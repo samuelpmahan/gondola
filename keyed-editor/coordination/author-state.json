@@ -1,0 +1,276 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-keyed-collection"
+  },
+  "workers": {
+    "W1": {
+      "job": "E3",
+      "agent": "/root/key_react_host"
+    },
+    "W2": {
+      "job": "E6",
+      "agent": "/root/key_demo"
+    },
+    "W3": {
+      "job": "E5",
+      "agent": "/root/key_harness"
+    },
+    "W4": {
+      "job": "E1",
+      "agent": "/root/key_go"
+    },
+    "W5": {
+      "job": "E2",
+      "agent": "/root/key_dom"
+    },
+    "W6": {
+      "job": "E4",
+      "agent": "/root/key_ref"
+    }
+  },
+  "jobs": {
+    "E1": {
+      "id": "E1",
+      "kind": "extract",
+      "task_kind": "implementation",
+      "scope": "go-collection-wasm",
+      "status": "running",
+      "worker": "W4",
+      "started_at": "2026-10-30T11:24:33.858664+00:00",
+      "finished_at": null
+    },
+    "E2": {
+      "id": "E2",
+      "kind": "extract",
+      "task_kind": "implementation",
+      "scope": "keyed-dom-protocol",
+      "status": "running",
+      "worker": "W5",
+      "started_at": "2026-10-30T11:24:33.974599+00:00",
+      "finished_at": null
+    },
+    "E3": {
+      "id": "E3",
+      "kind": "extract",
+      "task_kind": "implementation",
+      "scope": "react-update-host",
+      "status": "running",
+      "worker": "W1",
+      "started_at": "2026-10-30T11:24:34.081639+00:00",
+      "finished_at": null
+    },
+    "E4": {
+      "id": "E4",
+      "kind": "extract",
+      "task_kind": "implementation",
+      "scope": "independent-reference-scripts",
+      "status": "running",
+      "worker": "W6",
+      "started_at": "2026-10-30T11:24:34.192491+00:00",
+      "finished_at": null
+    },
+    "E5": {
+      "id": "E5",
+      "kind": "extract",
+      "task_kind": "implementation",
+      "scope": "browser-harness-adversarial",
+      "status": "running",
+      "worker": "W3",
+      "started_at": "2026-10-30T11:24:34.308735+00:00",
+      "finished_at": null
+    },
+    "E6": {
+      "id": "E6",
+      "kind": "extract",
+      "task_kind": "implementation",
+      "scope": "demo-runner-ci",
+      "status": "running",
+      "worker": "W2",
+      "started_at": "2026-10-30T11:24:34.412643+00:00",
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T11:20:25.558295+00:00",
+      "ready_jobs": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W2": "E6",
+        "W3": "E5",
+        "W4": "E1",
+        "W1": "E3",
+        "W5": "E2",
+        "W6": "E4"
+      },
+      "dispatch": {
+        "W2": "E6",
+        "W3": "E5",
+        "W4": "E1",
+        "W1": "E3",
+        "W5": "E2",
+        "W6": "E4"
+      },
+      "native_seconds": 0.006490600993856788,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E1": 1,
+        "E2": 1,
+        "E3": 1,
+        "E4": 1,
+        "E5": 1,
+        "E6": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E1": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E2": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E3": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E4": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E5": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E6": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ]
+      },
+      "weights": {
+        "E1": 100,
+        "E2": 100,
+        "E3": 100,
+        "E4": 100,
+        "E5": 100,
+        "E6": 100
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T11:24:33.858664+00:00",
+      "worker": "W4",
+      "job": "E1",
+      "agent": "/root/key_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T11:24:33.974599+00:00",
+      "worker": "W5",
+      "job": "E2",
+      "agent": "/root/key_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T11:24:34.081639+00:00",
+      "worker": "W1",
+      "job": "E3",
+      "agent": "/root/key_react_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T11:24:34.192491+00:00",
+      "worker": "W6",
+      "job": "E4",
+      "agent": "/root/key_ref"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T11:24:34.308735+00:00",
+      "worker": "W3",
+      "job": "E5",
+      "agent": "/root/key_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T11:24:34.412643+00:00",
+      "worker": "W2",
+      "job": "E6",
+      "agent": "/root/key_demo"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

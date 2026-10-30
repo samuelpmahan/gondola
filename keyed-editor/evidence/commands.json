@@ -1,0 +1,20 @@
+{
+  "cwd": "/workspace/scratch/39a56936f173/gondola",
+  "started_at": "2026-10-30T12:01:06.505928+00:00",
+  "additional": [
+    "go vet ./...",
+    "go test -race -count=1 ./collection"
+  ],
+  "versions": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "python": "Python 3.12.14",
+    "rebalancer": "1.0.4",
+    "source_files": 33
+  },
+  "normal_before_checker_availability_repair": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH CHROMIUM_EXECUTABLE_PATH=/tmp/chromium GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 bash run-keyed-editor.sh --seeds 20261030,20261031 --cases 30 --max-actions 40 --output keyed-editor/build/final-frozen-seeds-20261030-20261031.json",
+  "final_keyed_commands": "#!/usr/bin/env bash\nset -euo pipefail\ncd /workspace/scratch/39a56936f173/gondola\nexport PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH\nexport GOTOOLCHAIN=local\nexport CHROMIUM_EXECUTABLE_PATH=/tmp/chromium\nunset HTTP_LAB_BIN GO_BIN\npython - <<'PY'\nfrom pathlib import Path\np=Path('keyed-editor/build/http-lab')\nif p.exists():p.unlink()\nPY\nGOOS=js GOARCH=wasm go build -o keyed-editor/build/keyed-collection.wasm ./cmd/collection-wasm\ncp \"$(go env GOROOT)/lib/wasm/wasm_exec.js\" keyed-editor/build/wasm_exec.js\nnode cmd/collection-wasm/smoke.mjs keyed-editor/build/keyed-collection.wasm keyed-editor/build/wasm_exec.js\nNODE_PATH=\"$PWD/interaction/node_modules\" interaction/node_modules/.bin/esbuild keyed-editor/react.mjs --bundle --format=esm --platform=browser --outfile=keyed-editor/build/react.bundle.mjs\nNODE_PATH=\"$PWD/interaction/node_modules\" interaction/node_modules/.bin/esbuild keyed-editor/reference.mjs --bundle --format=esm --platform=browser --outfile=keyed-editor/build/reference.bundle.mjs\ngo test -count=1 ./...\nnode --test keyed-editor/*.test.mjs\nnode keyed-editor/demo-smoke.mjs\nnode keyed-editor/check.mjs --seeds 20261030,20261031 --cases 30 --max-actions 40 --output keyed-editor/build/final-reviewed-seeds-20261030-20261031.json\ngo vet ./... > keyed-editor/evidence/final-vet.log 2>&1\ngo test -race -count=1 ./collection > keyed-editor/evidence/final-race.log 2>&1\n",
+  "final_keyed_started_at": "2026-10-30T12:17:11.348987+00:00",
+  "publication_code_whitespace_check": "git -c core.whitespace=-blank-at-eof diff --cached --check -- collection cmd/collection-wasm keyed-editor/*.mjs keyed-editor/*.html run-keyed-editor.sh .github/workflows/keyed-editor.yml",
+  "whitespace_scope": "production source and tests; extra final blank lines allowed, raw logs and Markdown receipts preserved"
+}
