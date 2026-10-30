@@ -1,0 +1,22 @@
+{
+  "job_id": "XR-environment",
+  "worker": "W6",
+  "reviewer_agent": "/root/rebalancer",
+  "decision": "accepted",
+  "recorded_at": "2026-10-30T06:14:03.136993+00:00",
+  "summary": "The initial local setup gap is resolved. The runner now installs Playwright Chromium by default and has an explicit opt-out; CI installs Chromium with system dependencies then skips the duplicate install. No environment blocker remains.",
+  "review_report": "Read-only review found no runner, workflow, or package blocker: run-interaction.sh installs pinned deps unless explicitly skipped, builds both binaries and wasm_exec.js, bundles React, and runs Node/Playwright checks; CI performs the baseline check, npm install, Chromium install, and artifact upload. Finding: interaction/README.md:10\u201314 documents the local commands but omits `playwright install chromium`, while the runner only does npm ci and check.mjs launches Chromium. CI has the browser install, so this is a local setup/reproducibility gap, not a CI blocker.",
+  "requested_action": "Document or automate Playwright Chromium installation for the default local runner; re-review after owner change.",
+  "re_reviewed_at": "2026-10-30T06:14:03.136993+00:00",
+  "re_review_report": "Re-read run-interaction.sh lines 17-19: unless GONDOLA_SKIP_BROWSER_INSTALL=1, it runs the pinned Playwright binary with `install chromium` after npm ci. The workflow runs `playwright install --with-deps chromium`, then sets GONDOLA_SKIP_BROWSER_INSTALL=1 for the runner. This makes the documented local runner self-contained for browser provisioning and avoids a second install in CI. No code or browser tests were run for this re-review; the execution path/configuration was inspected.",
+  "resolved_finding": "interaction/README.md:10-14 omitted the browser installation step; the default runner now provisions Chromium.",
+  "reviewed_files": [
+    "run-interaction.sh",
+    ".github/workflows/interaction.yml",
+    "interaction/package.json",
+    "interaction/package-lock.json",
+    "interaction/README.md"
+  ],
+  "test_limit": "Read-only re-review. Browser CDN access was unavailable in the environment; CI-style browser execution was not repeated by this reviewer.",
+  "browser_checkpoint_note": "The mounted browser runs passed using Chromium 153.0.8010.0 provisioned by the npm-hosted package. The official Playwright Chromium download returned an invalid archive in this environment, so the standard Playwright browser installation/CI combination still requires its own green CI run."
+}

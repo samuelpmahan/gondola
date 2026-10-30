@@ -1,0 +1,325 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-cross-review",
+    "scope": "six-lane-independent-review"
+  },
+  "workers": {
+    "W1": {
+      "job": "XR-compare",
+      "agent": "/root/runtime"
+    },
+    "W2": {
+      "job": "XR-harness",
+      "agent": "/root/dom_adapter"
+    },
+    "W3": {
+      "job": "XR-runtime",
+      "agent": "/root/harness"
+    },
+    "W4": {
+      "job": "XR-rebalancer",
+      "agent": "/root/compare"
+    },
+    "W5": {
+      "job": "XR-dom_adapter",
+      "agent": "/root/environment"
+    },
+    "W6": {
+      "job": "XR-environment",
+      "agent": "/root/rebalancer"
+    }
+  },
+  "jobs": {
+    "XR-runtime": {
+      "id": "XR-runtime",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "runtime",
+      "author_worker": "W1",
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files.",
+      "status": "running",
+      "worker": "W3",
+      "started_at": "2026-10-30T06:09:27.310350+00:00",
+      "finished_at": null
+    },
+    "XR-dom_adapter": {
+      "id": "XR-dom_adapter",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "dom_adapter",
+      "author_worker": "W2",
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files.",
+      "status": "running",
+      "worker": "W5",
+      "started_at": "2026-10-30T06:09:27.310991+00:00",
+      "finished_at": null
+    },
+    "XR-harness": {
+      "id": "XR-harness",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "harness",
+      "author_worker": "W3",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files.",
+      "status": "running",
+      "worker": "W2",
+      "started_at": "2026-10-30T06:09:27.309975+00:00",
+      "finished_at": null
+    },
+    "XR-compare": {
+      "id": "XR-compare",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "compare",
+      "author_worker": "W4",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files.",
+      "status": "running",
+      "worker": "W1",
+      "started_at": "2026-10-30T06:09:27.309468+00:00",
+      "finished_at": null
+    },
+    "XR-environment": {
+      "id": "XR-environment",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "environment",
+      "author_worker": "W5",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files.",
+      "status": "running",
+      "worker": "W6",
+      "started_at": "2026-10-30T06:09:27.311329+00:00",
+      "finished_at": null
+    },
+    "XR-rebalancer": {
+      "id": "XR-rebalancer",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "rebalancer",
+      "author_worker": "W6",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files.",
+      "status": "running",
+      "worker": "W4",
+      "started_at": "2026-10-30T06:09:27.310653+00:00",
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T06:08:17.765394+00:00",
+      "ready_jobs": [
+        "XR-runtime",
+        "XR-dom_adapter",
+        "XR-harness",
+        "XR-compare",
+        "XR-environment",
+        "XR-rebalancer"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W2": "XR-harness",
+        "W5": "XR-dom_adapter",
+        "W6": "XR-environment",
+        "W3": "XR-runtime",
+        "W4": "XR-rebalancer",
+        "W1": "XR-compare"
+      },
+      "dispatch": {
+        "W2": "XR-harness",
+        "W5": "XR-dom_adapter",
+        "W6": "XR-environment",
+        "W3": "XR-runtime",
+        "W4": "XR-rebalancer",
+        "W1": "XR-compare"
+      },
+      "native_seconds": 0.00617834999866318,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "XR-runtime": 1,
+        "XR-dom_adapter": 1,
+        "XR-harness": 1,
+        "XR-compare": 1,
+        "XR-environment": 1,
+        "XR-rebalancer": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-runtime": [
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-dom_adapter": [
+          "W1",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-harness": [
+          "W1",
+          "W2",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-compare": [
+          "W1",
+          "W2",
+          "W3",
+          "W5",
+          "W6"
+        ],
+        "XR-environment": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W6"
+        ],
+        "XR-rebalancer": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5"
+        ]
+      },
+      "weights": {
+        "XR-runtime": 100,
+        "XR-dom_adapter": 100,
+        "XR-harness": 100,
+        "XR-compare": 100,
+        "XR-environment": 100,
+        "XR-rebalancer": 100
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T06:09:27.309468+00:00",
+      "worker": "W1",
+      "job": "XR-compare",
+      "agent": "/root/runtime"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T06:09:27.309975+00:00",
+      "worker": "W2",
+      "job": "XR-harness",
+      "agent": "/root/dom_adapter"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T06:09:27.310350+00:00",
+      "worker": "W3",
+      "job": "XR-runtime",
+      "agent": "/root/harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T06:09:27.310653+00:00",
+      "worker": "W4",
+      "job": "XR-rebalancer",
+      "agent": "/root/compare"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T06:09:27.310991+00:00",
+      "worker": "W5",
+      "job": "XR-dom_adapter",
+      "agent": "/root/environment"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T06:09:27.311329+00:00",
+      "worker": "W6",
+      "job": "XR-environment",
+      "agent": "/root/rebalancer"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 100,
+    "repair_priority": 100
+  }
+}

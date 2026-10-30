@@ -1,0 +1,4 @@
+Native finish was attempted for W4 / XR-rebalancer after an observed review report.
+Attempt: python rebalancer/probe.py finish --state rebalancer/coordination/state.json --receipts-dir rebalancer/coordination/receipts W4
+Result: rejected by probe.validate_receipt with ValueError: extraction receipt has an unknown outcome.
+Reason: the scheduling spec reuses the probe's kind=extract slot for packet_type=independent_cross_review; the source finish validator requires one of the extraction outcome values, while this review report has a review decision. No extraction outcome was added. The separate review receipt is preserved, and native state remains running for this job.
