@@ -48,3 +48,29 @@ React to render the row again, so the spec checks itself. There are 59 rows.
 | `EXPECTED.json`, `SHA256SUMS` | The receipts: versions, seed, hashes of the cases and the verdict, and of every source file. |
 
 Built output and installed packages are never committed. They are reproduced by `run.sh`.
+
+## Milestone 1: the Inertia server
+
+`inertia/` is a Go `net/http` server for the Inertia protocol, version 3. A page is a Gobi component registered by name
+(`App.Page`), a layout wraps pages by name (`App.Layout`), and `App.Render` answers a first visit with HTML, an Inertia
+visit with JSON, a stale version with 409, and a partial reload with the props it asks for. `inertia/oracle` grades it
+against Inertia itself: `@inertiajs/react` and `@inertiajs/core` 3.9.1 with React 19.3.1, and jsdom 29.1.1 for the browser.
+
+```
+go run ./cmd/gobi check inertia --expect EXPECTED-INERTIA.json
+```
+
+It checks the first paint of 5,000 seeded random pages (alone and inside a layout) and 1,000 seeded random prop sets
+byte for byte against Inertia's own server-side rendering, then runs `go test ./inertia/...`: the rules table
+(`inertia/rules_test.go`, one executable row per rule, re-asked of Inertia) and the protocol checks, which run Inertia's own
+client in jsdom against the Go handler over real HTTP.
+
+| Path | What it is |
+| --- | --- |
+| `inertia/inertia.go`, `page.go`, `json.go` | The server: `App`, `Render`, `Redirect`, prop resolution, the data-page script. |
+| `inertia/oracle` | `SameFirstPaint` (Go's body against Inertia's server-side rendering) and `Visit` (Inertia's client in jsdom). |
+| `inertia-ssr.mjs` | Inertia's server-side rendering (`createInertiaApp` with `renderToString`), as a process Go talks to. |
+| `inertia-client.mjs` | Inertia's client in jsdom: hydrates the Go page, runs the steps, records errors; one worker per page load. |
+| `inertia-pages.mjs`, `react-nodes.mjs` | Go's Nodes (one layer per layout, one for the page) become React components; layouts are given to Inertia as persistent layouts. |
+| `EXPECTED-INERTIA.json` | The Milestone 1 receipt. |
+| `asks/` | The users' checks (they own it). |

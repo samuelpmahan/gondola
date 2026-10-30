@@ -166,6 +166,10 @@ var receiptFields = []string{"react", "reactDom", "fastCheck", "seed", "cases", 
 
 // orderedReceipt writes the receipt as indented JSON with the keys in a fixed order.
 func orderedReceipt(receipt map[string]any) []byte {
+	return orderedReceiptFields(receipt, receiptFields)
+}
+
+func orderedReceiptFields(receipt map[string]any, receiptFields []string) []byte {
 	var b strings.Builder
 	b.WriteString("{\n")
 	for i, field := range receiptFields {
@@ -182,6 +186,10 @@ func orderedReceipt(receipt map[string]any) []byte {
 
 // compareReceipt prints one ERROR line per field that differs from the expected file, or "receipt matches".
 func compareReceipt(path string, receipt map[string]any) bool {
+	return compareReceiptFields(path, receipt, receiptFields)
+}
+
+func compareReceiptFields(path string, receipt map[string]any, receiptFields []string) bool {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println("ERROR receipt:", err)

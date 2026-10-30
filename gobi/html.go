@@ -9,11 +9,24 @@ func HTML(n Node) string {
 	return joinSurrogates(s.preloads + s.out)
 }
 
+// HydratableHTML writes a Node the way react-dom/server's renderToString does, which is what Inertia's server-side
+// rendering calls: the same text as HTML, plus the marker <!-- --> that React puts between two text runs that touch, so
+// that the browser keeps them as two text nodes for hydration. Every rule in inertia/rules_test.go was found with
+// Inertia's own server-side rendering.
+func HydratableHTML(n Node) string {
+	s := htmlState{hydratable: true}
+	s.write(n, selectScope{})
+	return joinSurrogates(s.preloads + s.out)
+}
+
 // htmlState is the output so far. preloads holds the <link> tags React hoists to the front for images.
 type htmlState struct {
 	out      string
 	preloads string
 	seen     []string // image sources already preloaded
+
+	hydratable bool // write the <!-- --> marker between text runs that touch (HydratableHTML)
+	afterText  bool // the last thing written was a text run, with no tag since
 }
 
 // selectScope is the value of the nearest enclosing <select>, which decides which <option>s are selected.
@@ -34,6 +47,12 @@ type written struct {
 func (s *htmlState) write(n Node, scope selectScope) {
 	switch n.Kind {
 	case Text:
+		if s.hydratable && n.Text != "" {
+			if s.afterText {
+				s.out += "<!-- -->"
+			}
+			s.afterText = true
+		}
 		s.out += escape(n.Text)
 	case Fragment:
 		for _, k := range n.Kids {
@@ -50,6 +69,7 @@ func (s *htmlState) element(n Node, scope selectScope) {
 	for _, a := range attrs {
 		s.out += a.text
 	}
+	s.afterText = false // any tag ends a text run; empty text and fragments do not
 	if void[n.Tag] {
 		s.out += "/>"
 		return
@@ -83,6 +103,7 @@ func (s *htmlState) element(n Node, scope selectScope) {
 		}
 	}
 	s.out += "</" + n.Tag + ">"
+	s.afterText = false
 }
 
 // attributes works out the attributes React writes for an element, in React's order, and the textarea's value.
