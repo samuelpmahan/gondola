@@ -1,0 +1,31 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-multi-root-e5-oracle-repair"
+  },
+  "workers": [
+    "W1",
+    "W4"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-RE5-"
+  },
+  "policy": {
+    "extract_priority": 300,
+    "review_priority": 400,
+    "repair_priority": 500
+  },
+  "jobs": [
+    {
+      "id": "RE5",
+      "kind": "extract",
+      "repair_of": "E5",
+      "allow_workers": [
+        "W1"
+      ],
+      "owner": "multi-root replay/oracle only",
+      "summary": "compare lifecycle parity and enforce generated action bounds"
+    }
+  ]
+}

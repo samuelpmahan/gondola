@@ -1,0 +1,1702 @@
+{
+  "evidence": "prior failed raw replay compact summary",
+  "status": "failed",
+  "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node multi-root/check.mjs --cases 0 --output multi-root/build/replay-smoke.json",
+  "rawReport": {
+    "path": "multi-root/build/replay-smoke.json",
+    "sha256": "b4573363479ba9edf230e3cb1e2e1ed67f1d6b2afa2117a0be96bcac207f7d21",
+    "bytes": 8620324
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "react": "19.3.1",
+    "playwright": "1.64.1"
+  },
+  "browser": {
+    "name": "Chromium",
+    "version": "153.0.8010.0",
+    "executable": "/tmp/chromium",
+    "contexts": 1
+  },
+  "seeds": [
+    20261030,
+    20261031
+  ],
+  "fixedScripts": [
+    {
+      "name": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "seed": null,
+      "actions": [
+        {
+          "kind": "add",
+          "root": "alpha"
+        },
+        {
+          "kind": "add",
+          "root": "beta"
+        },
+        {
+          "kind": "add",
+          "root": "gamma"
+        },
+        {
+          "kind": "fill",
+          "root": "alpha",
+          "rowID": 1,
+          "value": "same row-local IDs"
+        },
+        {
+          "kind": "fill",
+          "root": "beta",
+          "rowID": 1,
+          "value": "same row-local IDs"
+        },
+        {
+          "kind": "fill",
+          "root": "gamma",
+          "rowID": 1,
+          "value": "same row-local IDs"
+        },
+        {
+          "kind": "save",
+          "root": "alpha",
+          "rowID": 1
+        },
+        {
+          "kind": "save",
+          "root": "beta",
+          "rowID": 1
+        },
+        {
+          "kind": "save",
+          "root": "gamma",
+          "rowID": 1
+        },
+        {
+          "kind": "unmount",
+          "root": "alpha"
+        },
+        {
+          "kind": "release",
+          "root": "alpha",
+          "requestID": 1,
+          "mode": "success"
+        },
+        {
+          "kind": "fill",
+          "root": "beta",
+          "rowID": 1,
+          "value": "beta continues after alpha disposal"
+        },
+        {
+          "kind": "release",
+          "root": "beta",
+          "requestID": 1,
+          "mode": "success"
+        },
+        {
+          "kind": "fill",
+          "root": "gamma",
+          "rowID": 1,
+          "value": "gamma continues after alpha disposal"
+        },
+        {
+          "kind": "release",
+          "root": "gamma",
+          "requestID": 1,
+          "mode": "success"
+        },
+        {
+          "kind": "mount",
+          "root": "alpha",
+          "backend": "react"
+        },
+        {
+          "kind": "add",
+          "root": "alpha"
+        },
+        {
+          "kind": "fill",
+          "root": "alpha",
+          "rowID": 1,
+          "value": "fresh root state"
+        },
+        {
+          "kind": "save",
+          "root": "alpha",
+          "rowID": 1
+        },
+        {
+          "kind": "release",
+          "root": "alpha",
+          "requestID": 1,
+          "mode": "success"
+        },
+        {
+          "kind": "unmount",
+          "root": "alpha"
+        },
+        {
+          "kind": "mount",
+          "root": "alpha",
+          "backend": "dom"
+        },
+        {
+          "kind": "unmount",
+          "root": "alpha"
+        },
+        {
+          "kind": "mount",
+          "root": "alpha",
+          "backend": "godom"
+        },
+        {
+          "kind": "add",
+          "root": "alpha"
+        }
+      ]
+    },
+    {
+      "name": "all-directed-renderer-changes-preserve-focus-per-root",
+      "seed": null,
+      "actions": [
+        {
+          "kind": "add",
+          "root": "alpha"
+        },
+        {
+          "kind": "add",
+          "root": "beta"
+        },
+        {
+          "kind": "add",
+          "root": "gamma"
+        },
+        {
+          "kind": "fill",
+          "root": "alpha",
+          "rowID": 1,
+          "value": "alpha focus"
+        },
+        {
+          "kind": "fill",
+          "root": "beta",
+          "rowID": 1,
+          "value": "beta focus"
+        },
+        {
+          "kind": "fill",
+          "root": "gamma",
+          "rowID": 1,
+          "value": "gamma focus"
+        },
+        {
+          "kind": "focus",
+          "root": "alpha",
+          "rowID": 1,
+          "selectionStart": 1,
+          "selectionEnd": 4,
+          "selectionDirection": "forward"
+        },
+        {
+          "kind": "focus",
+          "root": "beta",
+          "rowID": 1,
+          "selectionStart": 2,
+          "selectionEnd": 5,
+          "selectionDirection": "backward"
+        },
+        {
+          "kind": "focus",
+          "root": "gamma",
+          "rowID": 1,
+          "selectionStart": 0,
+          "selectionEnd": 3,
+          "selectionDirection": "forward"
+        },
+        {
+          "kind": "replace",
+          "root": "alpha",
+          "from": "dom",
+          "backend": "dom"
+        },
+        {
+          "kind": "replace",
+          "root": "alpha",
+          "from": "dom",
+          "backend": "react"
+        },
+        {
+          "kind": "replace",
+          "root": "alpha",
+          "from": "dom",
+          "backend": "godom"
+        },
+        {
+          "kind": "replace",
+          "root": "beta",
+          "from": "react",
+          "backend": "dom"
+        },
+        {
+          "kind": "replace",
+          "root": "beta",
+          "from": "react",
+          "backend": "react"
+        },
+        {
+          "kind": "replace",
+          "root": "beta",
+          "from": "react",
+          "backend": "godom"
+        },
+        {
+          "kind": "replace",
+          "root": "gamma",
+          "from": "godom",
+          "backend": "dom"
+        },
+        {
+          "kind": "replace",
+          "root": "gamma",
+          "from": "godom",
+          "backend": "react"
+        },
+        {
+          "kind": "replace",
+          "root": "gamma",
+          "from": "godom",
+          "backend": "godom"
+        },
+        {
+          "kind": "fill",
+          "root": "beta",
+          "rowID": 1,
+          "value": "beta remains interactive"
+        },
+        {
+          "kind": "fill",
+          "root": "gamma",
+          "rowID": 1,
+          "value": "gamma remains interactive"
+        }
+      ]
+    },
+    {
+      "name": "renderer-failure-isolation-and-sibling-continuation",
+      "seed": null,
+      "actions": [
+        {
+          "kind": "add",
+          "root": "alpha"
+        },
+        {
+          "kind": "add",
+          "root": "beta"
+        },
+        {
+          "kind": "add",
+          "root": "gamma"
+        },
+        {
+          "kind": "fill",
+          "root": "alpha",
+          "rowID": 1,
+          "value": "alpha draft"
+        },
+        {
+          "kind": "fill",
+          "root": "beta",
+          "rowID": 1,
+          "value": "beta draft"
+        },
+        {
+          "kind": "fill",
+          "root": "gamma",
+          "rowID": 1,
+          "value": "gamma draft"
+        },
+        {
+          "kind": "save",
+          "root": "gamma",
+          "rowID": 1
+        },
+        {
+          "kind": "renderer-failure",
+          "root": "gamma",
+          "backend": "throw-on-mount"
+        },
+        {
+          "kind": "fill",
+          "root": "alpha",
+          "rowID": 1,
+          "value": "alpha survives failure"
+        },
+        {
+          "kind": "fill",
+          "root": "beta",
+          "rowID": 1,
+          "value": "beta survives failure"
+        },
+        {
+          "kind": "unmount",
+          "root": "gamma"
+        },
+        {
+          "kind": "mount",
+          "root": "gamma",
+          "backend": "dom"
+        },
+        {
+          "kind": "add",
+          "root": "gamma"
+        },
+        {
+          "kind": "fill",
+          "root": "gamma",
+          "rowID": 1,
+          "value": "fresh gamma session"
+        },
+        {
+          "kind": "unmount",
+          "root": "gamma"
+        }
+      ]
+    }
+  ],
+  "actionCount": 60,
+  "observationCount": 330,
+  "mismatchCount": 75,
+  "mismatches": [
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 10,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "alpha"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 10,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "alpha"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 11,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "release",
+        "root": "alpha",
+        "requestID": 1,
+        "mode": "success"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 11,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "release",
+        "root": "alpha",
+        "requestID": 1,
+        "mode": "success"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 12,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "fill",
+        "root": "beta",
+        "rowID": 1,
+        "value": "beta continues after alpha disposal"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 12,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "fill",
+        "root": "beta",
+        "rowID": 1,
+        "value": "beta continues after alpha disposal"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 13,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "release",
+        "root": "beta",
+        "requestID": 1,
+        "mode": "success"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 13,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "release",
+        "root": "beta",
+        "requestID": 1,
+        "mode": "success"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 14,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "fill",
+        "root": "gamma",
+        "rowID": 1,
+        "value": "gamma continues after alpha disposal"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 14,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "fill",
+        "root": "gamma",
+        "rowID": 1,
+        "value": "gamma continues after alpha disposal"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 15,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "release",
+        "root": "gamma",
+        "requestID": 1,
+        "mode": "success"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 15,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "release",
+        "root": "gamma",
+        "requestID": 1,
+        "mode": "success"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 21,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "alpha"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 21,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "alpha"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 23,
+      "actor": "alpha/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "alpha"
+      }
+    },
+    {
+      "seed": null,
+      "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+      "tick": 23,
+      "actor": "alpha/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "alpha"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": null,
+      "actor": null,
+      "channel": "execution",
+      "expected": "scenario actions and cleanup complete",
+      "actual": "Error: alpha expected backend dom, got react\n    at runAction (eval at evaluate (:370:30), <anonymous>:396:49)\n    at executeScenario (eval at evaluate (:370:30), <anonymous>:593:15)\n    at async replayInBrowser (eval at evaluate (:370:30), <anonymous>:632:55)\n    at async <anonymous>:396:30",
+      "action": null
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": null,
+      "actor": null,
+      "channel": "tick-count",
+      "expected": 21,
+      "actual": 13,
+      "action": null
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "dom.inputValue",
+      "expected": "alpha focus",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha/candidate",
+      "channel": "focus-witness",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "dom.inputValue",
+      "expected": "beta focus",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta/candidate",
+      "channel": "focus-witness",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma/candidate",
+      "channel": "focus-witness",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "dom.inputValue",
+      "expected": "alpha focus",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 7,
+      "actor": "alpha",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "alpha",
+        "rowID": 1,
+        "selectionStart": 1,
+        "selectionEnd": 4,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "dom.inputValue",
+      "expected": "beta focus",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 8,
+      "actor": "beta",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "beta",
+        "rowID": 1,
+        "selectionStart": 2,
+        "selectionEnd": 5,
+        "selectionDirection": "backward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 9,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "focus",
+        "root": "gamma",
+        "rowID": 1,
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 10,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "dom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 11,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "react"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "alpha",
+      "channel": "backend-replacement",
+      "expected": "godom",
+      "actual": "react",
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "dom.inputPath",
+      "expected": "2/0/0",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "dom.inputValue",
+      "expected": "gamma focus",
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "dom.inputDisabled",
+      "expected": false,
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "all-directed-renderer-changes-preserve-focus-per-root",
+      "tick": 12,
+      "actor": "gamma",
+      "channel": "focus",
+      "expected": {
+        "key": "row-1-input",
+        "selectionStart": 0,
+        "selectionEnd": 3,
+        "selectionDirection": "forward"
+      },
+      "actual": null,
+      "action": {
+        "kind": "replace",
+        "root": "alpha",
+        "from": "dom",
+        "backend": "godom"
+      }
+    },
+    {
+      "seed": null,
+      "script": "renderer-failure-isolation-and-sibling-continuation",
+      "tick": 11,
+      "actor": "gamma/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "gamma"
+      }
+    },
+    {
+      "seed": null,
+      "script": "renderer-failure-isolation-and-sibling-continuation",
+      "tick": 11,
+      "actor": "gamma/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "gamma"
+      }
+    },
+    {
+      "seed": null,
+      "script": "renderer-failure-isolation-and-sibling-continuation",
+      "tick": 15,
+      "actor": "gamma/candidate",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "gamma"
+      }
+    },
+    {
+      "seed": null,
+      "script": "renderer-failure-isolation-and-sibling-continuation",
+      "tick": 15,
+      "actor": "gamma/reference",
+      "channel": "observation-shape.dom",
+      "expected": "object",
+      "actual": null,
+      "action": {
+        "kind": "unmount",
+        "root": "gamma"
+      }
+    },
+    {
+      "seed": 20261030,
+      "script": "browser",
+      "tick": null,
+      "actor": null,
+      "channel": "page-error",
+      "expected": null,
+      "actual": "Failed to load resource: the server responded with a status of 409 (Conflict)",
+      "action": null
+    }
+  ],
+  "native": {
+    "matched": 13,
+    "comparisons": 13,
+    "segments": [
+      {
+        "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+        "root": "alpha",
+        "sessionID": 1,
+        "referenceSessionID": 1,
+        "generation": 1,
+        "status": "matched"
+      },
+      {
+        "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+        "root": "beta",
+        "sessionID": 2,
+        "referenceSessionID": 2,
+        "generation": 1,
+        "status": "matched"
+      },
+      {
+        "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+        "root": "gamma",
+        "sessionID": 3,
+        "referenceSessionID": 3,
+        "generation": 1,
+        "status": "matched"
+      },
+      {
+        "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+        "root": "alpha",
+        "sessionID": 4,
+        "referenceSessionID": 4,
+        "generation": 2,
+        "status": "matched"
+      },
+      {
+        "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+        "root": "alpha",
+        "sessionID": 5,
+        "referenceSessionID": 5,
+        "generation": 3,
+        "status": "matched"
+      },
+      {
+        "script": "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+        "root": "alpha",
+        "sessionID": 6,
+        "referenceSessionID": 6,
+        "generation": 4,
+        "status": "matched"
+      },
+      {
+        "script": "all-directed-renderer-changes-preserve-focus-per-root",
+        "root": "alpha",
+        "sessionID": 7,
+        "referenceSessionID": 7,
+        "generation": 5,
+        "status": "matched"
+      },
+      {
+        "script": "all-directed-renderer-changes-preserve-focus-per-root",
+        "root": "beta",
+        "sessionID": 8,
+        "referenceSessionID": 8,
+        "generation": 2,
+        "status": "matched"
+      },
+      {
+        "script": "all-directed-renderer-changes-preserve-focus-per-root",
+        "root": "gamma",
+        "sessionID": 9,
+        "referenceSessionID": 9,
+        "generation": 2,
+        "status": "matched"
+      },
+      {
+        "script": "renderer-failure-isolation-and-sibling-continuation",
+        "root": "alpha",
+        "sessionID": 10,
+        "referenceSessionID": 10,
+        "generation": 6,
+        "status": "matched"
+      },
+      {
+        "script": "renderer-failure-isolation-and-sibling-continuation",
+        "root": "beta",
+        "sessionID": 11,
+        "referenceSessionID": 11,
+        "generation": 3,
+        "status": "matched"
+      },
+      {
+        "script": "renderer-failure-isolation-and-sibling-continuation",
+        "root": "gamma",
+        "sessionID": 12,
+        "referenceSessionID": 12,
+        "generation": 3,
+        "status": "matched"
+      },
+      {
+        "script": "renderer-failure-isolation-and-sibling-continuation",
+        "root": "gamma",
+        "sessionID": 13,
+        "referenceSessionID": 13,
+        "generation": 4,
+        "status": "matched"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-godom-lifecycle-repair"
+  },
+  "workers": [
+    "W2",
+    "W6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-GODOM",
+      "kind": "extract",
+      "allow_workers": [
+        "W2"
+      ],
+      "owner": "cmd/godom-wasm/main_wasm.go and smoke.html only",
+      "summary": "reject duplicate root mounts and bound exported Go callback registrations"
+    }
+  ]
+}

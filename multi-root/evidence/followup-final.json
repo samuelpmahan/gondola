@@ -1,0 +1,60 @@
+{
+  "schema": "gobi.multi-root-followup/v1",
+  "base_head": "bd8455a0656a28d303266e8bc0f39e893769a0bd",
+  "status": "source_review_accepted_fresh_ci_pending",
+  "changes": [
+    "Require live-session backend continuity except successful targeted replacement; original independent amend retained.",
+    "Reject duplicate and reentrant GoDOM root ownership before initialization and throughout teardown/panic cleanup.",
+    "Replace seven retained Go callbacks per mount with eight lifetime shared callbacks and garbage-collectable bound JavaScript instance wrappers."
+  ],
+  "source_sha256": {
+    "multi-root/check.mjs": "38b70f706d5225d0b75f09f1a212c80f86851468f8a55137ccba5098ad808ef5",
+    "multi-root/check.test.mjs": "4915fd29df0b791df4808dd608f6e8a78eafd8ffc5565c20604b276a0056528b",
+    "cmd/godom-wasm/main_wasm.go": "0088ad98470707502e8b84b5afeea7e85ea28ff3d6e892a1c3f5d22beaab49e7",
+    "cmd/godom-wasm/smoke.html": "f0600bb6d260348d8db4fd17641179881980aafed830a488243379da0bb43a03"
+  },
+  "checks": [
+    {
+      "command": "node --test multi-root/*.test.mjs renderer-conformance/adapter.test.mjs",
+      "node": "v24.22.1",
+      "passed": 40,
+      "failed": 0
+    },
+    {
+      "command": "node offline compareReplayScenario() for each retained report.scenarios",
+      "mode": "offline revalidation, no new browser execution",
+      "raw_sha256": "9a07a712e25ebaee207bfd8589d42bf030394af37157d224cf36a5d9c92009aa",
+      "scripts": 63,
+      "actions": 1896,
+      "actor_observations": 11754,
+      "mismatches": 0
+    },
+    {
+      "command": "sha256sum -c SHA256SUMS",
+      "passed": 24
+    }
+  ],
+  "reviews": {
+    "backend": "coordination/receipts/XR-BACKEND.json",
+    "godom": "coordination/receipts/XR-RG2.json",
+    "preserved_amendments": [
+      "coordination/receipts/XR-RE5-RE5.json",
+      "coordination/receipts/XR-R-GODOM.json"
+    ]
+  },
+  "coordination": {
+    "native_rebalancer": "1.0.4",
+    "probe_sha256": "5fa75295203944df8b7e2112dbd900b9c89255209a1ac92d61c01bf035d8066c",
+    "available_child_slots": 6,
+    "actual_luna_workers": 6,
+    "reasoning": "xhigh",
+    "audit_solve": {
+      "native_score": 500,
+      "exact_score": 500,
+      "broken": 0
+    },
+    "note": "Five disjoint native-allocated audits ran alongside the resumed reviewer. Solver allocation and actual platform dispatch are separate. XR-BACKEND and RG2 correction dispatch requests briefly preceded their recorded native followup allocations; reports retain this chronology."
+  },
+  "execution_limit": "Go compiler and Chromium absent after workspace maintenance; fresh CI must execute new bridge revision. Initial-head successful full CI is separately preserved in ci-initial-head.json. Source inspection bounds Go API callbacks; no heap-size or GC timing guarantee.",
+  "next": "Require fresh CI success, then typed parent/child ownership with nested lifecycle and effect cancellation."
+}

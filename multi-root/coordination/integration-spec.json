@@ -1,0 +1,12 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {"name": "gondola-multi-root-integration-audit"},
+  "workers": ["W2", "W3", "W5"],
+  "review_policy": {"enabled": false},
+  "policy": {"extract_priority": 100, "review_priority": 200, "repair_priority": 300},
+  "jobs": [
+    {"id": "IA1", "kind": "extract", "allow_workers": ["W2"], "summary": "cross-layer contract and fail-closed audit"},
+    {"id": "IA2", "kind": "extract", "allow_workers": ["W3"], "summary": "runner CI demo and evidence audit"},
+    {"id": "IA3", "kind": "extract", "allow_workers": ["W5"], "summary": "actual browser multi-session and multi-GoDOM adversarial probe"}
+  ]
+}

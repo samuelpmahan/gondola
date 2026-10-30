@@ -1,0 +1,196 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-godom-panic-cleanup-repair"
+  },
+  "workers": {
+    "W2": {
+      "job": null,
+      "agent": null
+    },
+    "W6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "RG2": {
+      "id": "RG2",
+      "kind": "extract",
+      "allow_workers": [
+        "W2"
+      ],
+      "owner": "cmd/godom-wasm/main_wasm.go and smoke.html only",
+      "summary": "keep root reserved during panic recovery cleanup",
+      "status": "done",
+      "worker": "W2",
+      "started_at": "2026-10-30T16:20:20.412961+00:00",
+      "finished_at": "2026-10-30T16:21:08.839122+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/RG2.json"
+    },
+    "XR-RG2": {
+      "id": "XR-RG2",
+      "kind": "review",
+      "depends_on": "RG2",
+      "status": "done",
+      "worker": "W6",
+      "started_at": "2026-10-30T16:21:09.046880+00:00",
+      "finished_at": "2026-10-30T16:21:51.191191+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-RG2.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T16:20:20.297656+00:00",
+      "ready_jobs": [
+        "RG2"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W2": "RG2",
+        "W6": "BENCH"
+      },
+      "dispatch": {
+        "W2": "RG2"
+      },
+      "native_seconds": 0.0030230219999793917,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "RG2": 1,
+        "XR-RG2": 0,
+        "BENCH": 2
+      },
+      "eligible": {
+        "RG2": [
+          "W2"
+        ]
+      },
+      "weights": {
+        "RG2": 100
+      },
+      "agent_by_worker": {
+        "W2": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:20:20.412961+00:00",
+      "worker": "W2",
+      "job": "RG2",
+      "agent": "/root/accept_godom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:21:08.839122+00:00",
+      "worker": "W2",
+      "job": "RG2"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T16:21:08.947361+00:00",
+      "ready_jobs": [
+        "XR-RG2"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W6": "XR-RG2",
+        "W2": "BENCH"
+      },
+      "dispatch": {
+        "W6": "XR-RG2"
+      },
+      "native_seconds": 0.0033538180000505236,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "RG2": 0,
+        "XR-RG2": 1,
+        "BENCH": 2
+      },
+      "eligible": {
+        "XR-RG2": [
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-RG2": 200
+      },
+      "agent_by_worker": {
+        "W2": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:21:09.046880+00:00",
+      "worker": "W6",
+      "job": "XR-RG2",
+      "agent": "/root/accept_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:21:51.191191+00:00",
+      "worker": "W6",
+      "job": "XR-RG2"
+    }
+  ],
+  "epoch": 2,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-godom-lifecycle-repair"
+  },
+  "workers": {
+    "W2": {
+      "job": null,
+      "agent": null
+    },
+    "W6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "R-GODOM": {
+      "id": "R-GODOM",
+      "kind": "extract",
+      "allow_workers": [
+        "W2"
+      ],
+      "owner": "cmd/godom-wasm/main_wasm.go and smoke.html only",
+      "summary": "reject duplicate root mounts and bound exported Go callback registrations",
+      "status": "done",
+      "worker": "W2",
+      "started_at": "2026-10-30T16:13:29.807012+00:00",
+      "finished_at": "2026-10-30T16:18:01.793048+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/R-GODOM.json"
+    },
+    "XR-R-GODOM": {
+      "id": "XR-R-GODOM",
+      "kind": "review",
+      "depends_on": "R-GODOM",
+      "status": "done",
+      "worker": "W6",
+      "started_at": "2026-10-30T16:18:02.000464+00:00",
+      "finished_at": "2026-10-30T16:20:54.906646+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-R-GODOM.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T16:13:26.985941+00:00",
+      "ready_jobs": [
+        "R-GODOM"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W6": "BENCH",
+        "W2": "R-GODOM"
+      },
+      "dispatch": {
+        "W2": "R-GODOM"
+      },
+      "native_seconds": 0.010783362999973178,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "R-GODOM": 1,
+        "XR-R-GODOM": 0,
+        "BENCH": 2
+      },
+      "eligible": {
+        "R-GODOM": [
+          "W2"
+        ]
+      },
+      "weights": {
+        "R-GODOM": 100
+      },
+      "agent_by_worker": {
+        "W2": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:13:29.807012+00:00",
+      "worker": "W2",
+      "job": "R-GODOM",
+      "agent": "/root/accept_godom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:18:01.793048+00:00",
+      "worker": "W2",
+      "job": "R-GODOM"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T16:18:01.888966+00:00",
+      "ready_jobs": [
+        "XR-R-GODOM"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W2": "BENCH",
+        "W6": "XR-R-GODOM"
+      },
+      "dispatch": {
+        "W6": "XR-R-GODOM"
+      },
+      "native_seconds": 0.003181468000093446,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "R-GODOM": 0,
+        "XR-R-GODOM": 1,
+        "BENCH": 2
+      },
+      "eligible": {
+        "XR-R-GODOM": [
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-R-GODOM": 200
+      },
+      "agent_by_worker": {
+        "W2": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:18:02.000464+00:00",
+      "worker": "W6",
+      "job": "XR-R-GODOM",
+      "agent": "/root/accept_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:20:54.906646+00:00",
+      "worker": "W6",
+      "job": "XR-R-GODOM"
+    }
+  ],
+  "epoch": 2,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

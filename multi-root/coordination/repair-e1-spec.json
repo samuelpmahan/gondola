@@ -1,0 +1,17 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {"name": "gondola-multi-root-e1-repair"},
+  "workers": ["W5", "W6"],
+  "review_policy": {"enabled": true, "review_prefix": "XR-RP-"},
+  "policy": {"extract_priority": 300, "review_priority": 400, "repair_priority": 500},
+  "jobs": [
+    {
+      "id": "RP-E1",
+      "kind": "extract",
+      "repair_of": "E1",
+      "allow_workers": ["W6"],
+      "owner": "multisession/",
+      "summary": "preserve queued cancel effects through Dispose"
+    }
+  ]
+}

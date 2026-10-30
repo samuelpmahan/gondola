@@ -1,0 +1,193 @@
+{
+  "job_id": "E5",
+  "worker": "W1",
+  "status": "matched",
+  "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node multi-root/check.mjs --output multi-root/build/replay-default-final.json",
+  "seeds": [
+    20261030,
+    20261031
+  ],
+  "generatedCasesPerSeed": 30,
+  "maxActionsPerGeneratedCase": 40,
+  "fixedScripts": [
+    "identical-row-and-request-ids-held-saves-disposal-late-reply-and-root-reuse",
+    "all-directed-renderer-changes-preserve-focus-per-root",
+    "renderer-failure-isolation-and-sibling-continuation"
+  ],
+  "metrics": {
+    "scripts": 63,
+    "actions": 1764,
+    "ticks": 1827,
+    "actorObservations": 10962,
+    "mismatches": 0
+  },
+  "native": {
+    "status": "matched",
+    "matched": 193,
+    "comparisons": 193,
+    "sessionSegments": 193
+  },
+  "negativeControls": [
+    {
+      "name": "missing actors and channels fail closed",
+      "pass": true
+    },
+    {
+      "name": "active session aliasing is rejected",
+      "pass": true
+    },
+    {
+      "name": "synchronized no-op dispatch is rejected",
+      "pass": true
+    },
+    {
+      "name": "out-of-order event receipts are rejected",
+      "pass": true
+    },
+    {
+      "name": "disposed-session revival is rejected",
+      "pass": true
+    },
+    {
+      "name": "empty native frames are rejected",
+      "pass": true
+    }
+  ],
+  "requiredChannels": [
+    "snapshot.state",
+    "snapshot.tree",
+    "snapshot.bindings",
+    "snapshot.messages",
+    "audit",
+    "transportLog",
+    "serverRequests",
+    "pending",
+    "DOM html/root/disabled/controls/order",
+    "liveProps",
+    "focus and selection",
+    "session identity and generation",
+    "ordered lifecycle/events",
+    "native Go state/tree/DOM envelopes"
+  ],
+  "reportSchema": {
+    "topLevel": [
+      "status",
+      "seeds",
+      "scripts",
+      "fixed_scripts",
+      "generated_cases_per_seed",
+      "max_actions_per_generated_case",
+      "actions",
+      "observations",
+      "native_comparisons",
+      "native_matched",
+      "mismatches",
+      "mismatch_count",
+      "required_channels",
+      "negative_controls",
+      "browser",
+      "toolchain",
+      "scenarios",
+      "native_inputs",
+      "native_comparison",
+      "commands",
+      "limits"
+    ],
+    "mismatch": {
+      "seed": "number|null",
+      "script": "string|null",
+      "tick": "number|null",
+      "actor": "root/participant|string|null",
+      "channel": "string",
+      "expected": "any|null",
+      "actual": "any|null",
+      "action": "action|null"
+    }
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "react": "19.3.1",
+    "playwright": "1.64.1"
+  },
+  "browser": {
+    "name": "Chromium",
+    "version": "153.0.8010.0",
+    "executable": "/tmp/chromium",
+    "contexts": 1
+  },
+  "commands": {
+    "checker": [
+      "/tmp/gondola-node22/node_modules/node/bin/node",
+      "/workspace/scratch/39a56936f173/gondola/multi-root/check.mjs",
+      "--output",
+      "multi-root/build/replay-default-final.json"
+    ],
+    "nativeComparatorBuild": [
+      "/tmp/gondola-go/bin/go",
+      "build",
+      "-o",
+      "/workspace/scratch/39a56936f173/gondola/multi-root/build/compare-interaction.local",
+      "./cmd/compare-interaction"
+    ],
+    "httpLab": [
+      "/workspace/scratch/39a56936f173/gondola/http-effects/build/http-lab",
+      "-addr",
+      "127.0.0.1:0",
+      "-root",
+      "/workspace/scratch/39a56936f173/gondola"
+    ]
+  },
+  "bounds": {
+    "serverCancellationQuiescenceMs": 10000,
+    "rule": "Before observation capture after a repeated save, wait for the new request to be held and every previously held request on that lane to reach cancelled; transport logs are still compared in order."
+  },
+  "semanticNormalization": "selectionDirection is normalized to none only when selectionStart equals selectionEnd; non-collapsed selection direction remains compared exactly.",
+  "rawReport": {
+    "path": "multi-root/build/replay-default-final.json",
+    "bytes": 327100526,
+    "sha256": "dfa5dc8a044d519fce9192fded2ebfad4351744ce03570b75469f51f1b2cd6c2"
+  },
+  "sourceHashes": {
+    "multi-root/scripts.mjs": "a191a2eb0a5a55a9dafed05950c54a83a917605fcde3bce0ddd1bc7da24830c3",
+    "multi-root/reference.mjs": "e1f68d87f69ddb74d8d280a805f4c9040983835f80e3e997929e2be1e2ad4663",
+    "multi-root/check.mjs": "565737386c3e47377eff448e945fd888397a4a8908795293305357243a7602f5"
+  },
+  "verificationRuns": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test multi-root/*.test.mjs renderer-conformance/adapter.test.mjs",
+      "result": "36 passed, 0 failed"
+    },
+    {
+      "command": "node --test multi-root/check.test.mjs multi-root/scripts.test.mjs multi-root/reference.test.mjs",
+      "result": "10 passed, 0 failed"
+    },
+    {
+      "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium node multi-root/check.mjs --cases 0 --output multi-root/build/replay-fixed-smoke.json",
+      "result": "matched; 3 scripts, 64 actions, 67 ticks, 402 actor observations; native 13/13"
+    },
+    {
+      "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium node multi-root/check.mjs --seeds 20261030,20261031 --cases 2 --max-actions 12 --output multi-root/build/replay-generated-smoke.json",
+      "result": "matched; 7 scripts, 112 actions, 119 ticks, 714 actor observations; native 25/25"
+    },
+    {
+      "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium node multi-root/check.mjs --seeds 20261030 --cases 3 --max-actions 40 --output multi-root/build/replay-cancel-smoke.json",
+      "result": "matched; 6 scripts, 149 actions, 155 ticks, 930 actor observations; native 22/22"
+    },
+    {
+      "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium node multi-root/check.mjs --seeds 20261030,20261031 --cases 24 --max-actions 40 --output multi-root/build/replay-repaired-targeted.json",
+      "result": "matched; 51 scripts, 1,429 actions, 1,480 ticks, 8,880 actor observations; native 157/157"
+    }
+  ],
+  "preservedFailures": [
+    "multi-root/evidence/replay-failed-75.json",
+    "multi-root/evidence/replay-failed-default-cancel-race.json",
+    "multi-root/evidence/replay-failed-default-focus-direction.json"
+  ],
+  "limits": [
+    "The replay runs one Chromium page with three simultaneous Go sessions and three independent React reference sessions.",
+    "The loopback HTTP lab holds saves until each scripted release; disposal and late-release rejection are checked in the same page.",
+    "Renderer failure isolation uses an unknown renderer replacement request against one candidate root; actual throwing renderer teardown is covered by focused host tests.",
+    "The finite replay does not cover IME composition, concurrent browser scheduling, other browsers, pixel equivalence, or production services."
+  ]
+}

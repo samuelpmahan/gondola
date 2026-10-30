@@ -1,0 +1,266 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-pr8-acceptance-audit"
+  },
+  "workers": {
+    "W1": {
+      "job": null,
+      "agent": null
+    },
+    "W2": {
+      "job": null,
+      "agent": null
+    },
+    "W3": {
+      "job": null,
+      "agent": null
+    },
+    "W5": {
+      "job": null,
+      "agent": null
+    },
+    "W6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "A-GO": {
+      "id": "A-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "W1"
+      ],
+      "owner": "multi-root/coordination/reports/A-GO.md and receipts/A-GO.json only",
+      "summary": "Go session ownership/cancel disposal",
+      "status": "done",
+      "worker": "W1",
+      "started_at": "2026-10-30T16:10:51.357330+00:00",
+      "finished_at": "2026-10-30T16:13:26.299489+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/A-GO.json"
+    },
+    "A-WASM": {
+      "id": "A-WASM",
+      "kind": "extract",
+      "allow_workers": [
+        "W3"
+      ],
+      "owner": "multi-root/coordination/reports/A-WASM.md and receipts/A-WASM.json only",
+      "summary": "Strict WASM session boundary",
+      "status": "done",
+      "worker": "W3",
+      "started_at": "2026-10-30T16:10:51.462814+00:00",
+      "finished_at": "2026-10-30T16:13:26.469868+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/A-WASM.json"
+    },
+    "A-GODOM": {
+      "id": "A-GODOM",
+      "kind": "extract",
+      "allow_workers": [
+        "W2"
+      ],
+      "owner": "multi-root/coordination/reports/A-GODOM.md and receipts/A-GODOM.json only",
+      "summary": "Independent GoDOM renderer handles",
+      "status": "done",
+      "worker": "W2",
+      "started_at": "2026-10-30T16:10:51.568263+00:00",
+      "finished_at": "2026-10-30T16:13:26.385661+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/A-GODOM.json"
+    },
+    "A-HOST": {
+      "id": "A-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "W6"
+      ],
+      "owner": "multi-root/coordination/reports/A-HOST.md and receipts/A-HOST.json only",
+      "summary": "Host transport/lifecycle/failure isolation",
+      "status": "done",
+      "worker": "W6",
+      "started_at": "2026-10-30T16:10:51.671302+00:00",
+      "finished_at": "2026-10-30T16:13:26.658054+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/A-HOST.json"
+    },
+    "A-EVIDENCE": {
+      "id": "A-EVIDENCE",
+      "kind": "extract",
+      "allow_workers": [
+        "W5"
+      ],
+      "owner": "multi-root/coordination/reports/A-EVIDENCE.md and receipts/A-EVIDENCE.json only",
+      "summary": "Historical receipts and executed evidence",
+      "status": "done",
+      "worker": "W5",
+      "started_at": "2026-10-30T16:10:51.769865+00:00",
+      "finished_at": "2026-10-30T16:14:25.467293+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/A-EVIDENCE.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T16:10:25.909345+00:00",
+      "ready_jobs": [
+        "A-GO",
+        "A-WASM",
+        "A-GODOM",
+        "A-HOST",
+        "A-EVIDENCE"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W1": "A-GO",
+        "W5": "A-EVIDENCE",
+        "W6": "A-HOST",
+        "W2": "A-GODOM",
+        "W3": "A-WASM"
+      },
+      "dispatch": {
+        "W1": "A-GO",
+        "W5": "A-EVIDENCE",
+        "W6": "A-HOST",
+        "W2": "A-GODOM",
+        "W3": "A-WASM"
+      },
+      "native_seconds": 0.004693130999839923,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 500,
+      "native_score": 500,
+      "caps": {
+        "A-GO": 1,
+        "A-WASM": 1,
+        "A-GODOM": 1,
+        "A-HOST": 1,
+        "A-EVIDENCE": 1,
+        "BENCH": 5
+      },
+      "eligible": {
+        "A-GO": [
+          "W1"
+        ],
+        "A-WASM": [
+          "W3"
+        ],
+        "A-GODOM": [
+          "W2"
+        ],
+        "A-HOST": [
+          "W6"
+        ],
+        "A-EVIDENCE": [
+          "W5"
+        ]
+      },
+      "weights": {
+        "A-GO": 100,
+        "A-WASM": 100,
+        "A-GODOM": 100,
+        "A-HOST": 100,
+        "A-EVIDENCE": 100
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:10:51.357330+00:00",
+      "worker": "W1",
+      "job": "A-GO",
+      "agent": "/root/accept_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:10:51.462814+00:00",
+      "worker": "W3",
+      "job": "A-WASM",
+      "agent": "/root/accept_wasm"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:10:51.568263+00:00",
+      "worker": "W2",
+      "job": "A-GODOM",
+      "agent": "/root/accept_godom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:10:51.671302+00:00",
+      "worker": "W6",
+      "job": "A-HOST",
+      "agent": "/root/accept_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:10:51.769865+00:00",
+      "worker": "W5",
+      "job": "A-EVIDENCE",
+      "agent": "/root/accept_evidence"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:13:26.299489+00:00",
+      "worker": "W1",
+      "job": "A-GO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:13:26.385661+00:00",
+      "worker": "W2",
+      "job": "A-GODOM"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:13:26.469868+00:00",
+      "worker": "W3",
+      "job": "A-WASM"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:13:26.658054+00:00",
+      "worker": "W6",
+      "job": "A-HOST"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:14:25.467293+00:00",
+      "worker": "W5",
+      "job": "A-EVIDENCE"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

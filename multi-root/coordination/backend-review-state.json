@@ -1,0 +1,106 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-backend-transition-review"
+  },
+  "workers": {
+    "W4": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "XR-BACKEND": {
+      "id": "XR-BACKEND",
+      "kind": "extract",
+      "allow_workers": [
+        "W4"
+      ],
+      "owner": "multi-root/coordination/reports/XR-BACKEND.md and receipts/XR-BACKEND.json",
+      "summary": "independent review of lead-authored backend transition witness repair",
+      "status": "done",
+      "worker": "W4",
+      "started_at": "2026-10-30T16:11:33.010340+00:00",
+      "finished_at": "2026-10-30T16:13:26.751369+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-BACKEND.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T16:11:32.906128+00:00",
+      "ready_jobs": [
+        "XR-BACKEND"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W4": "XR-BACKEND"
+      },
+      "dispatch": {
+        "W4": "XR-BACKEND"
+      },
+      "native_seconds": 0.004543925000234594,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 1 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "XR-BACKEND": 1,
+        "BENCH": 1
+      },
+      "eligible": {
+        "XR-BACKEND": [
+          "W4"
+        ]
+      },
+      "weights": {
+        "XR-BACKEND": 100
+      },
+      "agent_by_worker": {
+        "W4": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T16:11:33.010340+00:00",
+      "worker": "W4",
+      "job": "XR-BACKEND",
+      "agent": "/root/multiroot_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T16:13:26.751369+00:00",
+      "worker": "W4",
+      "job": "XR-BACKEND"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

@@ -1,0 +1,143 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Multi-root WASM bridge smoke</title></head>
+<body>
+<script src="/wasm_exec.js"></script>
+<script>
+window.__multiRootSmoke = (async () => {
+  const assert = (condition, message) => {
+    if (!condition) throw new Error(message);
+  };
+  const isError = (value) => value && typeof value === "object" &&
+    Object.keys(value).length === 1 && Object.keys(value)[0] === "error" &&
+    typeof value.error === "string";
+  const unwrap = (value, operation) => {
+    if (isError(value)) throw new Error(`${operation}: ${value.error}`);
+    return value;
+  };
+  const waitFor = async (readiness) => {
+    for (let attempt = 0; attempt < 200; attempt += 1) {
+      if (readiness()) return;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    throw new Error("Go WASM bridge did not publish within the bounded wait");
+  };
+  const go = new Go();
+  const response = await fetch("/multi-root.wasm");
+  if (!response.ok) throw new Error(`could not load WASM: ${response.status}`);
+  const bytes = await response.arrayBuffer();
+  const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
+  void go.run(instance);
+  await waitFor(() => globalThis.gobiMultiRoot);
+
+  const api = globalThis.gobiMultiRoot;
+  const names = ["audit", "complete", "create", "decodeHTTP", "dispatch", "dispose",
+    "effects", "encodeHTTP", "list", "snapshot"];
+  assert(Object.keys(api).sort().join(",") === names.join(","),
+    "multi-root bridge must publish the exact method table");
+
+  const ids = [unwrap(api.create(), "create one"), unwrap(api.create(), "create two"),
+    unwrap(api.create(), "create three")];
+  assert(ids.every(Number.isSafeInteger) && ids.join(",") === "1,2,3",
+    "create must return increasing positive safe-integer session IDs");
+  assert(unwrap(api.list(), "list sessions").join(",") === "1,2,3",
+    "all three sessions must remain registered simultaneously");
+  for (const id of ids) {
+    const snapshot = unwrap(api.snapshot(id), `snapshot ${id}`);
+    assert(snapshot.state.Rows.length === 0 && snapshot.state.NextID === 0 &&
+      snapshot.state.NextRequestID === 0, `session ${id} must start independently empty`);
+  }
+
+  const dispatch = (id, Path, Event, Value, Key) => unwrap(
+    api.dispatch(id, { Path, Event, Value, Key }), `dispatch in ${id}`);
+  for (const [id, value] of ids.map((id, index) => [id, `draft-${index + 1}`])) {
+    dispatch(id, "0", "click", "", "add");
+    dispatch(id, "2/0/0", "input", value, "row-1-input");
+    const saved = dispatch(id, "2/0/5", "click", "", "row-1-save");
+    assert(saved.state.Rows[0].ID === 1 && saved.state.Rows[0].PendingID === 1,
+      `session ${id} must allocate its own row 1 and request 1`);
+  }
+  const starts = ids.map((id) => unwrap(api.effects(id), `effects ${id}`));
+  assert(starts.every((commands, index) => commands.length === 1 &&
+    commands[0].Kind === "start" && commands[0].ID === 1 &&
+    commands[0].Value === `draft-${index + 1}`),
+    "same local request ID 1 must route to three distinct session payloads");
+
+  const cancels = unwrap(api.dispose(ids[0]), "dispose first session");
+  assert(cancels.length === 1 && cancels[0].Kind === "cancel" && cancels[0].ID === 1,
+    "dispose must return that session's active request cancellation");
+  assert(unwrap(api.list(), "list after dispose").join(",") === "2,3",
+    "disposing session 1 must preserve sessions 2 and 3");
+  for (const late of [
+    () => api.snapshot(ids[0]),
+    () => api.dispatch(ids[0], { Path: "0", Event: "click", Value: "", Key: "add" }),
+    () => api.effects(ids[0]),
+    () => api.complete(ids[0], { ID: 1, Value: "late", Error: "" }),
+    () => api.audit(ids[0]),
+    () => api.dispose(ids[0]),
+  ]) {
+    assert(isError(late()), "disposed session calls and late replies must return an exact error frame");
+  }
+
+  const afterSibling = unwrap(api.complete(ids[1], { ID: 1, Value: "saved two", Error: "" }),
+    "complete second session");
+  assert(afterSibling.state.Rows[0].Saved === "saved two" && afterSibling.state.Rows[0].Saves === 1,
+    "session 2 completion must apply to session 2");
+  assert(unwrap(api.snapshot(ids[2]), "snapshot third session").state.Rows[0].PendingID === 1,
+    "session 2 completion must leave session 3's same-numbered request pending");
+  assert(unwrap(api.audit(ids[1]), "audit second session")[0].ID === 1 &&
+    unwrap(api.audit(ids[2]), "audit third session").length === 0,
+    "audits must remain session-scoped");
+
+  const beforeInvalid = unwrap(api.snapshot(ids[2]), "snapshot before malformed input");
+  for (const operation of [
+    () => api.dispatch(ids[2], { Path: "0", Event: "click", Value: "", Key: "add", extra: undefined }),
+    () => api.dispatch(ids[2], { Path: "0", Event: "click", Value: "", Key: "add", [Symbol("extra")]: true }),
+    () => api.dispatch(ids[2], Object.defineProperty(
+      { Path: "0", Event: "click", Value: "", Key: "add" }, "hidden", { value: true })),
+    () => api.complete(ids[2], { ID: 1, Value: "late", Error: "", extra: true }),
+    () => api.complete(ids[2], { ID: 1.5, Value: "late", Error: "" }),
+    () => api.dispatch(ids[2], { Path: "0", Event: "click", Value: "", Key: "add" }, "extra"),
+  ]) {
+    assert(isError(operation()), "malformed objects and wrong method arity must be rejected");
+  }
+  const throwingProxy = new Proxy({}, { ownKeys() { throw new Error("hostile proxy"); } });
+  assert(isError(api.dispatch(ids[2], throwingProxy)), "throwing ownKeys traps must be contained by the bridge");
+  const throwing = { Path: "0", Event: "click", Value: "" };
+  Object.defineProperty(throwing, "Key", { enumerable: true, get() { throw new Error("hostile getter"); } });
+  assert(isError(api.dispatch(ids[2], throwing)), "throwing property getters must be contained by the bridge");
+  assert(JSON.stringify(unwrap(api.snapshot(ids[2]), "snapshot after malformed input")) === JSON.stringify(beforeInvalid),
+    "invalid calls must preserve the targeted session snapshot");
+
+  for (const invalidID of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "2", new Number(2)]) {
+    assert(isError(api.snapshot(invalidID)), "session IDs must be primitive positive safe integers");
+  }
+  assert(isError(api.create("extra")) && isError(api.list("extra")) &&
+    isError(api.snapshot(ids[2], "extra")) && isError(api.effects(ids[2], "extra")) &&
+    isError(api.complete(ids[2], { ID: 1, Value: "x", Error: "" }, "extra")) &&
+    isError(api.dispose(ids[2], "extra")) && isError(api.audit(ids[2], "extra")) &&
+    isError(api.encodeHTTP(1, "x", "extra")) && isError(api.decodeHTTP(1, 200, "{}", "extra")),
+    "every method must enforce exact arity");
+
+  const wireValue = `line "one"\\two\n雪`;
+  assert(unwrap(api.encodeHTTP(Number.MAX_SAFE_INTEGER, wireValue), "encode HTTP") ===
+    JSON.stringify({ ID: Number.MAX_SAFE_INTEGER, Value: wireValue }),
+    "HTTP request codec must preserve the existing exact wire format");
+  assert(isError(api.decodeHTTP(1, 600, "{}")),
+    "HTTP bridge must reject invalid status");
+  assert(JSON.stringify(unwrap(api.decodeHTTP(7, 200,
+    ` {"ID":7,"Value":"saved","Error":""} `), "decode HTTP")) ===
+    JSON.stringify({ ID: 7, Value: "saved", Error: "" }),
+    "HTTP reply codec must retain its correlated response shape");
+
+  unwrap(api.dispose(ids[1]), "dispose completed session");
+  unwrap(api.dispose(ids[2]), "dispose remaining session");
+  assert(unwrap(api.list(), "list after cleanup").length === 0,
+    "all smoke sessions must be independently removable");
+  return { ok: true, sessions: ids, sharedLocalRequestIDs: [1, 1, 1],
+    disposedCancellation: cancels, siblingCompletion: "saved two", lateRepliesRejected: true };
+})().catch((error) => {
+  window.__multiRootSmokeError = String(error?.stack ?? error);
+  throw error;
+});
+</script>
+</body></html>

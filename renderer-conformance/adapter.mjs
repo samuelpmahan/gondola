@@ -1,4 +1,5 @@
-const BRIDGE_METHODS = ["mount", "update", "snapshot", "domSnapshot", "click", "focusState", "restoreFocus", "unmount"];
+const INSTANCE_METHODS = ["update", "snapshot", "domSnapshot", "click", "focusState", "restoreFocus", "unmount"];
+const LEGACY_METHODS = ["mount", ...INSTANCE_METHODS];
 let bootPromise = null;
 
 function fail(message, cause) {
@@ -9,10 +10,17 @@ function checkBridge(candidate) {
   if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) {
     fail("globalThis.gobiGoDOM is not an API object");
   }
-  for (const method of BRIDGE_METHODS) {
-    if (typeof candidate[method] !== "function") fail(`globalThis.gobiGoDOM must expose ${method}()`);
-  }
+  if (typeof candidate.mount !== "function") fail("globalThis.gobiGoDOM must expose mount()");
   return candidate;
+}
+
+function hasInstanceMethods(candidate) {
+  return candidate && typeof candidate === "object" && !Array.isArray(candidate) &&
+    INSTANCE_METHODS.every((method) => typeof candidate[method] === "function");
+}
+
+function hasLegacySingletonMethods(candidate) {
+  return LEGACY_METHODS.every((method) => typeof candidate[method] === "function");
 }
 
 function unwrap(method, result) {
@@ -87,7 +95,22 @@ export async function loadGoDOM({ wasmURL, wasmExecURL } = {}) {
   }
 }
 
-/** Mount the already-loaded singleton bridge with the keyed host facade. */
+function adaptHandle(handle) {
+  if (!hasInstanceMethods(handle)) fail("gobiGoDOM.mount() must return a renderer API");
+  return Object.fromEntries(INSTANCE_METHODS.map((method) => [
+    method,
+    (...args) => unwrap(method, handle[method](...args)),
+  ]));
+}
+
+function adaptLegacySingleton(bridge) {
+  return Object.fromEntries(INSTANCE_METHODS.map((method) => [
+    method,
+    (...args) => unwrap(method, bridge[method](...args)),
+  ]));
+}
+
+/** Mount the already-loaded Go bridge and adapt its per-root renderer handle. */
 export function mountGoDOM(root, facade) {
   const bridge = checkBridge(globalThis.gobiGoDOM);
   if (!root) fail("root is required");
@@ -95,14 +118,14 @@ export function mountGoDOM(root, facade) {
       typeof facade.dispatch !== "function") {
     fail("facade must expose init() and dispatch()");
   }
-  unwrap("mount", bridge.mount(root, facade));
-  return {
-    update(snapshot) { return unwrap("update", bridge.update(snapshot)); },
-    snapshot() { return unwrap("snapshot", bridge.snapshot()); },
-    domSnapshot() { return unwrap("domSnapshot", bridge.domSnapshot()); },
-    click(path) { return unwrap("click", bridge.click(path)); },
-    focusState() { return unwrap("focusState", bridge.focusState()); },
-    restoreFocus(focus) { return unwrap("restoreFocus", bridge.restoreFocus(focus)); },
-    unmount() { return unwrap("unmount", bridge.unmount()); },
-  };
+  const handle = unwrap("mount", bridge.mount(root, facade));
+  if (hasInstanceMethods(handle)) return adaptHandle(handle);
+
+  // Keep the published singleton test-double contract working while requiring
+  // the complete old method table and its null mount result. Real Go/WASM now
+  // returns a per-instance handle from mount().
+  if ((handle === null || handle === undefined) && hasLegacySingletonMethods(bridge)) {
+    return adaptLegacySingleton(bridge);
+  }
+  fail("gobiGoDOM.mount() must return a renderer API");
 }

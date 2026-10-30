@@ -1,0 +1,183 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-multi-root-integration-audit"
+  },
+  "workers": {
+    "W2": {
+      "job": null,
+      "agent": null
+    },
+    "W3": {
+      "job": null,
+      "agent": null
+    },
+    "W5": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "IA1": {
+      "id": "IA1",
+      "kind": "extract",
+      "allow_workers": [
+        "W2"
+      ],
+      "summary": "cross-layer contract and fail-closed audit",
+      "status": "done",
+      "worker": "W2",
+      "started_at": "2026-10-30T14:20:15.498066+00:00",
+      "finished_at": "2026-10-30T14:27:37.858504+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/IA1.json"
+    },
+    "IA2": {
+      "id": "IA2",
+      "kind": "extract",
+      "allow_workers": [
+        "W3"
+      ],
+      "summary": "runner CI demo and evidence audit",
+      "status": "done",
+      "worker": "W3",
+      "started_at": "2026-10-30T14:20:15.596061+00:00",
+      "finished_at": "2026-10-30T14:30:10.946984+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/IA2.json"
+    },
+    "IA3": {
+      "id": "IA3",
+      "kind": "extract",
+      "allow_workers": [
+        "W5"
+      ],
+      "summary": "actual browser multi-session and multi-GoDOM adversarial probe",
+      "status": "done",
+      "worker": "W5",
+      "started_at": "2026-10-30T14:20:15.409455+00:00",
+      "finished_at": "2026-10-30T14:26:51.497223+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/IA3.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T14:20:05.713659+00:00",
+      "ready_jobs": [
+        "IA1",
+        "IA2",
+        "IA3"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W5": "IA3",
+        "W2": "IA1",
+        "W3": "IA2"
+      },
+      "dispatch": {
+        "W5": "IA3",
+        "W2": "IA1",
+        "W3": "IA2"
+      },
+      "native_seconds": 0.004712691006716341,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 3 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "IA1": 1,
+        "IA2": 1,
+        "IA3": 1,
+        "BENCH": 3
+      },
+      "eligible": {
+        "IA1": [
+          "W2"
+        ],
+        "IA2": [
+          "W3"
+        ],
+        "IA3": [
+          "W5"
+        ]
+      },
+      "weights": {
+        "IA1": 100,
+        "IA2": 100,
+        "IA3": 100
+      },
+      "agent_by_worker": {
+        "W2": null,
+        "W3": null,
+        "W5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:20:15.409455+00:00",
+      "worker": "W5",
+      "job": "IA3",
+      "agent": "/root/multiroot_godom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:20:15.498066+00:00",
+      "worker": "W2",
+      "job": "IA1",
+      "agent": "/root/multiroot_bridge"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:20:15.596061+00:00",
+      "worker": "W3",
+      "job": "IA2",
+      "agent": "/root/multiroot_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:26:51.497223+00:00",
+      "worker": "W5",
+      "job": "IA3"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:27:37.858504+00:00",
+      "worker": "W2",
+      "job": "IA1"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:30:10.946984+00:00",
+      "worker": "W3",
+      "job": "IA2"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}
