@@ -1,0 +1,400 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  createCompositionReference,
+  MAX_TITLE_BYTES,
+  mountCompositionReferenceCollection,
+  referenceReactDOMVersion,
+  referenceReactVersion,
+} from "./reference.mjs";
+
+const inputs = (Title = "", ReadOnly = false) => ({ Title, ReadOnly });
+const click = (Path, Key, Value = "") => ({ Path, Key, Value, Event: "click" });
+const input = (Path, Key, Value) => ({ Path, Key, Value, Event: "input" });
+const isDisabled = (node) => (node?.Attrs ?? []).some((attribute) =>
+  attribute.Name === "disabled" && attribute.Flag === true);
+
+function addRow(manager, id) {
+  return manager.dispatch(id, click("0", "add"));
+}
+
+function editRow(manager, id, rowID, value) {
+  return manager.dispatch(id, input("2/" + String(rowID - 1) + "/0", "row-" + rowID + "-input", value));
+}
+
+function saveRow(manager, id, rowID) {
+  return manager.dispatch(id, click("2/" + String(rowID - 1) + "/5", "row-" + rowID + "-save", String(rowID)));
+}
+
+function publishNode(snapshot, rowIndex = 0) {
+  return snapshot.tree.Kids[2].Kids[rowIndex].Kids[9];
+}
+
+test("composition snapshot adds visible title and inbox while preserving collection paths", () => {
+  const manager = createCompositionReference();
+  const rootID = manager.create();
+  const childID = manager.createChild(rootID);
+  const root = manager.snapshot(rootID);
+  assert.deepEqual(root.state.Inputs, inputs());
+  assert.equal(root.state.InputRevision, 0);
+  assert.deepEqual(root.state.Inbox, []);
+  assert.equal(root.tree.Kids.length, 5);
+  assert.equal(root.tree.Kids[3].Key, "composition-title");
+  assert.equal(root.tree.Kids[3].Kids[0].Text, "Title: ");
+  assert.equal(root.tree.Kids[4].Key, "composition-inbox");
+  assert.equal(root.tree.Kids[4].Kids[0].Text, "Published: 0");
+  assert.equal(root.tree.Kids[0].Key, "add");
+  assert.equal(root.tree.Kids[1].Key, "reset");
+
+  addRow(manager, rootID);
+  assert.equal(publishNode(manager.snapshot(rootID)).Key, "row-1-publish");
+  assert.equal(isDisabled(publishNode(manager.snapshot(rootID))), true,
+    "roots cannot publish even when their collection row exists");
+
+  addRow(manager, childID);
+  const child = manager.snapshot(childID);
+  assert.equal(child.tree.Kids[2].Kids[0].Kids.length, 10);
+  assert.equal(child.tree.Kids[2].Kids[0].Kids[8].Key, "row-1-cancel");
+  assert.deepEqual(child.bindings, [{ Path: "2/0/0", Event: "input", Message: "edit/1", Source: "target.value" }]);
+});
+
+test("inputs are immediate-parent only, count equal values, and enforce UTF-8 byte limits", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  const grandchild = manager.createChild(child);
+  const title = "🌘".repeat(64);
+  assert.equal(new TextEncoder().encode(title).length, MAX_TITLE_BYTES);
+  const first = manager.setChildInputs(root, child, inputs(title));
+  assert.deepEqual(first.state.Inputs, inputs(title));
+  assert.equal(first.state.InputRevision, 1);
+  assert.equal(first.tree.Kids[3].Kids[0].Text, "Title: " + title);
+  assert.equal(manager.snapshot(grandchild).state.InputRevision, 0,
+    "parent inputs are not inherited by grandchildren");
+  manager.setChildInputs(root, child, inputs(title));
+  assert.equal(manager.snapshot(child).state.InputRevision, 2,
+    "an equal accepted value still advances the revision");
+
+  const before = manager.snapshot(child);
+  assert.deepEqual(manager.changes(), [child]);
+  assert.throws(() => manager.setChildInputs(grandchild, child, inputs("wrong parent")), /not an immediate child/i);
+  assert.throws(() => manager.setChildInputs(root, child, inputs("🌘".repeat(65))), /256 UTF-8 bytes/i);
+  assert.throws(() => manager.setChildInputs(root, child, { Title: "\ud800", ReadOnly: false }), /valid UTF-8/i);
+  assert.throws(() => manager.setChildInputs(root, child, { Title: "x", ReadOnly: 1 }), /boolean/i);
+  assert.throws(() => manager.setChildInputs(root, child, { Title: "x", ReadOnly: false, Extra: true }), /exactly/i);
+  assert.deepEqual(manager.snapshot(child), before);
+  assert.deepEqual(manager.changes(), [],
+    "failed input calls neither mutate state nor add dirty IDs");
+});
+
+test("publish captures saved content, advances global sequence, and routes to the immediate parent", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  const grandchild = manager.createChild(child);
+  manager.setChildInputs(root, child, inputs("review"));
+  manager.setChildInputs(child, grandchild, inputs("leaf"));
+
+  addRow(manager, child);
+  editRow(manager, child, 1, "first draft");
+  saveRow(manager, child, 1);
+  assert.deepEqual(manager.effects(child), [{ Kind: "start", ID: 1, Value: "first draft" }]);
+  manager.complete(child, { ID: 1, Value: "captured saved value", Error: "" });
+  editRow(manager, child, 1, "later draft");
+
+  const first = manager.publish(child, 1, 1);
+  const second = manager.publish(child, 1, 1);
+  assert.deepEqual(first, {
+    Sequence: 1, ParentID: root, ChildID: child, RowID: 1,
+    Saved: "captured saved value", Saves: 1, InputRevision: 1,
+  });
+  assert.equal(second.Sequence, 2, "repeated publish calls create distinct sequence numbers");
+  assert.deepEqual(manager.snapshot(root).state.Inbox, [first, second]);
+  assert.deepEqual(manager.snapshot(child).messages.slice(-2), [
+    { Name: "publish", Arg: "1/1" },
+    { Name: "publish", Arg: "1/1" },
+  ]);
+  assert.deepEqual(manager.snapshot(grandchild).state.Inbox, [],
+    "grandchild publication has not been routed to its grandparent");
+
+  addRow(manager, grandchild);
+  editRow(manager, grandchild, 1, "leaf draft");
+  saveRow(manager, grandchild, 1);
+  manager.complete(grandchild, { ID: 1, Value: "grandchild saved", Error: "" });
+  const leafReceipt = manager.publish(grandchild, 1, 1);
+  assert.equal(leafReceipt.Sequence, 3);
+  assert.deepEqual(manager.snapshot(child).state.Inbox, [leafReceipt]);
+  assert.deepEqual(manager.snapshot(root).state.Inbox, [first, second],
+    "grandchild publication goes only to its direct parent");
+});
+
+test("stale revisions, wrong parents, roots, and unsaved rows do not partially publish", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  manager.setChildInputs(root, child, inputs("same"));
+  manager.setChildInputs(root, child, inputs("same"));
+  addRow(manager, child);
+  editRow(manager, child, 1, "ready");
+  saveRow(manager, child, 1);
+  manager.complete(child, { ID: 1, Value: "ready saved", Error: "" });
+
+  const beforeChild = manager.snapshot(child);
+  const beforeParent = manager.snapshot(root);
+  manager.changes();
+  assert.throws(() => manager.publish(child, 1, 1), /stale/i);
+  assert.throws(() => manager.publish(root, 1, 0), /root/i);
+  assert.throws(() => manager.publish(child, 2, 2), /row 2 no longer exists/i);
+  assert.deepEqual(manager.snapshot(child), beforeChild);
+  assert.deepEqual(manager.snapshot(root), beforeParent);
+  assert.deepEqual(manager.changes(), []);
+
+  const current = publishNode(manager.snapshot(child));
+  assert.equal(current.On[0].Arg, "1/2");
+  assert.throws(() => manager.dispatch(child, click("2/0/9", current.Key, "1/1")), /literal ROW\/REVISION/i);
+  assert.throws(() => manager.dispatch(child, click("2/0/9", "row-99-publish", "1/2")), /key/i);
+  assert.deepEqual(manager.snapshot(child), beforeChild);
+  assert.deepEqual(manager.snapshot(root), beforeParent);
+});
+
+test("existing unsaved rows disable and suppress publish without consuming state or sequence", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  manager.setChildInputs(root, child, inputs("unsaved row"));
+  addRow(manager, child);
+  manager.changes();
+
+  const beforeChild = manager.snapshot(child);
+  const beforeParent = manager.snapshot(root);
+  const button = publishNode(beforeChild);
+  assert.equal(beforeChild.state.Rows[0].Saved, "");
+  assert.equal(button.Key, "row-1-publish");
+  assert.deepEqual(button.On, [{ Event: "click", Message: "publish", Arg: "1/1" }]);
+  assert.equal(isDisabled(button), true,
+    "an existing row with empty Saved is disabled in the projected view");
+
+  assert.throws(() => manager.publish(child, 1, beforeChild.state.InputRevision),
+    /row 1 has no saved value to publish/i,
+    "typed publication rejects the existing row for its empty Saved value");
+  assert.deepEqual(manager.snapshot(child), beforeChild);
+  assert.deepEqual(manager.snapshot(root), beforeParent);
+  assert.deepEqual(manager.changes(), [],
+    "the direct typed rejection leaves both sessions clean");
+
+  const suppressed = manager.dispatch(child,
+    click("2/0/9", button.Key, button.On[0].Arg));
+  assert.deepEqual(suppressed, beforeChild,
+    "the canonical click on the disabled publish control is suppressed");
+  assert.deepEqual(suppressed.messages, beforeChild.messages,
+    "disabled publish does not append a child message");
+  assert.deepEqual(manager.snapshot(root), beforeParent,
+    "disabled publish does not append to the parent's inbox");
+  assert.deepEqual(manager.changes(), [],
+    "disabled publish does not dirty either session");
+
+  editRow(manager, child, 1, "save this row");
+  saveRow(manager, child, 1);
+  manager.effects(child);
+  manager.complete(child, { ID: 1, Value: "captured after save", Error: "" });
+  manager.changes();
+  const receipt = manager.publish(child, 1, beforeChild.state.InputRevision);
+  assert.equal(receipt.Sequence, 1,
+    "neither rejected publication consumed the manager-global sequence");
+  assert.equal(receipt.Saved, "captured after save");
+  assert.deepEqual(manager.snapshot(root).state.Inbox, [receipt]);
+});
+
+test("publish dispatch validates the current canonical control and appends ordered messages", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  manager.setChildInputs(root, child, inputs("child"));
+  addRow(manager, child);
+  editRow(manager, child, 1, "draft");
+  saveRow(manager, child, 1);
+  manager.complete(child, { ID: 1, Value: "saved", Error: "" });
+
+  const button = publishNode(manager.snapshot(child));
+  assert.equal(button.Attrs[0].Value, "publish");
+  assert.equal(button.On[0].Message, "publish");
+  assert.equal(button.On[0].Arg, "1/1");
+  manager.dispatch(child, click("2/0/9", button.Key, button.On[0].Arg));
+  assert.equal(manager.snapshot(root).state.Inbox[0].Saved, "saved");
+  assert.deepEqual(manager.snapshot(child).messages.slice(-2), [
+    { Name: "reply", Arg: "1" },
+    { Name: "publish", Arg: "1/1" },
+  ]);
+
+  assert.throws(() => manager.dispatch(child, {
+    Path: "2/00/9", Key: "row-1-publish", Value: "1/1", Event: "click",
+  }), /canonical/i);
+  assert.throws(() => manager.dispatch(child, {
+    Path: "2/0/9", Key: "row-1-publish", Value: "1/1", Event: "input",
+  }), /publish control path/i);
+});
+
+test("read-only disables every button and input, suppresses edits and publish, but accepts replies", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  addRow(manager, child);
+  editRow(manager, child, 1, "before readonly");
+  saveRow(manager, child, 1);
+  manager.effects(child);
+  manager.setChildInputs(root, child, inputs("locked", true));
+
+  const locked = manager.snapshot(child);
+  const allControls = [];
+  const walk = (node) => {
+    if (node?.Kind === 1 && (node.Tag === "button" || node.Tag === "input")) allControls.push(node);
+    for (const childNode of node?.Kids ?? []) walk(childNode);
+  };
+  walk(locked.tree);
+  assert.ok(allControls.length > 0);
+  assert.ok(allControls.every(isDisabled), "all controls carry the disabled attribute in read-only mode");
+
+  const beforeDraft = locked.state.Rows[0].Draft;
+  manager.dispatch(child, input("2/0/0", "row-1-input", "blocked edit"));
+  assert.equal(manager.snapshot(child).state.Rows[0].Draft, beforeDraft);
+  assert.throws(() => manager.publish(child, 1, 1), /read-only/i);
+  assert.equal(manager.snapshot(root).state.Inbox.length, 0);
+  manager.complete(child, { ID: 1, Value: "saved while locked", Error: "" });
+  const completed = manager.snapshot(child);
+  assert.equal(completed.state.Rows[0].Saved, "saved while locked");
+  assert.equal(completed.state.Rows[0].Saves, 1);
+  assert.equal(isDisabled(publishNode(completed)), true);
+  assert.equal(completed.tree.Kids[3].Kids[0].Text, "Title: locked");
+
+  // Disabled controls still require a valid canonical event declaration.
+  assert.throws(() => manager.dispatch(child, {
+    Path: "0", Key: "add", Value: "", Event: "hover",
+  }), /handler or binding/i);
+  assert.throws(() => manager.dispatch(child, {
+    Path: "0", Key: "wrong", Value: "", Event: "click",
+  }), /key/i);
+});
+
+test("completed pending replies remain accepted while read-only and dirty only their target", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  addRow(manager, child);
+  editRow(manager, child, 1, "pending");
+  saveRow(manager, child, 1);
+  manager.effects(child);
+  manager.changes();
+  manager.setChildInputs(root, child, inputs("locked", true));
+  assert.deepEqual(manager.changes(), [child]);
+  manager.complete(child, { ID: 1, Value: "done", Error: "" });
+  assert.deepEqual(manager.changes(), [child]);
+  assert.deepEqual(manager.snapshot(root).state.Inbox, []);
+});
+
+test("child deletion retains parent inbox history, owner deletion clears it, and IDs/sequences never reuse", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  addRow(manager, child);
+  editRow(manager, child, 1, "draft");
+  saveRow(manager, child, 1);
+  manager.complete(child, { ID: 1, Value: "one", Error: "" });
+  const receipt = manager.publish(child, 1, 0);
+  assert.equal(receipt.Sequence, 1);
+  manager.dispose(child);
+  assert.deepEqual(manager.snapshot(root).state.Inbox, [receipt]);
+  assert.deepEqual(manager.changes(), [root]);
+  assert.throws(() => manager.snapshot(child), /unknown or disposed/i);
+
+  const second = manager.createChild(root);
+  assert.equal(second, 3);
+  addRow(manager, second);
+  editRow(manager, second, 1, "draft");
+  saveRow(manager, second, 1);
+  manager.complete(second, { ID: 1, Value: "two", Error: "" });
+  const nextReceipt = manager.publish(second, 1, 0);
+  assert.equal(nextReceipt.Sequence, 2);
+  assert.deepEqual(manager.snapshot(root).state.Inbox.map(({ Sequence }) => Sequence), [1, 2]);
+
+  manager.disposeTree(root);
+  assert.deepEqual(manager.list(), []);
+  const replacement = manager.create();
+  assert.equal(replacement, 4);
+  assert.deepEqual(manager.snapshot(replacement).state.Inbox, []);
+  assert.deepEqual(manager.changes(), []);
+});
+
+test("snapshots and receipts are defensive copies and failed calls leave dirty IDs untouched", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  manager.setChildInputs(root, child, inputs("copy"));
+  addRow(manager, child);
+  editRow(manager, child, 1, "draft");
+  saveRow(manager, child, 1);
+  manager.complete(child, { ID: 1, Value: "saved", Error: "" });
+  manager.changes();
+
+  const snapshot = manager.snapshot(root);
+  snapshot.state.Inbox.push({ Sequence: 900 });
+  snapshot.tree.Kids[3].Kids[0].Text = "corrupt";
+  const childSnapshot = manager.snapshot(child);
+  childSnapshot.state.Inputs.Title = "corrupt";
+  childSnapshot.messages.push({ Name: "corrupt", Arg: "" });
+  assert.equal(manager.snapshot(root).state.Inbox.length, 0);
+  assert.equal(manager.snapshot(child).state.Inputs.Title, "copy");
+  assert.equal(manager.snapshot(child).tree.Kids[3].Kids[0].Text, "Title: copy");
+  assert.equal(manager.snapshot(child).messages.some(({ Name }) => Name === "corrupt"), false);
+
+  const receipt = manager.publish(child, 1, 1);
+  receipt.Saved = "corrupt";
+  manager.changes().push(999);
+  assert.equal(manager.snapshot(root).state.Inbox[0].Saved, "saved");
+  assert.deepEqual(manager.changes(), []);
+});
+
+test("tree, list, audit, effects and changes retain session-tree behavior", () => {
+  const manager = createCompositionReference();
+  const root = manager.create();
+  const child = manager.createChild(root);
+  assert.deepEqual(manager.list(), [root, child]);
+  assert.deepEqual(manager.tree(), [
+    { SessionID: root, ParentID: 0, Depth: 1 },
+    { SessionID: child, ParentID: root, Depth: 2 },
+  ]);
+  addRow(manager, child);
+  editRow(manager, child, 1, "save");
+  saveRow(manager, child, 1);
+  assert.deepEqual(manager.effects(child), [{ Kind: "start", ID: 1, Value: "save" }]);
+  manager.complete(child, { ID: 1, Value: "done", Error: "" });
+  assert.deepEqual(manager.audit(child), [{
+    ID: 1, RowID: 1, Value: "done", Error: "", Accepted: true, Reason: "saved",
+  }]);
+  assert.deepEqual(manager.changes(), [child]);
+  assert.deepEqual(manager.changes(), []);
+});
+
+test("public composition methods enforce exact arity", () => {
+  const manager = createCompositionReference();
+  assert.throws(() => manager.create("extra"), /requires exactly 0 arguments/i);
+  const root = manager.create();
+  assert.throws(() => manager.createChild(root, "extra"), /requires exactly 1 argument/i);
+  const child = manager.createChild(root);
+  assert.throws(() => manager.tree("extra"), /requires exactly 0 arguments/i);
+  assert.throws(() => manager.list("extra"), /requires exactly 0 arguments/i);
+  assert.throws(() => manager.snapshot(child, "extra"), /requires exactly 1 argument/i);
+  assert.throws(() => manager.dispatch(child, {}, "extra"), /requires exactly 2 arguments/i);
+  assert.throws(() => manager.effects(child, "extra"), /requires exactly 1 argument/i);
+  assert.throws(() => manager.complete(child, {}, "extra"), /requires exactly 2 arguments/i);
+  assert.throws(() => manager.audit(child, "extra"), /requires exactly 1 argument/i);
+  assert.throws(() => manager.disposeTree(child, "extra"), /requires exactly 1 argument/i);
+  assert.throws(() => manager.setChildInputs(root, child, inputs(), "extra"), /requires exactly 3 arguments/i);
+  assert.throws(() => manager.publish(child, 1, 0, "extra"), /requires exactly 3 arguments/i);
+  assert.throws(() => manager.changes("extra"), /requires exactly 0 arguments/i);
+});
+
+test("composition projection is the inherited pinned React renderer", () => {
+  assert.equal(typeof mountCompositionReferenceCollection, "function");
+  assert.equal(referenceReactVersion, "19.3.1");
+  assert.equal(referenceReactDOMVersion, "19.3.1");
+});

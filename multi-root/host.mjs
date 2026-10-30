@@ -228,6 +228,25 @@ export function createMultiRootHost({ manager, descriptors, transportFactory } =
     }
   }
 
+  function refresh(root) {
+    const record = currentRecord(root);
+    try {
+      const result = record.keyedHost.refresh();
+      record.backend = record.keyedHost.backendName();
+      record.lifecycle = "active";
+      return result;
+    } catch (error) {
+      try {
+        record.backend = record.keyedHost.backendName();
+        record.lifecycle = "active";
+      } catch {
+        record.backend = null;
+        record.lifecycle = "failed";
+      }
+      throw fail(`could not refresh session ${record.sessionID}`, error);
+    }
+  }
+
   function unmount(root) {
     const record = currentRecord(root);
     const errors = retire(record);
@@ -272,6 +291,7 @@ export function createMultiRootHost({ manager, descriptors, transportFactory } =
   return {
     mount,
     replace,
+    refresh,
     session(root) { return currentRecord(root).sessionID; },
     unmount,
     settled,

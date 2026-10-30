@@ -106,3 +106,15 @@ bash run-session-tree.sh
 ```
 
 The runner includes every inherited gate, nested-session tests, a real HTTP demonstration, and deterministic browser/native comparison with an independent pinned React reference. See [session-tree/README.md](session-tree/README.md), [the Go/host contract](session-tree/DESIGN.md), and [executed results and limits](session-tree/RESULTS.md).
+
+## Typed parent/child application communication
+
+The composition experiment adds Go-defined child inputs and saved-row publications over the existing session tree. A parent can set its direct child's title and read-only policy; the child publishes a Go-captured saved value to its immediate parent's inbox with a monotonic sequence and input revision. DOM, React and direct Go/WASM views use the same Go application contracts.
+
+```sh
+bash run-typed-composition.sh
+./http-effects/build/http-lab -addr 127.0.0.1:8000 -root .
+# Open http://127.0.0.1:8000/typed-composition/demo.html
+```
+
+See [typed-composition/README.md](typed-composition/README.md), [contracts](typed-composition/DESIGN.md), [execution evidence and limits](typed-composition/RESULTS.md), and [assignment/review receipts](typed-composition/coordination/PROTOCOL.md). This remains a bounded application experiment; a general component compiler is not supplied.

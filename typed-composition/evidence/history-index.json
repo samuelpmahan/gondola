@@ -1,0 +1,515 @@
+{
+  "schema": "gondola.typed-composition.history-index/v1",
+  "purpose": "Preserve historical exploratory and failed/mixed composition replay evidence for audit. Archives are diagnostic history, not acceptance evidence.",
+  "createdUTC": "2026-10-30T20:12:44.956Z",
+  "acceptanceBoundary": {
+    "liveAcceptedFullOutputExcluded": true,
+    "excludedPaths": "typed-composition/build/accepted-full-*",
+    "finalAcceptedRunControlledByRoot": true
+  },
+  "archiveMethod": {
+    "format": "tar.xz",
+    "compression": "xz -1 -T2",
+    "metadataNormalized": true,
+    "verifiedArchiveIntegrity": true,
+    "verifiedArchiveListings": true,
+    "acceptedFullPathsFoundInArchives": false
+  },
+  "records": [
+    {
+      "id": "t5-exploratory-full",
+      "role": "exploratory-full",
+      "archive": {
+        "path": "typed-composition/evidence/history-t5-exploratory-full.tar.xz",
+        "bytes": 3403972,
+        "sha256": "f81b217657e1ceed402b88ef26aba3f1a62001985e0b634060b499506284d373",
+        "memberCount": 69,
+        "verification": {
+          "xzTest": "passed",
+          "archiveContentsListed": "passed",
+          "manifestShardDigests": "passed on extracted contents",
+          "replayFrames": "passed",
+          "acceptedFullExcluded": true
+        }
+      },
+      "results": [
+        {
+          "reportPath": "typed-composition/build/t5-full-report.json",
+          "reportSHA256": "c970838048ae4518734499629885cb393c22534e3459b9659151e8cb724c3370",
+          "manifestPath": "typed-composition/build/t5-full-report-manifest.json",
+          "manifestSHA256": "b8672ed0e4ecec781af8afca7aa36eabb2e6d0daabae7fa9ea6f32452f90e566",
+          "mismatchArtifactPath": "typed-composition/build/t5-full-report-mismatches.json",
+          "mismatchArtifactSHA256": "1fc1064043d8057b8c1875e1cfce2534b8fa57858f28e7dee97e2cd6e038d73c",
+          "status": "mismatched",
+          "mismatchCount": 369,
+          "scripts": 63,
+          "nativeExecutions": 63,
+          "actions": 2463,
+          "nativeFrames": 2463,
+          "actorNativeFrameComparisons": null,
+          "rawShardDirectory": "typed-composition/build/t5-full-report-scenarios",
+          "rawShardCount": 65,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [
+            {
+              "field": "frame.candidate-native",
+              "count": 133
+            },
+            {
+              "field": "frame.reference-native",
+              "count": 133
+            },
+            {
+              "field": "operation.native-candidate",
+              "count": 49
+            },
+            {
+              "field": "operation.native-reference",
+              "count": 49
+            },
+            {
+              "field": "focus.replacement-value",
+              "count": 5
+            }
+          ],
+          "sourceSetSHA256": "b0623216c0188eeecc7a292a0f53c27fdbe289e52351841d462978441c29ef54",
+          "sourcePinCount": 26,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 20261030,20261031 --cases 30 --max-actions 40 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/t5-full-report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "unavailable on PATH",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected"
+          }
+        }
+      ],
+      "sourceSnapshot": {
+        "available": false,
+        "reason": "No exact source tree archive for this historical report was preserved. Per-report sourcePins/sourceSetSHA256 are included as hashes only; later/current sources are not substituted."
+      },
+      "limits": "Diagnostic only; 369 findings were recorded while selector work was changing. Its historical mixed source snapshot is unavailable; the report preserves 26 source pin hashes, not an exact reconstructible source tree."
+    },
+    {
+      "id": "clean-fixed-preflights",
+      "role": "fixed-preflight-history",
+      "archive": {
+        "path": "typed-composition/evidence/history-clean-fixed-preflights.tar.xz",
+        "bytes": 412572,
+        "sha256": "c3d76a03130fbb5b702ac38fce0cc0f6137037739d89d5880dd09e02e579880d",
+        "memberCount": 29,
+        "verification": {
+          "xzTest": "passed",
+          "archiveContentsListed": "passed",
+          "manifestShardDigests": "passed on extracted contents",
+          "replayFrames": "passed",
+          "acceptedFullExcluded": true
+        }
+      },
+      "results": [
+        {
+          "reportPath": "typed-composition/build/t5-fixed-report.json",
+          "reportSHA256": "d1de9e4caed313d8963f839df249dfcfcceaf7199416453a31d364769a745447",
+          "manifestPath": "typed-composition/build/t5-fixed-report-manifest.json",
+          "manifestSHA256": "85ef222a234989f6a0ce9898d25ccdc0f1dfb0ed0cdae8a892f5aa2ea509c40e",
+          "mismatchArtifactPath": "typed-composition/build/t5-fixed-report-mismatches.json",
+          "mismatchArtifactSHA256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "status": "matched",
+          "mismatchCount": 0,
+          "scripts": 3,
+          "nativeExecutions": 3,
+          "actions": 63,
+          "nativeFrames": 63,
+          "actorNativeFrameComparisons": null,
+          "rawShardDirectory": "typed-composition/build/t5-fixed-report-scenarios",
+          "rawShardCount": 5,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [],
+          "sourceSetSHA256": "bbb7b5784cf84cb0e4d42fceb3b2f15556a732345af2a5b5580cfee420a2cc38",
+          "sourcePinCount": 26,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 1 --cases 0 --max-actions 9 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/t5-fixed-report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "unavailable on PATH",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected"
+          }
+        },
+        {
+          "reportPath": "typed-composition/build/t5-clean-fixed-report.json",
+          "reportSHA256": "555c30521038ae1094138758d057a3933979e98ab4c16d6ec3ed72bcf148a63f",
+          "manifestPath": "typed-composition/build/t5-clean-fixed-report-manifest.json",
+          "manifestSHA256": "b5cee480e6380f9b2dca3b55dd857d29b10ed6ee9b11c145604ab95087bec458",
+          "mismatchArtifactPath": "typed-composition/build/t5-clean-fixed-report-mismatches.json",
+          "mismatchArtifactSHA256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "status": "matched",
+          "mismatchCount": 0,
+          "scripts": 3,
+          "nativeExecutions": 3,
+          "actions": 63,
+          "nativeFrames": 63,
+          "actorNativeFrameComparisons": 126,
+          "rawShardDirectory": "typed-composition/build/t5-clean-fixed-report-scenarios",
+          "rawShardCount": 6,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [],
+          "sourceSetSHA256": "7106f3ac25a271bdb70bd2c282b42b973737acc43160837751cd9dd8af7fd0a5",
+          "sourcePinCount": 26,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 20261030,20261031 --cases 0 --max-actions 40 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/t5-clean-fixed-report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "go version go1.24.0 linux/amd64",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected",
+            "retainedCallbackAfterRecreation": "fenced"
+          }
+        },
+        {
+          "reportPath": "typed-composition/build/t5-final-fixed-report.json",
+          "reportSHA256": "b670659675a44a9551309288bf3d5081207f3edaecd852b9352132e53941cc8c",
+          "manifestPath": "typed-composition/build/t5-final-fixed-report-manifest.json",
+          "manifestSHA256": "5e8fc980a2c94ff3cb2403cf15eff9b134028dda2ffc996cd7451f80dce894bb",
+          "mismatchArtifactPath": "typed-composition/build/t5-final-fixed-report-mismatches.json",
+          "mismatchArtifactSHA256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "status": "matched",
+          "mismatchCount": 0,
+          "scripts": 3,
+          "nativeExecutions": 3,
+          "actions": 63,
+          "nativeFrames": 63,
+          "actorNativeFrameComparisons": 126,
+          "rawShardDirectory": "typed-composition/build/t5-final-fixed-report-scenarios",
+          "rawShardCount": 6,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [],
+          "sourceSetSHA256": "8bca4a72af464dcf90da439024e2e9cf8744ef3c2de038573d1d5dcbd14da96a",
+          "sourcePinCount": 49,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 20261030,20261031 --cases 0 --max-actions 40 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/t5-final-fixed-report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "go version go1.24.0 linux/amd64",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected",
+            "retainedCallbackAfterRecreation": "fenced"
+          }
+        }
+      ],
+      "sourceSnapshot": {
+        "available": false,
+        "reason": "No exact source tree archive for this historical report was preserved. Per-report sourcePins/sourceSetSHA256 are included as hashes only; later/current sources are not substituted."
+      },
+      "limits": "Three fixed-only runs, not seeded/full acceptance. Exact per-run source snapshots are unavailable; each report preserves its source pin hashes. The earliest report has older metadata and only five raw shards."
+    },
+    {
+      "id": "frozen-full",
+      "role": "source-frozen-full-diagnostic",
+      "archive": {
+        "path": "typed-composition/evidence/history-frozen-full.tar.xz",
+        "bytes": 6073764,
+        "sha256": "4ae949d639c323c2c2620c3b5dd331c7233a3250828a6206150755a85b3397bc",
+        "memberCount": 74,
+        "verification": {
+          "xzTest": "passed",
+          "archiveContentsListed": "passed",
+          "manifestShardDigests": "passed on extracted contents",
+          "replayFrames": "passed",
+          "acceptedFullExcluded": true
+        }
+      },
+      "results": [
+        {
+          "reportPath": "typed-composition/build/frozen-full-report.json",
+          "reportSHA256": "784cb1ae0d23a4362a7e44bb87011bc239eb2cca18e2c4bc974292160b8b417f",
+          "manifestPath": "typed-composition/build/frozen-full-report-manifest.json",
+          "manifestSHA256": "cb1a734fb25b265dd54d923e7348c849d10b4cb37a9028af03a9b56922890960",
+          "mismatchArtifactPath": "typed-composition/build/frozen-full-report-mismatches.json",
+          "mismatchArtifactSHA256": "35fddeb032ff5b66bf7e9f25c06d55fb096790897e79d8431479f3fa9246af5f",
+          "status": "mismatched",
+          "mismatchCount": 12,
+          "scripts": 63,
+          "nativeExecutions": 63,
+          "actions": 2463,
+          "nativeFrames": 2463,
+          "actorNativeFrameComparisons": 4926,
+          "rawShardDirectory": "typed-composition/build/frozen-full-report-scenarios",
+          "rawShardCount": 66,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [
+            {
+              "field": "input.candidate.live",
+              "count": 6
+            },
+            {
+              "field": "input.reference.live",
+              "count": 6
+            }
+          ],
+          "sourceSetSHA256": "b497a5d66e64aa430ab06deec024421c62df73531c8b837539076a93582dd9e7",
+          "sourcePinCount": 49,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 20261030,20261031 --cases 30 --max-actions 40 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/frozen-full-report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "go version go1.24.0 linux/amd64",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected",
+            "retainedCallbackAfterRecreation": "fenced"
+          }
+        }
+      ],
+      "sourceSnapshot": {
+        "available": true,
+        "archivePath": "typed-composition/evidence/frozen-before-oracle-closure.tar.xz",
+        "archiveSHA256": "017ddbf98af8a1a9aa173c5d2d5b1a00df7f092a5bdcb098da36159aab8dabf1",
+        "reportedMatchedFiles": 49,
+        "verifiedAgainstBeforeCapturePins": 49,
+        "verifiedPinMismatches": 0,
+        "unchangedFromBefore": true,
+        "reportPinsEqualBefore": true,
+        "reportPinsEqualCurrent": true,
+        "changedPaths": []
+      },
+      "limits": "The exact 49-file source snapshot is included and pin-verified. This full run has 12 blocked-input observer findings and is not accepted proof."
+    },
+    {
+      "id": "closure-fixed-generation",
+      "role": "generation-provenance-diagnostic",
+      "archive": {
+        "path": "typed-composition/evidence/history-closure-fixed-generation.tar.xz",
+        "bytes": 151452,
+        "sha256": "a301ecd937c173166259b00c8f77cc8b3450317f25db5764ac8ebb6fc71063df",
+        "memberCount": 12,
+        "verification": {
+          "xzTest": "passed",
+          "archiveContentsListed": "passed",
+          "manifestShardDigests": "passed on extracted contents",
+          "replayFrames": "passed",
+          "acceptedFullExcluded": true
+        }
+      },
+      "results": [
+        {
+          "reportPath": "typed-composition/build/closure-fixed-report.json",
+          "reportSHA256": "aefb1cfda458634bac3865260ea0caad7be655d033d1057bb42d43fdde864443",
+          "manifestPath": "typed-composition/build/closure-fixed-report-manifest.json",
+          "manifestSHA256": "b8a46cc7ed4d24e58f975997398f2b0e0dff7ec03cf4ea62fd930c554580dc90",
+          "mismatchArtifactPath": "typed-composition/build/closure-fixed-report-mismatches.json",
+          "mismatchArtifactSHA256": "022894d1f28dcb41052b8420af061f4f8aee9a4c4a3dc676f426f8a4c0f8182b",
+          "status": "mismatched",
+          "mismatchCount": 16,
+          "scripts": 3,
+          "nativeExecutions": 3,
+          "actions": 63,
+          "nativeFrames": 63,
+          "actorNativeFrameComparisons": 126,
+          "rawShardDirectory": "typed-composition/build/closure-fixed-report-scenarios",
+          "rawShardCount": 6,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [
+            {
+              "field": "transport.candidate.event.host-generation",
+              "count": 8
+            },
+            {
+              "field": "transport.reference.event.host-generation",
+              "count": 8
+            }
+          ],
+          "sourceSetSHA256": "9c9dec1765c48278855b2f7ecbf6e030916c5bbab200303039dd3480bd5f8302",
+          "sourcePinCount": 49,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 20261030,20261031 --cases 0 --max-actions 40 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/closure-fixed-report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "go version go1.24.0 linux/amd64",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected",
+            "retainedCallbackAfterRecreation": "fenced"
+          }
+        }
+      ],
+      "sourceSnapshot": {
+        "available": false,
+        "reason": "No exact source tree archive for this historical report was preserved. Per-report sourcePins/sourceSetSHA256 are included as hashes only; later/current sources are not substituted."
+      },
+      "limits": "Fixed-only run with 16 generation provenance findings. Its exact historical source snapshot is unavailable; the report preserves 49 source pin hashes.",
+      "execution": {
+        "status": "completed-with-findings",
+        "logPath": "typed-composition/build/closure-fixed.log",
+        "logSHA256": "a1b12f2e7a48863f9e78b18519deea7e2dacd01f397130caa445cb179f02d07d",
+        "testLogPath": "typed-composition/build/closure-node-tests.log",
+        "testLogSHA256": "df2ac3d838d810e0aab387dac1d8eeee9a76a5db582d81352785ec63e9a2cc26"
+      }
+    },
+    {
+      "id": "mixed-observer-full-run-second",
+      "role": "mixed-observer-full-diagnostic",
+      "archive": {
+        "path": "typed-composition/evidence/history-mixed-observer-full-run-second.tar.xz",
+        "bytes": 3296656,
+        "sha256": "fd65100e3589e5f24a94bc276f218c19104026ef3300a642939538f0f285a9f7",
+        "memberCount": 72,
+        "verification": {
+          "xzTest": "passed",
+          "archiveContentsListed": "passed",
+          "manifestShardDigests": "passed on extracted contents",
+          "replayFrames": "passed",
+          "acceptedFullExcluded": true
+        }
+      },
+      "results": [
+        {
+          "reportPath": "typed-composition/build/report.json",
+          "reportSHA256": "26ae2f34391a36afb5e245800493a09cb76299e67950b2896e5d0dbc554ad744",
+          "manifestPath": "typed-composition/build/report-manifest.json",
+          "manifestSHA256": "2f4ed12fa98f8ad2dba87935c99fa83e2066218c67b2b5b26285036eb57e42da",
+          "mismatchArtifactPath": "typed-composition/build/report-mismatches.json",
+          "mismatchArtifactSHA256": "782b290c7287521c17ff35d9723fb91293f69c0c7bc89095fae8aa6869fd5ee2",
+          "status": "mismatched",
+          "mismatchCount": 248,
+          "scripts": 63,
+          "nativeExecutions": 63,
+          "actions": 2463,
+          "nativeFrames": 2463,
+          "actorNativeFrameComparisons": 4926,
+          "rawShardDirectory": "typed-composition/build/report-scenarios",
+          "rawShardCount": 66,
+          "rawShardHashesVerified": true,
+          "nativeFrameEvidence": "Each replay script shard has nonempty nativeFrames matching actions and nativeInput.actions; browser-only mutation controls are separately classified.",
+          "mismatchCategories": [
+            {
+              "field": "input.candidate.observation.missing",
+              "count": 91
+            },
+            {
+              "field": "input.reference.observation.missing",
+              "count": 91
+            },
+            {
+              "field": "focus.reference-physical",
+              "count": 54
+            },
+            {
+              "field": "input.candidate.blocked-state-unchanged",
+              "count": 6
+            },
+            {
+              "field": "input.reference.blocked-state-unchanged",
+              "count": 6
+            }
+          ],
+          "sourceSetSHA256": "f7ca20534b65da3edc0e29f24020b6e522291efc1bd1aa6183c0abcc5fabafbf",
+          "sourcePinCount": 49,
+          "command": "COMPOSITION_REPLAY_BIN=/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay node typed-composition/check.mjs --seeds 20261030,20261031 --cases 30 --max-actions 40 --output /workspace/scratch/39a56936f173/gondola/typed-composition/build/report.json",
+          "browser": {
+            "chromium": "153.0.8010.0",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "toolchain": {
+            "node": "v22.23.4",
+            "platform": "linux",
+            "go": "go version go1.24.0 linux/amd64",
+            "nativeReplay": "/workspace/scratch/39a56936f173/gondola/typed-composition/build/composition-replay"
+          },
+          "mutationControls": {
+            "parent": "rejected-without-mutation",
+            "revision": "rejected-without-mutation",
+            "inboxOrdering": "detected",
+            "physicalDOMDisabled": "detected",
+            "retainedCallbackAfterRecreation": "fenced"
+          }
+        }
+      ],
+      "sourceSnapshot": {
+        "available": false,
+        "reason": "No exact source tree archive for this historical report was preserved. Per-report sourcePins/sourceSetSHA256 are included as hashes only; later/current sources are not substituted."
+      },
+      "limits": "Full run has 248 observer findings and exit code 1. Exact historical mixed source snapshot is unavailable; the report preserves 49 source pin hashes. Not accepted proof.",
+      "execution": {
+        "status": "failed",
+        "exitCode": 1,
+        "startedUTC": "2026-10-30T19:38:10.039561+00:00",
+        "finishedUTC": "2026-10-30T20:00:54.387549+00:00",
+        "command": [
+          "bash",
+          "run-typed-composition.sh"
+        ],
+        "logPath": "typed-composition/build/full-run-second.log",
+        "logSHA256": "f257428dd9811d26f53e83b79bb77597e6e9858f3945550b2b6489cef1642c51",
+        "logHashMatches": true,
+        "executionRecordPath": "typed-composition/build/full-run-second.json",
+        "executionRecordSHA256": "f3b0db4fa690e82d850b23b244979dc941816bde807db9d9076e02a1d290cd99"
+      }
+    }
+  ]
+}

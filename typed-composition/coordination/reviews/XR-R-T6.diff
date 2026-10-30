@@ -1,0 +1,581 @@
+diff --git a/typed-composition/browser-smoke.mjs b/typed-composition/browser-smoke.mjs
+new file mode 100644
+index 0000000..ae9b26a
+--- /dev/null
++++ b/typed-composition/browser-smoke.mjs
+@@ -0,0 +1,228 @@
++#!/usr/bin/env node
++import assert from "node:assert/strict";
++import { createRequire } from "node:module";
++import { dirname, resolve } from "node:path";
++import { fileURLToPath } from "node:url";
++import { startHTTPProcess } from "./http-lab-process.mjs";
++
++const HERE = dirname(fileURLToPath(import.meta.url));
++const ROOT = resolve(HERE, "..");
++const labPath = resolve(ROOT, "http-effects/build/http-lab");
++const requireFromInteraction = createRequire(resolve(ROOT, "interaction/package.json"));
++const { chromium } = requireFromInteraction("playwright");
++
++function startLab() {
++  return startHTTPProcess({
++    command: labPath,
++    args: ["-addr", "127.0.0.1:0", "-root", ROOT],
++    cwd: ROOT,
++  });
++}
++
++async function waitFor(page, predicate, description, arg = null) {
++  try { await page.waitForFunction(predicate, arg, { timeout: 15_000 }); }
++  catch (error) {
++    const detail = await page.evaluate(() => ({
++      live: document.getElementById("live-count")?.textContent,
++      snapshots: document.getElementById("snapshot-output")?.textContent,
++      receipts: document.getElementById("receipts-output")?.textContent,
++      error: document.getElementById("error")?.textContent,
++    }));
++    throw new Error(`${description}: ${error.message}\n${JSON.stringify(detail, null, 2)}`);
++  }
++}
++
++async function waitForRequest(page, sessionID, requestID, state) {
++  await page.waitForFunction(async ({ sid, id, wanted }) => {
++    const record = window.__typedCompositionDemo.records.get(sid);
++    if (!record) return false;
++    const response = await fetch(`/api/requests?lane=${encodeURIComponent(record.lane)}`, { cache: "no-store" });
++    if (!response.ok) return false;
++    const body = await response.json();
++    return body.requests?.some((request) => request.ID === id && request.State === wanted);
++  }, { sid: sessionID, id: requestID, wanted: state }, { timeout: 15_000 });
++}
++
++async function addDraft(page, sessionID, value) {
++  const view = page.locator(`[data-session-view="${sessionID}"]`);
++  await view.locator("button.add").click();
++  await view.getByLabel("Row 1").fill(value);
++  await waitFor(page, ({ sid, value: wanted }) => {
++    const snapshot = window.__typedCompositionDemo.manager.snapshot(sid);
++    const state = snapshot.state ?? snapshot.State;
++    return state.Rows?.[0]?.Draft === wanted;
++  }, `row draft ${JSON.stringify(value)}`, { sid: sessionID, value });
++  return view;
++}
++
++async function main() {
++  const lab = startLab();
++  let browser;
++  try {
++    const baseURL = await lab.ready;
++    browser = await chromium.launch({
++      headless: true,
++      ...(process.env.CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {}),
++      args: ["--no-sandbox"],
++    });
++    const page = await browser.newPage();
++    const pageErrors = [];
++    page.on("pageerror", (error) => pageErrors.push(String(error?.stack ?? error)));
++    page.on("console", (message) => { if (message.type() === "error") pageErrors.push(message.text()); });
++    await page.goto(`${baseURL}/typed-composition/demo.html`, { waitUntil: "load" });
++    await page.waitForFunction(() => document.getElementById("live-count")?.textContent === "2 live sessions" ||
++      (document.getElementById("error") && !document.getElementById("error").hidden), null, { timeout: 30_000 });
++    assert.equal(await page.locator("#error").isVisible(), false, await page.locator("#error").textContent());
++
++    const initial = await page.evaluate(() => window.__typedCompositionDemo.initialIDs);
++    assert.ok(initial.parent > 0 && initial.child > initial.parent);
++    assert.match(await page.locator(`[data-session-view="${initial.parent}"]`).textContent(), /Published: 0/);
++    assert.match(await page.locator(`[data-session-view="${initial.child}"]`).textContent(), /Title: Review ticket/);
++
++    const childView = await addDraft(page, initial.child, "accepted over HTTP");
++    const parentControls = page.locator(`[data-control-session="${initial.parent}"]`);
++    const childControls = page.locator(`[data-control-session="${initial.child}"]`);
++    await childControls.locator("[data-response-mode]").selectOption("held");
++    await childView.locator("button.save").click();
++    await waitForRequest(page, initial.child, 1, "held");
++    await waitFor(page, ({ sid }) => {
++      const snapshot = window.__typedCompositionDemo.manager.snapshot(sid);
++      const state = snapshot.state ?? snapshot.State;
++      return state.Rows[0].Status === "pending";
++    },
++      "child save is pending at HTTP server", { sid: initial.child });
++
++    await parentControls.locator("[data-policy-title]").fill("Approval ticket");
++    await parentControls.locator("[data-policy-title]").press("Tab");
++    await parentControls.locator("[data-policy-readonly]").check();
++    await page.evaluate(() => window.__typedCompositionDemo.settled());
++    await waitFor(page, ({ sid }) => {
++      const snapshot = window.__typedCompositionDemo.manager.snapshot(sid);
++      const state = snapshot.state ?? snapshot.State;
++      return state.Inputs?.ReadOnly === true || state.inputs?.readOnly === true;
++    }, "child receives parent read-only policy", { sid: initial.child });
++    await waitFor(page, ({ sid }) => document.querySelector(`[data-session-view="${sid}"]`)?.textContent.includes("Title: Approval ticket"),
++      "child title follows parent input", { sid: initial.child });
++    const disabledState = await page.evaluate((id) => {
++      const view = document.querySelector(`[data-session-view="${id}"]`);
++      return {
++        inputs: [...view.querySelectorAll("input")].map((input) => input.disabled),
++        buttons: [...view.querySelectorAll("button")].map((button) => button.disabled),
++      };
++    }, initial.child);
++    assert.ok(disabledState.inputs.length > 0 && disabledState.inputs.every(Boolean));
++    assert.ok(disabledState.buttons.length > 0 && disabledState.buttons.every(Boolean));
++
++    await page.locator(`[data-release="${initial.child}:1"]`).click();
++    await waitForRequest(page, initial.child, 1, "completed");
++    await waitFor(page, ({ sid }) => {
++      const snapshot = window.__typedCompositionDemo.manager.snapshot(sid);
++      const state = snapshot.state ?? snapshot.State;
++      const row = state.Rows[0];
++      return row.Saved === "accepted over HTTP" && row.Status === "saved" && row.PendingID === 0;
++    }, "pending completion updates Go state while read-only is active", { sid: initial.child });
++    assert.match(await page.locator(`[data-session-view="${initial.parent}"]`).textContent(), /Published: 0/);
++
++    await parentControls.locator("[data-policy-readonly]").uncheck();
++    await page.evaluate(() => window.__typedCompositionDemo.settled());
++    await waitFor(page, ({ sid }) => {
++      const snapshot = window.__typedCompositionDemo.manager.snapshot(sid);
++      const state = snapshot.state ?? snapshot.State;
++      return state.Inputs?.ReadOnly === false || state.inputs?.readOnly === false;
++    }, "parent re-enables the child", { sid: initial.child });
++
++    const rendererSequence = ["dom", "godom", "react"];
++    for (const backend of rendererSequence) {
++      await page.evaluate((id) => {
++        const input = document.querySelector(`[data-session-view="${id}"] input[aria-label="Row 1"]`);
++        input.focus();
++        input.setSelectionRange(2, 9, "backward");
++        input.dispatchEvent(new Event("select", { bubbles: true }));
++        window.__rendererInput = input;
++      }, initial.child);
++      await childControls.locator("[data-backend-select]").selectOption(backend);
++      await childControls.locator('[data-action="replace"]').click();
++      await waitFor(page, ({ id, backend: expected }) =>
++        document.querySelector(`[data-control-session="${id}"] [data-details]`)?.textContent.includes(expected),
++      `child renderer switched to ${backend}`, { id: initial.child, backend });
++      const after = await page.evaluate(({ id }) => {
++        const input = document.querySelector(`[data-session-view="${id}"] input[aria-label="Row 1"]`);
++        const state = window.__typedCompositionDemo.manager.snapshot(id).state;
++        return {
++          replaced: input !== window.__rendererInput,
++          focused: document.activeElement === input,
++          selection: [input.selectionStart, input.selectionEnd, input.selectionDirection],
++          draft: state.Rows[0].Draft,
++          saved: state.Rows[0].Saved,
++        };
++      }, { id: initial.child });
++      assert.equal(after.replaced, true);
++      assert.equal(after.focused, true);
++      assert.deepEqual(after.selection, [2, 9, "backward"]);
++      assert.equal(after.draft, "accepted over HTTP");
++      assert.equal(after.saved, "accepted over HTTP");
++      await page.evaluate((id) => { window.__rendererInput = document.querySelector(`[data-session-view="${id}"] input[aria-label="Row 1"]`); }, initial.child);
++    }
++
++    await childView.locator("button.publish").click();
++    await waitFor(page, ({ id }) => document.querySelector(`[data-session-view="${id}"]`)?.textContent.includes("Published: 1"),
++      "Go publishes child row into parent Inbox", { id: initial.parent });
++    await waitFor(page, ({ id }) => {
++      const snapshot = window.__typedCompositionDemo.manager.snapshot(id);
++      const state = snapshot.state ?? snapshot.State;
++      return state.Inbox?.length === 1 || state.inbox?.length === 1;
++    }, "parent Inbox retains one Go receipt", { id: initial.parent });
++    const receipt = await page.evaluate((id) => {
++      const snapshot = window.__typedCompositionDemo.manager.snapshot(id);
++      const state = snapshot.state ?? snapshot.State;
++      return state.Inbox?.[0] ?? state.inbox?.[0];
++    }, initial.parent);
++    assert.equal(receipt.Saved, "accepted over HTTP");
++    assert.equal(receipt.ChildID, initial.child);
++    assert.equal(receipt.Saves, 1);
++
++    await page.locator(`[data-control-session="${initial.child}"] [data-action="dispose"]`).click();
++    await waitFor(page, ({ id }) => !window.__typedCompositionDemo.host.tree().some((entry) => (entry.SessionID ?? entry.sessionID) === id),
++      "child session disposed", { id: initial.child });
++    assert.match(await page.locator(`[data-session-view="${initial.parent}"]`).textContent(), /Published: 1/);
++    const retained = JSON.parse(await page.locator("#receipts-output").textContent());
++    assert.equal(retained.length, 1);
++    assert.equal(retained[0].Saved, "accepted over HTTP");
++
++    await page.locator("#recreate-child").click();
++    await waitFor(page, ({ oldID }) => {
++      const demo = window.__typedCompositionDemo;
++      const tree = demo.host.tree();
++      const child = tree.find((entry) => (entry.ParentID ?? entry.parentID) === demo.initialIDs.parent);
++      return child && (child.SessionID ?? child.sessionID) > oldID;
++    }, "child recreated with a fresh session ID", { oldID: initial.child });
++    const recreated = await page.evaluate(() => {
++      const demo = window.__typedCompositionDemo;
++      const tree = demo.host.tree();
++      const child = tree.find((entry) => (entry.ParentID ?? entry.parentID) === demo.initialIDs.parent);
++      const id = child.SessionID ?? child.sessionID;
++      return { id, state: demo.manager.snapshot(id).state };
++    });
++    assert.ok(recreated.id > initial.child);
++    assert.deepEqual(recreated.state.Rows, []);
++    assert.match(await page.locator(`#receipts-output`).textContent(), /accepted over HTTP/);
++    assert.deepEqual(pageErrors, [], `browser console errors: ${pageErrors.join("\n")}`);
++    console.log(JSON.stringify({
++      initial,
++      recreatedID: recreated.id,
++      receipt,
++      rendererSequence,
++      readonlyCompletion: "saved while read-only",
++      http: "held request released through loopback HTTP lab",
++      pageErrors,
++    }));
++  } finally {
++    try {
++      if (browser) await browser.close();
++    } finally {
++      await lab.close();
++    }
++  }
++}
++
++await main();
+diff --git a/typed-composition/demo.html b/typed-composition/demo.html
+new file mode 100644
+index 0000000..b8ec879
+--- /dev/null
++++ b/typed-composition/demo.html
+@@ -0,0 +1,80 @@
++<!doctype html>
++<html lang="en">
++<head>
++  <meta charset="utf-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1">
++  <title>Typed parent and child collection composition</title>
++  <style>
++    :root { color-scheme: light dark; font: 15px/1.5 system-ui, sans-serif; }
++    body { max-width: 112rem; margin: 1.75rem auto; padding: 0 1.25rem; }
++    h1, h2, h3 { line-height: 1.2; }
++    p { max-width: 82ch; }
++    .muted { opacity: .72; }
++    button, select, input { font: inherit; padding: .35rem .55rem; }
++    button { cursor: pointer; }
++    button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
++    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
++    .layout { display: grid; grid-template-columns: minmax(18rem, 25rem) minmax(0, 1fr); gap: 1rem; align-items: start; }
++    .panel, .session-shell { border: 1px solid #8888; border-radius: .7rem; padding: .85rem; }
++    .control-list { display: grid; gap: .7rem; }
++    .session-control { border: 1px solid #8887; border-radius: .5rem; padding: .7rem; }
++    .session-control h3 { margin: 0 0 .4rem; }
++    .session-control p { margin: .25rem 0 .5rem; }
++    .actions, .policy-actions { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
++    .actions > * { flex: 1 1 auto; }
++    .roots { min-width: 0; }
++    .tree-shell { border-left: .3rem solid #6885aa; margin: .6rem 0; }
++    .tree-view { min-height: 5rem; }
++    .tree-children { border-left: 2px solid #75849a66; margin: .65rem 0 0 .55rem; padding: .1rem .1rem .1rem .8rem; }
++    .tree-view .collection, .tree-view .rows { display: grid; gap: .55rem; }
++    .tree-view .row { display: grid; gap: .35rem; border: 1px solid #8888; border-radius: .4rem; padding: .5rem; }
++    .tree-view input[type="text"] { box-sizing: border-box; width: 100%; }
++    .tree-view p { margin: 0; }
++    .policy { display: grid; gap: .45rem; border-top: 1px solid #8886; margin-top: .6rem; padding-top: .6rem; }
++    .policy label { display: grid; gap: .2rem; }
++    .policy .checkbox { display: flex; align-items: center; gap: .4rem; }
++    .inspection { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .6rem; }
++    pre { max-height: 24rem; overflow: auto; border: 1px solid #8885; border-radius: .4rem; padding: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
++    .server-record { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; border: 1px solid #8885; border-radius: .4rem; margin: .4rem 0; padding: .4rem; }
++    .server-record code { flex: 1 1 16rem; overflow-wrap: anywhere; }
++    @media (max-width: 62rem) { .layout { grid-template-columns: 1fr; } }
++  </style>
++</head>
++<body>
++  <main>
++    <h1>Typed parent and child collections</h1>
++    <p>The parent sets a direct child’s title and read-only policy through the typed Go API. The child keeps its own Go-owned collection state and HTTP save lane. A saved row can be published into the parent’s Inbox, which keeps immutable Go receipts after the child is disposed.</p>
++    <p class="muted">Switch any session among DOM, React, and GoDOM. The Go snapshot is the state source; replacing a renderer keeps the session and its nested children mounted.</p>
++    <p>Live sessions: <strong id="live-count">Waiting for Go/WASM…</strong></p>
++    <p id="error" role="alert" hidden></p>
++
++    <div class="layout">
++      <aside class="panel" aria-labelledby="controls-heading">
++        <h2 id="controls-heading">Session controls</h2>
++        <p class="muted">Hold the child’s next save to see it complete while its parent has made it read-only. Read-only disables view controls and publishing, while the pending Go completion still applies.</p>
++        <div class="policy-actions">
++          <button id="recreate-child" type="button" disabled>Recreate child session</button>
++        </div>
++        <div id="session-controls" class="control-list"><p class="muted">Waiting for Go/WASM…</p></div>
++      </aside>
++
++      <section class="panel roots" aria-labelledby="family-heading">
++        <h2 id="family-heading">Parent and child views</h2>
++        <p class="muted">The child view displays the title supplied by this parent. The parent view displays its Published count, and the receipts panel below is read from the Go snapshot.</p>
++        <div id="parent-mount"></div>
++      </section>
++    </div>
++
++    <section class="panel" aria-labelledby="inspect-heading">
++      <h2 id="inspect-heading">Go snapshots and retained receipts</h2>
++      <div class="inspection">
++        <div><h3>Session tree and state</h3><pre id="snapshot-output">Waiting for sessions…</pre></div>
++        <div><h3>Parent Inbox receipts</h3><pre id="receipts-output">Waiting for Go Inbox…</pre></div>
++        <div><h3>HTTP requests</h3><div id="http-output"><p class="muted">Waiting for requests…</p></div></div>
++      </div>
++    </section>
++  </main>
++  <script src="/typed-composition/build/wasm_exec.js"></script>
++  <script type="module" src="/typed-composition/demo.mjs"></script>
++</body>
++</html>
+diff --git a/typed-composition/http-lab-process.mjs b/typed-composition/http-lab-process.mjs
+new file mode 100644
+index 0000000..bc008fa
+--- /dev/null
++++ b/typed-composition/http-lab-process.mjs
+@@ -0,0 +1,150 @@
++import { spawn } from "node:child_process";
++import { createInterface } from "node:readline";
++
++function errorText(error) {
++  return error instanceof Error ? error.message : String(error);
++}
++
++function bounded(value, fallback, label) {
++  if (value === undefined) return fallback;
++  if (!Number.isInteger(value) || value < 1 || value > 60_000) {
++    throw new RangeError(`${label} must be an integer from 1 through 60000 milliseconds`);
++  }
++  return value;
++}
++
++/**
++ * Start the loopback lab and capture its exit/error promise before readiness
++ * can settle. Call close() from finally; its waits are bounded even when a
++ * failed spawn has no child process to terminate.
++ */
++export function startHTTPProcess({
++  command,
++  args = [],
++  cwd,
++  spawnImpl = spawn,
++  readinessTimeoutMs,
++  cleanupTimeoutMs,
++} = {}) {
++  if (typeof command !== "string" || command.length === 0) throw new TypeError("command must be a nonempty string");
++  if (!Array.isArray(args) || args.some((arg) => typeof arg !== "string")) throw new TypeError("args must be strings");
++  if (typeof spawnImpl !== "function") throw new TypeError("spawnImpl must be a function");
++  const readyTimeout = bounded(readinessTimeoutMs, 10_000, "readinessTimeoutMs");
++  const cleanupTimeout = bounded(cleanupTimeoutMs, 2_000, "cleanupTimeoutMs");
++
++  let child;
++  try {
++    child = spawnImpl(command, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
++  } catch (error) {
++    throw new Error(`could not spawn HTTP lab: ${errorText(error)}`, { cause: error });
++  }
++  if (!child || typeof child.once !== "function" || typeof child.kill !== "function" ||
++      !child.stdout || typeof child.stdout.on !== "function" ||
++      !child.stderr || typeof child.stderr.on !== "function") {
++    throw new TypeError("spawnImpl must return a child process with stdout, stderr, once(), and kill()");
++  }
++
++  const lines = createInterface({ input: child.stdout });
++  let stderr = "";
++  child.stderr.setEncoding?.("utf8");
++  child.stderr.on("data", (chunk) => { stderr += String(chunk); });
++
++  let exited = false;
++  let exitResult = null;
++  let spawnError = null;
++  let exitResolve;
++  const exit = new Promise((resolve) => { exitResolve = resolve; });
++  function finishExit(result) {
++    if (exited) return;
++    exited = true;
++    exitResult = result;
++    exitResolve(result);
++  }
++
++  let readySettled = false;
++  let readyResolve;
++  let readyReject;
++  let readinessTimer;
++  const ready = new Promise((resolve, reject) => {
++    readyResolve = resolve;
++    readyReject = reject;
++  });
++  function settleReady(error, value) {
++    if (readySettled) return;
++    readySettled = true;
++    clearTimeout(readinessTimer);
++    if (error) readyReject(error);
++    else readyResolve(value);
++  }
++  function readinessError(message, cause) {
++    return new Error(`HTTP lab ${message}${stderr ? `: ${stderr.trim()}` : ""}`, cause === undefined ? undefined : { cause });
++  }
++
++  child.once("exit", (code, signal) => {
++    finishExit({ kind: "exit", code, signal });
++    if (!readySettled) {
++      settleReady(readinessError(`exited before readiness (code=${code}, signal=${signal})`));
++    }
++  });
++  child.once("error", (error) => {
++    spawnError = error;
++    finishExit({ kind: "error", error });
++    if (!readySettled) settleReady(readinessError(`failed to start: ${errorText(error)}`, error));
++  });
++
++  // Real ChildProcess emits exit asynchronously, but preserve a completed
++  // state if a test double or future adapter reports it before registration.
++  if (child.exitCode !== null && child.exitCode !== undefined) {
++    finishExit({ kind: "exit", code: child.exitCode, signal: child.signalCode ?? null });
++    settleReady(readinessError(`exited before readiness (code=${child.exitCode}, signal=${child.signalCode ?? null})`));
++  } else if (child.signalCode !== null && child.signalCode !== undefined) {
++    finishExit({ kind: "exit", code: null, signal: child.signalCode });
++    settleReady(readinessError(`exited before readiness (code=null, signal=${child.signalCode})`));
++  }
++
++  lines.once("line", (line) => {
++    try {
++      const result = JSON.parse(line);
++      if (typeof result.url !== "string" || result.url.length === 0) throw new Error("readiness record has no url");
++      settleReady(null, result.url);
++    } catch (error) {
++      settleReady(readinessError(`returned invalid readiness data: ${errorText(error)}`, error));
++    }
++  });
++  if (!readySettled) {
++    readinessTimer = setTimeout(() => {
++      settleReady(readinessError(`readiness timed out after ${readyTimeout} ms`));
++    }, readyTimeout);
++  }
++
++  let closePromise = null;
++  async function close() {
++    if (closePromise) return closePromise;
++    closePromise = (async () => {
++      lines.close();
++      if (exited || spawnError) return exitResult;
++      try { child.kill("SIGTERM"); }
++      catch (error) {
++        if (!exited) return { kind: "kill-error", error };
++      }
++
++      let timer;
++      const wait = (milliseconds) => Promise.race([
++        exit,
++        new Promise((resolve) => { timer = setTimeout(() => resolve(null), milliseconds); }),
++      ]).finally(() => clearTimeout(timer));
++
++      let result = await wait(cleanupTimeout);
++      if (result) return result;
++      try { child.kill("SIGKILL"); }
++      catch (error) {
++        if (!exited) return { kind: "kill-error", error };
++      }
++      result = await wait(cleanupTimeout);
++      return result ?? { kind: "timed-out", timeoutMs: cleanupTimeout };
++    })();
++    return closePromise;
++  }
++
++  return { child, lines, ready, exit, close };
++}
+diff --git a/typed-composition/http-lab-process.test.mjs b/typed-composition/http-lab-process.test.mjs
+new file mode 100644
+index 0000000..6e680fa
+--- /dev/null
++++ b/typed-composition/http-lab-process.test.mjs
+@@ -0,0 +1,99 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { EventEmitter } from "node:events";
++import { PassThrough } from "node:stream";
++import { startHTTPProcess } from "./http-lab-process.mjs";
++
++function fakeChild(killImpl = () => true) {
++  const child = new EventEmitter();
++  child.stdout = new PassThrough();
++  child.stderr = new PassThrough();
++  child.exitCode = null;
++  child.signalCode = null;
++  child.killSignals = [];
++  child.kill = (signal) => {
++    child.killSignals.push(signal);
++    return killImpl(signal, child);
++  };
++  return child;
++}
++
++test("exit before readiness rejects promptly and close observes the already-recorded exit", async () => {
++  const child = fakeChild();
++  const lab = startHTTPProcess({
++    command: "http-lab",
++    spawnImpl: () => child,
++    readinessTimeoutMs: 500,
++    cleanupTimeoutMs: 20,
++  });
++  child.exitCode = 17;
++  child.emit("exit", 17, null);
++
++  await assert.rejects(lab.ready, /exited before readiness \(code=17, signal=null\)/);
++  assert.deepEqual(await lab.close(), { kind: "exit", code: 17, signal: null });
++  assert.deepEqual(child.killSignals, [], "an already-exited child is not killed or awaited again");
++});
++
++test("spawn error rejects readiness and cleanup returns without waiting for a nonexistent process", async () => {
++  const child = fakeChild();
++  const lab = startHTTPProcess({
++    command: "missing-http-lab",
++    spawnImpl: () => child,
++    readinessTimeoutMs: 500,
++    cleanupTimeoutMs: 20,
++  });
++  const failure = Object.assign(new Error("spawn ENOENT"), { code: "ENOENT" });
++  child.emit("error", failure);
++
++  await assert.rejects(lab.ready, /failed to start: spawn ENOENT/);
++  const outcome = await lab.close();
++  assert.equal(outcome.kind, "error");
++  assert.equal(outcome.error, failure);
++  assert.deepEqual(child.killSignals, []);
++});
++
++test("synchronous spawn failure is surfaced immediately", () => {
++  assert.throws(() => startHTTPProcess({
++    command: "bad-lab",
++    spawnImpl() { throw new Error("spawn syscall failed"); },
++  }), /could not spawn HTTP lab: spawn syscall failed/);
++});
++
++test("cleanup escalates to SIGKILL and stays bounded if no exit event follows", async () => {
++  const child = fakeChild();
++  const lab = startHTTPProcess({
++    command: "http-lab",
++    spawnImpl: () => child,
++    readinessTimeoutMs: 500,
++    cleanupTimeoutMs: 10,
++  });
++  child.stdout.write('{"url":"http://127.0.0.1:1234"}\n');
++  assert.equal(await lab.ready, "http://127.0.0.1:1234");
++
++  const started = Date.now();
++  const outcome = await lab.close();
++  assert.deepEqual(outcome, { kind: "timed-out", timeoutMs: 10 });
++  assert.deepEqual(child.killSignals, ["SIGTERM", "SIGKILL"]);
++  assert.ok(Date.now() - started < 250, "cleanup should not wait without a bound");
++});
++
++test("cleanup waits on the exit listener registered at spawn time after termination", async () => {
++  const child = fakeChild((signal, process) => {
++    if (signal === "SIGKILL") {
++      process.exitCode = 0;
++      process.signalCode = signal;
++      queueMicrotask(() => process.emit("exit", 0, signal));
++    }
++    return true;
++  });
++  const lab = startHTTPProcess({
++    command: "http-lab",
++    spawnImpl: () => child,
++    readinessTimeoutMs: 500,
++    cleanupTimeoutMs: 30,
++  });
++  child.stdout.write('{"url":"http://127.0.0.1:1234"}\n');
++  await lab.ready;
++  assert.deepEqual(await lab.close(), { kind: "exit", code: 0, signal: "SIGKILL" });
++  assert.deepEqual(child.killSignals, ["SIGTERM", "SIGKILL"]);
++});

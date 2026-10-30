@@ -1,0 +1,19 @@
+# XR-T2 independent review — bridge and replay boundary
+
+**Decision: amend.** The strict WASM/native boundary mostly follows the wire contract, but a hostile JavaScript accessor can reenter the exported API while an outer call is still validating. This allows a failed outer call to accompany a committed Go mutation. The own-field schema check also reads values with `Reflect.get` after checking only the key list, so a proxy can report the expected names while resolving values from its prototype. These gaps need repair before accepting the boundary.
+
+## Blocking findings
+
+1. **No bridge-wide reentry fence during validation.** `method()` checks arity and recovers panics, but it does not mark a bridge operation active while decoders inspect JS values. `decodeInputs()` calls `exactObjectKeys()` and then `safeGet()`, which invokes property accessors. In an actual Go/WASM browser run, an own `Title` getter called `gobiComposition.create()` and returned a number. The outer `setChildInputs()` returned the expected type error, but the nested call created session 3; `list()` changed from `[1,2]` to `[1,2,3]`. Thus an invalid request can consume a Go session ID through reentrant bridge entry during its validation.
+
+2. **Reported keys are not tied to own data-property values.** `exactObjectKeys()` trusts `Reflect.ownKeys()` and later reads fields with `Reflect.get()`. A proxy over an object with no own fields reported `['Title','ReadOnly']` from `ownKeys()` while inheriting those values from its prototype. `setChildInputs()` accepted the proxy and committed `Title: "from prototype"`, `InputRevision: 1`. This violates the closed own-field/data-schema expectation. Read validated own data descriptors and use their captured values; add a method reentry guard so proxy traps/accessors cannot invoke another bridge mutation during validation. The guard is for nested bridge calls; it does not make arbitrary JavaScript side effects transactional.
+
+The standalone browser probe is `coordination/reviews/xr_t2_reentry_probe.mjs` (SHA-256 `9e0a62f8d381ab497f0ba093c1c249fbe72aab94fab9baa5873dce0f5461fd7c`); its raw result is `coordination/reviews/xr_t2_reentry_probe.raw.json` (SHA-256 `b2f37464fddb3a3e61630cf23b04f346aeaf5bc5dc891e6b580d85c842791fca`). It uses an actual Chromium page and the compiled Go/WASM bridge. Built with Go 1.24.0 using `GOOS=js GOARCH=wasm`; the exact reviewed WASM was archived as `evidence/bridge-before-review.wasm.xz`. Its uncompressed SHA-256 is `581d5a77502fade25ec96f182b7189800290dba82e6de3c77e6f0e051925fb88` (verified after decompression).
+
+## Other reviewed areas
+
+- The method table contains the specified 16 operations. Each wrapper checks exact positional arity and has a panic recovery path. IDs, row IDs, request IDs, revisions, and status values are checked as primitive JS numbers with integer/range checks and no coercion. Step/reply/input values require exact key sets and primitive field types; title validation rejects unpaired UTF-16 surrogates before Go UTF-8 conversion, then the Go manager enforces the UTF-8 byte limit.
+- The native parser validates the complete replay document before executing actions, rejects duplicate/unknown/missing fields, enforces canonical unsigned decimal tokens and valid input-title Unicode escapes, and returns per-action error results. Frame capture includes the complete live tree, snapshots, and drained changes. Effects/audit/disposal values are preserved as action results rather than queried again during frame capture.
+- The WASM code builds for `js/wasm`; the independent probe executed it in Chromium and invoked the Go-created global. I did not rerun the author's exact smoke/test suites or the full replay/browser runner.
+
+No production source was modified during this review. The bounded probe and raw output are review artifacts only.

@@ -1,0 +1,74 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-typed-composition"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "T1",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "composition/ only",
+      "summary": "Go typed inputs/publication contracts and concurrency tests"
+    },
+    {
+      "id": "T2",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "cmd/composition-wasm/ and cmd/composition-replay/ only",
+      "summary": "strict WASM and native action replay boundaries"
+    },
+    {
+      "id": "T3",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "typed-composition/host.mjs and host.test.mjs; additive refresh in keyed-editor/host.mjs, multi-root/host.mjs, session-tree/host.mjs and their focused tests; additive snapshot in multi-root/runtime.mjs and runtime tests",
+      "summary": "dirty propagation with refresh and lifecycle gates"
+    },
+    {
+      "id": "T4",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "typed-composition/reference.mjs, reference.test.mjs, scripts.mjs, scripts.test.mjs only",
+      "summary": "independent JS typed model and deterministic scripts"
+    },
+    {
+      "id": "T5",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "typed-composition/fixture.mjs, fixture.html, check.mjs, check.test.mjs only",
+      "summary": "browser differential replay with native frames and adversarial controls"
+    },
+    {
+      "id": "T6",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "typed-composition/demo.html,demo.mjs,browser-smoke.mjs,README.md; run-typed-composition.sh and .github/workflows/typed-composition.yml only",
+      "summary": "executable HTTP composition demo, runner, CI and reproduction guide"
+    }
+  ]
+}

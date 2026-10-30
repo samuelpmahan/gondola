@@ -1,0 +1,122 @@
+{
+  "schema": "gondola.typed-composition.o-probe/v1",
+  "job": "O-PROBE",
+  "positiveBaseline": {
+    "path": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/reviews/O-PROBE-positive.json",
+    "sha256": "b29e07a478aac020504b22ce9e6b1b4aedfbbacaf592b1051be3e01f5344861c",
+    "issues": 0,
+    "actions": 14
+  },
+  "sourcePins": {
+    "typed-composition/fixture.mjs": "21604cc888b704b2d36b2683d27e301b5b0bfe9994577872af63cf73e7134c60",
+    "typed-composition/check.mjs": "fea6e333b301a010fab306475b2d9b5eae8c2b918b8defa4045c8384b8f1d422",
+    "typed-composition/check.test.mjs": "ea153f9dc5b2b6a9a70a9ffec13786434c6e48490e95c9b9349ed8c293a6dc76",
+    "typed-composition/testdata/check-positive-scenario.mjs": "9012ba366e959cecd8791c25c1f35267f9dd822394427cb219af8b094b163174"
+  },
+  "selectedActions": {
+    "focusIndex": 4,
+    "effectsIndex": 6,
+    "reversalIndex": 13,
+    "omittedCommand": {
+      "index": 6,
+      "actorName": "candidate",
+      "sessionID": 2,
+      "command": {
+        "Kind": "start",
+        "ID": 1,
+        "Value": "first draft"
+      },
+      "eventIndex": 0
+    },
+    "rejectedIndex": 12,
+    "blockedObservation": {
+      "index": 11,
+      "actorName": "candidate",
+      "field": "inputObservation"
+    }
+  },
+  "controls": [
+    {
+      "name": "missing-focus-at-first-enabled-input",
+      "expected": "rejected",
+      "status": "passed",
+      "issueCount": 1,
+      "mismatchFields": [
+        "focus.replacement.missing"
+      ]
+    },
+    {
+      "name": "missing-effects-and-transport-arrays-on-both-actors",
+      "expected": "rejected",
+      "status": "passed",
+      "issueCount": 12,
+      "mismatchFields": [
+        "transport.candidate.managerEffects.missing",
+        "transport.candidate.transportCalls.missing",
+        "transport.candidate.clock.delta",
+        "transport.candidate.effects-channel",
+        "transport.candidate.command-count",
+        "transport.reference.managerEffects.missing",
+        "transport.reference.transportCalls.missing",
+        "transport.reference.clock.delta",
+        "transport.reference.effects-channel",
+        "transport.reference.command-count",
+        "transport.candidate.cancel.previous-state",
+        "transport.reference.cancel.previous-state"
+      ]
+    },
+    {
+      "name": "bilateral-transport-reversal",
+      "expected": "rejected",
+      "status": "passed",
+      "issueCount": 8,
+      "mismatchFields": [
+        "transport.candidate.event.sequence",
+        "transport.candidate.cancel.id",
+        "transport.reference.event.sequence",
+        "transport.reference.cancel.id"
+      ]
+    },
+    {
+      "name": "omitted-command-execution-on-both-actors",
+      "expected": "rejected",
+      "status": "passed",
+      "issueCount": 6,
+      "mismatchFields": [
+        "transport.candidate.clock.delta",
+        "transport.candidate.command-count",
+        "transport.reference.clock.delta",
+        "transport.reference.command-count",
+        "transport.candidate.cancel.previous-state",
+        "transport.reference.cancel.previous-state"
+      ]
+    },
+    {
+      "name": "rejection-changed-to-success",
+      "expected": "rejected",
+      "status": "passed",
+      "issueCount": 1,
+      "mismatchFields": [
+        "operation.native-candidate"
+      ]
+    },
+    {
+      "name": "inconsistent-blocked-input-witness",
+      "expected": "rejected",
+      "status": "passed",
+      "issueCount": 2,
+      "mismatchFields": [
+        "input.candidate.afterValue",
+        "input.candidate.native-dispatch-count"
+      ]
+    },
+    {
+      "name": "error-text-only-change-is-outside-equivalence-scope",
+      "expected": "accepted-by-scope",
+      "status": "passed",
+      "issueCount": 0,
+      "mismatchFields": []
+    }
+  ],
+  "status": "passed"
+}

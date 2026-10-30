@@ -1,0 +1,729 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-composed-oracle-closure"
+  },
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "O-PINS": {
+      "id": "O-PINS",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "evidence/inherited-pins.json; assigned evidence report/receipt",
+      "summary": "final predecessor pin and historical restoration audit",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T19:51:19.857001+00:00",
+      "finished_at": "2026-10-30T19:55:59.781172+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/O-PINS.json"
+    },
+    "O-CHECK": {
+      "id": "O-CHECK",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "typed-composition/check.mjs only",
+      "summary": "fail-closed disabled/focus/Go-command/transport ordering validation",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-30T19:51:19.528444+00:00",
+      "finished_at": "2026-10-30T20:05:27.976676+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/O-CHECK.json"
+    },
+    "O-PROBE": {
+      "id": "O-PROBE",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "assigned offline probe/results/report/receipt only",
+      "summary": "independent formerly missed mutation controls on repaired oracle",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T19:51:19.420648+00:00",
+      "finished_at": "2026-10-30T20:05:28.156058+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/O-PROBE.json"
+    },
+    "O-TEST": {
+      "id": "O-TEST",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "typed-composition/check.test.mjs and bounded testdata only",
+      "summary": "causal positive and negative checker tests",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T19:51:19.766523+00:00",
+      "finished_at": "2026-10-30T20:05:28.062696+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/O-TEST.json"
+    },
+    "O-FIXTURE": {
+      "id": "O-FIXTURE",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "typed-composition/fixture.mjs only",
+      "summary": "actual disabled-event and global invocation/focus observations",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T19:51:19.633664+00:00",
+      "finished_at": "2026-10-30T20:06:54.970537+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/O-FIXTURE.json"
+    },
+    "O-BROWSER": {
+      "id": "O-BROWSER",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "assigned browser probe/results/report/receipt only",
+      "summary": "independent actual disabled suppression and renderer focus proof",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-30T19:51:19.985238+00:00",
+      "finished_at": "2026-10-30T20:00:15.419628+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/O-BROWSER.json"
+    },
+    "XR-O-PINS": {
+      "id": "XR-O-PINS",
+      "kind": "review",
+      "depends_on": "O-PINS",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-30T20:00:15.758506+00:00",
+      "finished_at": "2026-10-30T20:05:27.892339+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-O-PINS.json"
+    },
+    "XR-O-CHECK": {
+      "id": "XR-O-CHECK",
+      "kind": "review",
+      "depends_on": "O-CHECK",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T20:05:28.350074+00:00",
+      "finished_at": "2026-10-30T20:13:02.727113+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-O-CHECK.json"
+    },
+    "XR-O-PROBE": {
+      "id": "XR-O-PROBE",
+      "kind": "review",
+      "depends_on": "O-PROBE",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T20:05:28.444115+00:00",
+      "finished_at": "2026-10-30T20:13:02.816155+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-O-PROBE.json"
+    },
+    "XR-O-TEST": {
+      "id": "XR-O-TEST",
+      "kind": "review",
+      "depends_on": "O-TEST",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-30T20:05:28.528675+00:00",
+      "finished_at": "2026-10-30T20:13:02.640316+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-O-TEST.json"
+    },
+    "XR-O-FIXTURE": {
+      "id": "XR-O-FIXTURE",
+      "kind": "review",
+      "depends_on": "O-FIXTURE",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T20:07:46.964381+00:00",
+      "finished_at": "2026-10-30T20:13:02.541389+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-O-FIXTURE.json"
+    },
+    "XR-O-BROWSER": {
+      "id": "XR-O-BROWSER",
+      "kind": "review",
+      "depends_on": "O-BROWSER",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T20:00:15.664511+00:00",
+      "finished_at": "2026-10-30T20:05:27.801504+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-O-BROWSER.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T19:51:19.282284+00:00",
+      "ready_jobs": [
+        "O-PINS",
+        "O-CHECK",
+        "O-PROBE",
+        "O-TEST",
+        "O-FIXTURE",
+        "O-BROWSER"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "O-PROBE",
+        "N2": "O-CHECK",
+        "N5": "O-FIXTURE",
+        "N4": "O-TEST",
+        "N1": "O-PINS",
+        "N6": "O-BROWSER"
+      },
+      "dispatch": {
+        "N3": "O-PROBE",
+        "N2": "O-CHECK",
+        "N5": "O-FIXTURE",
+        "N4": "O-TEST",
+        "N1": "O-PINS",
+        "N6": "O-BROWSER"
+      },
+      "native_seconds": 0.005598122001174488,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 1800,
+      "native_score": 1800,
+      "caps": {
+        "O-PINS": 1,
+        "O-CHECK": 1,
+        "O-PROBE": 1,
+        "O-TEST": 1,
+        "O-FIXTURE": 1,
+        "O-BROWSER": 1,
+        "XR-O-PINS": 0,
+        "XR-O-CHECK": 0,
+        "XR-O-PROBE": 0,
+        "XR-O-TEST": 0,
+        "XR-O-FIXTURE": 0,
+        "XR-O-BROWSER": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "O-PINS": [
+          "N1"
+        ],
+        "O-CHECK": [
+          "N2"
+        ],
+        "O-PROBE": [
+          "N3"
+        ],
+        "O-TEST": [
+          "N4"
+        ],
+        "O-FIXTURE": [
+          "N5"
+        ],
+        "O-BROWSER": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "O-PINS": 300,
+        "O-CHECK": 300,
+        "O-PROBE": 300,
+        "O-TEST": 300,
+        "O-FIXTURE": 300,
+        "O-BROWSER": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:51:19.420648+00:00",
+      "worker": "N3",
+      "job": "O-PROBE",
+      "agent": "/root/compose_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:51:19.528444+00:00",
+      "worker": "N2",
+      "job": "O-CHECK",
+      "agent": "/root/compose_bridge"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:51:19.633664+00:00",
+      "worker": "N5",
+      "job": "O-FIXTURE",
+      "agent": "/root/compose_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:51:19.766523+00:00",
+      "worker": "N4",
+      "job": "O-TEST",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:51:19.857001+00:00",
+      "worker": "N1",
+      "job": "O-PINS",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:51:19.985238+00:00",
+      "worker": "N6",
+      "job": "O-BROWSER",
+      "agent": "/root/compose_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:55:59.781172+00:00",
+      "worker": "N1",
+      "job": "O-PINS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:00:15.419628+00:00",
+      "worker": "N6",
+      "job": "O-BROWSER"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T20:00:15.523224+00:00",
+      "ready_jobs": [
+        "XR-O-PINS",
+        "XR-O-BROWSER"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "XR-O-BROWSER",
+        "N2": "O-CHECK",
+        "N6": "XR-O-PINS",
+        "N4": "O-TEST",
+        "N3": "O-PROBE",
+        "N5": "O-FIXTURE"
+      },
+      "dispatch": {
+        "N1": "XR-O-BROWSER",
+        "N6": "XR-O-PINS"
+      },
+      "native_seconds": 0.004901910997432424,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "O-PINS": 0,
+        "O-CHECK": 1,
+        "O-PROBE": 1,
+        "O-TEST": 1,
+        "O-FIXTURE": 1,
+        "O-BROWSER": 0,
+        "XR-O-PINS": 1,
+        "XR-O-CHECK": 0,
+        "XR-O-PROBE": 0,
+        "XR-O-TEST": 0,
+        "XR-O-FIXTURE": 0,
+        "XR-O-BROWSER": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-O-PINS": [
+          "N6"
+        ],
+        "XR-O-BROWSER": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-O-PINS": 200,
+        "XR-O-BROWSER": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/compose_bridge",
+        "N3": "/root/compose_host",
+        "N4": "/root/compose_model",
+        "N5": "/root/compose_oracle",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:00:15.664511+00:00",
+      "worker": "N1",
+      "job": "XR-O-BROWSER",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:00:15.758506+00:00",
+      "worker": "N6",
+      "job": "XR-O-PINS",
+      "agent": "/root/compose_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:05:27.801504+00:00",
+      "worker": "N1",
+      "job": "XR-O-BROWSER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:05:27.892339+00:00",
+      "worker": "N6",
+      "job": "XR-O-PINS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:05:27.976676+00:00",
+      "worker": "N2",
+      "job": "O-CHECK"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:05:28.062696+00:00",
+      "worker": "N4",
+      "job": "O-TEST"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:05:28.156058+00:00",
+      "worker": "N3",
+      "job": "O-PROBE"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-30T20:05:28.250963+00:00",
+      "ready_jobs": [
+        "XR-O-CHECK",
+        "XR-O-PROBE",
+        "XR-O-TEST"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N3": "XR-O-CHECK",
+        "N5": "O-FIXTURE",
+        "N4": "XR-O-PROBE",
+        "N2": "XR-O-TEST"
+      },
+      "dispatch": {
+        "N3": "XR-O-CHECK",
+        "N4": "XR-O-PROBE",
+        "N2": "XR-O-TEST"
+      },
+      "native_seconds": 0.004942495997966034,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "O-PINS": 0,
+        "O-CHECK": 0,
+        "O-PROBE": 0,
+        "O-TEST": 0,
+        "O-FIXTURE": 1,
+        "O-BROWSER": 0,
+        "XR-O-PINS": 0,
+        "XR-O-CHECK": 1,
+        "XR-O-PROBE": 1,
+        "XR-O-TEST": 1,
+        "XR-O-FIXTURE": 0,
+        "XR-O-BROWSER": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-O-CHECK": [
+          "N1",
+          "N3",
+          "N4",
+          "N6"
+        ],
+        "XR-O-PROBE": [
+          "N1",
+          "N2",
+          "N4",
+          "N6"
+        ],
+        "XR-O-TEST": [
+          "N1",
+          "N2",
+          "N3",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-O-CHECK": 200,
+        "XR-O-PROBE": 200,
+        "XR-O-TEST": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/compose_oracle",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:05:28.350074+00:00",
+      "worker": "N3",
+      "job": "XR-O-CHECK",
+      "agent": "/root/compose_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:05:28.444115+00:00",
+      "worker": "N4",
+      "job": "XR-O-PROBE",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:05:28.528675+00:00",
+      "worker": "N2",
+      "job": "XR-O-TEST",
+      "agent": "/root/compose_bridge"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:06:54.970537+00:00",
+      "worker": "N5",
+      "job": "O-FIXTURE"
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-30T20:06:55.063190+00:00",
+      "ready_jobs": [
+        "XR-O-FIXTURE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4"
+      ],
+      "assignments": {
+        "N4": "XR-O-PROBE",
+        "N2": "XR-O-TEST",
+        "N1": "XR-O-FIXTURE",
+        "N6": "BENCH",
+        "N5": "BENCH",
+        "N3": "XR-O-CHECK"
+      },
+      "dispatch": {
+        "N1": "XR-O-FIXTURE"
+      },
+      "native_seconds": 0.003603451001254143,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "O-PINS": 0,
+        "O-CHECK": 0,
+        "O-PROBE": 0,
+        "O-TEST": 0,
+        "O-FIXTURE": 0,
+        "O-BROWSER": 0,
+        "XR-O-PINS": 0,
+        "XR-O-CHECK": 1,
+        "XR-O-PROBE": 1,
+        "XR-O-TEST": 1,
+        "XR-O-FIXTURE": 1,
+        "XR-O-BROWSER": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-O-FIXTURE": [
+          "N1",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-O-FIXTURE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/compose_bridge",
+        "N3": "/root/compose_host",
+        "N4": "/root/compose_model",
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:07:46.964381+00:00",
+      "worker": "N1",
+      "job": "XR-O-FIXTURE",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:13:02.541389+00:00",
+      "worker": "N1",
+      "job": "XR-O-FIXTURE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:13:02.640316+00:00",
+      "worker": "N2",
+      "job": "XR-O-TEST"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:13:02.727113+00:00",
+      "worker": "N3",
+      "job": "XR-O-CHECK"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:13:02.816155+00:00",
+      "worker": "N4",
+      "job": "XR-O-PROBE"
+    }
+  ],
+  "epoch": 4,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

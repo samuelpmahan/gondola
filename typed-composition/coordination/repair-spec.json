@@ -1,0 +1,48 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-typed-composition-review-repairs"
+  },
+  "workers": [
+    "N2",
+    "N3",
+    "N4",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-T2",
+      "kind": "extract",
+      "repair_of": "T2",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "cmd/composition-wasm main_wasm.go and smoke files/tests; WIRE.md only",
+      "summary": "own data descriptors and nested bridge-call fence close XR-T2 admission invariance failure"
+    },
+    {
+      "id": "R-T4",
+      "kind": "extract",
+      "repair_of": "T4",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "typed-composition/reference.test.mjs only",
+      "summary": "causal existing-unsaved-row publish admission and disabled projection assertions"
+    },
+    {
+      "id": "R-T6",
+      "kind": "extract",
+      "repair_of": "T6",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "typed-composition/browser-smoke.mjs, demo.html, new bounded process lifecycle helper/tests if needed",
+      "summary": "race-free early lab exit/spawn-failure cleanup and accurate child title copy"
+    }
+  ]
+}

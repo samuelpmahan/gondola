@@ -1,0 +1,33 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-typed-composition-integration-audits"
+  },
+  "workers": [
+    "N1",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "jobs": [
+    {
+      "id": "A-PRESERVATION",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "summary": "independent original and predecessor receipt/source preservation audit",
+      "owner": "evidence/inherited-pins.json; reports and receipt only"
+    },
+    {
+      "id": "A-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "summary": "cross-layer typed contract and propagation integration audit",
+      "owner": "reports and receipt only"
+    }
+  ]
+}

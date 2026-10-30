@@ -24,13 +24,14 @@ test("session runtime routes every keyed-host call through one SessionID", () =>
   const runtime = createSessionRuntime(manager, 10);
 
   runtime.init();
+  runtime.snapshot();
   runtime.dispatch({ Path: "0", Event: "input", Value: "next", Key: "draft-input" });
   runtime.complete({ ID: 3, Value: "saved", Error: "" });
   runtime.effects();
   runtime.audit();
 
   assert.deepEqual(manager.calls.map((call) => call.slice(0, 2)), [
-    ["snapshot", 10], ["dispatch", 10], ["complete", 10], ["effects", 10], ["audit", 10],
+    ["snapshot", 10], ["snapshot", 10], ["dispatch", 10], ["complete", 10], ["effects", 10], ["audit", 10],
   ]);
   assert.equal(runtime.init().state.value, "before");
 });
@@ -60,6 +61,7 @@ test("session runtime fences all bridge calls after the owning generation retire
   current = false;
 
   assert.throws(() => runtime.init(), /no longer the current root generation/);
+  assert.throws(() => runtime.snapshot(), /no longer the current root generation/);
   assert.throws(() => runtime.dispatch({}), /no longer the current root generation/);
   assert.throws(() => runtime.complete({}), /no longer the current root generation/);
   assert.throws(() => runtime.effects(), /no longer the current root generation/);
@@ -114,6 +116,7 @@ test("manager adapter preserves plain fake-manager values and method context", (
 test("session runtime never returns Go error frames as snapshot, transition, effect, reply, or audit data", () => {
   const cases = [
     ["snapshot", "init", []],
+    ["snapshot", "snapshot", []],
     ["dispatch", "dispatch", [{}]],
     ["complete", "complete", [{}]],
     ["effects", "effects", []],

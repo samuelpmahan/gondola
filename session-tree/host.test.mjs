@@ -310,7 +310,7 @@ function includesError(error, phrase) {
 
 test("public API nests stable child shells beside replaceable renderer roots", () => {
   const { host, manager, records } = setup();
-  assert.deepEqual(Object.keys(host).sort(), ["dispose", "mountChild", "mountRoot", "replace", "settled", "snapshot", "snapshotAll", "tree"]);
+  assert.deepEqual(Object.keys(host).sort(), ["dispose", "mountChild", "mountRoot", "refresh", "replace", "settled", "snapshot", "snapshotAll", "tree"]);
 
   const container = fakeContainer();
   const root = host.mountRoot(container);
@@ -377,6 +377,65 @@ test("public API nests stable child shells beside replaceable renderer roots", (
 
   host.dispose(root.sessionID);
   host.dispose(siblingRoot.sessionID);
+});
+
+test("refresh reads authoritative Go state into the current session renderer without remounting", async () => {
+  const { host, manager, records } = setup();
+  const root = host.mountRoot(fakeContainer());
+  const renderer = currentRenderer(records, root.sessionID, "dom");
+  renderer.focus = { key: "draft-input", selectionStart: 1, selectionEnd: 4, selectionDirection: "forward" };
+  manager.sessions.get(root.sessionID).Version = 9;
+
+  const refreshed = host.refresh(root.sessionID);
+  assert.equal(refreshed.state.Version, 9);
+  assert.equal(host.snapshot(root.sessionID).state.Version, 9);
+  assert.equal(renderer.updates.length, 2, "refresh paints through the existing renderer API");
+  assert.deepEqual(host.snapshotAll()[0].focus, renderer.focus);
+  assert.equal(host.snapshotAll()[0].lifecycle, "active");
+  assert.equal(records.filter((record) => record.sessionID === root.sessionID && record.mounted).length, 1);
+  await host.settled();
+
+  host.dispose(root.sessionID);
+  assert.throws(() => host.refresh(root.sessionID), /not mounted/);
+});
+
+test("refresh reserves structural host operations across renderer callbacks", () => {
+  const { host, manager, records } = setup();
+  const root = host.mountRoot(fakeContainer());
+  const renderer = currentRenderer(records, root.sessionID, "dom");
+  const nestedErrors = [];
+  const replaceChildren = renderer.root.replaceChildren.bind(renderer.root);
+  let probing = false;
+  renderer.root.replaceChildren = (...children) => {
+    if (!probing) {
+      probing = true;
+      for (const action of [
+        () => host.dispose(root.sessionID),
+        () => host.replace(root.sessionID, "react"),
+        () => host.refresh(root.sessionID),
+      ]) {
+        try { action(); }
+        catch (error) { nestedErrors.push(error); }
+      }
+    }
+    return replaceChildren(...children);
+  };
+
+  manager.sessions.get(root.sessionID).Version = 9;
+  let refreshed;
+  let outerError;
+  try { refreshed = host.refresh(root.sessionID); }
+  catch (error) { outerError = error; }
+
+  assert.deepEqual(manager.calls.disposeTree, [], "nested disposal is rejected before Go mutation");
+  assert.equal(nestedErrors.length, 3);
+  assert.ok(nestedErrors.every((error) => /cannot re-enter an active refresh operation/.test(error.message)));
+  assert.equal(outerError, undefined, "the renderer update and outer refresh complete normally");
+  assert.deepEqual(manager.list(), [root.sessionID]);
+  assert.equal(refreshed.state.Version, 9, "the outer refresh still updates the existing renderer");
+  assert.equal(renderer.mounted, true);
+  assert.equal(host.snapshot(root.sessionID).state.Version, 9);
+  host.dispose(root.sessionID);
 });
 
 test("child renderer dispatch is scoped to its node and never updates its parent", () => {

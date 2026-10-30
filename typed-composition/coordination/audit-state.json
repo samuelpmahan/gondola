@@ -1,0 +1,146 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-typed-composition-integration-audits"
+  },
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "A-PRESERVATION": {
+      "id": "A-PRESERVATION",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "summary": "independent original and predecessor receipt/source preservation audit",
+      "owner": "evidence/inherited-pins.json; reports and receipt only",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T19:18:52.390245+00:00",
+      "finished_at": "2026-10-30T19:23:00.025308+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/A-PRESERVATION.json"
+    },
+    "A-CONTRACT": {
+      "id": "A-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "summary": "cross-layer typed contract and propagation integration audit",
+      "owner": "reports and receipt only",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-30T19:18:52.492878+00:00",
+      "finished_at": "2026-10-30T19:21:42.460809+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/A-CONTRACT.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T19:18:52.288429+00:00",
+      "ready_jobs": [
+        "A-PRESERVATION",
+        "A-CONTRACT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "A-CONTRACT",
+        "N1": "A-PRESERVATION"
+      },
+      "dispatch": {
+        "N6": "A-CONTRACT",
+        "N1": "A-PRESERVATION"
+      },
+      "native_seconds": 0.003194322998751886,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "A-PRESERVATION": 1,
+        "A-CONTRACT": 1,
+        "BENCH": 2
+      },
+      "eligible": {
+        "A-PRESERVATION": [
+          "N1"
+        ],
+        "A-CONTRACT": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "A-PRESERVATION": 100,
+        "A-CONTRACT": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:18:52.390245+00:00",
+      "worker": "N1",
+      "job": "A-PRESERVATION",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:18:52.492878+00:00",
+      "worker": "N6",
+      "job": "A-CONTRACT",
+      "agent": "/root/compose_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:21:42.460809+00:00",
+      "worker": "N6",
+      "job": "A-CONTRACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:23:00.025308+00:00",
+      "worker": "N1",
+      "job": "A-PRESERVATION"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

@@ -1,0 +1,1992 @@
+diff --git a/cmd/composition-replay/decoder.go b/cmd/composition-replay/decoder.go
+new file mode 100644
+index 0000000..26e3112
+--- /dev/null
++++ b/cmd/composition-replay/decoder.go
+@@ -0,0 +1,335 @@
++package main
++
++// Strict JSON decoders shared by bridge tests and the native replay command.
++import (
++	"bytes"
++	"encoding/json"
++	"fmt"
++	"io"
++	"strconv"
++	"unicode/utf8"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/composition"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++type replayAction struct {
++	Method string            `json:"method"`
++	Args   []json.RawMessage `json:"args"`
++}
++
++func decodeReplayInput(encoded []byte) ([]replayAction, error) {
++	if !utf8.Valid(encoded) {
++		return nil, fmt.Errorf("input must contain valid Unicode")
++	}
++	fields, err := decodeExactObject(string(encoded), "actions")
++	if err != nil {
++		return nil, err
++	}
++	raw := bytes.TrimSpace(fields["actions"])
++	if len(raw) == 0 || raw[0] != '[' {
++		return nil, fmt.Errorf("field %q must be an array", "actions")
++	}
++	var actions []json.RawMessage
++	if err := json.Unmarshal(raw, &actions); err != nil || actions == nil {
++		return nil, fmt.Errorf("field %q must be an array", "actions")
++	}
++	result := make([]replayAction, len(actions))
++	for index, action := range actions {
++		decoded, err := decodeActionJSON(string(action))
++		if err != nil {
++			return nil, fmt.Errorf("action %d: %w", index, err)
++		}
++		result[index] = decoded
++	}
++	return result, nil
++}
++
++func decodeActionJSON(encoded string) (replayAction, error) {
++	fields, err := decodeExactObject(encoded, "method", "args")
++	if err != nil {
++		return replayAction{}, err
++	}
++	method, err := decodeJSONString(fields, "method")
++	if err != nil {
++		return replayAction{}, err
++	}
++	argsRaw := bytes.TrimSpace(fields["args"])
++	if len(argsRaw) == 0 || argsRaw[0] != '[' {
++		return replayAction{}, fmt.Errorf("field %q must be an array", "args")
++	}
++	var args []json.RawMessage
++	if err := json.Unmarshal(argsRaw, &args); err != nil || args == nil {
++		return replayAction{}, fmt.Errorf("field %q must be an array", "args")
++	}
++	return replayAction{Method: method, Args: args}, nil
++}
++
++func decodeStepJSON(encoded string) (collection.Step, error) {
++	fields, err := decodeExactObject(encoded, "Path", "Event", "Value", "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	path, err := decodeJSONString(fields, "Path")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	event, err := decodeJSONString(fields, "Event")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	value, err := decodeJSONString(fields, "Value")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	key, err := decodeJSONString(fields, "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	return collection.Step{Path: path, Event: event, Value: value, Key: key}, nil
++}
++
++func decodeReplyJSON(encoded string) (asyncsave.Reply, error) {
++	fields, err := decodeExactObject(encoded, "ID", "Value", "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	id, err := parsePositiveSafeUint(fields["ID"], "ID")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	value, err := decodeJSONString(fields, "Value")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	message, err := decodeJSONString(fields, "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	return asyncsave.Reply{ID: id, Value: value, Error: message}, nil
++}
++
++func decodeInputsJSON(encoded string) (composition.Inputs, error) {
++	if !utf8.ValidString(encoded) || !validUnicodeEscapes([]byte(encoded)) {
++		return composition.Inputs{}, fmt.Errorf("input must contain valid Unicode")
++	}
++	fields, err := decodeExactObject(encoded, "Title", "ReadOnly")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	title, err := decodeJSONString(fields, "Title")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	var readOnly bool
++	if !isJSONBool(fields["ReadOnly"]) || json.Unmarshal(fields["ReadOnly"], &readOnly) != nil {
++		return composition.Inputs{}, fmt.Errorf("field %q must be a boolean", "ReadOnly")
++	}
++	return composition.Inputs{Title: title, ReadOnly: readOnly}, nil
++}
++
++// decodeExactObject rejects arrays, null, duplicate keys, missing keys,
++// unknown keys, and trailing JSON values. Duplicate matching uses decoded
++// names, so (for example) "ID" and "I\\u0044" collide.
++func decodeExactObject(encoded string, names ...string) (map[string]json.RawMessage, error) {
++	decoder := json.NewDecoder(bytes.NewBufferString(encoded))
++	first, err := decoder.Token()
++	if err != nil {
++		return nil, err
++	}
++	open, ok := first.(json.Delim)
++	if !ok || open != '{' {
++		return nil, fmt.Errorf("input must be an object")
++	}
++	allowed := make(map[string]struct{}, len(names))
++	for _, name := range names {
++		allowed[name] = struct{}{}
++	}
++	fields := make(map[string]json.RawMessage, len(names))
++	for decoder.More() {
++		token, err := decoder.Token()
++		if err != nil {
++			return nil, err
++		}
++		name, ok := token.(string)
++		if !ok {
++			return nil, fmt.Errorf("input property name must be a string")
++		}
++		if _, exists := fields[name]; exists {
++			return nil, fmt.Errorf("duplicate field %q", name)
++		}
++		if _, exists := allowed[name]; !exists {
++			return nil, fmt.Errorf("unexpected field %q", name)
++		}
++		var raw json.RawMessage
++		if err := decoder.Decode(&raw); err != nil {
++			return nil, err
++		}
++		fields[name] = raw
++	}
++	last, err := decoder.Token()
++	if err != nil {
++		return nil, err
++	}
++	close, ok := last.(json.Delim)
++	if !ok || close != '}' {
++		return nil, fmt.Errorf("input object was not closed")
++	}
++	if _, err := decoder.Token(); err != io.EOF {
++		if err == nil {
++			return nil, fmt.Errorf("trailing JSON value")
++		}
++		return nil, err
++	}
++	for _, name := range names {
++		if _, ok := fields[name]; !ok {
++			return nil, fmt.Errorf("missing field %q", name)
++		}
++	}
++	return fields, nil
++}
++
++func decodeJSONString(fields map[string]json.RawMessage, name string) (string, error) {
++	var value string
++	raw := bytes.TrimSpace(fields[name])
++	if len(raw) == 0 || raw[0] != '"' {
++		return "", fmt.Errorf("field %q must be a string", name)
++	}
++	if err := json.Unmarshal(raw, &value); err != nil {
++		return "", fmt.Errorf("field %q must be a string", name)
++	}
++	return value, nil
++}
++
++func parsePositiveSafeUint(raw json.RawMessage, name string) (uint64, error) {
++	value, err := parseSafeUint(raw, name)
++	if err != nil || value == 0 {
++		return 0, fmt.Errorf("field %q must be a positive safe integer", name)
++	}
++	return value, nil
++}
++
++func parseSafeUint(raw json.RawMessage, name string) (uint64, error) {
++	value := bytes.TrimSpace(raw)
++	if len(value) == 0 || value[0] < '0' || value[0] > '9' {
++		return 0, fmt.Errorf("field %q must be a non-negative safe integer", name)
++	}
++	for _, digit := range value {
++		if digit < '0' || digit > '9' {
++			return 0, fmt.Errorf("field %q must be a non-negative safe integer", name)
++		}
++	}
++	parsed, err := strconv.ParseUint(string(value), 10, 64)
++	if err != nil || parsed > asyncsave.MaxID || strconv.FormatUint(parsed, 10) != string(value) {
++		return 0, fmt.Errorf("field %q must be a non-negative safe integer", name)
++	}
++	return parsed, nil
++}
++
++func decodeSessionIDJSON(raw json.RawMessage, name string) (multisession.SessionID, error) {
++	value, err := parsePositiveSafeUint(raw, name)
++	if err != nil {
++		return 0, err
++	}
++	return multisession.SessionID(value), nil
++}
++
++func decodeRowIDJSON(raw json.RawMessage) (collection.RowID, error) {
++	value, err := parsePositiveSafeUint(raw, "rowID")
++	if err != nil {
++		return 0, err
++	}
++	return collection.RowID(value), nil
++}
++
++func decodeRevisionJSON(raw json.RawMessage) (uint64, error) {
++	return parseSafeUint(raw, "inputRevision")
++}
++
++func decodeStatusJSON(raw json.RawMessage) (int, error) {
++	value, err := parseSafeUint(raw, "status")
++	if err != nil || value < 100 || value > 599 {
++		return 0, fmt.Errorf("field %q must be an integer in range 100..599", "status")
++	}
++	return int(value), nil
++}
++
++func isJSONBool(raw json.RawMessage) bool {
++	trimmed := bytes.TrimSpace(raw)
++	return bytes.Equal(trimmed, []byte("true")) || bytes.Equal(trimmed, []byte("false"))
++}
++
++func validUnicodeEscapes(body []byte) bool {
++	inString := false
++	for i := 0; i < len(body); {
++		if !inString {
++			if body[i] == '"' {
++				inString = true
++			}
++			i++
++			continue
++		}
++		if body[i] == '"' {
++			inString = false
++			i++
++			continue
++		}
++		if body[i] != '\\' {
++			i++
++			continue
++		}
++		if i+1 >= len(body) {
++			return false
++		}
++		if body[i+1] != 'u' {
++			i += 2
++			continue
++		}
++		if i+6 > len(body) {
++			return false
++		}
++		code, ok := parseHex4(body[i+2 : i+6])
++		if !ok {
++			return false
++		}
++		switch {
++		case code >= 0xd800 && code <= 0xdbff:
++			if i+12 > len(body) || body[i+6] != '\\' || body[i+7] != 'u' {
++				return false
++			}
++			low, ok := parseHex4(body[i+8 : i+12])
++			if !ok || low < 0xdc00 || low > 0xdfff {
++				return false
++			}
++			i += 12
++		case code >= 0xdc00 && code <= 0xdfff:
++			return false
++		default:
++			i += 6
++		}
++	}
++	return !inString
++}
++
++func parseHex4(value []byte) (uint16, bool) {
++	if len(value) != 4 {
++		return 0, false
++	}
++	var result uint16
++	for _, digit := range value {
++		result <<= 4
++		switch {
++		case digit >= '0' && digit <= '9':
++			result |= uint16(digit - '0')
++		case digit >= 'a' && digit <= 'f':
++			result |= uint16(digit-'a') + 10
++		case digit >= 'A' && digit <= 'F':
++			result |= uint16(digit-'A') + 10
++		default:
++			return 0, false
++		}
++	}
++	return result, true
++}
+diff --git a/cmd/composition-replay/main.go b/cmd/composition-replay/main.go
+new file mode 100644
+index 0000000..576408d
+--- /dev/null
++++ b/cmd/composition-replay/main.go
+@@ -0,0 +1,353 @@
++// Command composition-replay executes typed composition actions and emits one
++// complete state frame after each operation for browser/native comparison.
++package main
++
++import (
++	"encoding/json"
++	"fmt"
++	"io"
++	"os"
++
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/composition"
++	"github.com/samuelpmahan/gondola/httpwire"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++type replayFrame struct {
++	Action replayAction     `json:"action"`
++	Result any              `json:"result"`
++	Frame  compositionFrame `json:"frame"`
++}
++
++type compositionFrame struct {
++	Tree     []multisession.SessionInfo `json:"tree"`
++	Sessions []sessionFrame             `json:"sessions"`
++	Changes  []multisession.SessionID   `json:"changes"`
++}
++
++type sessionFrame struct {
++	ID       multisession.SessionID `json:"id"`
++	Snapshot composition.Snapshot   `json:"snapshot"`
++}
++
++type replayOutput struct {
++	Frames []replayFrame `json:"frames"`
++}
++
++func main() {
++	os.Exit(run(os.Args[1:]))
++}
++
++func run(args []string) int {
++	if len(args) > 1 {
++		fmt.Fprintf(os.Stderr, "usage: %s [actions.json|-]\n", "composition-replay")
++		return 2
++	}
++	var reader io.Reader = os.Stdin
++	if len(args) == 1 && args[0] != "-" {
++		file, err := os.Open(args[0])
++		if err != nil {
++			fmt.Fprintln(os.Stderr, "composition-replay:", err)
++			return 2
++		}
++		defer file.Close()
++		reader = file
++	}
++	encoded, err := io.ReadAll(reader)
++	if err != nil {
++		fmt.Fprintln(os.Stderr, "composition-replay: read input:", err)
++		return 2
++	}
++	actions, err := decodeReplayInput(encoded)
++	if err != nil {
++		fmt.Fprintln(os.Stderr, "composition-replay: invalid input:", err)
++		return 2
++	}
++	manager := composition.NewManager()
++	frames := make([]replayFrame, 0, len(actions))
++	for _, action := range actions {
++		result := executeAction(manager, action)
++		frame, err := captureFrame(manager)
++		if err != nil {
++			fmt.Fprintln(os.Stderr, "composition-replay: capture frame:", err)
++			return 2
++		}
++		frames = append(frames, replayFrame{Action: action, Result: result, Frame: frame})
++	}
++	if err := json.NewEncoder(os.Stdout).Encode(replayOutput{Frames: frames}); err != nil {
++		fmt.Fprintln(os.Stderr, "composition-replay: encode output:", err)
++		return 2
++	}
++	return 0
++}
++
++func executeAction(manager *composition.Manager, action replayAction) any {
++	fail := func(err error) any { return map[string]string{"error": err.Error()} }
++	if err := exactActionArgs(action, expectedArity(action.Method)); err != nil {
++		return fail(err)
++	}
++	args := action.Args
++	decodeID := func(index int, name string) (multisession.SessionID, error) {
++		return decodeSessionIDJSON(args[index], name)
++	}
++	decodeString := func(index int, name string) (string, error) {
++		var value string
++		if err := json.Unmarshal(args[index], &value); err != nil || !rawStartsWith(args[index], '"') {
++			return "", fmt.Errorf("argument %d (%s) must be a string", index, name)
++		}
++		return value, nil
++	}
++	switch action.Method {
++	case "create":
++		id, err := manager.Create()
++		if err != nil {
++			return fail(err)
++		}
++		return id
++	case "createChild":
++		parent, err := decodeID(0, "parentID")
++		if err != nil {
++			return fail(err)
++		}
++		id, err := manager.CreateChild(parent)
++		if err != nil {
++			return fail(err)
++		}
++		return id
++	case "tree":
++		tree := manager.Tree()
++		if tree == nil {
++			tree = []multisession.SessionInfo{}
++		}
++		return tree
++	case "list":
++		ids := manager.List()
++		if ids == nil {
++			ids = []multisession.SessionID{}
++		}
++		return ids
++	case "snapshot":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		snapshot, err := manager.Snapshot(id)
++		if err != nil {
++			return fail(err)
++		}
++		return snapshot
++	case "dispatch":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		step, err := decodeStepJSON(string(args[1]))
++		if err != nil {
++			return fail(fmt.Errorf("invalid step: %w", err))
++		}
++		snapshot, err := manager.Dispatch(id, step)
++		if err != nil {
++			return fail(err)
++		}
++		return snapshot
++	case "effects":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		commands, err := manager.Effects(id)
++		if err != nil {
++			return fail(err)
++		}
++		if commands == nil {
++			commands = []collection.Command{}
++		}
++		return commands
++	case "complete":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		reply, err := decodeReplyJSON(string(args[1]))
++		if err != nil {
++			return fail(fmt.Errorf("invalid reply: %w", err))
++		}
++		snapshot, err := manager.Complete(id, reply)
++		if err != nil {
++			return fail(err)
++		}
++		return snapshot
++	case "audit":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		outcomes, err := manager.Audit(id)
++		if err != nil {
++			return fail(err)
++		}
++		if outcomes == nil {
++			outcomes = []collection.Outcome{}
++		}
++		return outcomes
++	case "dispose":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		commands, err := manager.Dispose(id)
++		if err != nil {
++			return fail(err)
++		}
++		if commands == nil {
++			commands = []collection.Command{}
++		}
++		return commands
++	case "disposeTree":
++		id, err := decodeID(0, "sessionID")
++		if err != nil {
++			return fail(err)
++		}
++		disposals, err := manager.DisposeTree(id)
++		if err != nil {
++			return fail(err)
++		}
++		if disposals == nil {
++			disposals = []multisession.Disposal{}
++		}
++		return disposals
++	case "setChildInputs":
++		parent, err := decodeID(0, "parentID")
++		if err != nil {
++			return fail(err)
++		}
++		child, err := decodeID(1, "childID")
++		if err != nil {
++			return fail(err)
++		}
++		inputs, err := decodeInputsJSON(string(args[2]))
++		if err != nil {
++			return fail(fmt.Errorf("invalid inputs: %w", err))
++		}
++		snapshot, err := manager.SetChildInputs(parent, child, inputs)
++		if err != nil {
++			return fail(err)
++		}
++		return snapshot
++	case "publish":
++		child, err := decodeID(0, "childID")
++		if err != nil {
++			return fail(err)
++		}
++		row, err := decodeRowIDJSON(args[1])
++		if err != nil {
++			return fail(err)
++		}
++		revision, err := decodeRevisionJSON(args[2])
++		if err != nil {
++			return fail(err)
++		}
++		publication, err := manager.Publish(child, row, revision)
++		if err != nil {
++			return fail(err)
++		}
++		return publication
++	case "changes":
++		ids := manager.Changes()
++		if ids == nil {
++			ids = []multisession.SessionID{}
++		}
++		return ids
++	case "encodeHTTP":
++		id, err := parsePositiveSafeUint(args[0], "requestID")
++		if err != nil {
++			return fail(err)
++		}
++		value, err := decodeString(1, "value")
++		if err != nil {
++			return fail(err)
++		}
++		body, err := httpwire.EncodeRequest(id, value)
++		if err != nil {
++			return fail(err)
++		}
++		return string(body)
++	case "decodeHTTP":
++		id, err := parsePositiveSafeUint(args[0], "requestID")
++		if err != nil {
++			return fail(err)
++		}
++		status, err := decodeStatusJSON(args[1])
++		if err != nil {
++			return fail(err)
++		}
++		body, err := decodeString(2, "body")
++		if err != nil {
++			return fail(err)
++		}
++		return httpwire.DecodeResponse(id, status, []byte(body))
++	default:
++		return fail(fmt.Errorf("unknown composition method %q", action.Method))
++	}
++}
++
++func expectedArity(method string) int {
++	switch method {
++	case "create", "tree", "list", "changes":
++		return 0
++	case "createChild", "snapshot", "effects", "audit", "dispose", "disposeTree":
++		return 1
++	case "dispatch", "complete", "encodeHTTP":
++		return 2
++	case "setChildInputs":
++		return 3
++	case "publish", "decodeHTTP":
++		return 3
++	default:
++		return -1
++	}
++}
++
++func exactActionArgs(action replayAction, arity int) error {
++	if arity < 0 {
++		return fmt.Errorf("unknown composition method %q", action.Method)
++	}
++	if len(action.Args) != arity {
++		return fmt.Errorf("%s requires exactly %d argument(s), got %d", action.Method, arity, len(action.Args))
++	}
++	return nil
++}
++
++func captureFrame(manager *composition.Manager) (compositionFrame, error) {
++	tree := manager.Tree()
++	if tree == nil {
++		tree = []multisession.SessionInfo{}
++	}
++	ids := manager.List()
++	if ids == nil {
++		ids = []multisession.SessionID{}
++	}
++	sessions := make([]sessionFrame, 0, len(ids))
++	for _, id := range ids {
++		snapshot, err := manager.Snapshot(id)
++		if err != nil {
++			return compositionFrame{}, err
++		}
++		sessions = append(sessions, sessionFrame{ID: id, Snapshot: snapshot})
++	}
++	changes := manager.Changes()
++	if changes == nil {
++		changes = []multisession.SessionID{}
++	}
++	return compositionFrame{Tree: tree, Sessions: sessions, Changes: changes}, nil
++}
++
++func rawStartsWith(raw json.RawMessage, prefix byte) bool {
++	for _, value := range raw {
++		if value != ' ' && value != '\n' && value != '\r' && value != '\t' {
++			return value == prefix
++		}
++	}
++	return false
++}
+diff --git a/cmd/composition-replay/main_test.go b/cmd/composition-replay/main_test.go
+new file mode 100644
+index 0000000..7c20f60
+--- /dev/null
++++ b/cmd/composition-replay/main_test.go
+@@ -0,0 +1,110 @@
++package main
++
++import (
++	"encoding/json"
++	"reflect"
++	"testing"
++
++	"github.com/samuelpmahan/gondola/composition"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++func rawArgs(values ...string) []json.RawMessage {
++	result := make([]json.RawMessage, len(values))
++	for index, value := range values {
++		result[index] = json.RawMessage(value)
++	}
++	return result
++}
++
++func TestReplayCapturesFullFramesAndDrainsChanges(t *testing.T) {
++	manager := composition.NewManager()
++	createRoot := replayAction{Method: "create", Args: rawArgs()}
++	if got := executeAction(manager, createRoot); got != multisession.SessionID(1) {
++		t.Fatalf("create result = %#v, want 1", got)
++	}
++	frame, err := captureFrame(manager)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if len(frame.Tree) != 1 || frame.Tree[0].SessionID != 1 || len(frame.Sessions) != 1 || frame.Sessions[0].ID != 1 {
++		t.Fatalf("create frame = %#v, want full root snapshot", frame)
++	}
++	if len(frame.Sessions[0].Snapshot.State.Inbox) != 0 || frame.Changes == nil || len(frame.Changes) != 0 {
++		t.Fatalf("create frame slices/changes = %#v, want empty nonnil slices", frame)
++	}
++
++	if got := executeAction(manager, replayAction{Method: "createChild", Args: rawArgs(`1`)}); got != multisession.SessionID(2) {
++		t.Fatalf("createChild result = %#v, want 2", got)
++	}
++	_, err = captureFrame(manager)
++	if err != nil {
++		t.Fatal(err)
++	}
++	inputs := replayAction{Method: "setChildInputs", Args: rawArgs(`1`, `2`, `{"Title":"Notebook","ReadOnly":false}`)}
++	updated := executeAction(manager, inputs).(composition.Snapshot)
++	if updated.State.Inputs.Title != "Notebook" || updated.State.InputRevision != 1 {
++		t.Fatalf("setChildInputs result state = %#v", updated.State)
++	}
++	frame, err = captureFrame(manager)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if !reflect.DeepEqual(frame.Changes, []multisession.SessionID{2}) {
++		t.Fatalf("dirty changes = %#v, want [2]", frame.Changes)
++	}
++	if len(frame.Sessions) != 2 || frame.Sessions[1].Snapshot.State.Inputs.Title != "Notebook" {
++		t.Fatalf("full live snapshots missing child input: %#v", frame.Sessions)
++	}
++	if changes := executeAction(manager, replayAction{Method: "changes", Args: rawArgs()}); !reflect.DeepEqual(changes, []multisession.SessionID{}) {
++		t.Fatalf("changes result after frame drain = %#v, want empty", changes)
++	}
++
++	before, err := manager.Snapshot(2)
++	if err != nil {
++		t.Fatal(err)
++	}
++	invalid := replayAction{Method: "setChildInputs", Args: rawArgs(`1`, `2`, `{"Title":"bad","ReadOnly":false,"extra":true}`)}
++	if result := executeAction(manager, invalid); !isErrorResult(result) {
++		t.Fatalf("malformed setChildInputs result = %#v, want error object", result)
++	}
++	after, err := manager.Snapshot(2)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if !reflect.DeepEqual(before, after) {
++		t.Fatalf("invalid action changed child snapshot: before %#v after %#v", before, after)
++	}
++
++	removed := executeAction(manager, replayAction{Method: "disposeTree", Args: rawArgs(`1`)}).([]multisession.Disposal)
++	if len(removed) != 2 || removed[0].SessionID != 2 || removed[1].SessionID != 1 {
++		t.Fatalf("disposeTree result = %#v, want child-first postorder", removed)
++	}
++	frame, err = captureFrame(manager)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if len(frame.Tree) != 0 || len(frame.Sessions) != 0 || frame.Tree == nil || frame.Sessions == nil || frame.Changes == nil {
++		t.Fatalf("disposed frame = %#v, want empty nonnil full frame", frame)
++	}
++}
++
++func TestReplayWrongArityAndUnknownMethodsAreErrorsWithoutMutation(t *testing.T) {
++	manager := composition.NewManager()
++	for _, action := range []replayAction{
++		{Method: "create", Args: rawArgs(`1`)},
++		{Method: "unknown", Args: rawArgs()},
++	} {
++		if result := executeAction(manager, action); !isErrorResult(result) {
++			t.Errorf("executeAction(%#v) = %#v, want error object", action, result)
++		}
++	}
++	if got := manager.List(); len(got) != 0 {
++		t.Fatalf("failed actions created sessions: %#v", got)
++	}
++}
++
++func isErrorResult(value any) bool {
++	result, ok := value.(map[string]string)
++	return ok && len(result) == 1 && result["error"] != ""
++}
+diff --git a/cmd/composition-wasm/bridge_decode.go b/cmd/composition-wasm/bridge_decode.go
+new file mode 100644
+index 0000000..26e3112
+--- /dev/null
++++ b/cmd/composition-wasm/bridge_decode.go
+@@ -0,0 +1,335 @@
++package main
++
++// Strict JSON decoders shared by bridge tests and the native replay command.
++import (
++	"bytes"
++	"encoding/json"
++	"fmt"
++	"io"
++	"strconv"
++	"unicode/utf8"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/composition"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++type replayAction struct {
++	Method string            `json:"method"`
++	Args   []json.RawMessage `json:"args"`
++}
++
++func decodeReplayInput(encoded []byte) ([]replayAction, error) {
++	if !utf8.Valid(encoded) {
++		return nil, fmt.Errorf("input must contain valid Unicode")
++	}
++	fields, err := decodeExactObject(string(encoded), "actions")
++	if err != nil {
++		return nil, err
++	}
++	raw := bytes.TrimSpace(fields["actions"])
++	if len(raw) == 0 || raw[0] != '[' {
++		return nil, fmt.Errorf("field %q must be an array", "actions")
++	}
++	var actions []json.RawMessage
++	if err := json.Unmarshal(raw, &actions); err != nil || actions == nil {
++		return nil, fmt.Errorf("field %q must be an array", "actions")
++	}
++	result := make([]replayAction, len(actions))
++	for index, action := range actions {
++		decoded, err := decodeActionJSON(string(action))
++		if err != nil {
++			return nil, fmt.Errorf("action %d: %w", index, err)
++		}
++		result[index] = decoded
++	}
++	return result, nil
++}
++
++func decodeActionJSON(encoded string) (replayAction, error) {
++	fields, err := decodeExactObject(encoded, "method", "args")
++	if err != nil {
++		return replayAction{}, err
++	}
++	method, err := decodeJSONString(fields, "method")
++	if err != nil {
++		return replayAction{}, err
++	}
++	argsRaw := bytes.TrimSpace(fields["args"])
++	if len(argsRaw) == 0 || argsRaw[0] != '[' {
++		return replayAction{}, fmt.Errorf("field %q must be an array", "args")
++	}
++	var args []json.RawMessage
++	if err := json.Unmarshal(argsRaw, &args); err != nil || args == nil {
++		return replayAction{}, fmt.Errorf("field %q must be an array", "args")
++	}
++	return replayAction{Method: method, Args: args}, nil
++}
++
++func decodeStepJSON(encoded string) (collection.Step, error) {
++	fields, err := decodeExactObject(encoded, "Path", "Event", "Value", "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	path, err := decodeJSONString(fields, "Path")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	event, err := decodeJSONString(fields, "Event")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	value, err := decodeJSONString(fields, "Value")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	key, err := decodeJSONString(fields, "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	return collection.Step{Path: path, Event: event, Value: value, Key: key}, nil
++}
++
++func decodeReplyJSON(encoded string) (asyncsave.Reply, error) {
++	fields, err := decodeExactObject(encoded, "ID", "Value", "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	id, err := parsePositiveSafeUint(fields["ID"], "ID")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	value, err := decodeJSONString(fields, "Value")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	message, err := decodeJSONString(fields, "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	return asyncsave.Reply{ID: id, Value: value, Error: message}, nil
++}
++
++func decodeInputsJSON(encoded string) (composition.Inputs, error) {
++	if !utf8.ValidString(encoded) || !validUnicodeEscapes([]byte(encoded)) {
++		return composition.Inputs{}, fmt.Errorf("input must contain valid Unicode")
++	}
++	fields, err := decodeExactObject(encoded, "Title", "ReadOnly")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	title, err := decodeJSONString(fields, "Title")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	var readOnly bool
++	if !isJSONBool(fields["ReadOnly"]) || json.Unmarshal(fields["ReadOnly"], &readOnly) != nil {
++		return composition.Inputs{}, fmt.Errorf("field %q must be a boolean", "ReadOnly")
++	}
++	return composition.Inputs{Title: title, ReadOnly: readOnly}, nil
++}
++
++// decodeExactObject rejects arrays, null, duplicate keys, missing keys,
++// unknown keys, and trailing JSON values. Duplicate matching uses decoded
++// names, so (for example) "ID" and "I\\u0044" collide.
++func decodeExactObject(encoded string, names ...string) (map[string]json.RawMessage, error) {
++	decoder := json.NewDecoder(bytes.NewBufferString(encoded))
++	first, err := decoder.Token()
++	if err != nil {
++		return nil, err
++	}
++	open, ok := first.(json.Delim)
++	if !ok || open != '{' {
++		return nil, fmt.Errorf("input must be an object")
++	}
++	allowed := make(map[string]struct{}, len(names))
++	for _, name := range names {
++		allowed[name] = struct{}{}
++	}
++	fields := make(map[string]json.RawMessage, len(names))
++	for decoder.More() {
++		token, err := decoder.Token()
++		if err != nil {
++			return nil, err
++		}
++		name, ok := token.(string)
++		if !ok {
++			return nil, fmt.Errorf("input property name must be a string")
++		}
++		if _, exists := fields[name]; exists {
++			return nil, fmt.Errorf("duplicate field %q", name)
++		}
++		if _, exists := allowed[name]; !exists {
++			return nil, fmt.Errorf("unexpected field %q", name)
++		}
++		var raw json.RawMessage
++		if err := decoder.Decode(&raw); err != nil {
++			return nil, err
++		}
++		fields[name] = raw
++	}
++	last, err := decoder.Token()
++	if err != nil {
++		return nil, err
++	}
++	close, ok := last.(json.Delim)
++	if !ok || close != '}' {
++		return nil, fmt.Errorf("input object was not closed")
++	}
++	if _, err := decoder.Token(); err != io.EOF {
++		if err == nil {
++			return nil, fmt.Errorf("trailing JSON value")
++		}
++		return nil, err
++	}
++	for _, name := range names {
++		if _, ok := fields[name]; !ok {
++			return nil, fmt.Errorf("missing field %q", name)
++		}
++	}
++	return fields, nil
++}
++
++func decodeJSONString(fields map[string]json.RawMessage, name string) (string, error) {
++	var value string
++	raw := bytes.TrimSpace(fields[name])
++	if len(raw) == 0 || raw[0] != '"' {
++		return "", fmt.Errorf("field %q must be a string", name)
++	}
++	if err := json.Unmarshal(raw, &value); err != nil {
++		return "", fmt.Errorf("field %q must be a string", name)
++	}
++	return value, nil
++}
++
++func parsePositiveSafeUint(raw json.RawMessage, name string) (uint64, error) {
++	value, err := parseSafeUint(raw, name)
++	if err != nil || value == 0 {
++		return 0, fmt.Errorf("field %q must be a positive safe integer", name)
++	}
++	return value, nil
++}
++
++func parseSafeUint(raw json.RawMessage, name string) (uint64, error) {
++	value := bytes.TrimSpace(raw)
++	if len(value) == 0 || value[0] < '0' || value[0] > '9' {
++		return 0, fmt.Errorf("field %q must be a non-negative safe integer", name)
++	}
++	for _, digit := range value {
++		if digit < '0' || digit > '9' {
++			return 0, fmt.Errorf("field %q must be a non-negative safe integer", name)
++		}
++	}
++	parsed, err := strconv.ParseUint(string(value), 10, 64)
++	if err != nil || parsed > asyncsave.MaxID || strconv.FormatUint(parsed, 10) != string(value) {
++		return 0, fmt.Errorf("field %q must be a non-negative safe integer", name)
++	}
++	return parsed, nil
++}
++
++func decodeSessionIDJSON(raw json.RawMessage, name string) (multisession.SessionID, error) {
++	value, err := parsePositiveSafeUint(raw, name)
++	if err != nil {
++		return 0, err
++	}
++	return multisession.SessionID(value), nil
++}
++
++func decodeRowIDJSON(raw json.RawMessage) (collection.RowID, error) {
++	value, err := parsePositiveSafeUint(raw, "rowID")
++	if err != nil {
++		return 0, err
++	}
++	return collection.RowID(value), nil
++}
++
++func decodeRevisionJSON(raw json.RawMessage) (uint64, error) {
++	return parseSafeUint(raw, "inputRevision")
++}
++
++func decodeStatusJSON(raw json.RawMessage) (int, error) {
++	value, err := parseSafeUint(raw, "status")
++	if err != nil || value < 100 || value > 599 {
++		return 0, fmt.Errorf("field %q must be an integer in range 100..599", "status")
++	}
++	return int(value), nil
++}
++
++func isJSONBool(raw json.RawMessage) bool {
++	trimmed := bytes.TrimSpace(raw)
++	return bytes.Equal(trimmed, []byte("true")) || bytes.Equal(trimmed, []byte("false"))
++}
++
++func validUnicodeEscapes(body []byte) bool {
++	inString := false
++	for i := 0; i < len(body); {
++		if !inString {
++			if body[i] == '"' {
++				inString = true
++			}
++			i++
++			continue
++		}
++		if body[i] == '"' {
++			inString = false
++			i++
++			continue
++		}
++		if body[i] != '\\' {
++			i++
++			continue
++		}
++		if i+1 >= len(body) {
++			return false
++		}
++		if body[i+1] != 'u' {
++			i += 2
++			continue
++		}
++		if i+6 > len(body) {
++			return false
++		}
++		code, ok := parseHex4(body[i+2 : i+6])
++		if !ok {
++			return false
++		}
++		switch {
++		case code >= 0xd800 && code <= 0xdbff:
++			if i+12 > len(body) || body[i+6] != '\\' || body[i+7] != 'u' {
++				return false
++			}
++			low, ok := parseHex4(body[i+8 : i+12])
++			if !ok || low < 0xdc00 || low > 0xdfff {
++				return false
++			}
++			i += 12
++		case code >= 0xdc00 && code <= 0xdfff:
++			return false
++		default:
++			i += 6
++		}
++	}
++	return !inString
++}
++
++func parseHex4(value []byte) (uint16, bool) {
++	if len(value) != 4 {
++		return 0, false
++	}
++	var result uint16
++	for _, digit := range value {
++		result <<= 4
++		switch {
++		case digit >= '0' && digit <= '9':
++			result |= uint16(digit - '0')
++		case digit >= 'a' && digit <= 'f':
++			result |= uint16(digit-'a') + 10
++		case digit >= 'A' && digit <= 'F':
++			result |= uint16(digit-'A') + 10
++		default:
++			return 0, false
++		}
++	}
++	return result, true
++}
+diff --git a/cmd/composition-wasm/bridge_decode_test.go b/cmd/composition-wasm/bridge_decode_test.go
+new file mode 100644
+index 0000000..ce41440
+--- /dev/null
++++ b/cmd/composition-wasm/bridge_decode_test.go
+@@ -0,0 +1,125 @@
++package main
++
++import (
++	"testing"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++)
++
++func TestDecodeReplayInputRequiresClosedActionObjects(t *testing.T) {
++	actions, err := decodeReplayInput([]byte(`{"actions":[{"method":"dispatch","args":[1,{"Path":"2/0/0","Event":"input","Value":"draft","Key":"row-1-input"}]}]}`))
++	if err != nil {
++		t.Fatalf("decodeReplayInput() error = %v", err)
++	}
++	if len(actions) != 1 || actions[0].Method != "dispatch" || len(actions[0].Args) != 2 {
++		t.Fatalf("decodeReplayInput() = %#v, want one dispatch action", actions)
++	}
++	step, err := decodeStepJSON(string(actions[0].Args[1]))
++	want := collection.Step{Path: "2/0/0", Event: "input", Value: "draft", Key: "row-1-input"}
++	if err != nil || step != want {
++		t.Fatalf("decodeStepJSON() = %#v, %v; want %#v", step, err, want)
++	}
++
++	for _, input := range []string{
++		`null`,
++		`[]`,
++		`{"actions":null}`,
++		`{"actions":[],"extra":true}`,
++		`{"actions":[],"actions":[]}`,
++		`{"actions":[],"a\u0063tions":[]}`,
++		`{"actions":[]} {}`,
++		`{"actions":[{"method":"create","args":[],"extra":0}]}`,
++		`{"actions":[{"method":"create","method":"list","args":[]}]}`,
++		`{"actions":[{"method":"create","args":null}]}`,
++		`{"actions":[{"method":"create","args":[]}],"bad":"\uD800"}`,
++	} {
++		t.Run(input, func(t *testing.T) {
++			if got, err := decodeReplayInput([]byte(input)); err == nil {
++				t.Fatalf("decodeReplayInput(%s) = %#v, want error", input, got)
++			}
++		})
++	}
++}
++
++func TestDecodeInputsJSONUsesExactPrimitiveFieldsAndUnicode(t *testing.T) {
++	got, err := decodeInputsJSON(`{"Title":"Research","ReadOnly":true}`)
++	if err != nil || got.Title != "Research" || !got.ReadOnly {
++		t.Fatalf("decodeInputsJSON() = %#v, %v", got, err)
++	}
++	for _, input := range []string{
++		`null`,
++		`{"Title":"x"}`,
++		`{"Title":"x","ReadOnly":true,"extra":0}`,
++		`{"Title":"x","Title":"y","ReadOnly":true}`,
++		`{"Title":"x","ReadOnly":1}`,
++		`{"Title":"x","ReadOnly":"true"}`,
++		`{"Title":"\uD800","ReadOnly":false}`,
++		`{"Title":"\uDC00","ReadOnly":false}`,
++	} {
++		t.Run(input, func(t *testing.T) {
++			if got, err := decodeInputsJSON(input); err == nil {
++				t.Fatalf("decodeInputsJSON(%s) = %#v, want error", input, got)
++			}
++		})
++	}
++}
++
++func TestDecodeStepAndReplyUseExactFieldsAndTypes(t *testing.T) {
++	step, err := decodeStepJSON(`{"Path":"0","Event":"click","Value":"","Key":"add"}`)
++	if err != nil || step != (collection.Step{Path: "0", Event: "click", Key: "add"}) {
++		t.Fatalf("decodeStepJSON() = %#v, %v", step, err)
++	}
++	reply, err := decodeReplyJSON(`{"ID":7,"Value":"saved","Error":""}`)
++	if err != nil || reply != (asyncsave.Reply{ID: 7, Value: "saved"}) {
++		t.Fatalf("decodeReplyJSON() = %#v, %v", reply, err)
++	}
++	for _, input := range []string{
++		`{"Path":"0","Event":"click","Value":"","Key":"add","x":0}`,
++		`{"Path":"0","Event":"click","Value":"","Key":null}`,
++	} {
++		t.Run(input, func(t *testing.T) {
++			if got, err := decodeStepJSON(input); err == nil {
++				t.Fatalf("decodeStepJSON(%s) = %#v, want error", input, got)
++			}
++		})
++	}
++	for _, input := range []string{
++		`{"ID":7,"Value":"saved","Error":"","extra":0}`,
++		`{"ID":7.0,"Value":"saved","Error":""}`,
++		`{"ID":9007199254740992,"Value":"saved","Error":""}`,
++	} {
++		t.Run(input, func(t *testing.T) {
++			if got, err := decodeReplyJSON(input); err == nil {
++				t.Fatalf("decodeReplyJSON(%s) = %#v, want error", input, got)
++			}
++		})
++	}
++}
++
++func TestParseSafeUintRequiresCanonicalSafeInteger(t *testing.T) {
++	for _, tc := range []struct {
++		raw  string
++		want uint64
++		ok   bool
++	}{
++		{`0`, 0, true},
++		{`1`, 1, true},
++		{`9007199254740991`, asyncsave.MaxID, true},
++		{`-1`, 0, false},
++		{`1.0`, 0, false},
++		{`1e0`, 0, false},
++		{`1.5`, 0, false},
++		{`"1"`, 0, false},
++		{`true`, 0, false},
++		{`9007199254740992`, 0, false},
++	} {
++		got, err := parseSafeUint([]byte(tc.raw), "value")
++		if tc.ok && (err != nil || got != tc.want) {
++			t.Errorf("parseSafeUint(%s) = %d, %v; want %d", tc.raw, got, err, tc.want)
++		}
++		if !tc.ok && err == nil {
++			t.Errorf("parseSafeUint(%s) = %d, want error", tc.raw, got)
++		}
++	}
++}
+diff --git a/cmd/composition-wasm/main_stub.go b/cmd/composition-wasm/main_stub.go
+new file mode 100644
+index 0000000..095613b
+--- /dev/null
++++ b/cmd/composition-wasm/main_stub.go
+@@ -0,0 +1,6 @@
++//go:build !js || !wasm
++
++package main
++
++// Keep native `go test ./...` able to load the browser-only bridge package.
++func main() {}
+diff --git a/cmd/composition-wasm/main_wasm.go b/cmd/composition-wasm/main_wasm.go
+new file mode 100644
+index 0000000..284a106
+--- /dev/null
++++ b/cmd/composition-wasm/main_wasm.go
+@@ -0,0 +1,456 @@
++//go:build js && wasm
++
++// Command composition-wasm exposes typed parent/child composition through the
++// exact-arity gobiComposition browser global.
++package main
++
++import (
++	"encoding/json"
++	"fmt"
++	"math"
++	"syscall/js"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/composition"
++	"github.com/samuelpmahan/gondola/httpwire"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++var (
++	manager *composition.Manager
++	keepers []js.Func
++)
++
++func main() {
++	manager = composition.NewManager()
++	api := js.Global().Get("Object").New()
++	api.Set("create", method("create", 0, func(args []js.Value) any {
++		id, err := manager.Create()
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return float64(id)
++	}))
++	api.Set("createChild", method("createChild", 1, func(args []js.Value) any {
++		parent, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		id, err := manager.CreateChild(parent)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return float64(id)
++	}))
++	api.Set("tree", method("tree", 0, func(args []js.Value) any {
++		tree := manager.Tree()
++		if tree == nil {
++			tree = []multisession.SessionInfo{}
++		}
++		return toJS(tree)
++	}))
++	api.Set("list", method("list", 0, func(args []js.Value) any {
++		ids := manager.List()
++		if ids == nil {
++			ids = []multisession.SessionID{}
++		}
++		return toJS(ids)
++	}))
++	api.Set("snapshot", method("snapshot", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		snapshot, err := manager.Snapshot(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("dispatch", method("dispatch", 2, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		step, err := decodeStep(args[1])
++		if err != nil {
++			return errorResult(fmt.Sprintf("invalid step: %v", err))
++		}
++		snapshot, err := manager.Dispatch(id, step)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("effects", method("effects", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		commands, err := manager.Effects(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if commands == nil {
++			commands = []collection.Command{}
++		}
++		return toJS(commands)
++	}))
++	api.Set("complete", method("complete", 2, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		reply, err := decodeReply(args[1])
++		if err != nil {
++			return errorResult(fmt.Sprintf("invalid reply: %v", err))
++		}
++		snapshot, err := manager.Complete(id, reply)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("audit", method("audit", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		outcomes, err := manager.Audit(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if outcomes == nil {
++			outcomes = []collection.Outcome{}
++		}
++		return toJS(outcomes)
++	}))
++	api.Set("dispose", method("dispose", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		commands, err := manager.Dispose(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if commands == nil {
++			commands = []collection.Command{}
++		}
++		return toJS(commands)
++	}))
++	api.Set("disposeTree", method("disposeTree", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		disposals, err := manager.DisposeTree(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if disposals == nil {
++			disposals = []multisession.Disposal{}
++		}
++		return toJS(disposals)
++	}))
++	api.Set("setChildInputs", method("setChildInputs", 3, func(args []js.Value) any {
++		parent, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		child, err := decodeSessionID(args[1])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		inputs, err := decodeInputs(args[2])
++		if err != nil {
++			return errorResult(fmt.Sprintf("invalid inputs: %v", err))
++		}
++		snapshot, err := manager.SetChildInputs(parent, child, inputs)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("publish", method("publish", 3, func(args []js.Value) any {
++		child, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		row, err := safeTypedID(args[1], "row ID")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		revision, err := safeUint(args[2], "input revision", true)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		publication, err := manager.Publish(child, collection.RowID(row), revision)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(publication)
++	}))
++	api.Set("changes", method("changes", 0, func(args []js.Value) any {
++		ids := manager.Changes()
++		if ids == nil {
++			ids = []multisession.SessionID{}
++		}
++		return toJS(ids)
++	}))
++	api.Set("encodeHTTP", method("encodeHTTP", 2, func(args []js.Value) any {
++		id, err := safeTypedID(args[0], "request ID")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if args[1].Type() != js.TypeString {
++			return errorResult("encodeHTTP value must be a primitive string")
++		}
++		body, err := httpwire.EncodeRequest(id, args[1].String())
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return string(body)
++	}))
++	api.Set("decodeHTTP", method("decodeHTTP", 3, func(args []js.Value) any {
++		id, err := safeTypedID(args[0], "request ID")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		status, err := safeJSInteger(args[1], 100, 599, "status")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if args[2].Type() != js.TypeString {
++			return errorResult("decodeHTTP body must be a primitive string")
++		}
++		return toJS(httpwire.DecodeResponse(id, int(status), []byte(args[2].String())))
++	}))
++	js.Global().Set("gobiComposition", api)
++	select {}
++}
++
++func method(name string, arity int, operation func([]js.Value) any) js.Func {
++	return keep(js.FuncOf(func(this js.Value, args []js.Value) (result any) {
++		if len(args) != arity {
++			return errorResult(fmt.Sprintf("%s requires exactly %d argument(s), got %d", name, arity, len(args)))
++		}
++		defer func() {
++			if recovered := recover(); recovered != nil {
++				result = errorResult(fmt.Sprintf("%s failed: %v", name, recovered))
++			}
++		}()
++		return operation(args)
++	}))
++}
++
++func keep(function js.Func) js.Func {
++	keepers = append(keepers, function)
++	return function
++}
++
++func decodeSessionID(value js.Value) (multisession.SessionID, error) {
++	if value.Type() != js.TypeNumber {
++		return 0, fmt.Errorf("session ID must be a primitive integer number")
++	}
++	number := value.Float()
++	if math.IsNaN(number) || math.IsInf(number, 0) || math.Trunc(number) != number || number < 1 || number > float64(multisession.MaxSessionID) {
++		return 0, fmt.Errorf("session ID must be an integer in range 1..%d", multisession.MaxSessionID)
++	}
++	return multisession.SessionID(uint64(number)), nil
++}
++
++func safeTypedID(value js.Value, name string) (uint64, error) {
++	return safeUint(value, name, false)
++}
++
++func safeUint(value js.Value, name string, allowZero bool) (uint64, error) {
++	minimum := float64(1)
++	if allowZero {
++		minimum = 0
++	}
++	number, err := safeJSInteger(value, minimum, float64(asyncsave.MaxID), name)
++	if err != nil {
++		return 0, err
++	}
++	return uint64(number), nil
++}
++
++func safeJSInteger(value js.Value, minimum, maximum float64, name string) (float64, error) {
++	if value.Type() != js.TypeNumber {
++		return 0, fmt.Errorf("%s must be a primitive integer number", name)
++	}
++	number := value.Float()
++	if math.IsNaN(number) || math.IsInf(number, 0) || math.Trunc(number) != number || number < minimum || number > maximum {
++		return 0, fmt.Errorf("%s must be an integer in range %d..%d", name, int64(minimum), int64(maximum))
++	}
++	return number, nil
++}
++
++func decodeStep(value js.Value) (step collection.Step, err error) {
++	defer recoverDecode("step", &err)
++	if err := exactObjectKeys(value, "Path", "Event", "Value", "Key"); err != nil {
++		return collection.Step{}, err
++	}
++	path, err := requiredJSString(value, "Path")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	event, err := requiredJSString(value, "Event")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	input, err := requiredJSString(value, "Value")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	key, err := requiredJSString(value, "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	return collection.Step{Path: path, Event: event, Value: input, Key: key}, nil
++}
++
++func decodeReply(value js.Value) (reply asyncsave.Reply, err error) {
++	defer recoverDecode("reply", &err)
++	if err := exactObjectKeys(value, "ID", "Value", "Error"); err != nil {
++		return asyncsave.Reply{}, err
++	}
++	idValue, err := safeGet(value, "ID")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	id, err := safeTypedID(idValue, "reply ID")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	answer, err := requiredJSString(value, "Value")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	message, err := requiredJSString(value, "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	return asyncsave.Reply{ID: id, Value: answer, Error: message}, nil
++}
++
++func decodeInputs(value js.Value) (inputs composition.Inputs, err error) {
++	defer recoverDecode("inputs", &err)
++	if err := exactObjectKeys(value, "Title", "ReadOnly"); err != nil {
++		return composition.Inputs{}, err
++	}
++	titleValue, err := safeGet(value, "Title")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	if titleValue.Type() != js.TypeString {
++		return composition.Inputs{}, fmt.Errorf("field %q must be a primitive string", "Title")
++	}
++	if !validJSUTF16(titleValue) {
++		return composition.Inputs{}, fmt.Errorf("field %q must contain valid Unicode", "Title")
++	}
++	readOnly, err := safeGet(value, "ReadOnly")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	if readOnly.Type() != js.TypeBoolean {
++		return composition.Inputs{}, fmt.Errorf("field %q must be a primitive boolean", "ReadOnly")
++	}
++	return composition.Inputs{Title: titleValue.String(), ReadOnly: readOnly.Bool()}, nil
++}
++
++func recoverDecode(name string, err *error) {
++	if recovered := recover(); recovered != nil {
++		*err = fmt.Errorf("%s fields could not be read: %v", name, recovered)
++	}
++}
++
++func exactObjectKeys(value js.Value, names ...string) error {
++	if value.IsNull() || value.IsUndefined() || value.Type() != js.TypeObject {
++		return fmt.Errorf("input must be an object")
++	}
++	keys, err := reflectOwnKeys(value)
++	if err != nil {
++		return err
++	}
++	if keys.Length() != len(names) {
++		return fmt.Errorf("input must contain exactly %d own field(s)", len(names))
++	}
++	wanted := make(map[string]struct{}, len(names))
++	for _, name := range names {
++		wanted[name] = struct{}{}
++	}
++	for index := 0; index < keys.Length(); index++ {
++		key := keys.Index(index)
++		if key.Type() != js.TypeString {
++			return fmt.Errorf("input field names must be strings")
++		}
++		if _, ok := wanted[key.String()]; !ok {
++			return fmt.Errorf("unexpected field %q", key.String())
++		}
++		delete(wanted, key.String())
++	}
++	if len(wanted) != 0 {
++		return fmt.Errorf("input is missing required fields")
++	}
++	return nil
++}
++
++func reflectOwnKeys(value js.Value) (keys js.Value, err error) {
++	defer func() {
++		if recovered := recover(); recovered != nil {
++			keys = js.Undefined()
++			err = fmt.Errorf("input fields could not be read: %v", recovered)
++		}
++	}()
++	return js.Global().Get("Reflect").Call("ownKeys", value), nil
++}
++
++func requiredJSString(value js.Value, name string) (string, error) {
++	field, err := safeGet(value, name)
++	if err != nil {
++		return "", err
++	}
++	if field.Type() != js.TypeString {
++		return "", fmt.Errorf("field %q must be a primitive string", name)
++	}
++	return field.String(), nil
++}
++
++func safeGet(value js.Value, name string) (field js.Value, err error) {
++	defer func() {
++		if recovered := recover(); recovered != nil {
++			field = js.Undefined()
++			err = fmt.Errorf("field %q could not be read: %v", name, recovered)
++		}
++	}()
++	return js.Global().Get("Reflect").Call("get", value, name), nil
++}
++
++func validJSUTF16(value js.Value) (valid bool) {
++	defer func() {
++		if recover() != nil {
++			valid = false
++		}
++	}()
++	// encodeURIComponent throws for unpaired UTF-16 surrogates and accepts
++	// valid pairs, so no lossy JS-to-Go string conversion is needed to check.
++	js.Global().Call("encodeURIComponent", value)
++	return true
++}
++
++func toJS(value any) js.Value {
++	encoded, err := json.Marshal(value)
++	if err != nil {
++		return errorResult(fmt.Sprintf("could not encode result: %v", err))
++	}
++	return js.Global().Get("JSON").Call("parse", string(encoded))
++}
++
++func errorResult(message string) js.Value {
++	result := js.Global().Get("Object").New()
++	result.Set("error", message)
++	return result
++}
+diff --git a/cmd/composition-wasm/smoke.html b/cmd/composition-wasm/smoke.html
+new file mode 100644
+index 0000000..ef0075c
+--- /dev/null
++++ b/cmd/composition-wasm/smoke.html
+@@ -0,0 +1,99 @@
++<!doctype html>
++<html><head><meta charset="utf-8"><title>Composition WASM bridge smoke</title></head>
++<body>
++<script src="/wasm_exec.js"></script>
++<script>
++window.__compositionSmoke = (async () => {
++  const assert = (condition, message) => { if (!condition) throw new Error(message); };
++  const isError = (value) => value && typeof value === "object" &&
++    Object.keys(value).length === 1 && Object.keys(value)[0] === "error" && typeof value.error === "string";
++  const unwrap = (value, operation) => { if (isError(value)) throw new Error(`${operation}: ${value.error}`); return value; };
++  const waitFor = async (readiness) => {
++    for (let attempt = 0; attempt < 200; attempt += 1) {
++      if (readiness()) return;
++      await new Promise((resolve) => setTimeout(resolve, 0));
++    }
++    throw new Error("Go WASM bridge did not publish within the bounded wait");
++  };
++  const go = new Go();
++  const response = await fetch("/composition.wasm");
++  if (!response.ok) throw new Error(`could not load WASM: ${response.status}`);
++  const bytes = await response.arrayBuffer();
++  const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
++  void go.run(instance);
++  await waitFor(() => globalThis.gobiComposition);
++
++  const api = globalThis.gobiComposition;
++  const names = ["audit", "changes", "complete", "create", "createChild", "decodeHTTP", "dispatch",
++    "dispose", "disposeTree", "effects", "encodeHTTP", "list", "publish", "setChildInputs",
++    "snapshot", "tree"];
++  assert(Object.keys(api).sort().join(",") === names.join(","), "composition bridge method table must be exact");
++  const root = unwrap(api.create(), "create root");
++  const child = unwrap(api.createChild(root), "create child");
++  assert(root === 1 && child === 2, "IDs must be positive increasing safe integers");
++  const initial = unwrap(api.snapshot(child), "snapshot child");
++  assert(Object.keys(initial).sort().join(",") === "bindings,messages,state,tree",
++    "composition snapshot must retain the exact four-field envelope");
++
++  const inputUpdate = unwrap(api.setChildInputs(root, child, { Title: "Notebook", ReadOnly: true }), "set child inputs");
++  assert(inputUpdate.state.Inputs.Title === "Notebook" && inputUpdate.state.Inputs.ReadOnly === true &&
++    inputUpdate.state.InputRevision === 1, "typed inputs must reach the Go-owned snapshot");
++  const readonlySnapshot = JSON.stringify(unwrap(api.snapshot(child), "snapshot readonly child"));
++  const readonlyDispatch = api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add" });
++  assert(isError(readonlyDispatch) || JSON.stringify(readonlyDispatch) === readonlySnapshot,
++    "read-only child dispatch must be rejected or suppressed by Go policy");
++
++  const beforeInvalid = JSON.stringify(unwrap(api.snapshot(child), "snapshot before malformed calls"));
++  const invalidCalls = [
++    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: true, extra: undefined }),
++    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: 1 }),
++    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: new Boolean(true) }),
++    () => api.setChildInputs(root, child, { Title: "\uD800", ReadOnly: false }),
++    () => api.setChildInputs(root, child, Object.defineProperty(
++      { ReadOnly: false }, "Title", { enumerable: true, get() { throw new Error("hostile getter"); } })),
++    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add", extra: true }),
++    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add", [Symbol("extra")]: true }),
++    () => api.dispatch(child, Object.defineProperty(
++      { Path: "0", Event: "click", Value: "", Key: "add" }, "hidden", { value: true })),
++    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: new String("add") }),
++    () => api.publish(child, 1.5, 1),
++    () => api.publish(child, Number.MAX_SAFE_INTEGER + 1, 1),
++    () => api.publish(child, 1, 1.5),
++    () => api.publish(child, 1, -1),
++    () => api.complete(child, { ID: 1, Value: "late", Error: "", extra: true }),
++    () => api.complete(child, { ID: 1.5, Value: "late", Error: "" }),
++    () => api.decodeHTTP(1, 600, "{}"),
++    () => api.encodeHTTP(1, new String("value")),
++  ];
++  for (const invalid of invalidCalls) assert(isError(invalid()), "malformed composition input must be rejected");
++  const throwingProxy = new Proxy({}, { ownKeys() { throw new Error("hostile proxy"); } });
++  assert(isError(api.setChildInputs(root, child, throwingProxy)), "throwing ownKeys trap must be contained");
++  assert(JSON.stringify(unwrap(api.snapshot(child), "snapshot after malformed calls")) === beforeInvalid,
++    "invalid bridge calls must leave Go-owned composition state unchanged");
++
++  const ids = [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "1", new Number(root)];
++  for (const id of ids) {
++    assert(isError(api.snapshot(id)) && isError(api.createChild(id)) && isError(api.disposeTree(id)),
++      "session IDs must be primitive positive safe integer numbers");
++  }
++  const arities = {
++    audit: 1, changes: 0, complete: 2, create: 0, createChild: 1, decodeHTTP: 3,
++    dispatch: 2, dispose: 1, disposeTree: 1, effects: 1, encodeHTTP: 2, list: 0,
++    publish: 3, setChildInputs: 3, snapshot: 1, tree: 0,
++  };
++  for (const [name, arity] of Object.entries(arities)) {
++    const args = Array.from({ length: arity + 1 }, () => undefined);
++    assert(isError(api[name](...args)), `${name} must reject the wrong arity`);
++  }
++
++  unwrap(api.dispose(child), "dispose child");
++  unwrap(api.dispose(root), "dispose root");
++  assert(unwrap(api.list(), "list after cleanup").length === 0, "smoke sessions must be removable");
++  return { ok: true, methodCount: names.length, readonlyInputRevision: inputUpdate.state.InputRevision,
++    malformedSchemasRejected: invalidCalls.length + 1, safeIDsRejected: ids.length, exactArityMethods: Object.keys(arities).length };
++})().catch((error) => {
++  window.__compositionSmokeError = String(error?.stack ?? error);
++  throw error;
++});
++</script>
++</body></html>
+diff --git a/cmd/composition-wasm/smoke.mjs b/cmd/composition-wasm/smoke.mjs
+new file mode 100644
+index 0000000..9017aad
+--- /dev/null
++++ b/cmd/composition-wasm/smoke.mjs
+@@ -0,0 +1,49 @@
++import assert from "node:assert/strict";
++import { createServer } from "node:http";
++import { readFile } from "node:fs/promises";
++import { createRequire } from "node:module";
++import { dirname, resolve } from "node:path";
++import { fileURLToPath } from "node:url";
++
++const commandDir = dirname(fileURLToPath(import.meta.url));
++const repoRoot = resolve(commandDir, "../..");
++const [wasmPath, wasmExecPath] = process.argv.slice(2);
++if (!wasmPath || !wasmExecPath) throw new Error("usage: node smoke.mjs <composition.wasm> <wasm_exec.js>");
++
++const files = new Map([
++  ["/", [resolve(commandDir, "smoke.html"), "text/html; charset=utf-8"]],
++  ["/composition.wasm", [resolve(wasmPath), "application/wasm"]],
++  ["/wasm_exec.js", [resolve(wasmExecPath), "text/javascript; charset=utf-8"]],
++]);
++const server = createServer(async (request, response) => {
++  const entry = files.get(new URL(request.url, "http://localhost").pathname);
++  if (!entry) { response.writeHead(404).end("not found"); return; }
++  try { response.setHeader("content-type", entry[1]); response.end(await readFile(entry[0])); }
++  catch { response.writeHead(500).end("file unavailable"); }
++});
++await new Promise((resolveListen, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolveListen); });
++
++let browser;
++try {
++  const require = createRequire(import.meta.url);
++  const { chromium } = require(resolve(repoRoot, "interaction/node_modules/playwright"));
++  browser = await chromium.launch({
++    headless: true,
++    ...(process.env.CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {}),
++    args: ["--no-sandbox"],
++  });
++  const page = await browser.newPage();
++  const pageErrors = [];
++  page.on("pageerror", (error) => pageErrors.push(String(error?.stack ?? error)));
++  await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: "load" });
++  const result = await page.evaluate(async () => {
++    await window.__compositionSmoke;
++    return window.__compositionSmokeError ? { error: window.__compositionSmokeError } : { ok: true };
++  });
++  assert.deepEqual(result, { ok: true }, JSON.stringify({ result, pageErrors }));
++  assert.deepEqual(pageErrors, [], "browser must not report uncaught smoke errors");
++  process.stdout.write(`${JSON.stringify(await page.evaluate(() => window.__compositionSmoke))}\n`);
++} finally {
++  if (browser) await browser.close();
++  await new Promise((resolveClose) => server.close(resolveClose));
++}
+diff --git a/typed-composition/coordination/WIRE.md b/typed-composition/coordination/WIRE.md
+new file mode 100644
+index 0000000..5e1caae
+--- /dev/null
++++ b/typed-composition/coordination/WIRE.md
+@@ -0,0 +1,64 @@
++# Composition replay wire
++
++The WASM bridge is built from `./cmd/composition-wasm` and publishes the
++`gobiComposition` global. `cmd/composition-replay` executes the same typed
++operations natively. Both expose the same lower-case operation names and
++positional arguments:
++
++| Method | Positional arguments |
++| --- | --- |
++| `create` | none |
++| `createChild` | `parentID` |
++| `tree` | none |
++| `list` | none |
++| `snapshot` | `sessionID` |
++| `dispatch` | `sessionID`, `{Path, Event, Value, Key}` |
++| `effects` | `sessionID` |
++| `complete` | `sessionID`, `{ID, Value, Error}` |
++| `audit` | `sessionID` |
++| `dispose` | `sessionID` |
++| `disposeTree` | `sessionID` |
++| `setChildInputs` | `parentID`, `childID`, `{Title, ReadOnly}` |
++| `publish` | `childID`, `rowID`, `inputRevision` |
++| `changes` | none |
++| `encodeHTTP` | `requestID`, primitive string value |
++| `decodeHTTP` | `requestID`, status, primitive string body |
++
++The `dispatch` step object is the existing collection step shape. Composition
++publish controls also require `Value` to match the exact current handler
++argument (`ROW/REVISION`); the bridge leaves that policy check to Go.
++
++Replay input is one closed JSON object with an `actions` array. Each action is
++one closed object with `method` and `args`; `args` is the positional argument
++array. For example:
++
++```json
++{"actions":[{"method":"create","args":[]},{"method":"snapshot","args":[1]}]}
++```
++
++The native executable accepts a file path or `-` for standard input and emits
++one JSON object with a `frames` array. Every action produces exactly one frame
++in input order. The output root has one `frames` array. Every frame has the
++original `action`, that action's `result`, and a `frame` object with:
++
++- `tree`: the full manager tree.
++- `sessions`: one `{ "id", "snapshot" }` item for each live session in
++  ascending ID order; `snapshot` has the complete composition snapshot.
++- `changes`: the sorted dirty IDs drained after the action.
++
++`result` is the operation's return value, or an exact `{ "error": "..." }`
++object when the operation rejects. The frame contains the full manager tree,
++the full composition snapshot (state, rendered tree, bindings and ordered
++messages) for every live session in ascending ID order, and the sorted dirty
++IDs drained after the operation. `effects`, `audit`, and disposal results are
++already captured as `result`; querying them again while building a frame would
++change manager state. Invalid operations still produce a frame so callers can
++compare rejection invariance. Malformed top-level/action JSON fails the replay
++input before actions execute.
++
++All browser method calls enforce exact arity, primitive types, safe integer
++IDs/revisions, and exact own-field schemas. The native replay parser applies
++the same field and integer-shape rules to JSON action arguments. Since JSON
++replay has a lexical number representation, safe integer fields there require
++canonical unsigned decimal tokens (`1`, not `1.0` or `1e0`); the browser bridge
++checks the received primitive Number for an integer value in the safe range.

@@ -1,0 +1,19 @@
+{
+  "schema": "gondola.assignment-amendments/v1",
+  "items": [
+    {
+      "job": "T3",
+      "addition": "multi-root/runtime.mjs and runtime.test.mjs authoritative snapshot method",
+      "reason": "scoped runtime lacked snapshot(), required by generic refresh",
+      "overlap": "No other worker owned these paths"
+    },
+    {
+      "job": "R-T2",
+      "addition": "typed-composition/host.mjs and host.test.mjs",
+      "reason": "H-HOST actual browser reproduction proved argument clone bypassed strict boundary and ran getter before nested-call fence",
+      "ownershipTransfer": "N3 original host source is frozen; N2 owns this bounded argument-forwarding delta",
+      "evidence": "reviews/host-admission-result.json",
+      "independentReviewRequired": true
+    }
+  ]
+}

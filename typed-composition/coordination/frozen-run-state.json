@@ -1,0 +1,106 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-typed-composition-frozen-replay"
+  },
+  "workers": {
+    "N5": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "F-RUN": {
+      "id": "F-RUN",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "build execution and source-pin evidence, F-RUN report/receipt only",
+      "summary": "execute frozen full seeded browser/native replay and record exact terminal evidence without source edits",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T19:43:43.418610+00:00",
+      "finished_at": "2026-10-30T19:51:19.004566+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/F-RUN.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T19:43:43.316873+00:00",
+      "ready_jobs": [
+        "F-RUN"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N5": "F-RUN"
+      },
+      "dispatch": {
+        "N5": "F-RUN"
+      },
+      "native_seconds": 0.00275854799838271,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 1 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "F-RUN": 1,
+        "BENCH": 1
+      },
+      "eligible": {
+        "F-RUN": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "F-RUN": 100
+      },
+      "agent_by_worker": {
+        "N5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:43:43.418610+00:00",
+      "worker": "N5",
+      "job": "F-RUN",
+      "agent": "/root/compose_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:51:19.004566+00:00",
+      "worker": "N5",
+      "job": "F-RUN"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

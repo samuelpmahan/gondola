@@ -1,0 +1,37 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-typed-composition-input-process-repairs"
+  },
+  "workers": [
+    "N3",
+    "N4",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-T4B",
+      "kind": "extract",
+      "repair_of": "T4",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "typed-composition/scripts.mjs and scripts.test.mjs only",
+      "summary": "represent browser text input CR/LF sanitation in deterministic effective Go Steps with preserved requested-value witnesses"
+    },
+    {
+      "id": "R-T6B",
+      "kind": "extract",
+      "repair_of": "R-T6",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "typed-composition/http-lab-process.mjs, helper tests and browser-smoke.mjs only",
+      "summary": "separate post-start process errors from observed exit and fail smoke on unsuccessful cleanup"
+    }
+  ]
+}

@@ -1,0 +1,1324 @@
+diff --git a/composition/manager.go b/composition/manager.go
+new file mode 100644
+index 0000000..e17bfeb
+--- /dev/null
++++ b/composition/manager.go
+@@ -0,0 +1,681 @@
++// Package composition adds typed parent/child communication to an immutable
++// multisession tree while leaving collection transitions owned by Go.
++package composition
++
++import (
++	"fmt"
++	"sort"
++	"strconv"
++	"strings"
++	"sync"
++	"unicode/utf8"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/gobi"
++	"github.com/samuelpmahan/gondola/inputbinding"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++// SessionID identifies a live collection session.
++type SessionID = multisession.SessionID
++
++// Inputs are the direct, typed values a parent assigns to one child.
++type Inputs struct {
++	Title    string
++	ReadOnly bool
++}
++
++// Publication is an immutable receipt appended to a child's immediate
++// parent's inbox.
++type Publication struct {
++	Sequence      uint64
++	ParentID      SessionID
++	ChildID       SessionID
++	RowID         collection.RowID
++	Saved         string
++	Saves         int
++	InputRevision uint64
++}
++
++// State extends the owned collection state with this session's direct inputs,
++// input revision, and publication inbox.
++type State struct {
++	collection.State
++	Inputs        Inputs
++	InputRevision uint64
++	Inbox         []Publication
++}
++
++// Snapshot pairs the complete composition state with its Gobi view, input
++// bindings, and ordered message history.
++type Snapshot struct {
++	State    State                  `json:"state"`
++	Tree     gobi.Node              `json:"tree"`
++	Bindings []inputbinding.Binding `json:"bindings"`
++	Messages []gobi.Message         `json:"messages"`
++}
++
++type sessionState struct {
++	parent        SessionID
++	inputs        Inputs
++	inputRevision uint64
++	inbox         []Publication
++	messages      []gobi.Message
++}
++
++// Manager serializes composition policy with all operations on its private
++// multisession manager. The wrapped manager is intentionally not exposed.
++type Manager struct {
++	mu           sync.Mutex
++	base         *multisession.Manager
++	sessions     map[SessionID]*sessionState
++	changes      map[SessionID]struct{}
++	nextSequence uint64
++}
++
++// NewManager returns an empty composition manager.
++func NewManager() *Manager {
++	return &Manager{
++		base:     multisession.NewManager(),
++		sessions: make(map[SessionID]*sessionState),
++		changes:  make(map[SessionID]struct{}),
++	}
++}
++
++// Create allocates a fresh root collection session.
++func (m *Manager) Create() (SessionID, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	id, err := m.base.Create()
++	if err != nil {
++		return 0, err
++	}
++	m.addSessionLocked(id, 0)
++	return id, nil
++}
++
++// CreateChild allocates a fresh collection session beneath a live parent.
++func (m *Manager) CreateChild(parent SessionID) (SessionID, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	if err := validSessionID(parent); err != nil {
++		return 0, err
++	}
++	id, err := m.base.CreateChild(parent)
++	if err != nil {
++		return 0, err
++	}
++	m.addSessionLocked(id, parent)
++	return id, nil
++}
++
++func (m *Manager) addSessionLocked(id, parent SessionID) {
++	m.sessions[id] = &sessionState{
++		parent:   parent,
++		inbox:    []Publication{},
++		messages: []gobi.Message{},
++	}
++}
++
++// Tree returns the live session tree in ascending SessionID order.
++func (m *Manager) Tree() []multisession.SessionInfo {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++	return m.base.Tree()
++}
++
++// List returns the live session IDs in ascending allocation order.
++func (m *Manager) List() []SessionID {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++	return m.base.List()
++}
++
++// Snapshot returns the current composition view for one live session.
++func (m *Manager) Snapshot(id SessionID) (Snapshot, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	baseSnapshot, err := m.base.Snapshot(id)
++	if err != nil {
++		return Snapshot{}, err
++	}
++	return m.snapshotLocked(id, baseSnapshot)
++}
++
++// Dispatch applies one event to a session. Row publication controls are
++// resolved here as typed calls; all other enabled collection events delegate
++// to the wrapped collection manager.
++func (m *Manager) Dispatch(id SessionID, step collection.Step) (Snapshot, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	baseBefore, err := m.base.Snapshot(id)
++	if err != nil {
++		return Snapshot{}, err
++	}
++	current, err := m.snapshotLocked(id, baseBefore)
++	if err != nil {
++		return Snapshot{}, err
++	}
++	view := inputbinding.View{Tree: current.Tree, Bindings: current.Bindings}
++	if err := validateCompositionView(view); err != nil {
++		return current, fmt.Errorf("invalid composition view: %w", err)
++	}
++	target, err := nodeAtPath(current.Tree, step.Path)
++	if err != nil {
++		return current, err
++	}
++	if target.Key != step.Key {
++		return current, fmt.Errorf("dispatch key %q does not match target key %q", step.Key, target.Key)
++	}
++
++	if isPublishControl(target) {
++		publishHandlers := make([]gobi.On, 0, 1)
++		for _, handler := range target.On {
++			if handler.Message == "publish" {
++				publishHandlers = append(publishHandlers, handler)
++			}
++		}
++		if len(publishHandlers) != 1 || publishHandlers[0].Event != "click" || step.Event != "click" {
++			return current, fmt.Errorf("publish control path, key, or event is not canonical")
++		}
++		if err := validateEventAt(view, step.Path, step.Event); err != nil {
++			return current, fmt.Errorf("publish control path, key, or event is not canonical")
++		}
++		row, err := rowAtPublishPath(current.State.Rows, step.Path)
++		if err != nil {
++			return current, fmt.Errorf("publish control does not identify a current collection row")
++		}
++		expectedKey := "row-" + strconv.FormatUint(uint64(row.ID), 10) + "-publish"
++		expectedArg := strconv.FormatUint(uint64(row.ID), 10) + "/" + strconv.FormatUint(current.State.InputRevision, 10)
++		if target.Key != expectedKey || publishHandlers[0].Arg != expectedArg {
++			return current, fmt.Errorf("publish control must carry an exact ROW/REVISION argument")
++		}
++		if step.Value != publishHandlers[0].Arg {
++			return current, fmt.Errorf("publish dispatch value must equal the current literal ROW/REVISION argument")
++		}
++		if isDisabled(target) {
++			return current, nil
++		}
++		_, err = m.publishLocked(id, row.ID, current.State.InputRevision)
++		if err != nil {
++			return current, err
++		}
++		baseAfter, err := m.base.Snapshot(id)
++		if err != nil {
++			return Snapshot{}, err
++		}
++		return m.snapshotLocked(id, baseAfter)
++	}
++
++	if err := validateEventAt(view, step.Path, step.Event); err != nil {
++		return current, err
++	}
++	// A disabled control still has to name a real declared event. Read-only
++	// suppresses valid events after that path/key/event validation has passed.
++	if isDisabled(target) || current.State.Inputs.ReadOnly {
++		return current, nil
++	}
++
++	baseAfter, err := m.base.Dispatch(id, step)
++	if err != nil {
++		return current, err
++	}
++	m.appendBaseMessagesLocked(id, len(baseBefore.Messages), baseAfter.Messages)
++	if len(baseAfter.Messages) > len(baseBefore.Messages) {
++		m.changes[id] = struct{}{}
++	}
++	return m.snapshotLocked(id, baseAfter)
++}
++
++// Complete delivers a reply to the addressed collection, even when its inputs
++// are read-only. Read-only policy does not cancel or reject pending requests.
++func (m *Manager) Complete(id SessionID, reply asyncsave.Reply) (Snapshot, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	baseBefore, err := m.base.Snapshot(id)
++	if err != nil {
++		return Snapshot{}, err
++	}
++	baseAfter, err := m.base.Complete(id, reply)
++	if err != nil {
++		current, snapshotErr := m.snapshotLocked(id, baseBefore)
++		if snapshotErr != nil {
++			return Snapshot{}, snapshotErr
++		}
++		return current, err
++	}
++	m.appendBaseMessagesLocked(id, len(baseBefore.Messages), baseAfter.Messages)
++	if len(baseAfter.Messages) > len(baseBefore.Messages) {
++		m.changes[id] = struct{}{}
++	}
++	return m.snapshotLocked(id, baseAfter)
++}
++
++// Effects drains commands queued by the addressed collection session.
++func (m *Manager) Effects(id SessionID) ([]collection.Command, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++	return m.base.Effects(id)
++}
++
++// Audit returns the completion history for the addressed collection session.
++func (m *Manager) Audit(id SessionID) ([]collection.Outcome, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++	return m.base.Audit(id)
++}
++
++// Dispose removes a leaf session. Its inbox is discarded, while receipts in
++// its parent's inbox remain untouched.
++func (m *Manager) Dispose(id SessionID) ([]collection.Command, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	commands, err := m.base.Dispose(id)
++	if err != nil {
++		return nil, err
++	}
++	delete(m.sessions, id)
++	delete(m.changes, id)
++	return commands, nil
++}
++
++// DisposeTree removes a session and all descendants atomically.
++func (m *Manager) DisposeTree(id SessionID) ([]multisession.Disposal, error) {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	disposals, err := m.base.DisposeTree(id)
++	if err != nil {
++		return nil, err
++	}
++	for _, disposal := range disposals {
++		delete(m.sessions, disposal.SessionID)
++		delete(m.changes, disposal.SessionID)
++	}
++	return disposals, nil
++}
++
++// SetChildInputs sets a direct child's inputs and advances its revision.
++// Equal values are accepted and still advance the revision.
++func (m *Manager) SetChildInputs(parent, child SessionID, inputs Inputs) (Snapshot, error) {
++	if !utf8.ValidString(inputs.Title) {
++		return Snapshot{}, fmt.Errorf("input title must be valid UTF-8")
++	}
++	if len(inputs.Title) > 256 {
++		return Snapshot{}, fmt.Errorf("input title exceeds 256 UTF-8 bytes")
++	}
++	if err := validSessionID(parent); err != nil {
++		return Snapshot{}, err
++	}
++	if err := validSessionID(child); err != nil {
++		return Snapshot{}, err
++	}
++
++	m.mu.Lock()
++	defer m.mu.Unlock()
++	parentState, parentLive := m.sessions[parent]
++	childState, childLive := m.sessions[child]
++	if !parentLive {
++		return Snapshot{}, fmt.Errorf("unknown session ID %d", parent)
++	}
++	if !childLive {
++		return Snapshot{}, fmt.Errorf("unknown session ID %d", child)
++	}
++	if childState.parent != parent {
++		return Snapshot{}, fmt.Errorf("session ID %d is not an immediate child of session ID %d", child, parent)
++	}
++	_ = parentState // Parent liveness is part of the direct-parent authorization check.
++	if childState.inputRevision >= collection.MaxID {
++		return Snapshot{}, fmt.Errorf("input revision space exhausted at %d", childState.inputRevision)
++	}
++	baseSnapshot, err := m.base.Snapshot(child)
++	if err != nil {
++		return Snapshot{}, err
++	}
++	childState.inputs = inputs
++	childState.inputRevision++
++	m.changes[child] = struct{}{}
++	return m.snapshotLocked(child, baseSnapshot)
++}
++
++// Publish captures the child's current saved row value and appends a receipt
++// to its immediate parent's inbox.
++func (m *Manager) Publish(child SessionID, row collection.RowID, revision uint64) (Publication, error) {
++	if err := validSessionID(child); err != nil {
++		return Publication{}, err
++	}
++	if row == 0 || uint64(row) > collection.MaxID {
++		return Publication{}, fmt.Errorf("row ID %d is outside the supported range 1..%d", row, collection.MaxID)
++	}
++	if revision > collection.MaxID {
++		return Publication{}, fmt.Errorf("input revision %d is outside the supported range 0..%d", revision, collection.MaxID)
++	}
++	m.mu.Lock()
++	defer m.mu.Unlock()
++	return m.publishLocked(child, row, revision)
++}
++
++func (m *Manager) publishLocked(child SessionID, rowID collection.RowID, revision uint64) (Publication, error) {
++	childState, ok := m.sessions[child]
++	if !ok {
++		return Publication{}, fmt.Errorf("unknown session ID %d", child)
++	}
++	if childState.parent == 0 {
++		return Publication{}, fmt.Errorf("root session ID %d cannot publish", child)
++	}
++	parentState, ok := m.sessions[childState.parent]
++	if !ok {
++		return Publication{}, fmt.Errorf("unknown parent session ID %d", childState.parent)
++	}
++	if childState.inputs.ReadOnly {
++		return Publication{}, fmt.Errorf("session ID %d is read-only", child)
++	}
++	if revision != childState.inputRevision {
++		return Publication{}, fmt.Errorf("input revision %d is stale; current revision is %d", revision, childState.inputRevision)
++	}
++	if m.nextSequence >= collection.MaxID {
++		return Publication{}, fmt.Errorf("publication sequence space exhausted at %d", m.nextSequence)
++	}
++	baseSnapshot, err := m.base.Snapshot(child)
++	if err != nil {
++		return Publication{}, err
++	}
++	var row *collection.Row
++	for index := range baseSnapshot.State.Rows {
++		if baseSnapshot.State.Rows[index].ID == rowID {
++			row = &baseSnapshot.State.Rows[index]
++			break
++		}
++	}
++	if row == nil {
++		return Publication{}, fmt.Errorf("row %d no longer exists", rowID)
++	}
++	if row.Saved == "" {
++		return Publication{}, fmt.Errorf("row %d has no saved value to publish", rowID)
++	}
++
++	publication := Publication{
++		Sequence:      m.nextSequence + 1,
++		ParentID:      childState.parent,
++		ChildID:       child,
++		RowID:         row.ID,
++		Saved:         row.Saved,
++		Saves:         row.Saves,
++		InputRevision: childState.inputRevision,
++	}
++	m.nextSequence = publication.Sequence
++	parentState.inbox = append(parentState.inbox, publication)
++	childState.messages = append(childState.messages, gobi.Message{
++		Name: "publish",
++		Arg:  strconv.FormatUint(uint64(row.ID), 10) + "/" + strconv.FormatUint(childState.inputRevision, 10),
++	})
++	m.changes[child] = struct{}{}
++	m.changes[childState.parent] = struct{}{}
++	return publication, nil
++}
++
++// Changes drains sorted unique IDs changed by successful composition or
++// collection operations. The result is always a fresh, nonnil slice.
++func (m *Manager) Changes() []SessionID {
++	m.mu.Lock()
++	defer m.mu.Unlock()
++
++	ids := make([]SessionID, 0, len(m.changes))
++	for id := range m.changes {
++		if _, live := m.sessions[id]; live {
++			ids = append(ids, id)
++		}
++	}
++	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
++	m.changes = make(map[SessionID]struct{})
++	return ids
++}
++
++func (m *Manager) snapshotLocked(id SessionID, baseSnapshot collection.Snapshot) (Snapshot, error) {
++	state, ok := m.sessions[id]
++	if !ok {
++		return Snapshot{}, fmt.Errorf("unknown session ID %d", id)
++	}
++	compositionState := State{
++		State:         cloneCollectionState(baseSnapshot.State),
++		Inputs:        state.inputs,
++		InputRevision: state.inputRevision,
++		Inbox:         clonePublications(state.inbox),
++	}
++	view := compositionView(compositionState, state.parent == 0)
++	return Snapshot{
++		State:    compositionState,
++		Tree:     view.Tree,
++		Bindings: cloneBindings(view.Bindings),
++		Messages: cloneMessages(state.messages),
++	}, nil
++}
++
++func compositionView(state State, root bool) inputbinding.View {
++	view := collection.View(state.State)
++	rootNode := view.Tree
++	rootNode.Kids = append(rootNode.Kids[:len(rootNode.Kids):len(rootNode.Kids)],
++		gobi.El("p", gobi.Txt("Title: "+state.Inputs.Title)).Keyed("composition-title"),
++		gobi.El("p", gobi.Txt("Published: "+strconv.Itoa(len(state.Inbox)))).Keyed("composition-inbox"),
++	)
++	rows := rootNode.Kids[2]
++	for index := range rows.Kids {
++		row := &rows.Kids[index]
++		currentRow := state.Rows[index]
++		id := strconv.FormatUint(uint64(currentRow.ID), 10)
++		publish := gobi.El("button", gobi.Txt("Publish")).Keyed("row-"+id+"-publish").
++			Set("class", "publish").
++			Handle("click", "publish", id+"/"+strconv.FormatUint(state.InputRevision, 10))
++		if root || currentRow.Saved == "" || state.Inputs.ReadOnly {
++			publish = publish.Flag("disabled")
++		}
++		row.Kids = append(row.Kids[:len(row.Kids):len(row.Kids)], publish)
++	}
++	view.Tree = rootNode
++	if state.Inputs.ReadOnly {
++		setReadonlyDisabled(&view.Tree)
++	}
++	return view
++}
++
++func setReadonlyDisabled(node *gobi.Node) {
++	if node.Kind == gobi.Element && (node.Tag == "button" || node.Tag == "input") {
++		found := false
++		for index := range node.Attrs {
++			if node.Attrs[index].Name == "disabled" {
++				node.Attrs[index].Flag = true
++				node.Attrs[index].Value = ""
++				node.Attrs[index].Style = nil
++				found = true
++			}
++		}
++		if !found {
++			node.Attrs = append(node.Attrs[:len(node.Attrs):len(node.Attrs)], gobi.Attr{Name: "disabled", Flag: true})
++		}
++	}
++	for index := range node.Kids {
++		setReadonlyDisabled(&node.Kids[index])
++	}
++}
++
++func (m *Manager) appendBaseMessagesLocked(id SessionID, previousCount int, current []gobi.Message) {
++	if previousCount < 0 || previousCount > len(current) {
++		return
++	}
++	state := m.sessions[id]
++	state.messages = append(state.messages, current[previousCount:]...)
++}
++
++func cloneCollectionState(state collection.State) collection.State {
++	rows := make([]collection.Row, len(state.Rows))
++	copy(rows, state.Rows)
++	state.Rows = rows
++	return state
++}
++
++func clonePublications(publications []Publication) []Publication {
++	result := make([]Publication, len(publications))
++	copy(result, publications)
++	return result
++}
++
++func cloneMessages(messages []gobi.Message) []gobi.Message {
++	result := make([]gobi.Message, len(messages))
++	copy(result, messages)
++	return result
++}
++
++func cloneBindings(bindings []inputbinding.Binding) []inputbinding.Binding {
++	result := make([]inputbinding.Binding, len(bindings))
++	copy(result, bindings)
++	return result
++}
++
++func validSessionID(id SessionID) error {
++	if id == 0 || uint64(id) > collection.MaxID {
++		return fmt.Errorf("session ID %d is outside the supported range 1..%d", id, collection.MaxID)
++	}
++	return nil
++}
++
++func isPublishControl(node gobi.Node) bool {
++	if strings.HasSuffix(node.Key, "-publish") {
++		return true
++	}
++	for _, handler := range node.On {
++		if handler.Message == "publish" {
++			return true
++		}
++	}
++	return false
++}
++
++func rowAtPublishPath(rows []collection.Row, path string) (collection.Row, error) {
++	for index, row := range rows {
++		if path == "2/"+strconv.Itoa(index)+"/9" {
++			return row, nil
++		}
++	}
++	return collection.Row{}, fmt.Errorf("path %q is not a canonical row publication control", path)
++}
++
++func validateEventAt(view inputbinding.View, path, event string) error {
++	count := 0
++	for _, binding := range view.Bindings {
++		if binding.Path == path && binding.Event == event {
++			count++
++		}
++	}
++	node, err := nodeAtPath(view.Tree, path)
++	if err != nil {
++		return err
++	}
++	for _, handler := range node.On {
++		if handler.Event == event {
++			count++
++		}
++	}
++	if count == 0 {
++		return fmt.Errorf("no %q handler or binding at path %q", event, path)
++	}
++	if count > 1 {
++		return fmt.Errorf("ambiguous %q handlers at path %q", event, path)
++	}
++	return nil
++}
++
++func validateCompositionView(view inputbinding.View) error {
++	if err := inputbinding.Validate(view); err != nil {
++		return err
++	}
++	seen := make(map[string]struct{})
++	return validateNodeKeys(view.Tree, seen)
++}
++
++func validateNodeKeys(node gobi.Node, seen map[string]struct{}) error {
++	switch node.Kind {
++	case gobi.Element:
++		if !validKey(node.Key) {
++			return fmt.Errorf("element key %q is not a valid nonempty ASCII token", node.Key)
++		}
++		if _, exists := seen[node.Key]; exists {
++			return fmt.Errorf("duplicate element key %q", node.Key)
++		}
++		seen[node.Key] = struct{}{}
++	case gobi.Text:
++		if node.Key != "" {
++			return fmt.Errorf("text nodes must have empty keys, got %q", node.Key)
++		}
++	case gobi.Fragment:
++		if node.Key != "" {
++			return fmt.Errorf("fragments must have empty keys, got %q", node.Key)
++		}
++	default:
++		return fmt.Errorf("unknown Gobi node kind %d", node.Kind)
++	}
++	for _, child := range node.Kids {
++		if err := validateNodeKeys(child, seen); err != nil {
++			return err
++		}
++	}
++	return nil
++}
++
++func validKey(value string) bool {
++	if len(value) == 0 || len(value) > 64 || !asciiLetter(value[0]) {
++		return false
++	}
++	for index := 1; index < len(value); index++ {
++		character := value[index]
++		if !asciiLetter(character) && (character < '0' || character > '9') && character != '-' {
++			return false
++		}
++	}
++	return true
++}
++
++func asciiLetter(character byte) bool {
++	return character >= 'A' && character <= 'Z' || character >= 'a' && character <= 'z'
++}
++
++func nodeAtPath(root gobi.Node, path string) (gobi.Node, error) {
++	if path == "" {
++		return root, nil
++	}
++	current := root
++	for _, part := range strings.Split(path, "/") {
++		if part == "" || (len(part) > 1 && part[0] == '0') {
++			return gobi.Node{}, fmt.Errorf("invalid canonical collection path %q", path)
++		}
++		for _, character := range part {
++			if character < '0' || character > '9' {
++				return gobi.Node{}, fmt.Errorf("invalid canonical collection path %q", path)
++			}
++		}
++		index, err := strconv.ParseUint(part, 10, 64)
++		if err != nil || index > collection.MaxID {
++			return gobi.Node{}, fmt.Errorf("collection path index exceeds the JavaScript-safe integer limit")
++		}
++		if index >= uint64(len(current.Kids)) {
++			return gobi.Node{}, fmt.Errorf("collection path is out of range: %q", path)
++		}
++		current = current.Kids[int(index)]
++	}
++	return current, nil
++}
++
++func isDisabled(node gobi.Node) bool {
++	for _, attr := range node.Attrs {
++		if attr.Name == "disabled" && attr.Flag {
++			return true
++		}
++	}
++	return false
++}
+diff --git a/composition/manager_test.go b/composition/manager_test.go
+new file mode 100644
+index 0000000..3921440
+--- /dev/null
++++ b/composition/manager_test.go
+@@ -0,0 +1,631 @@
++package composition
++
++import (
++	"fmt"
++	"reflect"
++	"strings"
++	"sync"
++	"testing"
++	"unicode/utf8"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/gobi"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++func TestSetChildInputsRequiresImmediateLiveParentAndAdvancesRevision(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	sibling := mustCreateChild(t, m, root)
++	grandchild := mustCreateChild(t, m, child)
++
++	first, err := m.SetChildInputs(root, child, Inputs{Title: "child", ReadOnly: true})
++	if err != nil {
++		t.Fatalf("SetChildInputs() error = %v", err)
++	}
++	if first.State.InputRevision != 1 || first.State.Inputs != (Inputs{Title: "child", ReadOnly: true}) {
++		t.Fatalf("first child state = %#v", first.State)
++	}
++	second, err := m.SetChildInputs(root, child, Inputs{Title: "child", ReadOnly: true})
++	if err != nil {
++		t.Fatalf("equal SetChildInputs() error = %v", err)
++	}
++	if second.State.InputRevision != 2 {
++		t.Fatalf("equal input update revision = %d, want 2", second.State.InputRevision)
++	}
++
++	before, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, pair := range [][2]multisession.SessionID{{sibling, child}, {root, grandchild}} {
++		if _, err := m.SetChildInputs(pair[0], pair[1], Inputs{Title: "wrong parent"}); err == nil {
++			t.Errorf("SetChildInputs(%d, %d) unexpectedly succeeded", pair[0], pair[1])
++		}
++	}
++	after, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if after.State.Inputs != before.State.Inputs || after.State.InputRevision != before.State.InputRevision {
++		t.Fatalf("failed parent checks changed child state: before=%#v after=%#v", before.State, after.State)
++	}
++	grandchildState, err := m.SetChildInputs(child, grandchild, Inputs{Title: "direct"})
++	if err != nil || grandchildState.State.InputRevision != 1 {
++		t.Fatalf("immediate child input update = %#v, %v", grandchildState.State, err)
++	}
++}
++
++func TestSetChildInputsValidatesUTF8ByteLimitAndSafeRevisionAtomically(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	if _, err := m.SetChildInputs(root, child, Inputs{Title: strings.Repeat("x", 257)}); err == nil {
++		t.Fatal("overlong title unexpectedly succeeded")
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{Title: string([]byte{0xff})}); err == nil {
++		t.Fatal("invalid UTF-8 title unexpectedly succeeded")
++	}
++	valid := strings.Repeat("é", 128)
++	if len(valid) != 256 || !utf8.ValidString(valid) {
++		t.Fatal("test title construction is invalid")
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{Title: valid}); err != nil {
++		t.Fatalf("256-byte title rejected: %v", err)
++	}
++	if got := m.Changes(); !equalIDs(got, []SessionID{child}) {
++		t.Fatalf("Changes() after accepted update = %v", got)
++	}
++
++	m.mu.Lock()
++	m.sessions[child].inputRevision = collection.MaxID
++	m.mu.Unlock()
++	before, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{Title: "cannot commit"}); err == nil {
++		t.Fatal("revision exhaustion unexpectedly succeeded")
++	}
++	after, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if before.State.Inputs != after.State.Inputs || before.State.InputRevision != after.State.InputRevision {
++		t.Fatalf("revision exhaustion changed state: before=%#v after=%#v", before.State, after.State)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("failed revision update dirtied IDs: %v", got)
++	}
++}
++
++func TestCompositionViewPositionsAndReadonlyControls(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	if _, err := m.Dispatch(child, collection.Step{Path: "0", Event: "click", Key: "add"}); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{Title: "Notes", ReadOnly: true}); err != nil {
++		t.Fatal(err)
++	}
++	snapshot, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if len(snapshot.Tree.Kids) != 5 || snapshot.Tree.Kids[0].Key != "add" || snapshot.Tree.Kids[1].Key != "reset" || snapshot.Tree.Kids[2].Key != "rows" || snapshot.Tree.Kids[3].Key != "composition-title" || snapshot.Tree.Kids[4].Key != "composition-inbox" {
++		t.Fatalf("root child positions/keys changed: %#v", snapshot.Tree.Kids)
++	}
++	if got := snapshot.Tree.Kids[3].Kids[0].Text; got != "Title: Notes" {
++		t.Fatalf("title text = %q", got)
++	}
++	if got := snapshot.Tree.Kids[4].Kids[0].Text; got != "Published: 0" {
++		t.Fatalf("inbox text = %q", got)
++	}
++	row := snapshot.Tree.Kids[2].Kids[0]
++	if len(row.Kids) != 10 {
++		t.Fatalf("row has %d controls, want 10", len(row.Kids))
++	}
++	publish := row.Kids[9]
++	if publish.Key != "row-1-publish" || publish.Attrs[0].Value != "publish" || publish.Kids[0].Text != "Publish" || publish.On[0] != (gobi.On{Event: "click", Message: "publish", Arg: "1/1"}) {
++		t.Fatalf("publish node = %#v", publish)
++	}
++	if !hasDisabled(publish) {
++		t.Fatal("read-only publish control is enabled")
++	}
++	if len(snapshot.Bindings) != 1 || snapshot.Bindings[0].Path != "2/0/0" {
++		t.Fatalf("read-only input binding was removed or moved: %#v", snapshot.Bindings)
++	}
++	if !hasDisabled(row.Kids[0]) {
++		t.Fatal("read-only input is enabled")
++	}
++	if err := walkCheckDisabled(snapshot.Tree); err != nil {
++		t.Fatal(err)
++	}
++	if got, err := m.Dispatch(child, collection.Step{Path: "2/0/0", Event: "input", Key: "row-1-input", Value: "ignored"}); err != nil || got.State.Rows[0].Draft != "" {
++		t.Fatalf("valid readonly input was not suppressed: snapshot=%#v error=%v", got.State, err)
++	}
++	if _, err := m.Dispatch(child, collection.Step{Path: "2/0/0", Event: "change", Key: "row-1-input"}); err == nil {
++		t.Fatal("readonly input accepted a noncanonical event")
++	}
++	if _, err := m.Dispatch(child, collection.Step{Path: "2/0/9", Event: "click", Value: "1/1", Key: "row-1-publish"}); err != nil {
++		t.Fatalf("valid readonly publish should be suppressed: %v", err)
++	}
++	if got := m.Changes(); !equalIDs(got, []SessionID{child}) {
++		t.Fatalf("only the accepted input update should be dirty before drain: %v", got)
++	}
++}
++
++func TestPublishCapturesGoStateOrdersMessagesAndTargetsDirectParent(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	grandchild := mustCreateChild(t, m, child)
++	row := mustAddSavedRow(t, m, child, "alpha")
++	grandRow := mustAddSavedRow(t, m, grandchild, "nested")
++
++	firstSnapshot, err := m.Dispatch(child, collection.Step{Path: "2/0/9", Event: "click", Value: "1/0", Key: "row-1-publish"})
++	if err != nil {
++		t.Fatalf("Dispatch(publish) error = %v", err)
++	}
++	if len(firstSnapshot.State.Inbox) != 0 || len(firstSnapshot.Messages) != 5 {
++		t.Fatalf("child publication snapshot = %#v", firstSnapshot)
++	}
++	rootAfterDispatch, err := m.Snapshot(root)
++	if err != nil || len(rootAfterDispatch.State.Inbox) != 1 {
++		t.Fatalf("typed dispatch did not publish to parent: %#v, %v", rootAfterDispatch.State.Inbox, err)
++	}
++	first := rootAfterDispatch.State.Inbox[0]
++	second, err := m.Publish(child, row, 0)
++	if err != nil {
++		t.Fatalf("repeated Publish() error = %v", err)
++	}
++	if first.Sequence != 1 || second.Sequence != 2 || first.Saved != "alpha" || first.Saves != 1 || first.ParentID != root || first.ChildID != child {
++		t.Fatalf("publication receipts = %#v then %#v", first, second)
++	}
++	childSnapshot, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if got := childSnapshot.Messages; len(got) != 6 || got[4] != (gobi.Message{Name: "publish", Arg: "1/0"}) || got[5] != (gobi.Message{Name: "publish", Arg: "1/0"}) {
++		t.Fatalf("child messages do not preserve edit/save/reply/publish order: %#v", got)
++	}
++	rootSnapshot, err := m.Snapshot(root)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if len(rootSnapshot.State.Inbox) != 2 || rootSnapshot.State.Inbox[0].Sequence != 1 || rootSnapshot.State.Inbox[1].Sequence != 2 {
++		t.Fatalf("root inbox = %#v", rootSnapshot.State.Inbox)
++	}
++	if len(rootSnapshot.State.Inbox) == 0 || rootSnapshot.State.Inbox[0].Saved != "alpha" {
++		t.Fatalf("root inbox did not capture saved content: %#v", rootSnapshot.State.Inbox)
++	}
++	if _, err := m.Publish(grandchild, grandRow, 0); err != nil {
++		t.Fatalf("grandchild Publish() error = %v", err)
++	}
++	childSnapshot, err = m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if len(childSnapshot.State.Inbox) != 1 || childSnapshot.State.Inbox[0].ParentID != child || childSnapshot.State.Inbox[0].ChildID != grandchild {
++		t.Fatalf("grandchild publication was not delivered to direct parent: %#v", childSnapshot.State.Inbox)
++	}
++	rootSnapshot, err = m.Snapshot(root)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if len(rootSnapshot.State.Inbox) != 2 {
++		t.Fatalf("grandchild publication leaked to root: %#v", rootSnapshot.State.Inbox)
++	}
++	if _, err := m.Publish(root, row, 0); err == nil {
++		t.Fatal("root publication unexpectedly succeeded")
++	}
++	if got := m.Changes(); !equalIDs(got, []SessionID{root, child, grandchild}) {
++		t.Fatalf("publish changes = %v", got)
++	}
++}
++
++func TestDispatchPublishRequiresCurrentLiteralRevision(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	row := mustAddSavedRow(t, m, child, "saved")
++	if row != 1 {
++		t.Fatalf("helper row = %d", row)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("unexpected setup changes: %v", got)
++	}
++	for _, step := range []collection.Step{
++		{Path: "2/0/9", Event: "click", Value: "1/1", Key: "row-1-publish"},
++		{Path: "2/0/9", Event: "click", Value: "01/0", Key: "row-1-publish"},
++	} {
++		if _, err := m.Dispatch(child, step); err == nil {
++			t.Errorf("invalid publish step %#v unexpectedly succeeded", step)
++		}
++	}
++	if parent, err := m.Snapshot(root); err != nil || len(parent.State.Inbox) != 0 {
++		t.Fatalf("invalid publish dispatch changed inbox: %#v, %v", parent.State.Inbox, err)
++	}
++	if childSnapshot, err := m.Snapshot(child); err != nil || len(childSnapshot.Messages) != 4 {
++		t.Fatalf("invalid publish dispatch changed messages: %#v, %v", childSnapshot.Messages, err)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("invalid publish dispatch dirtied IDs: %v", got)
++	}
++}
++
++func TestPublishRejectsPolicyAndRevisionWithoutSideEffects(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	row := mustAddSavedRow(t, m, child, "saved")
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("Changes() should have been drained by helper setup, got %v", got)
++	}
++	if _, err := m.Publish(child, row, 1); err == nil {
++		t.Fatal("stale input revision unexpectedly published")
++	}
++	if _, err := m.Publish(child, collection.RowID(99), 0); err == nil {
++		t.Fatal("unknown row unexpectedly published")
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{ReadOnly: true}); err != nil {
++		t.Fatal(err)
++	}
++	if got := m.Changes(); !equalIDs(got, []SessionID{child}) {
++		t.Fatalf("input change = %v", got)
++	}
++	if _, err := m.Publish(child, row, 1); err == nil {
++		t.Fatal("read-only publication unexpectedly succeeded")
++	}
++	if snapshot, err := m.Snapshot(root); err != nil || len(snapshot.State.Inbox) != 0 {
++		t.Fatalf("rejected publications changed inbox: %#v, %v", snapshot.State.Inbox, err)
++	}
++	if snapshot, err := m.Snapshot(child); err != nil || len(snapshot.Messages) != 4 {
++		t.Fatalf("rejected publications changed messages: %#v, %v", snapshot.Messages, err)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("rejected publications dirtied IDs: %v", got)
++	}
++}
++
++func TestReadonlyDoesNotCancelPendingAndCompleteStillApplies(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	row := mustAddDraftRow(t, m, child, "pending draft")
++	if _, err := m.Dispatch(child, collection.Step{Path: "2/0/5", Event: "click", Key: "row-1-save"}); err != nil {
++		t.Fatal(err)
++	}
++	effects, err := m.Effects(child)
++	if err != nil || len(effects) != 1 || effects[0].Kind != "start" {
++		t.Fatalf("save effects = %#v, %v", effects, err)
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{ReadOnly: true}); err != nil {
++		t.Fatal(err)
++	}
++	if cancel, err := m.Effects(child); err != nil || len(cancel) != 0 {
++		t.Fatalf("read-only update unexpectedly canceled pending request: %#v, %v", cancel, err)
++	}
++	snapshot, err := m.Complete(child, asyncsave.Reply{ID: uint64(snapshotRowPending(t, m, child, row)), Value: "reply"})
++	if err != nil {
++		t.Fatalf("Complete() in readonly mode error = %v", err)
++	}
++	if snapshot.State.Rows[0].Saved != "reply" || snapshot.State.Rows[0].Saves != 1 || snapshot.State.Rows[0].PendingID != 0 {
++		t.Fatalf("reply was not applied while read-only: %#v", snapshot.State.Rows[0])
++	}
++	if got := snapshot.Messages[len(snapshot.Messages)-1]; got != (gobi.Message{Name: "reply", Arg: "1"}) {
++		t.Fatalf("completion message = %#v", got)
++	}
++	if got := m.Changes(); !equalIDs(got, []SessionID{child}) {
++		t.Fatalf("completion did not dirty target: %v", got)
++	}
++}
++
++func TestCompleteRejectsInvalidReplyIDsWithoutChangingState(t *testing.T) {
++	m := NewManager()
++	id := mustCreate(t, m)
++	before, err := m.Snapshot(id)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, reply := range []asyncsave.Reply{
++		{ID: 0, Value: "zero"},
++		{ID: asyncsave.MaxID + 1, Value: "unsafe"},
++	} {
++		after, completeErr := m.Complete(id, reply)
++		if completeErr == nil {
++			t.Errorf("Complete(%#v) unexpectedly succeeded", reply)
++		}
++		if !reflect.DeepEqual(after, before) {
++			t.Errorf("Complete(%#v) changed state on rejection: before=%#v after=%#v", reply, before, after)
++		}
++	}
++	if audit, err := m.Audit(id); err != nil || len(audit) != 0 {
++		t.Fatalf("invalid replies changed completion audit: %#v, %v", audit, err)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("invalid replies dirtied IDs: %v", got)
++	}
++}
++
++func TestDispatchValidatesDisabledAndReadonlyPathsBeforeSuppression(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	if _, err := m.Dispatch(child, collection.Step{Path: "0", Event: "click", Key: "add"}); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := m.SetChildInputs(root, child, Inputs{ReadOnly: true}); err != nil {
++		t.Fatal(err)
++	}
++	valid := collection.Step{Path: "0", Event: "click", Key: "add"}
++	if _, err := m.Dispatch(child, valid); err != nil {
++		t.Fatalf("valid disabled event rejected: %v", err)
++	}
++	for _, step := range []collection.Step{
++		{Path: "00", Event: "click", Key: "add"},
++		{Path: "0", Event: "input", Key: "add"},
++		{Path: "0", Event: "click", Key: "wrong"},
++	} {
++		if _, err := m.Dispatch(child, step); err == nil {
++			t.Errorf("invalid disabled step %#v unexpectedly succeeded", step)
++		}
++	}
++	if got := m.Changes(); !equalIDs(got, []SessionID{child}) {
++		t.Fatalf("only prior add and input update should be dirty: %v", got)
++	}
++}
++
++func TestSnapshotAndChangesAreDefensiveAndSorted(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	childB := mustCreateChild(t, m, root)
++	childA := mustCreateChild(t, m, root)
++	row := mustAddSavedRow(t, m, childA, "captured")
++	if _, err := m.Publish(childA, row, 0); err != nil {
++		t.Fatal(err)
++	}
++	snapshot, err := m.Snapshot(root)
++	if err != nil {
++		t.Fatal(err)
++	}
++	mutated := snapshot
++	mutated.State.Inbox[0].Saved = "corrupt"
++	mutated.Tree.Kids[3].Kids[0].Text = "corrupt"
++	mutated.Bindings = append(mutated.Bindings, snapshot.Bindings...)
++	mutated.Messages = append(mutated.Messages, gobi.Message{Name: "fake"})
++	current, err := m.Snapshot(root)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if current.State.Inbox[0].Saved != "captured" || current.Tree.Kids[3].Kids[0].Text != "Title: " || len(current.Bindings) != 0 || len(current.Messages) != 0 {
++		t.Fatalf("snapshot mutation leaked into manager: %#v", current)
++	}
++	changes := m.Changes()
++	if !equalIDs(changes, []SessionID{root, childA}) {
++		t.Fatalf("changes not sorted/unique: %v", changes)
++	}
++	changes[0] = childB
++	if next := m.Changes(); next == nil || len(next) != 0 {
++		t.Fatalf("drained Changes() = %#v, want nonnil empty slice", next)
++	}
++}
++
++func TestDisposePreservesParentInboxAndGlobalSequence(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	row := mustAddSavedRow(t, m, child, "before disposal")
++	first, err := m.Publish(child, row, 0)
++	if err != nil {
++		t.Fatal(err)
++	}
++	m.Changes()
++	if _, err := m.Dispose(child); err != nil {
++		t.Fatal(err)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("disposal left dead IDs dirty: %v", got)
++	}
++	parent, err := m.Snapshot(root)
++	if err != nil || len(parent.State.Inbox) != 1 || parent.State.Inbox[0].Saved != "before disposal" {
++		t.Fatalf("parent inbox did not survive child disposal: %#v, %v", parent.State.Inbox, err)
++	}
++	child2 := mustCreateChild(t, m, root)
++	row2 := mustAddSavedRow(t, m, child2, "after disposal")
++	second, err := m.Publish(child2, row2, 0)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if second.Sequence != first.Sequence+1 {
++		t.Fatalf("sequence reused after disposal: first=%d second=%d", first.Sequence, second.Sequence)
++	}
++	if _, err := m.Dispose(root); err == nil {
++		t.Fatal("Dispose() accepted a parent with children")
++	}
++	if _, err := m.DisposeTree(root); err != nil {
++		t.Fatal(err)
++	}
++	if got := m.Changes(); got == nil || len(got) != 0 {
++		t.Fatalf("DisposeTree left dirty IDs: %#v", got)
++	}
++}
++
++func TestPublishSequenceExhaustionIsAtomic(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	row := mustAddSavedRow(t, m, child, "saved")
++	m.mu.Lock()
++	m.nextSequence = collection.MaxID
++	m.mu.Unlock()
++	if _, err := m.Publish(child, row, 0); err == nil {
++		t.Fatal("sequence exhaustion unexpectedly succeeded")
++	}
++	parent, err := m.Snapshot(root)
++	if err != nil || len(parent.State.Inbox) != 0 {
++		t.Fatalf("sequence exhaustion changed inbox: %#v, %v", parent.State.Inbox, err)
++	}
++	if got := m.Changes(); len(got) != 0 {
++		t.Fatalf("sequence exhaustion dirtied IDs: %v", got)
++	}
++}
++
++func TestConcurrentInputRevisionsAndPublishesAreSerialized(t *testing.T) {
++	m := NewManager()
++	root := mustCreate(t, m)
++	child := mustCreateChild(t, m, root)
++	row := mustAddSavedRow(t, m, child, "parallel")
++	const updates = 40
++	var wg sync.WaitGroup
++	errCh := make(chan error, updates)
++	for i := 0; i < updates; i++ {
++		wg.Add(1)
++		go func(i int) {
++			defer wg.Done()
++			_, err := m.SetChildInputs(root, child, Inputs{Title: fmt.Sprintf("title-%d", i)})
++			errCh <- err
++		}(i)
++	}
++	wg.Wait()
++	close(errCh)
++	for err := range errCh {
++		if err != nil {
++			t.Fatalf("concurrent input update error = %v", err)
++		}
++	}
++	const publishes = 40
++	pubErrCh := make(chan error, publishes)
++	for i := 0; i < publishes; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			_, err := m.Publish(child, row, updates)
++			pubErrCh <- err
++		}()
++	}
++	wg.Wait()
++	close(pubErrCh)
++	for err := range pubErrCh {
++		if err != nil {
++			t.Fatalf("concurrent publish error = %v", err)
++		}
++	}
++	parent, err := m.Snapshot(root)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if got := len(parent.State.Inbox); got != publishes {
++		t.Fatalf("concurrent inbox count = %d, want %d", got, publishes)
++	}
++	for i, publication := range parent.State.Inbox {
++		if publication.Sequence != uint64(i+1) {
++			t.Fatalf("inbox sequence[%d] = %d", i, publication.Sequence)
++		}
++	}
++	childSnapshot, err := m.Snapshot(child)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if childSnapshot.State.InputRevision != updates || len(childSnapshot.Messages) != publishes+4 {
++		t.Fatalf("concurrent child state revision/messages = %d/%d", childSnapshot.State.InputRevision, len(childSnapshot.Messages))
++	}
++	changes := m.Changes()
++	if !equalIDs(changes, []SessionID{root, child}) {
++		t.Fatalf("concurrent changes = %v", changes)
++	}
++}
++
++func mustCreate(t *testing.T, m *Manager) SessionID {
++	t.Helper()
++	id, err := m.Create()
++	if err != nil {
++		t.Fatal(err)
++	}
++	return id
++}
++
++func mustCreateChild(t *testing.T, m *Manager, parent SessionID) SessionID {
++	t.Helper()
++	id, err := m.CreateChild(parent)
++	if err != nil {
++		t.Fatal(err)
++	}
++	return id
++}
++
++func mustAddDraftRow(t *testing.T, m *Manager, id SessionID, draft string) collection.RowID {
++	t.Helper()
++	if _, err := m.Dispatch(id, collection.Step{Path: "0", Event: "click", Key: "add"}); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := m.Dispatch(id, collection.Step{Path: "2/0/0", Event: "input", Key: "row-1-input", Value: draft}); err != nil {
++		t.Fatal(err)
++	}
++	m.Changes()
++	return 1
++}
++
++func mustAddSavedRow(t *testing.T, m *Manager, id SessionID, saved string) collection.RowID {
++	t.Helper()
++	row := mustAddDraftRow(t, m, id, saved)
++	if _, err := m.Dispatch(id, collection.Step{Path: "2/0/5", Event: "click", Key: "row-1-save"}); err != nil {
++		t.Fatal(err)
++	}
++	if _, err := m.Complete(id, asyncsave.Reply{ID: 1, Value: saved}); err != nil {
++		t.Fatal(err)
++	}
++	m.Changes()
++	return row
++}
++
++func snapshotRowPending(t *testing.T, m *Manager, id SessionID, row collection.RowID) collection.RequestID {
++	t.Helper()
++	snapshot, err := m.Snapshot(id)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, candidate := range snapshot.State.Rows {
++		if candidate.ID == row {
++			return candidate.PendingID
++		}
++	}
++	t.Fatalf("row %d is absent", row)
++	return 0
++}
++
++func hasDisabled(node gobi.Node) bool {
++	for _, attr := range node.Attrs {
++		if attr.Name == "disabled" && attr.Flag {
++			return true
++		}
++	}
++	return false
++}
++
++func walkCheckDisabled(node gobi.Node) error {
++	if node.Kind == gobi.Element && (node.Tag == "button" || node.Tag == "input") && !hasDisabled(node) {
++		return fmt.Errorf("%s node %q is not disabled", node.Tag, node.Key)
++	}
++	for _, child := range node.Kids {
++		if err := walkCheckDisabled(child); err != nil {
++			return err
++		}
++	}
++	return nil
++}
++
++func equalIDs(left, right []SessionID) bool {
++	if len(left) != len(right) {
++		return false
++	}
++	for i := range left {
++		if left[i] != right[i] {
++			return false
++		}
++	}
++	return true
++}
