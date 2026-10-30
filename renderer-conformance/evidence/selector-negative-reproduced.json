@@ -1,0 +1,9 @@
+{
+  "original_failed_report": "overwritten by author and not recoverable",
+  "reproduction": "fresh isolated negative control, not a recovered original run",
+  "expected_exit": 1,
+  "mismatches": 2,
+  "native_comparisons": 33,
+  "source_diff": "--- current-passing-harness\n+++ reproduced-bad-selector-harness\n@@ -670,7 +670,7 @@\n   await record(\"disabled-controls-suppress-native-click-and-preserve-snapshot\", async () => {\n     await setupProbeActor(\"godom\");\n     for (let row = 0; row < 4; row += 1) await apply({ kind: \"add\" });\n-    const disabledAdd = actor.root.querySelector(\"button.add\");\n+    const disabledAdd = [...actor.root.querySelectorAll(\"button\")].find((button) => button.getAttribute(\"aria-label\") === \"add\");\n     if (!disabledAdd?.disabled) throw new Error(\"four-row maximum did not disable the Add control\");\n     const before = actor.rawRuntime.snapshot();\n     const beforeDispatch = actor.runtimeCounts.dispatch;\n",
+  "report_archive": "selector-negative-reproduced.tar.xz"
+}

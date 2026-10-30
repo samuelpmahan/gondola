@@ -1,0 +1,224 @@
+{
+  "fixtureBundle": {
+    "path": "/workspace/scratch/39a56936f173/gondola/renderer-conformance/build/fixtures.json",
+    "fixtures": 36,
+    "manifestVersion": 1,
+    "nativeChecked": 36,
+    "javascriptCompared": 33,
+    "rawJsonOnly": 3,
+    "accepted": 7,
+    "rejected": 29,
+    "categories": {
+      "valid": {
+        "accepted": 7,
+        "rejected": 0,
+        "rawJsonOnly": 0
+      },
+      "schema": {
+        "accepted": 0,
+        "rejected": 12,
+        "rawJsonOnly": 3
+      },
+      "binding": {
+        "accepted": 0,
+        "rejected": 5,
+        "rawJsonOnly": 0
+      },
+      "message": {
+        "accepted": 0,
+        "rejected": 4,
+        "rawJsonOnly": 0
+      },
+      "keys": {
+        "accepted": 0,
+        "rejected": 3,
+        "rawJsonOnly": 0
+      },
+      "kind": {
+        "accepted": 0,
+        "rejected": 3,
+        "rawJsonOnly": 0
+      },
+      "depth": {
+        "accepted": 0,
+        "rejected": 1,
+        "rawJsonOnly": 0
+      },
+      "nodes": {
+        "accepted": 0,
+        "rejected": 1,
+        "rawJsonOnly": 0
+      }
+    }
+  },
+  "htmlOracle": {
+    "source": "cmd/conformance-fixtures/main.go: addSnapshot calls gobi.HTML(snapshot.Tree)",
+    "canonicalization": "browser <template>.innerHTML compared to each live renderer root.innerHTML",
+    "representativeExpectedHTML": {
+      "valid-controlled-keyed-view": "<div><input type=\"text\" value=\"typed text &lt;&amp;&gt; café 😀\"/><button aria-label=\"Save &amp; continue\" disabled=\"\">Save</button></div>",
+      "valid-root-text": "root text &lt;&amp;&gt;",
+      "valid-empty-text": "",
+      "valid-adjacent-text-nodes": "<div>left &lt;&amp;&gt; right</div>",
+      "valid-keyed-sibling-reorder": "<div><p>first</p><p>second</p><p>third</p></div>"
+    }
+  },
+  "rawSyntax": [
+    {
+      "name": "raw-json-only-duplicate-envelope-key",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: invalid JSON: duplicate object field \"state\""
+      },
+      "browserJSONParseable": true
+    },
+    {
+      "name": "raw-json-only-malformed-json",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: invalid JSON: EOF"
+      },
+      "browserJSONParseable": false
+    },
+    {
+      "name": "raw-json-only-trailing-json",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: invalid JSON: trailing JSON value"
+      },
+      "browserJSONParseable": false
+    }
+  ],
+  "whitespaceMutants": [
+    {
+      "name": "message-handler-u0085-only",
+      "category": "message",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: Node.On at 1 must contain a non-empty click Event and Message"
+      },
+      "javascript": false
+    },
+    {
+      "name": "message-handler-ufeff-only",
+      "category": "message",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: Node.On at 1 must contain a non-empty click Event and Message"
+      },
+      "javascript": false
+    },
+    {
+      "name": "message-binding-u0085-only",
+      "category": "message",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: binding 0 has a blank message name"
+      },
+      "javascript": false
+    },
+    {
+      "name": "message-binding-ufeff-only",
+      "category": "message",
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: binding 0 has a blank message name"
+      },
+      "javascript": false
+    }
+  ],
+  "depthNodeBoundaries": [
+    {
+      "name": "valid-max-depth-boundary",
+      "expectedValid": true,
+      "native": {
+        "valid": true,
+        "exitCode": 0,
+        "error": null
+      },
+      "javascript": true
+    },
+    {
+      "name": "depth-over-limit",
+      "expectedValid": false,
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: Node at 0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0 exceeds maximum depth 64"
+      },
+      "javascript": false
+    },
+    {
+      "name": "valid-max-node-boundary",
+      "expectedValid": true,
+      "native": {
+        "valid": true,
+        "exitCode": 0,
+        "error": null
+      },
+      "javascript": true
+    },
+    {
+      "name": "nodes-over-limit",
+      "expectedValid": false,
+      "native": {
+        "valid": false,
+        "exitCode": 1,
+        "error": "render contract: snapshot exceeds maximum node count 4096"
+      },
+      "javascript": false
+    }
+  ],
+  "schedules": {
+    "backends": [
+      "dom",
+      "react",
+      "godom"
+    ],
+    "fixed": 11,
+    "generated": 60,
+    "generatedWithGoDOMActorTransition": 60,
+    "maximumGeneratedActions": 29,
+    "directedEdges": [
+      "dom->godom",
+      "dom->react",
+      "godom->dom",
+      "godom->react",
+      "react->dom",
+      "react->godom"
+    ],
+    "focusedReorderTargets": [
+      "react",
+      "godom",
+      "dom"
+    ]
+  },
+  "browserGate": {
+    "command": [
+      "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium",
+      "/tmp/gondola-node22/node_modules/node/bin/node",
+      "/workspace/scratch/39a56936f173/gondola/renderer-conformance/fixture-check.browser.mjs"
+    ],
+    "exitCode": 0,
+    "stdout": "{\"positiveFixtures\":7,\"objectNegativeFixtures\":26,\"rawJsonOnlyFixtures\":3,\"renderedByBackend\":{\"dom\":7,\"react\":7,\"godom\":7},\"backendRenderCount\":21,\"negativeAtomicityChecks\":78,\"expectedHTMLSource\":\"Go gobi.HTML serialized through a browser template\",\"fixtureRuntime\":\"static snapshot facade; no collection application state transitions\"}",
+    "stderr": "(node:257) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.\n(Use `node --trace-warnings ...` to show where the warning was created)",
+    "positiveFixtures": 7,
+    "objectNegativeFixtures": 26,
+    "rawJsonOnlyFixtures": 3,
+    "renderedByBackend": {
+      "dom": 7,
+      "react": 7,
+      "godom": 7
+    },
+    "backendRenderCount": 21,
+    "negativeAtomicityChecks": 78,
+    "expectedHTMLSource": "Go gobi.HTML serialized through a browser template",
+    "fixtureRuntime": "static snapshot facade; no collection application state transitions"
+  }
+}

@@ -71,4 +71,16 @@ Open `http://127.0.0.1:8000/keyed-editor/demo.html`. Add, edit, reorder, save, c
 
 The checks cover retained input identity during same-backend updates and completion, logical focus/selection restoration across a backend swap, monotonic row and request IDs, stale replies after deletion, and error retry over the real HTTP lab. IME composition, other browser engines, pixel matching, and production HTTP services are outside this milestone.
 
+## Three-renderer conformance
+
+The additive renderer-conformance milestone runs that same collection through keyed DOM, React, and a Go/WASM DOM renderer. A Go-generated versioned manifest gates renderer admission before the collection initializes. The all-renderer real-HTTP demo and four-actor replay also check keyed identity, events, focus and selection restoration, HTTP completion, and stale or failed paths within this finite contract.
+
+Run the full inherited and renderer-conformance gates from the repository root:
+
+```sh
+bash run-renderer-conformance.sh
+```
+
+The runner first executes `run-keyed-editor.sh` in its default full mode, then builds the Go contract CLI, fixtures, and Go/WASM renderer before running the conformance tests, real-HTTP browser demo, and four-actor replay. Its Node 22 and Go 1.24 requirements match the keyed runner. See [renderer-conformance/README.md](renderer-conformance/README.md) for the demo and contract limits.
+
 Built output and installed packages are never committed. The original M0 outputs are reproduced by `run.sh`; keyed editor outputs are reproduced by `run-keyed-editor.sh`.

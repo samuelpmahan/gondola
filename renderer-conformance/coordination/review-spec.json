@@ -1,0 +1,103 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-go-renderer-contract-review"
+  },
+  "workers": [
+    "W1",
+    "W2",
+    "W3",
+    "W4",
+    "W5",
+    "W6"
+  ],
+  "jobs": [
+    {
+      "id": "XR-E1",
+      "kind": "extract",
+      "task_kind": "independent-review",
+      "scope": "E1",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ],
+      "excluded_author": "W4"
+    },
+    {
+      "id": "XR-E2",
+      "kind": "extract",
+      "task_kind": "independent-review",
+      "scope": "E2",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ],
+      "excluded_author": "W5"
+    },
+    {
+      "id": "XR-E3",
+      "kind": "extract",
+      "task_kind": "independent-review",
+      "scope": "E3",
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "excluded_author": "W1"
+    },
+    {
+      "id": "XR-E4",
+      "kind": "extract",
+      "task_kind": "independent-review",
+      "scope": "E4",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ],
+      "excluded_author": "W6"
+    },
+    {
+      "id": "XR-E5",
+      "kind": "extract",
+      "task_kind": "independent-review",
+      "scope": "E5",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "excluded_author": "W3"
+    },
+    {
+      "id": "XR-E6",
+      "kind": "extract",
+      "task_kind": "independent-review",
+      "scope": "E6",
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "excluded_author": "W2"
+    }
+  ],
+  "review_policy": {
+    "enabled": false
+  }
+}

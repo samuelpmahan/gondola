@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><div id="root"></div><script src="wasm_exec.js"></script><script>
+(async()=>{
+ async function start(path){const go=new Go(); const bytes=await (await fetch(path)).arrayBuffer(); const {instance}=await WebAssembly.instantiate(bytes,go.importObject); void go.run(instance); for(let i=0;i<100&&!window[path.includes('app')?'appDispatch':'rendererAPI'];i++) await new Promise(r=>setTimeout(r,0));}
+ await start('/app.wasm'); await start('/renderer.wasm');
+ window.facade={dispatch(){return window.appDispatch()}};
+ window.rendererAPI.mount(document.querySelector('#root'));
+ window.rendererAPI.click('0');
+ document.body.dataset.result=document.querySelector('#root').textContent;
+})();
+</script>

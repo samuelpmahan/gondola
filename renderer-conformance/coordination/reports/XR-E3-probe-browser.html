@@ -1,0 +1,127 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>XR-E3 Go DOM host swap probe</title></head>
+<body><div id="root"></div>
+<script src="/wasm_exec.js"></script>
+<script type="module">
+import { mountKeyedDOM } from "/keyed-editor/dom.mjs";
+import { createNegotiatedHost, descriptor } from "/renderer-conformance/registry.mjs";
+import { loadGoDOM, mountGoDOM } from "/renderer-conformance/adapter.mjs";
+
+const unwrap = (value, operation) => {
+  if (value && typeof value === "object" && typeof value.error === "string") {
+    throw new Error(`${operation}: ${value.error}`);
+  }
+  return value;
+};
+const waitFor = async (readiness) => {
+  for (let attempt = 0; attempt < 200; attempt += 1) {
+    if (readiness()) return;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  throw new Error("Go app did not publish within the bounded wait");
+};
+const startGoApp = async () => {
+  const go = new Go();
+  const response = await fetch("/collection.wasm");
+  if (!response.ok) throw new Error(`could not load Go app WASM: ${response.status}`);
+  const bytes = await response.arrayBuffer();
+  const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
+  void go.run(instance);
+  await waitFor(() => globalThis.gobiCollection);
+};
+
+window.__xrE3Promise = (async () => {
+  const manifest = await fetch("/manifest.json").then((response) => response.json());
+  await startGoApp();
+  await loadGoDOM({ wasmURL: "/godom.wasm" });
+  const calls = { init: 0, dispatch: 0, complete: 0, effects: 0, audit: 0 };
+  const runtime = {
+    init() { calls.init += 1; return unwrap(gobiCollection.init(), "Go collection init"); },
+    dispatch(step) { calls.dispatch += 1; return unwrap(gobiCollection.dispatch(step), "Go collection dispatch"); },
+    complete(reply) { calls.complete += 1; return unwrap(gobiCollection.complete(reply), "Go collection complete"); },
+    effects() { calls.effects += 1; return unwrap(gobiCollection.effects(), "Go collection effects"); },
+    audit() { calls.audit += 1; return unwrap(gobiCollection.audit(), "Go collection audit"); },
+  };
+  const transportCalls = { starts: 0, cancels: 0 };
+  const transport = {
+    start() { transportCalls.starts += 1; },
+    cancel() { transportCalls.cancels += 1; },
+  };
+  const root = document.getElementById("root");
+  const domDescriptor = descriptor("dom", (hostRoot, facade) => mountKeyedDOM(hostRoot, facade), manifest);
+  const goDescriptor = descriptor("godom", (hostRoot, facade) => mountGoDOM(hostRoot, facade), manifest);
+  const host = createNegotiatedHost(
+    root, runtime, [domDescriptor, goDescriptor], transport, "dom", manifest,
+  );
+  if (calls.init !== 1) throw new Error(`actual Go application init count was ${calls.init}`);
+
+  host.click("0");
+  let snapshot = host.snapshot();
+  if (snapshot.state.Rows.length !== 1) throw new Error("real Go add transition did not reach the DOM host");
+  const firstInput = root.querySelector('[aria-label="Row 1"]');
+  firstInput.focus();
+  firstInput.value = "opaque Go collection draft";
+  firstInput.setSelectionRange(3, 10, "forward");
+  firstInput.dispatchEvent(new Event("input", { bubbles: true }));
+  snapshot = host.snapshot();
+  if (snapshot.state.Rows[0].Draft !== "opaque Go collection draft") {
+    throw new Error("controlled input event did not update actual Go collection state");
+  }
+  if (calls.dispatch !== 2) throw new Error(`actual Go dispatch count was ${calls.dispatch}, expected add plus input`);
+
+  const htmlBeforeSwap = root.innerHTML;
+  host.replaceBackend("godom");
+  if (host.backendName() !== "godom") throw new Error("host did not select the Go DOM backend");
+  const goInput = root.querySelector('[aria-label="Row 1"]');
+  const goFocus = host.focusState();
+  if (goInput === firstInput) throw new Error("backend replacement must create a different physical input");
+  if (host.snapshot().state.Rows[0].Draft !== "opaque Go collection draft") {
+    throw new Error("Go-owned state changed during DOM-to-GoDOM backend swap");
+  }
+  if (root.innerHTML !== htmlBeforeSwap) throw new Error("DOM-to-GoDOM swap changed serialized content");
+  if (document.activeElement !== goInput || goFocus.key !== "row-1-input" || goFocus.selectionStart !== 3 ||
+      goFocus.selectionEnd !== 10 || goFocus.selectionDirection !== "forward") {
+    throw new Error(`DOM-to-GoDOM swap lost logical focus: ${JSON.stringify(goFocus)}`);
+  }
+
+  host.replaceBackend("dom");
+  if (host.backendName() !== "dom") throw new Error("host did not swap back to JS DOM");
+  const domInput = root.querySelector('[aria-label="Row 1"]');
+  const domFocus = host.focusState();
+  if (domInput === goInput) throw new Error("GoDOM-to-DOM swap must create a different physical input");
+  if (host.snapshot().state.Rows[0].Draft !== "opaque Go collection draft") {
+    throw new Error("Go-owned state changed during GoDOM-to-DOM backend swap");
+  }
+  if (document.activeElement !== domInput || domFocus.key !== "row-1-input" || domFocus.selectionStart !== 3 ||
+      domFocus.selectionEnd !== 10 || domFocus.selectionDirection !== "forward") {
+    throw new Error(`GoDOM-to-DOM swap lost logical focus: ${JSON.stringify(domFocus)}`);
+  }
+  if (transportCalls.starts !== 0 || transportCalls.cancels !== 0) {
+    throw new Error(`unexpected transport during state-only probe: ${JSON.stringify(transportCalls)}`);
+  }
+  const finalSnapshot = unwrap(gobiCollection.snapshot(), "final actual Go app snapshot");
+  if (finalSnapshot.state.Rows[0].Draft !== snapshot.state.Rows[0].Draft) {
+    throw new Error("actual Go app and negotiated host snapshots diverged");
+  }
+  host.unmount();
+  if (root.childNodes.length !== 0) throw new Error("negotiated host unmount failed to clear the root");
+  return {
+    ok: true,
+    appRuntime: "actual cmd/collection-wasm",
+    initialBackend: "dom",
+    swaps: ["dom->godom", "godom->dom"],
+    dispatchCalls: calls.dispatch,
+    opaqueState: finalSnapshot.state,
+    domToGoDOMFocus: goFocus,
+    goDOMToDOMFocus: domFocus,
+    physicalInputChangedEachSwap: true,
+    serializedHTMLStable: true,
+  };
+})().then((result) => {
+  window.__xrE3Result = result;
+  return result;
+}).catch((error) => {
+  window.__xrE3Error = String(error?.stack ?? error);
+  throw error;
+});
+</script></body></html>
