@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Controlled input across Gobi renderers</title>
+  <style>
+    :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+    body { max-width: 64rem; margin: 2.5rem auto; padding: 0 1.25rem; }
+    h1 { line-height: 1.15; }
+    .controls, .editor-actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+    button { font: inherit; padding: .45rem .8rem; cursor: pointer; }
+    button[aria-pressed="true"] { outline: 2px solid currentColor; outline-offset: 2px; }
+    #editor-root { border: 1px solid #8888; border-radius: .6rem; margin: 1rem 0; min-height: 8rem; padding: 1rem; }
+    #editor-root .editor { display: grid; gap: .8rem; }
+    #editor-root input { box-sizing: border-box; font: inherit; max-width: 40rem; padding: .45rem .6rem; width: 100%; }
+    #editor-root p { margin: 0; overflow-wrap: anywhere; }
+    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
+    pre { overflow: auto; border: 1px solid #8888; border-radius: .5rem; padding: .8rem; }
+    code { font-family: ui-monospace, monospace; }
+    .muted { opacity: .75; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Keep an editor session alive while swapping renderers</h1>
+    <p>Type a draft, save it (including repeated saves), or reset. Switch between the Gobi DOM and React renderers at any point; the same Go state and ordered message history continue across the swap.</p>
+
+    <section aria-labelledby="renderer-heading">
+      <h2 id="renderer-heading">Renderer</h2>
+      <div class="controls" role="group" aria-label="Choose renderer">
+        <button type="button" data-backend="dom" aria-pressed="true">Gobi DOM</button>
+        <button type="button" data-backend="react" aria-pressed="false">Gobi React</button>
+        <span>Active: <strong id="active-backend">Loading…</strong></span>
+      </div>
+    </section>
+
+    <section aria-labelledby="editor-heading">
+      <h2 id="editor-heading">Draft editor</h2>
+      <div id="editor-root" aria-live="polite"></div>
+    </section>
+
+    <p id="error" role="alert" hidden></p>
+
+    <section aria-labelledby="snapshot-heading">
+      <h2 id="snapshot-heading">Go runtime JSON</h2>
+      <p class="muted">The editor state, current Gobi tree, input binding, and ordered messages returned by Go.</p>
+      <pre id="runtime-snapshot">Waiting for WebAssembly…</pre>
+      <h2>Active renderer and actual DOM</h2>
+      <p class="muted">Includes the live HTML, disabled controls, input value property, and focus state observed in the page.</p>
+      <pre id="dom-snapshot">Waiting for the first render…</pre>
+    </section>
+  </main>
+
+  <script src="/controlled-input/build/wasm_exec.js"></script>
+  <script type="module" src="/controlled-input/demo.mjs"></script>
+</body>
+</html>

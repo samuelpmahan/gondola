@@ -1,0 +1,548 @@
+{
+  "schema": "chainspot.renderer-replacement-ledger/v1",
+  "run_id": "gondola-renderer-replacement-20261030",
+  "created_at": "2026-10-30T08:16:55.509995+00:00",
+  "repo_root": "../..",
+  "native_allocation": {
+    "solver": "nativeRebalancer",
+    "version": "1.0.4",
+    "spec_path": "controlled-input/coordination/initial-spec.json",
+    "solve_receipt_path": "controlled-input/coordination/initial-solve/epoch-00.json",
+    "bundle_path": "controlled-input/coordination/initial-solve/epoch-00.bundle",
+    "external_state_path": "/tmp/gondola-input-native/state.json",
+    "epoch": 0,
+    "solved_at": "2026-10-30T08:15:17.638795+00:00",
+    "assignments": {
+      "W2": "E6",
+      "W3": "E5",
+      "W4": "E1",
+      "W1": "E3",
+      "W5": "E2",
+      "W6": "E4"
+    },
+    "native_constraints": {
+      "solved": true,
+      "brokenVal": 0,
+      "brokenCount": 0,
+      "constraints": [
+        {
+          "name": "independent_review",
+          "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+          "value": 0
+        },
+        {
+          "name": "pin_in_flight",
+          "desc": "avoidMovingSpec: Avoid moving 0 objects",
+          "value": 0
+        },
+        {
+          "name": "ready_packet_capacity",
+          "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+          "value": 0
+        }
+      ]
+    },
+    "exact_score": 600,
+    "native_score": 600,
+    "eligibility_check": true,
+    "capacity_check": true
+  },
+  "worker_agents": {
+    "W4": "/root/input_go",
+    "W5": "/root/input_dom",
+    "W1": "/root/input_react",
+    "W6": "/root/input_harness",
+    "W3": "/root/input_adversarial",
+    "W2": "/root/input_demo"
+  },
+  "packets": {
+    "E1": {
+      "packet_fields": {
+        "id": "E1",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "go-contract-runtime"
+      },
+      "worker": "W4",
+      "agent": "/root/input_go",
+      "status": "accepted",
+      "started_at": "2026-10-30T08:16:55.147572+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead read contracts, component/session and WASM implementation; independently reran targeted Go tests successfully. Author reports complete Go suite, WASM build and format checks; browser execution remains downstream gated.",
+          "recorded_at": "2026-10-30T08:21:00.926304+00:00",
+          "source_report": "# E1 author report — Go contracts, editor, and WASM runtime\n\n## Implemented\n\n- `inputbinding/` defines the typed `Source` (`TargetValue == \"target.value\"`), `Binding`, and `View` sidecar. `Validate` rejects duplicate bindings, malformed/out-of-range paths, blank message names, unsupported event/source semantics, invalid text input targets, duplicate/missing value/type attributes, and collisions with a literal handler at the bound event. `Resolve` reads `gobi.Step.Value` for `target.value`; otherwise it returns the matching `gobi.On` message with its declared literal `Arg` unchanged. The generic resolver does not whitelist application message names.\n- `editor/` implements the frozen `State`, `Init`, `Update`, and stable five-child view topology. The input has no literal `On`; its binding is `0/input/edit/target.value`. Save stores the exact non-empty draft and increments on every save. Reset clears state. Unknown messages preserve state.\n- `editor.Session` owns state and cumulative ordered messages. Snapshots use lowercase top-level JSON keys `state`, `tree`, `bindings`, and `messages`; nested Go fields retain their default PascalCase names. Empty message history is a non-nil slice and serializes as `[]`. Snapshots copy the message history and rebuild the view, so mutations to returned values do not alter the session. Disabled events are suppressed, and failed dispatches are atomic.\n- `cmd/editor-wasm/` publishes `globalThis.gobiEditor.init()` and `.dispatch(step)`. Each `init()` creates a fresh zero-state session. Dispatch accepts Go's `gobi.Step` JSON fields (`Path`, `Event`, `Value`) and returns a snapshot or `{error: ...}`. Non-JSON-serializable step values are returned as errors instead of escaping the JS callback.\n\n## Tests and build evidence\n\nToolchain: `go version go1.24.0 linux/amd64` from `/tmp/gondola-go/bin/go`.\n\nTests were written before implementation. The first targeted run failed because `inputbinding` and `editor` had tests but no implementation files. After implementation, this command passed:\n\n```sh\n/tmp/gondola-go/bin/go test ./...\n```\n\nAll packages passed, including `inputbinding`, `editor`, `interaction`, `gobi`, `reactmap`, and `wire`. The new Go tests cover supported and negative binding contracts, malformed and out-of-range paths, duplicate/colliding/unsupported bindings, dynamic values, unchanged literal arguments, exact editor topology and attributes, repeated saves, empty save, unknown message, reset, disabled controls, ordered message history, atomic failure behavior, JSON envelope casing, and snapshot mutation isolation.\n\nThe browser build passed:\n\n```sh\nGOOS=js GOARCH=wasm /tmp/gondola-go/bin/go build -o /tmp/gobi-editor.wasm ./cmd/editor-wasm\n```\n\nFormatting check passed with no output:\n\n```sh\n/tmp/gondola-go/bin/gofmt -d inputbinding editor cmd/editor-wasm\n```\n\n## Scope and handoff\n\nE1 changed only `inputbinding/`, `editor/`, `cmd/editor-wasm/`, and this authorized report. It did not change the original counter, interaction session, Gobi Node/On types, signatures, receipts, or other inherited files. Runtime behavior has been compile-checked; the browser renderers, native typing/focus behavior, and browser replay are owned by downstream lanes and are not claimed by this report.\n",
+          "receipt_path": "controlled-input/coordination/E1-accepted.json",
+          "receipt_sha256": "a463a95cd687a711d4deb344c28d3070ab7d5d39afaded13e3ea92fbffed6f2d",
+          "deliverables": [
+            "inputbinding/binding.go",
+            "inputbinding/binding_test.go",
+            "editor/editor.go",
+            "editor/session.go",
+            "editor/editor_test.go",
+            "cmd/editor-wasm/main_wasm.go",
+            "cmd/editor-wasm/main_stub.go"
+          ]
+        }
+      ],
+      "coordination_observations": []
+    },
+    "E2": {
+      "packet_fields": {
+        "id": "E2",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "dom-renderer-protocol"
+      },
+      "worker": "W5",
+      "agent": "/root/input_dom",
+      "status": "amendment_requested",
+      "started_at": "2026-10-30T08:16:55.344564+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+          "recorded_at": "2026-10-30T08:25:22.946531+00:00",
+          "source_report": "# E2 author report: browser protocol and DOM renderer\n\n## Delivered\n\n- Added `protocol.mjs` with strict snapshot, Gobi node, attribute, literal handler, message, and binding validation. The shared browser subset supports `div`, `p`, `input`, and `button`, text/fragments, the editor's inert attributes, and literal `click` handlers. It keeps application state and message names generic.\n- Exported `validateSnapshot`, `clone`, `normalizePath`, `nodeAtPath`, `bindingAt`, `literalHandlerAt`, `isDisabled`, and the Gobi kind constants for downstream renderers.\n- Added `dom.mjs` with `mountEditorDOM(root, runtime)` matching the renderer-host API. It patches stable nodes, reads bound input data from `event.currentTarget.value`, forwards literal `Arg` values unchanged, suppresses disabled events, and fences detached, stale, and unmounted nodes.\n- The renderer validates the complete next snapshot before changing its accepted snapshot or DOM. A dispatch, validation, or paint error records `lastError()` and fences later events; a failed snapshot does not become the renderer's accepted state.\n- Input attributes serialize as ordinary attributes, then `type`, then `value`, matching React's observed Chromium DOM output while leaving the snapshot's Go attribute order untouched.\n- Added protocol and DOM unit tests with valid and invalid fixtures, event-value transport, literal-argument transport, focus and input identity across edits, disabled handling, stale-event fences, and failed-snapshot handling.\n\n## Verification\n\nCommand:\n\n```sh\n/tmp/gondola-node22/node_modules/node/bin/node --test controlled-input/protocol.test.mjs controlled-input/dom.test.mjs\n```\n\nResult: 11 tests passed, 0 failed.\n\nThe E6 demo lane separately reported a passing browser smoke with DOM/React HTML equality and unsaved state retained across a renderer swap. E3 observed Chromium 153 input serialization as `aria-label`, `type`, then `value`; E2 implements that order.\n\n## Scope\n\nThe browser validator deliberately rejects other tags, attributes, style declarations, keys, and literal event types. Those semantics are outside the frozen controlled-input milestone. This lane did not change Go application transitions, the backend host, or inherited files.\n",
+          "receipt_path": "controlled-input/coordination/E2-accepted.json",
+          "receipt_sha256": "77f03aad23075a31451beb95064f5cf505cd27ecb70ef92e210807d79005e483",
+          "deliverables": [
+            "controlled-input/protocol.mjs",
+            "controlled-input/dom.mjs",
+            "controlled-input/protocol.test.mjs",
+            "controlled-input/dom.test.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": [
+        {
+          "type": "coordinator_observation",
+          "observed_at": "2026-10-30T08:33:15.010567+00:00",
+          "reported_by": "/root/input_react",
+          "source_ref": "controlled-input/coordination/cross-review/XR-E2-initial-report.md",
+          "decision": "amend",
+          "summary": "Independent direct-renderer browser probe found null runtime.dispatch response silently treated as no handler; two events redispatch instead of fencing. Author authorized explicit sentinel and regression."
+        }
+      ]
+    },
+    "E3": {
+      "packet_fields": {
+        "id": "E3",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "react-renderer"
+      },
+      "worker": "W1",
+      "agent": "/root/input_react",
+      "status": "amendment_requested",
+      "started_at": "2026-10-30T08:16:55.242362+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+          "recorded_at": "2026-10-30T08:25:22.994842+00:00",
+          "source_report": "# E3 React renderer author report\n\n## Implementation\n\nAdded `controlled-input/react.mjs` exporting `mountEditorReact(root, runtime)` with the backend replacement interface: `snapshot()`, `domSnapshot()`, `click(path)`, and `unmount()`.\n\nThe adapter validates and clones each complete editor snapshot with `protocol.mjs`, then builds the initial React element tree before calling `createRoot`. Its local renderer also rejects unsupported tags, attributes, flags, styles, and non-click `Node.On` handlers. Input edits read `event.currentTarget.value`, resolve the declared `input` binding, and synchronously dispatch `{Path, Event, Value}` to the runtime. React's controlled-input warning is prevented with a no-op `onChange`; state changes still travel only through `onInput` and the Go snapshot. Literal button clicks send the declared `Arg`. Path keys and stable refs preserve the input element during ordinary edits. The adapter uses React and ReactDOM 19.3.1 with `flushSync`.\n\nAdded `controlled-input/react.test.mjs` with pre-`createRoot` rejection and reusable-root checks, negative cases for unsupported tags/attributes/events, and a real Chromium test that types Unicode and escaped text, checks synchronous Go-shaped snapshots and exact input steps, verifies input-node identity, and clicks Save to check literal `Arg` handling.\n\n## Verification\n\nBuilt the browser bundle with the repository's pinned esbuild and ran:\n\n```sh\nNODE_PATH=interaction/node_modules interaction/node_modules/.bin/esbuild controlled-input/react.mjs --bundle --format=esm --platform=browser --outfile=controlled-input/build/react.bundle.mjs\nCHROMIUM_EXECUTABLE_PATH=/tmp/chromium node --test controlled-input/react.test.mjs\n```\n\nResult: **3 tests passed**. The browser test ran with Node 24.22.1, React/ReactDOM 19.3.1, esbuild 0.28.2, and Chromium 153.0.8010.0. It observed no browser errors or React warnings. For the input Node attributes `[type, value, aria-label]`, React's actual `root.innerHTML` order is `aria-label`, `type`, then controlled `value`; this observation was sent to E2 for raw DOM/ref parity.\n\nThe browser fixture uses a deterministic synchronous runtime stub. It verifies renderer event transport and React behavior; it does not claim Go/WASM integration. Actual WASM parity and the full demo smoke are covered by the E4/E6 integration run.\n\n## Scope\n\nStable input identity is verified for normal edits. Focus/caret preservation across renderer swaps, IME composition, and concurrent scheduling remain outside this renderer's scope as stated in the plan.\n",
+          "receipt_path": "controlled-input/coordination/E3-accepted.json",
+          "receipt_sha256": "1190fdde7e1354eecd931a17d51022a05b4e60f90f861fb34e57e9d0424d2d29",
+          "deliverables": [
+            "controlled-input/react.mjs",
+            "controlled-input/react.test.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": [
+        {
+          "type": "coordinator_observation",
+          "observed_at": "2026-10-30T08:30:03.301494+00:00",
+          "reported_by": "/root/input_dom",
+          "source_ref": "controlled-input/coordination/cross-review/XR-E3-initial-report.md",
+          "decision": "amend",
+          "summary": "Independent review reproduced accepted-protocol React rejection of disabled input and aria-label on button; author authorized to align implementation and add browser regression."
+        }
+      ]
+    },
+    "E4": {
+      "packet_fields": {
+        "id": "E4",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "reference-harness"
+      },
+      "worker": "W6",
+      "agent": "/root/input_harness",
+      "status": "accepted",
+      "started_at": "2026-10-30T08:16:55.444925+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead inspected source and test contracts, independently passed controlled-input Node tests under Node22/Chromium153. Author reports current fixed-only replay of8scripts/74observations with16native matches and9adversarial probes; caret determinism and runtime isolation probe repaired before full run. Full two-seed suite now running.",
+          "recorded_at": "2026-10-30T08:26:45.634347+00:00",
+          "source_report": "# E4 author report\n\n## Owned implementation\n\n- `controlled-input/reference.mjs` owns an independent React 19 editor model and tree projection. Its edit, save, and reset transitions do not read Go snapshots.\n- `controlled-input/scripts.mjs` provides fixed boundary cases and reproducible generated scripts. The two default seeds are `20261030` and `20261031`; each generated script is limited to 80 actions.\n- `controlled-input/check.mjs` runs two captured Go WASM instances through the unchanged backend host and the DOM/React mounts, with a separate reference root. It uses Playwright fills, per-character typing, and native button clicks; captures snapshots and actual DOM after each observation; saves full traces and CompareInteraction inputs under the ignored build directory; and calls E5's `runAdversarial(page)`.\n- `controlled-input/harness.test.mjs` covers negative snapshot, DOM, value-property, disabled-property, and renderer-reported DOM comparisons, native envelope extras, fixed cases, seeds, and CLI validation.\n\n## Verification\n\n- Node 22.23.4 syntax checks passed for all four owned modules.\n- `node --test controlled-input/harness.test.mjs`: 10/10 passed.\n- Fixed-only Chromium diagnostic, seed `20261030`, `--cases 0`: 8 fixed scenarios, 74 observations, zero mismatches, 16/16 native `CompareInteraction` comparisons matched, and 9/9 adversarial probes passed. Browser: Chromium 153.0.8010.0.\n- Full diagnostic: `controlled-input/build/diagnostic-fixed.json` (build-ignored).\n\nThe typing replay focuses each new input and places the caret at the current value's end before a multi-key sequence. This lets the harness verify ordinary typing after renderer swaps without making swap selection preservation part of the contract. The Go instance isolation probe dispatches a disabled Save against the untouched second runtime and verifies it stays at zero with an empty message log; it does not reinitialize that runtime for the observation.\n\nThis lane did not run the 100-case-per-seed suite. Root owns the full generated run and evidence aggregation.\n",
+          "receipt_path": "controlled-input/coordination/E4-accepted.json",
+          "receipt_sha256": "795653745aa756a4a9e62c051f7894aaa132441ad61cf47ff8fa987460171b36",
+          "deliverables": [
+            "controlled-input/reference.mjs",
+            "controlled-input/check.mjs",
+            "controlled-input/scripts.mjs",
+            "controlled-input/harness.test.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": []
+    },
+    "E5": {
+      "packet_fields": {
+        "id": "E5",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "adversarial-validation"
+      },
+      "worker": "W3",
+      "agent": "/root/input_adversarial",
+      "status": "amendment_requested",
+      "started_at": "2026-10-30T08:16:55.058805+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead inspected source and test contracts, independently passed controlled-input Node tests under Node22/Chromium153. Author reports current fixed-only replay of8scripts/74observations with16native matches and9adversarial probes; caret determinism and runtime isolation probe repaired before full run. Full two-seed suite now running.",
+          "recorded_at": "2026-10-30T08:26:45.690171+00:00",
+          "source_report": "# E5 adversarial probes author report\n\n## Delivered\n\n- Added `controlled-input/adversarial.mjs` with `runAdversarial(page)`, using the browser fixture's actual host, Go runtimes, and both renderers.\n- The browser probes check native disabled Save/Reset suppression; empty input; Unicode and markup-shaped text escaping; repeated saves and reset; unchanged literal click arguments under DOM-property tampering; rejected duplicate, colliding, malformed, and unsupported bindings; React failed-mount root reuse; renderer-local runtime-error retention and event fencing; detached inputs after renderer swaps and unmount; and ordinary multi-key typing with focus, input identity, value, and caret checks after every key.\n- `expectedErrors` is empty. Runtime-failure probes inspect each renderer's explicit `lastError` and verify the callback fence; they do not emit or ignore global browser errors.\n- Added `controlled-input/adversarial.test.mjs` with pure protocol-negative tests for duplicate/colliding bindings, unsupported event/source semantics, invalid input targets/value attributes, malformed paths, literal argument lookup, and the Playwright API guard.\n\n## Verification\n\nCommand:\n\n```sh\n/tmp/gondola-node22/node_modules/node/bin/node --check controlled-input/adversarial.mjs\n/tmp/gondola-node22/node_modules/node/bin/node --test controlled-input/adversarial.test.mjs\n```\n\nResult: **6 tests passed, 0 failed** under Node `v22.23.4`.\n\nThe E4 fixed-only Chromium integration diagnostic ran the current adversarial module with seed `20261030` and `--cases 0`: **9/9 probes passed** across 8 fixed replay scripts and 74 observations. The retained report is `controlled-input/build/diagnostic-fixed.json`; E4's command and environment are recorded in `controlled-input/coordination/E4-author-report.md`. Browser was Chromium `153.0.8010.0`; runtime-failure checks produced no global error allowlist entries.\n\n## Findings and limits\n\n- Renderer replacement remounts the input and does not preserve the caret. The keyboard probe focuses each mounted input and presses End before typing, then verifies the existing node remains focused with the expected end caret after every ordinary keystroke. Swap selection preservation remains out of scope.\n- The unchanged backend host does not mark itself unusable when a native input event's runtime dispatch fails. Both renderers retain `lastError` and fence later input events; the host snapshot remains readable. This behavior is explicitly recorded in the browser observations and does not change the inherited host.\n- The browser negative suite confirms rejection by both renderers. The input-node `On` collision fixture is rejected by the closed `click`-only handler contract before the sidecar collision check; duplicate path/event bindings are separately rejected as ambiguous.\n\nNo inherited files were changed.\n",
+          "receipt_path": "controlled-input/coordination/E5-accepted.json",
+          "receipt_sha256": "a05c8799d3de6162ce8822439aa3273bc1dc7abe8064daf22ae5c57c9383c8e6",
+          "deliverables": [
+            "controlled-input/adversarial.mjs",
+            "controlled-input/adversarial.test.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": [
+        {
+          "type": "coordinator_observation",
+          "observed_at": "2026-10-30T08:30:03.362752+00:00",
+          "reported_by": "/root/input_go",
+          "source_ref": "controlled-input/coordination/cross-review/XR-E5-initial-report.md",
+          "decision": "amend",
+          "summary": "Independent review found disabled-control probe did not count runtime calls and invalid-binding probes accepted any mount error; author authorized specific diagnostic/count assertions."
+        }
+      ]
+    },
+    "E6": {
+      "packet_fields": {
+        "id": "E6",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "demo-runner-documentation"
+      },
+      "worker": "W2",
+      "agent": "/root/input_demo",
+      "status": "accepted",
+      "started_at": "2026-10-30T08:16:54.961494+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+          "recorded_at": "2026-10-30T08:25:23.041069+00:00",
+          "source_report": "# E6 author report: demo, runner, CI, and usage\n\n## Delivered\n\n- `controlled-input/demo.html` and `demo.mjs` mount one `gobiEditor` Go WASM runtime through the unchanged `backend-replacement/host.mjs`, with the new DOM and React renderers.\n- The demo displays the Go JSON snapshot, active backend, rendered HTML, actual input value property, disabled paths, and focus state. It shows renderer/runtime errors in an alert and reads an optional renderer `lastError` property when present.\n- `controlled-input/demo-smoke.mjs` uses Playwright actions against the served page. It checks normal multi-keystroke input on both renderers, state/message continuity across unsaved and saved renderer swaps, exact save and repeated-save results, reset, disabled properties, binding JSON, and equality between the renderer HTML snapshot and live `innerHTML`.\n- `run-controlled-input.sh` runs `run-backend-replacement.sh` first, builds the new Go WASM/editor assets and both browser bundles, then runs Go tests, controlled-input Node tests, the real demo smoke, and `check.mjs` with CLI arguments forwarded. The controlled-input GitHub workflow runs the static baseline first and sets up Go 1.24, Node 22, pinned dependencies, and Playwright Chromium.\n- `controlled-input/README.md` documents the binding contract, supported use, limits, run command, and local demo serving command.\n\n## Demo smoke evidence\n\nCommand:\n\n```sh\nPATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH \\\nCHROMIUM_EXECUTABLE_PATH=/tmp/chromium \\\nGONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 \\\nnode controlled-input/demo-smoke.mjs\n```\n\nEnvironment: Go `go1.24.0`, Node `v22.23.4`, Chromium `153.0.8010.0`. The smoke passed eight observations from initial state through reset. It verified six ordered `edit` messages (`d`, `dr`, `dra`, `draf`, `draft`, `draft!`), two `save` messages, then `reset`; the final state was empty with nine messages retained. Every observation checked live DOM HTML, actual input value, binding JSON, save/reset disabled properties, and backend name.\n\nThe smoke screenshot after typing `draft!` in React is `controlled-input/evidence/E6-after-react-edit.png`. The passing smoke output is preserved in `controlled-input/evidence/E6-demo-smoke.log`.\n\nOne pre-adjustment smoke attempt typed `!` immediately after a renderer swap. Because the swap remounts the input and cross-renderer caret preservation is outside scope, the caret started at offset zero; Go and actual DOM both correctly reported `!draft`. The smoke now presses End after the swap before continuing the edit. The diagnostic is preserved in `controlled-input/coordination/E6-demo-smoke-pre-adjustment.log`; it showed matching Go state, input property, HTML, and focus, with no renderer error.\n\n## Additional checks and remaining integration gate\n\n- `node --check controlled-input/demo.mjs` and `node --check controlled-input/demo-smoke.mjs` passed with Node 22.\n- `bash -n run-controlled-input.sh` passed.\n- Built `cmd/editor-wasm` for `js/wasm`, copied the Go 1.24 `wasm_exec.js`, and bundled `controlled-input/react.mjs` and `reference.mjs` using the pinned interaction esbuild.\n- The full controlled-input runner and `check.mjs` were not run in this author pass; root owns the integrated runner after harness and adversarial test assets are ready.\n",
+          "receipt_path": "controlled-input/coordination/E6-accepted.json",
+          "receipt_sha256": "2547fff8b9237069765cc8150734074a12dce4afef5bd92b49a90b8dce085108",
+          "deliverables": [
+            "controlled-input/demo.html",
+            "controlled-input/demo.mjs",
+            "controlled-input/demo-smoke.mjs",
+            "controlled-input/README.md",
+            "run-controlled-input.sh",
+            ".github/workflows/controlled-input.yml"
+          ]
+        }
+      ],
+      "coordination_observations": []
+    }
+  },
+  "cross_review": {
+    "status": "reviews_in_progress",
+    "spec_path": "controlled-input/coordination/cross-review/spec.json",
+    "external_state_path": "/tmp/gondola-input-native-review/state.json",
+    "solve_receipt_path": "controlled-input/coordination/cross-review/solve/epoch-00.json",
+    "assignments": {
+      "W5": "XR-E3",
+      "W4": "XR-E5",
+      "W2": "XR-E1",
+      "W1": "XR-E2",
+      "W6": "XR-E6",
+      "W3": "XR-E4"
+    },
+    "review_results": {},
+    "bundle_path": "controlled-input/coordination/cross-review/solve/epoch-00.bundle",
+    "external_solve_receipt_path": "/tmp/gondola-input-native-review/solve/epoch-00.json",
+    "native_constraints": {
+      "solved": true,
+      "brokenVal": 0,
+      "brokenCount": 0,
+      "constraints": [
+        {
+          "name": "independent_review",
+          "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+          "value": 0
+        },
+        {
+          "name": "pin_in_flight",
+          "desc": "avoidMovingSpec: Avoid moving 0 objects",
+          "value": 0
+        },
+        {
+          "name": "ready_packet_capacity",
+          "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+          "value": 0
+        }
+      ]
+    },
+    "exact_score": 600,
+    "native_score": 600,
+    "review_run_id": "gondola-input-native-review"
+  },
+  "events": [
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T08:16:55.147572+00:00",
+      "worker": "W4",
+      "agent": "/root/input_go",
+      "packet_id": "E1"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T08:16:55.344564+00:00",
+      "worker": "W5",
+      "agent": "/root/input_dom",
+      "packet_id": "E2"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T08:16:55.242362+00:00",
+      "worker": "W1",
+      "agent": "/root/input_react",
+      "packet_id": "E3"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T08:16:55.444925+00:00",
+      "worker": "W6",
+      "agent": "/root/input_harness",
+      "packet_id": "E4"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T08:16:55.058805+00:00",
+      "worker": "W3",
+      "agent": "/root/input_adversarial",
+      "packet_id": "E5"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T08:16:54.961494+00:00",
+      "worker": "W2",
+      "agent": "/root/input_demo",
+      "packet_id": "E6"
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E1",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead read contracts, component/session and WASM implementation; independently reran targeted Go tests successfully. Author reports complete Go suite, WASM build and format checks; browser execution remains downstream gated.",
+      "recorded_at": "2026-10-30T08:21:00.926304+00:00",
+      "source_report": "# E1 author report — Go contracts, editor, and WASM runtime\n\n## Implemented\n\n- `inputbinding/` defines the typed `Source` (`TargetValue == \"target.value\"`), `Binding`, and `View` sidecar. `Validate` rejects duplicate bindings, malformed/out-of-range paths, blank message names, unsupported event/source semantics, invalid text input targets, duplicate/missing value/type attributes, and collisions with a literal handler at the bound event. `Resolve` reads `gobi.Step.Value` for `target.value`; otherwise it returns the matching `gobi.On` message with its declared literal `Arg` unchanged. The generic resolver does not whitelist application message names.\n- `editor/` implements the frozen `State`, `Init`, `Update`, and stable five-child view topology. The input has no literal `On`; its binding is `0/input/edit/target.value`. Save stores the exact non-empty draft and increments on every save. Reset clears state. Unknown messages preserve state.\n- `editor.Session` owns state and cumulative ordered messages. Snapshots use lowercase top-level JSON keys `state`, `tree`, `bindings`, and `messages`; nested Go fields retain their default PascalCase names. Empty message history is a non-nil slice and serializes as `[]`. Snapshots copy the message history and rebuild the view, so mutations to returned values do not alter the session. Disabled events are suppressed, and failed dispatches are atomic.\n- `cmd/editor-wasm/` publishes `globalThis.gobiEditor.init()` and `.dispatch(step)`. Each `init()` creates a fresh zero-state session. Dispatch accepts Go's `gobi.Step` JSON fields (`Path`, `Event`, `Value`) and returns a snapshot or `{error: ...}`. Non-JSON-serializable step values are returned as errors instead of escaping the JS callback.\n\n## Tests and build evidence\n\nToolchain: `go version go1.24.0 linux/amd64` from `/tmp/gondola-go/bin/go`.\n\nTests were written before implementation. The first targeted run failed because `inputbinding` and `editor` had tests but no implementation files. After implementation, this command passed:\n\n```sh\n/tmp/gondola-go/bin/go test ./...\n```\n\nAll packages passed, including `inputbinding`, `editor`, `interaction`, `gobi`, `reactmap`, and `wire`. The new Go tests cover supported and negative binding contracts, malformed and out-of-range paths, duplicate/colliding/unsupported bindings, dynamic values, unchanged literal arguments, exact editor topology and attributes, repeated saves, empty save, unknown message, reset, disabled controls, ordered message history, atomic failure behavior, JSON envelope casing, and snapshot mutation isolation.\n\nThe browser build passed:\n\n```sh\nGOOS=js GOARCH=wasm /tmp/gondola-go/bin/go build -o /tmp/gobi-editor.wasm ./cmd/editor-wasm\n```\n\nFormatting check passed with no output:\n\n```sh\n/tmp/gondola-go/bin/gofmt -d inputbinding editor cmd/editor-wasm\n```\n\n## Scope and handoff\n\nE1 changed only `inputbinding/`, `editor/`, `cmd/editor-wasm/`, and this authorized report. It did not change the original counter, interaction session, Gobi Node/On types, signatures, receipts, or other inherited files. Runtime behavior has been compile-checked; the browser renderers, native typing/focus behavior, and browser replay are owned by downstream lanes and are not claimed by this report.\n",
+      "receipt_path": "controlled-input/coordination/E1-accepted.json",
+      "receipt_sha256": "a463a95cd687a711d4deb344c28d3070ab7d5d39afaded13e3ea92fbffed6f2d",
+      "deliverables": [
+        "inputbinding/binding.go",
+        "inputbinding/binding_test.go",
+        "editor/editor.go",
+        "editor/session.go",
+        "editor/editor_test.go",
+        "cmd/editor-wasm/main_wasm.go",
+        "cmd/editor-wasm/main_stub.go"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E2",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+      "recorded_at": "2026-10-30T08:25:22.946531+00:00",
+      "source_report": "# E2 author report: browser protocol and DOM renderer\n\n## Delivered\n\n- Added `protocol.mjs` with strict snapshot, Gobi node, attribute, literal handler, message, and binding validation. The shared browser subset supports `div`, `p`, `input`, and `button`, text/fragments, the editor's inert attributes, and literal `click` handlers. It keeps application state and message names generic.\n- Exported `validateSnapshot`, `clone`, `normalizePath`, `nodeAtPath`, `bindingAt`, `literalHandlerAt`, `isDisabled`, and the Gobi kind constants for downstream renderers.\n- Added `dom.mjs` with `mountEditorDOM(root, runtime)` matching the renderer-host API. It patches stable nodes, reads bound input data from `event.currentTarget.value`, forwards literal `Arg` values unchanged, suppresses disabled events, and fences detached, stale, and unmounted nodes.\n- The renderer validates the complete next snapshot before changing its accepted snapshot or DOM. A dispatch, validation, or paint error records `lastError()` and fences later events; a failed snapshot does not become the renderer's accepted state.\n- Input attributes serialize as ordinary attributes, then `type`, then `value`, matching React's observed Chromium DOM output while leaving the snapshot's Go attribute order untouched.\n- Added protocol and DOM unit tests with valid and invalid fixtures, event-value transport, literal-argument transport, focus and input identity across edits, disabled handling, stale-event fences, and failed-snapshot handling.\n\n## Verification\n\nCommand:\n\n```sh\n/tmp/gondola-node22/node_modules/node/bin/node --test controlled-input/protocol.test.mjs controlled-input/dom.test.mjs\n```\n\nResult: 11 tests passed, 0 failed.\n\nThe E6 demo lane separately reported a passing browser smoke with DOM/React HTML equality and unsaved state retained across a renderer swap. E3 observed Chromium 153 input serialization as `aria-label`, `type`, then `value`; E2 implements that order.\n\n## Scope\n\nThe browser validator deliberately rejects other tags, attributes, style declarations, keys, and literal event types. Those semantics are outside the frozen controlled-input milestone. This lane did not change Go application transitions, the backend host, or inherited files.\n",
+      "receipt_path": "controlled-input/coordination/E2-accepted.json",
+      "receipt_sha256": "77f03aad23075a31451beb95064f5cf505cd27ecb70ef92e210807d79005e483",
+      "deliverables": [
+        "controlled-input/protocol.mjs",
+        "controlled-input/dom.mjs",
+        "controlled-input/protocol.test.mjs",
+        "controlled-input/dom.test.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E3",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+      "recorded_at": "2026-10-30T08:25:22.994842+00:00",
+      "source_report": "# E3 React renderer author report\n\n## Implementation\n\nAdded `controlled-input/react.mjs` exporting `mountEditorReact(root, runtime)` with the backend replacement interface: `snapshot()`, `domSnapshot()`, `click(path)`, and `unmount()`.\n\nThe adapter validates and clones each complete editor snapshot with `protocol.mjs`, then builds the initial React element tree before calling `createRoot`. Its local renderer also rejects unsupported tags, attributes, flags, styles, and non-click `Node.On` handlers. Input edits read `event.currentTarget.value`, resolve the declared `input` binding, and synchronously dispatch `{Path, Event, Value}` to the runtime. React's controlled-input warning is prevented with a no-op `onChange`; state changes still travel only through `onInput` and the Go snapshot. Literal button clicks send the declared `Arg`. Path keys and stable refs preserve the input element during ordinary edits. The adapter uses React and ReactDOM 19.3.1 with `flushSync`.\n\nAdded `controlled-input/react.test.mjs` with pre-`createRoot` rejection and reusable-root checks, negative cases for unsupported tags/attributes/events, and a real Chromium test that types Unicode and escaped text, checks synchronous Go-shaped snapshots and exact input steps, verifies input-node identity, and clicks Save to check literal `Arg` handling.\n\n## Verification\n\nBuilt the browser bundle with the repository's pinned esbuild and ran:\n\n```sh\nNODE_PATH=interaction/node_modules interaction/node_modules/.bin/esbuild controlled-input/react.mjs --bundle --format=esm --platform=browser --outfile=controlled-input/build/react.bundle.mjs\nCHROMIUM_EXECUTABLE_PATH=/tmp/chromium node --test controlled-input/react.test.mjs\n```\n\nResult: **3 tests passed**. The browser test ran with Node 24.22.1, React/ReactDOM 19.3.1, esbuild 0.28.2, and Chromium 153.0.8010.0. It observed no browser errors or React warnings. For the input Node attributes `[type, value, aria-label]`, React's actual `root.innerHTML` order is `aria-label`, `type`, then controlled `value`; this observation was sent to E2 for raw DOM/ref parity.\n\nThe browser fixture uses a deterministic synchronous runtime stub. It verifies renderer event transport and React behavior; it does not claim Go/WASM integration. Actual WASM parity and the full demo smoke are covered by the E4/E6 integration run.\n\n## Scope\n\nStable input identity is verified for normal edits. Focus/caret preservation across renderer swaps, IME composition, and concurrent scheduling remain outside this renderer's scope as stated in the plan.\n",
+      "receipt_path": "controlled-input/coordination/E3-accepted.json",
+      "receipt_sha256": "1190fdde7e1354eecd931a17d51022a05b4e60f90f861fb34e57e9d0424d2d29",
+      "deliverables": [
+        "controlled-input/react.mjs",
+        "controlled-input/react.test.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E6",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+      "recorded_at": "2026-10-30T08:25:23.041069+00:00",
+      "source_report": "# E6 author report: demo, runner, CI, and usage\n\n## Delivered\n\n- `controlled-input/demo.html` and `demo.mjs` mount one `gobiEditor` Go WASM runtime through the unchanged `backend-replacement/host.mjs`, with the new DOM and React renderers.\n- The demo displays the Go JSON snapshot, active backend, rendered HTML, actual input value property, disabled paths, and focus state. It shows renderer/runtime errors in an alert and reads an optional renderer `lastError` property when present.\n- `controlled-input/demo-smoke.mjs` uses Playwright actions against the served page. It checks normal multi-keystroke input on both renderers, state/message continuity across unsaved and saved renderer swaps, exact save and repeated-save results, reset, disabled properties, binding JSON, and equality between the renderer HTML snapshot and live `innerHTML`.\n- `run-controlled-input.sh` runs `run-backend-replacement.sh` first, builds the new Go WASM/editor assets and both browser bundles, then runs Go tests, controlled-input Node tests, the real demo smoke, and `check.mjs` with CLI arguments forwarded. The controlled-input GitHub workflow runs the static baseline first and sets up Go 1.24, Node 22, pinned dependencies, and Playwright Chromium.\n- `controlled-input/README.md` documents the binding contract, supported use, limits, run command, and local demo serving command.\n\n## Demo smoke evidence\n\nCommand:\n\n```sh\nPATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH \\\nCHROMIUM_EXECUTABLE_PATH=/tmp/chromium \\\nGONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 \\\nnode controlled-input/demo-smoke.mjs\n```\n\nEnvironment: Go `go1.24.0`, Node `v22.23.4`, Chromium `153.0.8010.0`. The smoke passed eight observations from initial state through reset. It verified six ordered `edit` messages (`d`, `dr`, `dra`, `draf`, `draft`, `draft!`), two `save` messages, then `reset`; the final state was empty with nine messages retained. Every observation checked live DOM HTML, actual input value, binding JSON, save/reset disabled properties, and backend name.\n\nThe smoke screenshot after typing `draft!` in React is `controlled-input/evidence/E6-after-react-edit.png`. The passing smoke output is preserved in `controlled-input/evidence/E6-demo-smoke.log`.\n\nOne pre-adjustment smoke attempt typed `!` immediately after a renderer swap. Because the swap remounts the input and cross-renderer caret preservation is outside scope, the caret started at offset zero; Go and actual DOM both correctly reported `!draft`. The smoke now presses End after the swap before continuing the edit. The diagnostic is preserved in `controlled-input/coordination/E6-demo-smoke-pre-adjustment.log`; it showed matching Go state, input property, HTML, and focus, with no renderer error.\n\n## Additional checks and remaining integration gate\n\n- `node --check controlled-input/demo.mjs` and `node --check controlled-input/demo-smoke.mjs` passed with Node 22.\n- `bash -n run-controlled-input.sh` passed.\n- Built `cmd/editor-wasm` for `js/wasm`, copied the Go 1.24 `wasm_exec.js`, and bundled `controlled-input/react.mjs` and `reference.mjs` using the pinned interaction esbuild.\n- The full controlled-input runner and `check.mjs` were not run in this author pass; root owns the integrated runner after harness and adversarial test assets are ready.\n",
+      "receipt_path": "controlled-input/coordination/E6-accepted.json",
+      "receipt_sha256": "2547fff8b9237069765cc8150734074a12dce4afef5bd92b49a90b8dce085108",
+      "deliverables": [
+        "controlled-input/demo.html",
+        "controlled-input/demo.mjs",
+        "controlled-input/demo-smoke.mjs",
+        "controlled-input/README.md",
+        "run-controlled-input.sh",
+        ".github/workflows/controlled-input.yml"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E4",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead inspected source and test contracts, independently passed controlled-input Node tests under Node22/Chromium153. Author reports current fixed-only replay of8scripts/74observations with16native matches and9adversarial probes; caret determinism and runtime isolation probe repaired before full run. Full two-seed suite now running.",
+      "recorded_at": "2026-10-30T08:26:45.634347+00:00",
+      "source_report": "# E4 author report\n\n## Owned implementation\n\n- `controlled-input/reference.mjs` owns an independent React 19 editor model and tree projection. Its edit, save, and reset transitions do not read Go snapshots.\n- `controlled-input/scripts.mjs` provides fixed boundary cases and reproducible generated scripts. The two default seeds are `20261030` and `20261031`; each generated script is limited to 80 actions.\n- `controlled-input/check.mjs` runs two captured Go WASM instances through the unchanged backend host and the DOM/React mounts, with a separate reference root. It uses Playwright fills, per-character typing, and native button clicks; captures snapshots and actual DOM after each observation; saves full traces and CompareInteraction inputs under the ignored build directory; and calls E5's `runAdversarial(page)`.\n- `controlled-input/harness.test.mjs` covers negative snapshot, DOM, value-property, disabled-property, and renderer-reported DOM comparisons, native envelope extras, fixed cases, seeds, and CLI validation.\n\n## Verification\n\n- Node 22.23.4 syntax checks passed for all four owned modules.\n- `node --test controlled-input/harness.test.mjs`: 10/10 passed.\n- Fixed-only Chromium diagnostic, seed `20261030`, `--cases 0`: 8 fixed scenarios, 74 observations, zero mismatches, 16/16 native `CompareInteraction` comparisons matched, and 9/9 adversarial probes passed. Browser: Chromium 153.0.8010.0.\n- Full diagnostic: `controlled-input/build/diagnostic-fixed.json` (build-ignored).\n\nThe typing replay focuses each new input and places the caret at the current value's end before a multi-key sequence. This lets the harness verify ordinary typing after renderer swaps without making swap selection preservation part of the contract. The Go instance isolation probe dispatches a disabled Save against the untouched second runtime and verifies it stays at zero with an empty message log; it does not reinitialize that runtime for the observation.\n\nThis lane did not run the 100-case-per-seed suite. Root owns the full generated run and evidence aggregation.\n",
+      "receipt_path": "controlled-input/coordination/E4-accepted.json",
+      "receipt_sha256": "795653745aa756a4a9e62c051f7894aaa132441ad61cf47ff8fa987460171b36",
+      "deliverables": [
+        "controlled-input/reference.mjs",
+        "controlled-input/check.mjs",
+        "controlled-input/scripts.mjs",
+        "controlled-input/harness.test.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E5",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead inspected source and test contracts, independently passed controlled-input Node tests under Node22/Chromium153. Author reports current fixed-only replay of8scripts/74observations with16native matches and9adversarial probes; caret determinism and runtime isolation probe repaired before full run. Full two-seed suite now running.",
+      "recorded_at": "2026-10-30T08:26:45.690171+00:00",
+      "source_report": "# E5 adversarial probes author report\n\n## Delivered\n\n- Added `controlled-input/adversarial.mjs` with `runAdversarial(page)`, using the browser fixture's actual host, Go runtimes, and both renderers.\n- The browser probes check native disabled Save/Reset suppression; empty input; Unicode and markup-shaped text escaping; repeated saves and reset; unchanged literal click arguments under DOM-property tampering; rejected duplicate, colliding, malformed, and unsupported bindings; React failed-mount root reuse; renderer-local runtime-error retention and event fencing; detached inputs after renderer swaps and unmount; and ordinary multi-key typing with focus, input identity, value, and caret checks after every key.\n- `expectedErrors` is empty. Runtime-failure probes inspect each renderer's explicit `lastError` and verify the callback fence; they do not emit or ignore global browser errors.\n- Added `controlled-input/adversarial.test.mjs` with pure protocol-negative tests for duplicate/colliding bindings, unsupported event/source semantics, invalid input targets/value attributes, malformed paths, literal argument lookup, and the Playwright API guard.\n\n## Verification\n\nCommand:\n\n```sh\n/tmp/gondola-node22/node_modules/node/bin/node --check controlled-input/adversarial.mjs\n/tmp/gondola-node22/node_modules/node/bin/node --test controlled-input/adversarial.test.mjs\n```\n\nResult: **6 tests passed, 0 failed** under Node `v22.23.4`.\n\nThe E4 fixed-only Chromium integration diagnostic ran the current adversarial module with seed `20261030` and `--cases 0`: **9/9 probes passed** across 8 fixed replay scripts and 74 observations. The retained report is `controlled-input/build/diagnostic-fixed.json`; E4's command and environment are recorded in `controlled-input/coordination/E4-author-report.md`. Browser was Chromium `153.0.8010.0`; runtime-failure checks produced no global error allowlist entries.\n\n## Findings and limits\n\n- Renderer replacement remounts the input and does not preserve the caret. The keyboard probe focuses each mounted input and presses End before typing, then verifies the existing node remains focused with the expected end caret after every ordinary keystroke. Swap selection preservation remains out of scope.\n- The unchanged backend host does not mark itself unusable when a native input event's runtime dispatch fails. Both renderers retain `lastError` and fence later input events; the host snapshot remains readable. This behavior is explicitly recorded in the browser observations and does not change the inherited host.\n- The browser negative suite confirms rejection by both renderers. The input-node `On` collision fixture is rejected by the closed `click`-only handler contract before the sidecar collision check; duplicate path/event bindings are separately rejected as ambiguous.\n\nNo inherited files were changed.\n",
+      "receipt_path": "controlled-input/coordination/E5-accepted.json",
+      "receipt_sha256": "a05c8799d3de6162ce8822439aa3273bc1dc7abe8064daf22ae5c57c9383c8e6",
+      "deliverables": [
+        "controlled-input/adversarial.mjs",
+        "controlled-input/adversarial.test.mjs"
+      ]
+    },
+    {
+      "type": "cross_review_spec_prepared",
+      "at": "2026-10-30T08:26:45.784483+00:00",
+      "spec_path": "controlled-input/coordination/cross-review/spec.json",
+      "packet_count": 6
+    },
+    {
+      "type": "cross_review_native_solve",
+      "at": "2026-10-30T08:26:46.045840+00:00",
+      "solve_receipt_path": "controlled-input/coordination/cross-review/solve/epoch-00.json",
+      "bundle_path": "controlled-input/coordination/cross-review/solve/epoch-00.bundle",
+      "assignments": {
+        "W5": "XR-E3",
+        "W4": "XR-E5",
+        "W2": "XR-E1",
+        "W1": "XR-E2",
+        "W6": "XR-E6",
+        "W3": "XR-E4"
+      },
+      "native_score": 600,
+      "exact_score": 600
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T08:27:24.013963+00:00",
+      "worker": "W5",
+      "agent": "/root/input_dom",
+      "packet_id": "XR-E3"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T08:27:24.145178+00:00",
+      "worker": "W4",
+      "agent": "/root/input_go",
+      "packet_id": "XR-E5"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T08:27:24.283867+00:00",
+      "worker": "W2",
+      "agent": "/root/input_demo",
+      "packet_id": "XR-E1"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T08:27:24.430855+00:00",
+      "worker": "W1",
+      "agent": "/root/input_react",
+      "packet_id": "XR-E2"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T08:27:24.567839+00:00",
+      "worker": "W6",
+      "agent": "/root/input_harness",
+      "packet_id": "XR-E6"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T08:27:24.727779+00:00",
+      "worker": "W3",
+      "agent": "/root/input_adversarial",
+      "packet_id": "XR-E4"
+    },
+    {
+      "packet_id": "E3",
+      "type": "coordinator_observation",
+      "observed_at": "2026-10-30T08:30:03.301494+00:00",
+      "reported_by": "/root/input_dom",
+      "source_ref": "controlled-input/coordination/cross-review/XR-E3-initial-report.md",
+      "decision": "amend",
+      "summary": "Independent review reproduced accepted-protocol React rejection of disabled input and aria-label on button; author authorized to align implementation and add browser regression."
+    },
+    {
+      "packet_id": "E5",
+      "type": "coordinator_observation",
+      "observed_at": "2026-10-30T08:30:03.362752+00:00",
+      "reported_by": "/root/input_go",
+      "source_ref": "controlled-input/coordination/cross-review/XR-E5-initial-report.md",
+      "decision": "amend",
+      "summary": "Independent review found disabled-control probe did not count runtime calls and invalid-binding probes accepted any mount error; author authorized specific diagnostic/count assertions."
+    },
+    {
+      "packet_id": "E2",
+      "type": "coordinator_observation",
+      "observed_at": "2026-10-30T08:33:15.010567+00:00",
+      "reported_by": "/root/input_react",
+      "source_ref": "controlled-input/coordination/cross-review/XR-E2-initial-report.md",
+      "decision": "amend",
+      "summary": "Independent direct-renderer browser probe found null runtime.dispatch response silently treated as no handler; two events redispatch instead of fencing. Author authorized explicit sentinel and regression."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# XR-E6 independent review
+
+**Decision: accept.** I found no blocking E6 issue. I read the runner, workflow, README, demo, smoke script, existing host implementation, and E6 author evidence. I did not launch a second browser/full parity run while root's integrated run was active.
+
+## Fresh-clone command and dependency scope
+
+`bash run-controlled-input.sh` is the documented repository-root entry point. It delegates first to `run-backend-replacement.sh`, which delegates to `run-interaction.sh`; absent skip flags, that installs the pinned Playwright, esbuild, React, and ReactDOM dependencies from `interaction/package-lock.json` and installs Playwright Chromium. The controlled runner builds the editor WASM and both bundles, runs Go tests and `controlled-input/*.test.mjs`, runs the real demo smoke, then runs the parity harness. The browser checks resolve Playwright from `interaction/package.json`, and esbuild is taken from `interaction/node_modules`; the new runner and browser files have no bare imports that require root `node_modules`.
+
+The CI workflow separately runs `bash run.sh` for the signed static baseline, sets up Go 1.24 and Node 22, installs the pinned interaction dependencies and Chromium, then invokes the documented runner with install skips. The runner in turn runs inherited interaction and renderer-replacement gates as well as the new unit, demo, and parity checks. This covers the old and new gates without relying on locally installed root packages.
+
+## Demo lifecycle and observations
+
+`demo.mjs` creates one Go WASM instance and one `createBackendHost`. The unchanged host initializes the underlying runtime once, then serves cached snapshots to each renderer mount; renderer buttons call `replaceBackend` on that host. The demo refreshes the Go JSON, selected backend, reported/live HTML, input value property, disabled paths, and focus panel after swaps and deferred native input/click events. It surfaces global errors and unhandled rejections and reads the active renderer's `lastError` when available.
+
+The smoke uses Playwright `pressSequentially` and button `click` actions. After each observed action it checks Go state and ordered messages, backend name, rendered HTML against `innerHTML`, input value, disabled state, binding JSON, saved text, and the visible error banner. The recorded sequence contains six edits, two saves, and reset across a swap to React and back. The post-swap End key is correctly scoped to the new input because selection continuity across mounts is explicitly outside the milestone. Evidence is in `controlled-input/evidence/E6-demo-smoke.log` and the screenshot path named in the author report.
+
+There is no demo-specific counter that directly measures `runtime.init()` calls; the single host construction and the existing host's cached-facade implementation establish this behavior, and the parity harness separately checks one underlying init per host scenario. This is a coverage note, not a blocking issue.
+
+## Backend scope and integration
+
+The README states the supported dynamic input precisely: one text input, `input` event, `target.value` source, and the existing literal meaning of `gobi.On.Arg` for button messages. It describes the host renderer API and calls for rejecting unsupported binding semantics. It also identifies focus/selection continuity across swaps, IME composition, asynchronous scheduling, arbitrary nodes, and pixel parity as outside scope. This is a bounded requirement for future adapters, not a claim of generic event support.
+
+The CI test commands are meaningful: `run.sh` checks the signed baseline; the nested inherited runners check the original interaction and renderer-replacement suites; the controlled runner executes all new Go and Node unit tests, then the live demo and Go/DOM/React parity harness. The E6 author report records the focused Chromium smoke, while root owns the integrated generated run.
+
+No production edits were made in this review.
