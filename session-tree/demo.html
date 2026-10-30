@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nested Go collection sessions</title>
+  <style>
+    :root { color-scheme: light dark; font: 15px/1.5 system-ui, sans-serif; }
+    body { max-width: 118rem; margin: 1.75rem auto; padding: 0 1.25rem; }
+    h1, h2, h3 { line-height: 1.2; }
+    p { max-width: 80ch; }
+    .muted { opacity: .72; }
+    .topline, .toolbar, .node-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
+    button, select { font: inherit; padding: .36rem .65rem; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
+    .layout { display: grid; grid-template-columns: minmax(17rem, 24rem) minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+    .controls-panel, .inspect-panel, .root-card { border: 1px solid #8888; border-radius: .7rem; padding: .9rem; }
+    #session-controls { display: grid; gap: .75rem; }
+    .node-control { border: 1px solid #8887; border-radius: .55rem; padding: .7rem; }
+    .node-control h3 { margin: 0 0 .35rem; }
+    .node-control p { margin: .25rem 0 .55rem; }
+    .node-actions > * { flex: 1 1 auto; }
+    .roots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 31rem), 1fr)); gap: 1rem; }
+    .root-card { min-width: 0; }
+    .root-mount { min-height: 4rem; margin-top: .8rem; }
+    .tree-session-shell { border: 1px solid #75849a66; border-left: .3rem solid #6885aa; border-radius: .55rem; margin: .7rem 0; padding: .65rem; }
+    .tree-session-view { border-radius: .4rem; min-height: 6rem; padding: .4rem; }
+    .tree-session-children { border-left: 2px solid #75849a66; margin: .75rem 0 0 .55rem; padding: .15rem .1rem .1rem .8rem; }
+    .tree-session-view .collection, .tree-session-view .rows { display: grid; gap: .6rem; }
+    .tree-session-view .row { display: grid; gap: .4rem; border: 1px solid #8888; border-radius: .4rem; padding: .55rem; }
+    .tree-session-view input[type="text"] { box-sizing: border-box; font: inherit; padding: .35rem .5rem; width: 100%; }
+    .tree-session-view p { margin: 0; }
+    .inspection { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: .65rem; }
+    pre { max-height: 22rem; overflow: auto; border: 1px solid #8885; border-radius: .45rem; padding: .65rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .server-record { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; border: 1px solid #8885; border-radius: .4rem; margin: .45rem 0; padding: .45rem; }
+    .server-record code { flex: 1 1 14rem; overflow-wrap: anywhere; }
+    .badge { border: 1px solid #8888; border-radius: 99px; padding: .05rem .4rem; }
+    @media (max-width: 60rem) { .layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Nested collection sessions</h1>
+    <p>Each node is its own Go collection session and renderer. The family tree starts with a DOM parent, a React child, and a GoDOM grandchild. A separate root stays outside that subtree. Create deeper children, change a parent or child renderer, and hold saves in several sessions before disposing a branch.</p>
+    <p class="muted">This page uses the real HTTP lab: cancellation aborts that session’s request and a late release should return HTTP 409. The deterministic replay uses manual transports to compare exact start, cancel, and delivery order; it is a separate test from this HTTP-backed walkthrough.</p>
+    <p>Live sessions: <strong id="live-count">Loading…</strong></p>
+    <p id="error" role="alert" hidden></p>
+
+    <div class="layout">
+      <aside class="controls-panel" aria-labelledby="controls-heading">
+        <h2 id="controls-heading">Session controls</h2>
+        <p class="muted">Use each collection’s Add row and Save buttons in its view. “Add child” creates a new independent session beneath that node.</p>
+        <div class="toolbar">
+          <button id="recreate-family" type="button" disabled>Recreate family root</button>
+          <button id="recreate-sibling" type="button" disabled>Recreate sibling root</button>
+        </div>
+        <div id="session-controls" aria-live="polite"><p class="muted">Waiting for Go/WASM…</p></div>
+      </aside>
+
+      <section class="roots" aria-label="Mounted session roots">
+        <article class="root-card" aria-labelledby="family-heading">
+          <h2 id="family-heading">Family root and descendants</h2>
+          <p class="muted">The renderer owns only each node’s view. Child session shells live in a separate nested container, so swapping a parent renderer should keep the child shell and child DOM in place.</p>
+          <div id="family-mount" class="root-mount"></div>
+        </article>
+        <article class="root-card" aria-labelledby="sibling-heading">
+          <h2 id="sibling-heading">Unaffected sibling root</h2>
+          <p class="muted">Disposing the family or a subtree must leave this root’s session, input node, pending save, and transport lane alive.</p>
+          <div id="sibling-mount" class="root-mount"></div>
+        </article>
+      </section>
+    </div>
+
+    <section class="inspect-panel" aria-labelledby="inspect-heading">
+      <h2 id="inspect-heading">Go tree and live sessions</h2>
+      <div class="inspection">
+        <div><h3>Parent IDs and depth</h3><pre id="tree-output">Waiting for Go tree…</pre></div>
+        <div><h3>Session snapshots and renderer state</h3><pre id="snapshot-output">Waiting for sessions…</pre></div>
+        <div><h3>Postorder disposal and cancellation commands</h3><pre id="disposal-output">No subtree has been disposed.</pre></div>
+        <div><h3>Renderer transport events</h3><pre id="transport-output">Waiting for transport activity…</pre></div>
+      </div>
+    </section>
+    <section class="inspect-panel" aria-labelledby="http-heading">
+      <h2 id="http-heading">HTTP lab requests</h2>
+      <p class="muted">Each node receives a distinct HTTP lane, although request IDs are local to the Go session and can repeat across nodes.</p>
+      <div id="http-output" aria-live="polite"><p class="muted">Waiting for requests…</p></div>
+    </section>
+  </main>
+  <script src="/session-tree/build/wasm_exec.js"></script>
+  <script type="module" src="/session-tree/demo.mjs"></script>
+</body>
+</html>

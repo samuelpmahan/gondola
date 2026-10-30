@@ -1,0 +1,44 @@
+{
+  "schema": "gobi.session-tree-environment/v1",
+  "go": {
+    "version": "go1.24.0 linux/amd64",
+    "executable": "/tmp/gondola-go/bin/go",
+    "archive_sha256": "dea9ca38a0b852a74e81c26134671af7c0fbe65d81b0dc1c5bfe22cf7d4c8858",
+    "source": "https://go.dev/dl/go1.24.0.linux-amd64.tar.gz",
+    "verified_against": "https://go.dev/dl/?mode=json&include=all"
+  },
+  "node": {
+    "version": "22.23.4",
+    "executable": "/tmp/gondola-node22/node_modules/node/bin/node",
+    "provision_command": "npm install --prefix /tmp/gondola-node22 node@22.23.4 --no-audit --no-fund"
+  },
+  "browser": {
+    "version": "153.0.8010.0",
+    "executable": "/tmp/chromium",
+    "package": "@sparticuz/chromium@153.0.0",
+    "provision_command": "npm install --prefix /tmp/gondola-chromium @sparticuz/chromium@153.0.0 --no-audit --no-fund",
+    "standard_download": {
+      "command": "interaction/node_modules/.bin/playwright install chromium",
+      "result": "failed: End of central directory record signature not found (invalid archive)"
+    },
+    "temporary_workaround": "Patched only /tmp package build/lambdafs.js extract(output) to extract(output,{chown:false}) for overlay EINVAL chown. Removed zero-byte failed temporary /tmp/chromium and re-extracted. No repository dependency/source mutation.",
+    "launch_probe": "Playwright launch executablePath /tmp/chromium, page.setContent('<p>ready</p>'), textContent('p') returned ready"
+  },
+  "pinned_dependencies": {
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "playwright": "1.64.1"
+  },
+  "rebalancer": {
+    "version": "1.0.4",
+    "probe_sha256": "5fa75295203944df8b7e2112dbd900b9c89255209a1ac92d61c01bf035d8066c",
+    "toolkit_pr": 1,
+    "head": "989c295717511c812b69beda5d125817ffc054c9"
+  },
+  "base": {
+    "published_head": "6f3bc3057bc67f99580b086e00e34a2dfe7dda22",
+    "tree": "bdd7538539322904856ba9a41e3123005b3204e3",
+    "pr": 8,
+    "ci": "8/8 pull-request workflows success, independently checked before work"
+  }
+}
