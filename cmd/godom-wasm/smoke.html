@@ -1,0 +1,200 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Go DOM WASM smoke</title></head>
+<body>
+<div id="root"></div>
+<script src="/wasm_exec.js"></script>
+<script>
+window.__godomSmoke = (async () => {
+  const assert = (condition, message) => {
+    if (!condition) throw new Error(message);
+  };
+  const unwrap = (value, operation) => {
+    if (value && typeof value === "object" && typeof value.error === "string") {
+      throw new Error(`${operation}: ${value.error}`);
+    }
+    return value;
+  };
+  const waitFor = async (readiness) => {
+    for (let attempt = 0; attempt < 200; attempt += 1) {
+      if (readiness()) return;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    throw new Error("Go WASM bridge did not publish within the bounded wait");
+  };
+  const startGo = async (url) => {
+    const go = new Go();
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`could not load ${url}: ${response.status}`);
+    const bytes = await response.arrayBuffer();
+    const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
+    void go.run(instance);
+    return go;
+  };
+  await startGo("/collection.wasm");
+  await waitFor(() => globalThis.gobiCollection);
+  await startGo("/godom.wasm");
+  await waitFor(() => globalThis.gobiGoDOM);
+
+  const api = globalThis.gobiGoDOM;
+  assert(Object.keys(api).sort().join(",") ===
+    "click,domSnapshot,focusState,mount,restoreFocus,snapshot,unmount,update",
+    "Go DOM bridge must publish its exact singleton API");
+  const root = document.getElementById("root");
+  let failure = null;
+  const facade = {
+    init() { return unwrap(gobiCollection.init(), "collection init"); },
+    dispatch(step) { return unwrap(gobiCollection.dispatch(step), "collection dispatch"); },
+    rendererFailed(error) { failure = error; },
+  };
+  unwrap(api.mount(root, facade), "mount");
+
+  let snapshot = unwrap(api.snapshot(), "initial snapshot");
+  assert(snapshot.state.Rows.length === 0, "initial Go collection must be empty");
+  unwrap(api.click("0"), "add first row");
+  unwrap(api.click("0"), "add second row");
+  snapshot = unwrap(api.snapshot(), "after add");
+  assert(snapshot.state.Rows.map((row) => row.ID).join(",") === "1,2", "Go DOM click must dispatch into the Go collection");
+
+  const inputOne = root.querySelector('[aria-label="Row 1"]');
+  const inputTwo = root.querySelector('[aria-label="Row 2"]');
+  assert(inputOne && inputTwo, "both controlled inputs must render");
+  inputOne.value = "draft one";
+  inputOne.dispatchEvent(new Event("input", { bubbles: true }));
+  inputTwo.focus();
+  inputTwo.value = "draft two";
+  inputTwo.setSelectionRange(2, 7, "backward");
+  inputTwo.dispatchEvent(new Event("input", { bubbles: true }));
+  snapshot = unwrap(api.snapshot(), "after controlled input");
+  assert(snapshot.state.Rows.map((row) => row.Draft).join("|") === "draft one|draft two",
+    "Go DOM input callback must read the live currentTarget.value");
+  assert(root.querySelector('[aria-label="Row 1"]') === inputOne &&
+    root.querySelector('[aria-label="Row 2"]') === inputTwo,
+    "controlled updates must retain the original input objects");
+
+  const focusBeforeMove = unwrap(api.focusState(), "focus before move");
+  assert(focusBeforeMove.key === "row-2-input" && focusBeforeMove.selectionStart === 2 &&
+    focusBeforeMove.selectionEnd === 7 && focusBeforeMove.selectionDirection === "backward",
+    "focus capture must include the keyed input and selection");
+  unwrap(api.click("2/1/7"), "move second row upward");
+  snapshot = unwrap(api.snapshot(), "after reorder");
+  assert(snapshot.state.Rows.map((row) => row.ID).join(",") === "2,1", "row reorder must use the current child path");
+  assert(root.querySelector('[aria-label="Row 2"]') === inputTwo,
+    "reordering must retain the actual keyed input element");
+  assert(document.activeElement === inputTwo && inputTwo.selectionStart === 2 &&
+    inputTwo.selectionEnd === 7 && inputTwo.selectionDirection === "backward",
+    "reordering must restore keyed focus and selection");
+
+  unwrap(api.click("2/0/5"), "save reordered row");
+  const effects = unwrap(gobiCollection.effects(), "read Go collection effect");
+  assert(effects.length === 1 && effects[0].Kind === "start", "save must create a Go-owned pending effect");
+  const completed = unwrap(gobiCollection.complete({ ID: effects[0].ID, Value: "saved two", Error: "" }),
+    "complete Go collection effect");
+  unwrap(api.update(completed), "render Go completion");
+  snapshot = unwrap(api.snapshot(), "after completion");
+  assert(snapshot.state.Rows[0].Saved === "saved two" && snapshot.state.Rows[0].Saves === 1,
+    "Go renderer must apply the completion snapshot");
+  assert(root.querySelector('[aria-label="Row 2"]') === inputTwo && document.activeElement === inputTwo &&
+    inputTwo.selectionStart === 2 && inputTwo.selectionEnd === 7,
+    "HTTP-style completion update must retain input identity and logical focus");
+
+  const detachedRemove = root.querySelector(".row").querySelector("button.remove");
+  unwrap(api.click("2/0/6"), "remove completed row");
+  const afterRemove = unwrap(api.snapshot(), "after remove");
+  assert(afterRemove.state.Rows.length === 1, "remove must drop the selected row");
+  detachedRemove.click();
+  snapshot = unwrap(api.snapshot(), "after detached click");
+  assert(JSON.stringify(snapshot) === JSON.stringify(afterRemove),
+    "removed DOM listeners must not dispatch from detached callbacks");
+
+  const textNode = (text) => ({ Kind: 2, Tag: "", Key: "", Attrs: null, On: null, Kids: null, Text: text });
+  const fixture = {
+    state: { fixture: true },
+    tree: {
+      Kind: 1, Tag: "div", Key: "fixture-root", Attrs: [], On: [], Text: "",
+      Kids: [
+        textNode(""),
+        textNode("adjacent"),
+        textNode(" sibling"),
+        {
+          Kind: 1, Tag: "button", Key: "fixture-button", Attrs: [],
+          On: [{ Event: "click", Message: "fixture", Arg: "" }], Text: "",
+          Kids: [textNode("click")],
+        },
+      ],
+    },
+    bindings: [],
+    messages: [],
+  };
+  unwrap(api.update(fixture), "render adjacent text fixture");
+  assert(root.firstChild.childNodes.length === 4 && root.firstChild.childNodes[0].nodeType === 3 &&
+    root.firstChild.childNodes[0].nodeValue === "" && root.firstChild.childNodes[1].nodeType === 3 &&
+    root.firstChild.childNodes[2].nodeType === 3,
+    "empty and adjacent text nodes must preserve their physical child indexes");
+  const fixtureButton = root.firstChild.childNodes[3];
+  const observedSteps = [];
+  const normalDispatch = facade.dispatch;
+  facade.dispatch = (step) => { observedSteps.push(step); return fixture; };
+  unwrap(api.click("3"), "click after empty and adjacent text");
+  facade.dispatch = normalDispatch;
+  assert(observedSteps.length === 1 && observedSteps[0].Path === "3" &&
+    observedSteps[0].Key === "fixture-button",
+    "event routing must use the current child path after empty and adjacent text nodes");
+  assert(root.firstChild.childNodes[3] === fixtureButton, "fixture update must retain the keyed button");
+  const textClick = api.click("2");
+  assert(textClick && typeof textClick.error === "string", "text-node paths must not be accepted as click targets");
+  unwrap(api.update(afterRemove), "restore collection snapshot after text fixture");
+
+  const dom = unwrap(api.domSnapshot(), "DOM snapshot");
+  assert(dom.html === root.innerHTML && Array.isArray(dom.disabled), "DOM snapshot must report actual browser HTML and disabled paths");
+  const badCalls = [
+    ["mount", [root, facade, "extra"]],
+    ["update", []],
+    ["snapshot", ["extra"]],
+    ["domSnapshot", ["extra"]],
+    ["click", []],
+    ["focusState", ["extra"]],
+    ["restoreFocus", []],
+    ["unmount", ["extra"]],
+  ];
+  for (const [method, args] of badCalls) {
+    const result = api[method](...args);
+    assert(result && Object.keys(result).join(",") === "error" && typeof result.error === "string",
+      `${method} must return exactly {error:string} for wrong arity`);
+  }
+
+  const beforeInvalidUpdate = root.innerHTML;
+  const invalidUpdate = api.update({ state: {}, tree: {}, bindings: [], messages: [], extra: true });
+  assert(invalidUpdate && typeof invalidUpdate.error === "string", "strict snapshot validation must return an error object");
+  assert(root.innerHTML === beforeInvalidUpdate, "invalid snapshots must be rejected before DOM mutation");
+  unwrap(api.unmount(), "unmount after invalid update");
+  assert(root.childNodes.length === 0, "unmount must clear the root");
+
+  failure = null;
+  unwrap(api.mount(root, facade), "remount for callback failure");
+  const dispatch = facade.dispatch;
+  facade.dispatch = () => ({ state: {}, tree: {}, bindings: [], messages: [], unknown: true });
+  const failedClick = api.click("0");
+  assert(failedClick && typeof failedClick.error === "string", "native event callback failures must surface to click()");
+  assert(failure && typeof failure.error === "string", "event callback failure must notify facade.rendererFailed");
+  const fencedSnapshot = api.snapshot();
+  assert(fencedSnapshot && typeof fencedSnapshot.error === "string", "failed renderer must fence later API calls");
+  facade.dispatch = dispatch;
+  unwrap(api.unmount(), "unmount after callback failure");
+
+  return {
+    ok: true,
+    rowsAfterReorder: [2, 1],
+    retainedInputKeys: ["row-1-input", "row-2-input"],
+    focus: focusBeforeMove,
+    completionSaved: "saved two",
+    detachedCallbackCleaned: true,
+    wrongArityRejectedForAllMethods: true,
+    invalidSnapshotDidNotMutate: true,
+    callbackFailureNotified: true,
+  };
+})().catch((error) => {
+  window.__godomSmokeError = String(error?.stack ?? error);
+  throw error;
+});
+</script>
+</body></html>

@@ -1,0 +1,16 @@
+//go:build js && wasm
+package main
+import (
+  "strconv"
+  "syscall/js"
+)
+var count int
+var dispatch js.Func
+func main() {
+  dispatch = js.FuncOf(func(this js.Value, args []js.Value) any {
+    count++
+    return strconv.Itoa(count)
+  })
+  js.Global().Set("appDispatch", dispatch)
+  select {}
+}

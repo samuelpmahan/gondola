@@ -1,0 +1,35 @@
+//go:build js && wasm
+package main
+import "syscall/js"
+var funcs []js.Func
+var root js.Value
+var count int
+func keep(f js.Func) js.Func { funcs=append(funcs,f); return f }
+func main() {
+  api:=js.Global().Get("Object").New()
+  api.Set("mount", keep(js.FuncOf(func(this js.Value,args []js.Value) any {
+    root=args[0]
+    button:=js.Global().Get("document").Call("createElement","button")
+    button.Set("textContent","go")
+    button.Call("addEventListener","click",keep(js.FuncOf(func(this js.Value,args []js.Value) any {
+      // renderer Go callback -> JS facade -> app Go dispatch -> renderer Go update
+      snapshot:=js.Global().Get("facade").Call("dispatch")
+      api.Call("update",snapshot)
+      return nil
+    })))
+    root.Call("appendChild",button)
+    return nil
+  })))
+  api.Set("click",keep(js.FuncOf(func(this js.Value,args []js.Value) any {
+    root.Get("firstChild").Call("click")
+    return nil
+  })))
+  api.Set("update",keep(js.FuncOf(func(this js.Value,args []js.Value) any {
+    count++
+    root.Set("dataset-count", args[0].String())
+    root.Set("textContent", "updated:"+args[0].String()+":"+js.Global().Get("String").Invoke(count).String())
+    return nil
+  })))
+  js.Global().Set("rendererAPI",api)
+  select {}
+}
