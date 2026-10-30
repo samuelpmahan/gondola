@@ -1,0 +1,709 @@
+{
+  "schema": "chainspot.renderer-replacement-ledger/v1",
+  "run_id": "gondola-renderer-replacement-20261030",
+  "created_at": "2026-10-30T07:14:57.435094+00:00",
+  "repo_root": "../..",
+  "native_allocation": {
+    "solver": "nativeRebalancer",
+    "version": "1.0.4",
+    "spec_path": "backend-replacement/coordination/initial-spec.json",
+    "solve_receipt_path": "backend-replacement/coordination/initial-solve/epoch-00.json",
+    "bundle_path": "backend-replacement/coordination/initial-solve/epoch-00.bundle",
+    "external_state_path": "/workspace/scratch/39a56936f173/rebalancer/replacement-state.json",
+    "epoch": 0,
+    "solved_at": "2026-10-30T07:08:04.257955+00:00",
+    "assignments": {
+      "W2": "E6",
+      "W3": "E5",
+      "W4": "E1",
+      "W1": "E3",
+      "W5": "E2",
+      "W6": "E4"
+    },
+    "native_constraints": {
+      "solved": true,
+      "brokenVal": 0,
+      "brokenCount": 0,
+      "constraints": [
+        {
+          "name": "independent_review",
+          "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+          "value": 0
+        },
+        {
+          "name": "pin_in_flight",
+          "desc": "avoidMovingSpec: Avoid moving 0 objects",
+          "value": 0
+        },
+        {
+          "name": "ready_packet_capacity",
+          "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+          "value": 0
+        }
+      ]
+    },
+    "exact_score": 600,
+    "native_score": 600,
+    "eligibility_check": true,
+    "capacity_check": true,
+    "archived_state_path": "backend-replacement/coordination/initial-native-state.json"
+  },
+  "worker_agents": {
+    "W4": "/root/replace_react",
+    "W5": "/root/replace_host",
+    "W1": "/root/replace_harness",
+    "W6": "/root/replace_adversarial",
+    "W3": "/root/replace_demo",
+    "W2": "/root/replace_coordination"
+  },
+  "packets": {
+    "E1": {
+      "packet_fields": {
+        "id": "E1",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "react-backend"
+      },
+      "worker": "W4",
+      "agent": "/root/replace_react",
+      "status": "accepted",
+      "started_at": "2026-10-30T07:10:08.662453+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the React renderer lane after syntax and direct browser evidence; no unresolved renderer findings were reported.",
+          "recorded_at": "2026-10-30T07:17:03+00:00",
+          "source_report": "E1 author results: backend-replacement/react-backend.mjs added. It exports mountGobiReact(root, runtime), calls cached init() once, renders the Go-returned tree through React/ReactDOM 19.3.1 createRoot/flushSync, sends declared click paths/Args back through dispatch, preserves last valid snapshot/DOM and disables further clicks after callback/validation failures, and returns snapshot(), {html,disabled} domSnapshot(), click(path), unmount(), backendName(). Unsupported keys, non-click events, attrs outside class/true disabled, and effects fail closed; generated structural React keys are internal. Node 22 --check passes. Root reported cases=0 browser smoke matched 3 scripts/43 ticks and 13 adversarial direct-fixture probes passed; full run is pending after harness error-capture guard fix. No claim made about a generic Go compiler.",
+          "receipt_path": "backend-replacement/coordination/receipts/E1.json",
+          "receipt_sha256": "581b76b2db211df42c320e435b1869f04bb2bdad0fe6c45e532583b5d0952427",
+          "deliverables": [
+            "backend-replacement/react-backend.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": []
+    },
+    "E2": {
+      "packet_fields": {
+        "id": "E2",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "backend-host"
+      },
+      "worker": "W5",
+      "agent": "/root/replace_host",
+      "status": "accepted",
+      "started_at": "2026-10-30T07:10:09.062282+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the host lane after the readiness fence, fail-closed click handling, normalized DOM shape, and eight passing host tests were reported.",
+          "recorded_at": "2026-10-30T07:17:03+00:00",
+          "source_report": "Added fail-closed handling for renderer click errors while preserving accepted runtime state, plus stable {html, disabled} normalization for domSnapshot(). All 8 host tests pass.",
+          "receipt_path": "backend-replacement/coordination/receipts/E2.json",
+          "receipt_sha256": "1822dea3fc29d3382cdfeaed3902c4c7fec9eeeef5bdd0d59f016d2bfcfa0a86",
+          "deliverables": [
+            "backend-replacement/host.mjs",
+            "backend-replacement/host.test.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": [
+        {
+          "type": "coordinator_observation",
+          "observed_at": "2026-10-30T07:15:01.306940+00:00",
+          "reported_by": "/root",
+          "source_ref": "lead coordination report; first E2 review and follow-up",
+          "decision": "amend",
+          "summary": "Lead reported the first host result had 6 tests passing but identified that a renderer could dispatch during mount before a later mount failure. The same packet was kept open for a readiness barrier and snapshot validation regression; later lead update reported the barrier and 8 host tests passing. This is a nonfinal coordinator observation, not an author acceptance receipt."
+        }
+      ]
+    },
+    "E3": {
+      "packet_fields": {
+        "id": "E3",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "replacement-harness"
+      },
+      "worker": "W1",
+      "agent": "/root/replace_harness",
+      "status": "accepted",
+      "started_at": "2026-10-30T07:10:07.862177+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the harness lane after its unit suite and Chromium smoke matched all native Gobi comparisons and the adversarial probes.",
+          "recorded_at": "2026-10-30T07:20:55+00:00",
+          "source_report": "Final W1/E3 outcome: backend-replacement/check.mjs, scripts.mjs, and check.test.mjs are complete. 12/12 unit tests pass. Chromium 153 smoke (seed 20261030, cases 0) recorded 3 fixed scripts / 43 ticks, zero mismatches, native Gobi comparisons matched, 13/13 adversarial probes passed; both independent WASM host instances initialized once per scenario, and exercised swaps/stale clicks. Report: /tmp/replacement-smoke.json. No E3 work remains; lead full run can proceed with default 100 generated cases.",
+          "receipt_path": "backend-replacement/coordination/receipts/E3.json",
+          "receipt_sha256": "194a56bdc750cc857299bd285124638ed57513ceebc2719c3bdb7fb12173a815",
+          "deliverables": [
+            "backend-replacement/check.mjs",
+            "backend-replacement/scripts.mjs",
+            "backend-replacement/check.test.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": []
+    },
+    "E4": {
+      "packet_fields": {
+        "id": "E4",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "adversarial-checks"
+      },
+      "worker": "W6",
+      "agent": "/root/replace_adversarial",
+      "status": "accepted",
+      "started_at": "2026-10-30T07:10:09.461351+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the browser adversarial lane after the expected-error guard was scoped and the direct and integrated browser evidence passed.",
+          "recorded_at": "2026-10-30T07:17:03+00:00",
+          "source_report": "E4 author outcome: added backend-replacement/adversarial.mjs with 13 browser probes (no separate adversarial.test.mjs; check.mjs imports it directly). Direct real-Go Chromium run: 13/13 pass. Integrated check with GO_COMPARE_BIN=interaction/build/compare-interaction CHROMIUM_EXECUTABLE_PATH=/tmp/chromium node backend-replacement/check.mjs --cases 0 --output /tmp/backend-replacement-check.json passes 3 fixed scripts/43 ticks and native Gobi trace. Exact expected-error sentinel is scoped and reported; no pageErrors/console errors remain. No E4 work outstanding.",
+          "receipt_path": "backend-replacement/coordination/receipts/E4.json",
+          "receipt_sha256": "01bb0d96dff1931222a3b729a9def614e1c877c9cc028bdc13cb85d1d09695a7",
+          "deliverables": [
+            "backend-replacement/adversarial.mjs"
+          ]
+        }
+      ],
+      "coordination_observations": []
+    },
+    "E5": {
+      "packet_fields": {
+        "id": "E5",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "demo-runner"
+      },
+      "worker": "W3",
+      "agent": "/root/replace_demo",
+      "status": "accepted",
+      "started_at": "2026-10-30T07:10:08.265338+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the demo and runner lane after shell and JavaScript syntax checks and the pinned React bundle build passed; the full runner was held for integration sequencing.",
+          "recorded_at": "2026-10-30T07:17:03+00:00",
+          "source_report": "Implemented the demo, runner, replacement README, and CI workflow in the assigned files. The demo shows the shared Go snapshot and active renderer’s DOM after clicks and backend swaps. Shell and JavaScript syntax checks pass, and the React bundle builds with the pinned dependencies. I held the full runner while the host and backend changes are being coordinated.",
+          "receipt_path": "backend-replacement/coordination/receipts/E5.json",
+          "receipt_sha256": "480ca495ab549f320ea62fd88b27b38fce8d43af22e927df537821b118bac14d",
+          "deliverables": [
+            "backend-replacement/README.md",
+            "backend-replacement/demo.html",
+            "backend-replacement/scripts.mjs",
+            "run-backend-replacement.sh",
+            ".github/workflows/backend-replacement.yml"
+          ]
+        },
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the E5 repair after an executable demo smoke checked seven live states and confirmed the visible DOM and Go runtime snapshot stayed aligned.",
+          "recorded_at": "2026-10-30T07:20:55+00:00",
+          "source_report": "Root-forwarded E5 final author result: the live demo mismatch was fixed by deferring the React listener refresh to a zero-delay macrotask after the native click dispatch. The executable demo smoke is wired into the runner and CI. Seven live states were checked: Count values 0,1,2,2,3,3,0; message counts 0,1,2,2,3,3,4; actual DOM counts matched. Shell syntax, Node checks, and diff checks passed. No E5 work remains.",
+          "receipt_path": "backend-replacement/coordination/receipts/E5-final.json",
+          "receipt_sha256": "886f0d6aa7217b82fbbeade5012217abd1b62aead83c498e359b99af69e18fc1",
+          "deliverables": [
+            "backend-replacement/demo.html",
+            "backend-replacement/demo-smoke.mjs",
+            "backend-replacement/README.md",
+            "run-backend-replacement.sh",
+            ".github/workflows/backend-replacement.yml"
+          ]
+        }
+      ],
+      "coordination_observations": [
+        {
+          "type": "coordinator_observation",
+          "observed_at": "2026-10-30T07:19:26.092107+00:00",
+          "reported_by": "/root",
+          "source_ref": "live replacement demo browser observation and same-packet author follow-up",
+          "decision": "amend",
+          "summary": "Root observed a live demo mismatch: after Add the visible DOM showed Count 3 while the runtime snapshot showed Count 2, because the listener refresh microtask ran before React delegated dispatch. Root requested an E5 repair using a later macrotask plus an executable demo smoke check in CI. This is a nonfinal lead amendment; the earlier focused E5 acceptance remains preserved in author_results but no longer unlocks cross-review."
+        }
+      ]
+    },
+    "E6": {
+      "packet_fields": {
+        "id": "E6",
+        "kind": "extract",
+        "task_kind": "verification",
+        "scope": "coordination-review"
+      },
+      "worker": "W2",
+      "agent": "/root/replace_coordination",
+      "status": "accepted",
+      "started_at": "2026-10-30T07:09:50.276858+00:00",
+      "author_results": [
+        {
+          "decision": "accepted",
+          "decision_by": "/root",
+          "summary": "Lead accepted the native allocation ledger, fresh review scheduling adapter, and read-only contract audit; the audit found no unresolved API mismatch after host normalization.",
+          "recorded_at": "2026-10-30T07:20:55+00:00",
+          "source_report": "E6 coordination author result: created an external acceptance ledger from all six actual probe.start acknowledgments and the captured nativeRebalancer 1.0.4 allocation; added an adapter that records implementation/review decisions outside the legacy extraction-only finish schema, prepares a fresh independent six-packet review spec from accepted receipts, invokes the pinned native probe, verifies unique eligible assignments, author exclusions, capacity, zero broken constraints, and the exact score, and records actual reviewer starts. Added the protocol and a read-only audit of the Go/WASM, host, DOM, and React boundaries. No production files were edited for E6. The E6 review solve is a separate post-acceptance coordination step.",
+          "receipt_path": "backend-replacement/coordination/receipts/E6.json",
+          "receipt_sha256": "68631c8cada0ae440f4e91a180d806b84374e608d0b296889a4b4a37065b7715",
+          "deliverables": [
+            "backend-replacement/coordination/adapter.py",
+            "backend-replacement/coordination/PROTOCOL.md",
+            "backend-replacement/coordination/core-contract-audit.md",
+            "backend-replacement/coordination/initial-spec.json",
+            "backend-replacement/coordination/initial-solve/epoch-00.json",
+            "backend-replacement/coordination/initial-solve/epoch-00.bundle"
+          ]
+        }
+      ],
+      "coordination_observations": [
+        {
+          "type": "coordinator_observation",
+          "observed_at": "2026-10-30T07:22:17.349308+00:00",
+          "reported_by": "/root/replace_coordination",
+          "source_ref": "adapter-validation.log; test_adapter.py",
+          "decision": "accepted",
+          "summary": "Focused coordinator guard run passed 4 checks: missing author receipt blocks readiness; a later amendment supersedes an earlier acceptance; self-review assignment is rejected; and a tampered acceptance receipt is rejected. These are adapter-only checks; no fake outcome was sent to native finish."
+        }
+      ]
+    }
+  },
+  "cross_review": {
+    "status": "review_results_recorded",
+    "spec_path": "backend-replacement/coordination/cross-review/epoch-01-spec.json",
+    "external_state_path": "/workspace/scratch/39a56936f173/rebalancer/replacement-cross-review-01/state.json",
+    "solve_receipt_path": "backend-replacement/coordination/cross-review/epoch-01/solve/epoch-00.json",
+    "assignments": {
+      "W5": "XR-E3",
+      "W4": "XR-E5",
+      "W2": "XR-E1",
+      "W1": "XR-E2",
+      "W6": "XR-E6",
+      "W3": "XR-E4"
+    },
+    "review_results": {
+      "XR-E1": {
+        "worker": "W2",
+        "agent": "/root/replace_coordination",
+        "decision": "accepted",
+        "decision_by": "/root/replace_coordination",
+        "summary": "Read-only review of react-backend.mjs and its host/runtime call sites found no blocking issue. The adapter maps supported Gobi text, fragment, and element nodes; class and true disabled attributes; and declared click paths/Args into React and `{Path, Event, Value}` Go dispatch. Host snapshot validation preserves `{state, tree, messages}` and rejects WASM error objects before cache replacement. Native disabled buttons suppress clicks, callback/render failures disable the adapter and the host fails closed, and unmount clears the React root. Scope remains the documented synchronous counter subset.",
+        "recorded_at": "2026-10-30T07:23:38+00:00",
+        "receipt_path": "backend-replacement/coordination/receipts/XR-E1.json",
+        "receipt_sha256": "5988869aa120357faf7c97c35c470655eea84e5f041f38495047ecc8a91586b4"
+      },
+      "XR-E3": {
+        "worker": "W5",
+        "agent": "/root/replace_host",
+        "decision": "accepted",
+        "decision_by": "/root/replace_host",
+        "summary": "Read-only review accepted the harness. No blocking findings: per-tick comparisons cover both Go hosts against the independent React oracle and host-to-host, state/full tree/ordered messages, actual HTML, disabled paths, and root outerHTML. Native traces retain ordered index/Step/state/tree/DOM fields; the Go SameDOM comparator checks those, while message order is checked directly with isDeepStrictEqual. The harness verifies two isolated WASM APIs, one init per host, dispatch/message counts, invalid-backend preservation, stale clicks after swaps, and the exact expected window.error manifest with unrelated browser/console errors fatal. Seeded scripts force real swaps. Nonblocking note: the unit test detects message-array differences by adding an item rather than explicitly permuting two items; implementation comparison is order-sensitive.",
+        "recorded_at": "2026-10-30T07:23:35+00:00",
+        "receipt_path": "backend-replacement/coordination/receipts/XR-E3.json",
+        "receipt_sha256": "17c91108d253480a4ffcc01e7866830c937b8a7f332c7914bc49051b8aba39d9"
+      },
+      "XR-E4": {
+        "worker": "W3",
+        "agent": "/root/replace_demo",
+        "decision": "accepted",
+        "decision_by": "/root/replace_demo",
+        "summary": "Read-only adversarial review accepted, no blocking change recommended. The report-seed-20261030 artifact has all 13 named browser probes passing. Real Go WASM exercises lifecycle, swaps, state/messages, and stale controls; fake runtimes are limited to the runtime error sentinel, exact post-unmount dispatch counting, and malformed/unsupported React snapshots. The expected window.error sentinel is exact and scoped, unexpected or missing manifests fail, unrelated page/console errors remain fatal, and cleanup restores listeners/console state. Detached controls after swap/unmount do not dispatch; malformed initial mounts do not leave createRoot warnings; invalid post-dispatch snapshots preserve the last valid renderer snapshot and stop further callbacks.",
+        "recorded_at": "2026-10-30T07:23:38+00:00",
+        "receipt_path": "backend-replacement/coordination/receipts/XR-E4.json",
+        "receipt_sha256": "d2e88b45907d5803d828c86d9fbc434b71cc720d870316662c418952593869f3"
+      },
+      "XR-E5": {
+        "worker": "W4",
+        "agent": "/root/replace_react",
+        "decision": "accepted",
+        "decision_by": "/root/replace_react",
+        "summary": "Read-only review accepted the demo/runner checks with one nonblocking note. Fresh setup paths align: the README uses the repo-root runner, which calls the existing interaction runner, bundles the pinned React packages, then runs replacement tests, demo smoke, and parity. CI provisions Go 1.24, Node 22, dependencies, and Chromium. The demo keeps no JS counter state and its deferred click refresh runs after React delegated dispatch/flush; the seven-state browser smoke checks Go Count/messages, actual DOM, HTML equality, and disabled paths. Nonblocking note: the interactive demo does not surface a caught React callback error from a native click because its deferred refresh clears the banner without reading backend lastError; this is outside the requested happy-path check.",
+        "recorded_at": "2026-10-30T07:23:38+00:00",
+        "receipt_path": "backend-replacement/coordination/receipts/XR-E5.json",
+        "receipt_sha256": "9bf1abc7ee9241664a35807cc277073711cbe0b7b546e5153ddb2f84179a398e"
+      },
+      "XR-E2": {
+        "worker": "W1",
+        "agent": "/root/replace_harness",
+        "decision": "accepted",
+        "decision_by": "/root/replace_harness",
+        "summary": "XR-E2 review: accepted. No blocking issues found in host.mjs or host.test.mjs. The 8 host tests pass; reviewer made no edits. Lead's review summary also checked one real Go init/session, the epoch readiness barrier, rollback from failed replacement, fail-closed click behavior, and stable DOM snapshot shape.",
+        "recorded_at": "2026-10-30T07:24:55+00:00",
+        "receipt_path": "backend-replacement/coordination/receipts/XR-E2.json",
+        "receipt_sha256": "7ca11c958c13ce37daa9a4e0f7c6123d428fbec390d6e663fbdb2d3b528b5c91"
+      },
+      "XR-E6": {
+        "worker": "W6",
+        "agent": "/root/replace_adversarial",
+        "decision": "accepted",
+        "decision_by": "/root/replace_adversarial",
+        "summary": "Read-only review accepted. Reviewer verified the initial native allocation and six start acknowledgments, accepted E2/E5 repair history, latest-receipt review spec, fresh six-way native solve with exact/native score 600, zero broken constraints, unique assignments and all author exclusions; archived solve/bundle and six reviewer start identities; and four recorded review receipts/hashes. The four adapter negative tests passed and the adapter does not call native finish. Reviewer noted that build_review_spec duplicated source_paths. Current source contains one source_paths key per job; that disagreement is preserved for lead reconciliation.",
+        "recorded_at": "2026-10-30T07:25:41Z",
+        "receipt_path": "backend-replacement/coordination/receipts/XR-E6.json",
+        "receipt_sha256": "238af55625e6cbe5f9fcd72b2e29bac3a6e6bee1f4a473fa4de52ee481d451a2"
+      }
+    },
+    "bundle_path": "backend-replacement/coordination/cross-review/epoch-01/solve/epoch-00.bundle",
+    "external_solve_receipt_path": "/workspace/scratch/39a56936f173/rebalancer/replacement-cross-review-01/solve/epoch-00.json",
+    "native_constraints": {
+      "solved": true,
+      "brokenVal": 0,
+      "brokenCount": 0,
+      "constraints": [
+        {
+          "name": "independent_review",
+          "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+          "value": 0
+        },
+        {
+          "name": "pin_in_flight",
+          "desc": "avoidMovingSpec: Avoid moving 0 objects",
+          "value": 0
+        },
+        {
+          "name": "ready_packet_capacity",
+          "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+          "value": 0
+        }
+      ]
+    },
+    "exact_score": 600,
+    "native_score": 600,
+    "review_run_id": "replacement-cross-review-01",
+    "state_archive_path": "backend-replacement/coordination/cross-review/epoch-01/native-state.json"
+  },
+  "events": [
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T07:10:08.662453+00:00",
+      "worker": "W4",
+      "agent": "/root/replace_react",
+      "packet_id": "E1"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T07:10:09.062282+00:00",
+      "worker": "W5",
+      "agent": "/root/replace_host",
+      "packet_id": "E2"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T07:10:07.862177+00:00",
+      "worker": "W1",
+      "agent": "/root/replace_harness",
+      "packet_id": "E3"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T07:10:09.461351+00:00",
+      "worker": "W6",
+      "agent": "/root/replace_adversarial",
+      "packet_id": "E4"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T07:10:08.265338+00:00",
+      "worker": "W3",
+      "agent": "/root/replace_demo",
+      "packet_id": "E5"
+    },
+    {
+      "type": "probe_start_acknowledgment",
+      "at": "2026-10-30T07:09:50.276858+00:00",
+      "worker": "W2",
+      "agent": "/root/replace_coordination",
+      "packet_id": "E6"
+    },
+    {
+      "packet_id": "E2",
+      "type": "coordinator_observation",
+      "observed_at": "2026-10-30T07:15:01.306940+00:00",
+      "reported_by": "/root",
+      "source_ref": "lead coordination report; first E2 review and follow-up",
+      "decision": "amend",
+      "summary": "Lead reported the first host result had 6 tests passing but identified that a renderer could dispatch during mount before a later mount failure. The same packet was kept open for a readiness barrier and snapshot validation regression; later lead update reported the barrier and 8 host tests passing. This is a nonfinal coordinator observation, not an author acceptance receipt."
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E1",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the React renderer lane after syntax and direct browser evidence; no unresolved renderer findings were reported.",
+      "recorded_at": "2026-10-30T07:17:03+00:00",
+      "source_report": "E1 author results: backend-replacement/react-backend.mjs added. It exports mountGobiReact(root, runtime), calls cached init() once, renders the Go-returned tree through React/ReactDOM 19.3.1 createRoot/flushSync, sends declared click paths/Args back through dispatch, preserves last valid snapshot/DOM and disables further clicks after callback/validation failures, and returns snapshot(), {html,disabled} domSnapshot(), click(path), unmount(), backendName(). Unsupported keys, non-click events, attrs outside class/true disabled, and effects fail closed; generated structural React keys are internal. Node 22 --check passes. Root reported cases=0 browser smoke matched 3 scripts/43 ticks and 13 adversarial direct-fixture probes passed; full run is pending after harness error-capture guard fix. No claim made about a generic Go compiler.",
+      "receipt_path": "backend-replacement/coordination/receipts/E1.json",
+      "receipt_sha256": "581b76b2db211df42c320e435b1869f04bb2bdad0fe6c45e532583b5d0952427",
+      "deliverables": [
+        "backend-replacement/react-backend.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E2",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the host lane after the readiness fence, fail-closed click handling, normalized DOM shape, and eight passing host tests were reported.",
+      "recorded_at": "2026-10-30T07:17:03+00:00",
+      "source_report": "Added fail-closed handling for renderer click errors while preserving accepted runtime state, plus stable {html, disabled} normalization for domSnapshot(). All 8 host tests pass.",
+      "receipt_path": "backend-replacement/coordination/receipts/E2.json",
+      "receipt_sha256": "1822dea3fc29d3382cdfeaed3902c4c7fec9eeeef5bdd0d59f016d2bfcfa0a86",
+      "deliverables": [
+        "backend-replacement/host.mjs",
+        "backend-replacement/host.test.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E4",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the browser adversarial lane after the expected-error guard was scoped and the direct and integrated browser evidence passed.",
+      "recorded_at": "2026-10-30T07:17:03+00:00",
+      "source_report": "E4 author outcome: added backend-replacement/adversarial.mjs with 13 browser probes (no separate adversarial.test.mjs; check.mjs imports it directly). Direct real-Go Chromium run: 13/13 pass. Integrated check with GO_COMPARE_BIN=interaction/build/compare-interaction CHROMIUM_EXECUTABLE_PATH=/tmp/chromium node backend-replacement/check.mjs --cases 0 --output /tmp/backend-replacement-check.json passes 3 fixed scripts/43 ticks and native Gobi trace. Exact expected-error sentinel is scoped and reported; no pageErrors/console errors remain. No E4 work outstanding.",
+      "receipt_path": "backend-replacement/coordination/receipts/E4.json",
+      "receipt_sha256": "01bb0d96dff1931222a3b729a9def614e1c877c9cc028bdc13cb85d1d09695a7",
+      "deliverables": [
+        "backend-replacement/adversarial.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E5",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the demo and runner lane after shell and JavaScript syntax checks and the pinned React bundle build passed; the full runner was held for integration sequencing.",
+      "recorded_at": "2026-10-30T07:17:03+00:00",
+      "source_report": "Implemented the demo, runner, replacement README, and CI workflow in the assigned files. The demo shows the shared Go snapshot and active renderer’s DOM after clicks and backend swaps. Shell and JavaScript syntax checks pass, and the React bundle builds with the pinned dependencies. I held the full runner while the host and backend changes are being coordinated.",
+      "receipt_path": "backend-replacement/coordination/receipts/E5.json",
+      "receipt_sha256": "480ca495ab549f320ea62fd88b27b38fce8d43af22e927df537821b118bac14d",
+      "deliverables": [
+        "backend-replacement/README.md",
+        "backend-replacement/demo.html",
+        "backend-replacement/scripts.mjs",
+        "run-backend-replacement.sh",
+        ".github/workflows/backend-replacement.yml"
+      ]
+    },
+    {
+      "packet_id": "E5",
+      "type": "coordinator_observation",
+      "observed_at": "2026-10-30T07:19:26.092107+00:00",
+      "reported_by": "/root",
+      "source_ref": "live replacement demo browser observation and same-packet author follow-up",
+      "decision": "amend",
+      "summary": "Root observed a live demo mismatch: after Add the visible DOM showed Count 3 while the runtime snapshot showed Count 2, because the listener refresh microtask ran before React delegated dispatch. Root requested an E5 repair using a later macrotask plus an executable demo smoke check in CI. This is a nonfinal lead amendment; the earlier focused E5 acceptance remains preserved in author_results but no longer unlocks cross-review."
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E3",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the harness lane after its unit suite and Chromium smoke matched all native Gobi comparisons and the adversarial probes.",
+      "recorded_at": "2026-10-30T07:20:55+00:00",
+      "source_report": "Final W1/E3 outcome: backend-replacement/check.mjs, scripts.mjs, and check.test.mjs are complete. 12/12 unit tests pass. Chromium 153 smoke (seed 20261030, cases 0) recorded 3 fixed scripts / 43 ticks, zero mismatches, native Gobi comparisons matched, 13/13 adversarial probes passed; both independent WASM host instances initialized once per scenario, and exercised swaps/stale clicks. Report: /tmp/replacement-smoke.json. No E3 work remains; lead full run can proceed with default 100 generated cases.",
+      "receipt_path": "backend-replacement/coordination/receipts/E3.json",
+      "receipt_sha256": "194a56bdc750cc857299bd285124638ed57513ceebc2719c3bdb7fb12173a815",
+      "deliverables": [
+        "backend-replacement/check.mjs",
+        "backend-replacement/scripts.mjs",
+        "backend-replacement/check.test.mjs"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E5",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the E5 repair after an executable demo smoke checked seven live states and confirmed the visible DOM and Go runtime snapshot stayed aligned.",
+      "recorded_at": "2026-10-30T07:20:55+00:00",
+      "source_report": "Root-forwarded E5 final author result: the live demo mismatch was fixed by deferring the React listener refresh to a zero-delay macrotask after the native click dispatch. The executable demo smoke is wired into the runner and CI. Seven live states were checked: Count values 0,1,2,2,3,3,0; message counts 0,1,2,2,3,3,4; actual DOM counts matched. Shell syntax, Node checks, and diff checks passed. No E5 work remains.",
+      "receipt_path": "backend-replacement/coordination/receipts/E5-final.json",
+      "receipt_sha256": "886f0d6aa7217b82fbbeade5012217abd1b62aead83c498e359b99af69e18fc1",
+      "deliverables": [
+        "backend-replacement/demo.html",
+        "backend-replacement/demo-smoke.mjs",
+        "backend-replacement/README.md",
+        "run-backend-replacement.sh",
+        ".github/workflows/backend-replacement.yml"
+      ]
+    },
+    {
+      "type": "author_result_recorded",
+      "packet_id": "E6",
+      "decision": "accepted",
+      "decision_by": "/root",
+      "summary": "Lead accepted the native allocation ledger, fresh review scheduling adapter, and read-only contract audit; the audit found no unresolved API mismatch after host normalization.",
+      "recorded_at": "2026-10-30T07:20:55+00:00",
+      "source_report": "E6 coordination author result: created an external acceptance ledger from all six actual probe.start acknowledgments and the captured nativeRebalancer 1.0.4 allocation; added an adapter that records implementation/review decisions outside the legacy extraction-only finish schema, prepares a fresh independent six-packet review spec from accepted receipts, invokes the pinned native probe, verifies unique eligible assignments, author exclusions, capacity, zero broken constraints, and the exact score, and records actual reviewer starts. Added the protocol and a read-only audit of the Go/WASM, host, DOM, and React boundaries. No production files were edited for E6. The E6 review solve is a separate post-acceptance coordination step.",
+      "receipt_path": "backend-replacement/coordination/receipts/E6.json",
+      "receipt_sha256": "68631c8cada0ae440f4e91a180d806b84374e608d0b296889a4b4a37065b7715",
+      "deliverables": [
+        "backend-replacement/coordination/adapter.py",
+        "backend-replacement/coordination/PROTOCOL.md",
+        "backend-replacement/coordination/core-contract-audit.md",
+        "backend-replacement/coordination/initial-spec.json",
+        "backend-replacement/coordination/initial-solve/epoch-00.json",
+        "backend-replacement/coordination/initial-solve/epoch-00.bundle"
+      ]
+    },
+    {
+      "type": "cross_review_spec_prepared",
+      "at": "2026-10-30T07:21:21.527283+00:00",
+      "spec_path": "backend-replacement/coordination/cross-review/epoch-01-spec.json",
+      "packet_count": 6
+    },
+    {
+      "type": "cross_review_native_solve",
+      "at": "2026-10-30T07:21:28.372736+00:00",
+      "solve_receipt_path": "backend-replacement/coordination/cross-review/epoch-01/solve/epoch-00.json",
+      "bundle_path": "backend-replacement/coordination/cross-review/epoch-01/solve/epoch-00.bundle",
+      "assignments": {
+        "W5": "XR-E3",
+        "W4": "XR-E5",
+        "W2": "XR-E1",
+        "W1": "XR-E2",
+        "W6": "XR-E6",
+        "W3": "XR-E4"
+      },
+      "native_score": 600,
+      "exact_score": 600
+    },
+    {
+      "packet_id": "E6",
+      "type": "coordinator_observation",
+      "observed_at": "2026-10-30T07:22:17.349308+00:00",
+      "reported_by": "/root/replace_coordination",
+      "source_ref": "adapter-validation.log; test_adapter.py",
+      "decision": "accepted",
+      "summary": "Focused coordinator guard run passed 4 checks: missing author receipt blocks readiness; a later amendment supersedes an earlier acceptance; self-review assignment is rejected; and a tampered acceptance receipt is rejected. These are adapter-only checks; no fake outcome was sent to native finish."
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T07:22:33.678428+00:00",
+      "worker": "W5",
+      "agent": "/root/replace_host",
+      "packet_id": "XR-E3"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T07:22:34.097647+00:00",
+      "worker": "W4",
+      "agent": "/root/replace_react",
+      "packet_id": "XR-E5"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T07:22:34.534973+00:00",
+      "worker": "W2",
+      "agent": "/root/replace_coordination",
+      "packet_id": "XR-E1"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T07:22:34.950842+00:00",
+      "worker": "W1",
+      "agent": "/root/replace_harness",
+      "packet_id": "XR-E2"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T07:22:35.367403+00:00",
+      "worker": "W6",
+      "agent": "/root/replace_adversarial",
+      "packet_id": "XR-E6"
+    },
+    {
+      "type": "cross_review_start_acknowledgment",
+      "at": "2026-10-30T07:22:35.774130+00:00",
+      "worker": "W3",
+      "agent": "/root/replace_demo",
+      "packet_id": "XR-E4"
+    },
+    {
+      "type": "cross_review_result_recorded",
+      "at": "2026-10-30T07:24:00.342270+00:00",
+      "packet_id": "XR-E1",
+      "worker": "W2",
+      "agent": "/root/replace_coordination",
+      "decision": "accepted",
+      "decision_by": "/root/replace_coordination",
+      "summary": "Read-only review of react-backend.mjs and its host/runtime call sites found no blocking issue. The adapter maps supported Gobi text, fragment, and element nodes; class and true disabled attributes; and declared click paths/Args into React and `{Path, Event, Value}` Go dispatch. Host snapshot validation preserves `{state, tree, messages}` and rejects WASM error objects before cache replacement. Native disabled buttons suppress clicks, callback/render failures disable the adapter and the host fails closed, and unmount clears the React root. Scope remains the documented synchronous counter subset.",
+      "recorded_at": "2026-10-30T07:23:38+00:00",
+      "receipt_path": "backend-replacement/coordination/receipts/XR-E1.json",
+      "receipt_sha256": "5988869aa120357faf7c97c35c470655eea84e5f041f38495047ecc8a91586b4"
+    },
+    {
+      "type": "cross_review_result_recorded",
+      "at": "2026-10-30T07:24:00.699323+00:00",
+      "packet_id": "XR-E3",
+      "worker": "W5",
+      "agent": "/root/replace_host",
+      "decision": "accepted",
+      "decision_by": "/root/replace_host",
+      "summary": "Read-only review accepted the harness. No blocking findings: per-tick comparisons cover both Go hosts against the independent React oracle and host-to-host, state/full tree/ordered messages, actual HTML, disabled paths, and root outerHTML. Native traces retain ordered index/Step/state/tree/DOM fields; the Go SameDOM comparator checks those, while message order is checked directly with isDeepStrictEqual. The harness verifies two isolated WASM APIs, one init per host, dispatch/message counts, invalid-backend preservation, stale clicks after swaps, and the exact expected window.error manifest with unrelated browser/console errors fatal. Seeded scripts force real swaps. Nonblocking note: the unit test detects message-array differences by adding an item rather than explicitly permuting two items; implementation comparison is order-sensitive.",
+      "recorded_at": "2026-10-30T07:23:35+00:00",
+      "receipt_path": "backend-replacement/coordination/receipts/XR-E3.json",
+      "receipt_sha256": "17c91108d253480a4ffcc01e7866830c937b8a7f332c7914bc49051b8aba39d9"
+    },
+    {
+      "type": "cross_review_result_recorded",
+      "at": "2026-10-30T07:24:01.044982+00:00",
+      "packet_id": "XR-E4",
+      "worker": "W3",
+      "agent": "/root/replace_demo",
+      "decision": "accepted",
+      "decision_by": "/root/replace_demo",
+      "summary": "Read-only adversarial review accepted, no blocking change recommended. The report-seed-20261030 artifact has all 13 named browser probes passing. Real Go WASM exercises lifecycle, swaps, state/messages, and stale controls; fake runtimes are limited to the runtime error sentinel, exact post-unmount dispatch counting, and malformed/unsupported React snapshots. The expected window.error sentinel is exact and scoped, unexpected or missing manifests fail, unrelated page/console errors remain fatal, and cleanup restores listeners/console state. Detached controls after swap/unmount do not dispatch; malformed initial mounts do not leave createRoot warnings; invalid post-dispatch snapshots preserve the last valid renderer snapshot and stop further callbacks.",
+      "recorded_at": "2026-10-30T07:23:38+00:00",
+      "receipt_path": "backend-replacement/coordination/receipts/XR-E4.json",
+      "receipt_sha256": "d2e88b45907d5803d828c86d9fbc434b71cc720d870316662c418952593869f3"
+    },
+    {
+      "type": "cross_review_result_recorded",
+      "at": "2026-10-30T07:24:01.415069+00:00",
+      "packet_id": "XR-E5",
+      "worker": "W4",
+      "agent": "/root/replace_react",
+      "decision": "accepted",
+      "decision_by": "/root/replace_react",
+      "summary": "Read-only review accepted the demo/runner checks with one nonblocking note. Fresh setup paths align: the README uses the repo-root runner, which calls the existing interaction runner, bundles the pinned React packages, then runs replacement tests, demo smoke, and parity. CI provisions Go 1.24, Node 22, dependencies, and Chromium. The demo keeps no JS counter state and its deferred click refresh runs after React delegated dispatch/flush; the seven-state browser smoke checks Go Count/messages, actual DOM, HTML equality, and disabled paths. Nonblocking note: the interactive demo does not surface a caught React callback error from a native click because its deferred refresh clears the banner without reading backend lastError; this is outside the requested happy-path check.",
+      "recorded_at": "2026-10-30T07:23:38+00:00",
+      "receipt_path": "backend-replacement/coordination/receipts/XR-E5.json",
+      "receipt_sha256": "9bf1abc7ee9241664a35807cc277073711cbe0b7b546e5153ddb2f84179a398e"
+    },
+    {
+      "type": "cross_review_result_recorded",
+      "at": "2026-10-30T07:25:01.763316+00:00",
+      "packet_id": "XR-E2",
+      "worker": "W1",
+      "agent": "/root/replace_harness",
+      "decision": "accepted",
+      "decision_by": "/root/replace_harness",
+      "summary": "XR-E2 review: accepted. No blocking issues found in host.mjs or host.test.mjs. The 8 host tests pass; reviewer made no edits. Lead's review summary also checked one real Go init/session, the epoch readiness barrier, rollback from failed replacement, fail-closed click behavior, and stable DOM snapshot shape.",
+      "recorded_at": "2026-10-30T07:24:55+00:00",
+      "receipt_path": "backend-replacement/coordination/receipts/XR-E2.json",
+      "receipt_sha256": "7ca11c958c13ce37daa9a4e0f7c6123d428fbec390d6e663fbdb2d3b528b5c91"
+    },
+    {
+      "type": "cross_review_result_recorded",
+      "at": "2026-10-30T07:26:22.207215+00:00",
+      "packet_id": "XR-E6",
+      "worker": "W6",
+      "agent": "/root/replace_adversarial",
+      "decision": "accepted",
+      "decision_by": "/root/replace_adversarial",
+      "summary": "Read-only review accepted. Reviewer verified the initial native allocation and six start acknowledgments, accepted E2/E5 repair history, latest-receipt review spec, fresh six-way native solve with exact/native score 600, zero broken constraints, unique assignments and all author exclusions; archived solve/bundle and six reviewer start identities; and four recorded review receipts/hashes. The four adapter negative tests passed and the adapter does not call native finish. Reviewer noted that build_review_spec duplicated source_paths. Current source contains one source_paths key per job; that disagreement is preserved for lead reconciliation.",
+      "recorded_at": "2026-10-30T07:25:41Z",
+      "receipt_path": "backend-replacement/coordination/receipts/XR-E6.json",
+      "receipt_sha256": "238af55625e6cbe5f9fcd72b2e29bac3a6e6bee1f4a473fa4de52ee481d451a2"
+    }
+  ]
+}
