@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gobi renderer replacement demo</title>
+  <style>
+    :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+    body { max-width: 56rem; margin: 2.5rem auto; padding: 0 1.25rem; }
+    h1 { line-height: 1.15; }
+    .controls, .counter-controls { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+    button { font: inherit; padding: .45rem .8rem; cursor: pointer; }
+    button[aria-pressed="true"] { outline: 2px solid currentColor; outline-offset: 2px; }
+    #counter-root { border: 1px solid #8888; border-radius: .6rem; margin: 1rem 0; min-height: 4rem; padding: 1rem; }
+    #counter-root .counter { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+    #counter-root p { margin: 0; }
+    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
+    pre { overflow: auto; border: 1px solid #8888; border-radius: .5rem; padding: .8rem; }
+    code { font-family: ui-monospace, monospace; }
+    .muted { opacity: .75; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Swap the renderer while the Go counter stays alive</h1>
+    <p>The counter runs in Go WebAssembly. Add and Reset send its declared messages. Switch renderers at any time; the Go state and message log stay in the same runtime session.</p>
+
+    <section aria-labelledby="renderer-heading">
+      <h2 id="renderer-heading">Renderer</h2>
+      <div class="controls" role="group" aria-label="Choose renderer">
+        <button type="button" data-backend="dom" aria-pressed="true">Gobi DOM</button>
+        <button type="button" data-backend="react" aria-pressed="false">Gobi React</button>
+        <span>Active: <strong id="active-backend">Loading…</strong></span>
+      </div>
+    </section>
+
+    <section aria-labelledby="counter-heading">
+      <h2 id="counter-heading">Live counter</h2>
+      <div id="counter-root" aria-live="polite"></div>
+    </section>
+
+    <p id="error" role="alert" hidden></p>
+
+    <section aria-labelledby="snapshot-heading">
+      <h2 id="snapshot-heading">Go runtime snapshot</h2>
+      <p class="muted">State, current Gobi tree, and delivered messages returned by the shared Go runtime.</p>
+      <pre id="runtime-snapshot">Waiting for WebAssembly…</pre>
+      <h2>Rendered DOM snapshot</h2>
+      <p class="muted">Observed from the active renderer after each counter action or backend switch.</p>
+      <pre id="dom-snapshot">Waiting for the first render…</pre>
+    </section>
+  </main>
+
+  <script src="/interaction/build/wasm_exec.js"></script>
+  <script type="module">
+    import { mountGobi } from "/interaction/dom.mjs";
+    import { createBackendHost } from "/backend-replacement/host.mjs";
+    import { mountGobiReact } from "/backend-replacement/build/react-backend.bundle.mjs";
+
+    const root = document.getElementById("counter-root");
+    const runtimeOutput = document.getElementById("runtime-snapshot");
+    const domOutput = document.getElementById("dom-snapshot");
+    const backendOutput = document.getElementById("active-backend");
+    const errorOutput = document.getElementById("error");
+    let host = null;
+
+    function showError(error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      errorOutput.textContent = `Could not complete that action: ${detail}`;
+      errorOutput.hidden = false;
+    }
+
+    function clearError() {
+      errorOutput.textContent = "";
+      errorOutput.hidden = true;
+    }
+
+    function refreshSnapshots() {
+      if (!host) return;
+      backendOutput.textContent = host.backendName();
+      runtimeOutput.textContent = JSON.stringify(host.snapshot(), null, 2);
+      domOutput.textContent = JSON.stringify(host.domSnapshot(), null, 2);
+      for (const button of document.querySelectorAll("[data-backend]")) {
+        button.setAttribute("aria-pressed", String(button.dataset.backend === host.backendName()));
+      }
+    }
+
+    for (const button of document.querySelectorAll("[data-backend]")) {
+      button.addEventListener("click", () => {
+        try {
+          host.replaceBackend(button.dataset.backend);
+          clearError();
+          refreshSnapshots();
+        } catch (error) {
+          showError(error);
+          try { refreshSnapshots(); } catch (snapshotError) { showError(snapshotError); }
+        }
+      });
+    }
+
+    // Defer until the full click dispatch finishes. React handles clicks with a
+    // delegated listener on this root, which runs after this listener was added.
+    root.addEventListener("click", (event) => {
+      if (!event.target.closest?.("button")) return;
+      setTimeout(() => {
+        try {
+          refreshSnapshots();
+          clearError();
+        } catch (error) {
+          showError(error);
+        }
+      }, 0);
+    });
+
+    window.addEventListener("error", (event) => {
+      if (event.error) showError(event.error);
+      else if (event.message) showError(event.message);
+    });
+    window.addEventListener("unhandledrejection", (event) => showError(event.reason));
+
+    async function start() {
+      if (typeof Go !== "function") throw new Error("wasm_exec.js did not define Go");
+      const go = new Go();
+      const response = await fetch("/interaction/build/counter.wasm");
+      if (!response.ok) throw new Error(`Could not load counter.wasm (HTTP ${response.status})`);
+      const bytes = await response.arrayBuffer();
+      const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
+      void go.run(instance).catch(showError);
+
+      for (let attempt = 0; attempt < 500; attempt++) {
+        if (globalThis.gobiCounter && typeof globalThis.gobiCounter.init === "function") break;
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      }
+      if (!globalThis.gobiCounter || typeof globalThis.gobiCounter.init !== "function") {
+        throw new Error("The Go counter did not publish its runtime API");
+      }
+
+      host = createBackendHost(root, globalThis.gobiCounter, {
+        dom: mountGobi,
+        react: mountGobiReact,
+      }, "dom");
+      refreshSnapshots();
+    }
+
+    start().catch(showError);
+  </script>
+</body>
+</html>
