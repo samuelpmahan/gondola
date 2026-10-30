@@ -1,0 +1,17 @@
+{
+  "schema": "chainspot.renderer-replacement-packet-receipt/v1",
+  "packet_id": "E4",
+  "worker": "W6",
+  "agent": "/root/input_harness",
+  "decision": "accepted",
+  "decision_by": "/root",
+  "summary": "Lead inspected source and test contracts, independently passed controlled-input Node tests under Node22/Chromium153. Author reports current fixed-only replay of8scripts/74observations with16native matches and9adversarial probes; caret determinism and runtime isolation probe repaired before full run. Full two-seed suite now running.",
+  "recorded_at": "2026-10-30T08:26:45.634347+00:00",
+  "source_report": "# E4 author report\n\n## Owned implementation\n\n- `controlled-input/reference.mjs` owns an independent React 19 editor model and tree projection. Its edit, save, and reset transitions do not read Go snapshots.\n- `controlled-input/scripts.mjs` provides fixed boundary cases and reproducible generated scripts. The two default seeds are `20261030` and `20261031`; each generated script is limited to 80 actions.\n- `controlled-input/check.mjs` runs two captured Go WASM instances through the unchanged backend host and the DOM/React mounts, with a separate reference root. It uses Playwright fills, per-character typing, and native button clicks; captures snapshots and actual DOM after each observation; saves full traces and CompareInteraction inputs under the ignored build directory; and calls E5's `runAdversarial(page)`.\n- `controlled-input/harness.test.mjs` covers negative snapshot, DOM, value-property, disabled-property, and renderer-reported DOM comparisons, native envelope extras, fixed cases, seeds, and CLI validation.\n\n## Verification\n\n- Node 22.23.4 syntax checks passed for all four owned modules.\n- `node --test controlled-input/harness.test.mjs`: 10/10 passed.\n- Fixed-only Chromium diagnostic, seed `20261030`, `--cases 0`: 8 fixed scenarios, 74 observations, zero mismatches, 16/16 native `CompareInteraction` comparisons matched, and 9/9 adversarial probes passed. Browser: Chromium 153.0.8010.0.\n- Full diagnostic: `controlled-input/build/diagnostic-fixed.json` (build-ignored).\n\nThe typing replay focuses each new input and places the caret at the current value's end before a multi-key sequence. This lets the harness verify ordinary typing after renderer swaps without making swap selection preservation part of the contract. The Go instance isolation probe dispatches a disabled Save against the untouched second runtime and verifies it stays at zero with an empty message log; it does not reinitialize that runtime for the observation.\n\nThis lane did not run the 100-case-per-seed suite. Root owns the full generated run and evidence aggregation.\n",
+  "deliverables": [
+    "controlled-input/reference.mjs",
+    "controlled-input/check.mjs",
+    "controlled-input/scripts.mjs",
+    "controlled-input/harness.test.mjs"
+  ]
+}

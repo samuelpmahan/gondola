@@ -1,0 +1,242 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-renderer-replacement-cross-review",
+    "scope": "independent-author-review"
+  },
+  "workers": [
+    "W1",
+    "W2",
+    "W3",
+    "W4",
+    "W5",
+    "W6"
+  ],
+  "jobs": [
+    {
+      "id": "XR-E1",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "go-contract-runtime",
+      "author_packet": "E1",
+      "author_worker": "W4",
+      "author_agent": "/root/input_go",
+      "author_task_kind": "implementation",
+      "author_scope": "go-contract-runtime",
+      "author_packet_fields": {
+        "id": "E1",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "go-contract-runtime"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E1-accepted.json",
+      "author_receipt_sha256": "a463a95cd687a711d4deb344c28d3070ab7d5d39afaded13e3ea92fbffed6f2d",
+      "source_paths": [
+        "inputbinding/binding.go",
+        "inputbinding/binding_test.go",
+        "editor/editor.go",
+        "editor/session.go",
+        "editor/editor_test.go",
+        "cmd/editor-wasm/main_wasm.go",
+        "cmd/editor-wasm/main_stub.go"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files."
+    },
+    {
+      "id": "XR-E2",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "dom-renderer-protocol",
+      "author_packet": "E2",
+      "author_worker": "W5",
+      "author_agent": "/root/input_dom",
+      "author_task_kind": "implementation",
+      "author_scope": "dom-renderer-protocol",
+      "author_packet_fields": {
+        "id": "E2",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "dom-renderer-protocol"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E2-accepted.json",
+      "author_receipt_sha256": "77f03aad23075a31451beb95064f5cf505cd27ecb70ef92e210807d79005e483",
+      "source_paths": [
+        "controlled-input/protocol.mjs",
+        "controlled-input/dom.mjs",
+        "controlled-input/protocol.test.mjs",
+        "controlled-input/dom.test.mjs"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files."
+    },
+    {
+      "id": "XR-E3",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "react-renderer",
+      "author_packet": "E3",
+      "author_worker": "W1",
+      "author_agent": "/root/input_react",
+      "author_task_kind": "implementation",
+      "author_scope": "react-renderer",
+      "author_packet_fields": {
+        "id": "E3",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "react-renderer"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E3-accepted.json",
+      "author_receipt_sha256": "1190fdde7e1354eecd931a17d51022a05b4e60f90f861fb34e57e9d0424d2d29",
+      "source_paths": [
+        "controlled-input/react.mjs",
+        "controlled-input/react.test.mjs"
+      ],
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files."
+    },
+    {
+      "id": "XR-E4",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "reference-harness",
+      "author_packet": "E4",
+      "author_worker": "W6",
+      "author_agent": "/root/input_harness",
+      "author_task_kind": "implementation",
+      "author_scope": "reference-harness",
+      "author_packet_fields": {
+        "id": "E4",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "reference-harness"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E4-accepted.json",
+      "author_receipt_sha256": "795653745aa756a4a9e62c051f7894aaa132441ad61cf47ff8fa987460171b36",
+      "source_paths": [
+        "controlled-input/reference.mjs",
+        "controlled-input/check.mjs",
+        "controlled-input/scripts.mjs",
+        "controlled-input/harness.test.mjs"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files."
+    },
+    {
+      "id": "XR-E5",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "adversarial-validation",
+      "author_packet": "E5",
+      "author_worker": "W3",
+      "author_agent": "/root/input_adversarial",
+      "author_task_kind": "implementation",
+      "author_scope": "adversarial-validation",
+      "author_packet_fields": {
+        "id": "E5",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "adversarial-validation"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E5-accepted.json",
+      "author_receipt_sha256": "a05c8799d3de6162ce8822439aa3273bc1dc7abe8064daf22ae5c57c9383c8e6",
+      "source_paths": [
+        "controlled-input/adversarial.mjs",
+        "controlled-input/adversarial.test.mjs"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files."
+    },
+    {
+      "id": "XR-E6",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "demo-runner-documentation",
+      "author_packet": "E6",
+      "author_worker": "W2",
+      "author_agent": "/root/input_demo",
+      "author_task_kind": "implementation",
+      "author_scope": "demo-runner-documentation",
+      "author_packet_fields": {
+        "id": "E6",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "demo-runner-documentation"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E6-accepted.json",
+      "author_receipt_sha256": "2547fff8b9237069765cc8150734074a12dce4afef5bd92b49a90b8dce085108",
+      "source_paths": [
+        "controlled-input/demo.html",
+        "controlled-input/demo.mjs",
+        "controlled-input/demo-smoke.mjs",
+        "controlled-input/README.md",
+        "run-controlled-input.sh",
+        ".github/workflows/controlled-input.yml"
+      ],
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files."
+    }
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 100,
+    "repair_priority": 100
+  }
+}

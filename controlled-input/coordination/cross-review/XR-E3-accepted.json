@@ -1,0 +1,12 @@
+{
+  "schema": "chainspot.renderer-replacement-review-receipt/v1",
+  "packet_id": "XR-E3",
+  "worker": "W5",
+  "agent": "/root/input_dom",
+  "decision": "accepted",
+  "decision_by": "/root/input_dom",
+  "summary": "# XR-E3 final independent review\n\n**Decision: ACCEPT after amendment.** The initial mismatch and amend-required decision are preserved in [XR-E3-initial-report.md](./XR-E3-initial-report.md). The React author aligned the adapter with the shared protocol and DOM renderer, then added browser coverage for the mismatched valid snapshots.\n\n## Amendment verified\n\n- React now accepts a true `disabled` flag on text inputs as well as buttons.\n- Input and click dispatch paths both suppress events when the current protocol node or DOM control is disabled.\n- React accepts `aria-label` on any supported element, matching the shared protocol and DOM renderer.\n- The browser test mounts a protocol-valid disabled input and an aria-labeled Save button in both renderers, checks raw `innerHTML` and disabled-path parity, dispatches synthetic input events, and verifies that neither runtime receives a step.\n\n## Verification\n\nCommand run independently after the amendment:\n\n```sh\nCHROMIUM_EXECUTABLE_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test controlled-input/react.test.mjs\n```\n\nResult: 3 tests passed, 0 failed. This includes initial validation before React claims a reusable root, unsupported-semantics rejection, real Chromium typing with `currentTarget.value`, synchronous snapshot rendering, input-node identity, literal click argument preservation, and the amended cross-renderer attribute/disabled-input parity probe.\n\nThe source review also confirms renderer-local errors are retained and fence later callbacks, and React unmount clears its path refs. The full two-seed harness was not run by this review lane.\n\n## Scope\n\nNo implementation or historical files were edited by the reviewer. The E3 author made the amendment and added its targeted browser coverage.\n",
+  "recorded_at": "2026-10-30T08:36:30.685041+00:00",
+  "source_report_path": "controlled-input/coordination/cross-review/XR-E3-report.md",
+  "source_report_sha256": "7a3331a1fa7fa6346ff4ab26ffd6338a4d86572bc8ac35ffc06d242cd4a8e5b4"
+}

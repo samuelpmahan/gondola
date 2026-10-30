@@ -1,0 +1,452 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-renderer-replacement-cross-review",
+    "scope": "independent-author-review"
+  },
+  "workers": {
+    "W1": {
+      "job": "XR-E2",
+      "agent": "/root/input_react"
+    },
+    "W2": {
+      "job": "XR-E1",
+      "agent": "/root/input_demo"
+    },
+    "W3": {
+      "job": "XR-E4",
+      "agent": "/root/input_adversarial"
+    },
+    "W4": {
+      "job": "XR-E5",
+      "agent": "/root/input_go"
+    },
+    "W5": {
+      "job": "XR-E3",
+      "agent": "/root/input_dom"
+    },
+    "W6": {
+      "job": "XR-E6",
+      "agent": "/root/input_harness"
+    }
+  },
+  "jobs": {
+    "XR-E1": {
+      "id": "XR-E1",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "go-contract-runtime",
+      "author_packet": "E1",
+      "author_worker": "W4",
+      "author_agent": "/root/input_go",
+      "author_task_kind": "implementation",
+      "author_scope": "go-contract-runtime",
+      "author_packet_fields": {
+        "id": "E1",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "go-contract-runtime"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E1-accepted.json",
+      "author_receipt_sha256": "a463a95cd687a711d4deb344c28d3070ab7d5d39afaded13e3ea92fbffed6f2d",
+      "source_paths": [
+        "inputbinding/binding.go",
+        "inputbinding/binding_test.go",
+        "editor/editor.go",
+        "editor/session.go",
+        "editor/editor_test.go",
+        "cmd/editor-wasm/main_wasm.go",
+        "cmd/editor-wasm/main_stub.go"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files.",
+      "status": "running",
+      "worker": "W2",
+      "started_at": "2026-10-30T08:27:24.283867+00:00",
+      "finished_at": null
+    },
+    "XR-E2": {
+      "id": "XR-E2",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "dom-renderer-protocol",
+      "author_packet": "E2",
+      "author_worker": "W5",
+      "author_agent": "/root/input_dom",
+      "author_task_kind": "implementation",
+      "author_scope": "dom-renderer-protocol",
+      "author_packet_fields": {
+        "id": "E2",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "dom-renderer-protocol"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E2-accepted.json",
+      "author_receipt_sha256": "77f03aad23075a31451beb95064f5cf505cd27ecb70ef92e210807d79005e483",
+      "source_paths": [
+        "controlled-input/protocol.mjs",
+        "controlled-input/dom.mjs",
+        "controlled-input/protocol.test.mjs",
+        "controlled-input/dom.test.mjs"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files.",
+      "status": "running",
+      "worker": "W1",
+      "started_at": "2026-10-30T08:27:24.430855+00:00",
+      "finished_at": null
+    },
+    "XR-E3": {
+      "id": "XR-E3",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "react-renderer",
+      "author_packet": "E3",
+      "author_worker": "W1",
+      "author_agent": "/root/input_react",
+      "author_task_kind": "implementation",
+      "author_scope": "react-renderer",
+      "author_packet_fields": {
+        "id": "E3",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "react-renderer"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E3-accepted.json",
+      "author_receipt_sha256": "1190fdde7e1354eecd931a17d51022a05b4e60f90f861fb34e57e9d0424d2d29",
+      "source_paths": [
+        "controlled-input/react.mjs",
+        "controlled-input/react.test.mjs"
+      ],
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files.",
+      "status": "running",
+      "worker": "W5",
+      "started_at": "2026-10-30T08:27:24.013963+00:00",
+      "finished_at": null
+    },
+    "XR-E4": {
+      "id": "XR-E4",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "reference-harness",
+      "author_packet": "E4",
+      "author_worker": "W6",
+      "author_agent": "/root/input_harness",
+      "author_task_kind": "implementation",
+      "author_scope": "reference-harness",
+      "author_packet_fields": {
+        "id": "E4",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "reference-harness"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E4-accepted.json",
+      "author_receipt_sha256": "795653745aa756a4a9e62c051f7894aaa132441ad61cf47ff8fa987460171b36",
+      "source_paths": [
+        "controlled-input/reference.mjs",
+        "controlled-input/check.mjs",
+        "controlled-input/scripts.mjs",
+        "controlled-input/harness.test.mjs"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files.",
+      "status": "running",
+      "worker": "W3",
+      "started_at": "2026-10-30T08:27:24.727779+00:00",
+      "finished_at": null
+    },
+    "XR-E5": {
+      "id": "XR-E5",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "adversarial-validation",
+      "author_packet": "E5",
+      "author_worker": "W3",
+      "author_agent": "/root/input_adversarial",
+      "author_task_kind": "implementation",
+      "author_scope": "adversarial-validation",
+      "author_packet_fields": {
+        "id": "E5",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "adversarial-validation"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E5-accepted.json",
+      "author_receipt_sha256": "a05c8799d3de6162ce8822439aa3273bc1dc7abe8064daf22ae5c57c9383c8e6",
+      "source_paths": [
+        "controlled-input/adversarial.mjs",
+        "controlled-input/adversarial.test.mjs"
+      ],
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files.",
+      "status": "running",
+      "worker": "W4",
+      "started_at": "2026-10-30T08:27:24.145178+00:00",
+      "finished_at": null
+    },
+    "XR-E6": {
+      "id": "XR-E6",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "stage": "cross_review",
+      "packet_type": "independent_author_review",
+      "lane": "demo-runner-documentation",
+      "author_packet": "E6",
+      "author_worker": "W2",
+      "author_agent": "/root/input_demo",
+      "author_task_kind": "implementation",
+      "author_scope": "demo-runner-documentation",
+      "author_packet_fields": {
+        "id": "E6",
+        "kind": "extract",
+        "task_kind": "implementation",
+        "scope": "demo-runner-documentation"
+      },
+      "author_decision": "accepted",
+      "author_receipt_path": "controlled-input/coordination/E6-accepted.json",
+      "author_receipt_sha256": "2547fff8b9237069765cc8150734074a12dce4afef5bd92b49a90b8dce085108",
+      "source_paths": [
+        "controlled-input/demo.html",
+        "controlled-input/demo.mjs",
+        "controlled-input/demo-smoke.mjs",
+        "controlled-input/README.md",
+        "run-controlled-input.sh",
+        ".github/workflows/controlled-input.yml"
+      ],
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Independently inspect the accepted packet's listed deliverables and direct call sites. Report concrete correctness, API, boundary, and proof gaps without editing the lane owner's files.",
+      "status": "running",
+      "worker": "W6",
+      "started_at": "2026-10-30T08:27:24.567839+00:00",
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T08:26:46.045840+00:00",
+      "ready_jobs": [
+        "XR-E1",
+        "XR-E2",
+        "XR-E3",
+        "XR-E4",
+        "XR-E5",
+        "XR-E6"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W5": "XR-E3",
+        "W4": "XR-E5",
+        "W2": "XR-E1",
+        "W1": "XR-E2",
+        "W6": "XR-E6",
+        "W3": "XR-E4"
+      },
+      "dispatch": {
+        "W5": "XR-E3",
+        "W4": "XR-E5",
+        "W2": "XR-E1",
+        "W1": "XR-E2",
+        "W6": "XR-E6",
+        "W3": "XR-E4"
+      },
+      "native_seconds": 0.0045882420090492815,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "XR-E1": 1,
+        "XR-E2": 1,
+        "XR-E3": 1,
+        "XR-E4": 1,
+        "XR-E5": 1,
+        "XR-E6": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-E1": [
+          "W1",
+          "W2",
+          "W3",
+          "W5",
+          "W6"
+        ],
+        "XR-E2": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W6"
+        ],
+        "XR-E3": [
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-E4": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5"
+        ],
+        "XR-E5": [
+          "W1",
+          "W2",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-E6": [
+          "W1",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-E1": 100,
+        "XR-E2": 100,
+        "XR-E3": 100,
+        "XR-E4": 100,
+        "XR-E5": 100,
+        "XR-E6": 100
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T08:27:24.013963+00:00",
+      "worker": "W5",
+      "job": "XR-E3",
+      "agent": "/root/input_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T08:27:24.145178+00:00",
+      "worker": "W4",
+      "job": "XR-E5",
+      "agent": "/root/input_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T08:27:24.283867+00:00",
+      "worker": "W2",
+      "job": "XR-E1",
+      "agent": "/root/input_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T08:27:24.430855+00:00",
+      "worker": "W1",
+      "job": "XR-E2",
+      "agent": "/root/input_react"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T08:27:24.567839+00:00",
+      "worker": "W6",
+      "job": "XR-E6",
+      "agent": "/root/input_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T08:27:24.727779+00:00",
+      "worker": "W3",
+      "job": "XR-E4",
+      "agent": "/root/input_adversarial"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 100,
+    "repair_priority": 100
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "chainspot.renderer-replacement-packet-receipt/v1",
+  "packet_id": "E2",
+  "worker": "W5",
+  "agent": "/root/input_dom",
+  "decision": "accepted",
+  "decision_by": "/root",
+  "summary": "Lead inspected source and disjoint ownership; all 30 controlled-input Node tests pass independently under Node22/Chromium153. Demo author passed eight real-Go observations. Full integrated seeded verification is running separately.",
+  "recorded_at": "2026-10-30T08:25:22.946531+00:00",
+  "source_report": "# E2 author report: browser protocol and DOM renderer\n\n## Delivered\n\n- Added `protocol.mjs` with strict snapshot, Gobi node, attribute, literal handler, message, and binding validation. The shared browser subset supports `div`, `p`, `input`, and `button`, text/fragments, the editor's inert attributes, and literal `click` handlers. It keeps application state and message names generic.\n- Exported `validateSnapshot`, `clone`, `normalizePath`, `nodeAtPath`, `bindingAt`, `literalHandlerAt`, `isDisabled`, and the Gobi kind constants for downstream renderers.\n- Added `dom.mjs` with `mountEditorDOM(root, runtime)` matching the renderer-host API. It patches stable nodes, reads bound input data from `event.currentTarget.value`, forwards literal `Arg` values unchanged, suppresses disabled events, and fences detached, stale, and unmounted nodes.\n- The renderer validates the complete next snapshot before changing its accepted snapshot or DOM. A dispatch, validation, or paint error records `lastError()` and fences later events; a failed snapshot does not become the renderer's accepted state.\n- Input attributes serialize as ordinary attributes, then `type`, then `value`, matching React's observed Chromium DOM output while leaving the snapshot's Go attribute order untouched.\n- Added protocol and DOM unit tests with valid and invalid fixtures, event-value transport, literal-argument transport, focus and input identity across edits, disabled handling, stale-event fences, and failed-snapshot handling.\n\n## Verification\n\nCommand:\n\n```sh\n/tmp/gondola-node22/node_modules/node/bin/node --test controlled-input/protocol.test.mjs controlled-input/dom.test.mjs\n```\n\nResult: 11 tests passed, 0 failed.\n\nThe E6 demo lane separately reported a passing browser smoke with DOM/React HTML equality and unsaved state retained across a renderer swap. E3 observed Chromium 153 input serialization as `aria-label`, `type`, then `value`; E2 implements that order.\n\n## Scope\n\nThe browser validator deliberately rejects other tags, attributes, style declarations, keys, and literal event types. Those semantics are outside the frozen controlled-input milestone. This lane did not change Go application transitions, the backend host, or inherited files.\n",
+  "deliverables": [
+    "controlled-input/protocol.mjs",
+    "controlled-input/dom.mjs",
+    "controlled-input/protocol.test.mjs",
+    "controlled-input/dom.test.mjs"
+  ]
+}
