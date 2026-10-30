@@ -1,0 +1,31 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-multi-root-host-contract-repair"
+  },
+  "workers": [
+    "W2",
+    "W3"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-RH-"
+  },
+  "policy": {
+    "extract_priority": 300,
+    "review_priority": 400,
+    "repair_priority": 500
+  },
+  "jobs": [
+    {
+      "id": "RH-E4",
+      "kind": "extract",
+      "repair_of": "E4",
+      "allow_workers": [
+        "W3"
+      ],
+      "owner": "multi-root host/runtime only",
+      "summary": "make raw bridge error frames part of the host contract"
+    }
+  ]
+}

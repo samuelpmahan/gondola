@@ -1,0 +1,122 @@
+{
+  "schema": "gobi.multi-root-evidence/v1",
+  "job": "E6",
+  "worker": "W4",
+  "status": "pending_root_integration",
+  "observed_toolchain": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "playwright": "1.64.1",
+    "chromium": "153.0.8010.0",
+    "chromium_executable": "/tmp/chromium",
+    "native_rebalancer": "1.0.4"
+  },
+  "packet_checks": [
+    {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --check multi-root/demo.mjs",
+      "status": "passed",
+      "scope": "syntax_only"
+    },
+    {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --check multi-root/browser-smoke.mjs",
+      "status": "passed",
+      "scope": "syntax_only"
+    },
+    {
+      "command": "bash -n run-multi-root.sh",
+      "status": "passed",
+      "scope": "syntax_only"
+    },
+    {
+      "command": "GOOS=js GOARCH=wasm /tmp/gondola-go/bin/go build -o multi-root/build/multi-root.wasm ./cmd/multi-root-wasm",
+      "status": "passed",
+      "scope": "WASM_build",
+      "sha256": "e59bc84cce3238b8ade5c10f7fe74ffcd14dcae8bcfa2ac1158ce7dd7d78ec11"
+    },
+    {
+      "command": "GOOS=js GOARCH=wasm /tmp/gondola-go/bin/go build -o multi-root/build/godom.wasm ./cmd/godom-wasm",
+      "status": "passed",
+      "scope": "WASM_build",
+      "sha256": "2797e238bb5bb777f99aa23f83ad0d03ee7c6c3c6ec0597af5c919ded723aa28"
+    },
+    {
+      "command": "cp $(/tmp/gondola-go/bin/go env GOROOT)/lib/wasm/wasm_exec.js multi-root/build/wasm_exec.js",
+      "status": "passed",
+      "scope": "matching_Go_1.24.0_runtime",
+      "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14"
+    },
+    {
+      "command": "NODE_PATH=interaction/node_modules interaction/node_modules/.bin/esbuild keyed-editor/react.mjs --bundle --format=esm --platform=browser --outfile=multi-root/build/react.bundle.mjs",
+      "status": "passed",
+      "scope": "React_renderer_bundle",
+      "sha256": "091e9e8a2f17a9d148803f568720614a911cd22d0fed6db7cbd55c47597e17a6"
+    },
+    {
+      "command": "NODE_PATH=interaction/node_modules interaction/node_modules/.bin/esbuild multi-root/reference.mjs --bundle --format=esm --platform=browser --outfile=multi-root/build/reference.bundle.mjs",
+      "status": "passed",
+      "scope": "independent_reference_bundle",
+      "sha256": "748cb44c0bd4bdd8e54386bb5370b56cc63476176d9144e1b413128d08e0ddd6"
+    }
+  ],
+  "browser_demo_smoke": {
+    "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node multi-root/browser-smoke.mjs",
+    "status": "passed",
+    "browser": "Chromium 153.0.8010.0",
+    "assertions": [
+      "three distinct DOM, React, and GoDOM sessions and HTTP lanes",
+      "root-local DOM-to-React swap restores backward selection and preserves sibling inputs",
+      "same local request ID 1 held in two independent lanes",
+      "disposing A cancels A while B remains held and completes",
+      "late release for disposed A is rejected with HTTP 409",
+      "fresh remount creates empty session state and a new lane"
+    ],
+    "screenshot": "multi-root/evidence/demo-three-roots-held.png",
+    "screenshot_sha256": "2bbe5ec09b265c0c037a5183a12fde48adbff21010e36d4937f2d6cb5a49fcdb"
+  },
+  "repairs": [
+    "Forwarded the bridge list method required by the multi-root runtime contract and made startup errors fail promptly in the browser smoke.",
+    "Scoped the save-button locator to stable app-root selectors and preserved unchanged HTTP request controls across polling refreshes so clicks are not detached before dispatch.",
+    "Classified the one expected late-release HTTP 409 separately from uncaught browser errors.",
+    "The first packet-local build omitted GOOS/GOARCH and produced a native executable; rebuilt both WASM targets with the runner's GOOS=js GOARCH=wasm settings before the passing browser smoke."
+  ],
+  "full_runner": {
+    "command": "bash run-multi-root.sh",
+    "status": "pending",
+    "reason": "root integration run not yet complete"
+  },
+  "replay": {
+    "seeds": [20261030, 20261031],
+    "fixed_scripts": 3,
+    "generated_cases_per_seed": 30,
+    "max_actions_per_generated_case": 40,
+    "status": "pending",
+    "report_fields": [
+      "status", "seeds", "scripts", "fixed_scripts", "generated_cases_per_seed",
+      "max_actions_per_generated_case", "actions", "observations", "native_comparisons",
+      "native_matched", "mismatches", "mismatch_count", "required_channels",
+      "negative_controls", "browser", "toolchain", "scenarios", "native_inputs",
+      "native_comparison", "commands", "limits"
+    ],
+    "mismatch_fields": ["seed", "script", "tick", "actor", "channel", "expected", "actual", "action"],
+    "required_channels_and_negative_controls": "pending root replay output"
+  },
+  "preservation_reconnaissance": {
+    "prior_delivery_pins": 650,
+    "root_sha256_entries": 24,
+    "source": "root coordinator reconnaissance message",
+    "final_recheck": "pending"
+  },
+  "author_allocation": {
+    "source": "multi-root/coordination/native/epoch-00.json",
+    "native_rebalancer": "1.0.4",
+    "exact_score": 600,
+    "native_score": 600,
+    "broken_constraints": 0
+  },
+  "cross_reviews": {
+    "required": 6,
+    "status": "pending_root_reconciliation"
+  }
+}

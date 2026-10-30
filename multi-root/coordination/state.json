@@ -1,0 +1,805 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-multi-root-authors"
+  },
+  "workers": {
+    "W1": {
+      "job": null,
+      "agent": null
+    },
+    "W2": {
+      "job": null,
+      "agent": null
+    },
+    "W3": {
+      "job": null,
+      "agent": null
+    },
+    "W4": {
+      "job": null,
+      "agent": null
+    },
+    "W5": {
+      "job": null,
+      "agent": null
+    },
+    "W6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "E1": {
+      "id": "E1",
+      "kind": "extract",
+      "owner": "multisession/",
+      "summary": "typed Go session manager",
+      "status": "done",
+      "worker": "W6",
+      "started_at": "2026-10-30T14:08:47.296787+00:00",
+      "finished_at": "2026-10-30T14:12:47.508645+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/E1.json"
+    },
+    "E2": {
+      "id": "E2",
+      "kind": "extract",
+      "owner": "cmd/multi-root-wasm/",
+      "summary": "strict multi-session WASM bridge",
+      "status": "done",
+      "worker": "W2",
+      "started_at": "2026-10-30T14:08:47.200062+00:00",
+      "finished_at": "2026-10-30T14:14:26.270538+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/E2.json"
+    },
+    "E3": {
+      "id": "E3",
+      "kind": "extract",
+      "owner": "cmd/godom-wasm/ and renderer-conformance adapter",
+      "summary": "multi-instance GoDOM bridge",
+      "status": "done",
+      "worker": "W5",
+      "started_at": "2026-10-30T14:08:46.900178+00:00",
+      "finished_at": "2026-10-30T14:13:53.490351+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/E3.json"
+    },
+    "E4": {
+      "id": "E4",
+      "kind": "extract",
+      "owner": "multi-root host/runtime only",
+      "summary": "JavaScript composition host",
+      "status": "done",
+      "worker": "W3",
+      "started_at": "2026-10-30T14:08:47.398791+00:00",
+      "finished_at": "2026-10-30T14:15:43.035317+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/E4.json"
+    },
+    "E5": {
+      "id": "E5",
+      "kind": "extract",
+      "owner": "multi-root replay/oracle only",
+      "summary": "deterministic oracle and replay",
+      "status": "done",
+      "worker": "W1",
+      "started_at": "2026-10-30T14:08:46.993942+00:00",
+      "finished_at": "2026-10-30T14:57:36.103832+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/E5.json"
+    },
+    "E6": {
+      "id": "E6",
+      "kind": "extract",
+      "owner": "multi-root demo/runner/CI/docs only",
+      "summary": "executable delivery and evidence",
+      "status": "done",
+      "worker": "W4",
+      "started_at": "2026-10-30T14:08:47.090503+00:00",
+      "finished_at": "2026-10-30T14:38:09.776235+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/E6.json"
+    },
+    "XR-E1": {
+      "id": "XR-E1",
+      "kind": "review",
+      "depends_on": "E1",
+      "status": "done",
+      "worker": "W5",
+      "started_at": "2026-10-30T14:14:01.324515+00:00",
+      "finished_at": "2026-10-30T14:16:59.589361+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-E1.json"
+    },
+    "XR-E2": {
+      "id": "XR-E2",
+      "kind": "review",
+      "depends_on": "E2",
+      "status": "done",
+      "worker": "W3",
+      "started_at": "2026-10-30T14:15:53.110649+00:00",
+      "finished_at": "2026-10-30T14:18:05.338562+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-E2.json"
+    },
+    "XR-E3": {
+      "id": "XR-E3",
+      "kind": "review",
+      "depends_on": "E3",
+      "status": "done",
+      "worker": "W6",
+      "started_at": "2026-10-30T14:14:01.426283+00:00",
+      "finished_at": "2026-10-30T14:16:52.555724+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-E3.json"
+    },
+    "XR-E4": {
+      "id": "XR-E4",
+      "kind": "review",
+      "depends_on": "E4",
+      "status": "done",
+      "worker": "W2",
+      "started_at": "2026-10-30T14:15:53.205036+00:00",
+      "finished_at": "2026-10-30T14:18:36.937641+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-E4.json"
+    },
+    "XR-E5": {
+      "id": "XR-E5",
+      "kind": "review",
+      "depends_on": "E5",
+      "status": "done",
+      "worker": "W4",
+      "started_at": "2026-10-30T14:57:39.093657+00:00",
+      "finished_at": "2026-10-30T15:00:57.430880+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-E5.json"
+    },
+    "XR-E6": {
+      "id": "XR-E6",
+      "kind": "review",
+      "depends_on": "E6",
+      "status": "done",
+      "worker": "W5",
+      "started_at": "2026-10-30T14:38:15.422315+00:00",
+      "finished_at": "2026-10-30T14:41:42.159527+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/XR-E6.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T14:08:17.124814+00:00",
+      "ready_jobs": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W5": "E3",
+        "W1": "E5",
+        "W4": "E6",
+        "W2": "E2",
+        "W6": "E1",
+        "W3": "E4"
+      },
+      "dispatch": {
+        "W5": "E3",
+        "W1": "E5",
+        "W4": "E6",
+        "W2": "E2",
+        "W6": "E1",
+        "W3": "E4"
+      },
+      "native_seconds": 0.006336937003652565,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E1": 1,
+        "E2": 1,
+        "E3": 1,
+        "E4": 1,
+        "E5": 1,
+        "E6": 1,
+        "XR-E1": 0,
+        "XR-E2": 0,
+        "XR-E3": 0,
+        "XR-E4": 0,
+        "XR-E5": 0,
+        "XR-E6": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E1": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E2": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E3": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E4": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E5": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "E6": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ]
+      },
+      "weights": {
+        "E1": 100,
+        "E2": 100,
+        "E3": 100,
+        "E4": 100,
+        "E5": 100,
+        "E6": 100
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:08:46.900178+00:00",
+      "worker": "W5",
+      "job": "E3",
+      "agent": "/root/multiroot_godom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:08:46.993942+00:00",
+      "worker": "W1",
+      "job": "E5",
+      "agent": "/root/multiroot_replay"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:08:47.090503+00:00",
+      "worker": "W4",
+      "job": "E6",
+      "agent": "/root/multiroot_delivery"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:08:47.200062+00:00",
+      "worker": "W2",
+      "job": "E2",
+      "agent": "/root/multiroot_bridge"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:08:47.296787+00:00",
+      "worker": "W6",
+      "job": "E1",
+      "agent": "/root/multiroot_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:08:47.398791+00:00",
+      "worker": "W3",
+      "job": "E4",
+      "agent": "/root/multiroot_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:12:47.508645+00:00",
+      "worker": "W6",
+      "job": "E1"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:13:53.490351+00:00",
+      "worker": "W5",
+      "job": "E3"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T14:13:53.592359+00:00",
+      "ready_jobs": [
+        "XR-E1",
+        "XR-E3"
+      ],
+      "pinned_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4"
+      ],
+      "assignments": {
+        "W6": "XR-E3",
+        "W5": "XR-E1",
+        "W3": "E4",
+        "W1": "E5",
+        "W4": "E6",
+        "W2": "E2"
+      },
+      "dispatch": {
+        "W6": "XR-E3",
+        "W5": "XR-E1"
+      },
+      "native_seconds": 0.00525083600950893,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E1": 0,
+        "E2": 1,
+        "E3": 0,
+        "E4": 1,
+        "E5": 1,
+        "E6": 1,
+        "XR-E1": 1,
+        "XR-E2": 0,
+        "XR-E3": 1,
+        "XR-E4": 0,
+        "XR-E5": 0,
+        "XR-E6": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-E1": [
+          "W5"
+        ],
+        "XR-E3": [
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-E1": 200,
+        "XR-E3": 200
+      },
+      "agent_by_worker": {
+        "W1": "/root/multiroot_replay",
+        "W2": "/root/multiroot_bridge",
+        "W3": "/root/multiroot_host",
+        "W4": "/root/multiroot_delivery",
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:14:01.324515+00:00",
+      "worker": "W5",
+      "job": "XR-E1",
+      "agent": "/root/multiroot_godom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:14:01.426283+00:00",
+      "worker": "W6",
+      "job": "XR-E3",
+      "agent": "/root/multiroot_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:14:26.270538+00:00",
+      "worker": "W2",
+      "job": "E2"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:15:43.035317+00:00",
+      "worker": "W3",
+      "job": "E4"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-30T14:15:43.168120+00:00",
+      "ready_jobs": [
+        "XR-E2",
+        "XR-E4"
+      ],
+      "pinned_workers": [
+        "W1",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "assignments": {
+        "W6": "XR-E3",
+        "W5": "XR-E1",
+        "W1": "E5",
+        "W4": "E6",
+        "W3": "XR-E2",
+        "W2": "XR-E4"
+      },
+      "dispatch": {
+        "W3": "XR-E2",
+        "W2": "XR-E4"
+      },
+      "native_seconds": 0.005127393000293523,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 1,
+        "E6": 1,
+        "XR-E1": 1,
+        "XR-E2": 1,
+        "XR-E3": 1,
+        "XR-E4": 1,
+        "XR-E5": 0,
+        "XR-E6": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-E2": [
+          "W3"
+        ],
+        "XR-E4": [
+          "W2"
+        ]
+      },
+      "weights": {
+        "XR-E2": 200,
+        "XR-E4": 200
+      },
+      "agent_by_worker": {
+        "W1": "/root/multiroot_replay",
+        "W2": null,
+        "W3": null,
+        "W4": "/root/multiroot_delivery",
+        "W5": "/root/multiroot_godom",
+        "W6": "/root/multiroot_go"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:15:53.110649+00:00",
+      "worker": "W3",
+      "job": "XR-E2",
+      "agent": "/root/multiroot_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:15:53.205036+00:00",
+      "worker": "W2",
+      "job": "XR-E4",
+      "agent": "/root/multiroot_bridge"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:16:52.555724+00:00",
+      "worker": "W6",
+      "job": "XR-E3"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:16:59.589361+00:00",
+      "worker": "W5",
+      "job": "XR-E1"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:18:05.338562+00:00",
+      "worker": "W3",
+      "job": "XR-E2"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:18:36.937641+00:00",
+      "worker": "W2",
+      "job": "XR-E4"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:38:09.776235+00:00",
+      "worker": "W4",
+      "job": "E6"
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-30T14:38:09.927184+00:00",
+      "ready_jobs": [
+        "XR-E6"
+      ],
+      "pinned_workers": [
+        "W1"
+      ],
+      "assignments": {
+        "W2": "BENCH",
+        "W3": "BENCH",
+        "W4": "BENCH",
+        "W6": "BENCH",
+        "W1": "E5",
+        "W5": "XR-E6"
+      },
+      "dispatch": {
+        "W5": "XR-E6"
+      },
+      "native_seconds": 0.008342134999111295,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 1,
+        "E6": 0,
+        "XR-E1": 0,
+        "XR-E2": 0,
+        "XR-E3": 0,
+        "XR-E4": 0,
+        "XR-E5": 0,
+        "XR-E6": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-E6": [
+          "W2",
+          "W3",
+          "W5",
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-E6": 200
+      },
+      "agent_by_worker": {
+        "W1": "/root/multiroot_replay",
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:38:15.422315+00:00",
+      "worker": "W5",
+      "job": "XR-E6",
+      "agent": "/root/multiroot_godom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:41:42.159527+00:00",
+      "worker": "W5",
+      "job": "XR-E6"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T14:57:36.103832+00:00",
+      "worker": "W1",
+      "job": "E5"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-30T14:57:36.246146+00:00",
+      "ready_jobs": [
+        "XR-E5"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W5": "BENCH",
+        "W1": "BENCH",
+        "W3": "BENCH",
+        "W6": "BENCH",
+        "W2": "BENCH",
+        "W4": "XR-E5"
+      },
+      "dispatch": {
+        "W4": "XR-E5"
+      },
+      "native_seconds": 0.00667804699332919,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "XR-E1": 0,
+        "XR-E2": 0,
+        "XR-E3": 0,
+        "XR-E4": 0,
+        "XR-E5": 1,
+        "XR-E6": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-E5": [
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-E5": 200
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T14:57:39.093657+00:00",
+      "worker": "W4",
+      "job": "XR-E5",
+      "agent": "/root/multiroot_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T15:00:57.430880+00:00",
+      "worker": "W4",
+      "job": "XR-E5"
+    }
+  ],
+  "epoch": 5,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

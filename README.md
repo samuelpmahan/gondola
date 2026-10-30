@@ -84,3 +84,13 @@ bash run-renderer-conformance.sh
 The runner first executes `run-keyed-editor.sh` in its default full mode, then builds the Go contract CLI, fixtures, and Go/WASM renderer before running the conformance tests, real-HTTP browser demo, and four-actor replay. Its Node 22 and Go 1.24 requirements match the keyed runner. See [renderer-conformance/README.md](renderer-conformance/README.md) for the demo and contract limits.
 
 Built output and installed packages are never committed. The original M0 outputs are reproduced by `run.sh`; keyed editor outputs are reproduced by `run-keyed-editor.sh`.
+
+## Multi-root sessions
+
+The multi-root milestone composes three independent collection sessions in one browser page, with DOM, React, and GoDOM roots, session-scoped HTTP lanes, renderer swaps, disposal, late-reply rejection, sibling continuation, and fresh root remount. Run the full inherited and new gates from the repository root:
+
+```sh
+bash run-multi-root.sh
+```
+
+The default runner executes `run-renderer-conformance.sh` before building the multi-session and GoDOM WebAssembly bridges, copying the matching Go runtime, and running the new Go, Node, browser demo, and seeded replay gates. It requires Go 1.24, Node 22, the pinned interaction packages, and Playwright Chromium. See [multi-root/README.md](multi-root/README.md) for the manual demo and [multi-root/RESULTS.md](multi-root/RESULTS.md) for result status and the evidence schema.

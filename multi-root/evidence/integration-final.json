@@ -1,0 +1,144 @@
+{
+  "schema": "gobi.multi-root-integration/v1",
+  "status": "matched",
+  "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH CHROMIUM_EXECUTABLE_PATH=/tmp/chromium GOTOOLCHAIN=local GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 bash run-multi-root.sh",
+  "exit_code": 0,
+  "toolchain": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "react": "19.3.1",
+    "playwright": "1.64.1"
+  },
+  "browser": {
+    "name": "Chromium",
+    "version": "153.0.8010.0",
+    "executable": "/tmp/chromium",
+    "contexts": 1
+  },
+  "seeds": [
+    20261030,
+    20261031
+  ],
+  "scripts": 63,
+  "actions": 1896,
+  "ticks": 1959,
+  "observations": 11754,
+  "native_comparisons": 193,
+  "native_matched": 193,
+  "mismatch_count": 0,
+  "mismatches": [],
+  "negative_controls": [
+    {
+      "name": "missing actors and channels fail closed",
+      "pass": true
+    },
+    {
+      "name": "active session aliasing is rejected",
+      "pass": true
+    },
+    {
+      "name": "synchronized no-op dispatch is rejected",
+      "pass": true
+    },
+    {
+      "name": "out-of-order event receipts are rejected",
+      "pass": true
+    },
+    {
+      "name": "disposed-session revival is rejected",
+      "pass": true
+    },
+    {
+      "name": "empty native frames are rejected",
+      "pass": true
+    }
+  ],
+  "required_channels": [
+    "snapshot.state",
+    "snapshot.tree",
+    "snapshot.bindings",
+    "snapshot.messages",
+    "audit",
+    "transportLog",
+    "serverRequests",
+    "pending",
+    "DOM html/root/disabled/controls/order",
+    "liveProps",
+    "focus and selection",
+    "session identity and generation",
+    "ordered lifecycle/events",
+    "native Go state/tree/DOM envelopes"
+  ],
+  "raw_report": {
+    "path": "multi-root/build/replay-seeds-20261030-20261031.json",
+    "bytes": 350530239,
+    "sha256": "9a07a712e25ebaee207bfd8589d42bf030394af37157d224cf36a5d9c92009aa"
+  },
+  "preservation": {
+    "checked": 650,
+    "changed": [
+      {
+        "manifest": "renderer-conformance/evidence/delivery-manifest.json",
+        "path": "cmd/godom-wasm/main_wasm.go",
+        "expected": "44ba6a4deef747c0b89e221e2949cb97d948c4113083a0bd521be3ddf98c38d2",
+        "actual": "1687bff182670c96a085acc9d50db9707d89af742ba52678e5f4e19033f8d742"
+      },
+      {
+        "manifest": "renderer-conformance/evidence/delivery-manifest.json",
+        "path": "cmd/godom-wasm/smoke.html",
+        "expected": "8d1b7af296af3d404b42d668619a08d3210efffa0ad1f8dc70a60c656cf28c1c",
+        "actual": "3685ce0bdd25966063c08070defdb9a025f7f18141b81bf1c55b7cc1393208e3"
+      },
+      {
+        "manifest": "renderer-conformance/evidence/delivery-manifest.json",
+        "path": "renderer-conformance/adapter.mjs",
+        "expected": "eb05f483296a9038aa597b5db46897a386c2a26ae5e5ff0dbc987a4546f79bf1",
+        "actual": "6e6a8c48c32866ad45c40a726a8422950928578745e83503e5dcc8c5e7462e51"
+      },
+      {
+        "manifest": "renderer-conformance/evidence/delivery-manifest.json",
+        "path": "renderer-conformance/adapter.test.mjs",
+        "expected": "520485785614a210c47187ba472edaabde5eb5d4a71585854b0ad3d1b1a57e05",
+        "actual": "2b3ae69e9f7bc3aa6a18a4e1d70b069370c09a1862aa17e8909003d741b68fdf"
+      }
+    ],
+    "root_sha256_entries": 24,
+    "root_sha256_result": "all pass",
+    "note": "Historical manifests remain unchanged. These four source files intentionally evolve the single-instance renderer into instance handles; prior bytes remain in base commit 47728575f6f9a7989e3e380bc0acf2d4b242180b."
+  },
+  "review": {
+    "status": "pending_independent_RE5_review",
+    "reason": "Assigned independent Luna reviewer hit usage limit before writing final repair review; prior XR-E5 amend receipt remains authoritative."
+  },
+  "inherited": {
+    "static_cases": 5000,
+    "counter": {
+      "scripts": 107,
+      "ticks": 4473
+    },
+    "replacement": {
+      "scripts": 103,
+      "ticks": 5249
+    },
+    "controlled_input": {
+      "scripts": 216,
+      "observations": 10149
+    },
+    "async_effects": {
+      "scripts": 76,
+      "observations": 1552
+    },
+    "http_effects": {
+      "scripts": 82,
+      "observations": 1572
+    },
+    "keyed_editor": {
+      "scripts": 70,
+      "observations": 1113
+    },
+    "renderer_conformance": {
+      "scripts": 71,
+      "observations": 1184
+    }
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-multi-root-e5-oracle-repair"
+  },
+  "workers": {
+    "W1": {
+      "job": null,
+      "agent": null
+    },
+    "W4": {
+      "job": "XR-RE5-RE5",
+      "agent": "/root/multiroot_delivery"
+    }
+  },
+  "jobs": {
+    "RE5": {
+      "id": "RE5",
+      "kind": "extract",
+      "repair_of": "E5",
+      "allow_workers": [
+        "W1"
+      ],
+      "owner": "multi-root replay/oracle only",
+      "summary": "compare lifecycle parity and enforce generated action bounds",
+      "status": "done",
+      "worker": "W1",
+      "started_at": "2026-10-30T15:01:17.062540+00:00",
+      "finished_at": "2026-10-30T15:08:28.559894+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/multi-root/coordination/receipts/RE5.json"
+    },
+    "XR-RE5-RE5": {
+      "id": "XR-RE5-RE5",
+      "kind": "review",
+      "depends_on": "RE5",
+      "status": "running",
+      "worker": "W4",
+      "started_at": "2026-10-30T15:08:28.803541+00:00",
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T15:01:16.937655+00:00",
+      "ready_jobs": [
+        "RE5"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W1": "RE5",
+        "W4": "BENCH"
+      },
+      "dispatch": {
+        "W1": "RE5"
+      },
+      "native_seconds": 0.003598437993787229,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 500,
+      "native_score": 500,
+      "caps": {
+        "RE5": 1,
+        "XR-RE5-RE5": 0,
+        "BENCH": 2
+      },
+      "eligible": {
+        "RE5": [
+          "W1"
+        ]
+      },
+      "weights": {
+        "RE5": 500
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W4": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T15:01:17.062540+00:00",
+      "worker": "W1",
+      "job": "RE5",
+      "agent": "/root/multiroot_replay"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T15:08:28.559894+00:00",
+      "worker": "W1",
+      "job": "RE5"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T15:08:28.684282+00:00",
+      "ready_jobs": [
+        "XR-RE5-RE5"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W4": "XR-RE5-RE5",
+        "W1": "BENCH"
+      },
+      "dispatch": {
+        "W4": "XR-RE5-RE5"
+      },
+      "native_seconds": 0.00674008899659384,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "RE5": 0,
+        "XR-RE5-RE5": 1,
+        "BENCH": 2
+      },
+      "eligible": {
+        "XR-RE5-RE5": [
+          "W4"
+        ]
+      },
+      "weights": {
+        "XR-RE5-RE5": 400
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W4": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T15:08:28.803541+00:00",
+      "worker": "W4",
+      "job": "XR-RE5-RE5",
+      "agent": "/root/multiroot_delivery"
+    }
+  ],
+  "epoch": 2,
+  "policy": {
+    "extract_priority": 300,
+    "review_priority": 400,
+    "repair_priority": 500
+  }
+}

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gobi multi-root sessions</title>
+  <style>
+    :root { color-scheme: light dark; font: 15px/1.5 system-ui, sans-serif; }
+    body { max-width: 112rem; margin: 2rem auto; padding: 0 1.25rem; }
+    h1, h2, h3 { line-height: 1.2; }
+    .muted { opacity: .72; }
+    .root-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); gap: 1rem; }
+    .root-card { min-width: 0; border: 1px solid #8888; border-radius: .7rem; padding: 1rem; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+    button, select { font: inherit; padding: .38rem .7rem; }
+    button { cursor: pointer; }
+    button[aria-pressed="true"] { outline: 2px solid currentColor; outline-offset: 2px; }
+    .app-root { border: 1px solid #8888; border-radius: .55rem; margin: .8rem 0; min-height: 8rem; padding: .7rem; }
+    .app-root .collection, .app-root .rows { display: grid; gap: .65rem; }
+    .app-root .row { border: 1px solid #8888; border-radius: .4rem; display: grid; gap: .45rem; padding: .65rem; }
+    .app-root input[type="text"] { box-sizing: border-box; font: inherit; padding: .4rem .55rem; width: 100%; }
+    .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: .65rem; }
+    pre { max-height: 17rem; overflow: auto; border: 1px solid #8885; border-radius: .45rem; padding: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .server-row { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; border: 1px solid #8885; border-radius: .4rem; margin: .4rem 0; padding: .4rem .55rem; }
+    .server-row code { flex: 1 1 12rem; overflow-wrap: anywhere; }
+    .badge { border: 1px solid #8888; border-radius: 99px; padding: .05rem .4rem; }
+    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Three Go sessions, one browser realm</h1>
+    <p>Each panel owns an independent session, renderer, and HTTP lane. Hold saves in two panels at once, change a single panel's renderer, and dispose a panel with a save still held. The surviving session stays usable; releasing the disposed session's request is rejected. Remounting that panel creates a fresh session.</p>
+    <p class="muted">For the clearest walk-through, use DOM in Root A, React in Root B, and GoDOM in Root C. Renderer choices are local to their panel.</p>
+    <p>Live sessions: <strong id="live-sessions">Loading…</strong></p>
+    <p id="error" role="alert" hidden></p>
+    <section class="root-grid" aria-label="Independent Go collection sessions">
+      <article class="root-card" data-slot="A" aria-labelledby="heading-A">
+        <h2 id="heading-A">Root A</h2>
+        <div class="controls" role="group" aria-label="Root A renderer">
+          <button type="button" data-backend="dom" aria-pressed="true">DOM</button>
+          <button type="button" data-backend="react" aria-pressed="false">React</button>
+          <button type="button" data-backend="godom" aria-pressed="false">GoDOM</button>
+          <label>Next save <select data-mode><option value="success">Success</option><option value="held">Hold</option></select></label>
+          <button type="button" data-action="focus">Focus first input</button>
+          <button type="button" data-action="dispose">Dispose root</button>
+          <button type="button" data-action="remount" disabled>Fresh remount</button>
+        </div>
+        <p>Session <code data-session>pending</code> · lane <code data-lane>pending</code> · renderer <strong data-active-backend>loading</strong></p>
+        <div class="app-root" data-app-root aria-live="polite"></div>
+        <h3>HTTP request records</h3>
+        <div data-requests aria-live="polite"><span class="muted">Loading…</span></div>
+        <div class="snapshot-grid">
+          <div><h3>Go session snapshot</h3><pre data-snapshot>Waiting for Go…</pre></div>
+          <div><h3>Go audit and transport</h3><pre data-events>Waiting for activity…</pre></div>
+          <div><h3>Live DOM and focus</h3><pre data-dom>Waiting for render…</pre></div>
+        </div>
+      </article>
+      <article class="root-card" data-slot="B" aria-labelledby="heading-B">
+        <h2 id="heading-B">Root B</h2>
+        <div class="controls" role="group" aria-label="Root B renderer">
+          <button type="button" data-backend="dom" aria-pressed="false">DOM</button>
+          <button type="button" data-backend="react" aria-pressed="true">React</button>
+          <button type="button" data-backend="godom" aria-pressed="false">GoDOM</button>
+          <label>Next save <select data-mode><option value="success">Success</option><option value="held">Hold</option></select></label>
+          <button type="button" data-action="focus">Focus first input</button>
+          <button type="button" data-action="dispose">Dispose root</button>
+          <button type="button" data-action="remount" disabled>Fresh remount</button>
+        </div>
+        <p>Session <code data-session>pending</code> · lane <code data-lane>pending</code> · renderer <strong data-active-backend>loading</strong></p>
+        <div class="app-root" data-app-root aria-live="polite"></div>
+        <h3>HTTP request records</h3>
+        <div data-requests aria-live="polite"><span class="muted">Loading…</span></div>
+        <div class="snapshot-grid">
+          <div><h3>Go session snapshot</h3><pre data-snapshot>Waiting for Go…</pre></div>
+          <div><h3>Go audit and transport</h3><pre data-events>Waiting for activity…</pre></div>
+          <div><h3>Live DOM and focus</h3><pre data-dom>Waiting for render…</pre></div>
+        </div>
+      </article>
+      <article class="root-card" data-slot="C" aria-labelledby="heading-C">
+        <h2 id="heading-C">Root C</h2>
+        <div class="controls" role="group" aria-label="Root C renderer">
+          <button type="button" data-backend="dom" aria-pressed="false">DOM</button>
+          <button type="button" data-backend="react" aria-pressed="false">React</button>
+          <button type="button" data-backend="godom" aria-pressed="true">GoDOM</button>
+          <label>Next save <select data-mode><option value="success">Success</option><option value="held">Hold</option></select></label>
+          <button type="button" data-action="focus">Focus first input</button>
+          <button type="button" data-action="dispose">Dispose root</button>
+          <button type="button" data-action="remount" disabled>Fresh remount</button>
+        </div>
+        <p>Session <code data-session>pending</code> · lane <code data-lane>pending</code> · renderer <strong data-active-backend>loading</strong></p>
+        <div class="app-root" data-app-root aria-live="polite"></div>
+        <h3>HTTP request records</h3>
+        <div data-requests aria-live="polite"><span class="muted">Loading…</span></div>
+        <div class="snapshot-grid">
+          <div><h3>Go session snapshot</h3><pre data-snapshot>Waiting for Go…</pre></div>
+          <div><h3>Go audit and transport</h3><pre data-events>Waiting for activity…</pre></div>
+          <div><h3>Live DOM and focus</h3><pre data-dom>Waiting for render…</pre></div>
+        </div>
+      </article>
+    </section>
+  </main>
+  <script src="/multi-root/build/wasm_exec.js"></script>
+  <script type="module" src="/multi-root/demo.mjs"></script>
+</body>
+</html>

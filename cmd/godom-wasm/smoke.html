@@ -2,6 +2,7 @@
 <html><head><meta charset="utf-8"><title>Go DOM WASM smoke</title></head>
 <body>
 <div id="root"></div>
+<div id="root-b"></div>
 <script src="/wasm_exec.js"></script>
 <script>
 window.__godomSmoke = (async () => {
@@ -36,23 +37,78 @@ window.__godomSmoke = (async () => {
   await waitFor(() => globalThis.gobiGoDOM);
 
   const api = globalThis.gobiGoDOM;
-  assert(Object.keys(api).sort().join(",") ===
-    "click,domSnapshot,focusState,mount,restoreFocus,snapshot,unmount,update",
-    "Go DOM bridge must publish its exact singleton API");
+  assert(Object.keys(api).sort().join(",") === "mount",
+    "Go DOM bridge must publish only the instance mount factory");
   const root = document.getElementById("root");
-  let failure = null;
+  const rootB = document.getElementById("root-b");
+  let failureA = null;
   const facade = {
     init() { return unwrap(gobiCollection.init(), "collection init"); },
     dispatch(step) { return unwrap(gobiCollection.dispatch(step), "collection dispatch"); },
-    rendererFailed(error) { failure = error; },
+    rendererFailed(error) { failureA = error; },
   };
-  unwrap(api.mount(root, facade), "mount");
+  const rendererA = unwrap(api.mount(root, facade), "mount root A");
 
-  let snapshot = unwrap(api.snapshot(), "initial snapshot");
+  let sideVersion = 0;
+  let sideDispatches = 0;
+  let failureB = null;
+  const sideSnapshot = () => ({
+    state: { root: "B", version: sideVersion },
+    tree: {
+      Kind: 1, Tag: "div", Key: "side-root", Attrs: [], On: [], Text: "",
+      Kids: [
+        {
+          Kind: 1, Tag: "button", Key: "side-button", Attrs: [],
+          On: [{ Event: "click", Message: "side-click", Arg: "B" }], Text: "",
+          Kids: [{ Kind: 2, Tag: "", Key: "", Attrs: null, On: null, Kids: null, Text: "side click" }],
+        },
+        {
+          Kind: 1, Tag: "input", Key: "side-input",
+          Attrs: [
+            { Name: "type", Value: "text", Flag: false, Style: null },
+            { Name: "value", Value: "", Flag: false, Style: null },
+            { Name: "aria-label", Value: "Side input", Flag: false, Style: null },
+          ],
+          On: [], Text: "", Kids: null,
+        },
+      ],
+    },
+    bindings: [],
+    messages: [],
+  });
+  const sideFacade = {
+    init() { return sideSnapshot(); },
+    dispatch(step) {
+      assert(step && step.Event === "click" && step.Value === "B" && step.Key === "side-button",
+        "root B must dispatch its own click event");
+      sideDispatches += 1;
+      sideVersion += 1;
+      return sideSnapshot();
+    },
+    rendererFailed(error) { failureB = error; },
+  };
+  const rendererB = unwrap(api.mount(rootB, sideFacade), "mount root B");
+  assert(rendererA && rendererB && rendererA !== rendererB, "mount must return two distinct live renderer APIs");
+  assert(rendererB.snapshot().state.version === 0, "root B must begin with its own facade snapshot");
+  assert(rendererB.domSnapshot().html === rootB.innerHTML,
+    "root B DOM snapshots must report only root B's rendered DOM");
+
+  const sideInput = rootB.querySelector('[aria-label="Side input"]');
+  assert(sideInput, "root B input must render independently");
+  sideInput.focus();
+  sideInput.value = "side draft";
+  sideInput.setSelectionRange(2, 7, "backward");
+  const sideFocus = unwrap(rendererB.focusState(), "root B focus capture");
+  assert(sideFocus.key === "side-input" && sideFocus.selectionDirection === "backward",
+    "root B must capture its own keyed focus and selection");
+  assert(unwrap(rendererA.focusState(), "root A focus while B is active") === null,
+    "root A must not report root B focus");
+
+  let snapshot = unwrap(rendererA.snapshot(), "initial snapshot");
   assert(snapshot.state.Rows.length === 0, "initial Go collection must be empty");
-  unwrap(api.click("0"), "add first row");
-  unwrap(api.click("0"), "add second row");
-  snapshot = unwrap(api.snapshot(), "after add");
+  unwrap(rendererA.click("0"), "add first row");
+  unwrap(rendererA.click("0"), "add second row");
+  snapshot = unwrap(rendererA.snapshot(), "after add");
   assert(snapshot.state.Rows.map((row) => row.ID).join(",") === "1,2", "Go DOM click must dispatch into the Go collection");
 
   const inputOne = root.querySelector('[aria-label="Row 1"]');
@@ -64,19 +120,36 @@ window.__godomSmoke = (async () => {
   inputTwo.value = "draft two";
   inputTwo.setSelectionRange(2, 7, "backward");
   inputTwo.dispatchEvent(new Event("input", { bubbles: true }));
-  snapshot = unwrap(api.snapshot(), "after controlled input");
+  snapshot = unwrap(rendererA.snapshot(), "after controlled input");
   assert(snapshot.state.Rows.map((row) => row.Draft).join("|") === "draft one|draft two",
     "Go DOM input callback must read the live currentTarget.value");
   assert(root.querySelector('[aria-label="Row 1"]') === inputOne &&
     root.querySelector('[aria-label="Row 2"]') === inputTwo,
     "controlled updates must retain the original input objects");
 
-  const focusBeforeMove = unwrap(api.focusState(), "focus before move");
+  const focusBeforeMove = unwrap(rendererA.focusState(), "focus before move");
   assert(focusBeforeMove.key === "row-2-input" && focusBeforeMove.selectionStart === 2 &&
     focusBeforeMove.selectionEnd === 7 && focusBeforeMove.selectionDirection === "backward",
     "focus capture must include the keyed input and selection");
-  unwrap(api.click("2/1/7"), "move second row upward");
-  snapshot = unwrap(api.snapshot(), "after reorder");
+  assert(unwrap(rendererB.focusState(), "root B focus while A is active") === null,
+    "root B must not report root A focus");
+  const rootAStateBeforeBUpdate = JSON.stringify(rendererA.snapshot());
+  sideVersion = 1;
+  unwrap(rendererB.update(sideSnapshot()), "update root B while A is focused");
+  assert(rendererB.snapshot().state.version === 1 &&
+    JSON.stringify(rendererA.snapshot()) === rootAStateBeforeBUpdate,
+    "root B update and snapshot must not change root A state");
+  assert(rendererB.domSnapshot().html === rootB.innerHTML && rendererA.domSnapshot().html === root.innerHTML,
+    "each DOM snapshot must stay bound to its own root");
+  assert(document.activeElement === inputTwo && rootB.querySelector('[aria-label="Side input"]') === sideInput,
+    "updating root B must leave root A focus and both roots' nodes independent");
+  assert(unwrap(rendererB.restoreFocus(sideFocus), "restore root B focus") === true && document.activeElement === sideInput,
+    "root B must restore only its own keyed focus");
+  assert(unwrap(rendererA.restoreFocus(focusBeforeMove), "restore root A focus") === true && document.activeElement === inputTwo,
+    "root A must restore its own keyed focus without changing root B state");
+
+  unwrap(rendererA.click("2/1/7"), "move second row upward");
+  snapshot = unwrap(rendererA.snapshot(), "after reorder");
   assert(snapshot.state.Rows.map((row) => row.ID).join(",") === "2,1", "row reorder must use the current child path");
   assert(root.querySelector('[aria-label="Row 2"]') === inputTwo,
     "reordering must retain the actual keyed input element");
@@ -84,13 +157,13 @@ window.__godomSmoke = (async () => {
     inputTwo.selectionEnd === 7 && inputTwo.selectionDirection === "backward",
     "reordering must restore keyed focus and selection");
 
-  unwrap(api.click("2/0/5"), "save reordered row");
+  unwrap(rendererA.click("2/0/5"), "save reordered row");
   const effects = unwrap(gobiCollection.effects(), "read Go collection effect");
   assert(effects.length === 1 && effects[0].Kind === "start", "save must create a Go-owned pending effect");
   const completed = unwrap(gobiCollection.complete({ ID: effects[0].ID, Value: "saved two", Error: "" }),
     "complete Go collection effect");
-  unwrap(api.update(completed), "render Go completion");
-  snapshot = unwrap(api.snapshot(), "after completion");
+  unwrap(rendererA.update(completed), "render Go completion");
+  snapshot = unwrap(rendererA.snapshot(), "after completion");
   assert(snapshot.state.Rows[0].Saved === "saved two" && snapshot.state.Rows[0].Saves === 1,
     "Go renderer must apply the completion snapshot");
   assert(root.querySelector('[aria-label="Row 2"]') === inputTwo && document.activeElement === inputTwo &&
@@ -98,11 +171,11 @@ window.__godomSmoke = (async () => {
     "HTTP-style completion update must retain input identity and logical focus");
 
   const detachedRemove = root.querySelector(".row").querySelector("button.remove");
-  unwrap(api.click("2/0/6"), "remove completed row");
-  const afterRemove = unwrap(api.snapshot(), "after remove");
+  unwrap(rendererA.click("2/0/6"), "remove completed row");
+  const afterRemove = unwrap(rendererA.snapshot(), "after remove");
   assert(afterRemove.state.Rows.length === 1, "remove must drop the selected row");
   detachedRemove.click();
-  snapshot = unwrap(api.snapshot(), "after detached click");
+  snapshot = unwrap(rendererA.snapshot(), "after detached click");
   assert(JSON.stringify(snapshot) === JSON.stringify(afterRemove),
     "removed DOM listeners must not dispatch from detached callbacks");
 
@@ -125,7 +198,7 @@ window.__godomSmoke = (async () => {
     bindings: [],
     messages: [],
   };
-  unwrap(api.update(fixture), "render adjacent text fixture");
+  unwrap(rendererA.update(fixture), "render adjacent text fixture");
   assert(root.firstChild.childNodes.length === 4 && root.firstChild.childNodes[0].nodeType === 3 &&
     root.firstChild.childNodes[0].nodeValue === "" && root.firstChild.childNodes[1].nodeType === 3 &&
     root.firstChild.childNodes[2].nodeType === 3,
@@ -134,20 +207,19 @@ window.__godomSmoke = (async () => {
   const observedSteps = [];
   const normalDispatch = facade.dispatch;
   facade.dispatch = (step) => { observedSteps.push(step); return fixture; };
-  unwrap(api.click("3"), "click after empty and adjacent text");
+  unwrap(rendererA.click("3"), "click after empty and adjacent text");
   facade.dispatch = normalDispatch;
   assert(observedSteps.length === 1 && observedSteps[0].Path === "3" &&
     observedSteps[0].Key === "fixture-button",
     "event routing must use the current child path after empty and adjacent text nodes");
   assert(root.firstChild.childNodes[3] === fixtureButton, "fixture update must retain the keyed button");
-  const textClick = api.click("2");
+  const textClick = rendererA.click("2");
   assert(textClick && typeof textClick.error === "string", "text-node paths must not be accepted as click targets");
-  unwrap(api.update(afterRemove), "restore collection snapshot after text fixture");
+  unwrap(rendererA.update(afterRemove), "restore collection snapshot after text fixture");
 
-  const dom = unwrap(api.domSnapshot(), "DOM snapshot");
+  const dom = unwrap(rendererA.domSnapshot(), "DOM snapshot");
   assert(dom.html === root.innerHTML && Array.isArray(dom.disabled), "DOM snapshot must report actual browser HTML and disabled paths");
   const badCalls = [
-    ["mount", [root, facade, "extra"]],
     ["update", []],
     ["snapshot", ["extra"]],
     ["domSnapshot", ["extra"]],
@@ -157,32 +229,63 @@ window.__godomSmoke = (async () => {
     ["unmount", ["extra"]],
   ];
   for (const [method, args] of badCalls) {
-    const result = api[method](...args);
+    const result = rendererA[method](...args);
     assert(result && Object.keys(result).join(",") === "error" && typeof result.error === "string",
       `${method} must return exactly {error:string} for wrong arity`);
   }
+  const badMount = api.mount(root, facade, "extra");
+  assert(badMount && typeof badMount.error === "string", "mount must reject wrong arity");
 
   const beforeInvalidUpdate = root.innerHTML;
-  const invalidUpdate = api.update({ state: {}, tree: {}, bindings: [], messages: [], extra: true });
+  const invalidUpdate = rendererA.update({ state: {}, tree: {}, bindings: [], messages: [], extra: true });
   assert(invalidUpdate && typeof invalidUpdate.error === "string", "strict snapshot validation must return an error object");
   assert(root.innerHTML === beforeInvalidUpdate, "invalid snapshots must be rejected before DOM mutation");
-  unwrap(api.unmount(), "unmount after invalid update");
+  assert(rendererA.snapshot().error, "invalid update must fence only root A");
+  assert(rendererB.snapshot().state.version === 1, "root B must remain live after root A is fenced");
+  unwrap(rendererB.click("0"), "root B click while root A is fenced");
+  assert(sideDispatches === 1 && rendererB.snapshot().state.version === 2 && failureB === null,
+    "root B click and failure callback must stay independent of root A");
+  unwrap(rendererA.unmount(), "unmount root A after invalid update");
+  unwrap(rendererA.unmount(), "repeat root A unmount");
+  assert(rendererA.snapshot().error, "stale root A methods must fail after unmount");
   assert(root.childNodes.length === 0, "unmount must clear the root");
+  const rootBHTML = rootB.innerHTML;
+  assert(rendererB.snapshot().state.version === 2 && rootB.innerHTML === rootBHTML,
+    "root A teardown must not touch root B");
 
-  failure = null;
-  unwrap(api.mount(root, facade), "remount for callback failure");
+  failureA = null;
+  const failedRendererA = unwrap(api.mount(root, facade), "remount root A for callback failure");
   const dispatch = facade.dispatch;
   facade.dispatch = () => ({ state: {}, tree: {}, bindings: [], messages: [], unknown: true });
-  const failedClick = api.click("0");
+  const failedClick = failedRendererA.click("0");
   assert(failedClick && typeof failedClick.error === "string", "native event callback failures must surface to click()");
-  assert(failure && typeof failure.error === "string", "event callback failure must notify facade.rendererFailed");
-  const fencedSnapshot = api.snapshot();
+  assert(failureA && typeof failureA.error === "string", "event callback failure must notify only root A facade.rendererFailed");
+  const fencedSnapshot = failedRendererA.snapshot();
   assert(fencedSnapshot && typeof fencedSnapshot.error === "string", "failed renderer must fence later API calls");
+  assert(rendererB.snapshot().state.version === 2 && failureB === null,
+    "root A callback failure must leave root B's handle and failure fence untouched");
+  unwrap(rendererB.click("0"), "root B click after root A callback failure");
+  assert(rendererB.snapshot().state.version === 3 && failureB === null,
+    "root B must continue dispatching after root A callback failure");
   facade.dispatch = dispatch;
-  unwrap(api.unmount(), "unmount after callback failure");
+  unwrap(failedRendererA.unmount(), "unmount after callback failure");
+  assert(failedRendererA.click("0").error, "stale root A event methods must fail");
+  assert(rendererB.snapshot().state.version === 3, "stale root A calls must not change root B");
+  unwrap(rendererB.unmount(), "unmount root B");
+  unwrap(rendererB.unmount(), "repeat root B unmount");
+  assert(rendererB.snapshot().error, "stale root B methods must fail after unmount");
+
+  const freshFacade = { init() { return sideSnapshot(); }, dispatch() { return sideSnapshot(); } };
+  const freshRenderer = unwrap(api.mount(root, freshFacade), "mount fresh root A instance");
+  assert(freshRenderer.snapshot().state.version === 3, "vacated root must accept a fresh renderer instance");
+  const rootAfterFreshMount = root.innerHTML;
+  assert(failedRendererA.update(sideSnapshot()).error && root.innerHTML === rootAfterFreshMount,
+    "a stale handle must not mutate a fresh instance mounted on its former root");
+  unwrap(freshRenderer.unmount(), "unmount fresh root A instance");
 
   return {
     ok: true,
+    simultaneousInstances: 2,
     rowsAfterReorder: [2, 1],
     retainedInputKeys: ["row-1-input", "row-2-input"],
     focus: focusBeforeMove,
@@ -190,7 +293,10 @@ window.__godomSmoke = (async () => {
     detachedCallbackCleaned: true,
     wrongArityRejectedForAllMethods: true,
     invalidSnapshotDidNotMutate: true,
-    callbackFailureNotified: true,
+    independentFocusRestore: true,
+    idempotentUnmountAndStaleHandleFence: true,
+    independentCallbackFailureFence: true,
+    rootReuseAfterUnmount: true,
   };
 })().catch((error) => {
   window.__godomSmokeError = String(error?.stack ?? error);

@@ -1,0 +1,15 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {"name": "gondola-multi-root-authors"},
+  "workers": ["W1", "W2", "W3", "W4", "W5", "W6"],
+  "review_policy": {"enabled": true, "review_prefix": "XR-E"},
+  "policy": {"extract_priority": 100, "review_priority": 200, "repair_priority": 300},
+  "jobs": [
+    {"id": "E1", "kind": "extract", "owner": "multisession/", "summary": "typed Go session manager"},
+    {"id": "E2", "kind": "extract", "owner": "cmd/multi-root-wasm/", "summary": "strict multi-session WASM bridge"},
+    {"id": "E3", "kind": "extract", "owner": "cmd/godom-wasm/ and renderer-conformance adapter", "summary": "multi-instance GoDOM bridge"},
+    {"id": "E4", "kind": "extract", "owner": "multi-root host/runtime only", "summary": "JavaScript composition host"},
+    {"id": "E5", "kind": "extract", "owner": "multi-root replay/oracle only", "summary": "deterministic oracle and replay"},
+    {"id": "E6", "kind": "extract", "owner": "multi-root demo/runner/CI/docs only", "summary": "executable delivery and evidence"}
+  ]
+}
