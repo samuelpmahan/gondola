@@ -2,14 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { chromium } from "../../interaction/node_modules/playwright/index.mjs";
 
+import { chromiumLaunchOptions } from "./browser.mjs";
 import { installNoWasmGuards } from "./no-wasm.mjs";
 
 test("browser guard detects compilation and instantiation attempts instead of allowing fallback", async () => {
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath: process.env.CHROMIUM_PATH ?? "/tmp/chromium",
-    args: ["--no-sandbox", "--disable-dev-shm-usage"],
-  });
+  const browser = await chromium.launch(chromiumLaunchOptions(process.env.CHROMIUM_PATH));
   try {
     const page = await browser.newPage();
     const guard = await installNoWasmGuards(page);
@@ -31,11 +28,7 @@ test("browser guard detects compilation and instantiation attempts instead of al
 });
 
 test("browser guard rejects WASM asset requests", async () => {
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath: process.env.CHROMIUM_PATH ?? "/tmp/chromium",
-    args: ["--no-sandbox", "--disable-dev-shm-usage"],
-  });
+  const browser = await chromium.launch(chromiumLaunchOptions(process.env.CHROMIUM_PATH));
   try {
     const page = await browser.newPage();
     const guard = await installNoWasmGuards(page);
