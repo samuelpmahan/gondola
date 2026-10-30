@@ -1,0 +1,274 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-typed-composition-input-process-repairs"
+  },
+  "workers": {
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "R-T4B": {
+      "id": "R-T4B",
+      "kind": "extract",
+      "repair_of": "T4",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "typed-composition/scripts.mjs and scripts.test.mjs only",
+      "summary": "represent browser text input CR/LF sanitation in deterministic effective Go Steps with preserved requested-value witnesses",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T19:26:18.177324+00:00",
+      "finished_at": "2026-10-30T19:37:05.081116+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/R-T4B.json"
+    },
+    "R-T6B": {
+      "id": "R-T6B",
+      "kind": "extract",
+      "repair_of": "R-T6",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "typed-composition/http-lab-process.mjs, helper tests and browser-smoke.mjs only",
+      "summary": "separate post-start process errors from observed exit and fail smoke on unsuccessful cleanup",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-30T19:26:18.305069+00:00",
+      "finished_at": "2026-10-30T19:37:05.176582+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/R-T6B.json"
+    },
+    "XR-R-T4B": {
+      "id": "XR-R-T4B",
+      "kind": "review",
+      "depends_on": "R-T4B",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T19:37:11.234454+00:00",
+      "finished_at": "2026-10-30T19:38:53.639925+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-R-T4B.json"
+    },
+    "XR-R-T6B": {
+      "id": "XR-R-T6B",
+      "kind": "review",
+      "depends_on": "R-T6B",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T19:37:11.329625+00:00",
+      "finished_at": "2026-10-30T19:38:53.722069+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/XR-R-T6B.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T19:26:18.042990+00:00",
+      "ready_jobs": [
+        "R-T4B",
+        "R-T6B"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "BENCH",
+        "N4": "R-T4B",
+        "N6": "R-T6B"
+      },
+      "dispatch": {
+        "N4": "R-T4B",
+        "N6": "R-T6B"
+      },
+      "native_seconds": 0.00398938500075019,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 3 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "R-T4B": 1,
+        "R-T6B": 1,
+        "XR-R-T4B": 0,
+        "XR-R-T6B": 0,
+        "BENCH": 3
+      },
+      "eligible": {
+        "R-T4B": [
+          "N4"
+        ],
+        "R-T6B": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "R-T4B": 300,
+        "R-T6B": 300
+      },
+      "agent_by_worker": {
+        "N3": null,
+        "N4": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:26:18.177324+00:00",
+      "worker": "N4",
+      "job": "R-T4B",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:26:18.305069+00:00",
+      "worker": "N6",
+      "job": "R-T6B",
+      "agent": "/root/compose_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:37:05.081116+00:00",
+      "worker": "N4",
+      "job": "R-T4B"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:37:05.176582+00:00",
+      "worker": "N6",
+      "job": "R-T6B"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T19:37:05.267597+00:00",
+      "ready_jobs": [
+        "XR-R-T4B",
+        "XR-R-T6B"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "BENCH",
+        "N3": "XR-R-T4B",
+        "N4": "XR-R-T6B"
+      },
+      "dispatch": {
+        "N3": "XR-R-T4B",
+        "N4": "XR-R-T6B"
+      },
+      "native_seconds": 0.003479622999293497,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 3 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "R-T4B": 0,
+        "R-T6B": 0,
+        "XR-R-T4B": 1,
+        "XR-R-T6B": 1,
+        "BENCH": 3
+      },
+      "eligible": {
+        "XR-R-T4B": [
+          "N3",
+          "N6"
+        ],
+        "XR-R-T6B": [
+          "N3",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-R-T4B": 200,
+        "XR-R-T6B": 200
+      },
+      "agent_by_worker": {
+        "N3": null,
+        "N4": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:37:11.234454+00:00",
+      "worker": "N3",
+      "job": "XR-R-T4B",
+      "agent": "/root/compose_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:37:11.329625+00:00",
+      "worker": "N4",
+      "job": "XR-R-T6B",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:38:53.639925+00:00",
+      "worker": "N3",
+      "job": "XR-R-T4B"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:38:53.722069+00:00",
+      "worker": "N4",
+      "job": "XR-R-T6B"
+    }
+  ],
+  "epoch": 2,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

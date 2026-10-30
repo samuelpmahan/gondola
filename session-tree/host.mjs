@@ -419,6 +419,26 @@ export function createSessionTreeHost({ manager, descriptors, transportFactory }
     }
   }
 
+  function refresh(id) {
+    sessionID(id);
+    assertIdle("refresh");
+    const node = activeNodes.get(id);
+    if (!node || !node.active) throw fail(`session ${id} is not mounted`);
+    operation = { kind: "refresh", node };
+    try {
+      const result = flatHost.refresh(node.viewRoot);
+      node.lifecycle = "active";
+      return clone(result);
+    } catch (error) {
+      const entry = flatHost.snapshotAll().find((item) => item.sessionID === id);
+      node.backend = entry?.backend ?? null;
+      node.lifecycle = entry?.lifecycle ?? "failed";
+      throw fail(`could not refresh session ${id}`, error);
+    } finally {
+      operation = null;
+    }
+  }
+
   function snapshot(id) {
     sessionID(id);
     const node = activeNodes.get(id);
@@ -531,5 +551,5 @@ export function createSessionTreeHost({ manager, descriptors, transportFactory }
     return checked.bundles.map((bundle) => ({ SessionID: bundle.SessionID, Commands: bundle.Commands.map((command) => ({ ...command })) }));
   }
 
-  return { mountRoot, mountChild, replace, snapshot, tree, snapshotAll, settled, dispose };
+  return { mountRoot, mountChild, replace, refresh, snapshot, tree, snapshotAll, settled, dispose };
 }

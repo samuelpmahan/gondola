@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Typed parent and child collection composition</title>
+  <style>
+    :root { color-scheme: light dark; font: 15px/1.5 system-ui, sans-serif; }
+    body { max-width: 112rem; margin: 1.75rem auto; padding: 0 1.25rem; }
+    h1, h2, h3 { line-height: 1.2; }
+    p { max-width: 82ch; }
+    .muted { opacity: .72; }
+    button, select, input { font: inherit; padding: .35rem .55rem; }
+    button { cursor: pointer; }
+    button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
+    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
+    .layout { display: grid; grid-template-columns: minmax(18rem, 25rem) minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .panel, .session-shell { border: 1px solid #8888; border-radius: .7rem; padding: .85rem; }
+    .control-list { display: grid; gap: .7rem; }
+    .session-control { border: 1px solid #8887; border-radius: .5rem; padding: .7rem; }
+    .session-control h3 { margin: 0 0 .4rem; }
+    .session-control p { margin: .25rem 0 .5rem; }
+    .actions, .policy-actions { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
+    .actions > * { flex: 1 1 auto; }
+    .roots { min-width: 0; }
+    .tree-shell { border-left: .3rem solid #6885aa; margin: .6rem 0; }
+    .tree-view { min-height: 5rem; }
+    .tree-children { border-left: 2px solid #75849a66; margin: .65rem 0 0 .55rem; padding: .1rem .1rem .1rem .8rem; }
+    .tree-view .collection, .tree-view .rows { display: grid; gap: .55rem; }
+    .tree-view .row { display: grid; gap: .35rem; border: 1px solid #8888; border-radius: .4rem; padding: .5rem; }
+    .tree-view input[type="text"] { box-sizing: border-box; width: 100%; }
+    .tree-view p { margin: 0; }
+    .policy { display: grid; gap: .45rem; border-top: 1px solid #8886; margin-top: .6rem; padding-top: .6rem; }
+    .policy label { display: grid; gap: .2rem; }
+    .policy .checkbox { display: flex; align-items: center; gap: .4rem; }
+    .inspection { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .6rem; }
+    pre { max-height: 24rem; overflow: auto; border: 1px solid #8885; border-radius: .4rem; padding: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .server-record { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; border: 1px solid #8885; border-radius: .4rem; margin: .4rem 0; padding: .4rem; }
+    .server-record code { flex: 1 1 16rem; overflow-wrap: anywhere; }
+    @media (max-width: 62rem) { .layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Typed parent and child collections</h1>
+    <p>The parent sets a direct child’s title and read-only policy through the typed Go API. The child keeps its own Go-owned collection state and HTTP save lane. A saved row can be published into the parent’s Inbox, which keeps immutable Go receipts after the child is disposed.</p>
+    <p class="muted">Switch any session among DOM, React, and GoDOM. The Go snapshot is the state source; replacing a renderer keeps the session and its nested children mounted.</p>
+    <p>Live sessions: <strong id="live-count">Waiting for Go/WASM…</strong></p>
+    <p id="error" role="alert" hidden></p>
+
+    <div class="layout">
+      <aside class="panel" aria-labelledby="controls-heading">
+        <h2 id="controls-heading">Session controls</h2>
+        <p class="muted">Hold the child’s next save to see it complete while its parent has made it read-only. Read-only disables view controls and publishing, while the pending Go completion still applies.</p>
+        <div class="policy-actions">
+          <button id="recreate-child" type="button" disabled>Recreate child session</button>
+        </div>
+        <div id="session-controls" class="control-list"><p class="muted">Waiting for Go/WASM…</p></div>
+      </aside>
+
+      <section class="panel roots" aria-labelledby="family-heading">
+        <h2 id="family-heading">Parent and child views</h2>
+        <p class="muted">The child view displays the title supplied by this parent. The parent view displays its Published count, and the receipts panel below is read from the Go snapshot.</p>
+        <div id="parent-mount"></div>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="inspect-heading">
+      <h2 id="inspect-heading">Go snapshots and retained receipts</h2>
+      <div class="inspection">
+        <div><h3>Session tree and state</h3><pre id="snapshot-output">Waiting for sessions…</pre></div>
+        <div><h3>Parent Inbox receipts</h3><pre id="receipts-output">Waiting for Go Inbox…</pre></div>
+        <div><h3>HTTP requests</h3><div id="http-output"><p class="muted">Waiting for requests…</p></div></div>
+      </div>
+    </section>
+  </main>
+  <script src="/typed-composition/build/wasm_exec.js"></script>
+  <script type="module" src="/typed-composition/demo.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-typed-composition-delivery-evidence"
+  },
+  "workers": {
+    "N5": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "P-TRACES": {
+      "id": "P-TRACES",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "evidence/history archives and index; P-TRACES report/receipt only",
+      "summary": "preserve all historical raw reports/shards/envelopes and reproducibility limits without altering live accepted run",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T20:07:47.341031+00:00",
+      "finished_at": "2026-10-30T20:15:34.394759+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/P-TRACES.json"
+    },
+    "P-DEMO": {
+      "id": "P-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "evidence/typed-composition-demo.png and demonstration receipt/report only",
+      "summary": "capture actual executable HTTP demonstration with Go child publication visible in parent",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-30T20:07:47.460634+00:00",
+      "finished_at": "2026-10-30T20:13:02.914970+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/P-DEMO.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T20:07:47.224971+00:00",
+      "ready_jobs": [
+        "P-TRACES",
+        "P-DEMO"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "P-DEMO",
+        "N5": "P-TRACES"
+      },
+      "dispatch": {
+        "N6": "P-DEMO",
+        "N5": "P-TRACES"
+      },
+      "native_seconds": 0.0034052020018862095,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "P-TRACES": 1,
+        "P-DEMO": 1,
+        "BENCH": 2
+      },
+      "eligible": {
+        "P-TRACES": [
+          "N5"
+        ],
+        "P-DEMO": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "P-TRACES": 100,
+        "P-DEMO": 100
+      },
+      "agent_by_worker": {
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:07:47.341031+00:00",
+      "worker": "N5",
+      "job": "P-TRACES",
+      "agent": "/root/compose_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:07:47.460634+00:00",
+      "worker": "N6",
+      "job": "P-DEMO",
+      "agent": "/root/compose_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:13:02.914970+00:00",
+      "worker": "N6",
+      "job": "P-DEMO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:15:34.394759+00:00",
+      "worker": "N5",
+      "job": "P-TRACES"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

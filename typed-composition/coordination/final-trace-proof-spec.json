@@ -1,0 +1,33 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-typed-composition-final-trace-proof"
+  },
+  "workers": [
+    "N2",
+    "N4"
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "jobs": [
+    {
+      "id": "F-SOURCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "final source/build provenance report/receipt only",
+      "summary": "verify accepted 49 source/asset pins, command/toolchain/binary provenance and stable source relationship"
+    },
+    {
+      "id": "F-DATA",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "final raw trace proof report/receipt only",
+      "summary": "independent raw shard hashes, native input/frames completeness, counts and mutation control evidence"
+    }
+  ]
+}

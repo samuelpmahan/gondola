@@ -1,0 +1,33 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-typed-composition-delivery-evidence"
+  },
+  "workers": [
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "jobs": [
+    {
+      "id": "P-TRACES",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "evidence/history archives and index; P-TRACES report/receipt only",
+      "summary": "preserve all historical raw reports/shards/envelopes and reproducibility limits without altering live accepted run"
+    },
+    {
+      "id": "P-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "evidence/typed-composition-demo.png and demonstration receipt/report only",
+      "summary": "capture actual executable HTTP demonstration with Go child publication visible in parent"
+    }
+  ]
+}

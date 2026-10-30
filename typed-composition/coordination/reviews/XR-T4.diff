@@ -1,0 +1,1268 @@
+diff --git a/typed-composition/reference.mjs b/typed-composition/reference.mjs
+new file mode 100644
+index 0000000..caf18a8
+--- /dev/null
++++ b/typed-composition/reference.mjs
+@@ -0,0 +1,449 @@
++// Independent typed parent/child collection model. Collection transitions are
++// delegated to the existing independent collection reference, while inputs,
++// publication, message ordering, and the immutable tree are modeled here.
++
++import { createSessionTreeReference, mountTreeReferenceCollection,
++  referenceReactVersion, referenceReactDOMVersion } from "../session-tree/reference.mjs";
++import { encodeHTTP, decodeHTTP } from "../http-effects/reference.mjs";
++
++export const MAX_COMPOSITION_INTEGER = Number.MAX_SAFE_INTEGER;
++export const MAX_TITLE_BYTES = 256;
++export const MAX_COMPOSITION_DEPTH = 32;
++export { referenceReactVersion, referenceReactDOMVersion };
++export const compositionReactVersion = referenceReactVersion;
++export const compositionReactDOMVersion = referenceReactDOMVersion;
++// The generic projection only consumes the snapshot contract. It uses the
++// pinned React 19.3.1 renderer and the tree produced by this independent model.
++export const mountCompositionReferenceCollection = mountTreeReferenceCollection;
++
++const hText = (Text) => ({ Kind: 2, Tag: "", Key: "", Attrs: null, On: null, Kids: null, Text });
++const hElement = (Tag, Key, Attrs, On, Kids) => ({
++  Kind: 1, Tag, Key, Attrs, On, Kids, Text: "",
++});
++const hAttr = (Name, Value = "", Flag = false) => ({ Name, Value, Flag, Style: null });
++const hLiteral = (Event, Message, Arg = "") => ({ Event, Message, Arg });
++
++function clone(value) {
++  if (Array.isArray(value)) return value.map(clone);
++  if (value && typeof value === "object") {
++    const copy = {};
++    for (const [key, item] of Object.entries(value)) copy[key] = clone(item);
++    return copy;
++  }
++  return value;
++}
++
++function fail(message, Type = Error) {
++  return new Type(message);
++}
++
++function exactArity(actual, expected, method) {
++  if (actual !== expected) {
++    throw fail(method + " requires exactly " + String(expected) + " argument" +
++      (expected === 1 ? "" : "s"), TypeError);
++  }
++}
++
++function assertID(value, description) {
++  if (!Number.isSafeInteger(value) || value <= 0 || value > MAX_COMPOSITION_INTEGER) {
++    const idName = String(description).toLowerCase().includes("row") ? "row ID" : "session ID";
++    throw fail(idName + " " + String(value) + " is outside the supported range 1.." +
++      String(MAX_COMPOSITION_INTEGER), RangeError);
++  }
++  return value;
++}
++
++function assertRevision(value) {
++  if (!Number.isSafeInteger(value) || value < 0 || value > MAX_COMPOSITION_INTEGER) {
++    throw fail("input revision " + String(value) + " is outside the supported range 0.." +
++      String(MAX_COMPOSITION_INTEGER), RangeError);
++  }
++  return value;
++}
++
++function exactFields(value, fields, description) {
++  if (!value || typeof value !== "object" || Array.isArray(value)) {
++    throw fail(description + " must be an object", TypeError);
++  }
++  const actual = Object.keys(value).sort();
++  const expected = [...fields].sort();
++  if (actual.length !== expected.length || actual.some((field, index) => field !== expected[index])) {
++    throw fail(description + " must contain exactly " + expected.join(", "), TypeError);
++  }
++}
++
++function validUnicode(value) {
++  for (let index = 0; index < value.length; index += 1) {
++    const unit = value.charCodeAt(index);
++    if (unit >= 0xd800 && unit <= 0xdbff) {
++      if (index + 1 >= value.length) return false;
++      const next = value.charCodeAt(index + 1);
++      if (next < 0xdc00 || next > 0xdfff) return false;
++      index += 1;
++    } else if (unit >= 0xdc00 && unit <= 0xdfff) return false;
++  }
++  return true;
++}
++
++function normalizeInputs(raw) {
++  exactFields(raw, ["Title", "ReadOnly"], "inputs");
++  if (typeof raw.Title !== "string" || !validUnicode(raw.Title)) {
++    throw fail("input title must be valid UTF-8", TypeError);
++  }
++  if (new TextEncoder().encode(raw.Title).length > MAX_TITLE_BYTES) {
++    throw fail("input title exceeds 256 UTF-8 bytes", RangeError);
++  }
++  if (typeof raw.ReadOnly !== "boolean") {
++    throw fail("inputs ReadOnly must be a boolean", TypeError);
++  }
++  return { Title: raw.Title, ReadOnly: raw.ReadOnly };
++}
++
++function normalizeStep(raw) {
++  exactFields(raw, ["Path", "Event", "Value", "Key"], "dispatch step");
++  if (typeof raw.Path !== "string" || typeof raw.Event !== "string" ||
++      typeof raw.Value !== "string" || typeof raw.Key !== "string") {
++    throw fail("dispatch step fields must be primitive strings", TypeError);
++  }
++  return { Path: raw.Path, Event: raw.Event, Value: raw.Value, Key: raw.Key };
++}
++
++function pathIndexes(path) {
++  if (path === "") return [];
++  if (typeof path !== "string" || !/^(?:0|[1-9][0-9]*)(?:\/(?:0|[1-9][0-9]*))*$/.test(path)) {
++    throw fail("invalid canonical collection path " + JSON.stringify(path));
++  }
++  const indexes = path.split("/").map(Number);
++  if (indexes.some((index) => !Number.isSafeInteger(index))) {
++    throw fail("collection path index exceeds the JavaScript-safe integer limit", RangeError);
++  }
++  return indexes;
++}
++
++function nodeAtPath(tree, path) {
++  let node = tree;
++  for (const index of pathIndexes(path)) {
++    if (!Array.isArray(node?.Kids) || index >= node.Kids.length) {
++      throw fail("collection path is out of range: " + JSON.stringify(path));
++    }
++    node = node.Kids[index];
++  }
++  return node;
++}
++
++function disabled(node) {
++  return (node?.Attrs ?? []).some((attribute) => attribute.Name === "disabled" && attribute.Flag === true);
++}
++
++function addDisabled(node) {
++  const attrs = Array.isArray(node.Attrs) ? node.Attrs : [];
++  const existing = attrs.find((attribute) => attribute.Name === "disabled");
++  if (existing) existing.Flag = true;
++  else attrs.push(hAttr("disabled", "", true));
++  node.Attrs = attrs;
++}
++
++function applyReadOnly(tree, readOnly) {
++  function visit(node) {
++    if (!node || typeof node !== "object") return;
++    if (readOnly && node.Kind === 1 && (node.Tag === "button" || node.Tag === "input")) {
++      addDisabled(node);
++    }
++    for (const child of node.Kids ?? []) visit(child);
++  }
++  visit(tree);
++}
++
++function compositionTree(base, inputs, revision, inbox, isRoot) {
++  const tree = clone(base.tree);
++  if (!Array.isArray(tree.Kids)) tree.Kids = [];
++  tree.Kids.push(hElement("p", "composition-title", null, null, [hText("Title: " + inputs.Title)]));
++  tree.Kids.push(hElement("p", "composition-inbox", null, null, [
++    hText("Published: " + String(inbox.length)),
++  ]));
++
++  const rowsNode = tree.Kids[2];
++  const rows = base.state.Rows;
++  if (rowsNode && Array.isArray(rowsNode.Kids)) {
++    rowsNode.Kids.forEach((rowNode, index) => {
++      const row = rows[index];
++      if (!row || !Array.isArray(rowNode.Kids)) {
++        throw fail("collection row tree does not match collection state");
++      }
++      const canPublish = !isRoot && !inputs.ReadOnly && row.Saved !== "";
++      const arg = String(row.ID) + "/" + String(revision);
++      rowNode.Kids.push(hElement("button", "row-" + String(row.ID) + "-publish", [
++        hAttr("class", "publish"),
++        ...(canPublish ? [] : [hAttr("disabled", "", true)]),
++      ], [hLiteral("click", "publish", arg)], [hText("Publish")]));
++    });
++  }
++  applyReadOnly(tree, inputs.ReadOnly);
++  return tree;
++}
++
++function parsePublicationArg(arg) {
++  const match = /^(?:[1-9][0-9]*)\/(?:0|[1-9][0-9]*)$/.exec(arg);
++  if (!match) throw fail("publish control must carry an exact ROW/REVISION argument");
++  const [rowText, revisionText] = arg.split("/");
++  const rowID = Number(rowText);
++  const revision = Number(revisionText);
++  assertID(rowID, "publish row ID");
++  assertRevision(revision);
++  if (String(rowID) !== rowText || String(revision) !== revisionText) {
++    throw fail("publish control must carry canonical decimal IDs and revision");
++  }
++  return { rowID, revision };
++}
++
++function appendNewBaseMessages(meta, before, after) {
++  const previous = before.messages.length;
++  for (const message of after.messages.slice(previous)) meta.messages.push(clone(message));
++}
++
++/** Create an independent composition manager over collection-reference sessions. */
++export function createCompositionReference() {
++  const sessions = createSessionTreeReference();
++  const metadata = new Map();
++  const dirty = new Set();
++  let nextSequence = 0;
++
++  function requireMeta(id, description = "session ID") {
++    assertID(id, description);
++    const meta = metadata.get(id);
++    if (!meta) throw fail("unknown or disposed session ID " + String(id));
++    return meta;
++  }
++
++  function newMeta(parentID) {
++    return {
++      parentID,
++      inputs: { Title: "", ReadOnly: false },
++      inputRevision: 0,
++      inbox: [],
++      messages: [],
++    };
++  }
++
++  function markDirty(...ids) {
++    for (const id of ids) dirty.add(id);
++  }
++
++  function project(id) {
++    const meta = requireMeta(id);
++    const base = sessions.snapshot(id);
++    const isRoot = meta.parentID === 0;
++    return {
++      state: {
++        ...clone(base.state),
++        Inputs: clone(meta.inputs),
++        InputRevision: meta.inputRevision,
++        Inbox: clone(meta.inbox),
++      },
++      tree: compositionTree(base, meta.inputs, meta.inputRevision, meta.inbox, isRoot),
++      bindings: clone(base.bindings),
++      messages: clone(meta.messages),
++    };
++  }
++
++  function clearDisposed(ids) {
++    for (const id of ids) {
++      metadata.delete(id);
++      dirty.delete(id);
++    }
++  }
++
++  function setChildInputs(parentID, childID, rawInputs) {
++    exactArity(arguments.length, 3, "setChildInputs");
++    const inputs = normalizeInputs(rawInputs);
++    assertID(parentID, "parent session ID");
++    assertID(childID, "child session ID");
++    const parent = requireMeta(parentID, "parent session ID");
++    const child = requireMeta(childID, "child session ID");
++    if (child.parentID !== parentID) {
++      throw fail("session ID " + String(childID) + " is not an immediate child of session ID " + String(parentID));
++    }
++    if (child.inputRevision >= MAX_COMPOSITION_INTEGER) {
++      throw fail("input revision space exhausted at " + String(child.inputRevision), RangeError);
++    }
++    child.inputs = inputs;
++    child.inputRevision += 1;
++    markDirty(childID);
++    void parent;
++    return project(childID);
++  }
++
++  function publish(childID, rowID, revision) {
++    exactArity(arguments.length, 3, "publish");
++    assertID(childID, "child session ID");
++    assertID(rowID, "row ID");
++    assertRevision(revision);
++    const child = requireMeta(childID, "child session ID");
++    if (child.parentID === 0) throw fail("root session ID " + String(childID) + " cannot publish");
++    const parent = requireMeta(child.parentID, "parent session ID");
++    if (child.inputs.ReadOnly) throw fail("session ID " + String(childID) + " is read-only");
++    if (revision !== child.inputRevision) {
++      throw fail("input revision " + String(revision) + " is stale; current revision is " + String(child.inputRevision));
++    }
++    if (nextSequence >= MAX_COMPOSITION_INTEGER) {
++      throw fail("publication sequence space exhausted at " + String(nextSequence), RangeError);
++    }
++    const snapshot = sessions.snapshot(childID);
++    const row = snapshot.state.Rows.find((candidate) => candidate.ID === rowID);
++    if (!row) throw fail("row " + String(rowID) + " no longer exists");
++    if (row.Saved === "") throw fail("row " + String(rowID) + " has no saved value to publish");
++
++    const receipt = {
++      Sequence: nextSequence + 1,
++      ParentID: child.parentID,
++      ChildID: childID,
++      RowID: rowID,
++      Saved: row.Saved,
++      Saves: row.Saves,
++      InputRevision: child.inputRevision,
++    };
++    // Commit only after every admission check has succeeded.
++    nextSequence = receipt.Sequence;
++    parent.inbox.push(receipt);
++    child.messages.push({ Name: "publish", Arg: String(rowID) + "/" + String(revision) });
++    markDirty(childID, child.parentID);
++    return clone(receipt);
++  }
++
++  function dispatch(id, rawStep) {
++    exactArity(arguments.length, 2, "dispatch");
++    const meta = requireMeta(id);
++    const step = normalizeStep(rawStep);
++    const current = project(id);
++    const target = nodeAtPath(current.tree, step.Path);
++    if (target.Key !== step.Key) {
++      throw fail("dispatch key " + JSON.stringify(step.Key) + " does not match target key " + JSON.stringify(target.Key));
++    }
++
++    const bindings = current.bindings.filter((binding) =>
++      binding.Path === step.Path && binding.Event === step.Event);
++    const handlers = (target.On ?? []).filter((handler) => handler.Event === step.Event);
++    if (bindings.length > 1 || handlers.length > 1) {
++      throw fail("dispatch target has ambiguous event declarations");
++    }
++    const binding = bindings[0] ?? null;
++    const handler = handlers[0] ?? null;
++
++    // A publish node is intercepted only after its current path, key, event,
++    // and literal ROW/REVISION have all been verified.
++    const publishHandler = (target.On ?? []).filter((item) => item.Message === "publish");
++    if (publishHandler.length > 0) {
++      if (publishHandler.length !== 1 || publishHandler[0].Event !== "click" ||
++          step.Event !== "click" || !handler || handler !== publishHandler[0]) {
++        throw fail("publish control path, key, or event is not canonical");
++      }
++      const { rowID, revision } = parsePublicationArg(publishHandler[0].Arg);
++      if (step.Value !== publishHandler[0].Arg) {
++        throw fail("publish dispatch value must equal the current literal ROW/REVISION argument");
++      }
++      const row = sessions.snapshot(id).state.Rows.find((candidate) => candidate.ID === rowID);
++      if (!row || !step.Path.startsWith("2/")) {
++        throw fail("publish control does not identify a current collection row");
++      }
++      if (disabled(target)) return project(id);
++      publish(id, rowID, revision);
++      return project(id);
++    }
++
++    if (!binding && !handler) {
++      throw fail("no " + JSON.stringify(step.Event) + " handler or binding at path " + JSON.stringify(step.Path));
++    }
++    // Validate the event declaration before applying read-only suppression.
++    if (meta.inputs.ReadOnly || disabled(target)) return project(id);
++
++    const before = sessions.snapshot(id);
++    const after = sessions.dispatch(id, step);
++    appendNewBaseMessages(meta, before, after);
++    if (after.messages.length > before.messages.length) markDirty(id);
++    return project(id);
++  }
++
++  function complete(id, reply) {
++    exactArity(arguments.length, 2, "complete");
++    const meta = requireMeta(id);
++    const before = sessions.snapshot(id);
++    const after = sessions.complete(id, reply);
++    appendNewBaseMessages(meta, before, after);
++    if (after.messages.length > before.messages.length) markDirty(id);
++    return project(id);
++  }
++
++  function dispose(id) {
++    exactArity(arguments.length, 1, "dispose");
++    requireMeta(id);
++    const commands = sessions.dispose(id);
++    clearDisposed([id]);
++    return commands;
++  }
++
++  function disposeTree(id) {
++    exactArity(arguments.length, 1, "disposeTree");
++    requireMeta(id);
++    const disposed = sessions.disposeTree(id);
++    clearDisposed(disposed.map((item) => item.SessionID));
++    return disposed;
++  }
++
++  return {
++    create() {
++      exactArity(arguments.length, 0, "create");
++      const id = sessions.create();
++      metadata.set(id, newMeta(0));
++      return id;
++    },
++    createChild(parentID) {
++      exactArity(arguments.length, 1, "createChild");
++      requireMeta(parentID, "parent session ID");
++      const id = sessions.createChild(parentID);
++      metadata.set(id, newMeta(parentID));
++      return id;
++    },
++    tree() {
++      exactArity(arguments.length, 0, "tree");
++      return sessions.tree();
++    },
++    list() {
++      exactArity(arguments.length, 0, "list");
++      return sessions.list();
++    },
++    snapshot(id) {
++      exactArity(arguments.length, 1, "snapshot");
++      return project(id);
++    },
++    dispatch,
++    effects(id) {
++      exactArity(arguments.length, 1, "effects");
++      requireMeta(id);
++      return sessions.effects(id);
++    },
++    complete,
++    audit(id) {
++      exactArity(arguments.length, 1, "audit");
++      requireMeta(id);
++      return sessions.audit(id);
++    },
++    dispose,
++    disposeTree,
++    setChildInputs(parentID, childID, rawInputs) {
++      exactArity(arguments.length, 3, "setChildInputs");
++      return setChildInputs(parentID, childID, rawInputs);
++    },
++    publish(childID, rowID, revision) {
++      exactArity(arguments.length, 3, "publish");
++      return publish(childID, rowID, revision);
++    },
++    changes() {
++      exactArity(arguments.length, 0, "changes");
++      const result = [...dirty].filter((id) => metadata.has(id)).sort((left, right) => left - right);
++      dirty.clear();
++      return result;
++    },
++    encodeHTTP,
++    decodeHTTP,
++  };
++}
+diff --git a/typed-composition/reference.test.mjs b/typed-composition/reference.test.mjs
+new file mode 100644
+index 0000000..785158c
+--- /dev/null
++++ b/typed-composition/reference.test.mjs
+@@ -0,0 +1,352 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import {
++  createCompositionReference,
++  MAX_TITLE_BYTES,
++  mountCompositionReferenceCollection,
++  referenceReactDOMVersion,
++  referenceReactVersion,
++} from "./reference.mjs";
++
++const inputs = (Title = "", ReadOnly = false) => ({ Title, ReadOnly });
++const click = (Path, Key, Value = "") => ({ Path, Key, Value, Event: "click" });
++const input = (Path, Key, Value) => ({ Path, Key, Value, Event: "input" });
++const isDisabled = (node) => (node?.Attrs ?? []).some((attribute) =>
++  attribute.Name === "disabled" && attribute.Flag === true);
++
++function addRow(manager, id) {
++  return manager.dispatch(id, click("0", "add"));
++}
++
++function editRow(manager, id, rowID, value) {
++  return manager.dispatch(id, input("2/" + String(rowID - 1) + "/0", "row-" + rowID + "-input", value));
++}
++
++function saveRow(manager, id, rowID) {
++  return manager.dispatch(id, click("2/" + String(rowID - 1) + "/5", "row-" + rowID + "-save", String(rowID)));
++}
++
++function publishNode(snapshot, rowIndex = 0) {
++  return snapshot.tree.Kids[2].Kids[rowIndex].Kids[9];
++}
++
++test("composition snapshot adds visible title and inbox while preserving collection paths", () => {
++  const manager = createCompositionReference();
++  const rootID = manager.create();
++  const childID = manager.createChild(rootID);
++  const root = manager.snapshot(rootID);
++  assert.deepEqual(root.state.Inputs, inputs());
++  assert.equal(root.state.InputRevision, 0);
++  assert.deepEqual(root.state.Inbox, []);
++  assert.equal(root.tree.Kids.length, 5);
++  assert.equal(root.tree.Kids[3].Key, "composition-title");
++  assert.equal(root.tree.Kids[3].Kids[0].Text, "Title: ");
++  assert.equal(root.tree.Kids[4].Key, "composition-inbox");
++  assert.equal(root.tree.Kids[4].Kids[0].Text, "Published: 0");
++  assert.equal(root.tree.Kids[0].Key, "add");
++  assert.equal(root.tree.Kids[1].Key, "reset");
++
++  addRow(manager, rootID);
++  assert.equal(publishNode(manager.snapshot(rootID)).Key, "row-1-publish");
++  assert.equal(isDisabled(publishNode(manager.snapshot(rootID))), true,
++    "roots cannot publish even when their collection row exists");
++
++  addRow(manager, childID);
++  const child = manager.snapshot(childID);
++  assert.equal(child.tree.Kids[2].Kids[0].Kids.length, 10);
++  assert.equal(child.tree.Kids[2].Kids[0].Kids[8].Key, "row-1-cancel");
++  assert.deepEqual(child.bindings, [{ Path: "2/0/0", Event: "input", Message: "edit/1", Source: "target.value" }]);
++});
++
++test("inputs are immediate-parent only, count equal values, and enforce UTF-8 byte limits", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  const grandchild = manager.createChild(child);
++  const title = "🌘".repeat(64);
++  assert.equal(new TextEncoder().encode(title).length, MAX_TITLE_BYTES);
++  const first = manager.setChildInputs(root, child, inputs(title));
++  assert.deepEqual(first.state.Inputs, inputs(title));
++  assert.equal(first.state.InputRevision, 1);
++  assert.equal(first.tree.Kids[3].Kids[0].Text, "Title: " + title);
++  assert.equal(manager.snapshot(grandchild).state.InputRevision, 0,
++    "parent inputs are not inherited by grandchildren");
++  manager.setChildInputs(root, child, inputs(title));
++  assert.equal(manager.snapshot(child).state.InputRevision, 2,
++    "an equal accepted value still advances the revision");
++
++  const before = manager.snapshot(child);
++  assert.deepEqual(manager.changes(), [child]);
++  assert.throws(() => manager.setChildInputs(grandchild, child, inputs("wrong parent")), /not an immediate child/i);
++  assert.throws(() => manager.setChildInputs(root, child, inputs("🌘".repeat(65))), /256 UTF-8 bytes/i);
++  assert.throws(() => manager.setChildInputs(root, child, { Title: "\ud800", ReadOnly: false }), /valid UTF-8/i);
++  assert.throws(() => manager.setChildInputs(root, child, { Title: "x", ReadOnly: 1 }), /boolean/i);
++  assert.throws(() => manager.setChildInputs(root, child, { Title: "x", ReadOnly: false, Extra: true }), /exactly/i);
++  assert.deepEqual(manager.snapshot(child), before);
++  assert.deepEqual(manager.changes(), [],
++    "failed input calls neither mutate state nor add dirty IDs");
++});
++
++test("publish captures saved content, advances global sequence, and routes to the immediate parent", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  const grandchild = manager.createChild(child);
++  manager.setChildInputs(root, child, inputs("review"));
++  manager.setChildInputs(child, grandchild, inputs("leaf"));
++
++  addRow(manager, child);
++  editRow(manager, child, 1, "first draft");
++  saveRow(manager, child, 1);
++  assert.deepEqual(manager.effects(child), [{ Kind: "start", ID: 1, Value: "first draft" }]);
++  manager.complete(child, { ID: 1, Value: "captured saved value", Error: "" });
++  editRow(manager, child, 1, "later draft");
++
++  const first = manager.publish(child, 1, 1);
++  const second = manager.publish(child, 1, 1);
++  assert.deepEqual(first, {
++    Sequence: 1, ParentID: root, ChildID: child, RowID: 1,
++    Saved: "captured saved value", Saves: 1, InputRevision: 1,
++  });
++  assert.equal(second.Sequence, 2, "repeated publish calls create distinct sequence numbers");
++  assert.deepEqual(manager.snapshot(root).state.Inbox, [first, second]);
++  assert.deepEqual(manager.snapshot(child).messages.slice(-2), [
++    { Name: "publish", Arg: "1/1" },
++    { Name: "publish", Arg: "1/1" },
++  ]);
++  assert.deepEqual(manager.snapshot(grandchild).state.Inbox, [],
++    "grandchild publication has not been routed to its grandparent");
++
++  addRow(manager, grandchild);
++  editRow(manager, grandchild, 1, "leaf draft");
++  saveRow(manager, grandchild, 1);
++  manager.complete(grandchild, { ID: 1, Value: "grandchild saved", Error: "" });
++  const leafReceipt = manager.publish(grandchild, 1, 1);
++  assert.equal(leafReceipt.Sequence, 3);
++  assert.deepEqual(manager.snapshot(child).state.Inbox, [leafReceipt]);
++  assert.deepEqual(manager.snapshot(root).state.Inbox, [first, second],
++    "grandchild publication goes only to its direct parent");
++});
++
++test("stale revisions, wrong parents, roots, and unsaved rows do not partially publish", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  manager.setChildInputs(root, child, inputs("same"));
++  manager.setChildInputs(root, child, inputs("same"));
++  addRow(manager, child);
++  editRow(manager, child, 1, "ready");
++  saveRow(manager, child, 1);
++  manager.complete(child, { ID: 1, Value: "ready saved", Error: "" });
++
++  const beforeChild = manager.snapshot(child);
++  const beforeParent = manager.snapshot(root);
++  manager.changes();
++  assert.throws(() => manager.publish(child, 1, 1), /stale/i);
++  assert.throws(() => manager.publish(root, 1, 0), /root/i);
++  assert.throws(() => manager.publish(child, 2, 2), /row 2 no longer exists/i);
++  assert.deepEqual(manager.snapshot(child), beforeChild);
++  assert.deepEqual(manager.snapshot(root), beforeParent);
++  assert.deepEqual(manager.changes(), []);
++
++  const current = publishNode(manager.snapshot(child));
++  assert.equal(current.On[0].Arg, "1/2");
++  assert.throws(() => manager.dispatch(child, click("2/0/9", current.Key, "1/1")), /literal ROW\/REVISION/i);
++  assert.throws(() => manager.dispatch(child, click("2/0/9", "row-99-publish", "1/2")), /key/i);
++  assert.deepEqual(manager.snapshot(child), beforeChild);
++  assert.deepEqual(manager.snapshot(root), beforeParent);
++});
++
++test("publish dispatch validates the current canonical control and appends ordered messages", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  manager.setChildInputs(root, child, inputs("child"));
++  addRow(manager, child);
++  editRow(manager, child, 1, "draft");
++  saveRow(manager, child, 1);
++  manager.complete(child, { ID: 1, Value: "saved", Error: "" });
++
++  const button = publishNode(manager.snapshot(child));
++  assert.equal(button.Attrs[0].Value, "publish");
++  assert.equal(button.On[0].Message, "publish");
++  assert.equal(button.On[0].Arg, "1/1");
++  manager.dispatch(child, click("2/0/9", button.Key, button.On[0].Arg));
++  assert.equal(manager.snapshot(root).state.Inbox[0].Saved, "saved");
++  assert.deepEqual(manager.snapshot(child).messages.slice(-2), [
++    { Name: "reply", Arg: "1" },
++    { Name: "publish", Arg: "1/1" },
++  ]);
++
++  assert.throws(() => manager.dispatch(child, {
++    Path: "2/00/9", Key: "row-1-publish", Value: "1/1", Event: "click",
++  }), /canonical/i);
++  assert.throws(() => manager.dispatch(child, {
++    Path: "2/0/9", Key: "row-1-publish", Value: "1/1", Event: "input",
++  }), /publish control path/i);
++});
++
++test("read-only disables every button and input, suppresses edits and publish, but accepts replies", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  addRow(manager, child);
++  editRow(manager, child, 1, "before readonly");
++  saveRow(manager, child, 1);
++  manager.effects(child);
++  manager.setChildInputs(root, child, inputs("locked", true));
++
++  const locked = manager.snapshot(child);
++  const allControls = [];
++  const walk = (node) => {
++    if (node?.Kind === 1 && (node.Tag === "button" || node.Tag === "input")) allControls.push(node);
++    for (const childNode of node?.Kids ?? []) walk(childNode);
++  };
++  walk(locked.tree);
++  assert.ok(allControls.length > 0);
++  assert.ok(allControls.every(isDisabled), "all controls carry the disabled attribute in read-only mode");
++
++  const beforeDraft = locked.state.Rows[0].Draft;
++  manager.dispatch(child, input("2/0/0", "row-1-input", "blocked edit"));
++  assert.equal(manager.snapshot(child).state.Rows[0].Draft, beforeDraft);
++  assert.throws(() => manager.publish(child, 1, 1), /read-only/i);
++  assert.equal(manager.snapshot(root).state.Inbox.length, 0);
++  manager.complete(child, { ID: 1, Value: "saved while locked", Error: "" });
++  const completed = manager.snapshot(child);
++  assert.equal(completed.state.Rows[0].Saved, "saved while locked");
++  assert.equal(completed.state.Rows[0].Saves, 1);
++  assert.equal(isDisabled(publishNode(completed)), true);
++  assert.equal(completed.tree.Kids[3].Kids[0].Text, "Title: locked");
++
++  // Disabled controls still require a valid canonical event declaration.
++  assert.throws(() => manager.dispatch(child, {
++    Path: "0", Key: "add", Value: "", Event: "hover",
++  }), /handler or binding/i);
++  assert.throws(() => manager.dispatch(child, {
++    Path: "0", Key: "wrong", Value: "", Event: "click",
++  }), /key/i);
++});
++
++test("completed pending replies remain accepted while read-only and dirty only their target", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  addRow(manager, child);
++  editRow(manager, child, 1, "pending");
++  saveRow(manager, child, 1);
++  manager.effects(child);
++  manager.changes();
++  manager.setChildInputs(root, child, inputs("locked", true));
++  assert.deepEqual(manager.changes(), [child]);
++  manager.complete(child, { ID: 1, Value: "done", Error: "" });
++  assert.deepEqual(manager.changes(), [child]);
++  assert.deepEqual(manager.snapshot(root).state.Inbox, []);
++});
++
++test("child deletion retains parent inbox history, owner deletion clears it, and IDs/sequences never reuse", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  addRow(manager, child);
++  editRow(manager, child, 1, "draft");
++  saveRow(manager, child, 1);
++  manager.complete(child, { ID: 1, Value: "one", Error: "" });
++  const receipt = manager.publish(child, 1, 0);
++  assert.equal(receipt.Sequence, 1);
++  manager.dispose(child);
++  assert.deepEqual(manager.snapshot(root).state.Inbox, [receipt]);
++  assert.deepEqual(manager.changes(), [root]);
++  assert.throws(() => manager.snapshot(child), /unknown or disposed/i);
++
++  const second = manager.createChild(root);
++  assert.equal(second, 3);
++  addRow(manager, second);
++  editRow(manager, second, 1, "draft");
++  saveRow(manager, second, 1);
++  manager.complete(second, { ID: 1, Value: "two", Error: "" });
++  const nextReceipt = manager.publish(second, 1, 0);
++  assert.equal(nextReceipt.Sequence, 2);
++  assert.deepEqual(manager.snapshot(root).state.Inbox.map(({ Sequence }) => Sequence), [1, 2]);
++
++  manager.disposeTree(root);
++  assert.deepEqual(manager.list(), []);
++  const replacement = manager.create();
++  assert.equal(replacement, 4);
++  assert.deepEqual(manager.snapshot(replacement).state.Inbox, []);
++  assert.deepEqual(manager.changes(), []);
++});
++
++test("snapshots and receipts are defensive copies and failed calls leave dirty IDs untouched", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  manager.setChildInputs(root, child, inputs("copy"));
++  addRow(manager, child);
++  editRow(manager, child, 1, "draft");
++  saveRow(manager, child, 1);
++  manager.complete(child, { ID: 1, Value: "saved", Error: "" });
++  manager.changes();
++
++  const snapshot = manager.snapshot(root);
++  snapshot.state.Inbox.push({ Sequence: 900 });
++  snapshot.tree.Kids[3].Kids[0].Text = "corrupt";
++  const childSnapshot = manager.snapshot(child);
++  childSnapshot.state.Inputs.Title = "corrupt";
++  childSnapshot.messages.push({ Name: "corrupt", Arg: "" });
++  assert.equal(manager.snapshot(root).state.Inbox.length, 0);
++  assert.equal(manager.snapshot(child).state.Inputs.Title, "copy");
++  assert.equal(manager.snapshot(child).tree.Kids[3].Kids[0].Text, "Title: copy");
++  assert.equal(manager.snapshot(child).messages.some(({ Name }) => Name === "corrupt"), false);
++
++  const receipt = manager.publish(child, 1, 1);
++  receipt.Saved = "corrupt";
++  manager.changes().push(999);
++  assert.equal(manager.snapshot(root).state.Inbox[0].Saved, "saved");
++  assert.deepEqual(manager.changes(), []);
++});
++
++test("tree, list, audit, effects and changes retain session-tree behavior", () => {
++  const manager = createCompositionReference();
++  const root = manager.create();
++  const child = manager.createChild(root);
++  assert.deepEqual(manager.list(), [root, child]);
++  assert.deepEqual(manager.tree(), [
++    { SessionID: root, ParentID: 0, Depth: 1 },
++    { SessionID: child, ParentID: root, Depth: 2 },
++  ]);
++  addRow(manager, child);
++  editRow(manager, child, 1, "save");
++  saveRow(manager, child, 1);
++  assert.deepEqual(manager.effects(child), [{ Kind: "start", ID: 1, Value: "save" }]);
++  manager.complete(child, { ID: 1, Value: "done", Error: "" });
++  assert.deepEqual(manager.audit(child), [{
++    ID: 1, RowID: 1, Value: "done", Error: "", Accepted: true, Reason: "saved",
++  }]);
++  assert.deepEqual(manager.changes(), [child]);
++  assert.deepEqual(manager.changes(), []);
++});
++
++test("public composition methods enforce exact arity", () => {
++  const manager = createCompositionReference();
++  assert.throws(() => manager.create("extra"), /requires exactly 0 arguments/i);
++  const root = manager.create();
++  assert.throws(() => manager.createChild(root, "extra"), /requires exactly 1 argument/i);
++  const child = manager.createChild(root);
++  assert.throws(() => manager.tree("extra"), /requires exactly 0 arguments/i);
++  assert.throws(() => manager.list("extra"), /requires exactly 0 arguments/i);
++  assert.throws(() => manager.snapshot(child, "extra"), /requires exactly 1 argument/i);
++  assert.throws(() => manager.dispatch(child, {}, "extra"), /requires exactly 2 arguments/i);
++  assert.throws(() => manager.effects(child, "extra"), /requires exactly 1 argument/i);
++  assert.throws(() => manager.complete(child, {}, "extra"), /requires exactly 2 arguments/i);
++  assert.throws(() => manager.audit(child, "extra"), /requires exactly 1 argument/i);
++  assert.throws(() => manager.disposeTree(child, "extra"), /requires exactly 1 argument/i);
++  assert.throws(() => manager.setChildInputs(root, child, inputs(), "extra"), /requires exactly 3 arguments/i);
++  assert.throws(() => manager.publish(child, 1, 0, "extra"), /requires exactly 3 arguments/i);
++  assert.throws(() => manager.changes("extra"), /requires exactly 0 arguments/i);
++});
++
++test("composition projection is the inherited pinned React renderer", () => {
++  assert.equal(typeof mountCompositionReferenceCollection, "function");
++  assert.equal(referenceReactVersion, "19.3.1");
++  assert.equal(referenceReactDOMVersion, "19.3.1");
++});
+diff --git a/typed-composition/scripts.mjs b/typed-composition/scripts.mjs
+new file mode 100644
+index 0000000..59b93cd
+--- /dev/null
++++ b/typed-composition/scripts.mjs
+@@ -0,0 +1,273 @@
++// Deterministic public-API traces shared by the independent model, browser
++// fixture, and native composition replay command.
++
++export const DEFAULT_SEEDS = Object.freeze([20261030, 20261031]);
++export const DEFAULT_CASES = 30;
++export const DEFAULT_MAX_ACTIONS = 40;
++
++const freeze = (value) => {
++  if (Array.isArray(value)) return Object.freeze(value.map(freeze));
++  if (value && typeof value === "object") {
++    const copy = {};
++    for (const [key, item] of Object.entries(value)) copy[key] = freeze(item);
++    return Object.freeze(copy);
++  }
++  return value;
++};
++
++const call = (method, ...args) => freeze({ method, args });
++const step = (Path, Key, Event = "click", Value = "") => ({ Path, Event, Value, Key });
++const add = (id) => call("dispatch", id, step("0", "add"));
++const edit = (id, rowID, value) =>
++  call("dispatch", id, step("2/" + String(rowID - 1) + "/0", "row-" + rowID + "-input", "input", value));
++const save = (id, rowID) =>
++  call("dispatch", id, step("2/" + String(rowID - 1) + "/5", "row-" + rowID + "-save", "click", String(rowID)));
++
++function script(name, actions, seed = null) {
++  return Object.freeze({ name, seed, actions: Object.freeze(actions.map(freeze)) });
++}
++
++const inputsAndPublication = script("inputs-publication-races", [
++  call("create"),
++  call("createChild", 1),
++  call("createChild", 2),
++  call("snapshot", 1),
++  call("snapshot", 2),
++  call("setChildInputs", 1, 2, { Title: "Research branch", ReadOnly: false }),
++  call("setChildInputs", 1, 2, { Title: "Research branch", ReadOnly: false }),
++  call("setChildInputs", 3, 2, { Title: "wrong parent", ReadOnly: false }),
++  add(1),
++  call("snapshot", 1),
++  add(2),
++  call("snapshot", 2),
++  edit(2, 1, "draft to save"),
++  save(2, 1),
++  call("effects", 2),
++  call("complete", 2, { ID: 1, Value: "saved at completion", Error: "" }),
++  call("dispatch", 2, step("2/0/9", "row-1-publish", "click", "1/2")),
++  edit(2, 1, "draft changed after save"),
++  call("publish", 2, 1, 1),
++  call("publish", 2, 1, 2),
++  call("publish", 2, 1, 2),
++  call("snapshot", 1),
++  call("changes"),
++]);
++
++const readonlyReply = script("readonly-pending-reply", [
++  call("create"),
++  call("createChild", 1),
++  add(2),
++  edit(2, 1, "held request"),
++  save(2, 1),
++  call("effects", 2),
++  call("setChildInputs", 1, 2, { Title: "Locked child", ReadOnly: true }),
++  add(2),
++  edit(2, 1, "blocked replacement"),
++  call("complete", 2, { ID: 1, Value: "completed while read-only", Error: "" }),
++  call("publish", 2, 1, 1),
++  call("snapshot", 2),
++  call("snapshot", 1),
++  call("changes"),
++]);
++
++const directParentLifecycle = script("grandchild-routing-disposal-and-recreation", [
++  call("create"),
++  call("createChild", 1),
++  call("createChild", 2),
++  call("setChildInputs", 1, 2, { Title: "Parent-owned title", ReadOnly: false }),
++  call("setChildInputs", 2, 3, { Title: "Grandchild-owned title", ReadOnly: false }),
++  add(2),
++  edit(2, 1, "child draft"),
++  save(2, 1),
++  call("effects", 2),
++  call("complete", 2, { ID: 1, Value: "child saved", Error: "" }),
++  call("publish", 2, 1, 1),
++  add(3),
++  edit(3, 1, "grandchild draft"),
++  save(3, 1),
++  call("effects", 3),
++  call("complete", 3, { ID: 1, Value: "grandchild saved", Error: "" }),
++  call("publish", 3, 1, 1),
++  call("snapshot", 1),
++  call("snapshot", 2),
++  call("dispose", 3),
++  call("snapshot", 2),
++  call("disposeTree", 1),
++  call("create"),
++  call("createChild", 4),
++  call("snapshot", 4),
++  call("snapshot", 5),
++]);
++
++export const fixedScripts = Object.freeze([
++  inputsAndPublication,
++  readonlyReply,
++  directParentLifecycle,
++]);
++
++function random32(seed) {
++  let state = seed >>> 0;
++  if (state === 0) state = 0x6d2b79f5;
++  return () => {
++    state ^= state << 13;
++    state ^= state >>> 17;
++    state ^= state << 5;
++    return (state >>> 0) / 0x1_0000_0000;
++  };
++}
++
++const pick = (random, values) => values[Math.floor(random() * values.length)];
++const draftValues = Object.freeze(["", "draft", "café", "🌘<&", "same saved text", "line one\nline two"]);
++
++function seededCase(seed, index, maxActions) {
++  const random = random32((seed + Math.imul(index + 1, 0x9e3779b1)) >>> 0);
++  const actions = [call("create"), call("createChild", 1), call("createChild", 2)];
++  const sessions = new Map([
++    [1, { parent: 0, readOnly: false, rows: [], nextRowID: 0, nextRequestID: 0, pending: new Map() }],
++    [2, { parent: 1, readOnly: false, rows: [], nextRowID: 0, nextRequestID: 0, pending: new Map() }],
++    [3, { parent: 2, readOnly: false, rows: [], nextRowID: 0, nextRequestID: 0, pending: new Map() }],
++  ]);
++  actions.push(call("snapshot", 1), call("snapshot", 2), call("snapshot", 3));
++
++  let revision = 0;
++  let grandchildRevision = 0;
++  const target = () => pick(random, [2, 3]);
++  const limit = Math.max(0, maxActions - actions.length - 3);
++  for (let index = 0; index < limit; index += 1) {
++    const id = target();
++    const state = sessions.get(id);
++    const row = state.rows.length === 0 ? null : pick(random, state.rows);
++    const choice = Math.floor(random() * 8);
++
++    if (choice === 0) {
++      const title = pick(random, ["", "child-" + index, "🌘", "café"]);
++      const readOnly = random() < 0.25;
++      actions.push(call("setChildInputs", 1, 2, { Title: title, ReadOnly: readOnly }));
++      revision += 1;
++      sessions.get(2).readOnly = readOnly;
++    } else if (choice === 1) {
++      const title = pick(random, ["leaf-" + index, "🌿", ""]);
++      const readOnly = random() < 0.25;
++      actions.push(call("setChildInputs", 2, 3, { Title: title, ReadOnly: readOnly }));
++      grandchildRevision += 1;
++      sessions.get(3).readOnly = readOnly;
++    } else if (choice === 2 && state.rows.length < 4) {
++      actions.push(add(id));
++      if (!state.readOnly) {
++        state.nextRowID += 1;
++        state.rows.push({ id: state.nextRowID, draft: "", saved: "", saves: 0 });
++      }
++    } else if (choice === 3 && row) {
++      const value = pick(random, draftValues);
++      actions.push(edit(id, row.id, value));
++      if (!state.readOnly) row.draft = value;
++    } else if (choice === 4 && row) {
++      if (!state.readOnly && row.draft !== "") {
++        state.nextRequestID += 1;
++        // Replacing a request leaves the older reply callback releasable, but
++        // only the newest request for this row can still be accepted.
++        state.pending.set(state.nextRequestID, row.id);
++        if (!state.pendingByRow) state.pendingByRow = new Map();
++        state.pendingByRow.set(row.id, state.nextRequestID);
++      }
++      actions.push(save(id, row.id));
++    } else if (choice === 5 && state.pending.size > 0) {
++      const [requestID, rowID] = [...state.pending.entries()][0];
++      state.pending.delete(requestID);
++      const error = random() < 0.18 ? "seeded error" : "";
++      actions.push(call("complete", id, {
++        ID: requestID,
++        Value: "reply-" + index,
++        Error: error,
++      }));
++      if (state.pendingByRow?.get(rowID) === requestID) {
++        state.pendingByRow.delete(rowID);
++        const targetRow = state.rows.find((candidate) => candidate.id === rowID);
++        if (targetRow && error === "") {
++          targetRow.saved = "reply-" + index;
++          targetRow.saves += 1;
++        }
++      }
++    } else if (choice === 6 && row) {
++      const currentRevision = id === 2 ? revision : grandchildRevision;
++      const useStale = random() < 0.5 && currentRevision > 0;
++      actions.push(call("publish", id, row.id,
++        useStale ? currentRevision - 1 : currentRevision));
++    } else {
++      actions.push(call("snapshot", id));
++    }
++  }
++  actions.push(call("tree"), call("list"), call("changes"));
++  return script("seed-" + seed + "-case-" + index, actions, seed);
++}
++
++function validateOptions({ cases, maxActions }) {
++  if (!Number.isInteger(cases) || cases < 0) throw new RangeError("cases must be a non-negative integer");
++  if (!Number.isInteger(maxActions) || maxActions < 9 || maxActions > DEFAULT_MAX_ACTIONS) {
++    throw new RangeError("maxActions must be from 9 through " + DEFAULT_MAX_ACTIONS);
++  }
++}
++
++/** Reproducible bounded application traces. Each script has an explicit seed. */
++export function seededScripts(seed, { cases = DEFAULT_CASES, maxActions = DEFAULT_MAX_ACTIONS } = {}) {
++  if (!Number.isInteger(seed) || seed < 0 || seed > 0xffff_ffff) {
++    throw new RangeError("seed must be an unsigned 32-bit integer");
++  }
++  validateOptions({ cases, maxActions });
++  return Object.freeze(Array.from({ length: cases }, (_, index) => seededCase(seed, index, maxActions)));
++}
++
++export function makeScripts({
++  seeds = DEFAULT_SEEDS,
++  cases = DEFAULT_CASES,
++  maxActions = DEFAULT_MAX_ACTIONS,
++} = {}) {
++  if (!Array.isArray(seeds) || seeds.some((seed) =>
++    !Number.isInteger(seed) || seed < 0 || seed > 0xffff_ffff)) {
++    throw new RangeError("seeds must be an array of unsigned 32-bit integers");
++  }
++  if (new Set(seeds).size !== seeds.length) throw new RangeError("seeds must be unique");
++  validateOptions({ cases, maxActions });
++  return Object.freeze([
++    ...fixedScripts,
++    ...seeds.flatMap((seed) => seededScripts(seed, { cases, maxActions })),
++  ]);
++}
++
++const clone = (value) => {
++  if (Array.isArray(value)) return value.map(clone);
++  if (value && typeof value === "object") {
++    const copy = {};
++    for (const [key, item] of Object.entries(value)) copy[key] = clone(item);
++    return copy;
++  }
++  return value;
++};
++
++/** Execute one script against the independent model using the native frame shape. */
++export function runReferenceScript(reference, selectedScript) {
++  if (!reference || typeof reference !== "object" || !Array.isArray(selectedScript?.actions)) {
++    throw new TypeError("runReferenceScript requires a reference manager and a script with actions");
++  }
++  return selectedScript.actions.map((action) => {
++    let result;
++    try {
++      const method = reference[action.method];
++      if (typeof method !== "function") throw new TypeError("unknown composition method " + action.method);
++      result = method(...action.args);
++    } catch (error) {
++      result = { error: error instanceof Error ? error.message : String(error) };
++    }
++
++    const tree = reference.tree();
++    const sessions = reference.list().map((id) => ({ id, snapshot: reference.snapshot(id) }));
++    // Like the native replay command, each frame drains changes after the
++    // operation. A standalone changes action already drained them for result.
++    const changes = reference.changes();
++    return {
++      action: clone(action),
++      result: clone(result),
++      frame: { tree: clone(tree), sessions: clone(sessions), changes: clone(changes) },
++    };
++  });
++}
+diff --git a/typed-composition/scripts.test.mjs b/typed-composition/scripts.test.mjs
+new file mode 100644
+index 0000000..36fab97
+--- /dev/null
++++ b/typed-composition/scripts.test.mjs
+@@ -0,0 +1,170 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { createCompositionReference } from "./reference.mjs";
++import {
++  DEFAULT_CASES,
++  DEFAULT_MAX_ACTIONS,
++  DEFAULT_SEEDS,
++  fixedScripts,
++  makeScripts,
++  runReferenceScript,
++  seededScripts,
++} from "./scripts.mjs";
++
++const callMethods = new Set([
++  "create", "createChild", "tree", "list", "snapshot", "dispatch", "effects",
++  "complete", "audit", "dispose", "disposeTree", "setChildInputs", "publish",
++  "changes", "encodeHTTP", "decodeHTTP",
++]);
++
++function action(script, method, predicate = () => true) {
++  return script.actions.find((candidate) => candidate.method === method && predicate(candidate));
++}
++
++test("fixed traces use the closed native action schema and include typed policy witnesses", () => {
++  assert.deepEqual(DEFAULT_SEEDS, [20261030, 20261031]);
++  assert.equal(DEFAULT_CASES, 30);
++  assert.equal(DEFAULT_MAX_ACTIONS, 40);
++  assert.deepEqual(fixedScripts.map(({ name }) => name), [
++    "inputs-publication-races",
++    "readonly-pending-reply",
++    "grandchild-routing-disposal-and-recreation",
++  ]);
++
++  for (const script of fixedScripts) {
++    assert.ok(Object.isFrozen(script));
++    assert.ok(Object.isFrozen(script.actions));
++    for (const item of script.actions) {
++      assert.deepEqual(Object.keys(item).sort(), ["args", "method"]);
++      assert.ok(callMethods.has(item.method), "unknown native method " + item.method);
++      assert.ok(Array.isArray(item.args));
++      assert.ok(Object.isFrozen(item.args));
++    }
++  }
++
++  const publication = fixedScripts[0];
++  assert.ok(action(publication, "setChildInputs", (item) =>
++    item.args[0] === 1 && item.args[1] === 2 && item.args[2].Title === "Research branch"));
++  assert.ok(action(publication, "setChildInputs", (item) =>
++    item.args[0] === 3 && item.args[1] === 2), "wrong immediate parent is attempted");
++  assert.ok(action(publication, "dispatch", (item) =>
++    item.args[1].Path === "2/0/9" &&
++    item.args[1].Key === "row-1-publish" &&
++    item.args[1].Value === "1/2"), "a rendered publish button is clicked");
++  assert.ok(action(publication, "publish", (item) => item.args[2] === 1),
++    "a stale input revision is attempted after equal inputs");
++  assert.ok(action(publication, "publish", (item) => item.args[2] === 2),
++    "current-revision publication is repeated");
++
++  const readonly = fixedScripts[1];
++  assert.ok(action(readonly, "complete"), "pending async work completes after ReadOnly turns on");
++  assert.ok(action(readonly, "setChildInputs", (item) => item.args[2].ReadOnly));
++  assert.ok(action(readonly, "publish"), "direct publication is attempted while read-only");
++  const lifecycle = fixedScripts[2];
++  assert.ok(action(lifecycle, "createChild", (item) => item.args[0] === 2),
++    "the script creates a grandchild");
++  assert.ok(action(lifecycle, "disposeTree"));
++  assert.equal(lifecycle.actions.filter((item) => item.method === "create").length, 2,
++    "a new root is created after disposal");
++});
++
++test("fixed script replay emits full native-shaped frames and preserves message/inbox order", () => {
++  const frames = runReferenceScript(createCompositionReference(), fixedScripts[0]);
++  assert.equal(frames.length, fixedScripts[0].actions.length);
++  for (const entry of frames) {
++    assert.deepEqual(Object.keys(entry).sort(), ["action", "frame", "result"]);
++    assert.deepEqual(Object.keys(entry.frame).sort(), ["changes", "sessions", "tree"]);
++    assert.ok(Array.isArray(entry.frame.changes));
++    assert.ok(entry.frame.sessions.every((item, index, values) =>
++      index === 0 || values[index - 1].id < item.id));
++  }
++
++  const wrongParent = frames.find((entry) =>
++    entry.action.method === "setChildInputs" && entry.action.args[0] === 3);
++  assert.equal(wrongParent.result.error, "session ID 2 is not an immediate child of session ID 3");
++
++  const stalePublish = frames.find((entry) =>
++    entry.action.method === "publish" && entry.action.args[2] === 1);
++  assert.equal(stalePublish.result.error, "input revision 1 is stale; current revision is 2");
++
++  const final = frames.at(-1);
++  assert.deepEqual(final.result, []);
++  assert.deepEqual(final.frame.changes, [],
++    "per-action frames drain dirty IDs before the final changes() action");
++  const firstPublish = frames.find((entry) =>
++    entry.action.method === "dispatch" && entry.action.args[1].Path === "2/0/9");
++  assert.deepEqual(firstPublish.frame.changes, [1, 2],
++    "the publish action dirties the child and its immediate parent");
++  const parent = final.frame.sessions.find(({ id }) => id === 1).snapshot;
++  assert.deepEqual(parent.state.Inbox.map(({ Sequence, Saved, InputRevision }) =>
++    [Sequence, Saved, InputRevision]), [
++    [1, "saved at completion", 2],
++    [2, "saved at completion", 2],
++    [3, "saved at completion", 2],
++  ]);
++  const child = final.frame.sessions.find(({ id }) => id === 2).snapshot;
++  assert.deepEqual(child.messages.filter(({ Name }) => Name === "publish"), [
++    { Name: "publish", Arg: "1/2" },
++    { Name: "publish", Arg: "1/2" },
++    { Name: "publish", Arg: "1/2" },
++  ]);
++});
++
++test("every fixed trace completes as ordered full-state frames", () => {
++  for (const script of fixedScripts) {
++    const frames = runReferenceScript(createCompositionReference(), script);
++    assert.equal(frames.length, script.actions.length);
++    assert.ok(frames.every(({ frame }) =>
++      Array.isArray(frame.tree) &&
++      Array.isArray(frame.sessions) &&
++      Array.isArray(frame.changes)));
++  }
++  const policy = runReferenceScript(createCompositionReference(), fixedScripts[0]);
++  assert.equal(policy.filter(({ result }) => result && typeof result === "object" && "error" in result).length, 2);
++  const readonly = runReferenceScript(createCompositionReference(), fixedScripts[1]);
++  assert.equal(readonly.filter(({ result }) => result && typeof result === "object" && "error" in result).length, 1);
++});
++
++test("seeded traces are stable, bounded, and executable against the independent model", () => {
++  for (const seed of DEFAULT_SEEDS) {
++    const first = seededScripts(seed);
++    assert.equal(first.length, DEFAULT_CASES);
++    assert.deepEqual(first, seededScripts(seed));
++    for (const script of first) {
++      assert.ok(script.actions.length <= DEFAULT_MAX_ACTIONS, script.name + " exceeds the action cap");
++      assert.ok(script.seed === seed);
++      for (const item of script.actions) {
++        assert.ok(callMethods.has(item.method));
++        assert.ok(Array.isArray(item.args));
++      }
++    }
++  }
++
++  const bounded = makeScripts({ seeds: [7, 8], cases: 3, maxActions: 12 });
++  assert.equal(bounded.length, fixedScripts.length + 6);
++  for (const script of bounded.slice(fixedScripts.length)) {
++    assert.ok(script.actions.length <= 12);
++    const frames = runReferenceScript(createCompositionReference(), script);
++    assert.equal(frames.length, script.actions.length);
++    assert.ok(frames.every(({ frame }) => Array.isArray(frame.sessions)));
++  }
++
++  assert.throws(() => seededScripts(-1), /unsigned 32-bit/i);
++  assert.throws(() => seededScripts(1, { maxActions: 41 }), /maxActions/i);
++  assert.throws(() => seededScripts(1, { maxActions: 8 }), /maxActions/i);
++  assert.throws(() => makeScripts({ seeds: [1, 1] }), /unique/i);
++  assert.throws(() => makeScripts({ cases: -1 }), /cases/i);
++});
++
++test("seeded action records are JSON serializable and preserve primitive values", () => {
++  const selected = makeScripts({ seeds: [20261030], cases: 2, maxActions: 14 });
++  const encoded = JSON.stringify(selected);
++  const decoded = JSON.parse(encoded);
++  assert.deepEqual(decoded, selected);
++  for (const script of decoded) {
++    for (const item of script.actions) {
++      assert.deepEqual(Object.keys(item).sort(), ["args", "method"]);
++      assert.equal(typeof item.method, "string");
++    }
++  }
++});

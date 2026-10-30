@@ -32,7 +32,7 @@ function fixture(state, messages) {
 }
 
 function fakeRuntime() {
-  const calls = { init: 0, dispatch: 0, complete: 0, effects: 0, audit: 0 };
+  const calls = { init: 0, snapshot: 0, dispatch: 0, complete: 0, effects: 0, audit: 0 };
   const state = { Draft: "", Saved: "", PendingID: 0, Status: "idle", NextID: 0 };
   const messages = [];
   const outbox = [];
@@ -51,6 +51,12 @@ function fakeRuntime() {
       requestRows.clear();
       return snapshot();
     },
+    snapshot() {
+      calls.snapshot += 1;
+      return snapshot();
+    },
+    replaceState(patch) { Object.assign(state, patch); },
+    queueEffect(command) { outbox.push(command); },
     dispatch(step) {
       calls.dispatch += 1;
       if (step.Path === "0" && step.Key === "draft-input" && step.Event === "input") {
@@ -155,6 +161,31 @@ test("HTTP completion updates the mounted keyed renderer without a remount or se
   assert.equal(runtime.calls.init, 1);
   assert.equal(mounts.length, 1, "completion preserves renderer and React root identity");
   assert.equal(mounts[0].updates.length, 3, "input, save, and completion all paint their snapshots");
+  host.unmount();
+});
+
+test("refresh updates the existing renderer from the runtime snapshot and drains effects", async () => {
+  const runtime = fakeRuntime();
+  const transport = createManualTransport();
+  const mounts = [];
+  const host = createKeyedHost(fakeRoot(), runtime, recordingRenderers(mounts), transport);
+  const focus = { key: "draft-input", selectionStart: 1, selectionEnd: 3, selectionDirection: "forward" };
+  mounts[0].focus = focus;
+  runtime.replaceState({ Saved: "changed outside the renderer", Status: "saved" });
+  runtime.queueEffect({ Kind: "start", ID: 7, Value: "refresh effect" });
+
+  const refreshed = host.refresh();
+  assert.equal(refreshed.state.Saved, "changed outside the renderer");
+  assert.equal(host.snapshot().state.Status, "saved");
+  assert.equal(mounts.length, 1, "refresh reuses the mounted renderer");
+  assert.equal(mounts[0].updates.length, 1);
+  assert.deepEqual(host.focusState(), focus, "keyed update preserves observed selection");
+  assert.equal(runtime.calls.init, 1);
+  assert.equal(runtime.calls.snapshot, 1);
+  assert.deepEqual(transport.log(), [], "effects wait until the refresh call returns");
+
+  await host.settled();
+  assert.deepEqual(transport.log(), [{ kind: "start", command: { Kind: "start", ID: 7, Value: "refresh effect" } }]);
   host.unmount();
 });
 

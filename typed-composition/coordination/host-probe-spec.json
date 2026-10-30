@@ -1,0 +1,23 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-public-host-admission-probe"
+  },
+  "workers": [
+    "N1"
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "jobs": [
+    {
+      "id": "H-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "coordination/reviews/host-admission probe and report/receipt only",
+      "summary": "reproduce whether pre-bridge host argument clone bypasses strict data admission/reentry fence"
+    }
+  ]
+}

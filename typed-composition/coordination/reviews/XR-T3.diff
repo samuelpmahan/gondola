@@ -1,0 +1,896 @@
+diff --git a/keyed-editor/host.mjs b/keyed-editor/host.mjs
+index cf9d44a..d4383b1 100644
+--- a/keyed-editor/host.mjs
++++ b/keyed-editor/host.mjs
+@@ -159,6 +159,30 @@ export function createKeyedHost(root, runtime, renderers, transport, initialBack
+     return clone(cachedSnapshot);
+   }
+ 
++  function refresh() {
++    assertUsable();
++    if (typeof runtime.snapshot !== "function") {
++      throw fail("runtime must expose snapshot() to refresh a mounted renderer");
++    }
++
++    let next;
++    try {
++      next = clone(validateSnapshot(runtime.snapshot()));
++    } catch (error) {
++      throw fail("runtime.snapshot() returned an invalid snapshot", error);
++    }
++    cachedSnapshot = next;
++    try {
++      // Keyed renderers retain the focused node and its selection while
++      // applying an in-place update; refresh must not remount the renderer.
++      selectedRenderer.update(clone(next));
++    } catch (error) {
++      failLifecycle(`renderer ${JSON.stringify(selectedName)} update failed after runtime refresh`, error);
++    }
++    enqueue(drainEffects);
++    return clone(next);
++  }
++
+   function audit() {
+     assertUsable();
+     const result = runtime.audit();
+@@ -441,6 +465,7 @@ export function createKeyedHost(root, runtime, renderers, transport, initialBack
+ 
+   return {
+     snapshot,
++    refresh,
+     audit,
+     domSnapshot,
+     focusState,
+diff --git a/keyed-editor/host.test.mjs b/keyed-editor/host.test.mjs
+index db5bb43..7625efa 100644
+--- a/keyed-editor/host.test.mjs
++++ b/keyed-editor/host.test.mjs
+@@ -32,7 +32,7 @@ function fixture(state, messages) {
+ }
+ 
+ function fakeRuntime() {
+-  const calls = { init: 0, dispatch: 0, complete: 0, effects: 0, audit: 0 };
++  const calls = { init: 0, snapshot: 0, dispatch: 0, complete: 0, effects: 0, audit: 0 };
+   const state = { Draft: "", Saved: "", PendingID: 0, Status: "idle", NextID: 0 };
+   const messages = [];
+   const outbox = [];
+@@ -51,6 +51,12 @@ function fakeRuntime() {
+       requestRows.clear();
+       return snapshot();
+     },
++    snapshot() {
++      calls.snapshot += 1;
++      return snapshot();
++    },
++    replaceState(patch) { Object.assign(state, patch); },
++    queueEffect(command) { outbox.push(command); },
+     dispatch(step) {
+       calls.dispatch += 1;
+       if (step.Path === "0" && step.Key === "draft-input" && step.Event === "input") {
+@@ -158,6 +164,31 @@ test("HTTP completion updates the mounted keyed renderer without a remount or se
+   host.unmount();
+ });
+ 
++test("refresh updates the existing renderer from the runtime snapshot and drains effects", async () => {
++  const runtime = fakeRuntime();
++  const transport = createManualTransport();
++  const mounts = [];
++  const host = createKeyedHost(fakeRoot(), runtime, recordingRenderers(mounts), transport);
++  const focus = { key: "draft-input", selectionStart: 1, selectionEnd: 3, selectionDirection: "forward" };
++  mounts[0].focus = focus;
++  runtime.replaceState({ Saved: "changed outside the renderer", Status: "saved" });
++  runtime.queueEffect({ Kind: "start", ID: 7, Value: "refresh effect" });
++
++  const refreshed = host.refresh();
++  assert.equal(refreshed.state.Saved, "changed outside the renderer");
++  assert.equal(host.snapshot().state.Status, "saved");
++  assert.equal(mounts.length, 1, "refresh reuses the mounted renderer");
++  assert.equal(mounts[0].updates.length, 1);
++  assert.deepEqual(host.focusState(), focus, "keyed update preserves observed selection");
++  assert.equal(runtime.calls.init, 1);
++  assert.equal(runtime.calls.snapshot, 1);
++  assert.deepEqual(transport.log(), [], "effects wait until the refresh call returns");
++
++  await host.settled();
++  assert.deepEqual(transport.log(), [{ kind: "start", command: { Kind: "start", ID: 7, Value: "refresh effect" } }]);
++  host.unmount();
++});
++
+ test("backend replacement transfers key-based selection and fences the old facade", () => {
+   const runtime = fakeRuntime();
+   const mounts = [];
+diff --git a/multi-root/host.mjs b/multi-root/host.mjs
+index 6969440..f83ce7f 100644
+--- a/multi-root/host.mjs
++++ b/multi-root/host.mjs
+@@ -228,6 +228,25 @@ export function createMultiRootHost({ manager, descriptors, transportFactory } =
+     }
+   }
+ 
++  function refresh(root) {
++    const record = currentRecord(root);
++    try {
++      const result = record.keyedHost.refresh();
++      record.backend = record.keyedHost.backendName();
++      record.lifecycle = "active";
++      return result;
++    } catch (error) {
++      try {
++        record.backend = record.keyedHost.backendName();
++        record.lifecycle = "active";
++      } catch {
++        record.backend = null;
++        record.lifecycle = "failed";
++      }
++      throw fail(`could not refresh session ${record.sessionID}`, error);
++    }
++  }
++
+   function unmount(root) {
+     const record = currentRecord(root);
+     const errors = retire(record);
+@@ -272,6 +291,7 @@ export function createMultiRootHost({ manager, descriptors, transportFactory } =
+   return {
+     mount,
+     replace,
++    refresh,
+     session(root) { return currentRecord(root).sessionID; },
+     unmount,
+     settled,
+diff --git a/multi-root/host.test.mjs b/multi-root/host.test.mjs
+index 4997413..9ed4127 100644
+--- a/multi-root/host.test.mjs
++++ b/multi-root/host.test.mjs
+@@ -182,6 +182,26 @@ function rendererFor(records, root, name = "dom") {
+   return record;
+ }
+ 
++test("refresh updates one root in place and preserves its observed focus state", async () => {
++  const { host, manager, renderRecords } = composition();
++  const root = fakeRoot();
++  const { sessionID } = host.mount(root);
++  const renderer = rendererFor(renderRecords, root);
++  renderer.focus = { key: "draft-input", selectionStart: 2, selectionEnd: 4, selectionDirection: "backward" };
++  manager.sessions.get(sessionID).Saved = "changed outside the host";
++
++  const refreshed = host.refresh(root);
++  assert.equal(refreshed.state.Saved, "changed outside the host");
++  assert.equal(renderer.updates.length, 1);
++  assert.equal(host.snapshotAll()[0].snapshot.state.Saved, "changed outside the host");
++  assert.deepEqual(host.snapshotAll()[0].focus, renderer.focus);
++  assert.equal(host.snapshotAll()[0].lifecycle, "active");
++
++  await host.settled(root);
++  host.unmount(root);
++  assert.throws(() => host.refresh(root), /root is not mounted/);
++});
++
+ test("roots with the same local request ID use independent transports and sessions", async () => {
+   const { host, manager, renderRecords, transports } = composition();
+   const rootA = fakeRoot();
+diff --git a/multi-root/runtime.mjs b/multi-root/runtime.mjs
+index 59e84ad..3cb77f4 100644
+--- a/multi-root/runtime.mjs
++++ b/multi-root/runtime.mjs
+@@ -64,6 +64,10 @@ export function createSessionRuntime(manager, sessionID, isCurrent = () => true)
+       assertCurrent();
+       return clone(manager.snapshot(sessionID));
+     },
++    snapshot() {
++      assertCurrent();
++      return clone(manager.snapshot(sessionID));
++    },
+     dispatch(step) {
+       assertCurrent();
+       return clone(manager.dispatch(sessionID, step));
+diff --git a/multi-root/runtime.test.mjs b/multi-root/runtime.test.mjs
+index 2f67e4e..1c5396b 100644
+--- a/multi-root/runtime.test.mjs
++++ b/multi-root/runtime.test.mjs
+@@ -24,13 +24,14 @@ test("session runtime routes every keyed-host call through one SessionID", () =>
+   const runtime = createSessionRuntime(manager, 10);
+ 
+   runtime.init();
++  runtime.snapshot();
+   runtime.dispatch({ Path: "0", Event: "input", Value: "next", Key: "draft-input" });
+   runtime.complete({ ID: 3, Value: "saved", Error: "" });
+   runtime.effects();
+   runtime.audit();
+ 
+   assert.deepEqual(manager.calls.map((call) => call.slice(0, 2)), [
+-    ["snapshot", 10], ["dispatch", 10], ["complete", 10], ["effects", 10], ["audit", 10],
++    ["snapshot", 10], ["snapshot", 10], ["dispatch", 10], ["complete", 10], ["effects", 10], ["audit", 10],
+   ]);
+   assert.equal(runtime.init().state.value, "before");
+ });
+@@ -60,6 +61,7 @@ test("session runtime fences all bridge calls after the owning generation retire
+   current = false;
+ 
+   assert.throws(() => runtime.init(), /no longer the current root generation/);
++  assert.throws(() => runtime.snapshot(), /no longer the current root generation/);
+   assert.throws(() => runtime.dispatch({}), /no longer the current root generation/);
+   assert.throws(() => runtime.complete({}), /no longer the current root generation/);
+   assert.throws(() => runtime.effects(), /no longer the current root generation/);
+@@ -114,6 +116,7 @@ test("manager adapter preserves plain fake-manager values and method context", (
+ test("session runtime never returns Go error frames as snapshot, transition, effect, reply, or audit data", () => {
+   const cases = [
+     ["snapshot", "init", []],
++    ["snapshot", "snapshot", []],
+     ["dispatch", "dispatch", [{}]],
+     ["complete", "complete", [{}]],
+     ["effects", "effects", []],
+diff --git a/session-tree/host.mjs b/session-tree/host.mjs
+index fb691e7..e1b5a1d 100644
+--- a/session-tree/host.mjs
++++ b/session-tree/host.mjs
+@@ -419,6 +419,23 @@ export function createSessionTreeHost({ manager, descriptors, transportFactory }
+     }
+   }
+ 
++  function refresh(id) {
++    sessionID(id);
++    assertIdle("refresh");
++    const node = activeNodes.get(id);
++    if (!node || !node.active) throw fail(`session ${id} is not mounted`);
++    try {
++      const result = flatHost.refresh(node.viewRoot);
++      node.lifecycle = "active";
++      return clone(result);
++    } catch (error) {
++      const entry = flatHost.snapshotAll().find((item) => item.sessionID === id);
++      node.backend = entry?.backend ?? null;
++      node.lifecycle = entry?.lifecycle ?? "failed";
++      throw fail(`could not refresh session ${id}`, error);
++    }
++  }
++
+   function snapshot(id) {
+     sessionID(id);
+     const node = activeNodes.get(id);
+@@ -531,5 +548,5 @@ export function createSessionTreeHost({ manager, descriptors, transportFactory }
+     return checked.bundles.map((bundle) => ({ SessionID: bundle.SessionID, Commands: bundle.Commands.map((command) => ({ ...command })) }));
+   }
+ 
+-  return { mountRoot, mountChild, replace, snapshot, tree, snapshotAll, settled, dispose };
++  return { mountRoot, mountChild, replace, refresh, snapshot, tree, snapshotAll, settled, dispose };
+ }
+diff --git a/session-tree/host.test.mjs b/session-tree/host.test.mjs
+index 0aacd5f..b4f6a9e 100644
+--- a/session-tree/host.test.mjs
++++ b/session-tree/host.test.mjs
+@@ -310,7 +310,7 @@ function includesError(error, phrase) {
+ 
+ test("public API nests stable child shells beside replaceable renderer roots", () => {
+   const { host, manager, records } = setup();
+-  assert.deepEqual(Object.keys(host).sort(), ["dispose", "mountChild", "mountRoot", "replace", "settled", "snapshot", "snapshotAll", "tree"]);
++  assert.deepEqual(Object.keys(host).sort(), ["dispose", "mountChild", "mountRoot", "refresh", "replace", "settled", "snapshot", "snapshotAll", "tree"]);
+ 
+   const container = fakeContainer();
+   const root = host.mountRoot(container);
+@@ -379,6 +379,26 @@ test("public API nests stable child shells beside replaceable renderer roots", (
+   host.dispose(siblingRoot.sessionID);
+ });
+ 
++test("refresh reads authoritative Go state into the current session renderer without remounting", async () => {
++  const { host, manager, records } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const renderer = currentRenderer(records, root.sessionID, "dom");
++  renderer.focus = { key: "draft-input", selectionStart: 1, selectionEnd: 4, selectionDirection: "forward" };
++  manager.sessions.get(root.sessionID).Version = 9;
++
++  const refreshed = host.refresh(root.sessionID);
++  assert.equal(refreshed.state.Version, 9);
++  assert.equal(host.snapshot(root.sessionID).state.Version, 9);
++  assert.equal(renderer.updates.length, 2, "refresh paints through the existing renderer API");
++  assert.deepEqual(host.snapshotAll()[0].focus, renderer.focus);
++  assert.equal(host.snapshotAll()[0].lifecycle, "active");
++  assert.equal(records.filter((record) => record.sessionID === root.sessionID && record.mounted).length, 1);
++  await host.settled();
++
++  host.dispose(root.sessionID);
++  assert.throws(() => host.refresh(root.sessionID), /not mounted/);
++});
++
+ test("child renderer dispatch is scoped to its node and never updates its parent", () => {
+   const { host, manager, records } = setup();
+   const root = host.mountRoot(fakeContainer());
+diff --git a/typed-composition/host.mjs b/typed-composition/host.mjs
+new file mode 100644
+index 0000000..b01a904
+--- /dev/null
++++ b/typed-composition/host.mjs
+@@ -0,0 +1,215 @@
++import { clone } from "../keyed-editor/protocol.mjs";
++import { createSessionTreeHost } from "../session-tree/host.mjs";
++
++const SESSION_TREE_METHODS = [
++  "create", "createChild", "tree", "list", "snapshot", "dispatch", "effects", "complete",
++  "audit", "dispose", "disposeTree",
++];
++const COMPOSITION_METHODS = ["setChildInputs", "publish", "changes"];
++const MUTATING_METHODS = new Set([
++  "create", "createChild", "dispatch", "complete", "dispose", "disposeTree", "setChildInputs", "publish",
++]);
++const managerOwners = new WeakMap();
++
++function fail(message, cause) {
++  return new Error(`composition host: ${message}`, cause === undefined ? undefined : { cause });
++}
++
++function assertManager(manager) {
++  if (!manager || typeof manager !== "object" || Array.isArray(manager)) {
++    throw fail("manager bridge is required");
++  }
++  for (const method of [...SESSION_TREE_METHODS, ...COMPOSITION_METHODS]) {
++    if (typeof manager[method] !== "function") throw fail(`manager bridge must expose ${method}()`);
++  }
++  if (managerOwners.has(manager)) throw fail("manager already has an active composition host");
++}
++
++function assertNoErrorFrame(method, result) {
++  if (!result || typeof result !== "object" || Array.isArray(result)) return result;
++  const keys = Object.keys(result);
++  if (keys.length === 1 && keys[0] === "error" && typeof result.error === "string") {
++    throw fail(`gobiComposition.${method} returned error frame: ${result.error}`);
++  }
++  return result;
++}
++
++function checkedChanges(value) {
++  if (!Array.isArray(value)) throw fail("manager.changes() must return an array");
++  let prior = 0;
++  return value.map((id, index) => {
++    if (!Number.isSafeInteger(id) || id <= prior) {
++      throw fail(`manager.changes() entry ${index} must be a positive, sorted, unique safe session ID`);
++    }
++    prior = id;
++    return id;
++  });
++}
++
++function copiedArguments(args) {
++  try { return args.map((arg) => clone(arg)); }
++  catch (error) { throw fail("manager arguments must be JSON-shaped values", error); }
++}
++
++/**
++ * Coordinate Go-owned typed composition with the existing session-tree host.
++ * This layer only schedules dirty snapshot refreshes; application state and
++ * publication policy remain inside the manager.
++ */
++export function createCompositionHost({ manager, descriptors, transportFactory } = {}) {
++  assertManager(manager);
++  const lease = {};
++  managerOwners.set(manager, lease);
++
++  let treeHost;
++  try {
++    let propagationScheduled = false;
++    let propagationRunning = false;
++    let propagateAgain = false;
++    let mutationVersion = 0;
++    const propagationErrors = [];
++    const propagationWaiters = [];
++
++    function assertOwner() {
++      if (managerOwners.get(manager) !== lease) throw fail("manager ownership has been retired");
++    }
++
++    function callManager(method, args) {
++      assertOwner();
++      let result;
++      try { result = Reflect.apply(manager[method], manager, copiedArguments(args)); }
++      catch (error) { throw fail(`gobiComposition.${method}() failed`, error); }
++      return clone(assertNoErrorFrame(method, result));
++    }
++
++    function settlePropagationWaiters() {
++      if (propagationScheduled || propagationRunning || propagationWaiters.length === 0) return;
++      const waiters = propagationWaiters.splice(0);
++      const errors = propagationErrors.splice(0);
++      if (errors.length) {
++        const aggregate = new AggregateError(errors, "composition host dirty refresh failed");
++        for (const waiter of waiters) waiter.reject(aggregate);
++      } else {
++        for (const waiter of waiters) waiter.resolve();
++      }
++    }
++
++    function recordPropagationError(error) {
++      propagationErrors.push(error instanceof Error ? error : fail(String(error)));
++    }
++
++    function drainChanges() {
++      const changed = checkedChanges(callManager("changes", []));
++      if (changed.length === 0) return false;
++
++      const live = new Set(treeHost.tree().map((entry) => entry.SessionID));
++      for (const id of changed) {
++        // Go removes dead dirty IDs. Keep this fence as well so an already
++        // queued refresh cannot reach a disposed or subsequently recreated node.
++        if (!live.has(id)) continue;
++        try { treeHost.refresh(id); }
++        catch (error) { recordPropagationError(error); }
++      }
++      return true;
++    }
++
++    function runPropagation() {
++      propagationScheduled = false;
++      if (propagationRunning) {
++        propagateAgain = true;
++        return;
++      }
++      propagationRunning = true;
++      try {
++        let passes = 0;
++        do {
++          propagateAgain = false;
++          try {
++            while (drainChanges()) {
++              passes += 1;
++              if (passes > 1000) throw fail("dirty refresh did not reach quiescence");
++            }
++          } catch (error) {
++            recordPropagationError(error);
++            break;
++          }
++        } while (propagateAgain);
++      } finally {
++        propagationRunning = false;
++      }
++      if (propagateAgain) schedulePropagation();
++      settlePropagationWaiters();
++    }
++
++    function schedulePropagation() {
++      mutationVersion += 1;
++      if (propagationRunning) {
++        propagateAgain = true;
++        return;
++      }
++      if (propagationScheduled) return;
++      propagationScheduled = true;
++      queueMicrotask(runPropagation);
++    }
++
++    const wrappedManager = {};
++    for (const method of SESSION_TREE_METHODS) {
++      wrappedManager[method] = (...args) => {
++        const result = callManager(method, args);
++        if (MUTATING_METHODS.has(method)) schedulePropagation();
++        return result;
++      };
++    }
++
++    treeHost = createSessionTreeHost({ manager: wrappedManager, descriptors, transportFactory });
++
++    function waitForPropagation() {
++      return new Promise((resolve, reject) => {
++        propagationWaiters.push({ resolve, reject });
++        settlePropagationWaiters();
++      });
++    }
++
++    async function settled() {
++      const errors = [];
++      for (let pass = 0; pass < 1000; pass += 1) {
++        const startingVersion = mutationVersion;
++        try { await treeHost.settled(); }
++        catch (error) { errors.push(error); }
++        try { await waitForPropagation(); }
++        catch (error) { errors.push(error); }
++        try { await treeHost.settled(); }
++        catch (error) { errors.push(error); }
++
++        if (!propagationScheduled && !propagationRunning && mutationVersion === startingVersion) {
++          if (errors.length === 1) throw errors[0];
++          if (errors.length > 1) throw new AggregateError(errors, "composition host settled work failed");
++          return;
++        }
++      }
++      throw fail("settled() did not reach quiescence");
++    }
++
++    function setChildInputs(parentID, childID, inputs) {
++      const result = callManager("setChildInputs", [parentID, childID, inputs]);
++      schedulePropagation();
++      return result;
++    }
++
++    function publish(childID, rowID, inputRevision) {
++      const result = callManager("publish", [childID, rowID, inputRevision]);
++      schedulePropagation();
++      return result;
++    }
++
++    return {
++      ...treeHost,
++      settled,
++      setChildInputs,
++      publish,
++    };
++  } catch (error) {
++    if (managerOwners.get(manager) === lease) managerOwners.delete(manager);
++    throw error;
++  }
++}
+diff --git a/typed-composition/host.test.mjs b/typed-composition/host.test.mjs
+new file mode 100644
+index 0000000..e6a3f5c
+--- /dev/null
++++ b/typed-composition/host.test.mjs
+@@ -0,0 +1,373 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { createManualTransport } from "../async-effects/transport.mjs";
++import { createCompositionHost } from "./host.mjs";
++
++const text = (Text) => ({ Kind: 2, Tag: "", Key: "", Attrs: null, On: null, Kids: null, Text });
++const element = (Tag, Key, { On = null, Kids = null } = {}) => ({
++  Kind: 1, Tag, Key, Attrs: null, On, Kids, Text: "",
++});
++
++class FakeElement {
++  constructor(tagName, ownerDocument) {
++    this.tagName = tagName;
++    this.ownerDocument = ownerDocument;
++    this.childNodes = [];
++    this.parentNode = null;
++    this.content = "";
++  }
++
++  appendChild(child) {
++    if (child.parentNode) child.parentNode.removeChild(child);
++    child.parentNode = this;
++    this.childNodes.push(child);
++    return child;
++  }
++
++  removeChild(child) {
++    const index = this.childNodes.indexOf(child);
++    if (index < 0) throw new Error("node is not a child");
++    this.childNodes.splice(index, 1);
++    child.parentNode = null;
++    return child;
++  }
++
++  replaceChildren(...children) {
++    for (const child of this.childNodes) child.parentNode = null;
++    this.childNodes = [];
++    this.content = children.map((child) => child.content ?? child.tagName).join("");
++    for (const child of children) this.appendChild(child);
++  }
++}
++
++class FakeDocument {
++  createElement(tagName) { return new FakeElement(tagName, this); }
++}
++
++function fakeContainer() {
++  return new FakeDocument().createElement("main");
++}
++
++function fakeManager() {
++  let nextID = 0;
++  let nextSequence = 0;
++  const sessions = new Map();
++  const dirty = new Set();
++  const calls = {
++    snapshot: [], dispatch: [], complete: [], effects: [], audit: [], changes: 0,
++    setChildInputs: [], publish: [], disposeTree: [],
++  };
++
++  function get(id) {
++    const session = sessions.get(id);
++    if (!session) throw new Error(`unknown session ${id}`);
++    return session;
++  }
++
++  function createSession(parentID, depth) {
++    const id = ++nextID;
++    sessions.set(id, {
++      id, parentID, depth, version: 0, inputs: { Title: "", ReadOnly: false }, inputRevision: 0,
++      inbox: [], messages: [], outbox: [], rows: [{ ID: 1, Saved: "" }], nextRequest: 0,
++    });
++    return id;
++  }
++
++  function snapshot(id) {
++    calls.snapshot.push(id);
++    const session = get(id);
++    return {
++      state: {
++        SessionID: session.id, ParentID: session.parentID, Depth: session.depth, Version: session.version,
++        Inputs: { ...session.inputs }, InputRevision: session.inputRevision,
++        Inbox: session.inbox.map((item) => ({ ...item })),
++        Rows: session.rows.map((row) => ({ ...row })),
++      },
++      tree: element("div", "composition", {
++        Kids: [
++          element("button", "tick", { On: [{ Event: "click", Message: "tick", Arg: "" }], Kids: [text("Tick")] }),
++          element("p", "title", { Kids: [text(`Title: ${session.inputs.Title}`)] }),
++          element("p", "inbox", { Kids: [text(`Published: ${session.inbox.length}`)] }),
++        ],
++      }),
++      bindings: [],
++      messages: session.messages.map((message) => ({ ...message })),
++    };
++  }
++
++  function postorder(rootID) {
++    const result = [];
++    function visit(id) {
++      for (const child of [...sessions.values()].filter((entry) => entry.parentID === id).sort((a, b) => a.id - b.id)) {
++        visit(child.id);
++      }
++      result.push(id);
++    }
++    visit(rootID);
++    return result;
++  }
++
++  return {
++    calls,
++    sessions,
++    create() { return createSession(0, 1); },
++    createChild(parentID) {
++      const parent = get(parentID);
++      return createSession(parentID, parent.depth + 1);
++    },
++    tree() {
++      return [...sessions.values()].sort((a, b) => a.id - b.id).map((session) => ({
++        SessionID: session.id, ParentID: session.parentID, Depth: session.depth,
++      }));
++    },
++    list() { return [...sessions.keys()].sort((a, b) => a - b); },
++    snapshot,
++    dispatch(id, step) {
++      calls.dispatch.push(id);
++      const session = get(id);
++      if (step.Path !== "0" || step.Key !== "tick" || step.Event !== "click") throw new Error("invalid step");
++      session.version += 1;
++      session.messages.push({ Name: "tick", Arg: String(session.version) });
++      session.nextRequest += 1;
++      session.outbox.push({ Kind: "start", ID: session.nextRequest, Value: `tick-${id}` });
++      dirty.add(id);
++      return snapshot(id);
++    },
++    effects(id) {
++      calls.effects.push(id);
++      return get(id).outbox.splice(0);
++    },
++    complete(id, reply) {
++      calls.complete.push(id);
++      const session = get(id);
++      session.version += 1;
++      session.messages.push({ Name: "reply", Arg: String(reply.ID) });
++      dirty.add(id);
++      return snapshot(id);
++    },
++    audit(id) { calls.audit.push(id); return []; },
++    dispose(id) {
++      if ([...sessions.values()].some((entry) => entry.parentID === id)) throw new Error("session has children");
++      sessions.delete(id);
++      return [];
++    },
++    disposeTree(id) {
++      calls.disposeTree.push(id);
++      const ids = postorder(id);
++      const result = ids.map((sessionID) => ({ SessionID: sessionID, Commands: [] }));
++      for (const sessionID of ids) sessions.delete(sessionID);
++      // Leave dirty IDs behind to exercise the browser host's disposed-node fence.
++      return result;
++    },
++    setChildInputs(parentID, childID, inputs) {
++      calls.setChildInputs.push({ parentID, childID });
++      const parent = get(parentID);
++      const child = get(childID);
++      if (child.parentID !== parent.id) throw new Error("parent is not the immediate parent");
++      if (typeof inputs?.Title !== "string" || typeof inputs?.ReadOnly !== "boolean") throw new Error("invalid inputs");
++      child.inputs = { Title: inputs.Title, ReadOnly: inputs.ReadOnly };
++      child.inputRevision += 1;
++      child.version += 1;
++      dirty.add(childID);
++      return snapshot(childID);
++    },
++    publish(childID, rowID, inputRevision) {
++      calls.publish.push({ childID, rowID, inputRevision });
++      const child = get(childID);
++      if (child.parentID === 0 || inputRevision !== child.inputRevision) return { error: "publish revision rejected" };
++      const row = child.rows.find((entry) => entry.ID === rowID);
++      if (!row || row.Saved === "" || child.inputs.ReadOnly) return { error: "publish policy rejected" };
++      const publication = {
++        Sequence: ++nextSequence, ParentID: child.parentID, ChildID: childID, RowID: rowID,
++        Saved: row.Saved, Saves: 1, InputRevision: inputRevision,
++      };
++      get(child.parentID).inbox.push({ ...publication });
++      child.messages.push({ Name: "publish", Arg: `${rowID}/${inputRevision}` });
++      dirty.add(childID);
++      dirty.add(child.parentID);
++      return publication;
++    },
++    changes() {
++      calls.changes += 1;
++      const changed = [...dirty].sort((a, b) => a - b);
++      dirty.clear();
++      return changed;
++    },
++  };
++}
++
++function recordingRenderers(records, manager) {
++  function mount(name, root, runtime) {
++    const initial = runtime.init();
++    const record = { name, root, runtime, latest: initial, focus: null, updates: [], mounted: true };
++    const api = {
++      update(next) {
++        if (manager.failUpdate) throw new Error("renderer refresh failed");
++        record.latest = next;
++        record.updates.push(next);
++      },
++      snapshot() { return record.latest; },
++      domSnapshot() { return { html: `${name}:${record.latest.state.SessionID}`, disabled: [] }; },
++      focusState() { return record.focus && { ...record.focus }; },
++      restoreFocus(next) { record.focus = next && { ...next }; },
++      click(path) {
++        if (path !== "0") throw new Error("only tick path is clickable");
++        const next = runtime.dispatch({ Path: "0", Event: "click", Value: "", Key: "tick" });
++        api.update(next);
++        return next;
++      },
++      unmount() { record.mounted = false; },
++    };
++    record.click = api.click;
++    records.push(record);
++    return api;
++  }
++  return {
++    dom: (root, runtime) => mount("dom", root, runtime),
++    react: (root, runtime) => mount("react", root, runtime),
++  };
++}
++
++function setup(manager = fakeManager()) {
++  const records = [];
++  const transports = new Map();
++  const host = createCompositionHost({
++    manager,
++    descriptors: recordingRenderers(records, manager),
++    transportFactory(sessionID) {
++      const transport = createManualTransport();
++      transports.set(sessionID, transport);
++      return transport;
++    },
++  });
++  return { host, manager, records, transports };
++}
++
++function currentRenderer(records, id) {
++  const record = [...records].reverse().find((entry) => entry.latest.state.SessionID === id && entry.mounted);
++  assert.ok(record, `expected a mounted renderer for ${id}`);
++  return record;
++}
++
++function includesError(error, phrase) {
++  if (!error) return false;
++  if (String(error.message ?? error).includes(phrase)) return true;
++  if (error.cause && includesError(error.cause, phrase)) return true;
++  return Array.isArray(error.errors) && error.errors.some((nested) => includesError(nested, phrase));
++}
++
++test("renderer dispatch schedules dirty refresh after the event and settled waits for effects", async () => {
++  const { host, manager, records, transports } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  const parentRenderer = currentRenderer(records, root.sessionID);
++  const childRenderer = currentRenderer(records, child.sessionID);
++
++  childRenderer.click("0");
++  assert.equal(childRenderer.updates.length, 1, "the renderer paints its dispatch result synchronously");
++  assert.equal(parentRenderer.updates.length, 0);
++  assert.deepEqual(transports.get(child.sessionID).log(), [], "effect work waits until the event callback returns");
++  await host.settled();
++
++  assert.equal(childRenderer.updates.length, 2, "the Go dirty snapshot is refreshed in place");
++  assert.equal(parentRenderer.updates.length, 0, "an unrelated parent stays untouched");
++  assert.equal(host.snapshot(child.sessionID).state.Version, 1);
++  assert.deepEqual(transports.get(child.sessionID).log(), [
++    { kind: "start", command: { Kind: "start", ID: 1, Value: `tick-${child.sessionID}` } },
++  ]);
++  assert.equal(manager.calls.snapshot.filter((id) => id === child.sessionID).length, 3,
++    "initialization, dispatch, and dirty refresh all read Go snapshots without reinitializing");
++  host.dispose(root.sessionID);
++});
++
++test("child inputs and publication refresh only Go-dirty sessions and keep renderers mounted", async () => {
++  const { host, manager, records } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  const parentRenderer = currentRenderer(records, root.sessionID);
++  const childRenderer = currentRenderer(records, child.sessionID);
++  const childFocus = { key: "publish", selectionStart: 2, selectionEnd: 4, selectionDirection: "forward" };
++  childRenderer.focus = childFocus;
++
++  const inputSnapshot = host.setChildInputs(root.sessionID, child.sessionID, { Title: "child title", ReadOnly: false });
++  assert.equal(inputSnapshot.state.InputRevision, 1);
++  assert.equal(childRenderer.updates.length, 0, "the host waits until the call stack returns");
++  await host.settled();
++  assert.equal(childRenderer.latest.state.Inputs.Title, "child title");
++  assert.equal(childRenderer.updates.length, 1);
++  assert.equal(parentRenderer.updates.length, 0);
++  assert.deepEqual(childRenderer.focus, childFocus);
++
++  manager.sessions.get(child.sessionID).rows[0].Saved = "captured value";
++  const receipt = host.publish(child.sessionID, 1, 1);
++  assert.equal(receipt.Saved, "captured value");
++  assert.equal(parentRenderer.updates.length, 0, "publication updates wait for propagation");
++  await host.settled();
++
++  assert.equal(childRenderer.updates.length, 2);
++  assert.equal(parentRenderer.updates.length, 1);
++  assert.equal(host.snapshot(root.sessionID).state.Inbox.length, 1);
++  assert.deepEqual(host.snapshot(child.sessionID).messages.at(-1), { Name: "publish", Arg: "1/1" });
++  assert.equal(currentRenderer(records, root.sessionID), parentRenderer, "the existing parent renderer is retained");
++  assert.equal(currentRenderer(records, child.sessionID), childRenderer, "the existing child renderer is retained");
++  host.dispose(root.sessionID);
++});
++
++test("policy errors do not dirty or poison a live composition host", async () => {
++  const { host, manager, records } = setup();
++  const rootA = host.mountRoot(fakeContainer());
++  const childA = host.mountChild(rootA.sessionID);
++  const rootB = host.mountRoot(fakeContainer());
++  const beforeChanges = manager.calls.changes;
++
++  assert.throws(() => host.setChildInputs(rootB.sessionID, childA.sessionID, { Title: "wrong parent", ReadOnly: false }),
++    (error) => includesError(error, "immediate parent"));
++  assert.throws(() => host.publish(childA.sessionID, 1, 99), (error) => includesError(error, "revision rejected"));
++  assert.equal(manager.calls.changes, beforeChanges, "rejected calls do not schedule a dirty drain");
++  await host.settled();
++  assert.equal(host.snapshot(childA.sessionID).state.InputRevision, 0);
++  assert.equal(host.snapshotAll().every((entry) => entry.lifecycle === "active"), true);
++  assert.equal(records.filter((entry) => entry.updates.length > 0).length, 0);
++
++  host.dispose(rootA.sessionID);
++  host.dispose(rootB.sessionID);
++});
++
++test("queued dirty IDs for a disposed subtree are fenced before renderer refresh", async () => {
++  const { host, manager, records } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  host.setChildInputs(root.sessionID, child.sessionID, { Title: "queued", ReadOnly: false });
++  const beforeDisposal = manager.calls.snapshot.filter((id) => id === child.sessionID).length;
++  host.dispose(root.sessionID);
++  await host.settled();
++
++  assert.equal(manager.calls.snapshot.filter((id) => id === child.sessionID).length, beforeDisposal,
++    "the queued propagation never asks Go to snapshot a retired child");
++  assert.equal(records.every((entry) => !entry.mounted), true);
++  assert.deepEqual(host.tree(), []);
++});
++
++test("refresh failures surface from settled without rolling back committed Go state", async () => {
++  const manager = fakeManager();
++  const { host, records } = setup(manager);
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  manager.failUpdate = true;
++
++  host.setChildInputs(root.sessionID, child.sessionID, { Title: "committed", ReadOnly: false });
++  await assert.rejects(host.settled(), (error) => includesError(error, "renderer refresh failed"));
++  assert.equal(manager.sessions.get(child.sessionID).inputs.Title, "committed");
++  assert.equal(host.snapshotAll().find((entry) => entry.sessionID === child.sessionID).lifecycle, "failed");
++  assert.ok(records.some((entry) => entry.latest.state.SessionID === child.sessionID && !entry.mounted));
++
++  manager.failUpdate = false;
++  host.dispose(root.sessionID);
++});
++
++test("one manager cannot be owned by two composition hosts", () => {
++  const manager = fakeManager();
++  const first = setup(manager).host;
++  assert.throws(() => createCompositionHost({ manager, descriptors: {}, transportFactory() {} }), /already has an active/);
++  assert.deepEqual(first.tree(), []);
++});

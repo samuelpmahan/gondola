@@ -1,0 +1,149 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Composition WASM bridge smoke</title></head>
+<body>
+<script src="/wasm_exec.js"></script>
+<script>
+window.__compositionSmoke = (async () => {
+  const assert = (condition, message) => { if (!condition) throw new Error(message); };
+  const isError = (value) => value && typeof value === "object" &&
+    Object.keys(value).length === 1 && Object.keys(value)[0] === "error" && typeof value.error === "string";
+  const unwrap = (value, operation) => { if (isError(value)) throw new Error(`${operation}: ${value.error}`); return value; };
+  const waitFor = async (readiness) => {
+    for (let attempt = 0; attempt < 200; attempt += 1) {
+      if (readiness()) return;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    throw new Error("Go WASM bridge did not publish within the bounded wait");
+  };
+  const go = new Go();
+  const response = await fetch("/composition.wasm");
+  if (!response.ok) throw new Error(`could not load WASM: ${response.status}`);
+  const bytes = await response.arrayBuffer();
+  const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
+  void go.run(instance);
+  await waitFor(() => globalThis.gobiComposition);
+
+  const api = globalThis.gobiComposition;
+  const names = ["audit", "changes", "complete", "create", "createChild", "decodeHTTP", "dispatch",
+    "dispose", "disposeTree", "effects", "encodeHTTP", "list", "publish", "setChildInputs",
+    "snapshot", "tree"];
+  assert(Object.keys(api).sort().join(",") === names.join(","), "composition bridge method table must be exact");
+  const root = unwrap(api.create(), "create root");
+  const child = unwrap(api.createChild(root), "create child");
+  assert(root === 1 && child === 2, "IDs must be positive increasing safe integers");
+  const initial = unwrap(api.snapshot(child), "snapshot child");
+  assert(Object.keys(initial).sort().join(",") === "bindings,messages,state,tree",
+    "composition snapshot must retain the exact four-field envelope");
+
+  const inputUpdate = unwrap(api.setChildInputs(root, child, { Title: "Notebook", ReadOnly: true }), "set child inputs");
+  assert(inputUpdate.state.Inputs.Title === "Notebook" && inputUpdate.state.Inputs.ReadOnly === true &&
+    inputUpdate.state.InputRevision === 1, "typed inputs must reach the Go-owned snapshot");
+  const readonlySnapshot = JSON.stringify(unwrap(api.snapshot(child), "snapshot readonly child"));
+  const readonlyDispatch = api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add" });
+  assert(isError(readonlyDispatch) || JSON.stringify(readonlyDispatch) === readonlySnapshot,
+    "read-only child dispatch must be rejected or suppressed by Go policy");
+
+  const beforeReentry = JSON.stringify(unwrap(api.list(), "list before reentry probes"));
+  let getterReads = 0;
+  const accessorInput = Object.defineProperty({ ReadOnly: false }, "Title", {
+    enumerable: true,
+    get() { getterReads += 1; return api.create(); },
+  });
+  assert(isError(api.setChildInputs(root, child, accessorInput)), "own accessor fields must be rejected");
+  assert(getterReads === 0, "schema validation must reject accessors without invoking them");
+
+  const inheritedValues = { Title: "prototype fallback", ReadOnly: false };
+  let ownKeysNestedCall;
+  const ownKeysProxy = new Proxy(Object.create(inheritedValues), {
+    ownKeys() {
+      ownKeysNestedCall = api.create();
+      return ["Title", "ReadOnly"];
+    },
+  });
+  assert(isError(api.setChildInputs(root, child, ownKeysProxy)),
+    "fabricated own-key names without own descriptors must be rejected");
+  assert(isError(ownKeysNestedCall), "nested bridge mutation during ownKeys inspection must be fenced");
+
+  const descriptorTarget = {};
+  Object.defineProperties(descriptorTarget, {
+    Title: { value: "ignored", configurable: true },
+    ReadOnly: { value: false, configurable: true },
+  });
+  let descriptorNestedCall;
+  const descriptorProxy = new Proxy(descriptorTarget, {
+    getOwnPropertyDescriptor(target, name) {
+      descriptorNestedCall = api.create();
+      throw new Error(`hostile descriptor trap for ${String(name)}`);
+    },
+  });
+  assert(isError(api.setChildInputs(root, child, descriptorProxy)),
+    "throwing own-descriptor traps must be contained");
+  assert(isError(descriptorNestedCall), "nested bridge mutation during descriptor inspection must be fenced");
+  assert(JSON.stringify(unwrap(api.list(), "list after reentry probes")) === beforeReentry,
+    "failed schema probes must not consume session IDs");
+
+  const beforeInvalid = JSON.stringify(unwrap(api.snapshot(child), "snapshot before malformed calls"));
+  const invalidCalls = [
+    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: true, extra: undefined }),
+    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: 1 }),
+    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: new Boolean(true) }),
+    () => api.setChildInputs(root, child, { Title: "\uD800", ReadOnly: false }),
+    () => api.setChildInputs(root, child, Object.defineProperty(
+      { ReadOnly: false }, "Title", { enumerable: true, get() { throw new Error("hostile getter"); } })),
+    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add", extra: true }),
+    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add", [Symbol("extra")]: true }),
+    () => api.dispatch(child, Object.defineProperty(
+      { Path: "0", Event: "click", Value: "", Key: "add" }, "hidden", { value: true })),
+    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: new String("add") }),
+    () => api.publish(child, 1.5, 1),
+    () => api.publish(child, Number.MAX_SAFE_INTEGER + 1, 1),
+    () => api.publish(child, 1, 1.5),
+    () => api.publish(child, 1, -1),
+    () => api.complete(child, { ID: 1, Value: "late", Error: "", extra: true }),
+    () => api.complete(child, { ID: 1.5, Value: "late", Error: "" }),
+    () => api.decodeHTTP(1, 600, "{}"),
+    () => api.encodeHTTP(1, new String("value")),
+  ];
+  for (const invalid of invalidCalls) assert(isError(invalid()), "malformed composition input must be rejected");
+  const throwingProxy = new Proxy({}, { ownKeys() { throw new Error("hostile proxy"); } });
+  assert(isError(api.setChildInputs(root, child, throwingProxy)), "throwing ownKeys trap must be contained");
+  assert(JSON.stringify(unwrap(api.snapshot(child), "snapshot after malformed calls")) === beforeInvalid,
+    "invalid bridge calls must leave Go-owned composition state unchanged");
+
+  const afterErrors = unwrap(api.setChildInputs(root, child, { Title: "Still usable", ReadOnly: true }),
+    "set valid inputs after malformed calls");
+  assert(afterErrors.state.Inputs.Title === "Still usable" && afterErrors.state.InputRevision === 2,
+    "valid bridge methods must remain usable after rejected accessors and proxies");
+  const nextID = unwrap(api.create(), "create after malformed calls");
+  assert(nextID === 3 && unwrap(api.list(), "list after valid call").join(",") === "1,2,3",
+    "rejected accessors and proxy traps must not consume IDs");
+
+  const ids = [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "1", new Number(root)];
+  for (const id of ids) {
+    assert(isError(api.snapshot(id)) && isError(api.createChild(id)) && isError(api.disposeTree(id)),
+      "session IDs must be primitive positive safe integer numbers");
+  }
+  const arities = {
+    audit: 1, changes: 0, complete: 2, create: 0, createChild: 1, decodeHTTP: 3,
+    dispatch: 2, dispose: 1, disposeTree: 1, effects: 1, encodeHTTP: 2, list: 0,
+    publish: 3, setChildInputs: 3, snapshot: 1, tree: 0,
+  };
+  for (const [name, arity] of Object.entries(arities)) {
+    const args = Array.from({ length: arity + 1 }, () => undefined);
+    assert(isError(api[name](...args)), `${name} must reject the wrong arity`);
+  }
+
+  unwrap(api.dispose(child), "dispose child");
+  unwrap(api.dispose(root), "dispose root");
+  unwrap(api.dispose(nextID), "dispose post-probe root");
+  assert(unwrap(api.list(), "list after cleanup").length === 0, "smoke sessions must be removable");
+  return { ok: true, methodCount: names.length, readonlyInputRevision: inputUpdate.state.InputRevision,
+    malformedSchemasRejected: invalidCalls.length + 1, safeIDsRejected: ids.length,
+    exactArityMethods: Object.keys(arities).length, accessorReads: getterReads, ownKeysReentryBlocked: isError(ownKeysNestedCall),
+    descriptorReentryBlocked: isError(descriptorNestedCall), validMethodsAfterErrors: true };
+})().catch((error) => {
+  window.__compositionSmokeError = String(error?.stack ?? error);
+  throw error;
+});
+</script>
+</body></html>

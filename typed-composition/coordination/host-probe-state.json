@@ -1,0 +1,106 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-public-host-admission-probe"
+  },
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "H-HOST": {
+      "id": "H-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "coordination/reviews/host-admission probe and report/receipt only",
+      "summary": "reproduce whether pre-bridge host argument clone bypasses strict data admission/reentry fence",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T19:23:00.686522+00:00",
+      "finished_at": "2026-10-30T19:37:04.910419+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/H-HOST.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T19:23:00.582367+00:00",
+      "ready_jobs": [
+        "H-HOST"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N1": "H-HOST"
+      },
+      "dispatch": {
+        "N1": "H-HOST"
+      },
+      "native_seconds": 0.003910044999429374,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 1 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "H-HOST": 1,
+        "BENCH": 1
+      },
+      "eligible": {
+        "H-HOST": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "H-HOST": 100
+      },
+      "agent_by_worker": {
+        "N1": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T19:23:00.686522+00:00",
+      "worker": "N1",
+      "job": "H-HOST",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T19:37:04.910419+00:00",
+      "worker": "N1",
+      "job": "H-HOST"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

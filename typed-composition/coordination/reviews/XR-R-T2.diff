@@ -1,0 +1,1355 @@
+diff --git a/cmd/composition-wasm/main_wasm.go b/cmd/composition-wasm/main_wasm.go
+new file mode 100644
+index 0000000..10b7c55
+--- /dev/null
++++ b/cmd/composition-wasm/main_wasm.go
+@@ -0,0 +1,483 @@
++//go:build js && wasm
++
++// Command composition-wasm exposes typed parent/child composition through the
++// exact-arity gobiComposition browser global.
++package main
++
++import (
++	"encoding/json"
++	"fmt"
++	"math"
++	"syscall/js"
++
++	"github.com/samuelpmahan/gondola/asyncsave"
++	"github.com/samuelpmahan/gondola/collection"
++	"github.com/samuelpmahan/gondola/composition"
++	"github.com/samuelpmahan/gondola/httpwire"
++	"github.com/samuelpmahan/gondola/multisession"
++)
++
++var (
++	manager       *composition.Manager
++	keepers       []js.Func
++	bridgeRunning bool
++)
++
++func main() {
++	manager = composition.NewManager()
++	api := js.Global().Get("Object").New()
++	api.Set("create", method("create", 0, func(args []js.Value) any {
++		id, err := manager.Create()
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return float64(id)
++	}))
++	api.Set("createChild", method("createChild", 1, func(args []js.Value) any {
++		parent, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		id, err := manager.CreateChild(parent)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return float64(id)
++	}))
++	api.Set("tree", method("tree", 0, func(args []js.Value) any {
++		tree := manager.Tree()
++		if tree == nil {
++			tree = []multisession.SessionInfo{}
++		}
++		return toJS(tree)
++	}))
++	api.Set("list", method("list", 0, func(args []js.Value) any {
++		ids := manager.List()
++		if ids == nil {
++			ids = []multisession.SessionID{}
++		}
++		return toJS(ids)
++	}))
++	api.Set("snapshot", method("snapshot", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		snapshot, err := manager.Snapshot(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("dispatch", method("dispatch", 2, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		step, err := decodeStep(args[1])
++		if err != nil {
++			return errorResult(fmt.Sprintf("invalid step: %v", err))
++		}
++		snapshot, err := manager.Dispatch(id, step)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("effects", method("effects", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		commands, err := manager.Effects(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if commands == nil {
++			commands = []collection.Command{}
++		}
++		return toJS(commands)
++	}))
++	api.Set("complete", method("complete", 2, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		reply, err := decodeReply(args[1])
++		if err != nil {
++			return errorResult(fmt.Sprintf("invalid reply: %v", err))
++		}
++		snapshot, err := manager.Complete(id, reply)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("audit", method("audit", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		outcomes, err := manager.Audit(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if outcomes == nil {
++			outcomes = []collection.Outcome{}
++		}
++		return toJS(outcomes)
++	}))
++	api.Set("dispose", method("dispose", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		commands, err := manager.Dispose(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if commands == nil {
++			commands = []collection.Command{}
++		}
++		return toJS(commands)
++	}))
++	api.Set("disposeTree", method("disposeTree", 1, func(args []js.Value) any {
++		id, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		disposals, err := manager.DisposeTree(id)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if disposals == nil {
++			disposals = []multisession.Disposal{}
++		}
++		return toJS(disposals)
++	}))
++	api.Set("setChildInputs", method("setChildInputs", 3, func(args []js.Value) any {
++		parent, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		child, err := decodeSessionID(args[1])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		inputs, err := decodeInputs(args[2])
++		if err != nil {
++			return errorResult(fmt.Sprintf("invalid inputs: %v", err))
++		}
++		snapshot, err := manager.SetChildInputs(parent, child, inputs)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(snapshot)
++	}))
++	api.Set("publish", method("publish", 3, func(args []js.Value) any {
++		child, err := decodeSessionID(args[0])
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		row, err := safeTypedID(args[1], "row ID")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		revision, err := safeUint(args[2], "input revision", true)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		publication, err := manager.Publish(child, collection.RowID(row), revision)
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return toJS(publication)
++	}))
++	api.Set("changes", method("changes", 0, func(args []js.Value) any {
++		ids := manager.Changes()
++		if ids == nil {
++			ids = []multisession.SessionID{}
++		}
++		return toJS(ids)
++	}))
++	api.Set("encodeHTTP", method("encodeHTTP", 2, func(args []js.Value) any {
++		id, err := safeTypedID(args[0], "request ID")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if args[1].Type() != js.TypeString {
++			return errorResult("encodeHTTP value must be a primitive string")
++		}
++		body, err := httpwire.EncodeRequest(id, args[1].String())
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		return string(body)
++	}))
++	api.Set("decodeHTTP", method("decodeHTTP", 3, func(args []js.Value) any {
++		id, err := safeTypedID(args[0], "request ID")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		status, err := safeJSInteger(args[1], 100, 599, "status")
++		if err != nil {
++			return errorResult(err.Error())
++		}
++		if args[2].Type() != js.TypeString {
++			return errorResult("decodeHTTP body must be a primitive string")
++		}
++		return toJS(httpwire.DecodeResponse(id, int(status), []byte(args[2].String())))
++	}))
++	js.Global().Set("gobiComposition", api)
++	select {}
++}
++
++func method(name string, arity int, operation func([]js.Value) any) js.Func {
++	return keep(js.FuncOf(func(this js.Value, args []js.Value) (result any) {
++		if bridgeRunning {
++			return errorResult("nested gobiComposition calls are not allowed during a bridge operation")
++		}
++		bridgeRunning = true
++		defer func() { bridgeRunning = false }()
++
++		if len(args) != arity {
++			return errorResult(fmt.Sprintf("%s requires exactly %d argument(s), got %d", name, arity, len(args)))
++		}
++		defer func() {
++			if recovered := recover(); recovered != nil {
++				result = errorResult(fmt.Sprintf("%s failed: %v", name, recovered))
++			}
++		}()
++		return operation(args)
++	}))
++}
++
++func keep(function js.Func) js.Func {
++	keepers = append(keepers, function)
++	return function
++}
++
++func decodeSessionID(value js.Value) (multisession.SessionID, error) {
++	if value.Type() != js.TypeNumber {
++		return 0, fmt.Errorf("session ID must be a primitive integer number")
++	}
++	number := value.Float()
++	if math.IsNaN(number) || math.IsInf(number, 0) || math.Trunc(number) != number || number < 1 || number > float64(multisession.MaxSessionID) {
++		return 0, fmt.Errorf("session ID must be an integer in range 1..%d", multisession.MaxSessionID)
++	}
++	return multisession.SessionID(uint64(number)), nil
++}
++
++func safeTypedID(value js.Value, name string) (uint64, error) {
++	return safeUint(value, name, false)
++}
++
++func safeUint(value js.Value, name string, allowZero bool) (uint64, error) {
++	minimum := float64(1)
++	if allowZero {
++		minimum = 0
++	}
++	number, err := safeJSInteger(value, minimum, float64(asyncsave.MaxID), name)
++	if err != nil {
++		return 0, err
++	}
++	return uint64(number), nil
++}
++
++func safeJSInteger(value js.Value, minimum, maximum float64, name string) (float64, error) {
++	if value.Type() != js.TypeNumber {
++		return 0, fmt.Errorf("%s must be a primitive integer number", name)
++	}
++	number := value.Float()
++	if math.IsNaN(number) || math.IsInf(number, 0) || math.Trunc(number) != number || number < minimum || number > maximum {
++		return 0, fmt.Errorf("%s must be an integer in range %d..%d", name, int64(minimum), int64(maximum))
++	}
++	return number, nil
++}
++
++func decodeStep(value js.Value) (step collection.Step, err error) {
++	defer recoverDecode("step", &err)
++	fields, err := exactDataFields(value, "Path", "Event", "Value", "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	path, err := requiredJSString(fields, "Path")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	event, err := requiredJSString(fields, "Event")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	input, err := requiredJSString(fields, "Value")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	key, err := requiredJSString(fields, "Key")
++	if err != nil {
++		return collection.Step{}, err
++	}
++	return collection.Step{Path: path, Event: event, Value: input, Key: key}, nil
++}
++
++func decodeReply(value js.Value) (reply asyncsave.Reply, err error) {
++	defer recoverDecode("reply", &err)
++	fields, err := exactDataFields(value, "ID", "Value", "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	id, err := safeTypedID(fields["ID"], "reply ID")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	answer, err := requiredJSString(fields, "Value")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	message, err := requiredJSString(fields, "Error")
++	if err != nil {
++		return asyncsave.Reply{}, err
++	}
++	return asyncsave.Reply{ID: id, Value: answer, Error: message}, nil
++}
++
++func decodeInputs(value js.Value) (inputs composition.Inputs, err error) {
++	defer recoverDecode("inputs", &err)
++	fields, err := exactDataFields(value, "Title", "ReadOnly")
++	if err != nil {
++		return composition.Inputs{}, err
++	}
++	titleValue := fields["Title"]
++	if titleValue.Type() != js.TypeString {
++		return composition.Inputs{}, fmt.Errorf("field %q must be a primitive string", "Title")
++	}
++	if !validJSUTF16(titleValue) {
++		return composition.Inputs{}, fmt.Errorf("field %q must contain valid Unicode", "Title")
++	}
++	readOnly := fields["ReadOnly"]
++	if readOnly.Type() != js.TypeBoolean {
++		return composition.Inputs{}, fmt.Errorf("field %q must be a primitive boolean", "ReadOnly")
++	}
++	return composition.Inputs{Title: titleValue.String(), ReadOnly: readOnly.Bool()}, nil
++}
++
++func recoverDecode(name string, err *error) {
++	if recovered := recover(); recovered != nil {
++		*err = fmt.Errorf("%s fields could not be read: %v", name, recovered)
++	}
++}
++
++// exactDataFields snapshots only own data-property values. Input getters are
++// rejected without invocation; proxy traps can still run, so method() fences
++// nested calls while this schema is inspected.
++func exactDataFields(value js.Value, names ...string) (fields map[string]js.Value, err error) {
++	defer func() {
++		if recovered := recover(); recovered != nil {
++			fields = nil
++			err = fmt.Errorf("input fields could not be read: %v", recovered)
++		}
++	}()
++	if value.IsNull() || value.IsUndefined() || value.Type() != js.TypeObject {
++		return nil, fmt.Errorf("input must be an object")
++	}
++	if js.Global().Get("Array").Call("isArray", value).Bool() {
++		return nil, fmt.Errorf("input must be an object")
++	}
++	keys, err := reflectOwnKeys(value)
++	if err != nil {
++		return nil, err
++	}
++	if keys.Length() != len(names) {
++		return nil, fmt.Errorf("input must contain exactly %d own field(s)", len(names))
++	}
++	wanted := make(map[string]struct{}, len(names))
++	for _, name := range names {
++		wanted[name] = struct{}{}
++	}
++	for index := 0; index < keys.Length(); index++ {
++		key := keys.Index(index)
++		if key.Type() != js.TypeString {
++			return nil, fmt.Errorf("input field names must be strings")
++		}
++		if _, ok := wanted[key.String()]; !ok {
++			return nil, fmt.Errorf("unexpected field %q", key.String())
++		}
++		delete(wanted, key.String())
++	}
++	if len(wanted) != 0 {
++		return nil, fmt.Errorf("input is missing required fields")
++	}
++
++	fields = make(map[string]js.Value, len(names))
++	for _, name := range names {
++		descriptor, err := reflectOwnDescriptor(value, name)
++		if err != nil {
++			return nil, err
++		}
++		if descriptor.IsNull() || descriptor.IsUndefined() || descriptor.Type() != js.TypeObject {
++			return nil, fmt.Errorf("field %q must be an own data property", name)
++		}
++		if !js.Global().Get("Object").Call("hasOwn", descriptor, "value").Bool() {
++			return nil, fmt.Errorf("field %q must be an own data property", name)
++		}
++		fields[name] = descriptor.Get("value")
++	}
++	return fields, nil
++}
++
++func reflectOwnKeys(value js.Value) (keys js.Value, err error) {
++	defer func() {
++		if recovered := recover(); recovered != nil {
++			keys = js.Undefined()
++			err = fmt.Errorf("input fields could not be read: %v", recovered)
++		}
++	}()
++	return js.Global().Get("Reflect").Call("ownKeys", value), nil
++}
++
++func reflectOwnDescriptor(value js.Value, name string) (descriptor js.Value, err error) {
++	defer func() {
++		if recovered := recover(); recovered != nil {
++			descriptor = js.Undefined()
++			err = fmt.Errorf("field %q descriptor could not be read: %v", name, recovered)
++		}
++	}()
++	return js.Global().Get("Reflect").Call("getOwnPropertyDescriptor", value, name), nil
++}
++
++func requiredJSString(fields map[string]js.Value, name string) (string, error) {
++	field, ok := fields[name]
++	if !ok {
++		return "", fmt.Errorf("field %q is missing", name)
++	}
++	if field.Type() != js.TypeString {
++		return "", fmt.Errorf("field %q must be a primitive string", name)
++	}
++	return field.String(), nil
++}
++
++func validJSUTF16(value js.Value) (valid bool) {
++	defer func() {
++		if recover() != nil {
++			valid = false
++		}
++	}()
++	// encodeURIComponent throws for unpaired UTF-16 surrogates and accepts
++	// valid pairs, so no lossy JS-to-Go string conversion is needed to check.
++	js.Global().Call("encodeURIComponent", value)
++	return true
++}
++
++func toJS(value any) js.Value {
++	encoded, err := json.Marshal(value)
++	if err != nil {
++		return errorResult(fmt.Sprintf("could not encode result: %v", err))
++	}
++	return js.Global().Get("JSON").Call("parse", string(encoded))
++}
++
++func errorResult(message string) js.Value {
++	result := js.Global().Get("Object").New()
++	result.Set("error", message)
++	return result
++}
+diff --git a/cmd/composition-wasm/smoke.html b/cmd/composition-wasm/smoke.html
+new file mode 100644
+index 0000000..d118407
+--- /dev/null
++++ b/cmd/composition-wasm/smoke.html
+@@ -0,0 +1,149 @@
++<!doctype html>
++<html><head><meta charset="utf-8"><title>Composition WASM bridge smoke</title></head>
++<body>
++<script src="/wasm_exec.js"></script>
++<script>
++window.__compositionSmoke = (async () => {
++  const assert = (condition, message) => { if (!condition) throw new Error(message); };
++  const isError = (value) => value && typeof value === "object" &&
++    Object.keys(value).length === 1 && Object.keys(value)[0] === "error" && typeof value.error === "string";
++  const unwrap = (value, operation) => { if (isError(value)) throw new Error(`${operation}: ${value.error}`); return value; };
++  const waitFor = async (readiness) => {
++    for (let attempt = 0; attempt < 200; attempt += 1) {
++      if (readiness()) return;
++      await new Promise((resolve) => setTimeout(resolve, 0));
++    }
++    throw new Error("Go WASM bridge did not publish within the bounded wait");
++  };
++  const go = new Go();
++  const response = await fetch("/composition.wasm");
++  if (!response.ok) throw new Error(`could not load WASM: ${response.status}`);
++  const bytes = await response.arrayBuffer();
++  const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
++  void go.run(instance);
++  await waitFor(() => globalThis.gobiComposition);
++
++  const api = globalThis.gobiComposition;
++  const names = ["audit", "changes", "complete", "create", "createChild", "decodeHTTP", "dispatch",
++    "dispose", "disposeTree", "effects", "encodeHTTP", "list", "publish", "setChildInputs",
++    "snapshot", "tree"];
++  assert(Object.keys(api).sort().join(",") === names.join(","), "composition bridge method table must be exact");
++  const root = unwrap(api.create(), "create root");
++  const child = unwrap(api.createChild(root), "create child");
++  assert(root === 1 && child === 2, "IDs must be positive increasing safe integers");
++  const initial = unwrap(api.snapshot(child), "snapshot child");
++  assert(Object.keys(initial).sort().join(",") === "bindings,messages,state,tree",
++    "composition snapshot must retain the exact four-field envelope");
++
++  const inputUpdate = unwrap(api.setChildInputs(root, child, { Title: "Notebook", ReadOnly: true }), "set child inputs");
++  assert(inputUpdate.state.Inputs.Title === "Notebook" && inputUpdate.state.Inputs.ReadOnly === true &&
++    inputUpdate.state.InputRevision === 1, "typed inputs must reach the Go-owned snapshot");
++  const readonlySnapshot = JSON.stringify(unwrap(api.snapshot(child), "snapshot readonly child"));
++  const readonlyDispatch = api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add" });
++  assert(isError(readonlyDispatch) || JSON.stringify(readonlyDispatch) === readonlySnapshot,
++    "read-only child dispatch must be rejected or suppressed by Go policy");
++
++  const beforeReentry = JSON.stringify(unwrap(api.list(), "list before reentry probes"));
++  let getterReads = 0;
++  const accessorInput = Object.defineProperty({ ReadOnly: false }, "Title", {
++    enumerable: true,
++    get() { getterReads += 1; return api.create(); },
++  });
++  assert(isError(api.setChildInputs(root, child, accessorInput)), "own accessor fields must be rejected");
++  assert(getterReads === 0, "schema validation must reject accessors without invoking them");
++
++  const inheritedValues = { Title: "prototype fallback", ReadOnly: false };
++  let ownKeysNestedCall;
++  const ownKeysProxy = new Proxy(Object.create(inheritedValues), {
++    ownKeys() {
++      ownKeysNestedCall = api.create();
++      return ["Title", "ReadOnly"];
++    },
++  });
++  assert(isError(api.setChildInputs(root, child, ownKeysProxy)),
++    "fabricated own-key names without own descriptors must be rejected");
++  assert(isError(ownKeysNestedCall), "nested bridge mutation during ownKeys inspection must be fenced");
++
++  const descriptorTarget = {};
++  Object.defineProperties(descriptorTarget, {
++    Title: { value: "ignored", configurable: true },
++    ReadOnly: { value: false, configurable: true },
++  });
++  let descriptorNestedCall;
++  const descriptorProxy = new Proxy(descriptorTarget, {
++    getOwnPropertyDescriptor(target, name) {
++      descriptorNestedCall = api.create();
++      throw new Error(`hostile descriptor trap for ${String(name)}`);
++    },
++  });
++  assert(isError(api.setChildInputs(root, child, descriptorProxy)),
++    "throwing own-descriptor traps must be contained");
++  assert(isError(descriptorNestedCall), "nested bridge mutation during descriptor inspection must be fenced");
++  assert(JSON.stringify(unwrap(api.list(), "list after reentry probes")) === beforeReentry,
++    "failed schema probes must not consume session IDs");
++
++  const beforeInvalid = JSON.stringify(unwrap(api.snapshot(child), "snapshot before malformed calls"));
++  const invalidCalls = [
++    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: true, extra: undefined }),
++    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: 1 }),
++    () => api.setChildInputs(root, child, { Title: "x", ReadOnly: new Boolean(true) }),
++    () => api.setChildInputs(root, child, { Title: "\uD800", ReadOnly: false }),
++    () => api.setChildInputs(root, child, Object.defineProperty(
++      { ReadOnly: false }, "Title", { enumerable: true, get() { throw new Error("hostile getter"); } })),
++    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add", extra: true }),
++    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: "add", [Symbol("extra")]: true }),
++    () => api.dispatch(child, Object.defineProperty(
++      { Path: "0", Event: "click", Value: "", Key: "add" }, "hidden", { value: true })),
++    () => api.dispatch(child, { Path: "0", Event: "click", Value: "", Key: new String("add") }),
++    () => api.publish(child, 1.5, 1),
++    () => api.publish(child, Number.MAX_SAFE_INTEGER + 1, 1),
++    () => api.publish(child, 1, 1.5),
++    () => api.publish(child, 1, -1),
++    () => api.complete(child, { ID: 1, Value: "late", Error: "", extra: true }),
++    () => api.complete(child, { ID: 1.5, Value: "late", Error: "" }),
++    () => api.decodeHTTP(1, 600, "{}"),
++    () => api.encodeHTTP(1, new String("value")),
++  ];
++  for (const invalid of invalidCalls) assert(isError(invalid()), "malformed composition input must be rejected");
++  const throwingProxy = new Proxy({}, { ownKeys() { throw new Error("hostile proxy"); } });
++  assert(isError(api.setChildInputs(root, child, throwingProxy)), "throwing ownKeys trap must be contained");
++  assert(JSON.stringify(unwrap(api.snapshot(child), "snapshot after malformed calls")) === beforeInvalid,
++    "invalid bridge calls must leave Go-owned composition state unchanged");
++
++  const afterErrors = unwrap(api.setChildInputs(root, child, { Title: "Still usable", ReadOnly: true }),
++    "set valid inputs after malformed calls");
++  assert(afterErrors.state.Inputs.Title === "Still usable" && afterErrors.state.InputRevision === 2,
++    "valid bridge methods must remain usable after rejected accessors and proxies");
++  const nextID = unwrap(api.create(), "create after malformed calls");
++  assert(nextID === 3 && unwrap(api.list(), "list after valid call").join(",") === "1,2,3",
++    "rejected accessors and proxy traps must not consume IDs");
++
++  const ids = [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "1", new Number(root)];
++  for (const id of ids) {
++    assert(isError(api.snapshot(id)) && isError(api.createChild(id)) && isError(api.disposeTree(id)),
++      "session IDs must be primitive positive safe integer numbers");
++  }
++  const arities = {
++    audit: 1, changes: 0, complete: 2, create: 0, createChild: 1, decodeHTTP: 3,
++    dispatch: 2, dispose: 1, disposeTree: 1, effects: 1, encodeHTTP: 2, list: 0,
++    publish: 3, setChildInputs: 3, snapshot: 1, tree: 0,
++  };
++  for (const [name, arity] of Object.entries(arities)) {
++    const args = Array.from({ length: arity + 1 }, () => undefined);
++    assert(isError(api[name](...args)), `${name} must reject the wrong arity`);
++  }
++
++  unwrap(api.dispose(child), "dispose child");
++  unwrap(api.dispose(root), "dispose root");
++  unwrap(api.dispose(nextID), "dispose post-probe root");
++  assert(unwrap(api.list(), "list after cleanup").length === 0, "smoke sessions must be removable");
++  return { ok: true, methodCount: names.length, readonlyInputRevision: inputUpdate.state.InputRevision,
++    malformedSchemasRejected: invalidCalls.length + 1, safeIDsRejected: ids.length,
++    exactArityMethods: Object.keys(arities).length, accessorReads: getterReads, ownKeysReentryBlocked: isError(ownKeysNestedCall),
++    descriptorReentryBlocked: isError(descriptorNestedCall), validMethodsAfterErrors: true };
++})().catch((error) => {
++  window.__compositionSmokeError = String(error?.stack ?? error);
++  throw error;
++});
++</script>
++</body></html>
+diff --git a/typed-composition/host.mjs b/typed-composition/host.mjs
+new file mode 100644
+index 0000000..2fac03c
+--- /dev/null
++++ b/typed-composition/host.mjs
+@@ -0,0 +1,213 @@
++import { clone } from "../keyed-editor/protocol.mjs";
++import { createSessionTreeHost } from "../session-tree/host.mjs";
++
++const SESSION_TREE_METHODS = [
++  "create", "createChild", "tree", "list", "snapshot", "dispatch", "effects", "complete",
++  "audit", "dispose", "disposeTree",
++];
++const COMPOSITION_METHODS = ["setChildInputs", "publish", "changes"];
++const MUTATING_METHODS = new Set([
++  "create", "createChild", "dispatch", "complete", "dispose", "disposeTree", "setChildInputs", "publish",
++]);
++const managerOwners = new WeakMap();
++
++function fail(message, cause) {
++  return new Error(`composition host: ${message}`, cause === undefined ? undefined : { cause });
++}
++
++function assertManager(manager) {
++  if (!manager || typeof manager !== "object" || Array.isArray(manager)) {
++    throw fail("manager bridge is required");
++  }
++  for (const method of [...SESSION_TREE_METHODS, ...COMPOSITION_METHODS]) {
++    if (typeof manager[method] !== "function") throw fail(`manager bridge must expose ${method}()`);
++  }
++  if (managerOwners.has(manager)) throw fail("manager already has an active composition host");
++}
++
++function assertNoErrorFrame(method, result) {
++  if (!result || typeof result !== "object" || Array.isArray(result)) return result;
++  const keys = Object.keys(result);
++  if (keys.length === 1 && keys[0] === "error" && typeof result.error === "string") {
++    throw fail(`gobiComposition.${method} returned error frame: ${result.error}`);
++  }
++  return result;
++}
++
++function checkedChanges(value) {
++  if (!Array.isArray(value)) throw fail("manager.changes() must return an array");
++  let prior = 0;
++  return value.map((id, index) => {
++    if (!Number.isSafeInteger(id) || id <= prior) {
++      throw fail(`manager.changes() entry ${index} must be a positive, sorted, unique safe session ID`);
++    }
++    prior = id;
++    return id;
++  });
++}
++
++/**
++ * Coordinate Go-owned typed composition with the existing session-tree host.
++ * This layer only schedules dirty snapshot refreshes; application state and
++ * publication policy remain inside the manager.
++ */
++export function createCompositionHost({ manager, descriptors, transportFactory } = {}) {
++  assertManager(manager);
++  const lease = {};
++  managerOwners.set(manager, lease);
++
++  let treeHost;
++  try {
++    let propagationScheduled = false;
++    let propagationRunning = false;
++    let propagateAgain = false;
++    let mutationVersion = 0;
++    const propagationErrors = [];
++    const propagationWaiters = [];
++
++    function assertOwner() {
++      if (managerOwners.get(manager) !== lease) throw fail("manager ownership has been retired");
++    }
++
++    function callManager(method, args) {
++      assertOwner();
++      let result;
++      // Preserve caller objects through the manager boundary. In particular,
++      // input records must reach the strict bridge intact so it can reject
++      // symbols, accessors, and inherited fields without invoking getters.
++      try { result = Reflect.apply(manager[method], manager, args); }
++      catch (error) { throw fail(`gobiComposition.${method}() failed`, error); }
++      return clone(assertNoErrorFrame(method, result));
++    }
++
++    function settlePropagationWaiters() {
++      if (propagationScheduled || propagationRunning || propagationWaiters.length === 0) return;
++      const waiters = propagationWaiters.splice(0);
++      const errors = propagationErrors.splice(0);
++      if (errors.length) {
++        const aggregate = new AggregateError(errors, "composition host dirty refresh failed");
++        for (const waiter of waiters) waiter.reject(aggregate);
++      } else {
++        for (const waiter of waiters) waiter.resolve();
++      }
++    }
++
++    function recordPropagationError(error) {
++      propagationErrors.push(error instanceof Error ? error : fail(String(error)));
++    }
++
++    function drainChanges() {
++      const changed = checkedChanges(callManager("changes", []));
++      if (changed.length === 0) return false;
++
++      const live = new Set(treeHost.tree().map((entry) => entry.SessionID));
++      for (const id of changed) {
++        // Go removes dead dirty IDs. Keep this fence as well so an already
++        // queued refresh cannot reach a disposed or subsequently recreated node.
++        if (!live.has(id)) continue;
++        try { treeHost.refresh(id); }
++        catch (error) { recordPropagationError(error); }
++      }
++      return true;
++    }
++
++    function runPropagation() {
++      propagationScheduled = false;
++      if (propagationRunning) {
++        propagateAgain = true;
++        return;
++      }
++      propagationRunning = true;
++      try {
++        let passes = 0;
++        do {
++          propagateAgain = false;
++          try {
++            while (drainChanges()) {
++              passes += 1;
++              if (passes > 1000) throw fail("dirty refresh did not reach quiescence");
++            }
++          } catch (error) {
++            recordPropagationError(error);
++            break;
++          }
++        } while (propagateAgain);
++      } finally {
++        propagationRunning = false;
++      }
++      if (propagateAgain) schedulePropagation();
++      settlePropagationWaiters();
++    }
++
++    function schedulePropagation() {
++      mutationVersion += 1;
++      if (propagationRunning) {
++        propagateAgain = true;
++        return;
++      }
++      if (propagationScheduled) return;
++      propagationScheduled = true;
++      queueMicrotask(runPropagation);
++    }
++
++    const wrappedManager = {};
++    for (const method of SESSION_TREE_METHODS) {
++      wrappedManager[method] = (...args) => {
++        const result = callManager(method, args);
++        if (MUTATING_METHODS.has(method)) schedulePropagation();
++        return result;
++      };
++    }
++
++    treeHost = createSessionTreeHost({ manager: wrappedManager, descriptors, transportFactory });
++
++    function waitForPropagation() {
++      return new Promise((resolve, reject) => {
++        propagationWaiters.push({ resolve, reject });
++        settlePropagationWaiters();
++      });
++    }
++
++    async function settled() {
++      const errors = [];
++      for (let pass = 0; pass < 1000; pass += 1) {
++        const startingVersion = mutationVersion;
++        try { await treeHost.settled(); }
++        catch (error) { errors.push(error); }
++        try { await waitForPropagation(); }
++        catch (error) { errors.push(error); }
++        try { await treeHost.settled(); }
++        catch (error) { errors.push(error); }
++
++        if (!propagationScheduled && !propagationRunning && mutationVersion === startingVersion) {
++          if (errors.length === 1) throw errors[0];
++          if (errors.length > 1) throw new AggregateError(errors, "composition host settled work failed");
++          return;
++        }
++      }
++      throw fail("settled() did not reach quiescence");
++    }
++
++    function setChildInputs(parentID, childID, inputs) {
++      const result = callManager("setChildInputs", [parentID, childID, inputs]);
++      schedulePropagation();
++      return result;
++    }
++
++    function publish(childID, rowID, inputRevision) {
++      const result = callManager("publish", [childID, rowID, inputRevision]);
++      schedulePropagation();
++      return result;
++    }
++
++    return {
++      ...treeHost,
++      settled,
++      setChildInputs,
++      publish,
++    };
++  } catch (error) {
++    if (managerOwners.get(manager) === lease) managerOwners.delete(manager);
++    throw error;
++  }
++}
+diff --git a/typed-composition/host.test.mjs b/typed-composition/host.test.mjs
+new file mode 100644
+index 0000000..517f6bc
+--- /dev/null
++++ b/typed-composition/host.test.mjs
+@@ -0,0 +1,402 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { createManualTransport } from "../async-effects/transport.mjs";
++import { createCompositionHost } from "./host.mjs";
++
++const text = (Text) => ({ Kind: 2, Tag: "", Key: "", Attrs: null, On: null, Kids: null, Text });
++const element = (Tag, Key, { On = null, Kids = null } = {}) => ({
++  Kind: 1, Tag, Key, Attrs: null, On, Kids, Text: "",
++});
++
++class FakeElement {
++  constructor(tagName, ownerDocument) {
++    this.tagName = tagName;
++    this.ownerDocument = ownerDocument;
++    this.childNodes = [];
++    this.parentNode = null;
++    this.content = "";
++  }
++
++  appendChild(child) {
++    if (child.parentNode) child.parentNode.removeChild(child);
++    child.parentNode = this;
++    this.childNodes.push(child);
++    return child;
++  }
++
++  removeChild(child) {
++    const index = this.childNodes.indexOf(child);
++    if (index < 0) throw new Error("node is not a child");
++    this.childNodes.splice(index, 1);
++    child.parentNode = null;
++    return child;
++  }
++
++  replaceChildren(...children) {
++    for (const child of this.childNodes) child.parentNode = null;
++    this.childNodes = [];
++    this.content = children.map((child) => child.content ?? child.tagName).join("");
++    for (const child of children) this.appendChild(child);
++  }
++}
++
++class FakeDocument {
++  createElement(tagName) { return new FakeElement(tagName, this); }
++}
++
++function fakeContainer() {
++  return new FakeDocument().createElement("main");
++}
++
++function fakeManager() {
++  let nextID = 0;
++  let nextSequence = 0;
++  const sessions = new Map();
++  const dirty = new Set();
++  const calls = {
++    snapshot: [], dispatch: [], complete: [], effects: [], audit: [], changes: 0,
++    setChildInputs: [], publish: [], disposeTree: [],
++  };
++
++  function get(id) {
++    const session = sessions.get(id);
++    if (!session) throw new Error(`unknown session ${id}`);
++    return session;
++  }
++
++  function createSession(parentID, depth) {
++    const id = ++nextID;
++    sessions.set(id, {
++      id, parentID, depth, version: 0, inputs: { Title: "", ReadOnly: false }, inputRevision: 0,
++      inbox: [], messages: [], outbox: [], rows: [{ ID: 1, Saved: "" }], nextRequest: 0,
++    });
++    return id;
++  }
++
++  function snapshot(id) {
++    calls.snapshot.push(id);
++    const session = get(id);
++    return {
++      state: {
++        SessionID: session.id, ParentID: session.parentID, Depth: session.depth, Version: session.version,
++        Inputs: { ...session.inputs }, InputRevision: session.inputRevision,
++        Inbox: session.inbox.map((item) => ({ ...item })),
++        Rows: session.rows.map((row) => ({ ...row })),
++      },
++      tree: element("div", "composition", {
++        Kids: [
++          element("button", "tick", { On: [{ Event: "click", Message: "tick", Arg: "" }], Kids: [text("Tick")] }),
++          element("p", "title", { Kids: [text(`Title: ${session.inputs.Title}`)] }),
++          element("p", "inbox", { Kids: [text(`Published: ${session.inbox.length}`)] }),
++        ],
++      }),
++      bindings: [],
++      messages: session.messages.map((message) => ({ ...message })),
++    };
++  }
++
++  function postorder(rootID) {
++    const result = [];
++    function visit(id) {
++      for (const child of [...sessions.values()].filter((entry) => entry.parentID === id).sort((a, b) => a.id - b.id)) {
++        visit(child.id);
++      }
++      result.push(id);
++    }
++    visit(rootID);
++    return result;
++  }
++
++  return {
++    calls,
++    sessions,
++    create() { return createSession(0, 1); },
++    createChild(parentID) {
++      const parent = get(parentID);
++      return createSession(parentID, parent.depth + 1);
++    },
++    tree() {
++      return [...sessions.values()].sort((a, b) => a.id - b.id).map((session) => ({
++        SessionID: session.id, ParentID: session.parentID, Depth: session.depth,
++      }));
++    },
++    list() { return [...sessions.keys()].sort((a, b) => a - b); },
++    snapshot,
++    dispatch(id, step) {
++      calls.dispatch.push(id);
++      const session = get(id);
++      if (step.Path !== "0" || step.Key !== "tick" || step.Event !== "click") throw new Error("invalid step");
++      session.version += 1;
++      session.messages.push({ Name: "tick", Arg: String(session.version) });
++      session.nextRequest += 1;
++      session.outbox.push({ Kind: "start", ID: session.nextRequest, Value: `tick-${id}` });
++      dirty.add(id);
++      return snapshot(id);
++    },
++    effects(id) {
++      calls.effects.push(id);
++      return get(id).outbox.splice(0);
++    },
++    complete(id, reply) {
++      calls.complete.push(id);
++      const session = get(id);
++      session.version += 1;
++      session.messages.push({ Name: "reply", Arg: String(reply.ID) });
++      dirty.add(id);
++      return snapshot(id);
++    },
++    audit(id) { calls.audit.push(id); return []; },
++    dispose(id) {
++      if ([...sessions.values()].some((entry) => entry.parentID === id)) throw new Error("session has children");
++      sessions.delete(id);
++      return [];
++    },
++    disposeTree(id) {
++      calls.disposeTree.push(id);
++      const ids = postorder(id);
++      const result = ids.map((sessionID) => ({ SessionID: sessionID, Commands: [] }));
++      for (const sessionID of ids) sessions.delete(sessionID);
++      // Leave dirty IDs behind to exercise the browser host's disposed-node fence.
++      return result;
++    },
++    setChildInputs(parentID, childID, inputs) {
++      calls.setChildInputs.push({ parentID, childID });
++      const parent = get(parentID);
++      const child = get(childID);
++      if (child.parentID !== parent.id) throw new Error("parent is not the immediate parent");
++      if (typeof inputs?.Title !== "string" || typeof inputs?.ReadOnly !== "boolean") throw new Error("invalid inputs");
++      child.inputs = { Title: inputs.Title, ReadOnly: inputs.ReadOnly };
++      child.inputRevision += 1;
++      child.version += 1;
++      dirty.add(childID);
++      return snapshot(childID);
++    },
++    publish(childID, rowID, inputRevision) {
++      calls.publish.push({ childID, rowID, inputRevision });
++      const child = get(childID);
++      if (child.parentID === 0 || inputRevision !== child.inputRevision) return { error: "publish revision rejected" };
++      const row = child.rows.find((entry) => entry.ID === rowID);
++      if (!row || row.Saved === "" || child.inputs.ReadOnly) return { error: "publish policy rejected" };
++      const publication = {
++        Sequence: ++nextSequence, ParentID: child.parentID, ChildID: childID, RowID: rowID,
++        Saved: row.Saved, Saves: 1, InputRevision: inputRevision,
++      };
++      get(child.parentID).inbox.push({ ...publication });
++      child.messages.push({ Name: "publish", Arg: `${rowID}/${inputRevision}` });
++      dirty.add(childID);
++      dirty.add(child.parentID);
++      return publication;
++    },
++    changes() {
++      calls.changes += 1;
++      const changed = [...dirty].sort((a, b) => a - b);
++      dirty.clear();
++      return changed;
++    },
++  };
++}
++
++function recordingRenderers(records, manager) {
++  function mount(name, root, runtime) {
++    const initial = runtime.init();
++    const record = { name, root, runtime, latest: initial, focus: null, updates: [], mounted: true };
++    const api = {
++      update(next) {
++        if (manager.failUpdate) throw new Error("renderer refresh failed");
++        record.latest = next;
++        record.updates.push(next);
++      },
++      snapshot() { return record.latest; },
++      domSnapshot() { return { html: `${name}:${record.latest.state.SessionID}`, disabled: [] }; },
++      focusState() { return record.focus && { ...record.focus }; },
++      restoreFocus(next) { record.focus = next && { ...next }; },
++      click(path) {
++        if (path !== "0") throw new Error("only tick path is clickable");
++        const next = runtime.dispatch({ Path: "0", Event: "click", Value: "", Key: "tick" });
++        api.update(next);
++        return next;
++      },
++      unmount() { record.mounted = false; },
++    };
++    record.click = api.click;
++    records.push(record);
++    return api;
++  }
++  return {
++    dom: (root, runtime) => mount("dom", root, runtime),
++    react: (root, runtime) => mount("react", root, runtime),
++  };
++}
++
++function setup(manager = fakeManager()) {
++  const records = [];
++  const transports = new Map();
++  const host = createCompositionHost({
++    manager,
++    descriptors: recordingRenderers(records, manager),
++    transportFactory(sessionID) {
++      const transport = createManualTransport();
++      transports.set(sessionID, transport);
++      return transport;
++    },
++  });
++  return { host, manager, records, transports };
++}
++
++function currentRenderer(records, id) {
++  const record = [...records].reverse().find((entry) => entry.latest.state.SessionID === id && entry.mounted);
++  assert.ok(record, `expected a mounted renderer for ${id}`);
++  return record;
++}
++
++function includesError(error, phrase) {
++  if (!error) return false;
++  if (String(error.message ?? error).includes(phrase)) return true;
++  if (error.cause && includesError(error.cause, phrase)) return true;
++  return Array.isArray(error.errors) && error.errors.some((nested) => includesError(nested, phrase));
++}
++
++test("renderer dispatch schedules dirty refresh after the event and settled waits for effects", async () => {
++  const { host, manager, records, transports } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  const parentRenderer = currentRenderer(records, root.sessionID);
++  const childRenderer = currentRenderer(records, child.sessionID);
++
++  childRenderer.click("0");
++  assert.equal(childRenderer.updates.length, 1, "the renderer paints its dispatch result synchronously");
++  assert.equal(parentRenderer.updates.length, 0);
++  assert.deepEqual(transports.get(child.sessionID).log(), [], "effect work waits until the event callback returns");
++  await host.settled();
++
++  assert.equal(childRenderer.updates.length, 2, "the Go dirty snapshot is refreshed in place");
++  assert.equal(parentRenderer.updates.length, 0, "an unrelated parent stays untouched");
++  assert.equal(host.snapshot(child.sessionID).state.Version, 1);
++  assert.deepEqual(transports.get(child.sessionID).log(), [
++    { kind: "start", command: { Kind: "start", ID: 1, Value: `tick-${child.sessionID}` } },
++  ]);
++  assert.equal(manager.calls.snapshot.filter((id) => id === child.sessionID).length, 3,
++    "initialization, dispatch, and dirty refresh all read Go snapshots without reinitializing");
++  host.dispose(root.sessionID);
++});
++
++test("child inputs and publication refresh only Go-dirty sessions and keep renderers mounted", async () => {
++  const { host, manager, records } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  const parentRenderer = currentRenderer(records, root.sessionID);
++  const childRenderer = currentRenderer(records, child.sessionID);
++  const childFocus = { key: "publish", selectionStart: 2, selectionEnd: 4, selectionDirection: "forward" };
++  childRenderer.focus = childFocus;
++
++  const inputSnapshot = host.setChildInputs(root.sessionID, child.sessionID, { Title: "child title", ReadOnly: false });
++  assert.equal(inputSnapshot.state.InputRevision, 1);
++  assert.equal(childRenderer.updates.length, 0, "the host waits until the call stack returns");
++  await host.settled();
++  assert.equal(childRenderer.latest.state.Inputs.Title, "child title");
++  assert.equal(childRenderer.updates.length, 1);
++  assert.equal(parentRenderer.updates.length, 0);
++  assert.deepEqual(childRenderer.focus, childFocus);
++
++  manager.sessions.get(child.sessionID).rows[0].Saved = "captured value";
++  const receipt = host.publish(child.sessionID, 1, 1);
++  assert.equal(receipt.Saved, "captured value");
++  assert.equal(parentRenderer.updates.length, 0, "publication updates wait for propagation");
++  await host.settled();
++
++  assert.equal(childRenderer.updates.length, 2);
++  assert.equal(parentRenderer.updates.length, 1);
++  assert.equal(host.snapshot(root.sessionID).state.Inbox.length, 1);
++  assert.deepEqual(host.snapshot(child.sessionID).messages.at(-1), { Name: "publish", Arg: "1/1" });
++  assert.equal(currentRenderer(records, root.sessionID), parentRenderer, "the existing parent renderer is retained");
++  assert.equal(currentRenderer(records, child.sessionID), childRenderer, "the existing child renderer is retained");
++  host.dispose(root.sessionID);
++});
++
++test("policy errors do not dirty or poison a live composition host", async () => {
++  const { host, manager, records } = setup();
++  const rootA = host.mountRoot(fakeContainer());
++  const childA = host.mountChild(rootA.sessionID);
++  const rootB = host.mountRoot(fakeContainer());
++  const beforeChanges = manager.calls.changes;
++
++  assert.throws(() => host.setChildInputs(rootB.sessionID, childA.sessionID, { Title: "wrong parent", ReadOnly: false }),
++    (error) => includesError(error, "immediate parent"));
++  assert.throws(() => host.publish(childA.sessionID, 1, 99), (error) => includesError(error, "revision rejected"));
++  assert.equal(manager.calls.changes, beforeChanges, "rejected calls do not schedule a dirty drain");
++  await host.settled();
++  assert.equal(host.snapshot(childA.sessionID).state.InputRevision, 0);
++  assert.equal(host.snapshotAll().every((entry) => entry.lifecycle === "active"), true);
++  assert.equal(records.filter((entry) => entry.updates.length > 0).length, 0);
++
++  host.dispose(rootA.sessionID);
++  host.dispose(rootB.sessionID);
++});
++
++test("host forwards raw input records to the strict manager without inspecting them", () => {
++  const manager = fakeManager();
++  const { host } = setup(manager);
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  let getterReads = 0;
++  let receivedInputs;
++  const symbol = Symbol("unknown input field");
++  const inputs = { ReadOnly: false, [symbol]: "preserve for strict rejection" };
++  Object.defineProperty(inputs, "Title", {
++    enumerable: true,
++    get() {
++      getterReads += 1;
++      throw new Error("host must not invoke caller getters");
++    },
++  });
++  manager.setChildInputs = (_parentID, childID, value) => {
++    receivedInputs = value;
++    return manager.snapshot(childID);
++  };
++
++  host.setChildInputs(root.sessionID, child.sessionID, inputs);
++  assert.equal(receivedInputs, inputs, "the manager receives the original record by identity");
++  assert.equal(getterReads, 0);
++  assert.deepEqual(Reflect.ownKeys(receivedInputs), ["ReadOnly", "Title", symbol]);
++  assert.equal(Object.getOwnPropertyDescriptor(receivedInputs, "Title").get instanceof Function, true);
++  host.dispose(root.sessionID);
++});
++
++test("queued dirty IDs for a disposed subtree are fenced before renderer refresh", async () => {
++  const { host, manager, records } = setup();
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  host.setChildInputs(root.sessionID, child.sessionID, { Title: "queued", ReadOnly: false });
++  const beforeDisposal = manager.calls.snapshot.filter((id) => id === child.sessionID).length;
++  host.dispose(root.sessionID);
++  await host.settled();
++
++  assert.equal(manager.calls.snapshot.filter((id) => id === child.sessionID).length, beforeDisposal,
++    "the queued propagation never asks Go to snapshot a retired child");
++  assert.equal(records.every((entry) => !entry.mounted), true);
++  assert.deepEqual(host.tree(), []);
++});
++
++test("refresh failures surface from settled without rolling back committed Go state", async () => {
++  const manager = fakeManager();
++  const { host, records } = setup(manager);
++  const root = host.mountRoot(fakeContainer());
++  const child = host.mountChild(root.sessionID);
++  manager.failUpdate = true;
++
++  host.setChildInputs(root.sessionID, child.sessionID, { Title: "committed", ReadOnly: false });
++  await assert.rejects(host.settled(), (error) => includesError(error, "renderer refresh failed"));
++  assert.equal(manager.sessions.get(child.sessionID).inputs.Title, "committed");
++  assert.equal(host.snapshotAll().find((entry) => entry.sessionID === child.sessionID).lifecycle, "failed");
++  assert.ok(records.some((entry) => entry.latest.state.SessionID === child.sessionID && !entry.mounted));
++
++  manager.failUpdate = false;
++  host.dispose(root.sessionID);
++});
++
++test("one manager cannot be owned by two composition hosts", () => {
++  const manager = fakeManager();
++  const first = setup(manager).host;
++  assert.throws(() => createCompositionHost({ manager, descriptors: {}, transportFactory() {} }), /already has an active/);
++  assert.deepEqual(first.tree(), []);
++});
+diff --git a/typed-composition/coordination/WIRE.md b/typed-composition/coordination/WIRE.md
+new file mode 100644
+index 0000000..4cf64bd
+--- /dev/null
++++ b/typed-composition/coordination/WIRE.md
+@@ -0,0 +1,78 @@
++# Composition replay wire
++
++The WASM bridge is built from `./cmd/composition-wasm` and publishes the
++`gobiComposition` global. `cmd/composition-replay` executes the same typed
++operations natively. Both expose the same lower-case operation names and
++positional arguments:
++
++| Method | Positional arguments |
++| --- | --- |
++| `create` | none |
++| `createChild` | `parentID` |
++| `tree` | none |
++| `list` | none |
++| `snapshot` | `sessionID` |
++| `dispatch` | `sessionID`, `{Path, Event, Value, Key}` |
++| `effects` | `sessionID` |
++| `complete` | `sessionID`, `{ID, Value, Error}` |
++| `audit` | `sessionID` |
++| `dispose` | `sessionID` |
++| `disposeTree` | `sessionID` |
++| `setChildInputs` | `parentID`, `childID`, `{Title, ReadOnly}` |
++| `publish` | `childID`, `rowID`, `inputRevision` |
++| `changes` | none |
++| `encodeHTTP` | `requestID`, primitive string value |
++| `decodeHTTP` | `requestID`, status, primitive string body |
++
++The `dispatch` step object is the existing collection step shape. Composition
++publish controls also require `Value` to match the exact current handler
++argument (`ROW/REVISION`); the bridge leaves that policy check to Go.
++
++Replay input is one closed JSON object with an `actions` array. Each action is
++one closed object with `method` and `args`; `args` is the positional argument
++array. For example:
++
++```json
++{"actions":[{"method":"create","args":[]},{"method":"snapshot","args":[1]}]}
++```
++
++The native executable accepts a file path or `-` for standard input and emits
++one JSON object with a `frames` array. Every action produces exactly one frame
++in input order. The output root has one `frames` array. Every frame has the
++original `action`, that action's `result`, and a `frame` object with:
++
++- `tree`: the full manager tree.
++- `sessions`: one `{ "id", "snapshot" }` item for each live session in
++  ascending ID order; `snapshot` has the complete composition snapshot.
++- `changes`: the sorted dirty IDs drained after the action.
++
++`result` is the operation's return value, or an exact `{ "error": "..." }`
++object when the operation rejects. The frame contains the full manager tree,
++the full composition snapshot (state, rendered tree, bindings and ordered
++messages) for every live session in ascending ID order, and the sorted dirty
++IDs drained after the operation. `effects`, `audit`, and disposal results are
++already captured as `result`; querying them again while building a frame would
++change manager state. Invalid operations still produce a frame so callers can
++compare rejection invariance. Malformed top-level/action JSON fails the replay
++input before actions execute.
++
++All browser method calls enforce exact arity, primitive types, safe integer
++IDs/revisions, and exact own-field schemas. Schema objects must be non-null,
++non-array objects with exactly the expected own keys; each value must come
++from an own data descriptor. Accessor properties and inherited-value fallback
++are rejected without reading input getters. Property values are captured from
++own descriptors before type validation. Proxy traps may participate only by
++reporting the exact keys and own data descriptors; `ownKeys` alone cannot
++supply inherited values. Synchronous nested `gobiComposition` calls made by a
++proxy trap during validation receive an error result and do not enter the
++manager. Proxy traps may still have other JavaScript side effects; the bridge
++does not claim to roll those back. The composition host forwards caller
++argument references unchanged to the strict manager API, so it cannot invoke
++getters or erase symbols/hidden fields before that validation; manager results
++are cloned only after the call returns.
++
++The native replay parser applies the same field and integer-shape rules to JSON
++action arguments. Since JSON replay has a lexical number representation, safe
++integer fields there require canonical unsigned decimal tokens (`1`, not
++`1.0` or `1e0`); the browser bridge checks the received primitive Number for
++an integer value in the safe range.

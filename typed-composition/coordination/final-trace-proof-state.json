@@ -1,0 +1,146 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-typed-composition-final-trace-proof"
+  },
+  "workers": {
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "F-SOURCE": {
+      "id": "F-SOURCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "final source/build provenance report/receipt only",
+      "summary": "verify accepted 49 source/asset pins, command/toolchain/binary provenance and stable source relationship",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-30T20:13:03.189563+00:00",
+      "finished_at": "2026-10-30T20:17:50.376070+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/F-SOURCE.json"
+    },
+    "F-DATA": {
+      "id": "F-DATA",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "final raw trace proof report/receipt only",
+      "summary": "independent raw shard hashes, native input/frames completeness, counts and mutation control evidence",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T20:13:03.284471+00:00",
+      "finished_at": "2026-10-30T20:17:50.473756+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/typed-composition/coordination/receipts/F-DATA.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T20:13:03.097800+00:00",
+      "ready_jobs": [
+        "F-SOURCE",
+        "F-DATA"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N4": "F-DATA",
+        "N2": "F-SOURCE"
+      },
+      "dispatch": {
+        "N4": "F-DATA",
+        "N2": "F-SOURCE"
+      },
+      "native_seconds": 0.0027521580013853963,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 2 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "F-SOURCE": 1,
+        "F-DATA": 1,
+        "BENCH": 2
+      },
+      "eligible": {
+        "F-SOURCE": [
+          "N2"
+        ],
+        "F-DATA": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "F-SOURCE": 100,
+        "F-DATA": 100
+      },
+      "agent_by_worker": {
+        "N2": null,
+        "N4": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:13:03.189563+00:00",
+      "worker": "N2",
+      "job": "F-SOURCE",
+      "agent": "/root/compose_bridge"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:13:03.284471+00:00",
+      "worker": "N4",
+      "job": "F-DATA",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:17:50.376070+00:00",
+      "worker": "N2",
+      "job": "F-SOURCE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:17:50.473756+00:00",
+      "worker": "N4",
+      "job": "F-DATA"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

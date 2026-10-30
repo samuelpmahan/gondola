@@ -1,0 +1,26 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-refresh-reentry-check"
+  },
+  "workers": [
+    "N3",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-T3",
+      "kind": "extract",
+      "repair_of": "T3",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "session-tree/host.mjs and host.test.mjs; assigned probe/report/receipt only",
+      "summary": "reproduce refresh lifecycle reentry; if disposal can commit inside renderer.update, reserve refresh operation and test atomic rejection"
+    }
+  ]
+}

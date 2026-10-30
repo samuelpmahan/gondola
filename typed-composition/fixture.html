@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Typed composition replay fixture</title>
+  <style>
+    body { font: 14px/1.4 system-ui, sans-serif; margin: 1rem; }
+    #candidate-roots, #reference-roots { display: grid; gap: .5rem; }
+    [data-root-slot] { min-height: 2rem; }
+    .session-tree-shell { border: 1px solid #aaa; padding: .25rem; margin: .2rem; }
+    .session-tree-view { min-height: 1rem; }
+    .session-tree-children { padding-left: 1rem; }
+    #reference-roots { position: fixed; left: -12000px; top: 0; width: 1200px; }
+    #status { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Typed parent and child composition replay</h1>
+    <p id="status">Starting Go and renderer bridges…</p>
+    <section id="candidate-roots" aria-label="Candidate sessions"></section>
+    <section id="reference-roots" aria-label="Independent React reference sessions"></section>
+  </main>
+  <script src="/typed-composition/build/wasm_exec.js"></script>
+  <script type="module" src="/typed-composition/fixture.mjs"></script>
+</body>
+</html>

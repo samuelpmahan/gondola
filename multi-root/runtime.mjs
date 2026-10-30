@@ -64,6 +64,10 @@ export function createSessionRuntime(manager, sessionID, isCurrent = () => true)
       assertCurrent();
       return clone(manager.snapshot(sessionID));
     },
+    snapshot() {
+      assertCurrent();
+      return clone(manager.snapshot(sessionID));
+    },
     dispatch(step) {
       assertCurrent();
       return clone(manager.dispatch(sessionID, step));

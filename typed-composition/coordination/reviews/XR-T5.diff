@@ -1,0 +1,2044 @@
+diff --git a/typed-composition/fixture.mjs b/typed-composition/fixture.mjs
+new file mode 100644
+index 0000000..d845d2f
+--- /dev/null
++++ b/typed-composition/fixture.mjs
+@@ -0,0 +1,833 @@
++import { mountKeyedDOM } from "../keyed-editor/dom.mjs";
++import { mountKeyedReact } from "./build/react.bundle.mjs";
++import { loadGoDOM, mountGoDOM } from "../renderer-conformance/adapter.mjs";
++import { createCompositionHost } from "./host.mjs";
++import {
++  createCompositionReference,
++  mountCompositionReferenceCollection,
++  compositionReactDOMVersion,
++  compositionReactVersion,
++} from "./build/reference.bundle.mjs";
++
++const status = document.getElementById("status");
++const candidateArena = document.getElementById("candidate-roots");
++const referenceArena = document.getElementById("reference-roots");
++const MANAGER_METHODS = [
++  "create", "createChild", "tree", "list", "snapshot", "dispatch", "effects", "complete",
++  "audit", "dispose", "disposeTree", "setChildInputs", "publish", "changes",
++];
++const LOGGED_MANAGER_METHODS = new Set([
++  "create", "createChild", "dispatch", "effects", "complete", "dispose", "disposeTree",
++  "setChildInputs", "publish", "changes",
++]);
++const BACKENDS = ["dom", "react", "godom"];
++
++function cloneJSON(value) {
++  return value == null ? value : JSON.parse(JSON.stringify(value));
++}
++
++function errorMessage(error) {
++  return error instanceof Error ? error.message : String(error);
++}
++
++function errorFrame(value) {
++  return value !== null && typeof value === "object" && !Array.isArray(value) &&
++    Object.keys(value).length === 1 && typeof value.error === "string";
++}
++
++function asOperationError(value) {
++  return errorFrame(value) ? { error: value.error } : value;
++}
++
++function managerAdapter(raw, side) {
++  const adapted = {};
++  for (const method of MANAGER_METHODS) {
++    if (typeof raw?.[method] !== "function") throw new Error(`gobiComposition is missing ${method}()`);
++    adapted[method] = (...args) => {
++      const current = side.currentAction;
++      try {
++        const result = Reflect.apply(raw[method], raw, args);
++        if (current && LOGGED_MANAGER_METHODS.has(method)) {
++          current.calls.push({ method, args: cloneJSON(args), result: cloneJSON(result) });
++          if (method === "changes" && Array.isArray(result)) current.drainedChanges.push(...result);
++          if (method === "effects" && Array.isArray(result)) {
++            current.managerEffects.push({ sessionID: args[0], commands: cloneJSON(result) });
++          }
++        }
++        return result;
++      } catch (error) {
++        if (current) current.calls.push({ method, args: cloneJSON(args), error: errorMessage(error) });
++        throw error;
++      }
++    };
++  }
++  return adapted;
++}
++
++async function startCompositionWasm() {
++  if (typeof globalThis.Go !== "function") throw new Error("wasm_exec.js did not publish Go");
++  const response = await fetch("/typed-composition/build/composition.wasm", { cache: "no-store" });
++  if (!response.ok) throw new Error(`composition WASM returned HTTP ${response.status}`);
++  const go = new globalThis.Go();
++  const { instance } = await WebAssembly.instantiate(await response.arrayBuffer(), go.importObject);
++  Promise.resolve(go.run(instance)).catch((error) => {
++    globalThis.__typedCompositionStartupError = errorMessage(error);
++  });
++  for (let attempt = 0; attempt < 1000; attempt += 1) {
++    if (globalThis.gobiComposition) return globalThis.gobiComposition;
++    if (globalThis.__typedCompositionStartupError) throw new Error(globalThis.__typedCompositionStartupError);
++    await new Promise((resolve) => setTimeout(resolve, 10));
++  }
++  throw new Error("gobiComposition was not published within 10 seconds");
++}
++
++function buildElementIndex(viewRoot, tree) {
++  const treeElements = [];
++  const pathByKey = new Map();
++  function visit(node, path) {
++    if (!node || typeof node !== "object") return;
++    if (node.Kind === 1) {
++      treeElements.push({ node, path });
++      pathByKey.set(node.Key, path);
++    }
++    for (const [index, child] of (node.Kids ?? []).entries()) {
++      visit(child, path === "" ? String(index) : `${path}/${index}`);
++    }
++  }
++  visit(tree, "");
++  const domElements = [...viewRoot.querySelectorAll("*")];
++  const byPath = new Map();
++  const byKey = new Map();
++  const byElement = new WeakMap();
++  const countMatches = treeElements.length === domElements.length;
++  for (let index = 0; index < Math.min(treeElements.length, domElements.length); index += 1) {
++    const { node, path } = treeElements[index];
++    const element = domElements[index];
++    byPath.set(path, element);
++    byKey.set(node.Key, element);
++    byElement.set(element, { key: node.Key, path, node });
++  }
++  return { byPath, byKey, byElement, pathByKey, countMatches, treeElementCount: treeElements.length,
++    domElementCount: domElements.length };
++}
++
++function inputsFor(viewRoot, index) {
++  return [...viewRoot.querySelectorAll('input[type="text"]')].map((element) => {
++    const mapped = index.byElement.get(element);
++    return {
++      key: mapped?.key ?? "",
++      path: mapped?.path ?? null,
++      value: element.value,
++      disabled: element.disabled === true,
++      disabledAttribute: element.hasAttribute("disabled"),
++      selectionStart: Number.isInteger(element.selectionStart) ? element.selectionStart : 0,
++      selectionEnd: Number.isInteger(element.selectionEnd) ? element.selectionEnd : 0,
++      selectionDirection: element.selectionDirection ?? "none",
++    };
++  });
++}
++
++function controlsFor(viewRoot, index) {
++  return [...viewRoot.querySelectorAll("input,button")].map((element) => {
++    const mapped = index.byElement.get(element);
++    const rowInput = element.closest(".row")?.querySelector('input[aria-label]');
++    return {
++      tag: element.localName,
++      key: mapped?.key ?? "",
++      path: mapped?.path ?? null,
++      className: element.className ?? "",
++      label: element.getAttribute("aria-label") ?? "",
++      rowLabel: rowInput?.getAttribute("aria-label") ?? null,
++      text: element.textContent ?? "",
++      value: "value" in element ? element.value : null,
++      disabled: element.disabled === true,
++      disabledAttribute: element.hasAttribute("disabled"),
++      type: element.getAttribute("type"),
++    };
++  });
++}
++
++function liveFocusFor(viewRoot, index) {
++  const active = viewRoot.ownerDocument.activeElement;
++  if (!active || !viewRoot.contains(active) || active.localName !== "input") return null;
++  const mapped = index.byElement.get(active);
++  if (!mapped || !Number.isInteger(active.selectionStart) || !Number.isInteger(active.selectionEnd)) return null;
++  return {
++    active: true,
++    key: mapped.key,
++    path: mapped.path,
++    selectionStart: active.selectionStart,
++    selectionEnd: active.selectionEnd,
++    selectionDirection: active.selectionDirection ?? "none",
++    value: active.value,
++    disabled: active.disabled === true,
++  };
++}
++
++function makeTransport(side, sessionID, hostGeneration) {
++  const requests = new Map();
++  const events = [];
++  let sequence = 0;
++  function append(kind, extra = {}) {
++    const record = { sequence: ++sequence, kind, sessionID, hostGeneration, ...cloneJSON(extra) };
++    events.push(record);
++    side.transportClock.events.push({ ...record, side: side.name });
++    return record;
++  }
++  return {
++    side, sessionID, hostGeneration, requests, events,
++    start(command, deliver) {
++      if (requests.has(command.ID)) throw new Error(`${side.name} transport reused request ${command.ID} in session ${sessionID}`);
++      const record = { ID: command.ID, Value: command.Value, State: "held", deliver };
++      requests.set(command.ID, record);
++      side.pendingEffects.push({ sessionID, command: cloneJSON(command) });
++      append("start", { ID: command.ID, Value: command.Value, command: cloneJSON(command) });
++    },
++    cancel(ID) {
++      const record = requests.get(ID);
++      if (record && record.State !== "held") return undefined;
++      if (record) record.State = "cancelled";
++      else requests.set(ID, { ID, Value: "", State: "cancelled", deliver: null });
++      append("cancel", { ID });
++      return undefined;
++    },
++    deliver(ID, reply) {
++      const record = requests.get(ID);
++      if (!record || typeof record.deliver !== "function") throw new Error(`${side.name} has no saved callback for ${sessionID}/${ID}`);
++      const previousState = record.State;
++      append("delivery", { ID, Value: reply.Value, Error: reply.Error, previousState });
++      let callbackError = null;
++      try { record.deliver(cloneJSON(reply)); }
++      catch (error) { callbackError = errorMessage(error); }
++      if (previousState === "held" && callbackError === null) record.State = "delivered";
++      return { previousState, callbackError };
++    },
++  };
++}
++
++function createSide(name, rawManager, descriptors, arena) {
++  const side = {
++    name,
++    currentAction: null,
++    transports: new Map(),
++    pendingEffects: [],
++    transportClock: { sequence: 0, events: [] },
++    mounted: new Map(),
++    history: [],
++    rootIndex: 0,
++    replaced: new Set(),
++    nextBackendByID: new Map(),
++  };
++  side.manager = managerAdapter(rawManager, side);
++  side.host = createCompositionHost({
++    manager: side.manager,
++    descriptors,
++    transportFactory(sessionID, viewRoot, generation) {
++      const transport = makeTransport(side, sessionID, generation);
++      side.transports.set(sessionID, transport);
++      return transport;
++    },
++  });
++  side.arena = arena;
++  return side;
++}
++
++function createDescriptors(sideName) {
++  if (sideName === "reference") {
++    return {
++      react(root, runtime) {
++        return mountCompositionReferenceCollection(root, runtime, runtime.init());
++      },
++    };
++  }
++  return { dom: mountKeyedDOM, react: mountKeyedReact, godom: mountGoDOM };
++}
++
++function slotFor(side) {
++  const slot = side.arena.ownerDocument.createElement("div");
++  slot.dataset.rootSlot = `${side.name}-${side.rootIndex++}`;
++  side.arena.appendChild(slot);
++  return slot;
++}
++
++function activeRecord(side, id) {
++  return side.mounted.get(id) ?? null;
++}
++
++function snapshotFor(side, id) {
++  try { return asOperationError(side.manager.snapshot(id)); }
++  catch (error) { return { error: errorMessage(error) }; }
++}
++
++function treeNodeAt(tree, path) {
++  let node = tree;
++  if (path === "") return node;
++  for (const raw of path.split("/")) {
++    const index = Number(raw);
++    if (!Number.isSafeInteger(index) || !Array.isArray(node?.Kids) || index >= node.Kids.length) {
++      throw new Error(`dispatch path ${JSON.stringify(path)} is not present in the current tree`);
++    }
++    node = node.Kids[index];
++  }
++  return node;
++}
++
++async function dispatchThroughDOM(side, sessionID, step, inputWitness = null) {
++  const record = activeRecord(side, sessionID);
++  if (!record) throw new Error(`${side.name} has no mounted session ${sessionID}`);
++  const snapshot = side.manager.snapshot(sessionID);
++  if (errorFrame(snapshot)) return snapshot;
++  const node = treeNodeAt(snapshot.tree, step.Path);
++  if (!node || node.Kind !== 1 || node.Key !== step.Key) {
++    throw new Error(`dispatch key ${JSON.stringify(step.Key)} does not name the rendered node at ${JSON.stringify(step.Path)}`);
++  }
++  const index = buildElementIndex(record.viewRoot, snapshot.tree);
++  if (!index.countMatches) throw new Error(`rendered element count mismatch in ${side.name}/${sessionID}: tree=${index.treeElementCount}, DOM=${index.domElementCount}`);
++  const element = index.byPath.get(step.Path);
++  if (!element) throw new Error(`no mounted DOM element for ${side.name}/${sessionID}/${step.Path}`);
++  if (element.disabled === true) {
++    side.currentAction.disabledStepProbe = true;
++    return asOperationError(side.manager.dispatch(sessionID, step));
++  }
++
++  if (step.Event === "input") {
++    side.currentAction.didInput = true;
++    element.focus();
++    const requested = inputWitness?.requested ?? step.Value;
++    element.value = requested;
++    side.currentAction.inputWitnessObservation = {
++      requested,
++      effective: element.value,
++      eventValue: step.Value,
++      key: step.Key,
++      expectedEffective: inputWitness?.effective ?? step.Value,
++    };
++    // A noncollapsed backward selection makes keyed update and renderer-swap
++    // preservation observable in the immediate post-action DOM witness.
++    if (typeof element.setSelectionRange === "function" && step.Value.length >= 2) {
++      element.setSelectionRange(0, Math.min(2, step.Value.length), "backward");
++      side.currentAction.focusSelectionPrepared = true;
++    }
++    const EventType = element.ownerDocument.defaultView.InputEvent;
++    element.dispatchEvent(new EventType("input", { bubbles: true }));
++  } else if (step.Event === "click") {
++    element.click();
++  } else {
++    element.dispatchEvent(new element.ownerDocument.defaultView.Event(step.Event, { bubbles: true }));
++  }
++  await side.host.settled();
++  const invoked = side.currentAction.calls.filter((call) => call.method === "dispatch").at(-1);
++  return invoked ? asOperationError(invoked.result) : snapshotFor(side, sessionID);
++}
++
++async function replaceForFocusWitness(side, sessionID, action) {
++  if (side.name !== "candidate" || action.method !== "dispatch" || side.replaced.has(sessionID)) return null;
++  if (!side.currentAction.didInput || !side.currentAction.focusSelectionPrepared) return null;
++  const step = action.args[1];
++  if (step?.Event !== "input") return null;
++  const record = activeRecord(side, sessionID);
++  if (!record) return null;
++  const beforeIndex = buildElementIndex(record.viewRoot, side.manager.snapshot(sessionID).tree);
++  const before = liveFocusFor(record.viewRoot, beforeIndex);
++  if (!before?.active) return null;
++  const currentBackend = side.host.snapshotAll().find((entry) => entry.sessionID === sessionID)?.backend ?? "dom";
++  const currentIndex = BACKENDS.indexOf(currentBackend);
++  const nextBackend = BACKENDS[(currentIndex + 1 + BACKENDS.length) % BACKENDS.length];
++  const result = side.host.replace(sessionID, nextBackend);
++  // Capture synchronously after replace() returns, before another side or
++  // renderer action can change the active element or selection.
++  const afterRecord = activeRecord(side, sessionID);
++  const afterSnapshot = side.manager.snapshot(sessionID);
++  const afterIndex = buildElementIndex(afterRecord.viewRoot, afterSnapshot.tree);
++  const afterImmediate = liveFocusFor(afterRecord.viewRoot, afterIndex);
++  await side.host.settled();
++  side.replaced.add(sessionID);
++  const settledRecord = activeRecord(side, sessionID);
++  const settledSnapshot = side.manager.snapshot(sessionID);
++  const settledIndex = buildElementIndex(settledRecord.viewRoot, settledSnapshot.tree);
++  return {
++    sessionID,
++    from: currentBackend,
++    to: nextBackend,
++    result: cloneJSON(result),
++    expectedKey: step.Key,
++    before,
++    after: afterImmediate,
++    afterSettled: liveFocusFor(settledRecord.viewRoot, settledIndex),
++    inputValue: afterIndex.byKey.get(before.key)?.value ?? null,
++  };
++}
++
++async function executeAction(side, action, inputWitness = null) {
++  const { method, args } = action;
++  let result;
++  let disposedIDs = [];
++  try {
++    switch (method) {
++      case "create": {
++        const backend = side.name === "reference" ? "react" : BACKENDS[(side.mounted.size) % BACKENDS.length];
++        const mounted = side.host.mountRoot(slotFor(side), backend);
++        side.mounted.set(mounted.sessionID, { ...mounted, backend });
++        side.nextBackendByID.set(mounted.sessionID, backend);
++        result = mounted.sessionID;
++        break;
++      }
++      case "createChild": {
++        const parentID = args[0];
++        const parent = activeRecord(side, parentID);
++        if (!parent) {
++          // Preserve the native public call's rejection for a non-hosted
++          // parent without allocating or mutating manager state.
++          result = asOperationError(side.manager.createChild(parentID));
++          break;
++        }
++        const backend = side.name === "reference" ? "react" : BACKENDS[(side.mounted.size) % BACKENDS.length];
++        const mounted = side.host.mountChild(parentID, backend);
++        side.mounted.set(mounted.sessionID, { ...mounted, backend });
++        side.nextBackendByID.set(mounted.sessionID, backend);
++        result = mounted.sessionID;
++        break;
++      }
++      case "dispatch":
++        result = await dispatchThroughDOM(side, args[0], args[1], inputWitness);
++        break;
++      case "setChildInputs":
++        result = asOperationError(side.host.setChildInputs(...args));
++        break;
++      case "publish":
++        result = asOperationError(side.host.publish(...args));
++        break;
++      case "complete": {
++        const [sessionID, reply] = args;
++        const transport = side.transports.get(sessionID);
++        if (!transport) result = asOperationError(side.manager.complete(sessionID, reply));
++        else {
++          transport.deliver(reply.ID, reply);
++          const call = side.currentAction.calls.filter((item) => item.method === "complete").at(-1);
++          result = call ? asOperationError(call.result) : snapshotFor(side, sessionID);
++        }
++        break;
++      }
++      case "effects": {
++        const [sessionID] = args;
++        result = side.pendingEffects.filter((entry) => entry.sessionID === sessionID).map((entry) => cloneJSON(entry.command));
++        side.pendingEffects = side.pendingEffects.filter((entry) => entry.sessionID !== sessionID);
++        break;
++      }
++      case "dispose":
++      case "disposeTree": {
++        const [sessionID] = args;
++        const bundles = side.host.dispose(sessionID);
++        disposedIDs = bundles.map((bundle) => bundle.SessionID);
++        result = method === "dispose"
++          ? (bundles.find((bundle) => bundle.SessionID === sessionID)?.Commands ?? [])
++          : bundles;
++        for (const id of disposedIDs) {
++          const previous = side.mounted.get(id);
++          if (previous) side.history.push({ sessionID: id, parentID: previous.parentID, depth: previous.depth,
++            backend: previous.backend, lifecycle: "disposed" });
++          side.mounted.delete(id);
++          side.transports.delete(id);
++        }
++        break;
++      }
++      case "changes":
++        result = asOperationError(side.manager.changes());
++        break;
++      case "tree":
++        result = side.host.tree();
++        break;
++      case "list":
++        result = side.manager.list();
++        break;
++      case "snapshot":
++        result = asOperationError(side.host.snapshot(args[0]));
++        break;
++      case "audit": {
++        const session = side.host.snapshotAll().find((entry) => entry.sessionID === args[0]);
++        result = session?.audit ?? side.manager.audit(args[0]);
++        break;
++      }
++      default: {
++        if (typeof side.manager[method] !== "function") throw new Error(`unknown composition method ${method}`);
++        result = asOperationError(side.manager[method](...args));
++      }
++    }
++  } catch (error) {
++    result = { error: errorMessage(error) };
++  }
++  try { await side.host.settled(); }
++  catch (error) { side.currentAction.settledError = errorMessage(error); }
++  if (method === "complete") {
++    const completed = side.currentAction.calls.filter((call) => call.method === "complete").at(-1);
++    if (completed?.result !== undefined) result = asOperationError(completed.result);
++    else if (completed?.error) result = { error: completed.error };
++  }
++  const focusReplacement = await replaceForFocusWitness(side, args[0], action).catch((error) => ({ error: errorMessage(error) }));
++  const actor = captureActor(side, side.currentAction, { result, disposedIDs, focusReplacement });
++  return { result: cloneJSON(result), actor };
++}
++
++function expectedDisabled(snapshot, tag, className, rowLabel, parentID) {
++  const state = snapshot?.state;
++  const rows = state?.Rows ?? [];
++  const readOnly = state?.Inputs?.ReadOnly === true;
++  if (tag === "input") return readOnly;
++  if (readOnly) return true;
++  if (className === "add") return rows.length >= 4;
++  if (className === "reset") return rows.length === 0;
++  const rowID = Number(/^Row ([1-9][0-9]*)$/.exec(rowLabel ?? "")?.[1] ?? 0);
++  const rowIndex = rows.findIndex((row) => row.ID === rowID);
++  const row = rowIndex < 0 ? null : rows[rowIndex];
++  if (className === "publish") return parentID === 0 || !row || row.Saved === "";
++  if (className === "save") return !row || row.Draft === "";
++  if (className === "cancel") return !row || row.PendingID === 0;
++  if (className === "up") return rowIndex <= 0;
++  return false;
++}
++
++function captureActor(side, currentAction, { result, disposedIDs, focusReplacement }) {
++  const managerTree = side.host.tree();
++  const managerList = side.manager.list();
++  const entries = side.host.snapshotAll();
++  const sessions = entries.map((entry) => {
++    const id = entry.sessionID;
++    const record = activeRecord(side, id);
++    const managerSnapshot = side.manager.snapshot(id);
++    const hostSnapshot = side.host.snapshot(id);
++    const index = buildElementIndex(entry.viewRoot, managerSnapshot.tree);
++    const actualDOM = entry.viewRoot.innerHTML;
++    const inputs = inputsFor(entry.viewRoot, index);
++    const controls = controlsFor(entry.viewRoot, index);
++    const focusWitness = liveFocusFor(entry.viewRoot, index);
++    const disabledViolations = controls.filter((control) =>
++      control.disabled !== expectedDisabled(managerSnapshot, control.tag, control.className, control.rowLabel, entry.parentID));
++    const reportedDisabled = Array.isArray(entry.domSnapshot?.disabled) ? [...entry.domSnapshot.disabled].sort() : [];
++    const actualDisabled = controls.filter((control) => control.disabled).map((control) => control.path).sort();
++    const visibleTitle = index.byKey.get("composition-title")?.textContent ?? null;
++    const visibleInbox = index.byKey.get("composition-inbox")?.textContent ?? null;
++    return {
++      sessionID: id,
++      parentID: entry.parentID,
++      depth: entry.depth,
++      generation: record?.generation ?? null,
++      backend: entry.backend,
++      managerSnapshot: cloneJSON(managerSnapshot),
++      snapshot: cloneJSON(entry.snapshot),
++      hostSnapshot: cloneJSON(hostSnapshot),
++      audit: cloneJSON(entry.audit),
++      managerAudit: cloneJSON(side.manager.audit(id)),
++      domSnapshot: cloneJSON(entry.domSnapshot),
++      actualDOM,
++      actualDOMMatchesSnapshot: entry.domSnapshot?.html === actualDOM,
++      shellHTML: record?.shell?.outerHTML ?? "",
++      focus: cloneJSON(entry.focus),
++      focusWitness,
++      lifecycle: entry.lifecycle,
++      errors: cloneJSON(entry.errors),
++      inputs,
++      controls,
++      elementCountMatches: index.countMatches,
++      elementCounts: { tree: index.treeElementCount, dom: index.domElementCount },
++      disabledViolations,
++      reportedDisabled,
++      actualDisabled,
++      reportedDisabledMatches: JSON.stringify(reportedDisabled) === JSON.stringify(actualDisabled),
++      visibleTitle,
++      expectedTitle: `Title: ${managerSnapshot.state?.Inputs?.Title ?? ""}`,
++      visibleInbox,
++      expectedInbox: `Published: ${managerSnapshot.state?.Inbox?.length ?? 0}`,
++      transportLog: cloneJSON(side.transports.get(id)?.events ?? []),
++      rowOrder: (managerSnapshot.state?.Rows ?? []).map((row) => `Row ${row.ID}`),
++      inputOrder: inputs.map((input) => `Row ${input.key.match(/row-(\d+)-input/)?.[1] ?? ""}`),
++      inputValues: inputs.map((input) => input.value),
++      shellOwnership: record ? {
++        shellChildren: [...record.shell.children].map((child) => child.className),
++        viewContained: record.shell.contains(record.viewRoot),
++        childrenContained: record.shell.contains(record.childrenRoot),
++        physicalParent: record.shell.parentElement?.className ?? record.shell.parentElement?.dataset.rootSlot ?? null,
++      } : null,
++    };
++  });
++  const dirty = [...new Set(currentAction.drainedChanges.flat())].sort((left, right) => left - right);
++  const allLifecycle = [
++    ...side.history,
++    ...[...side.mounted.values()].map((record) => ({ sessionID: record.sessionID, parentID: record.parentID,
++      depth: record.depth, backend: side.host.snapshotAll().find((entry) => entry.sessionID === record.sessionID)?.backend ?? record.backend,
++      lifecycle: side.host.snapshotAll().find((entry) => entry.sessionID === record.sessionID)?.lifecycle ?? "active" })),
++  ];
++  return {
++    managerTree: cloneJSON(managerTree),
++    hostTree: cloneJSON(managerTree),
++    managerList: cloneJSON(managerList),
++    snapshotAllIDs: entries.map((entry) => entry.sessionID),
++    activeIDs: managerList.slice(),
++    sessions,
++    changes: dirty,
++    managerCalls: cloneJSON(currentAction.calls),
++    managerEffects: cloneJSON(currentAction.managerEffects),
++    effectsPending: cloneJSON(side.pendingEffects),
++    transportCalls: cloneJSON(side.transportClock.events.filter((event) => event.sequence > currentAction.transportClockStart)),
++    transportClock: currentAction.transportClockStart,
++    lifecycle: allLifecycle,
++    actionResult: cloneJSON(result),
++    disposedIDs,
++    settledError: currentAction.settledError ?? null,
++    disabledStepProbe: currentAction.disabledStepProbe === true,
++    inputWitnessObservation: cloneJSON(currentAction.inputWitnessObservation ?? null),
++    focusReplacement,
++  };
++}
++
++async function createFixture() {
++  const rawGoManager = await startCompositionWasm();
++  await loadGoDOM({ wasmURL: "/typed-composition/build/godom.wasm" });
++  const rawReference = createCompositionReference();
++  const candidate = createSide("candidate", rawGoManager, createDescriptors("candidate"), candidateArena);
++  const reference = createSide("reference", rawReference, createDescriptors("reference"), referenceArena);
++
++  async function runScript(selectedScript) {
++    if (!selectedScript || !Array.isArray(selectedScript.actions)) throw new TypeError("script.actions must be an array");
++    const frames = [];
++    for (const [index, action] of selectedScript.actions.entries()) {
++      const actors = {};
++      const results = {};
++      const inputWitness = selectedScript.inputWitnesses?.find((entry) => entry.actionIndex === index) ?? null;
++      for (const side of [candidate, reference]) {
++        side.currentAction = {
++          index,
++          action,
++          calls: [],
++          drainedChanges: [],
++          managerEffects: [],
++          transportClockStart: side.transportClock.sequence,
++          inputWitness,
++        };
++        const executed = await executeAction(side, action, inputWitness);
++        actors[side.name] = executed.actor;
++        results[side.name] = executed.result;
++      }
++      frames.push({ index, action: cloneJSON(action), operationResults: results, candidate: actors.candidate,
++        reference: actors.reference, captureOrder: ["candidate", "reference"], inputWitness: cloneJSON(inputWitness) });
++    }
++    const rootIDs = [...new Set([
++      ...candidate.host.tree().filter((entry) => entry.ParentID === 0).map((entry) => entry.SessionID),
++      ...reference.host.tree().filter((entry) => entry.ParentID === 0).map((entry) => entry.SessionID),
++    ])];
++    return {
++      name: selectedScript.name,
++      seed: selectedScript.seed ?? null,
++      actions: cloneJSON(selectedScript.actions),
++      inputWitnesses: cloneJSON(selectedScript.inputWitnesses ?? []),
++      frames,
++      versions: {
++        react: compositionReactVersion,
++        reactDOM: compositionReactDOMVersion,
++        userAgent: navigator.userAgent,
++      },
++      remainingRoots: rootIDs,
++    };
++  }
++
++  async function runDisabledDOMNegative(selectedScript) {
++    const scenario = await runScript(selectedScript);
++    const session = candidate.host.snapshotAll().find((entry) =>
++      entry.snapshot?.state?.Inputs?.ReadOnly === true);
++    if (!session) return { scenario, mutation: { status: "unavailable", reason: "no read-only candidate session" } };
++    const input = session.viewRoot.querySelector("input,button");
++    if (!input) return { scenario, mutation: { status: "unavailable", reason: "no candidate control" } };
++    const prior = input.disabled;
++    input.disabled = false;
++    const syntheticAction = { method: "physical-disabled-mutation", args: [] };
++    candidate.currentAction = { index: scenario.frames.length, action: syntheticAction, calls: [], drainedChanges: [],
++      managerEffects: [], transportClockStart: candidate.transportClock.sequence };
++    reference.currentAction = { index: scenario.frames.length, action: syntheticAction, calls: [], drainedChanges: [],
++      managerEffects: [], transportClockStart: reference.transportClock.sequence };
++    const mutatedCandidate = captureActor(candidate, candidate.currentAction, {
++      result: { mutation: "removed disabled property from a read-only DOM control" }, disposedIDs: [], focusReplacement: null,
++    });
++    const unchangedReference = captureActor(reference, reference.currentAction, {
++      result: { mutation: "reference not mutated" }, disposedIDs: [], focusReplacement: null,
++    });
++    const index = buildElementIndex(session.viewRoot, session.snapshot.tree);
++    const mutant = {
++      sessionID: session.sessionID,
++      key: index.byElement.get(input)?.key ?? null,
++      wasDisabled: prior,
++      disabled: input.disabled,
++      disabledAttribute: input.hasAttribute("disabled"),
++      actualDOM: session.viewRoot.innerHTML,
++      expectedReadOnly: session.snapshot.state.Inputs.ReadOnly,
++    };
++    return { scenario, mutation: mutant, mutationFrame: {
++      index: scenario.frames.length,
++      action: syntheticAction,
++      candidate: mutatedCandidate,
++      reference: unchangedReference,
++    } };
++  }
++
++  async function runRetainedCallbackFenceProbe() {
++    async function runSide(side) {
++      const backend = side.name === "reference" ? "react" : "dom";
++      const begin = (method, args = []) => {
++        side.currentAction = {
++          index: -1,
++          action: { method, args },
++          calls: [],
++          drainedChanges: [],
++          managerEffects: [],
++          transportClockStart: side.transportClock.sequence,
++        };
++      };
++      const mountRoot = async () => {
++        begin("create");
++        const mounted = side.host.mountRoot(slotFor(side), backend);
++        side.mounted.set(mounted.sessionID, { ...mounted, backend });
++        side.nextBackendByID.set(mounted.sessionID, backend);
++        await side.host.settled();
++        return mounted;
++      };
++      const mountChild = async (parentID) => {
++        begin("createChild", [parentID]);
++        const mounted = side.host.mountChild(parentID, backend);
++        side.mounted.set(mounted.sessionID, { ...mounted, backend });
++        side.nextBackendByID.set(mounted.sessionID, backend);
++        await side.host.settled();
++        return mounted;
++      };
++      const dispatch = async (sessionID, step) => {
++        begin("dispatch", [sessionID, step]);
++        await dispatchThroughDOM(side, sessionID, step);
++        await side.host.settled();
++      };
++      const managerProjection = (actor) => ({
++        tree: cloneJSON(actor.managerTree),
++        sessions: actor.sessions.map((session) => ({ id: session.sessionID, snapshot: cloneJSON(session.managerSnapshot) })),
++        changes: cloneJSON(actor.changes),
++      });
++      const domProjection = (actor) => actor.sessions.map((session) => ({
++        sessionID: session.sessionID,
++        actualDOM: session.actualDOM,
++        inputs: cloneJSON(session.inputs),
++        controls: cloneJSON(session.controls),
++        visibleTitle: session.visibleTitle,
++        visibleInbox: session.visibleInbox,
++      }));
++      const capture = (label) => {
++        begin(label);
++        const changes = side.manager.changes();
++        const actor = captureActor(side, side.currentAction, {
++          result: { label, changes }, disposedIDs: [], focusReplacement: null,
++        });
++        return { actor, changes: cloneJSON(changes) };
++      };
++
++      const oldRoot = await mountRoot();
++      const oldChild = await mountChild(oldRoot.sessionID);
++      begin("setChildInputs", [oldRoot.sessionID, oldChild.sessionID, { Title: "Ephemeral child", ReadOnly: false }]);
++      side.host.setChildInputs(oldRoot.sessionID, oldChild.sessionID, { Title: "Ephemeral child", ReadOnly: false });
++      await side.host.settled();
++      await dispatch(oldChild.sessionID, { Path: "0", Key: "add", Event: "click", Value: "" });
++      await dispatch(oldChild.sessionID, {
++        Path: "2/0/0", Key: "row-1-input", Event: "input", Value: "held request before disposal",
++      });
++      await dispatch(oldChild.sessionID, {
++        Path: "2/0/5", Key: "row-1-save", Event: "click", Value: "1",
++      });
++
++      const oldSnapshot = side.manager.snapshot(oldChild.sessionID);
++      const pendingID = oldSnapshot?.state?.Rows?.[0]?.PendingID ?? 0;
++      const oldTransport = side.transports.get(oldChild.sessionID);
++      const savedRequest = oldTransport?.requests.get(pendingID);
++      const retainedCallback = savedRequest?.deliver;
++      const oldIDs = [oldRoot.sessionID, oldChild.sessionID];
++      if (!pendingID || typeof retainedCallback !== "function") {
++        throw new Error(`${side.name} did not retain a pending transport callback before disposal`);
++      }
++
++      begin("disposeTree", [oldRoot.sessionID]);
++      const disposed = side.host.dispose(oldRoot.sessionID);
++      for (const bundle of disposed) {
++        const prior = side.mounted.get(bundle.SessionID);
++        if (prior) side.history.push({ sessionID: bundle.SessionID, parentID: prior.parentID,
++          depth: prior.depth, backend: prior.backend, lifecycle: "disposed" });
++        side.mounted.delete(bundle.SessionID);
++        side.transports.delete(bundle.SessionID);
++      }
++      await side.host.settled();
++
++      const freshRoot = await mountRoot();
++      const freshChild = await mountChild(freshRoot.sessionID);
++      begin("setChildInputs", [freshRoot.sessionID, freshChild.sessionID, { Title: "Ephemeral child", ReadOnly: false }]);
++      side.host.setChildInputs(freshRoot.sessionID, freshChild.sessionID, { Title: "Ephemeral child", ReadOnly: false });
++      await side.host.settled();
++      const freshIDs = [freshRoot.sessionID, freshChild.sessionID];
++      const before = capture("retained-callback-baseline");
++
++      begin("retained-callback-delivery", [oldChild.sessionID, pendingID]);
++      const delivery = oldTransport.deliver(pendingID, {
++        ID: pendingID, Value: "late reply must be fenced", Error: "",
++      });
++      // The retired keyed host pumps the retained callback in a microtask.
++      // Wait past that pump, then settle the new live tree and read Changes.
++      await new Promise((resolve) => setTimeout(resolve, 0));
++      await side.host.settled();
++      const after = capture("retained-callback-after");
++      const completeCalls = side.currentAction.calls.filter((call) => call.method === "complete");
++
++      return {
++        side: side.name,
++        actualGoManager: side.name === "candidate",
++        old: {
++          rootID: oldRoot.sessionID,
++          childID: oldChild.sessionID,
++          pendingID,
++          pendingSnapshot: cloneJSON(oldSnapshot),
++          savedCallbackRetained: typeof retainedCallback === "function",
++          transportStateBeforeDelivery: savedRequest.State,
++        },
++        disposedIDs: disposed.map((bundle) => bundle.SessionID),
++        freshIDs,
++        before: {
++          manager: managerProjection(before.actor),
++          dom: domProjection(before.actor),
++          changes: before.changes,
++        },
++        after: {
++          manager: managerProjection(after.actor),
++          dom: domProjection(after.actor),
++          changes: after.changes,
++        },
++        delivery: cloneJSON(delivery),
++        goCompleteCalls: completeCalls.length,
++        completeCalls: cloneJSON(completeCalls),
++        transportEvents: cloneJSON(oldTransport.events),
++      };
++    }
++
++    return {
++      candidate: await runSide(candidate),
++      reference: await runSide(reference),
++      versions: { react: compositionReactVersion, reactDOM: compositionReactDOMVersion },
++    };
++  }
++
++  return {
++    candidate,
++    reference,
++    runScript,
++    runDisabledDOMNegative,
++    runRetainedCallbackFenceProbe,
++    versions: { react: compositionReactVersion, reactDOM: compositionReactDOMVersion },
++  };
++}
++
++try {
++  const fixture = await createFixture();
++  globalThis.__typedCompositionFixture = fixture;
++  status.textContent = `Go typed composition, DOM/React/GoDOM, and pinned React reference are ready (${fixture.versions.react}).`;
++} catch (error) {
++  status.textContent = `Fixture startup failed: ${error?.stack ?? error}`;
++  globalThis.__typedCompositionStartupError = errorMessage(error);
++}
+diff --git a/typed-composition/fixture.html b/typed-composition/fixture.html
+new file mode 100644
+index 0000000..60e6fbb
+--- /dev/null
++++ b/typed-composition/fixture.html
+@@ -0,0 +1,28 @@
++<!doctype html>
++<html lang="en">
++<head>
++  <meta charset="utf-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1">
++  <title>Typed composition replay fixture</title>
++  <style>
++    body { font: 14px/1.4 system-ui, sans-serif; margin: 1rem; }
++    #candidate-roots, #reference-roots { display: grid; gap: .5rem; }
++    [data-root-slot] { min-height: 2rem; }
++    .session-tree-shell { border: 1px solid #aaa; padding: .25rem; margin: .2rem; }
++    .session-tree-view { min-height: 1rem; }
++    .session-tree-children { padding-left: 1rem; }
++    #reference-roots { position: fixed; left: -12000px; top: 0; width: 1200px; }
++    #status { white-space: pre-wrap; }
++  </style>
++</head>
++<body>
++  <main>
++    <h1>Typed parent and child composition replay</h1>
++    <p id="status">Starting Go and renderer bridges…</p>
++    <section id="candidate-roots" aria-label="Candidate sessions"></section>
++    <section id="reference-roots" aria-label="Independent React reference sessions"></section>
++  </main>
++  <script src="/typed-composition/build/wasm_exec.js"></script>
++  <script type="module" src="/typed-composition/fixture.mjs"></script>
++</body>
++</html>
+diff --git a/typed-composition/check.mjs b/typed-composition/check.mjs
+new file mode 100644
+index 0000000..f8bfea3
+--- /dev/null
++++ b/typed-composition/check.mjs
+@@ -0,0 +1,1020 @@
++#!/usr/bin/env node
++import assert from "node:assert/strict";
++import { createHash } from "node:crypto";
++import { access, mkdir, readFile, writeFile } from "node:fs/promises";
++import { constants as fsConstants } from "node:fs";
++import { createServer } from "node:http";
++import { createRequire } from "node:module";
++import { spawn, spawnSync } from "node:child_process";
++import { basename, dirname, extname, resolve, sep } from "node:path";
++import { fileURLToPath } from "node:url";
++import { isDeepStrictEqual } from "node:util";
++import { DEFAULT_CASES, DEFAULT_MAX_ACTIONS, DEFAULT_SEEDS, fixedScripts, makeScripts } from "./scripts.mjs";
++import { createCompositionReference } from "./reference.mjs";
++
++const HERE = dirname(fileURLToPath(import.meta.url));
++const ROOT = resolve(HERE, "..");
++const BUILD = resolve(HERE, "build");
++const requireFromInteraction = createRequire(resolve(ROOT, "interaction/package.json"));
++const { chromium } = requireFromInteraction("playwright");
++const { build } = requireFromInteraction("esbuild");
++const MAX_ROWS = 4;
++const REQUIRED_SNAPSHOT_FIELDS = ["state", "tree", "bindings", "messages"];
++
++const own = (value) => value === undefined ? null : value;
++const isRecord = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
++const clone = (value) => value == null ? value : structuredClone(value);
++
++function mismatch(out, field, context, expected, actual) {
++  out.push({ field, context: clone(context), expected: clone(own(expected)), actual: clone(own(actual)) });
++}
++
++function isErrorResult(value) {
++  return isRecord(value) && Object.keys(value).length === 1 && typeof value.error === "string";
++}
++
++function normalizeResult(value) {
++  if (isErrorResult(value)) return { outcome: "error" };
++  return { outcome: "ok", value: own(value) };
++}
++
++function compareResult(out, field, context, expected, actual) {
++  const left = normalizeResult(expected);
++  const right = normalizeResult(actual);
++  if (!isDeepStrictEqual(left, right)) mismatch(out, field, context, left, right);
++}
++
++function compareExact(out, field, context, expected, actual) {
++  if (!isDeepStrictEqual(expected, actual)) mismatch(out, field, context, expected, actual);
++}
++
++function pathIndexes(path) {
++  if (path === "") return [];
++  if (typeof path !== "string" || !/^(?:0|[1-9][0-9]*)(?:\/(?:0|[1-9][0-9]*))*$/.test(path)) return null;
++  return path.split("/").map(Number);
++}
++
++function attrValue(node, name) {
++  return node?.Attrs?.find((attribute) => attribute.Name === name && !attribute.Flag)?.Value ?? null;
++}
++
++function attrFlag(node, name) {
++  return node?.Attrs?.some((attribute) => attribute.Name === name && attribute.Flag === true) ?? false;
++}
++
++function visitTree(tree, callback, path = "") {
++  if (!tree || typeof tree !== "object") return;
++  callback(tree, path);
++  for (const [index, child] of (tree.Kids ?? []).entries()) {
++    visitTree(child, callback, path === "" ? String(index) : `${path}/${index}`);
++  }
++}
++
++function expectedDisabled(snapshot, session, control) {
++  const state = snapshot?.state;
++  const rows = Array.isArray(state?.Rows) ? state.Rows : [];
++  const readonly = state?.Inputs?.ReadOnly === true;
++  if (control.tag === "input") return readonly;
++  if (readonly) return true;
++  const label = control.rowLabel ?? "";
++  const match = /^Row ([1-9][0-9]*)$/.exec(label);
++  const rowID = match ? Number(match[1]) : 0;
++  const rowIndex = rows.findIndex((row) => row.ID === rowID);
++  const row = rowIndex < 0 ? null : rows[rowIndex];
++  switch (control.className) {
++    case "add": return rows.length >= MAX_ROWS;
++    case "reset": return rows.length === 0;
++    case "save": return !row || row.Draft === "";
++    case "cancel": return !row || row.PendingID === 0;
++    case "up": return rowIndex <= 0;
++    case "publish": return session.parentID === 0 || !row || row.Saved === "";
++    default: return false;
++  }
++}
++
++function validateTree(records, out, context, prefix) {
++  if (!Array.isArray(records)) {
++    mismatch(out, `${prefix}.tree.type`, context, "array", records);
++    return new Map();
++  }
++  const byID = new Map();
++  for (let index = 0; index < records.length; index += 1) {
++    const entry = records[index];
++    if (!isRecord(entry) || !Number.isSafeInteger(entry.SessionID) || entry.SessionID <= 0 ||
++        !Number.isSafeInteger(entry.ParentID) || entry.ParentID < 0 ||
++        !Number.isSafeInteger(entry.Depth) || entry.Depth < 1 || entry.Depth > 32) {
++      mismatch(out, `${prefix}.tree.record`, { ...context, index }, "safe session/parent/depth record", entry);
++      continue;
++    }
++    if (byID.has(entry.SessionID)) mismatch(out, `${prefix}.tree.duplicate`, { ...context, index }, "unique session ID", entry.SessionID);
++    if (index > 0 && records[index - 1]?.SessionID >= entry.SessionID) {
++      mismatch(out, `${prefix}.tree.order`, context, "ascending SessionID", records.map((item) => item?.SessionID));
++    }
++    byID.set(entry.SessionID, entry);
++  }
++  for (const entry of records) {
++    if (!isRecord(entry)) continue;
++    if (entry.ParentID === 0) {
++      if (entry.Depth !== 1) mismatch(out, `${prefix}.tree.root-depth`, context, 1, entry.Depth);
++    } else {
++      const parent = byID.get(entry.ParentID);
++      if (!parent || entry.Depth !== parent.Depth + 1) {
++        mismatch(out, `${prefix}.tree.parent-depth`, context, "live immediate parent at depth-1", entry);
++      }
++    }
++  }
++  return byID;
++}
++
++function historicalParentMap(actor) {
++  const result = new Map();
++  for (const entry of actor?.lifecycle ?? []) {
++    if (Number.isSafeInteger(entry?.sessionID) && Number.isSafeInteger(entry?.parentID)) {
++      result.set(entry.sessionID, entry.parentID);
++    }
++  }
++  return result;
++}
++
++function validatePublicationInbox(snapshot, session, treeByID, historicalParents, allSequences, registerSequences, out, context, prefix) {
++  const inbox = snapshot?.state?.Inbox;
++  if (!Array.isArray(inbox)) {
++    mismatch(out, `${prefix}.inbox.type`, context, "array", inbox);
++    return;
++  }
++  let priorSequence = 0;
++  const fields = ["Sequence", "ParentID", "ChildID", "RowID", "Saved", "Saves", "InputRevision"].sort();
++  for (const [index, publication] of inbox.entries()) {
++    const itemContext = { ...context, publication: index };
++    if (!isRecord(publication)) {
++      mismatch(out, `${prefix}.inbox.record`, itemContext, "object", publication);
++      continue;
++    }
++    compareExact(out, `${prefix}.inbox.fields`, itemContext, fields, Object.keys(publication).sort());
++    if (!Number.isSafeInteger(publication.Sequence) || publication.Sequence <= 0 || publication.Sequence <= priorSequence) {
++      mismatch(out, `${prefix}.inbox.sequence-order`, itemContext, `positive sequence greater than ${priorSequence}`, publication.Sequence);
++    }
++    priorSequence = Number.isSafeInteger(publication.Sequence) ? publication.Sequence : priorSequence;
++    if (registerSequences && allSequences.has(publication.Sequence)) {
++      mismatch(out, `${prefix}.inbox.sequence-duplicate`, itemContext, "globally unique publication sequence", publication.Sequence);
++    }
++    if (registerSequences) allSequences.add(publication.Sequence);
++    if (publication.ParentID !== session.sessionID) {
++      mismatch(out, `${prefix}.inbox.parent`, itemContext, session.sessionID, publication.ParentID);
++    }
++    const child = treeByID.get(publication.ChildID);
++    const historicalParent = historicalParents.get(publication.ChildID);
++    if ((child && child.ParentID !== session.sessionID) || (!child && historicalParent !== session.sessionID)) {
++      mismatch(out, `${prefix}.inbox.direct-child`, itemContext,
++        `child ${publication.ChildID} directly owned by ${session.sessionID} when published`, publication.ChildID);
++    }
++    if (!Number.isSafeInteger(publication.RowID) || publication.RowID <= 0 ||
++        typeof publication.Saved !== "string" || publication.Saved.length === 0 ||
++        !Number.isSafeInteger(publication.Saves) || publication.Saves <= 0 ||
++        !Number.isSafeInteger(publication.InputRevision) || publication.InputRevision < 0) {
++      mismatch(out, `${prefix}.inbox.payload`, itemContext,
++        "positive row, nonempty captured Saved, positive Saves and safe InputRevision", publication);
++    }
++  }
++}
++
++function validateSnapshotShape(snapshot, session, treeByID, historicalParents, allSequences, registerSequences, out, context, prefix) {
++  if (!isRecord(snapshot)) {
++    mismatch(out, `${prefix}.snapshot.type`, context, "object", snapshot);
++    return;
++  }
++  for (const field of REQUIRED_SNAPSHOT_FIELDS) {
++    if (!Object.hasOwn(snapshot, field)) mismatch(out, `${prefix}.snapshot.missing.${field}`, context, "present field", undefined);
++  }
++  const state = snapshot.state;
++  if (!isRecord(state) || !Array.isArray(state.Rows)) {
++    mismatch(out, `${prefix}.state.shape`, context, "state object with Rows array", state);
++    return;
++  }
++  if (!isRecord(state.Inputs) || typeof state.Inputs.Title !== "string" || typeof state.Inputs.ReadOnly !== "boolean") {
++    mismatch(out, `${prefix}.inputs.shape`, context, "Inputs {Title:string, ReadOnly:boolean}", state.Inputs);
++  }
++  if (!Number.isSafeInteger(state.InputRevision) || state.InputRevision < 0) {
++    mismatch(out, `${prefix}.input-revision`, context, "nonnegative safe integer", state.InputRevision);
++  }
++  validatePublicationInbox(snapshot, session, treeByID, historicalParents, allSequences, registerSequences, out, context, prefix);
++  if (!Array.isArray(snapshot.bindings) || !Array.isArray(snapshot.messages)) {
++    mismatch(out, `${prefix}.snapshot.collections`, context, "bindings and messages arrays", snapshot);
++  }
++}
++
++function validateSession(session, treeByID, historicalParents, allSequences, out, context, prefix) {
++  if (!isRecord(session)) {
++    mismatch(out, `${prefix}.session.type`, context, "object", session);
++    return;
++  }
++  const treeEntry = treeByID.get(session.sessionID);
++  if (!treeEntry) mismatch(out, `${prefix}.session.tree-membership`, context, "live tree entry", session.sessionID);
++  else {
++    compareExact(out, `${prefix}.session.parent`, context, treeEntry.ParentID, session.parentID);
++    compareExact(out, `${prefix}.session.depth`, context, treeEntry.Depth, session.depth);
++  }
++  for (const field of ["managerSnapshot", "snapshot", "hostSnapshot"]) {
++    validateSnapshotShape(session[field], session, treeByID, historicalParents, allSequences,
++      field === "managerSnapshot", out, context, `${prefix}.${field}`);
++  }
++  if (isRecord(session.managerSnapshot) && isRecord(session.snapshot)) {
++    compareExact(out, `${prefix}.snapshot.manager-parity`, context, session.managerSnapshot, session.snapshot);
++  }
++  if (isRecord(session.managerSnapshot) && isRecord(session.hostSnapshot)) {
++    compareExact(out, `${prefix}.snapshot.host-parity`, context, session.managerSnapshot, session.hostSnapshot);
++  }
++  const state = session.managerSnapshot?.state;
++  if (session.lifecycle !== "active") mismatch(out, `${prefix}.lifecycle`, context, "active", session.lifecycle);
++  if (!Array.isArray(session.errors) || session.errors.length > 0) mismatch(out, `${prefix}.lifecycle.errors`, context, [], session.errors);
++  if (session.actualDOMMatchesSnapshot !== true) mismatch(out, `${prefix}.dom.snapshot`, context, true, session.actualDOMMatchesSnapshot);
++  if (session.elementCountMatches !== true) mismatch(out, `${prefix}.dom.element-count`, context, true, session.elementCounts);
++  if (session.reportedDisabledMatches !== true) mismatch(out, `${prefix}.dom.disabled-report`, context, session.actualDisabled, session.reportedDisabled);
++  if (!Array.isArray(session.controls) || !Array.isArray(session.inputs)) {
++    mismatch(out, `${prefix}.dom.controls`, context, "controls and inputs arrays", session);
++    return;
++  }
++  const expectedRows = (state?.Rows ?? []).map((row) => `Row ${row.ID}`);
++  compareExact(out, `${prefix}.dom.input-order`, context, expectedRows, session.inputOrder);
++  for (const input of session.inputs) {
++    const row = (state?.Rows ?? []).find((candidate) => `row-${candidate.ID}-input` === input.key);
++    if (!row) mismatch(out, `${prefix}.dom.input-key`, { ...context, key: input.key }, "row input key", input);
++    else compareExact(out, `${prefix}.dom.input-live-value`, { ...context, key: input.key }, row.Draft, input.value);
++    if (input.disabled !== (state?.Inputs?.ReadOnly === true)) {
++      mismatch(out, `${prefix}.dom.input-disabled`, { ...context, key: input.key }, state?.Inputs?.ReadOnly === true, input.disabled);
++    }
++  }
++  const controlsByKey = new Map(session.controls.map((control) => [control.key, control]));
++  const treeNodesByKey = new Map();
++  visitTree(session.managerSnapshot?.tree, (node, path) => {
++    if (node.Kind === 1) treeNodesByKey.set(node.Key, { node, path });
++  });
++  for (const control of session.controls) {
++    const expected = expectedDisabled(session.managerSnapshot, session, control);
++    if (control.disabled !== expected) {
++      mismatch(out, `${prefix}.dom.control-disabled-policy`, { ...context, key: control.key, path: control.path }, expected, control.disabled);
++    }
++    if (control.disabledAttribute !== expected) {
++      mismatch(out, `${prefix}.dom.control-disabled-attribute`, { ...context, key: control.key, path: control.path }, expected, control.disabledAttribute);
++    }
++    if (control.disabled !== expected && state?.Inputs?.ReadOnly === true) {
++      mismatch(out, `${prefix}.dom.readonly-control-enabled`, { ...context, key: control.key, path: control.path }, true, control.disabled);
++    }
++    const treeNode = treeNodesByKey.get(control.key);
++    if (!treeNode) mismatch(out, `${prefix}.dom.control-tree-key`, { ...context, key: control.key }, "keyed element in snapshot tree", control);
++    else if (treeNode.path !== control.path) mismatch(out, `${prefix}.dom.control-path`, { ...context, key: control.key }, treeNode.path, control.path);
++    if (state?.Inputs?.ReadOnly === true && (control.tag === "input" || control.tag === "button") && !control.disabled) {
++      mismatch(out, `${prefix}.dom.readonly-disabled`, { ...context, key: control.key }, true, false);
++    }
++  }
++  const title = `Title: ${state?.Inputs?.Title ?? ""}`;
++  const inbox = `Published: ${state?.Inbox?.length ?? 0}`;
++  compareExact(out, `${prefix}.dom.title`, context, title, session.visibleTitle);
++  compareExact(out, `${prefix}.dom.inbox-count`, context, inbox, session.visibleInbox);
++  if (session.shellOwnership) {
++    compareExact(out, `${prefix}.lifecycle.shell-order`, context,
++      ["session-tree-view", "session-tree-children"], session.shellOwnership.shellChildren);
++    if (session.shellOwnership.viewContained !== true || session.shellOwnership.childrenContained !== true) {
++      mismatch(out, `${prefix}.lifecycle.shell-containment`, context, true, session.shellOwnership);
++    }
++    if (session.parentID !== 0 && session.shellOwnership.physicalParent !== "session-tree-children") {
++      mismatch(out, `${prefix}.lifecycle.physical-parent`, context, "session-tree-children", session.shellOwnership.physicalParent);
++    }
++  }
++  if (session.focusWitness !== null && (!isRecord(session.focusWitness) || session.focusWitness.active !== true ||
++      typeof session.focusWitness.key !== "string" || !Number.isSafeInteger(session.focusWitness.selectionStart) ||
++      !Number.isSafeInteger(session.focusWitness.selectionEnd))) {
++    mismatch(out, `${prefix}.focus.witness`, context, "null or active keyed input with integer selection", session.focusWitness);
++  }
++}
++
++function managerProjection(actor) {
++  return {
++    tree: clone(actor?.managerTree),
++    sessions: (actor?.sessions ?? []).map((session) => ({ id: session.sessionID, snapshot: clone(session.managerSnapshot) })),
++    changes: clone(actor?.changes),
++  };
++}
++
++function validateTransitions(previous, current, out, context, prefix) {
++  if (!previous || !current) return;
++  const previousByID = new Map((previous.sessions ?? []).map((session) => [session.sessionID ?? session.id, session]));
++  for (const session of current.sessions ?? []) {
++    const sessionID = session.sessionID ?? session.id;
++    const before = previousByID.get(sessionID);
++    if (!before) continue;
++    const oldSnapshot = before.managerSnapshot ?? before.snapshot;
++    const newSnapshot = session.managerSnapshot ?? session.snapshot;
++    const oldInbox = oldSnapshot?.state?.Inbox;
++    const newInbox = newSnapshot?.state?.Inbox;
++    if (Array.isArray(oldInbox) && Array.isArray(newInbox)) {
++      const retainedPrefix = newInbox.length >= oldInbox.length && oldInbox.every((entry, index) =>
++        isDeepStrictEqual(entry, newInbox[index]));
++      if (!retainedPrefix) mismatch(out, `${prefix}.transition.inbox-prefix`, context, oldInbox, newInbox);
++      const newEntries = newInbox.slice(oldInbox.length);
++      const priorSequence = oldInbox.at(-1)?.Sequence ?? 0;
++      if (newEntries.some((entry) => !Number.isSafeInteger(entry.Sequence) || entry.Sequence <= priorSequence)) {
++        mismatch(out, `${prefix}.transition.inbox-append-order`, context, `new sequences greater than ${priorSequence}`, newEntries);
++      }
++    }
++    const oldMessages = oldSnapshot?.messages;
++    const newMessages = newSnapshot?.messages;
++    if (Array.isArray(oldMessages) && Array.isArray(newMessages) &&
++        (newMessages.length < oldMessages.length || !oldMessages.every((entry, index) => isDeepStrictEqual(entry, newMessages[index])))) {
++      mismatch(out, `${prefix}.transition.messages-prefix`, context, oldMessages, newMessages);
++    }
++  }
++}
++
++/** Validate one complete script against the native replay, independent model, and browser actors. */
++export function validateScenario(scenario) {
++  const issues = [];
++  const actions = scenario?.actions;
++  if (!Array.isArray(actions)) {
++    mismatch(issues, "scenario.actions", { name: scenario?.name }, "actions array", actions);
++    return issues;
++  }
++  const nativeFrames = scenario.nativeFrames;
++  const modelFrames = scenario.modelFrames;
++  const browserFrames = scenario.browserFrames;
++  if (Array.isArray(scenario.browserErrors) && scenario.browserErrors.length > 0) {
++    mismatch(issues, "browser.errors", { name: scenario.name }, [], scenario.browserErrors);
++  }
++  for (const [name, frames] of [["native", nativeFrames], ["model", modelFrames], ["browser", browserFrames]]) {
++    if (!Array.isArray(frames) || frames.length === 0) mismatch(issues, `${name}.frames.missing`, { name: scenario.name }, `nonempty ${actions.length}-frame trace`, frames);
++    else if (frames.length !== actions.length) mismatch(issues, `${name}.frames.count`, { name: scenario.name }, actions.length, frames.length);
++  }
++  if (!Array.isArray(nativeFrames) || !Array.isArray(modelFrames) || !Array.isArray(browserFrames)) return issues;
++  if (nativeFrames.length === 0) mismatch(issues, "native.empty-frames", { name: scenario.name }, "at least one frame", 0);
++
++  let priorNative = null;
++  let priorCandidate = null;
++  let priorReference = null;
++  for (let index = 0; index < actions.length; index += 1) {
++    const action = actions[index];
++    const native = nativeFrames[index];
++    const model = modelFrames[index];
++    const browser = browserFrames[index];
++    const context = { name: scenario.name, index, method: action?.method };
++    if (!isRecord(native) || !isRecord(model) || !isRecord(browser)) {
++      mismatch(issues, "frame.shape", context, "native/model/browser frame objects", { native, model, browser });
++      continue;
++    }
++    compareExact(issues, "frame.action.native", context, action, native.action);
++    compareExact(issues, "frame.action.model", context, action, model.action);
++    compareExact(issues, "frame.action.browser", context, action, browser.action);
++    if (browser.captureOrder !== undefined) compareExact(issues, "frame.focus-capture-order", context,
++      ["candidate", "reference"], browser.captureOrder);
++    const inputWitness = (scenario.inputWitnesses ?? []).find((entry) => entry.actionIndex === index) ?? null;
++    compareExact(issues, "input.witness-action", context, inputWitness, browser.inputWitness ?? null);
++    if (inputWitness) {
++      const effective = String(inputWitness.requested).replace(/[\r\n]/g, "");
++      compareExact(issues, "input.witness-normalization", context, effective, inputWitness.effective);
++      for (const actorName of ["candidate", "reference"]) {
++        const actor = browser[actorName];
++        const observation = actor?.inputWitnessObservation;
++        compareExact(issues, `input.${actorName}.live`, context, {
++          requested: inputWitness.requested,
++          effective: inputWitness.effective,
++          eventValue: inputWitness.effective,
++          expectedEffective: inputWitness.effective,
++          key: inputWitness.key,
++        }, observation);
++        const dispatch = actor?.managerCalls?.filter((call) => call.method === "dispatch" && call.args?.[1]?.Event === "input").at(-1);
++        compareExact(issues, `input.${actorName}.dispatched-value`, context, inputWitness.effective, dispatch?.args?.[1]?.Value);
++      }
++    }
++    compareResult(issues, "operation.native-model", context, native.result, model.result);
++    compareResult(issues, "operation.native-candidate", context, native.result, browser.operationResults?.candidate);
++    compareResult(issues, "operation.native-reference", context, native.result, browser.operationResults?.reference);
++    compareExact(issues, "frame.native-model", context, native.frame, model.frame);
++    const expectedNativeFrame = native.frame;
++    compareExact(issues, "frame.candidate-native", context, expectedNativeFrame, managerProjection(browser.candidate));
++    compareExact(issues, "frame.reference-native", context, expectedNativeFrame, managerProjection(browser.reference));
++    if (!isDeepStrictEqual(browser.candidate?.managerEffects, browser.reference?.managerEffects)) {
++      mismatch(issues, "effects.candidate-reference", context, browser.candidate?.managerEffects, browser.reference?.managerEffects);
++    }
++    const stripSide = (events) => (events ?? []).map(({ side: _side, ...event }) => event);
++    compareExact(issues, "effects.transport-order", context,
++      stripSide(browser.candidate?.transportCalls), stripSide(browser.reference?.transportCalls));
++    const candidateTree = validateTree(browser.candidate?.managerTree, issues, context, "candidate");
++    const referenceTree = validateTree(browser.reference?.managerTree, issues, context, "reference");
++    for (const [actorName, actor, treeByID] of [
++      ["candidate", browser.candidate, candidateTree], ["reference", browser.reference, referenceTree],
++    ]) {
++      if (!isRecord(actor)) {
++        mismatch(issues, `${actorName}.actor`, context, "complete browser actor", actor);
++        continue;
++      }
++      const ids = (actor.managerTree ?? []).map((entry) => entry.SessionID);
++      compareExact(issues, `${actorName}.active-ids`, context, ids, actor.managerList);
++      compareExact(issues, `${actorName}.snapshot-ids`, context, ids, actor.snapshotAllIDs);
++      compareExact(issues, `${actorName}.host-ids`, context, ids, actor.activeIDs);
++      if (!Array.isArray(actor.sessions) || actor.sessions.length !== ids.length) {
++        mismatch(issues, `${actorName}.sessions.count`, context, ids.length, actor.sessions?.length);
++      }
++      const allSequences = new Set();
++      const historicalParents = historicalParentMap(actor);
++      for (const session of actor.sessions ?? []) {
++        validateSession(session, treeByID, historicalParents, allSequences, issues,
++          { ...context, sessionID: session.sessionID }, actorName);
++      }
++      if (actor.settledError !== null) mismatch(issues, `${actorName}.host.settled`, context, null, actor.settledError);
++    }
++    if (browser.candidate?.focusReplacement) {
++      const witness = browser.candidate.focusReplacement;
++      if (witness.error) mismatch(issues, "focus.replacement-error", context, "successful replacement", witness.error);
++      else {
++        compareExact(issues, "focus.replacement-target-key", context, witness.expectedKey, witness.before?.key);
++        if (!witness.before?.active || witness.before.selectionStart >= witness.before.selectionEnd ||
++            witness.before.selectionDirection !== "backward") {
++          mismatch(issues, "focus.replacement-witness-range", context,
++            { active: true, noncollapsed: true, selectionDirection: "backward" }, witness.before);
++        }
++        if (witness.before?.key !== witness.after?.key || witness.before?.selectionStart !== witness.after?.selectionStart ||
++            witness.before?.selectionEnd !== witness.after?.selectionEnd || witness.before?.selectionDirection !== witness.after?.selectionDirection) {
++          mismatch(issues, "focus.replacement-selection", context, witness.before, witness.after);
++        }
++        if (witness.after?.key !== witness.expectedKey || witness.after?.selectionStart !== witness.before?.selectionStart ||
++            witness.after?.selectionEnd !== witness.before?.selectionEnd || witness.after?.selectionDirection !== witness.before?.selectionDirection) {
++          mismatch(issues, "focus.replacement-immediate", context, witness.before, witness.after);
++        }
++        if (witness.afterSettled?.key !== witness.expectedKey || witness.afterSettled?.selectionStart !== witness.before?.selectionStart ||
++            witness.afterSettled?.selectionEnd !== witness.before?.selectionEnd || witness.afterSettled?.selectionDirection !== witness.before?.selectionDirection) {
++          mismatch(issues, "focus.replacement-settled", context, witness.before, witness.afterSettled);
++        }
++        if (witness.inputValue !== witness.before?.value && witness.before?.value !== undefined) {
++          mismatch(issues, "focus.replacement-value", context, witness.before?.value, witness.inputValue);
++        }
++        if (witness.from === witness.to) mismatch(issues, "focus.replacement-backend", context, "different renderer", witness);
++      }
++    }
++    if (native.frame && (!Array.isArray(native.frame.tree) || !Array.isArray(native.frame.sessions) || !Array.isArray(native.frame.changes))) {
++      mismatch(issues, "native.frame.channels", context, "tree/sessions/changes", native.frame);
++    }
++    validateTransitions(priorNative, native.frame, issues, context, "native");
++    validateTransitions(priorCandidate, browser.candidate, issues, context, "candidate");
++    validateTransitions(priorReference, browser.reference, issues, context, "reference");
++    priorNative = native.frame;
++    priorCandidate = browser.candidate;
++    priorReference = browser.reference;
++  }
++  return issues;
++}
++
++function frameStateProjection(frame) {
++  return {
++    tree: frame?.tree,
++    sessions: frame?.sessions,
++  };
++}
++
++function findRejectedMutationProof(scenario, method, predicate) {
++  const actionIndex = scenario.actions.findIndex((action) => action.method === method && predicate(action));
++  if (actionIndex < 0) return { status: "missing" };
++  const previous = actionIndex > 0 ? scenario.nativeFrames[actionIndex - 1] : null;
++  const current = scenario.nativeFrames[actionIndex];
++  const browser = scenario.browserFrames[actionIndex];
++  const rejected = isErrorResult(current?.result) && isErrorResult(scenario.modelFrames[actionIndex]?.result) &&
++    isErrorResult(browser?.operationResults?.candidate) && isErrorResult(browser?.operationResults?.reference);
++  const unchanged = previous !== null &&
++    isDeepStrictEqual(frameStateProjection(previous.frame), frameStateProjection(current?.frame)) &&
++    isDeepStrictEqual(current?.frame?.changes, []) &&
++    isDeepStrictEqual(frameStateProjection(previous.frame), frameStateProjection(managerProjection(browser?.candidate))) &&
++    isDeepStrictEqual(frameStateProjection(previous.frame), frameStateProjection(managerProjection(browser?.reference))) &&
++    isDeepStrictEqual(browser?.candidate?.changes, []) && isDeepStrictEqual(browser?.reference?.changes, []);
++  return { status: rejected && unchanged ? "rejected-without-mutation" : "failed", actionIndex,
++    rejected, unchanged, nativeResult: current?.result, browserResults: browser?.operationResults,
++    nativeChanges: current?.frame?.changes, browserChanges: { candidate: browser?.candidate?.changes, reference: browser?.reference?.changes } };
++}
++
++export function mutateInboxOrder(scenario) {
++  const mutated = clone(scenario);
++  const target = mutated.browserFrames?.find((frame) => frame.candidate?.sessions?.some((session) =>
++    session.managerSnapshot?.state?.Inbox?.length >= 2));
++  if (!target) return { scenario: mutated, mutation: { status: "unavailable" } };
++  const session = target.candidate.sessions.find((entry) => entry.managerSnapshot?.state?.Inbox?.length >= 2);
++  const inbox = session.managerSnapshot.state.Inbox;
++  [inbox[0], inbox[1]] = [inbox[1], inbox[0]];
++  session.snapshot.state.Inbox = clone(inbox);
++  session.hostSnapshot.state.Inbox = clone(inbox);
++  return { scenario: mutated, mutation: { status: "reordered", frameIndex: target.index, sessionID: session.sessionID,
++    sequenceBefore: scenario.browserFrames[target.index].candidate.sessions.find((entry) => entry.sessionID === session.sessionID)
++      .managerSnapshot.state.Inbox.map((item) => item.Sequence),
++    sequenceAfter: inbox.map((item) => item.Sequence) } };
++}
++
++export function validateActor(actor, context = {}) {
++  const issues = [];
++  const treeByID = validateTree(actor?.managerTree, issues, context, "actor");
++  const historicalParents = historicalParentMap(actor);
++  const allSequences = new Set();
++  for (const session of actor?.sessions ?? []) validateSession(session, treeByID, historicalParents, allSequences, issues, context, "actor");
++  return issues;
++}
++
++export function nativeInputFor(script) {
++  return { actions: script.actions.map(({ method, args }) => ({ method, args: clone(args) })) };
++}
++
++function parseOptions(argv) {
++  const options = { seeds: DEFAULT_SEEDS.slice(), cases: DEFAULT_CASES, maxActions: DEFAULT_MAX_ACTIONS,
++    output: resolve(BUILD, "check-report.json") };
++  for (let index = 0; index < argv.length; index += 1) {
++    const arg = argv[index];
++    if (arg === "--help" || arg === "-h") { options.help = true; continue; }
++    const value = argv[index + 1];
++    if (!value || value.startsWith("--")) throw new Error(`missing value for ${arg}`);
++    if (arg === "--seeds") options.seeds = value.split(",").filter(Boolean).map(Number);
++    else if (arg === "--cases") options.cases = Number(value);
++    else if (arg === "--max-actions") options.maxActions = Number(value);
++    else if (arg === "--output") options.output = resolve(process.cwd(), value);
++    else throw new Error(`unknown option ${arg}`);
++    index += 1;
++  }
++  return options;
++}
++
++function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
++
++async function sha256File(path) {
++  return sha256(await readFile(path));
++}
++
++function safeName(value) {
++  return String(value).normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 72) || "script";
++}
++
++export async function writeRawArtifacts({ scenarios, issues, outputDir, baseName = "composition" }) {
++  const scenarioDir = resolve(outputDir, `${baseName}-scenarios`);
++  await mkdir(scenarioDir, { recursive: true });
++  const files = [];
++  for (const [index, scenario] of scenarios.entries()) {
++    const name = `${String(index).padStart(4, "0")}-${safeName(scenario.name)}.json`;
++    const path = resolve(scenarioDir, name);
++    const encoded = `${JSON.stringify(scenario, null, 2)}\n`;
++    await writeFile(path, encoded);
++    files.push({ path, name, sha256: sha256(encoded), bytes: Buffer.byteLength(encoded) });
++  }
++  const mismatchPath = resolve(outputDir, `${baseName}-mismatches.json`);
++  const mismatchText = `${JSON.stringify(issues, null, 2)}\n`;
++  await writeFile(mismatchPath, mismatchText);
++  const manifest = { schema: "gondola.typed-composition.raw/v1", files,
++    mismatchArtifact: { path: mismatchPath, sha256: sha256(mismatchText), bytes: Buffer.byteLength(mismatchText), count: issues.length } };
++  const manifestPath = resolve(outputDir, `${baseName}-manifest.json`);
++  await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
++  return { scenarioDir, files, mismatchArtifact: manifest.mismatchArtifact, manifestPath };
++}
++
++async function buildBrowserBundles() {
++  await mkdir(BUILD, { recursive: true });
++  for (const [source, output] of [
++    [resolve(ROOT, "keyed-editor/react.mjs"), resolve(BUILD, "react.bundle.mjs")],
++    [resolve(HERE, "reference.mjs"), resolve(BUILD, "reference.bundle.mjs")],
++  ]) {
++    const result = await build({ entryPoints: [source], absWorkingDir: ROOT, bundle: true, format: "esm",
++      platform: "browser", target: "es2022", write: false, logLevel: "silent" });
++    await writeFile(output, result.outputFiles[0].text);
++  }
++}
++
++async function assertBuildAssets() {
++  const required = ["composition.wasm", "godom.wasm", "wasm_exec.js"];
++  for (const name of required) {
++    try { await access(resolve(BUILD, name), fsConstants.R_OK); }
++    catch { throw new Error(`missing typed-composition build asset ${resolve(BUILD, name)}; run run-typed-composition.sh first`); }
++  }
++}
++
++async function ensureNativeBinary() {
++  const configured = process.env.COMPOSITION_REPLAY_BIN;
++  const binary = configured ? resolve(process.cwd(), configured) : resolve(BUILD, "composition-replay");
++  try {
++    await access(binary, fsConstants.X_OK);
++    return binary;
++  } catch {
++    const result = spawnSync("go", ["build", "-o", binary, "./cmd/composition-replay"],
++      { cwd: ROOT, encoding: "utf8" });
++    if (result.status !== 0) throw new Error(`native composition replay build failed:\n${result.stderr ?? result.stdout}`);
++    return binary;
++  }
++}
++
++function runNative(binary, input) {
++  return new Promise((resolvePromise, rejectPromise) => {
++    const child = spawn(binary, ["-"], { cwd: ROOT, stdio: ["pipe", "pipe", "pipe"] });
++    let stdout = "";
++    let stderr = "";
++    child.stdout.setEncoding("utf8");
++    child.stderr.setEncoding("utf8");
++    child.stdout.on("data", (chunk) => { stdout += chunk; });
++    child.stderr.on("data", (chunk) => { stderr += chunk; });
++    child.once("error", rejectPromise);
++    child.once("close", (code, signal) => {
++      if (code !== 0) return rejectPromise(new Error(`native replay exited code=${code} signal=${signal}: ${stderr}`));
++      try { resolvePromise(JSON.parse(stdout)); }
++      catch (error) { rejectPromise(new Error(`native replay returned invalid JSON: ${error.message}\n${stdout.slice(0, 500)}`)); }
++    });
++    child.stdin.end(JSON.stringify(input));
++  });
++}
++
++function serveStatic() {
++  const mime = new Map([
++    [".html", "text/html; charset=utf-8"], [".mjs", "text/javascript; charset=utf-8"],
++    [".js", "text/javascript; charset=utf-8"], [".wasm", "application/wasm"],
++    [".css", "text/css; charset=utf-8"], [".json", "application/json; charset=utf-8"],
++  ]);
++  const server = createServer(async (request, response) => {
++    try {
++      const url = new URL(request.url ?? "/", "http://127.0.0.1");
++      const path = resolve(ROOT, `.${decodeURIComponent(url.pathname)}`);
++      if (path !== ROOT && !path.startsWith(ROOT + sep)) {
++        response.writeHead(403).end("forbidden");
++        return;
++      }
++      const content = await readFile(path);
++      response.writeHead(200, { "content-type": mime.get(extname(path)) ?? "application/octet-stream",
++        "cache-control": "no-store" });
++      response.end(content);
++    } catch {
++      response.writeHead(404).end("not found");
++    }
++  });
++  return new Promise((resolvePromise, rejectPromise) => {
++    server.once("error", rejectPromise);
++    server.listen(0, "127.0.0.1", () => resolvePromise({ server,
++      url: `http://127.0.0.1:${server.address().port}` }));
++  });
++}
++
++async function browserScript(context, baseURL, selectedScript, disabledNegative = false) {
++  const page = await context.newPage();
++  const errors = [];
++  page.on("pageerror", (error) => errors.push(String(error?.stack ?? error)));
++  page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
++  try {
++    await page.goto(`${baseURL}/typed-composition/fixture.html`, { waitUntil: "load", timeout: 30_000 });
++    await page.waitForFunction(() => window.__typedCompositionFixture || window.__typedCompositionStartupError,
++      null, { timeout: 30_000 });
++    const startupError = await page.evaluate(() => window.__typedCompositionStartupError ?? null);
++    if (startupError) throw new Error(`browser fixture startup failed: ${startupError}`);
++    const result = disabledNegative
++      ? await page.evaluate((script) => window.__typedCompositionFixture.runDisabledDOMNegative(script), selectedScript)
++      : await page.evaluate((script) => window.__typedCompositionFixture.runScript(script), selectedScript);
++    return { ...result, browserErrors: errors };
++  } finally {
++    await page.close();
++  }
++}
++
++async function browserRetainedCallbackFence(context, baseURL) {
++  const page = await context.newPage();
++  const errors = [];
++  page.on("pageerror", (error) => errors.push(String(error?.stack ?? error)));
++  page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
++  try {
++    await page.goto(`${baseURL}/typed-composition/fixture.html`, { waitUntil: "load", timeout: 30_000 });
++    await page.waitForFunction(() => window.__typedCompositionFixture || window.__typedCompositionStartupError,
++      null, { timeout: 30_000 });
++    const startupError = await page.evaluate(() => window.__typedCompositionStartupError ?? null);
++    if (startupError) throw new Error(`browser fixture startup failed: ${startupError}`);
++    return { ...(await page.evaluate(() => window.__typedCompositionFixture.runRetainedCallbackFenceProbe())), browserErrors: errors };
++  } catch (error) {
++    errors.push(error?.stack ?? String(error));
++    return { candidate: null, reference: null, browserErrors: errors };
++  } finally {
++    await page.close();
++  }
++}
++
++async function sourceHashes(nativeBinary) {
++  const files = [
++    "typed-composition/DESIGN.md", "typed-composition/fixture.html", "typed-composition/fixture.mjs",
++    "typed-composition/check.mjs", "typed-composition/check.test.mjs", "typed-composition/host.mjs",
++    "typed-composition/reference.mjs", "typed-composition/scripts.mjs", "keyed-editor/dom.mjs",
++    "keyed-editor/react.mjs", "keyed-editor/host.mjs", "multi-root/host.mjs", "session-tree/host.mjs",
++    "session-tree/reference.mjs", "renderer-conformance/adapter.mjs",
++    "cmd/composition-wasm/bridge_decode.go", "cmd/composition-wasm/main_stub.go", "cmd/composition-wasm/main_wasm.go",
++    "cmd/composition-wasm/bridge_decode_test.go", "cmd/composition-replay/main.go", "cmd/composition-replay/decoder.go",
++    "cmd/composition-replay/main_test.go", "composition/manager.go", "composition/manager_test.go",
++    "asyncsave/session.go", "asyncsave/session_test.go", "collection/session.go", "collection/session_test.go",
++    "gobi/build.go", "gobi/compare_interaction.go", "gobi/compare_interaction_test.go", "gobi/html.go",
++    "gobi/names.go", "gobi/node.go", "gobi/rules_test.go", "inputbinding/binding.go", "inputbinding/binding_test.go",
++    "multisession/manager.go", "multisession/manager_test.go", "multisession/manager_tree_test.go",
++    "go.mod", "interaction/package.json", "interaction/package-lock.json",
++    "typed-composition/build/composition.wasm", "typed-composition/build/godom.wasm",
++    "typed-composition/build/wasm_exec.js", "typed-composition/build/react.bundle.mjs",
++    "typed-composition/build/reference.bundle.mjs",
++  ];
++  const hashes = {};
++  for (const relative of files) {
++    const path = resolve(ROOT, relative);
++    try { hashes[relative] = await sha256File(path); }
++    catch (error) { throw new Error(`source pin is missing ${relative}: ${error.message}`); }
++  }
++  hashes[nativeBinary.slice(ROOT.length + 1)] = await sha256File(nativeBinary);
++  return hashes;
++}
++
++function runNodeModel(script) {
++  const reference = createCompositionReference();
++  return script.actions.map((action) => {
++    let result;
++    try {
++      const method = reference[action.method];
++      if (typeof method !== "function") throw new TypeError(`unknown composition method ${action.method}`);
++      result = method(...action.args);
++    } catch (error) {
++      result = { error: error instanceof Error ? error.message : String(error) };
++    }
++    const tree = reference.tree();
++    const sessions = reference.list().map((id) => ({ id, snapshot: reference.snapshot(id) }));
++    const changes = reference.changes();
++    return { action: clone(action), result: clone(result), frame: { tree: clone(tree), sessions: clone(sessions), changes: clone(changes) } };
++  });
++}
++
++function validateNativeCoverage(scenario, issues) {
++  if (!Array.isArray(scenario.nativeFrames) || scenario.nativeFrames.length === 0) {
++    mismatch(issues, "native.missing-frames", { name: scenario.name }, "nonempty native frames", scenario.nativeFrames);
++    return;
++  }
++  if (scenario.nativeFrames.length !== scenario.actions.length) {
++    mismatch(issues, "native.action-count", { name: scenario.name }, scenario.actions.length, scenario.nativeFrames.length);
++  }
++  for (const [index, frame] of scenario.nativeFrames.entries()) {
++    if (!isRecord(frame?.frame) || !Array.isArray(frame.frame.tree) || !Array.isArray(frame.frame.sessions) ||
++        !Array.isArray(frame.frame.changes)) {
++      mismatch(issues, "native.incomplete-frame", { name: scenario.name, index }, "tree/sessions/changes", frame);
++    }
++  }
++}
++
++async function writeShard(directory, index, scenario) {
++  await mkdir(directory, { recursive: true });
++  const name = `${String(index).padStart(4, "0")}-${safeName(scenario.name)}.json`;
++  const path = resolve(directory, name);
++  const encoded = `${JSON.stringify(scenario, null, 2)}\n`;
++  await writeFile(path, encoded);
++  return { name, path, bytes: Buffer.byteLength(encoded), sha256: sha256(encoded) };
++}
++
++function validateMutationControl(actor, mutation, label) {
++  const issues = validateActor(actor, { control: label });
++  return { status: issues.some((issue) => issue.field.includes("disabled")) ? "detected" : "failed",
++    mutation: clone(mutation), mismatchFields: issues.map((issue) => issue.field), issues };
++}
++
++function validateMutationOrder(mutated) {
++  const issues = validateScenario(mutated.scenario);
++  const detected = issues.some((issue) => issue.field.includes("inbox.sequence-order") || issue.field.includes("inbox-prefix"));
++  return { status: detected ? "detected" : "failed", mutation: clone(mutated.mutation),
++    mismatchFields: issues.map((issue) => issue.field), issues };
++}
++
++export function validateRetainedCallbackFence(probe) {
++  const issues = [];
++  if (Array.isArray(probe?.browserErrors) && probe.browserErrors.length > 0) {
++    mismatch(issues, "callback-fence.browser-errors", {}, [], probe.browserErrors);
++  }
++  const candidate = probe?.candidate;
++  const reference = probe?.reference;
++  for (const [sideName, side] of [["candidate", candidate], ["reference", reference]]) {
++    const context = { side: sideName };
++    if (!isRecord(side)) {
++      mismatch(issues, "callback-fence.side-missing", context, "complete callback-fence witness", side);
++      continue;
++    }
++    if (side.old?.pendingSnapshot?.state?.Rows?.[0]?.PendingID !== side.old?.pendingID || side.old?.pendingID <= 0) {
++      mismatch(issues, "callback-fence.pending-not-retained", context,
++        "old child has a nonzero pending request before disposal", side.old);
++    }
++    if (side.old?.savedCallbackRetained !== true || side.old?.transportStateBeforeDelivery !== "cancelled") {
++      mismatch(issues, "callback-fence.callback-not-retained", context,
++        { savedCallbackRetained: true, transportStateBeforeDelivery: "cancelled" }, side.old);
++    }
++    const oldIDs = new Set([side.old?.rootID, side.old?.childID]);
++    if (!Array.isArray(side.freshIDs) || side.freshIDs.length !== 2 || side.freshIDs.some((id) => oldIDs.has(id))) {
++      mismatch(issues, "callback-fence.recreation-ids", context,
++        "fresh root and child IDs distinct from disposed generation", side.freshIDs);
++    }
++    if (!isDeepStrictEqual(new Set(side.disposedIDs), oldIDs)) {
++      mismatch(issues, "callback-fence.disposal", context, [...oldIDs], side.disposedIDs);
++    }
++    compareExact(issues, "callback-fence.fresh-manager-unchanged", context,
++      side.before?.manager, side.after?.manager);
++    compareExact(issues, "callback-fence.fresh-dom-unchanged", context,
++      side.before?.dom, side.after?.dom);
++    compareExact(issues, "callback-fence.baseline-dirty-empty", context, [], side.before?.changes);
++    compareExact(issues, "callback-fence.after-dirty-empty", context, [], side.after?.changes);
++    if (side.goCompleteCalls !== 0 || (side.completeCalls?.length ?? 0) !== 0) {
++      mismatch(issues, "callback-fence.complete-called", context, 0, side.completeCalls);
++    }
++    if (side.delivery?.previousState !== "cancelled" ||
++        !side.transportEvents?.some((event) => event.kind === "delivery" && event.ID === side.old?.pendingID)) {
++      mismatch(issues, "callback-fence.late-delivery-not-attempted", context,
++        "cancelled retained request callback invoked after recreation", { delivery: side.delivery, events: side.transportEvents });
++    }
++    const freshChild = side.after?.manager?.sessions?.find((entry) => entry.id === side.freshIDs?.[1])?.snapshot;
++    if (!freshChild || freshChild.state?.Inbox?.length !== 0 || freshChild.messages?.length !== 0) {
++      mismatch(issues, "callback-fence.fresh-child-empty", context,
++        { inbox: [], messages: [] }, { inbox: freshChild?.state?.Inbox, messages: freshChild?.messages });
++    }
++  }
++  compareExact(issues, "callback-fence.candidate-reference-manager", {},
++    candidate?.after?.manager, reference?.after?.manager);
++  if (candidate?.actualGoManager !== true || candidate.goCompleteCalls !== 0) {
++    mismatch(issues, "callback-fence.actual-go-not-proved", {},
++      { actualGoManager: true, goCompleteCalls: 0 }, candidate);
++  }
++  return {
++    status: issues.length === 0 ? "fenced" : "failed",
++    mismatchFields: issues.map((issue) => issue.field),
++    issues,
++    candidate: clone(candidate),
++    reference: clone(reference),
++    browserErrors: clone(probe?.browserErrors ?? []),
++  };
++}
++
++async function main(argv = process.argv.slice(2)) {
++  const options = parseOptions(argv);
++  if (options.help) {
++    console.log("Usage: node typed-composition/check.mjs [--seeds a,b] [--cases n] [--max-actions n] [--output path]");
++    return;
++  }
++  if (!Number.isInteger(options.cases) || options.cases < 0 || !Number.isInteger(options.maxActions) || options.maxActions < 9) {
++    throw new RangeError("cases must be nonnegative and max-actions must be at least 9");
++  }
++  await buildBrowserBundles();
++  await assertBuildAssets();
++  const nativeBinary = await ensureNativeBinary();
++  const scripts = makeScripts({ seeds: options.seeds, cases: options.cases, maxActions: options.maxActions });
++  const { server, url } = await serveStatic();
++  let browser;
++  const allIssues = [];
++  const shards = [];
++  const scriptSummaries = [];
++  const fixedEvidence = new Map();
++  const started = Date.now();
++  try {
++    browser = await chromium.launch({ headless: true,
++      ...(process.env.CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.CHROMIUM_EXECUTABLE_PATH } : {}),
++      args: ["--no-sandbox"] });
++    const context = await browser.newContext();
++    for (const [index, script] of scripts.entries()) {
++      const nativeInput = nativeInputFor(script);
++      const nativeOutput = await runNative(nativeBinary, nativeInput);
++      const modelFrames = runNodeModel(script);
++      const browserOutput = await browserScript(context, url, script);
++      const scenario = {
++        name: script.name,
++        seed: script.seed ?? null,
++        actions: clone(script.actions),
++        inputWitnesses: clone(script.inputWitnesses ?? []),
++        nativeInput,
++        nativeFrames: clone(nativeOutput.frames),
++        modelFrames,
++        browserFrames: browserOutput.frames,
++        versions: browserOutput.versions,
++        browserErrors: browserOutput.browserErrors,
++      };
++      const issues = validateScenario(scenario);
++      validateNativeCoverage(scenario, issues);
++      allIssues.push(...issues);
++      const shard = await writeShard(resolve(dirname(options.output), `${basename(options.output, extname(options.output))}-scenarios`), index, {
++        ...scenario, mismatches: issues,
++      });
++      shards.push(shard);
++      if (fixedScripts.some((entry) => entry.name === script.name)) fixedEvidence.set(script.name, scenario);
++      scriptSummaries.push({ name: script.name, seed: script.seed ?? null, actions: script.actions.length,
++        nativeFrames: nativeOutput.frames?.length ?? 0, mismatchCount: issues.length, rawShard: shard.name, sha256: shard.sha256,
++        browserErrors: browserOutput.browserErrors, versions: browserOutput.versions });
++      if (issues.length > 0) process.stderr.write(`mismatch: ${script.name} (${issues.length})\n`);
++    }
++
++    const publicationScenario = fixedEvidence.get("inputs-publication-races");
++    const readonlyScenario = fixedEvidence.get("readonly-pending-reply");
++    const parentProof = publicationScenario && findRejectedMutationProof(publicationScenario, "setChildInputs",
++      (action) => action.args?.[0] === 3 && action.args?.[1] === 2);
++    const revisionProof = publicationScenario && findRejectedMutationProof(publicationScenario, "publish",
++      (action) => action.args?.[0] === 2 && action.args?.[1] === 1 && action.args?.[2] === 1);
++    const orderMutation = publicationScenario ? mutateInboxOrder(publicationScenario) : null;
++    const orderingControl = orderMutation?.mutation.status === "reordered" ? validateMutationOrder(orderMutation) :
++      { status: "failed", mutation: orderMutation?.mutation ?? null, mismatchFields: [], issues: [] };
++    const disabledScript = fixedScripts.find((entry) => entry.name === "readonly-pending-reply");
++    const disabledBrowserOutput = disabledScript ? await browserScript(context, url, disabledScript, true) : null;
++    const disabledControl = disabledBrowserOutput?.mutationFrame
++      ? validateMutationControl(disabledBrowserOutput.mutationFrame.candidate, disabledBrowserOutput.mutation, "readonly-dom-disabled")
++      : { status: "failed", mutation: disabledBrowserOutput?.mutation ?? null, mismatchFields: [], issues: [] };
++    const retainedCallbackOutput = await browserRetainedCallbackFence(context, url);
++    const retainedCallbackControl = validateRetainedCallbackFence(retainedCallbackOutput);
++    const controls = {
++      parent: parentProof ?? { status: "failed" },
++      revision: revisionProof ?? { status: "failed" },
++      inboxOrdering: orderingControl,
++      physicalDOMDisabled: disabledControl,
++      retainedCallbackAfterRecreation: retainedCallbackControl,
++    };
++    if (controls.parent.status !== "rejected-without-mutation") {
++      mismatch(allIssues, "negative.parent-not-failclosed", { control: "parent" }, "rejected without state/dirty changes", controls.parent);
++    }
++    if (controls.revision.status !== "rejected-without-mutation") {
++      mismatch(allIssues, "negative.revision-not-failclosed", { control: "revision" }, "rejected without state/dirty changes", controls.revision);
++    }
++    if (controls.inboxOrdering.status !== "detected") {
++      mismatch(allIssues, "negative.order-not-detected", { control: "inboxOrdering" }, "mutated publication order detected", controls.inboxOrdering);
++    }
++    if (controls.physicalDOMDisabled.status !== "detected" || disabledBrowserOutput?.mutation?.disabled !== false ||
++        disabledBrowserOutput?.mutation?.wasDisabled !== true || disabledBrowserOutput?.mutation?.expectedReadOnly !== true) {
++      mismatch(allIssues, "negative.disabled-not-detected", { control: "physicalDOMDisabled" },
++        "actual candidate DOM disabled property mutation detected", controls.physicalDOMDisabled);
++    }
++    if (controls.retainedCallbackAfterRecreation.status !== "fenced") {
++      mismatch(allIssues, "negative.retained-callback-not-fenced", { control: "retainedCallbackAfterRecreation" },
++        "retained callback attempted after disposal/recreation with zero Go Complete calls and unchanged fresh tree", controls.retainedCallbackAfterRecreation);
++    }
++    if (orderMutation) {
++      const shard = await writeShard(resolve(dirname(options.output), `${basename(options.output, extname(options.output))}-scenarios`),
++        shards.length, { name: "control-inbox-order-mutation", ...orderMutation, control: orderingControl });
++      shards.push(shard);
++    }
++    if (disabledBrowserOutput) {
++      const shard = await writeShard(resolve(dirname(options.output), `${basename(options.output, extname(options.output))}-scenarios`),
++        shards.length, { name: "control-physical-disabled-mutation", ...disabledBrowserOutput, control: disabledControl });
++      shards.push(shard);
++    }
++    {
++      const shard = await writeShard(resolve(dirname(options.output), `${basename(options.output, extname(options.output))}-scenarios`),
++        shards.length, { name: "control-retained-callback-after-recreation", ...retainedCallbackOutput, control: retainedCallbackControl });
++      shards.push(shard);
++    }
++    await context.close();
++
++    const goVersion = spawnSync("go", ["version"], { cwd: ROOT, encoding: "utf8" });
++    const sourcePins = await sourceHashes(nativeBinary);
++    const sourceHash = sha256(JSON.stringify(sourcePins));
++    const report = {
++      schema: "gondola.typed-composition.report/v1",
++      status: allIssues.length === 0 && Object.values(controls).every((control) =>
++        control.status === "detected" || control.status === "rejected-without-mutation" || control.status === "fenced") ? "matched" : "mismatched",
++      seeds: options.seeds,
++      casesPerSeed: options.cases,
++      maxActions: options.maxActions,
++      fixedScripts: fixedScripts.map((script) => ({ name: script.name, actions: script.actions.length })),
++      scripts: scripts.length,
++      nativeExecutions: scripts.length,
++      actions: scripts.reduce((sum, script) => sum + script.actions.length, 0),
++      nativeFrames: scripts.reduce((sum, script) => sum + script.actions.length, 0),
++      actorNativeFrameComparisons: scripts.reduce((sum, script) => sum + script.actions.length * 2, 0),
++      browserOnlyLifecycleProbes: 1,
++      mutationControls: controls,
++      rawScenarioDirectory: resolve(dirname(options.output), `${basename(options.output, extname(options.output))}-scenarios`),
++      rawScenarioShards: shards,
++      mismatchCount: allIssues.length,
++      mismatches: allIssues,
++      scriptSummaries,
++      browser: { chromium: browser.version(), ...browserOutputVersion(scriptSummaries) },
++      toolchain: { node: process.version, platform: process.platform,
++        go: (goVersion.stdout ?? "").trim() || "unavailable on PATH", nativeReplay: nativeBinary },
++      sourcePins,
++      sourceSetSHA256: sourceHash,
++      commands: [`COMPOSITION_REPLAY_BIN=${nativeBinary} node typed-composition/check.mjs --seeds ${options.seeds.join(",")} --cases ${options.cases} --max-actions ${options.maxActions} --output ${options.output}`],
++      elapsedMs: Date.now() - started,
++    };
++    const outputDir = dirname(options.output);
++    await mkdir(outputDir, { recursive: true });
++    const rawArtifacts = await writeRawArtifacts({ scenarios: [], issues: allIssues, outputDir,
++      baseName: basename(options.output, extname(options.output)) });
++    const manifest = { schema: "gondola.typed-composition.raw/v1", files: shards,
++      mismatchArtifact: rawArtifacts.mismatchArtifact };
++    await writeFile(rawArtifacts.manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
++    report.mismatchArtifact = rawArtifacts.mismatchArtifact;
++    report.rawManifest = rawArtifacts.manifestPath;
++    const encoded = `${JSON.stringify(report, null, 2)}\n`;
++    await writeFile(options.output, encoded);
++    const digest = sha256(encoded);
++    console.log(JSON.stringify({ status: report.status, scripts: report.scripts, actions: report.actions,
++      nativeExecutions: report.nativeExecutions, nativeFrames: report.nativeFrames,
++      actorNativeFrameComparisons: report.actorNativeFrameComparisons,
++      mutationControls: Object.fromEntries(Object.entries(controls).map(([key, value]) => [key, value.status])),
++      mismatches: report.mismatchCount, report: options.output, sha256: digest }, null, 2));
++    if (report.status !== "matched") process.exitCode = 1;
++  } finally {
++    if (browser) await browser.close();
++    await new Promise((resolvePromise) => server.close(resolvePromise));
++  }
++}
++
++function browserOutputVersion(summaries) {
++  const first = summaries[0];
++  return { react: first?.versions?.react ?? null, reactDOM: first?.versions?.reactDOM ?? null };
++}
++
++if (import.meta.url === `file://${process.argv[1]}`) {
++  main().catch((error) => {
++    process.stderr.write(`${error?.stack ?? error}\n`);
++    process.exitCode = 1;
++  });
++}
+diff --git a/typed-composition/check.test.mjs b/typed-composition/check.test.mjs
+new file mode 100644
+index 0000000..acfce42
+--- /dev/null
++++ b/typed-composition/check.test.mjs
+@@ -0,0 +1,139 @@
++import assert from "node:assert/strict";
++import { mkdtemp, readFile, rm } from "node:fs/promises";
++import { tmpdir } from "node:os";
++import { join } from "node:path";
++import test from "node:test";
++import { mutateInboxOrder, nativeInputFor, validateActor, validateRetainedCallbackFence, validateScenario, writeRawArtifacts } from "./check.mjs";
++
++function typedSnapshot({ readOnly = false, inbox = [] } = {}) {
++  const disabled = readOnly;
++  const attr = (Name, Value = "", Flag = false) => ({ Name, Value, Flag, Style: null });
++  const text = (Text) => ({ Kind: 2, Tag: "", Key: "", Attrs: null, On: null, Kids: null, Text });
++  const button = (Key, className, title, isDisabled) => ({ Kind: 1, Tag: "button", Key,
++    Attrs: [attr("class", className), ...(isDisabled ? [attr("disabled", "", true)] : [])],
++    On: [{ Event: "click", Message: className, Arg: "" }], Kids: [text(title)], Text: "" });
++  return {
++    state: { Rows: [], NextID: 0, NextRequestID: 0, Inputs: { Title: "Locked", ReadOnly: readOnly }, InputRevision: 1, Inbox: inbox },
++    tree: { Kind: 1, Tag: "div", Key: "collection", Attrs: [attr("class", "collection")], On: null,
++      Kids: [button("add", "add", "Add row", disabled), button("reset", "reset", "Reset", disabled),
++        { Kind: 1, Tag: "div", Key: "rows", Attrs: [attr("class", "rows")], On: null, Kids: [], Text: "" },
++        { Kind: 1, Tag: "p", Key: "composition-title", Attrs: null, On: null, Kids: [text("Title: Locked")], Text: "" },
++        { Kind: 1, Tag: "p", Key: "composition-inbox", Attrs: null, On: null,
++          Kids: [text(`Published: ${inbox.length}`)], Text: "" }], Text: "" },
++    bindings: [], messages: [],
++  };
++}
++
++function actor({ readOnly = false, inbox = [], mutated = false } = {}) {
++  const snapshot = typedSnapshot({ readOnly, inbox });
++  const controls = [
++    { tag: "button", key: "add", path: "0", className: "add", label: "", rowLabel: null,
++      text: "Add row", value: null, disabled: mutated ? false : readOnly,
++      disabledAttribute: mutated ? false : readOnly, type: null },
++    { tag: "button", key: "reset", path: "1", className: "reset", label: "", rowLabel: null,
++      text: "Reset", value: null, disabled: readOnly, disabledAttribute: readOnly, type: null },
++  ];
++  return {
++    managerTree: [{ SessionID: 1, ParentID: 0, Depth: 1 }],
++    managerList: [1], snapshotAllIDs: [1], activeIDs: [1], changes: [], managerCalls: [], managerEffects: [],
++    effectsPending: [], transportCalls: [], transportClock: 0, lifecycle: [{ sessionID: 1, parentID: 0, depth: 1,
++      backend: "dom", lifecycle: "active" }], actionResult: null, disposedIDs: [], settledError: null,
++    sessions: [{ sessionID: 1, parentID: 0, depth: 1, generation: 1, backend: "dom",
++      managerSnapshot: snapshot, snapshot: structuredClone(snapshot), hostSnapshot: structuredClone(snapshot),
++      audit: [], managerAudit: [], domSnapshot: { html: "<div></div>", disabled: readOnly ? ["0", "1"] : ["1"] },
++      actualDOM: "<div></div>", actualDOMMatchesSnapshot: true, shellHTML: "", focus: null, focusWitness: null,
++      lifecycle: "active", errors: [], inputs: [], controls, elementCountMatches: true,
++      elementCounts: { tree: 8, dom: 8 }, disabledViolations: [],
++      reportedDisabled: readOnly ? ["0", "1"] : ["1"], actualDisabled: readOnly ? ["0", "1"] : ["1"],
++      reportedDisabledMatches: true, visibleTitle: "Title: Locked", expectedTitle: "Title: Locked",
++      visibleInbox: `Published: ${inbox.length}`, expectedInbox: `Published: ${inbox.length}`,
++      transportLog: [], rowOrder: [], inputOrder: [], inputValues: [],
++      shellOwnership: { shellChildren: ["session-tree-view", "session-tree-children"], viewContained: true,
++        childrenContained: true, physicalParent: "root-slot" } }],
++  };
++}
++
++test("native input keeps the closed public action envelope", () => {
++  const script = { name: "wire", actions: [
++    { method: "create", args: [] },
++    { method: "setChildInputs", args: [1, 2, { Title: "x", ReadOnly: true }] },
++  ] };
++  assert.deepEqual(nativeInputFor(script), { actions: script.actions });
++});
++
++test("actor validator independently rejects an enabled read-only DOM control", () => {
++  const issues = validateActor(actor({ readOnly: true, mutated: true }), { script: "readonly" });
++  assert.ok(issues.some(({ field }) => field === "actor.dom.control-disabled-policy"));
++  assert.ok(issues.some(({ field }) => field === "actor.dom.readonly-control-enabled"));
++});
++
++test("inbox ordering mutation is caught from the typed receipt sequence", () => {
++  const inbox = [
++    { Sequence: 1, ParentID: 1, ChildID: 2, RowID: 1, Saved: "a", Saves: 1, InputRevision: 1 },
++    { Sequence: 2, ParentID: 1, ChildID: 2, RowID: 1, Saved: "b", Saves: 2, InputRevision: 1 },
++  ];
++  const candidate = actor({ inbox });
++  const source = { name: "ordered", actions: [], browserFrames: [{ index: 0, candidate: { ...candidate,
++    managerTree: [{ SessionID: 1, ParentID: 0, Depth: 1 }, { SessionID: 2, ParentID: 1, Depth: 2 }],
++    managerList: [1, 2], snapshotAllIDs: [1], activeIDs: [1] } }] };
++  // The helper only needs a live parent record with two inbox messages.
++  source.browserFrames[0].candidate.sessions[0].managerSnapshot.state.Inbox = inbox;
++  source.browserFrames[0].candidate.sessions[0].snapshot.state.Inbox = structuredClone(inbox);
++  source.browserFrames[0].candidate.sessions[0].hostSnapshot.state.Inbox = structuredClone(inbox);
++  const mutated = mutateInboxOrder(source);
++  assert.equal(mutated.mutation.status, "reordered");
++  const issues = validateActor(mutated.scenario.browserFrames[0].candidate, { script: "ordered" });
++  assert.ok(issues.some(({ field }) => field.endsWith("inbox.sequence-order")));
++});
++
++test("scenario validation fails closed when native frames are absent", () => {
++  const issues = validateScenario({ name: "missing-native", actions: [{ method: "create", args: [] }],
++    nativeFrames: [], modelFrames: [], browserFrames: [] });
++  assert.ok(issues.some(({ field }) => field === "native.frames.missing"));
++  assert.ok(issues.some(({ field }) => field === "native.empty-frames"));
++});
++
++test("retained callback proof requires no Go completion and unchanged recreated snapshots", () => {
++  const manager = {
++    tree: [{ SessionID: 3, ParentID: 0, Depth: 1 }, { SessionID: 4, ParentID: 3, Depth: 2 }],
++    sessions: [{ id: 3, snapshot: { state: { Inbox: [] }, messages: [] } },
++      { id: 4, snapshot: { state: { Inbox: [] }, messages: [] } }],
++    changes: [],
++  };
++  const side = {
++    actualGoManager: true,
++    old: { rootID: 1, childID: 2, pendingID: 1, pendingSnapshot: { state: { Rows: [{ PendingID: 1 }] } },
++      savedCallbackRetained: true, transportStateBeforeDelivery: "cancelled" },
++    disposedIDs: [2, 1],
++    freshIDs: [3, 4],
++    before: { manager, dom: [], changes: [] },
++    after: { manager, dom: [], changes: [] },
++    delivery: { previousState: "cancelled" },
++    goCompleteCalls: 0,
++    completeCalls: [],
++    transportEvents: [{ kind: "delivery", ID: 1 }],
++  };
++  const probe = { candidate: side, reference: { ...side, actualGoManager: false } };
++  assert.equal(validateRetainedCallbackFence(probe).status, "fenced");
++  const mutated = structuredClone(probe);
++  mutated.candidate.goCompleteCalls = 1;
++  mutated.candidate.completeCalls = [{ method: "complete" }];
++  assert.equal(validateRetainedCallbackFence(mutated).status, "failed");
++});
++
++test("raw mismatch artifacts preserve full, untruncated values and hashes", async () => {
++  const directory = await mkdtemp(join(tmpdir(), "typed-composition-check-"));
++  try {
++    const longValue = "x".repeat(5000);
++    const result = await writeRawArtifacts({ scenarios: [{ name: "raw", actions: [{ method: "create", args: [] }],
++      observation: longValue }], issues: [{ field: "large", actual: longValue }], outputDir: directory, baseName: "proof" });
++    const shard = await readFile(result.files[0].path, "utf8");
++    const mismatches = await readFile(result.mismatchArtifact.path, "utf8");
++    assert.ok(shard.includes(longValue));
++    assert.ok(mismatches.includes(longValue));
++    assert.equal(result.files[0].sha256.length, 64);
++    assert.equal(result.mismatchArtifact.sha256.length, 64);
++  } finally {
++    await rm(directory, { recursive: true, force: true });
++  }
++});

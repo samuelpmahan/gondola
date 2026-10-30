@@ -1,0 +1,80 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-composed-oracle-closure"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "O-PINS",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "evidence/inherited-pins.json; assigned evidence report/receipt",
+      "summary": "final predecessor pin and historical restoration audit"
+    },
+    {
+      "id": "O-CHECK",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "typed-composition/check.mjs only",
+      "summary": "fail-closed disabled/focus/Go-command/transport ordering validation"
+    },
+    {
+      "id": "O-PROBE",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "assigned offline probe/results/report/receipt only",
+      "summary": "independent formerly missed mutation controls on repaired oracle"
+    },
+    {
+      "id": "O-TEST",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "typed-composition/check.test.mjs and bounded testdata only",
+      "summary": "causal positive and negative checker tests"
+    },
+    {
+      "id": "O-FIXTURE",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "typed-composition/fixture.mjs only",
+      "summary": "actual disabled-event and global invocation/focus observations"
+    },
+    {
+      "id": "O-BROWSER",
+      "kind": "extract",
+      "repair_of": "T5",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "assigned browser probe/results/report/receipt only",
+      "summary": "independent actual disabled suppression and renderer focus proof"
+    }
+  ]
+}

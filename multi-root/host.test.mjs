@@ -182,6 +182,26 @@ function rendererFor(records, root, name = "dom") {
   return record;
 }
 
+test("refresh updates one root in place and preserves its observed focus state", async () => {
+  const { host, manager, renderRecords } = composition();
+  const root = fakeRoot();
+  const { sessionID } = host.mount(root);
+  const renderer = rendererFor(renderRecords, root);
+  renderer.focus = { key: "draft-input", selectionStart: 2, selectionEnd: 4, selectionDirection: "backward" };
+  manager.sessions.get(sessionID).Saved = "changed outside the host";
+
+  const refreshed = host.refresh(root);
+  assert.equal(refreshed.state.Saved, "changed outside the host");
+  assert.equal(renderer.updates.length, 1);
+  assert.equal(host.snapshotAll()[0].snapshot.state.Saved, "changed outside the host");
+  assert.deepEqual(host.snapshotAll()[0].focus, renderer.focus);
+  assert.equal(host.snapshotAll()[0].lifecycle, "active");
+
+  await host.settled(root);
+  host.unmount(root);
+  assert.throws(() => host.refresh(root), /root is not mounted/);
+});
+
 test("roots with the same local request ID use independent transports and sessions", async () => {
   const { host, manager, renderRecords, transports } = composition();
   const rootA = fakeRoot();

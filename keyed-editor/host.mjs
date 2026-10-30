@@ -159,6 +159,30 @@ export function createKeyedHost(root, runtime, renderers, transport, initialBack
     return clone(cachedSnapshot);
   }
 
+  function refresh() {
+    assertUsable();
+    if (typeof runtime.snapshot !== "function") {
+      throw fail("runtime must expose snapshot() to refresh a mounted renderer");
+    }
+
+    let next;
+    try {
+      next = clone(validateSnapshot(runtime.snapshot()));
+    } catch (error) {
+      throw fail("runtime.snapshot() returned an invalid snapshot", error);
+    }
+    cachedSnapshot = next;
+    try {
+      // Keyed renderers retain the focused node and its selection while
+      // applying an in-place update; refresh must not remount the renderer.
+      selectedRenderer.update(clone(next));
+    } catch (error) {
+      failLifecycle(`renderer ${JSON.stringify(selectedName)} update failed after runtime refresh`, error);
+    }
+    enqueue(drainEffects);
+    return clone(next);
+  }
+
   function audit() {
     assertUsable();
     const result = runtime.audit();
@@ -441,6 +465,7 @@ export function createKeyedHost(root, runtime, renderers, transport, initialBack
 
   return {
     snapshot,
+    refresh,
     audit,
     domSnapshot,
     focusState,
