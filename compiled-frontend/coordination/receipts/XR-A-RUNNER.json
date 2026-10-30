@@ -1,0 +1,38 @@
+{
+  "job_id": "XR-A-RUNNER",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Accept N4's A-RUNNER as an honest syntax-only audit with outcome insufficient_evidence. No current full runner, build, browser, or demo success is claimed. Root updated run.mjs after N4's source snapshot; refresh source hashes and syntax evidence after source freeze. Current runner verifies every BuildResult-listed output hash/byte length before and after replay but does not assert a fixed 209-output count.",
+  "scope": "Read-only audit-of-audit of A-RUNNER evidence and current runner flow; no production edits and no runner execution.",
+  "verified": {
+    "default_route": "run-compiled-frontend.sh -> inherited run-typed-composition.sh Go 1.24 baseline -> GOTOOLCHAIN=go1.27.3 compiled frontend runner",
+    "compiled_only": "Skips inherited full baseline but still runs explicit root Go 1.24 package test/race/vet checks and nested compiled tests/race/vet; assumes root React packages are installed.",
+    "root_go24_packages": [
+      "./compilercontract",
+      "./fixtures/compiled/...",
+      "./cmd/compiled-native"
+    ],
+    "source_pins": "Current run.mjs sourcePins includes counter/gobi/reactmap/compilercontract/fixtures/native source, package manifests and locks, compiled frontend modules, and the generated React map.",
+    "build_result_output_checks": "Current verifyOutputs validates a nonempty inventory, relative unique contained paths, and every listed file's SHA-256/byte length before and after browser/demo replay.",
+    "fixed_output_count": "No exact 209-entry assertion. Inventory is generic and no fresh BuildResult was produced in this audit.",
+    "execution_evidence": "compiled-frontend/artifacts absent; no current CLI, conformance, browser, demo, or full runner result to accept."
+  },
+  "follow_up": [
+    "Refresh source-hashes.sha256 and rerun syntax checks after root freezes the updated runner source.",
+    "Evaluate a separate actual-run receipt only after the React GoSlice backing-symbol and runtime complete-fence repairs are complete."
+  ],
+  "hashes": {
+    "n4_source_hash_manifest": "e2adfd8641ee249bc727a6c6e9bd48aec28815b162984cd86fa26d17918472db",
+    "n4_syntax_check_record": "185a250f75454d3628a5a2bc9f25ad097902d847537788c026211bcd6c1779d2",
+    "n4_runner_mjs_recorded": "6c6f4dd367f6b797114dd2cd9f26ec9b9e90df14bfbedcbc216d5b6c501ce577",
+    "current_runner_mjs": "b936b3e434cba643b7e0bcd2ad2e27e54c14205dad8c7ce6410ae04c898bbb93",
+    "startup_running_receipt": "current source writes the running receipt before the first synchronous command",
+    "current_manifest_other_27_entries": "match",
+    "current_runner_artifacts": "absent"
+  },
+  "limits": [
+    "No runner or test command was executed during this review.",
+    "Acceptance is limited to A-RUNNER's accurate disclosure of syntax-only evidence and insufficient_evidence outcome.",
+    "No claim is made about actual output count, digest values, conformance parity, browser behavior, or demo success."
+  ]
+}

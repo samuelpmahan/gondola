@@ -1,0 +1,66 @@
+{
+  "job_id": "XR-A-PRESERVE",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "The N1 preservation claims match bounded independent checks: all 24 root pins pass, all 1,228 baseline tracked paths match commit 42df688, root go.mod is unchanged and root go.sum absent, and the retained Go 1.24/Node 22/Chromium 153 run reports 63 scripts, 2,463 actions, 4,926 actor/native comparisons, and zero mismatches. The report correctly limits this evidence to a historical pre-codec-repair run.",
+  "evidence": {
+    "report_sha256": "7c80f01e46ba11bd742749feb0212e9cf197e36287204311578eec83cf8a1a28",
+    "scope": [
+      "compiled-frontend/coordination/reviews/xr_a_preserve/**",
+      "compiled-frontend/coordination/reports/XR-A-PRESERVE.md",
+      "compiled-frontend/coordination/receipts/XR-A-PRESERVE.json"
+    ],
+    "baseline": {
+      "head": "42df6883337605d901a23e9fed874768c7ce1824",
+      "tracked_paths": 1228,
+      "worktree_diff_exit_code": 0,
+      "index_diff_exit_code": 0,
+      "baseline_go_mod_sha256": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa",
+      "current_go_mod_sha256": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa",
+      "root_go_sum_worktree_present": false,
+      "root_go_sum_baseline_entry_present": false
+    },
+    "pins": {
+      "command": "sha256sum -c SHA256SUMS",
+      "exit_code": 0,
+      "verified_count": 24,
+      "sha256sums_sha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "raw_output": "coordination/reviews/xr_a_preserve/sha-check.log",
+      "raw_output_sha256": "e43918e16a1399d0d91ec6b9b428bb8a13679f0f880b97960aab21d419d99e0a"
+    },
+    "inherited_execution": {
+      "manifest_sha256": "795b36bfd55cbf3e55ec523676efd99e42fbe38009a6054c51aa47edc549e671",
+      "final_attempt_exit_code": 0,
+      "full_log_sha256": "8041da184cf0b6255c5dc0fc2801a659f7fd0dbbc99abf6635bbef98e365113f",
+      "final_report_sha256": "7f3bfc90929aa38d481f791d2dc45e7b8488b4a8d8f32afd5d9c044a02923387",
+      "final_report_bytes": 259933,
+      "toolchain": {
+        "go": "go1.24.0 linux/amd64",
+        "node": "v22.23.4",
+        "chromium": "153.0.8010.0"
+      },
+      "result": {
+        "status": "matched",
+        "scripts": 63,
+        "actions": 2463,
+        "native_executions": 63,
+        "native_frames": 2463,
+        "actor_native_frame_comparisons": 4926,
+        "mismatches": 0
+      },
+      "source_gate_limit": "The inherited root Go test phase preceded the compilercontract codec repair; it does not establish current Go 1.24 test/race/vet success for repaired/new compiled-frontend packages."
+    },
+    "review_artifacts": {
+      "verification_json": "coordination/reviews/xr_a_preserve/verification.json",
+      "verification_json_sha256": "a8e558cad63aabd013c89d0569ac3b31a94816203f3c5f31582a55c8d9f2464c",
+      "n1_report_sha256": "e4521a57a69c3484504d2578fa80a62cb3c6d22ac93c916a37cb73015b14f1d0",
+      "n1_receipt_sha256": "f94baac38574b9d1424c3d9c4fafd65bb224ccf2edd43044b41d1b9afff67850"
+    },
+    "full_runner_rerun": false,
+    "limits": [
+      "The accepted result covers preserved provenance and output integrity, not a fresh execution.",
+      "The 24 root SHA256SUMS pins are distinct from the 49 source pins in the typed-composition report.",
+      "No claim is made that the inherited run validated the later codec repair or new compiled-frontend gates."
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "incident": "dependency command executed from worktree root instead of nested module; root go.mod was immediately restored from HEAD before mutated bytes were captured",
+  "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go get github.com/s4wave/goscript@d8f58a091947cff26a9171be7bd130892b0afad3",
+  "actual_working_directory": "/workspace/scratch/39a56936f173/gondola-compiled",
+  "actual_output_log": "compiled-frontend/toolchain/incident/root-go-get-command.log",
+  "mutated_root_go_mod_bytes": "not captured before restoration; not reconstructed",
+  "root_go_mod_restored_exact_head": true,
+  "root_go_mod_sha256_after_restore": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa",
+  "root_go_sum_was_absent_at_head": true,
+  "actual_root_go_sum_after_mistake": {
+    "preserved_as": "compiled-frontend/toolchain/incident/root-go.sum.after-mistake",
+    "bytes": 171,
+    "sha256": "c2a750cddc3ea01aa6e699bfb00f676f57c31cf428c898ab5d19caae8cf8c80e",
+    "removed_from_root_after_preservation": true
+  },
+  "nested_module_resolution_rerun_from_nested_cwd": true,
+  "note": "No other root files were captured as modified by this command. Continue requiring an explicit nested cwd assertion before any dependency mutation."
+}

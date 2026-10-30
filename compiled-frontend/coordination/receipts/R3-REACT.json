@@ -1,0 +1,82 @@
+{
+  "job_id": "R3-REACT",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "The React renderer now accepts the pinned GoScript spareZero descriptor shape on GoSlice backing arrays, tolerates only holes in unused capacity, and snapshots only the visible window into trusted dense storage. Unit, emitter, and direct compiled-module lowering checks pass; N6 browser conformance remains pending.",
+  "source_scope": [
+    "frontend/react/renderer.mjs",
+    "frontend/react/renderer.test.mjs",
+    "coordination/reports/R3-REACT.md",
+    "coordination/receipts/R3-REACT.json"
+  ],
+  "evidence": {
+    "report_sha256": "2f254bf3e9946bf921f2cfcff06663f19e39c38b2edf210da56d799fb85c74ab",
+    "preserved_red": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "result": "exit 1; 18 passed, 4 failed before implementation on the marker-window, malformed-marker, visible-hole, and missing-marker sparse-capacity regressions",
+      "log": "frontend/react/r3-red.log",
+      "log_sha256": "cae46e5086c49176972a0e0be82397b53dff459e5db2780a239e9110a7c0a0ee"
+    },
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 22,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "frontend/react/r3-green-1.log",
+        "log_sha256": "c84c1a3431921d76f80baff039b77f0dd391fd147c52165cfd7155db11e0b43d"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 25,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "frontend/react/r3-node22-full.log",
+        "log_sha256": "b7fb4bdaf005e06252ab02bcc50696038b4eca2a2cef24637ae1074857fd6e00"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 -v ./emit",
+        "toolchain": "go1.27.3 linux/amd64",
+        "passed": 4,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "frontend/react/r3-go27-emit.log",
+        "log_sha256": "c410e1c5085fe292045730706603e23eb4222f0236c1a2ffc4d72cfa46a6b50b"
+      }
+    ],
+    "actual_compiled_modules": {
+      "toolchain": "Node v22.23.4",
+      "module_root": "/tmp/gondola-compiled-atomic/apps",
+      "check": "Loaded each actual gobiCompiled module, invoked its AppIR Init and View roles, and passed each result to lowerView with adapter callbacks. For list, invoked the emitted Update role five times with {Name:'add',Arg:''}, lowered each following View, and observed row counts 1 through 5.",
+      "results": {
+        "counter": {"initial_view_lowered": true, "module_sha256": "e7fd6d515cb1c90a28d90db51b85ee4d06986ed5999ee2b7d15b64fba2acfeda"},
+        "form": {"initial_view_lowered": true, "module_sha256": "a3bbf244004e10ae1b82a895dc717247731fbddad8d57dd1fbffc36c91ac6a4a"},
+        "list": {"initial_view_lowered": true, "five_add_views_lowered": true, "row_counts": [1, 2, 3, 4, 5], "module_sha256": "54b09d871576d33237c0bda34da1388b9ff9fa393ddafd4f26a71ca55cd75fd6"},
+        "effect": {"initial_view_lowered": true, "module_sha256": "7736585c8dea675a146861a840dbc7fec6afd3f0e4e70f2ea677dfbf757e038a"}
+      }
+    },
+    "changes": [
+      "GoSlice wrappers continue to require the exact five own data fields and own target descriptor value undefined.",
+      "GoSlice backing allows at most one non-global symbol named goscript.spareZero with an enumerable/writable/configurable own data descriptor whose value is a function; the function is never invoked and symbol identity is not authenticated.",
+      "Backing array own keys and descriptors are inspected; visible indexes are copied into a fresh dense array; holes are permitted only in unused capacity and only with the observed marker.",
+      "Ordinary arrays remain dense and reject all own symbols and extra properties. Proxy ordinary property get bypasses remain covered by descriptor-only tests."
+    ],
+    "sha256": {
+      "frontend/react/renderer.mjs": "12e50f96ec61975551d4f63242a512912aa986727170186ccb83ad66a9902da0",
+      "frontend/react/renderer.test.mjs": "0d2c1483c19ff95cc320dab64aeb2f4ec795e0b14e4128b45fe9aa0dafc2e99f",
+      "frontend/react/r3-red.log": "cae46e5086c49176972a0e0be82397b53dff459e5db2780a239e9110a7c0a0ee",
+      "frontend/react/r3-green-1.log": "c84c1a3431921d76f80baff039b77f0dd391fd147c52165cfd7155db11e0b43d",
+      "frontend/react/r3-node22-full.log": "b7fb4bdaf005e06252ab02bcc50696038b4eca2a2cef24637ae1074857fd6e00",
+      "frontend/react/r3-go27-emit.log": "c410e1c5085fe292045730706603e23eb4222f0236c1a2ffc4d72cfa46a6b50b"
+    },
+    "limits": [
+      "The direct N1 module check exercises actual compiled GoScript views and five real list additions, but does not mount into a browser.",
+      "N6 owns the fresh-build four-app browser conformance run, including physical DOM and post-unmount checks; it remains pending at this report checkpoint.",
+      "No React map, runtime, GoScript module, application, or codec source was edited in this lane."
+    ]
+  },
+  "reported_stage": "renderer_fixed_pending_browser_conformance"
+}

@@ -1,0 +1,83 @@
+{
+  "job_id": "XR-R-CONFORMANCE",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independent audit accepts N6's frozen R-CONFORMANCE evidence for four pinned apps and five deterministic profiles: all 43 ticks and 89 mutation controls matched, the preserved raw checksums passed, and all 98 direct/browser-base source pins per profile matched current files.",
+  "review_scope": [
+    "compiled-frontend/conformance/raw/r-conformance-final/**",
+    "compiled-frontend/coordination/reports/R-CONFORMANCE.md",
+    "compiled-frontend/coordination/receipts/R-CONFORMANCE.json"
+  ],
+  "evidence": {
+    "offline_checkers": {
+      "command_template": "/tmp/gondola-node22/node_modules/node/bin/node conformance/check.mjs --app-ir artifacts/compiled/apps/<app>/app-ir.json --fixture <fixture.json> --native conformance/raw/r-conformance-final/<profile>.native.json --direct conformance/raw/r-conformance-final/<profile>.direct.json --browser conformance/raw/r-conformance-final/<profile>.browser.json --output coordination/reviews/xr_r_conformance/<profile>.check.json",
+      "working_directory": "compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "profiles": 5,
+      "matched": 5,
+      "byte_identical_to_n6_check_reports": 5,
+      "ticks": 43,
+      "mutation_controls": 89,
+      "review_summary": "compiled-frontend/coordination/reviews/xr_r_conformance/checker-review.json",
+      "review_summary_sha256": "7f953a9a73906615230503ba950b01d5a381aa1c658972720004f21049e19c0e"
+    },
+    "raw_checksums": {
+      "command": "sha256sum -c conformance/raw/r-conformance-final/SHA256SUMS",
+      "working_directory": "compiled-frontend",
+      "files_verified": 73,
+      "exit_code": 0,
+      "raw_manifest_sha256": "d866f4174fbb7ae69ba697b736036e1cf878d827341fb16ea7d0cf6a3f25832d",
+      "output": "compiled-frontend/coordination/reviews/xr_r_conformance/raw-check.log",
+      "output_sha256": "75df964a71b52a44535b14b71362cdfcab7e099bd4d4836fb5ac735615b01cdb"
+    },
+    "historical_failure_checksums": {
+      "command": "sha256sum -c conformance/raw/n6-source-900dc38-r2runtime/SHA256SUMS",
+      "working_directory": "compiled-frontend",
+      "files_verified": 57,
+      "exit_code": 0,
+      "historical_failure_preserved": true
+    },
+    "provenance": {
+      "direct_inputs_per_profile": 98,
+      "browser_base_inputs_per_profile": 98,
+      "browser_inputs_including_generated_bundle": 99,
+      "direct_equals_browser_base": true,
+      "browser_equals_base_after_bundle_removal": true,
+      "current_local_pins_verified": 490,
+      "review_summary": "compiled-frontend/coordination/reviews/xr_r_conformance/provenance-review.json",
+      "review_summary_sha256": "3b71acdb9887d59eb1aaa02ad4f6a3cf7d24f5ad3f90e7a5d4b3495946c714480"
+    },
+    "n6_frozen_run": {
+      "receipt_sha256": "f8fb6f691c0a603c467cab27f666cb79e750514954d9fe8e40da224f2174fccc",
+      "root_execution_receipt_sha256": "e4f2d958d76f5ed03079e00914d705b0514f7de29023231206c0b00869c8c7b5",
+      "buildmanifest_sha256": "ab7f08e05f210f48f63c4bc7319383a6f2e08a3c89caf5c5a660fc91b64a7ae4",
+      "raw_manifest_sha256": "d866f4174fbb7ae69ba697b736036e1cf878d827341fb16ea7d0cf6a3f25832d"
+    },
+    "source_sha256": {
+      "compilercontract/js_encoder.go": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+      "compiled-frontend/frontend/react/renderer.mjs": "12e50f96ec61975551d4f63242a512912aa986727170186ccb83ad66a9902da0",
+      "compiled-frontend/frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+      "compiled-frontend/conformance/browser.mjs": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea",
+      "compiled-frontend/conformance/direct-js.mjs": "94e0da9f2d177d1ab6840bddfed0774358db36a3abe368b79b044d89167308c0",
+      "compiled-frontend/conformance/provenance.mjs": "fbc3045cf31f02cedf7abf1341bcfe0b6f951a57dfa3d4f49d8397d25421127e",
+      "compiled-frontend/conformance/fixtures/list-growth.json": "1159fea3b6937b325d66f6fbc201f31b3e6edd22bb1426723bd92e6d2d76a0a0"
+    },
+    "trace_findings": {
+      "four_pinned_apps": ["counter", "form", "list", "effect"],
+      "five_deterministic_profiles": ["counter", "form", "list", "effect", "list-growth"],
+      "focus_selection": "start 0, end 2, direction backward before/immediate/settled; same keyed node after reorder",
+      "detached_callback": "one stale observation from removed node; no message and no dispatch increment",
+      "disabled_clicks": "suppressed without callback/dispatch changes across all profiles",
+      "form_literal": "requested must not replace literal; target and observed button value empty; GoMessage Name=literal, Arg=target.value",
+      "effect": "pending view and disabled Request button before correlated dispatch-0002 completion; duplicate rejected with no tick",
+      "wasm": "zero API attempts and zero wasm requests across all profiles",
+      "unmount": "empty physical root and renderer snapshot across all profiles",
+      "typed_state": "Rows nil initially and non-nil empty after reset; float64 negative zero bits 8000000000000000; safe integer 9007199254740991 preserved"
+    }
+  },
+  "limits": [
+    "This reviewer independently reran the offline checker and provenance/hash validation; the full browser run and root composed runner were read from N6/root preserved receipts and raw evidence, not rerun.",
+    "A retained callback after runtime unmount remains not-tested; the verified stale callback belongs to a detached DOM node before runtime unmount.",
+    "Acceptance is limited to the pinned four-app compiled frontend and these five deterministic profiles; no general Go compatibility claim is made."
+  ]
+}

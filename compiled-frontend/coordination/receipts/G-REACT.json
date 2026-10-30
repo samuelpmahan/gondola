@@ -1,0 +1,16 @@
+{
+  "job_id": "G-REACT",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Implemented the validated AppIR React metadata emitter, configured gobi.Backend adapter, role binder, and generic keyed React renderer. Focused Go tests passed 4/4 and Node tests passed 14/14. Actual generated-app/browser integration remains unverified by this lane.",
+  "evidence": {
+    "go_command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./emit",
+    "go_passed": 4,
+    "go_failed": 0,
+    "node_command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.test.mjs compiled-frontend/frontend/react/bindings.test.mjs",
+    "node_passed": 14,
+    "node_failed": 0,
+    "scope": "compiled-frontend/emit/** and compiled-frontend/frontend/react/**",
+    "limits": "Binder tests use synthetic compiled symbols. No generated GoScript app or mounted browser run was performed by this lane; ABI shape support relies on the separately retained N1 pinned compiler probe."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-CONFORMANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "repair_of": "G-CONFORMANCE",
+      "owner": "conformance only; named report/receipt",
+      "summary": "Preserve failed ABI captures, add independent 5-row growth/reset fixture, execute final four-app/five-script native/direct/mounted comparison after renderer/codec source gates"
+    }
+  ]
+}

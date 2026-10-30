@@ -1,0 +1,76 @@
+{
+  "job_id": "XR-A-ABI",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "The bounded pinned-GoScript ABI observations are supported by the current hashed artifacts. Amend the old A-ABI report’s stale 22-entry-manifest and missing-analyzer notes: N1 refreshed the complete 28-entry manifest, and current analyzer source has numeric-profile checks whose soundness remains for the separate A-NUMERIC audit.",
+  "evidence": {
+    "commands": [
+      {
+        "command": "sha256sum -c toolchain/probe_counter/results/SHA256SUMS",
+        "result": "exit 0; all 28 current manifest entries verified"
+      },
+      {
+        "command": "python3 coordination/reviews/xr_a_abi/check_results.py",
+        "result": "28/28 current file hashes match; all 28 runner checksum inputs are listed; native/Node projection matches; Go integer parity mismatches are exactly Int64 and Uint64; raw/forwarding Update, nil/empty, negative-zero, and sampled GoSlice checks match"
+      },
+      {
+        "command": "rg -n 'WASM|WebAssembly|wasm' toolchain/probe_counter toolchain/probe_counter/results/emitted || true",
+        "result": "no matches in the focused probe source or emitted output tree; probe output is TypeScript executed by Node"
+      },
+      {
+        "command": "sha256sum /root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2/compiler/semantic-model-types.go /root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2/compiler/result.go /root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2/compiler/compiler.go",
+        "result": "semantic-model-types.go=67e9bb74f5375d9ab1ab10711c40835b2279b4df48c7ad406fcd7aa02dd284cd; result.go=47446c8d1cffff4eec97686dbd4d0d13d2f337c6caa863fd6cd6931a2d428b3b; compiler.go=fab09d4597b6289f5a53bc564b8cca961254cc2cec0f1f6d81fcfe41f58fd557"
+      }
+    ],
+    "probe_reproduction": {
+      "command": "./toolchain/probe_counter/run.sh",
+      "working_directory": "compiled-frontend/",
+      "result": "not rerun; review instruction was to avoid rerunning while N1 refreshed the artifacts"
+    },
+    "toolchain": {
+      "goscript": "github.com/s4wave/goscript v0.6.2",
+      "commit": "d8f58a091947cff26a9171be7bd130892b0afad3",
+      "go": "go1.27.3",
+      "node": "v22.23.4",
+      "esbuild": "0.28.2"
+    },
+    "observations": {
+      "compiler_api": "NewCompiler and CompilePackages are the used public seam. CompilationResult contains package lists, diagnostics, and optional async report. SemanticModel is publicly named and SemanticModelOwner.Build returns it, but its semantic maps/records are private and no exported semantic accessors expose typed symbols, types, or calls; no usable typed IR API was found.",
+      "typescript_no_wasm": "The exact probe compiles to emitted .ts files and bundles/runs them with Node and esbuild. No WASM path/output was found within this probe scope.",
+      "clone_and_copy_on_write": "Raw emitted counter.Update mutates and returns its state argument. The emitted adapter calls counter.Update((state).clone(), message), leaving input Count=0 and returned Count=1. Nested structs/fixed arrays copy; slice element writes share backing; append reallocation was exercised for []Inner and []float64 only.",
+      "nil_float_and_slices": "Node/native projections match for the recorded counter, semantic fixture, formatting, and Node.Set cases. Nil and empty non-nil slices differ for float64, int, uint64, string, bool, and struct slices. Negative zero remains IEEE-754 bits 8000000000000000 and the tested FormatFloat calls return -0.",
+      "overflow_negative_evidence": "At sampled width maxima, narrower integer types wrap. Emitted int64/uint64 increment results do not wrap as Go does; these are the two raw parity mismatches. Number-backed int/uint reach 9007199254740992, beyond the v1 safe-integer profile. This review does not decide whether analyzer checks reject such operations."
+    },
+    "sha256": {
+      "current_probe_manifest": "e836493ee8811f285ade00af72df5c949c4ae3636e9a76527b2b616753db7d00",
+      "historical_pre_refresh_manifest": "1df0acd14c811b88de67072bdcf6c2d97c29e25348a1fffa4bc0b562e5f7c3b4",
+      "manifest_history": "590e784208788dc976a1d05ce78a6dc487bd82a0f8209ec1f0e22a0ea07e15f6",
+      "semantic_abi": "123a3d0e75b06409572906107924f3389e3d63149486bd72cde61b5f7d8c4519",
+      "probe_runner": "caa30363dc009ebcf2af2826fcc755d3238e2a0da7073748bcd62657ea46528c",
+      "probe_counter_source": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+      "probe_adapter_source": "838c6bf8ef202ffe4490f43f298da4ce8288b8c70e7abd97eadba96e477250cb",
+      "probe_semantics_source": "d4f2060192054a781d4a5f32073bd94b836dffd6d881ee28dda45d8e365a2181",
+      "native_oracle_source": "21942abc5199e7ebd48dca7f34a16a2362e05f88b8467fe2ffed414a6e6a0df2",
+      "node_driver_source": "56d92852629d298d356774a2033e7ffd16b7a3009cdf3c4691c10b4b0b3e0dde",
+      "module_origin": "31d90367c83521c9ecb90e868ebc0f8028dfad7919443543497f1f19d83c165a",
+      "native_result": "3b34fc0e46e4122e033a6baf460438a4",
+      "node_result": "2647a555b025318606cb785dfc1c7f09593c7b62f2d5592b0eebc960177d806e",
+      "emitted_counter": "d041fab193cb6abf026ede3a6c8d80464f40d0b50b21c07cbb2c1a85575641bc",
+      "emitted_adapter": "07a1eb85a0eae641dc5e85cb9504dfa12add9b771acba2ed34e216afb52a8e9b",
+      "nested_module_go_mod": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+      "nested_module_go_sum": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b",
+      "analyzer_source_current_not_probe_manifested": "f762268f6a828864f175d9e941ecc0d1019724aeb0683fbb5223fca201c5e39a",
+      "prior_a_abi_report": "6bac2858f69c7e8fe692a144f60a6e3a858a004542c95a6fdc992a0a88ca63e2",
+      "prior_a_abi_receipt": "294d14c900e8abca1ece3db11f0f9b75174c8ab94c47522297859c05058d14c3",
+      "review_checker": "930cfba7aeada5248734d6191241eb72bfc78ec86136ce0c5084163a3db19aba"
+    },
+    "historical_correction": "The previous A-ABI receipt’s 1df0... manifest hash is the preserved SHA256SUMS.pre-refresh, not the current manifest. The refreshed current manifest has 28 entries and covers all runner inputs, including go.mod, go.sum, package.json, package-lock.json, and semantic/ABI.md.",
+    "analyzer_correction": "Current analyze/analyze.go contains ValidateOperations numeric-profile checks. Their correctness was not audited here; A-NUMERIC is the separate adversarial gate.",
+    "limits": [
+      "No compiler or probe rerun; the exact stored command was recorded only.",
+      "The probe does not establish GoSlice-after-append behavior for every ordinary slice element type.",
+      "No claim of complete GoScript compatibility, all overflow detection, four-app build success, React/effects integration, or browser conformance is made.",
+      "The no-WASM finding is restricted to this inspected probe path and output tree."
+    ]
+  }
+}

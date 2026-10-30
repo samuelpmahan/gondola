@@ -1,0 +1,29 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-compiled-frontend"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "A-ABI",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-frontend/coordination/reports/A-ABI.md and receipts/A-ABI.json only; read-only semantic probe audit",
+      "summary": "Independently verify pinned actual compiler seam, value-copy/COW/nil/float evidence and explicit integer overflow limitations; no end-to-end overclaim"
+    }
+  ]
+}

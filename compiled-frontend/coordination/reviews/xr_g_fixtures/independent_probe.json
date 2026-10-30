@@ -1,0 +1,89 @@
+{
+  "app_ir_hash_drift": {
+    "counter": {
+      "current": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+      "prior_receipt": "6435630c8c9a8203a38641148f9541e76f3b4a294ce47f3802b50146d8edf8f6"
+    },
+    "effect": {
+      "current": "0cad7389539e3fd89951901e41f8766dd0fb81012931700febfe7acad71c3b7d",
+      "prior_receipt": "b5ab162ea40e137442531d2e319e029d88d8865849b404f011f400bde89329bf"
+    }
+  },
+  "apps": {
+    "counter": {
+      "app_ir_sha256": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+      "counts": {
+        "actions": 4,
+        "actual_updates": 3,
+        "completions": 0,
+        "requests": 0,
+        "ticks": 5
+      },
+      "retained_n5_trace_sha256": "205adff25e733986a57ef108265223fc9eb925600b36b1c7f64176218e476f5f",
+      "trace_sha256": "205adff25e733986a57ef108265223fc9eb925600b36b1c7f64176218e476f5f"
+    },
+    "effect": {
+      "app_ir_sha256": "0cad7389539e3fd89951901e41f8766dd0fb81012931700febfe7acad71c3b7d",
+      "counts": {
+        "actions": 3,
+        "actual_updates": 3,
+        "completions": 1,
+        "requests": 1,
+        "ticks": 5
+      },
+      "retained_n5_trace_sha256": "38f0e2cfae0741b0ae5103744022a6f1177f368fcd4aaa820e74f8376d852df5",
+      "trace_sha256": "38f0e2cfae0741b0ae5103744022a6f1177f368fcd4aaa820e74f8376d852df5"
+    },
+    "form": {
+      "app_ir_sha256": "4c4ffefca78c86ac3914e0b3f410a4b49354a2b00c05d0b6d1c75e9ed96b19da",
+      "counts": {
+        "actions": 9,
+        "actual_updates": 8,
+        "completions": 0,
+        "requests": 0,
+        "ticks": 10
+      },
+      "retained_n5_trace_sha256": "d7a8a481c2630ce6eb654db7df6fb0141fb056356dcb2fe9fdac39f24103e53b",
+      "trace_sha256": "d7a8a481c2630ce6eb654db7df6fb0141fb056356dcb2fe9fdac39f24103e53b"
+    },
+    "list": {
+      "app_ir_sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+      "counts": {
+        "actions": 10,
+        "actual_updates": 8,
+        "completions": 0,
+        "requests": 0,
+        "ticks": 11
+      },
+      "retained_n5_trace_sha256": "4efce0ba39837e1269e48b7735fb6f6462f20b3d1525e6a3fa48941603a0c408",
+      "trace_sha256": "4efce0ba39837e1269e48b7735fb6f6462f20b3d1525e6a3fa48941603a0c408"
+    }
+  },
+  "build_result_sha256": "f260cdebb939d588fdd213d59038a3f223ad3769c68385df66fff22f9ded76a3",
+  "limits": [
+    "AppIR hashes for counter and effect differ from the hashes in the earlier G-FIXTURES receipt; the prior AppIR blobs are not present for a semantic diff. Current artifacts match toolchain/build-four/result.json, and native traces were rerun from them.",
+    "Native traces have dom:null; this verifies direct-Go behavior, not emitted JavaScript or mounted-browser parity.",
+    "The native fixture contains one request/reply and the trace proves one observed completion; duplicate completion suppression is separately covered by the effect Go test, not by repeated host delivery in this CLI run."
+  ],
+  "source_sha256": {
+    "cmd/compiled-native/replay.go": "39cf8cd7721d5cd4ecf1088a68558a7440bcb3acdc8745ded69f36d8afc5a637",
+    "cmd/compiled-native/replay_test.go": "40c8ffe93840dd777f02281304b364c2de5a7fe36e822920cc43c3dd5e0fccb6",
+    "counter/counter.go": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+    "fixtures/compiled/effect/app.go": "a8f75a4666c5f2a2cdc47ea1ddb8217abb379acde8171ae4935d9de6d6125764",
+    "fixtures/compiled/effect/view.go": "8866de42cd8910a213e01473c6ae782f767d17b2e116dfaead6d797ea557c7f8",
+    "fixtures/compiled/form/app.go": "ce5dd61731a40ba0aad82cfd8fc529bfb114aab19d4658bba2a3a25780c2435a",
+    "fixtures/compiled/form/view.go": "f4a253fd140be7769c3f46a6ab74186dc1bd9cebed651ed7eafde07f1403ea76",
+    "fixtures/compiled/list/app.go": "5b440b875b77db30814cb431f50b15d4df6180211b7acc79af120685e355b0f3",
+    "fixtures/compiled/list/view.go": "4f31b142e2641483844eaf36c37ecd3f3b091a2e73915abab36292c078571327"
+  },
+  "verified_claims": [
+    "current AppIR roles and state fields match generated build result and source declarations",
+    "fresh direct-Go native traces byte-match retained N5 trace files",
+    "source-forward messages match each recorded View binding or literal On handler; disabled actions have no dispatch",
+    "form literal Action.value remains distinct from its literal On.Arg message argument",
+    "list nil Rows and non-nil empty Rows remain distinct in typed trace values",
+    "form trace reaches 9007199254740991 and does not cross the safe-integer boundary",
+    "effect trace records one correlated lookup request and complete reply, with pending state committed first",
+    "effect NegativeZero remains 8000000000000000 at every tick"
+  ]
+}

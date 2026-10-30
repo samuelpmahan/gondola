@@ -1,0 +1,46 @@
+{
+  "job_id": "XR-G-REACT",
+  "worker": "N4",
+  "decision": "amend",
+  "summary": "Generic mapping, data-value/checked bindings, literal handler arguments, configured backend identity, and direct role binding are supported by source and focused tests. Amend for admission of an unobserved missing-target GoSlice shape and cross-lane runtime incompatibilities: action casing and stale-tick snapshots after renderer unmount. Browser E2E remains unverified.",
+  "evidence": {
+    "tests": [
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./emit",
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+        "passed": 14,
+        "failed": 0
+      }
+    ],
+    "probes": [
+      {
+        "probe": "lowerView with GoSlice Node.Kids wrapper omitting target",
+        "result": "accepted; only backing/offset/length/capacity present"
+      },
+      {
+        "probe": "lowerView event callback wired directly to current mountCompiledApp runtime dispatch",
+        "result": "failure stage dispatch-input; message Action must contain exactly event, path, value; trace remained at init tick"
+      }
+    ],
+    "sha256": {
+      "contract": "d59979b865afb6cb8abf9ed309edafa58fda62c4361a84c4be170a99eda0b862",
+      "n1_abi_report": "41c7dc4c5235bc231a095e7bf7090d3fa8b386d8524c3e617771f9adf6fd2dee",
+      "g_react_report": "5fc9f48e9057ce5d5a9a125d620b93b8b553d88673dd6458cbdc0474c33288f4",
+      "g_react_receipt": "f365de7ada8d92f8da3506f4146b7bc995d67ae5e76bbb24813581f612f4646c",
+      "emit_backend": "c602d9d196f61c1717b1ca72e36e50f22dbd0a55c24d0c7cd5d9b585d30dfb9c",
+      "renderer": "38c10071ca1fc90710f23fab7034f0d9d2ef9a7c308c1ed93295c9c6891551bf",
+      "bindings": "ac9b40e56039e385adf5d5b66f7476092aedaec7887dd51b00026def6f2e105b",
+      "react_map": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54",
+      "reactmap_source": "7ad8ebf5e76a4450421edf4673895201b620f27b341da0fae70313472f88ac02",
+      "runtime_seam_inspected": "6252e457db9992bb14ae7b866b2bc893c04eebab1b2917a3c0da6fa53e0067df"
+    },
+    "limits": [
+      "No generated app or browser mount was exercised; N6 remains the browser conformance gate.",
+      "React focus capture/restore is implemented, but the checked-in tests cover lower-level keyed identity rather than physical focus/selection restoration in a DOM."
+    ]
+  }
+}

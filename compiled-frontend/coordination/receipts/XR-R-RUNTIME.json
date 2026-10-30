@@ -1,0 +1,70 @@
+{
+  "job_id": "XR-R-RUNTIME",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "The frozen N4 runtime passes its 11 focused Node 22 tests for lowerCamel actions, marked fixture.request lookup/complete effects, dispatch reentry, and stale unmount snapshots. Independent probing found runtime.complete validates caller-controlled input before reserving completion admission: an invalid Proxy completion can invoke a nested valid pending reply, mutate state, and then itself be rejected.",
+  "evidence": {
+    "focused_test": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/runtime/runtime.test.mjs",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "passed": 11,
+      "failed": 0,
+      "exit_code": 0,
+      "raw_log": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_r_runtime/node-tests.log",
+      "raw_log_sha256": "fbd81fb807be11e9bc9e91b97ab8ff1862f1bfdaf18cd5fa7bdd4755117f2b42"
+    },
+    "independent_probe": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/xr_r_runtime/probe.mjs",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+      "exit_code": 0,
+      "source": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_r_runtime/probe.mjs",
+      "source_sha256": "fadc6eac0466695bc4febb2c3fe4765b65f34e0ddc9a3807174d1958cde6d311",
+      "result": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_r_runtime/probe.json",
+      "result_sha256": "6cfb77a93f37c7dfa25c45fe58b34c913efdcf85fd945b846c4b61c268d1fe6f",
+      "findings": {
+        "invalid_outer_completion_reentry": {
+          "real_pending_effect": ["fixture.request", "lookup", "complete"],
+          "outer_completion": "invalid proxy missing message field; rejected with exact-key error",
+          "own_keys_trap_invoked_nested_valid_completion": true,
+          "nested_completion_accepted": true,
+          "updates_after_outer_rejection": 2,
+          "final_count": "1",
+          "final_reply": "reply-from-reentrant-trap"
+        },
+        "stale_action_admission": {
+          "proxy_own_keys_trap_attempted_nested_dispatch": true,
+          "nested_dispatch_accepted": false,
+          "update_calls": 0,
+          "runtime_failure": null
+        },
+        "post_unmount_stale_snapshot": {
+          "stale_action_accepted": true,
+          "last_logical_view_preserved": true,
+          "physical_dom_html": "",
+          "update_calls": 1,
+          "runtime_failure": null
+        },
+        "lower_camel_action_and_marked_effect": {
+          "action_accepted": true,
+          "effect": {"kind": "fixture.request", "name": "lookup", "reply": "complete"}
+        }
+      }
+    },
+    "contract_cross_check": {
+      "go_validator": "/workspace/scratch/39a56936f173/gondola-compiled/compilercontract/validation.go",
+      "go_validator_sha256": "ccb28713bfa7dd0fd5b22fb5dd377945006d9f0517357c62f230666b91ec2e76",
+      "rule": "Go trace validation requires Effect.Kind=fixture.request, Name=lookup, and Reply=complete; runtime tests reject a marked effect with Name=first and Reply=done before host dispatch."
+    },
+    "sha256": {
+      "runtime": "18a9565d8e80179a22240f1fbe109b3d7297cee1551aaa43ccc09b0f912b1908",
+      "runtime_tests": "05c1b193038df485b260e98c5e6705d036a1eba2b27f79f884b0598811833af8"
+    },
+    "limits": [
+      "The independent harness and focused suite use compiled-symbol and renderer stubs while executing the actual frozen runtime module; generated-app and mounted-browser conformance are not established.",
+      "The deterministic HostScript positive test covers a trusted plain JSON fixture only; it does not establish descriptor-safe admission for arbitrary hostile HostScript objects.",
+      "The amendment is limited to public completion admission before caller-controlled descriptor or Proxy traps; no general JavaScript or Go audit is claimed.",
+      "No production runtime files were modified."
+    ]
+  }
+}

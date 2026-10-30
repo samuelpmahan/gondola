@@ -1,0 +1,67 @@
+{
+  "schema": "gobi.inherited-run/v1",
+  "status": "passed",
+  "attempts": [
+    {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-typed-composition.sh",
+      "exitCode": 1,
+      "log": "attempt-1-vcs-failure.log",
+      "facts": "Go24 root tests/static5000/24SHA passed, binary VCS stamping failed. go build -x showed cd /workspace; Go24 vcsGit RootNames accepts .git directories only; linked worktree .git is a file.",
+      "logSha256": "b7db793bce560f1a606cb6ca920c7b5641d650c237e024f6578870cfd55d4518",
+      "logBytes": 3013
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-typed-composition.sh",
+      "status": "passed",
+      "log": "full.log",
+      "note": "Only binary VCS stamping disabled. Root/newsourcehashes and publication Git tree are separately checked.",
+      "exitCode": 0,
+      "logSha256": "8041da184cf0b6255c5dc0fc2801a659f7fd0dbbc99abf6635bbef98e365113f",
+      "logBytes": 141473
+    }
+  ],
+  "completionObservedUTC": "2026-10-30T22:20:22.454666+00:00",
+  "startTimestamp": "not captured; exact command and full logs retained",
+  "versions": {
+    "go": "go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "React": "19.3.1",
+    "ReactDOM": "19.3.1",
+    "Playwright": "1.64.1",
+    "Chromium": "153.0.8010.0"
+  },
+  "finalReport": {
+    "path": "typed-composition/build/report.json",
+    "sha256": "7f3bfc90929aa38d481f791d2dc45e7b8488b4a8d8f32afd5d9c044a02923387",
+    "bytes": 259933,
+    "topLevelKeys": [
+      "schema",
+      "status",
+      "seeds",
+      "casesPerSeed",
+      "maxActions",
+      "fixedScripts",
+      "scripts",
+      "nativeExecutions",
+      "actions",
+      "nativeFrames",
+      "actorNativeFrameComparisons",
+      "browserOnlyLifecycleProbes",
+      "mutationControls",
+      "rawScenarioDirectory",
+      "rawScenarioShards",
+      "mismatchCount",
+      "mismatches",
+      "scriptSummaries",
+      "browser",
+      "toolchain",
+      "sourcePins",
+      "sourceSetSHA256",
+      "commands",
+      "elapsedMs",
+      "mismatchArtifact",
+      "rawManifest"
+    ]
+  },
+  "sourceScope": "All pre-existing tracked source bytes remained unchanged throughout. The new compilercontract codec was repaired after the inherited root Go test phase; fresh Go24 new-package tests/race/vet are a separate required compiler gate."
+}

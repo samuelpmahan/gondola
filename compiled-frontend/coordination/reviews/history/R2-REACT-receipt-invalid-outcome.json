@@ -1,0 +1,77 @@
+{
+  "job_id": "R2-REACT",
+  "worker": "N3",
+  "outcome": "repaired_pending_browser_conformance",
+  "summary": "Repaired Proxy descriptor bypasses in React adapter metadata, native arrays, and GoScript slices. The adapter now snapshots validated own descriptor values into trusted copies, checks the GoSlice target descriptor value, and consumes only copied backing windows.",
+  "source_scope": [
+    "frontend/react/renderer.mjs",
+    "frontend/react/renderer.test.mjs"
+  ],
+  "evidence": {
+    "preserved_red": {
+      "node_command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+      "result": "exit 1; 15 passed, 4 failed before implementation",
+      "log": "frontend/react/review-evidence/r2-node-red.log",
+      "log_sha256": "7ece21bd02f5f974363a6b859c18a8306451f9557a44185088c5b0bd8f63b076"
+    },
+    "proxy_reproduction": {
+      "source": "coordination/reviews/xr_r_react/proxy-slice-repro.mjs",
+      "source_sha256": "e9b8a7abe9fd62b757aacf22db8cd7b30e7b5b3f800e76bc1d075ad08f6fb40e",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/xr_r_react/proxy-slice-repro.mjs",
+      "before": {
+        "exit_code": 0,
+        "stdout": "{\"accepted\":true}",
+        "stdout_file": "frontend/react/review-evidence/r2-proxy-slice-before.raw.json",
+        "stdout_sha256": "11a49f853eb8befe94fef278d487125cd20930b9e41c4c0934394443e7f00878",
+        "stderr_file": "frontend/react/review-evidence/r2-proxy-slice-before.stderr.log",
+        "stderr_sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+      },
+      "after": {
+        "exit_code": 1,
+        "result": "rejected with Node.On has invalid GoScript slice bounds or backing",
+        "stdout_file": "frontend/react/review-evidence/r2-proxy-slice-after.raw.json",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_file": "frontend/react/review-evidence/r2-proxy-slice-after.stderr.log",
+        "stderr_sha256": "a93d5422375380b34365c5b1f4b28dc1a6d3aedf6dfd833d3ff26231423def08",
+        "exit_code_file": "frontend/react/review-evidence/r2-proxy-slice-after.exit-code",
+        "exit_code_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      }
+    },
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 20,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "frontend/react/review-evidence/r2-node-green.log",
+        "log_sha256": "4a5d188bd31ad71a16f64e50a5d0b9b9f0a7ada199921ffb55a4ff53ca80e505"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 -v ./emit",
+        "toolchain": "go1.27.3 linux/amd64",
+        "passed": 4,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "frontend/react/review-evidence/r2-go-emit.log",
+        "log_sha256": "708c56c7a2bd11f88368b08692f76040bb11ccabcf3735c2a071a6aa1bac59f7"
+      }
+    ],
+    "changes": [
+      "Native arrays are copied only from own dense data descriptors; caller-owned length and index gets are not used.",
+      "GoScript wrapper fields are copied from own enumerable writable configurable data descriptors; target is admitted only when its own descriptor value is undefined.",
+      "GoScript backing arrays are descriptor-snapshotted and slice windows are copied from that trusted snapshot.",
+      "View, Node, Attr, Style, On, and Binding records are copied and validated recursively before React lowering; copies use null prototypes.",
+      "Added negative Proxy cases for masked target descriptors, ordinary get traps, and accessor-backed array elements; added positive descriptor-only View/Node/handler and GoSlice window cases."
+    ],
+    "sha256": {
+      "frontend/react/renderer.mjs": "9f10b75d194aab53cbe504321e8f6df26592c20b6a7123d7f267ba2e68868e5a",
+      "frontend/react/renderer.test.mjs": "51b9dd07d3ded887adde821f89c0485ad1f244726a26fea4f0a7d8dd51f67257"
+    },
+    "limits": [
+      "No browser mount or four-app integration build was run by N3; N6 owns browser conformance and post-unmount DOM verification.",
+      "The Go emitter package tests do not exercise React rendering.",
+      "An initial Go test with GOTOOLCHAIN=local selected Go 1.24.0 and failed the module's Go version requirement; the explicit Go 1.27.3 command passed."
+    ]
+  }
+}

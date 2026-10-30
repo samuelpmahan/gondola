@@ -1,0 +1,51 @@
+{
+  "job_id": "R-REACT",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Repaired React Action casing, exact GoScript slice admission and empty-root snapshots after unmount. Fixed the emitter test AppIR fixture to describe actual Gobi.Node types; no production emitter code changed. Focused tests pass. Runtime stale-tick completion and browser integration remain owned by N4 and N6.",
+  "evidence": {
+    "tests": [
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 -v ./emit",
+        "toolchain": "go1.27.3 linux/amd64",
+        "passed": 4,
+        "failed": 0,
+        "result": "exit 0"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 15,
+        "failed": 0,
+        "result": "exit 0; Node emitted the experimental EnvHttpProxyAgent warning"
+      }
+    ],
+    "red_green": {
+      "red_command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+      "red_result": "exit 1; 11 passed and 4 failed: three lowerCamel Action assertions observed PascalCase callback fields, and a GoScript slice missing target did not throw",
+      "green_result": "same command; exit 0; 15 passed, 0 failed"
+    },
+    "pre_repair_review_probe": {
+      "source": "coordination/reviews/xr_g_runtime_probe.mjs",
+      "source_sha256": "3b5f1c6c7984424e410661aef42eae2d0db22b9f9dc666158e18a490e369a146",
+      "raw_result": "coordination/reviews/xr_g_runtime_probe.json",
+      "raw_result_sha256": "87b8fa610997e39e409193d9ad25bd7eb13fc17530526efd77a98b630b30a59d",
+      "preserved_findings": [
+        "PascalCase renderer Action was rejected at dispatch-input with zero Update calls.",
+        "An enumerable path getter reentered before runtime busy reservation; the outer and nested transitions were both accepted.",
+        "A post-unmount stale action was accepted but added no tick and set a suppressed-action failure."
+      ]
+    },
+    "initial_emit_failure": "Before fixing the test fixture, both existing emit tests failed with `invalid AppIR for React emission: empty structs are unsupported for type \"gobi.Node\"`. The test metadata now models the real seven-field Gobi.Node and nested types; the validator was not loosened.",
+    "sha256": {
+      "frontend/react/renderer.mjs": "458383ffeb719937e6a4b9a331f635cd2358c6593c8b34ce05e58cc3ba1d6906",
+      "frontend/react/renderer.test.mjs": "1430c7ebc246b6f9547498c4947d72054139470b1e5d2b5eb762e7714280599b",
+      "emit/backend_test.go": "e389a072b96397b5c6f9d11656d2b3a25d61ce75ba955483553419dca3d33c04"
+    },
+    "limits": [
+      "No mounted browser or four-app conformance run was performed by N3; N6 owns that gate.",
+      "The renderer’s empty-root snapshot is guarded by actual container childNodes, but the physical post-unmount branch still needs N6 mounted-browser evidence.",
+      "The preserved cross-lane runtime probe also covers N4-owned reentry and logical stale-tick handling, which remain outside N3's source scope."
+    ]
+  }
+}

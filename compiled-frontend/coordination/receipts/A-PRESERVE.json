@@ -1,0 +1,76 @@
+{
+  "job_id": "A-PRESERVE",
+  "worker": "N1",
+  "outcome": "confirmed_reuse",
+  "summary": "Verified the inherited typed-composition evidence and baseline preservation. All 24 pinned hashes match, all 1,228 pre-existing tracked paths are unchanged from 42df688, root go.mod matches baseline, and root go.sum is absent. The inherited run passed with zero mismatches; it predates the compilercontract codec repair.",
+  "scope": [
+    "compiled-frontend/coordination/reviews/preserve/**",
+    "compiled-frontend/coordination/reports/A-PRESERVE.md",
+    "compiled-frontend/coordination/receipts/A-PRESERVE.json"
+  ],
+  "baseline": {
+    "branch": "codex/gobi-compiled-frontend-20261030",
+    "head": "42df6883337605d901a23e9fed874768c7ce1824",
+    "parent": "d6d425765ee9d48eae22342a3cb75fab2e2871ba",
+    "tracked_path_count": 1228,
+    "worktree_diff_exit_code": 0,
+    "index_diff_exit_code": 0,
+    "status_note": "Implementation and evidence paths are untracked; no baseline tracked paths or index entries changed. No staging, commit, merge, or deployment occurred in this review."
+  },
+  "pins": {
+    "sha256sums_file": "SHA256SUMS",
+    "sha256sums_sha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+    "entry_count": 24,
+    "verified_count": 24,
+    "command": "sha256sum -c SHA256SUMS",
+    "exit_code": 0,
+    "saved_output": "compiled-frontend/coordination/reviews/preserve/sha-check.log",
+    "saved_output_sha256": "e43918e16a1399d0d91ec6b9b428bb8a13679f0f880b97960aab21d419d99e0a"
+  },
+  "root_module_state": {
+    "go_mod_sha256": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa",
+    "go_mod_matches_baseline": true,
+    "root_go_sum_present": false,
+    "baseline_has_root_go_sum": false,
+    "incident_note": "A prior go get invocation was reported. This review makes no claim that it never occurred; final root go.mod bytes match baseline and no root go.sum remains. compiled-frontend/go.sum is a separate nested module file."
+  },
+  "inherited_execution": {
+    "manifest": "compiled-frontend/evidence/inherited/execution.json",
+    "manifest_sha256": "795b36bfd55cbf3e55ec523676efd99e42fbe38009a6054c51aa47edc549e671",
+    "status": "passed",
+    "successful_command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-typed-composition.sh",
+    "successful_exit_code": 0,
+    "full_log": "compiled-frontend/evidence/inherited/full.log",
+    "full_log_sha256": "8041da184cf0b6255c5dc0fc2801a659f7fd0dbbc99abf6635bbef98e365113f",
+    "initial_attempt": {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-typed-composition.sh",
+      "exit_code": 1,
+      "log": "compiled-frontend/evidence/inherited/attempt-1-vcs-failure.log",
+      "log_sha256": "b7db793bce560f1a606cb6ca920c7b5641d650c237e024f6578870cfd55d4518",
+      "reason": "Go 1.24 VCS stamping failed in a linked worktree whose .git entry is a file; this occurred before interaction logs. The successful retry used GOFLAGS=-buildvcs=false to disable only binary VCS stamping."
+    },
+    "versions": {
+      "go": "go1.24.0 linux/amd64",
+      "node": "v22.23.4",
+      "react": "19.3.1",
+      "react_dom": "19.3.1",
+      "playwright": "1.64.1",
+      "chromium": "153.0.8010.0"
+    },
+    "completion_observed_utc": "2026-10-30T22:20:22.454666+00:00"
+  },
+  "inherited_result": {
+    "report": "typed-composition/build/report.json",
+    "report_sha256": "7f3bfc90929aa38d481f791d2dc45e7b8488b4a8d8f32afd5d9c044a02923387",
+    "report_bytes": 259933,
+    "status": "matched",
+    "scripts": 63,
+    "actions": 2463,
+    "native_executions": 63,
+    "native_frames": 2463,
+    "actor_native_frame_comparisons": 4926,
+    "mismatch_count": 0,
+    "source_set_sha256": "bed592e6a4fbbb98caceb9c430dcd4281b62bece4d1c84038af01750a63eace3"
+  },
+  "source_gate_limit": "The inherited root Go test phase preceded the compilercontract codec repair, as stated in execution.json. Do not use this inherited run to claim the repaired codec or new compiled-frontend packages passed current Go 1.24 test/race/vet gates. No new full run was started by N1."
+}

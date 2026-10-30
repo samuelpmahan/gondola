@@ -1,0 +1,111 @@
+{
+  "job_id": "XR-G-CONFORMANCE",
+  "worker": "N4",
+  "decision": "amend",
+  "summary": "The partial conformance evidence is supported, including exact native/direct agreement, the single successful counter browser check, and three stable ABI rejection captures. Amend stale final provenance input counts: the r2runtime artifacts contain 95 direct inputs and 96 browser inputs, not 94 and 95.",
+  "finding": {
+    "severity": "low",
+    "reported_direct_input_count": 94,
+    "observed_direct_input_count": 95,
+    "reported_browser_input_count": 95,
+    "observed_browser_input_count": 96,
+    "cause": "frontend/runtime/r2_completion_probe.mjs is included by provenance source scanning; the browser manifest also includes its generated bundle.",
+    "required_repair": "Update only the direct/browser provenance input counts in G-CONFORMANCE.md and G-CONFORMANCE.json. Keep the partial browser result and failure classifications."
+  },
+  "evidence": {
+    "source_checkpoint": {
+      "n1_tree_sha256": "900dc38eee351e745717136cb54ae26d0765ec53d25c2d99e226b2b4ee620f2b",
+      "renderer_sha256": "9f10b75d194aab53cbe504321e8f6df26592c20b6a7123d7f267ba2e68868e5a",
+      "runtime_sha256": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704"
+    },
+    "native_direct": {
+      "total_ticks": 31,
+      "apps": {
+        "counter": { "ticks": 5, "equality": "exact" },
+        "form": { "ticks": 10, "equality": "exact" },
+        "list": { "ticks": 11, "equality": "exact" },
+        "effect": { "ticks": 5, "equality": "exact" }
+      },
+      "verification_log": "coordination/reviews/xr_g_conformance/native-direct-readonly.stdout.log",
+      "summary_sha256": "53f1db1fe9fb8f9208f28a2afbed1483ae1282a0f727e1ae1bae71fa429155ba"
+    },
+    "counter_browser": {
+      "status": "matched",
+      "ticks": 5,
+      "mutation_controls_detected": 17,
+      "wasm_requests": 0,
+      "wasm_api_attempts": 0,
+      "empty_root_after_unmount": true,
+      "saved_checker_recomputed_identically": true,
+      "check_sha256": "1af9f1d8ba44ddce2c7c5f202e2e2ed88d62a74b007d8549c5039b74d50ec72f",
+      "browser_evidence_sha256": "bdb47da9937cdf5223aabd3486f4802e15ef12710be942af59e304bfe78a34f7"
+    },
+    "three_browser_failures": {
+      "form": { "stage": "mount-compiled-app", "stable": true, "changed_inputs": [], "failure_sha256": "6d24533be2c05fd2e74e0ddf8f43eb5bb05067a98f92700c7c3d4cf743550b34" },
+      "list": { "stage": "run-browser-action", "action_index": 0, "stable": true, "changed_inputs": [], "failure_sha256": "511222aa9e34a2cd0deaf679e736bfdfc3c010ddc31ff20eed8ce83fa258cc8a" },
+      "effect": { "stage": "mount-compiled-app", "stable": true, "changed_inputs": [], "failure_sha256": "c6e2a640717c34ec37ff46232710694f8004ba5a8874fdd5b75c36a21c4de80d" },
+      "common_error": "compiled React renderer: Node.Attrs.backing has unsupported symbol properties",
+      "failure_manifests_match_json_hashes": true,
+      "input_count_before_and_after": 96
+    },
+    "abi_probe": {
+      "source": "coordination/reviews/xr_r2_react/goscript-slice-probe.mjs",
+      "source_sha256": "ae2edf2fec7bd28fab76d549f4c14e8f8e97a1e7c3dbdeec3e9f52d934cc91f2",
+      "raw_result": "coordination/reviews/xr_r2_react/goscript-slice-probe.raw.json",
+      "raw_result_sha256": "2589ac6e1371c82bdc04f594a673e498f1b397518e84d69b1c0f6d12752d9517",
+      "observed": "Form View node 0 Attrs backing has length 4 with own Symbol(goscript.spareZero) function descriptor; GoSlice window is offset 0, length 3, capacity 4."
+    },
+    "provenance_comparison": {
+      "legacy_parallel": {
+        "directory": "conformance/raw/n6-source-900dc38",
+        "form_stable": true,
+        "list_stable": false,
+        "effect_stable": false,
+        "changed_path": "compiled-frontend/conformance/raw/n6-source-900dc38/form.browser.failed.bundle.mjs"
+      },
+      "sequential_rerun": {
+        "directory": "conformance/raw/n6-source-900dc38-rerun",
+        "form_list_effect_stable": true,
+        "changed_inputs": [],
+        "input_count": 95
+      },
+      "final_r2runtime": {
+        "directory": "conformance/raw/n6-source-900dc38-r2runtime",
+        "form_list_effect_stable": true,
+        "changed_inputs": [],
+        "input_count": 96,
+        "extra_source": "compiled-frontend/frontend/runtime/r2_completion_probe.mjs"
+      }
+    },
+    "tests": {
+      "original_37_test_set": {
+        "toolchain": "Node v22.23.4",
+        "passed": 37,
+        "failed": 0,
+        "stdout": "coordination/reviews/xr_g_conformance/conformance-tests-37.stdout.log",
+        "stdout_sha256": "61ad3403ab219ae77785fd1ef70108073a03f45095655467d06707adb8e2e332"
+      },
+      "current_full_glob_after_concurrent_additions": {
+        "passed": 40,
+        "failed": 0,
+        "new_files_seen": ["conformance/list-growth.test.mjs", "conformance/provenance-order.test.mjs"],
+        "stdout": "coordination/reviews/xr_g_conformance/conformance-tests.stdout.log",
+        "stdout_sha256": "d2a37b81eecd8f76ab21812a38f0b7019eb43be6e2b46771a4598969c2de4bc5"
+      },
+      "artifact_manifest": {
+        "command": "sha256sum -c compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/SHA256SUMS",
+        "verified_files": 57,
+        "exit_code": 0,
+        "log_sha256": "b5219e9237c9358d2dbb28df5d7120f6eb6a21ba03c4332a4d376bc96117d3de"
+      }
+    }
+  },
+  "limits": [
+    "Counter is the only fixture with a complete mounted-browser comparison in this capture; the three failure stages prevent later browser checks.",
+    "Action intent, observed renderer Action, and uppercase Go Message are checked as separate channels. The divergent literal-handler case is covered by checker tests, not by a successful mounted-browser fixture on this checkpoint.",
+    "Focus range/direction mutation controls are unit-tested, while list focus and backward selection remain unproven in mounted browser because list fails at action 0.",
+    "Effect commit-before-completion, exactly-once delivery, stale handler behavior beyond the reached stage, and callbacks after runtime unmount remain unproven in mounted browser.",
+    "React and codec source gates were open during this review; no four-app browser rerun was performed."
+  ],
+  "scope_note": "Invoking N6 verify-native-direct.mjs rewrote native-direct-summary.json to the same preexisting SHA-256. No raw trace or browser failure bytes changed; an additional read-only comparison was retained in the review directory."
+}

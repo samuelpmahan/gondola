@@ -1,0 +1,159 @@
+{
+  "module_root": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+  "module_origin_record": {
+    "Version": "v0.6.2",
+    "Time": "2026-10-28T13:31:33Z",
+    "Origin": {
+      "VCS": "git",
+      "URL": "https://github.com/s4wave/goscript",
+      "Hash": "d8f58a091947cff26a9171be7bd130892b0afad3",
+      "Ref": "refs/tags/v0.6.2"
+    }
+  },
+  "module_api_sources": {
+    "compiler/compiler.go": {
+      "sha256": "fab09d4597b6289f5a53bc564b8cca961254cc2cec0f1f6d81fcfe41f58fd557",
+      "bytes": 1025
+    },
+    "compiler/result.go": {
+      "sha256": "47446c8d1cffff4eec97686dbd4d0d13d2f337c6caa863fd6cd6931a2d428b3b",
+      "bytes": 656
+    },
+    "compiler/semantic-model-types.go": {
+      "sha256": "67e9bb74f5375d9ab1ab10711c40835b2279b4df48c7ad406fcd7aa02dd284cd",
+      "bytes": 14697
+    },
+    "compiler/package-graph.go": {
+      "sha256": "fd83aea3730c07aa64996bbbdabc6d1475297e7844f87bc7b394119822cd303d",
+      "bytes": 14472
+    }
+  },
+  "go_mod_pin_lines": [
+    "\tgithub.com/s4wave/goscript v0.6.2"
+  ],
+  "go_sum_pin_lines": [
+    "github.com/s4wave/goscript v0.6.2 h1:GucUqQ+xvaBzAH6W4U9Ec62T4ytUBDbmGojJbWrVEKc="
+  ],
+  "commands": {
+    "new_compiler": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.NewCompiler"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\nfunc NewCompiler(conf *Config, le *logrus.Entry, _ *packages.Config) (*Compiler, error)\n    NewCompiler builds a compiler adapter over the v2 compile service.\n\n",
+      "stderr": ""
+    },
+    "compile_packages": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.Compiler.CompilePackages"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\nfunc (c *Compiler) CompilePackages(ctx context.Context, patterns ...string) (*CompilationResult, error)\n    CompilePackages compiles Go package patterns through the v2 pipeline.\n\n",
+      "stderr": ""
+    },
+    "compilation_result": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.CompilationResult"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\ntype CompilationResult struct {\n\t// CompiledPackages contains package paths compiled to TypeScript.\n\tCompiledPackages []string\n\t// CopiedPackages contains package paths copied from override packages.\n\tCopiedPackages []string\n\t// OriginalPackages contains the package patterns or package paths requested.\n\tOriginalPackages []string\n\t// Diagnostics contains all diagnostics produced by the compile request.\n\tDiagnostics []Diagnostic\n\t// AsyncReport tells where the program's async functions come from, when\n\t// the request asked for it.\n\tAsyncReport *AsyncReport\n}\n    CompilationResult describes a compiler run after adapter normalization.\n\n",
+      "stderr": ""
+    },
+    "semantic_model": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.SemanticModel"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\ntype SemanticModel struct {\n\t// Has unexported fields.\n}\n    SemanticModel is the immutable compiler semantic surface consumed by\n    lowering.\n\n",
+      "stderr": ""
+    },
+    "semantic_model_build": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.SemanticModelOwner.Build"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\nfunc (o *SemanticModelOwner) Build(ctx context.Context, graph *PackageGraph, opts SemanticBuildOptions) (*SemanticModel, []Diagnostic)\n    Build constructs semantic facts for a package graph.\n\n    When a stored body summary does not apply, Build stops after the package\n    shards and lists the package in the model's staleSummaries; the caller\n    checks it with bodies and builds again.\n\n",
+      "stderr": ""
+    },
+    "package_graph": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.PackageGraph"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\ntype PackageGraph struct {\n\t// RequestedPatterns are the package patterns from the compile request.\n\tRequestedPatterns []string\n\t// RequestedPackagePaths are the loaded package paths for requested patterns.\n\tRequestedPackagePaths []string\n\t// Nodes are the deterministic package graph nodes.\n\tNodes []*PackageGraphNode\n\t// NodesByPackagePath maps package path to graph node.\n\tNodesByPackagePath map[string]*PackageGraphNode\n\n\t// Has unexported fields.\n}\n    PackageGraph is the immutable package graph produced for a compile request.\n\n",
+      "stderr": ""
+    },
+    "package_graph_node": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.PackageGraphNode"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\ntype PackageGraphNode struct {\n\t// ID is the go/packages package identity.\n\tID string\n\t// PkgPath is the stable Go package path.\n\tPkgPath string\n\t// Name is the Go package name.\n\tName string\n\t// ModulePath is the owning module path when known.\n\tModulePath string\n\t// ModuleDir is the owning module directory when known.\n\tModuleDir string\n\t// ForTest is the package path under test for Go test variants.\n\tForTest string\n\t// GoFiles are the package source files.\n\tGoFiles []string\n\t// CompiledGoFiles are files selected by build constraints.\n\tCompiledGoFiles []string\n\t// Imports are imported package paths.\n\tImports []string\n\t// Requested marks packages matched by request patterns.\n\tRequested bool\n\t// OverrideCandidate marks packages with a matching GoScript override package.\n\tOverrideCandidate bool\n}\n    PackageGraphNode is one package in the loaded graph.\n\n",
+      "stderr": ""
+    },
+    "semantic_model_owner": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "doc",
+        "github.com/s4wave/goscript/compiler.SemanticModelOwner"
+      ],
+      "exit_code": 0,
+      "stdout": "package compiler // import \"github.com/s4wave/goscript/compiler\"\n\ntype SemanticModelOwner struct {\n\t// Has unexported fields.\n}\n    SemanticModelOwner owns immutable Go semantic facts used by lowering.\n\nfunc NewSemanticModelOwner(overrideOwners ...*OverrideRegistryOwner) *SemanticModelOwner\nfunc (o *SemanticModelOwner) Build(ctx context.Context, graph *PackageGraph, opts SemanticBuildOptions) (*SemanticModel, []Diagnostic)\n",
+      "stderr": ""
+    },
+    "module_pin": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "list",
+        "-m",
+        "-json",
+        "github.com/s4wave/goscript"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n\t\"Path\": \"github.com/s4wave/goscript\",\n\t\"Version\": \"v0.6.2\",\n\t\"Time\": \"2026-10-28T13:31:33Z\",\n\t\"Dir\": \"/root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2\",\n\t\"GoMod\": \"/root/go/pkg/mod/cache/download/github.com/s4wave/goscript/@v/v0.6.2.mod\",\n\t\"GoVersion\": \"1.27.0\",\n\t\"Sum\": \"h1:GucUqQ+xvaBzAH6W4U9Ec62T4ytUBDbmGojJbWrVEKc=\",\n\t\"GoModSum\": \"h1:g2psiTXAhkiM7vtr8YEgkq/xUlYHLSghruODJL8VpAU=\"\n}\n",
+      "stderr": ""
+    },
+    "module_integrity": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "mod",
+        "verify"
+      ],
+      "exit_code": 0,
+      "stdout": "all modules verified\n",
+      "stderr": ""
+    },
+    "go_version": {
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "version"
+      ],
+      "exit_code": 0,
+      "stdout": "go version go1.27.3 linux/amd64\n",
+      "stderr": ""
+    },
+    "node_version": {
+      "command": [
+        "/tmp/gondola-node22/node_modules/node/bin/node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "v22.23.4\n",
+      "stderr": ""
+    }
+  }
+}

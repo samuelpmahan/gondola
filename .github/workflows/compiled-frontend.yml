@@ -1,0 +1,51 @@
+name: Gobi compiled Go frontend
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  compiled-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+      - name: Install pinned browser dependencies
+        run: |
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+          interaction/node_modules/.bin/playwright install --with-deps chromium
+      - name: Run baseline, inherited interaction and compiled frontend gates
+        env:
+          GONDOLA_SKIP_NPM_CI: "1"
+          GONDOLA_SKIP_BROWSER_INSTALL: "1"
+        run: bash run-compiled-frontend.sh
+      - name: Preserve executed evidence and generated sources
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-compiled-frontend-artifacts
+          path: |
+            compiled-frontend/artifacts/
+            compiled-frontend/conformance/raw/
+            typed-composition/build/
+            session-tree/build/
+            multi-root/build/
+            renderer-conformance/build/
+            keyed-editor/build/
+            http-effects/build/
+            async-effects/build/
+            controlled-input/build/
+            backend-replacement/build/
+            interaction/build/
+          if-no-files-found: ignore

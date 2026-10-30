@@ -1,0 +1,130 @@
+{
+  "job_id": "XR-G-SEMANTIC",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Independent audit confirms N1's pinned GoScript compiler route, real Go forwarders and emitted clone calls, AppIR role exports, and 209-file atomic build outputs. A valid source-build failure preserves all 209 previous hashes and returns ok:false with exit 1; duplicate and missing-field CLI requests are also rejected with exit 1 and leave the output hashes unchanged.",
+  "evidence": {
+    "public_compiler_api": {
+      "go_version": "go1.27.3",
+      "node_version": "v22.23.4",
+      "module": "github.com/s4wave/goscript",
+      "version": "v0.6.2",
+      "commit": "d8f58a091947cff26a9171be7bd130892b0afad3",
+      "go_sum": "h1:GucUqQ+xvaBzAH6W4U9Ec62T4ytUBDbmGojJbWrVEKc=",
+      "go_mod_verify": "all modules verified",
+      "api_finding": "NewCompiler and CompilePackages are public compile entry points. CompilationResult exposes package paths, diagnostics and optional async reporting. PackageGraph and PackageGraphNode expose identities, paths, files and imports, while typed package storage is private. SemanticModelOwner.Build returns an opaque SemanticModel with unexported fields and no public accessors. No public typed symbol/type/call metadata API was found.",
+      "frontend_typed_input": "Current analyze/project.go uses go/ast and go/types to project source into the frontend's neutral typed program.",
+      "evidence": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/public-api-evidence.json",
+      "evidence_sha256": "8e3623bb6e1920776acb0925fe8b3b8fbbc47c8ce6dc4032c5e9670090f99659",
+      "module_api_source_sha256": {
+        "compiler/compiler.go": "fab09d4597b6289f5a53bc564b8cca961254cc2cec0f1f6d81fcfe41f58fd557",
+        "compiler/result.go": "47446c8d1cffff4eec97686dbd4d0d13d2f337c6caa863fd6cd6931a2d428b3b",
+        "compiler/semantic-model-types.go": "67e9bb74f5375d9ab1ab10711c40835b2279b4df48c7ad406fcd7aa02dd284cd",
+        "compiler/package-graph.go": "fd83aea3730c07aa64996bbbdabc6d1475297e7844f87bc7b394119822cd303d"
+      }
+    },
+    "current_source_pins": {
+      "n1_source_checkpoint": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/toolchain/build-four/source-checkpoint.json",
+      "n1_tree_sha256": "900dc38eee351e745717136cb54ae26d0765ec53d25c2d99e226b2b4ee620f2b",
+      "n1_file_count": 86,
+      "verified_file_count": 86,
+      "mismatch_count": 0,
+      "checkpoint_audit": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/source-checkpoint-audit.json",
+      "checkpoint_audit_sha256": "ea162d333ec2eef0a7b8416edbdf8969c5b6790621390ef0a1c9ee37ba1ba61f",
+      "g_fixtures_source_receipt": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/receipts/G-FIXTURES.json",
+      "g_fixtures_source_receipt_sha256": "d80365eb6aef029172d6b983db937d3fdef74c0d2351e266cd11576018bff717",
+      "g_fixtures_sources_verified": 17,
+      "g_fixtures_source_mismatches": 0,
+      "app_source_audit": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/app-source-audit.json",
+      "app_source_audit_sha256": "ba003eb33abb6e2706cd1f4faf40b2c1b7996d0d8ca3392e532106525c8d24a9",
+      "go_mod_sha256": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+      "go_sum_sha256": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b",
+      "module_origin_sha256": "31d90367c83521c9ecb90e868ebc0f8028dfad7919443543497f1f19d83c165a"
+    },
+    "independent_cli_build": {
+      "binary_build_command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go build -o /tmp/gobi-build-xr-g-semantic-n5 ./cmd/gobi-build",
+      "binary_build_exit_code": 0,
+      "binary_sha256": "d3df8cc1636c65e34c69b82a075209acbf656eaf90f0c3ac83237079c331e3e8",
+      "matches_n1_reported_binary_sha256": true,
+      "valid_request_command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-xr-g-semantic-n5 < coordination/reviews/xr_g_semantic/valid-request.json > coordination/reviews/xr_g_semantic/build-result.json 2> coordination/reviews/xr_g_semantic/build.stderr.log",
+      "valid_request_exit_code": 0,
+      "valid_result": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/build-result.json",
+      "valid_result_sha256": "0d9acce5fed1df1fae7a4f273a9a8e66da2d200af1603a06ef6fcc41a0b0af94",
+      "output_directory": "/tmp/gondola-xr-g-semantic-n5-20261030-2215/output",
+      "apps": 4,
+      "diagnostics": 0
+    },
+    "forwarder_and_output_audit": {
+      "result": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/audit-result.json",
+      "result_sha256": "93df279d0d1730973957caeb3fe14bb6bf332045a6859eebe4122c15c3f6ff3c",
+      "audit_script": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/audit_build.mjs",
+      "audit_script_sha256": "8fdf9c4ad523cb51a8b4cfb5c48a5ff9a51d2af9d0f7c911dce3f977be9ce258",
+      "node_version": "v22.23.4",
+      "file_count": 209,
+      "all_output_bytes_and_sha256_values_match": true,
+      "buildmanifest_in_output_inventory": true,
+      "emitted_typescript_count": 186,
+      "forwarder_source_entries": 5,
+      "forwarder_go_file_count": 4,
+      "forwarder_module": "gobi.generated/compiled",
+      "app_ir_role_exports_per_app": [
+        "init",
+        "update",
+        "view"
+      ],
+      "all_four_bundles_imported_and_roles_called": true,
+      "all_four_updates_returned_distinct_values": true,
+      "counter_add": {
+        "input_count": 0,
+        "returned_count": 1
+      },
+      "forwarder_go_directly_calls_original_app_functions": true,
+      "emitted_update_uses_state_clone": true,
+      "components_modules_contain_role_metadata_only": true
+    },
+    "failure_and_closed_request_probes": {
+      "source_failure": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-xr-g-semantic-n5 < coordination/reviews/xr_g_semantic/failure-request.json > coordination/reviews/xr_g_semantic/failure-result.json 2> coordination/reviews/xr_g_semantic/failure.stderr.log",
+        "exit_code": 1,
+        "result": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/failure-result.json",
+        "result_sha256": "bf2a5cd89088687f5c7cca4dfc3d09da5385f2b16fea2819a2ba07d70ba21ef4",
+        "ok": false,
+        "preserved_previous_output": true,
+        "reported_output_count": 0
+      },
+      "duplicate_field": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-xr-g-semantic-n5 < coordination/reviews/xr_g_semantic/duplicate-field-request.json > coordination/reviews/xr_g_semantic/duplicate-field-result.json 2> coordination/reviews/xr_g_semantic/duplicate-field.stderr.log",
+        "exit_code": 1,
+        "result_sha256": "4a42efb4af20f23eca53d8d30b9e118b0d225ae46d0654b40a5f08d23848b831",
+        "ok": false,
+        "diagnostic": "decode build request: duplicate build request field \"backend\"",
+        "preserved_previous_output_field": false
+      },
+      "missing_field": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-xr-g-semantic-n5 < coordination/reviews/xr_g_semantic/missing-field-request.json > coordination/reviews/xr_g_semantic/missing-field-result.json 2> coordination/reviews/xr_g_semantic/missing-field.stderr.log",
+        "exit_code": 1,
+        "result_sha256": "00cd8fbd2b323867d552dbf04fe4be0b1a84f8766f39377e5db1ed67159e5cf4",
+        "ok": false,
+        "diagnostic": "decode build request: missing required build request field \"backend\"",
+        "preserved_previous_output_field": false
+      },
+      "preserved_output_hashes_reverified": 209,
+      "audit_after_all_failed_requests": "all 209 previous files still match the successful BuildResult byte counts and SHA-256 values"
+    },
+    "cleanup": {
+      "numeric_temp_source_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/numeric/fixture-scratch-73224265",
+      "archive": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_semantic/prior-numeric-fixture-scratch-73224265.tar.gz",
+      "archive_sha256": "a77af0b1fd069cfbc67e001272454fa14cf748afdbf0a47137be554dc82d0843",
+      "archived_app_go_count": 22,
+      "cleanup_status": "the directory was removed once, then later reappeared with the same original timestamp and contents; no numeric probe process is active. It was left in place because concurrent XR-A-NUMERIC ownership is possible."
+    },
+    "limits": [
+      "This audit exercises generated Init/Update/View for all four apps, but only checks the counter add business transition beyond role invocation and value-copy identity.",
+      "No full user action traces, React DOM, browser, or complete Go compatibility claim is made.",
+      "Duplicate and missing-field requests return preservedPreviousOutput:false because decoding exits before Build/Publish; the output path was not changed, as verified by all 209 hashes.",
+      "Known React slice-proxy and runtime completion-admission concerns were excluded from this semantic review."
+    ]
+  },
+  "reported_decision": "accept",
+  "native_schema_correction": "Mapped author reported accept to supported accepted enum; raw receipt retained in reviews/history/XR-G-SEMANTIC-receipt-accept-enum.json."
+}

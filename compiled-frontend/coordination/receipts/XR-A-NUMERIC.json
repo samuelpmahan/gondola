@@ -1,0 +1,62 @@
+{
+  "job_id": "XR-A-NUMERIC",
+  "reviewer": "N2",
+  "decision": "amend",
+  "summary": "A-NUMERIC's final probe, stored source-span results, Number/BigInt encoder boundaries, fixture positives, source hashes, and pre-repair attribution are confirmed for the finite cases recorded. Amend the cleanup statement: a current fixture-scratch directory exists and is distinct from the final run's recorded scratch path.",
+  "scope": "Read-only audit-of-audit of N5 A-NUMERIC artifacts. Does not independently accept G-CONTRACT production or establish general analyzer soundness.",
+  "verification": {
+    "review_mode": "stored-artifact inspection; no probe or test rerun",
+    "final_command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH /tmp/gondola-go/bin/go run ./coordination/reviews/numeric/run_probes.go -mode=post > coordination/reviews/numeric/final-full-check.json 2> coordination/reviews/numeric/final-full-check.stderr.log",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+    "recorded_exit": 0,
+    "counts": {
+      "unsafe_numeric_rejects_with_target_spans": 12,
+      "package_construct_rejects_with_target_spans": 2,
+      "required_safe_accepts": 6,
+      "conservative_safe_rejects": 2,
+      "positive_apps": 4,
+      "positive_app_diagnostics": 0
+    },
+    "diagnostic_counts_in_raw_json": {
+      "analyze.numeric-profile": 15,
+      "source.package-global": 1,
+      "source.init-function": 1,
+      "note": "One package-global case also has a numeric-profile diagnostic; counts above are cases, not diagnostic records."
+    },
+    "encoder": {
+      "number_int": "\u00b19007199254740991 accepted; next values outside rejected by native and generated JS encoders",
+      "number_uint": "9007199254740991 accepted; 9007199254740992 rejected by native and generated JS encoders",
+      "bigint_int64": "full-width max 9223372036854775807 accepted by both encoders",
+      "bigint_uint64": "full-width max 18446744073709551615 accepted by both encoders"
+    },
+    "pre_fix_attribution": "N5's first pre-fix harness attempt is only a transient compile failure. N2's RED test summary is explicitly attributed and has no separate retained stdout/stderr. The pre-codec mismatch is independently present in pre-codec-repair.json; it is not misrepresented as the failed analyzer attempt.",
+    "cleanup_discrepancy": {
+      "receipt_claim": "temporary_source_fixtures_remaining=0",
+      "current_observation": "coordination/reviews/numeric/fixture-scratch-73224265 exists with 22 app.go probe inputs",
+      "final_result_path": "fixture-scratch-1169737128",
+      "assessment": "The current scratch directory differs from the final JSON's recorded scratch path. Its origin is not established. Amend the unqualified current-state cleanup claim or clean it with its owner's authority and recheck."
+    }
+  },
+  "sha256": {
+    "analyze_analyze_go": "28270a69953b8a65d797b0187ca64cd50f48693a5cf283d9cd5edf16841f19c5",
+    "analyze_project_go": "32a2c6cee4d3a84a83d76733343f49c061910e3b6329d7fd153a1979a400868a",
+    "analyze_numeric_security_test_go": "656f6c4d6f47941f05e307214b238d0a5c0fb2dd4899b1cc8013bc528532f609",
+    "compilercontract_value_go": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f",
+    "review_harness": "e57902ff2fb1c1b6fb69e442cc9b35d2fff17f11517027201410bf5f49853a9c",
+    "final_full_check": "68914c08fcb4b02f063ffc717a539eae9728e2d00131ac4b0b97bf9e5d7d73f6",
+    "pre_codec_check": "2c66f363b2a5c8c670fb071153ebc3858c6cf320b626c726c71ebca414edc227",
+    "post_analyzer_pre_codec_check": "958fe1aeff8eb3f0290f6d12b026034c943ad6676fef145c89b451e49941e7fc",
+    "transient_compile_log": "f05ec2cadc16d571223c5c84e8d679616f2b3520107d11f61cad718ad12d0d16",
+    "n5_a_numeric_report": "e903a35148ed9146fb30d1a1250606ed21b4055e367852ef82e0742f9a2fac33",
+    "n5_a_numeric_receipt": "010183f48a852bcbdd7c394bab5e74d183829a2197cb50c247151074c0485551"
+  },
+  "limits": [
+    "Stored-artifact audit only; no independent test execution.",
+    "Does not establish general Go arithmetic/control-flow soundness or arbitrary helper/dataflow safety.",
+    "Imported dependency initializer behavior is outside these cases.",
+    "The two safe false rejects document incompleteness.",
+    "Does not decide or independently accept the N2 G-CONTRACT production changes."
+  ],
+  "worker": "N2",
+  "native_schema_correction": "Added required worker from existing reviewer identity; original receipt preserved in reviews/history/XR-A-NUMERIC-receipt-missing-worker.json."
+}

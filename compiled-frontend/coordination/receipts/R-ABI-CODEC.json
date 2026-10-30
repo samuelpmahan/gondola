@@ -1,0 +1,96 @@
+{
+  "job_id": "R-ABI-CODEC",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Regenerated encoder now admits the observed GoScript v0.6.2 sparse-capacity Array backing shape for GoSlice windows, copies only dense visible descriptors, and rejects unsupported extras and holes. Actual list state succeeds through six appends; root Go 1.24 compilercontract tests pass with Node 22. No full build or E2E result is claimed.",
+  "scope": {
+    "production": [
+      "compilercontract/js_encoder.go"
+    ],
+    "tests": [
+      "compilercontract/js_encoder_test.go"
+    ],
+    "review_artifacts": "compiled-frontend/coordination/reviews/r_abi_codec/**",
+    "other_production_changed": false
+  },
+  "reproduction": {
+    "actual_module": "/tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/gobi-compiled.mjs",
+    "app_ir": "/tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/app-ir.json",
+    "goscript": "github.com/s4wave/goscript v0.6.2",
+    "goscript_source": "/root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2/gs/builtin/slice.ts",
+    "node": "v22.23.4",
+    "pre_repair_command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/r_abi_codec/pre_repair_probe.mjs",
+    "pre_repair_exit": 1,
+    "pre_repair_failure": "After three actual Update(add) calls, the GoSlice has offset=0, length=3, capacity=4; encoding fails at backing index 3, an unused capacity hole.",
+    "raw_failure": "pre_repair_probe.stdout.json contains the TypeError and stack; pre_repair_probe.stderr.log and pre_repair_probe.exit-code retain accompanying stderr and exit code.",
+    "observed_marker": {
+      "description": "goscript.spareZero",
+      "global_key": null,
+      "symbol_descriptor": "enumerable=true, writable=true, configurable=true, data value function",
+      "factory_own_keys": [
+        {"name": "length", "value": 0, "enumerable": false, "writable": false, "configurable": true},
+        {"name": "name", "value": "", "enumerable": false, "writable": false, "configurable": true}
+      ],
+      "factory_invoked": false
+    }
+  },
+  "repair": {
+    "rules": [
+      "Validate GoSlice exact own data wrapper keys and safe offset/length/capacity sums and bounds.",
+      "Allow at most one local, non-global Symbol with description goscript.spareZero, exact observed symbol descriptor attributes, and the observed function own-property shape.",
+      "Validate all backing own keys and descriptors; holes are allowed only in [offset+length, offset+capacity).",
+      "Copy only visible array values through own data descriptors into a fresh dense array; do not invoke the spareZero factory.",
+      "Keep direct native arrays on the existing closed dense ownArray path."
+    ],
+    "identity_limit": "The private GoScript Symbol identity cannot be authenticated. Admission is intentionally shape-based; a local same-description Symbol with the exact observed shape can match. The encoder never invokes the factory and copies only the visible values.",
+    "typed_array_limit": "Direct Float64Array values, including negative zero, are covered. Float64Array-backed GoSlice wrapper and its hidden-capacity behavior are untested; the existing typed-array wrapper path validates/converts the dense backing then slices it."
+  },
+  "tests": {
+    "command": "GOTOOLCHAIN=local GONDOLA_NODE_BIN=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go-sdk/go/bin/go test -count=1 ./compilercontract",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled",
+    "go": "go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "exit": 0,
+    "result": "ok github.com/samuelpmahan/gondola/compilercontract",
+    "coverage": [
+      "GoScript-shaped Row, int, and uint64 BigInt slices",
+      "nil versus non-nil empty slice distinction",
+      "negative-zero float bits and uint64 full-width values",
+      "valid unused capacity holes and non-invoked factory",
+      "visible/prefix/out-of-capacity hole rejection",
+      "unknown/global symbol, bad factory, accessor, wrapper extra, and unsafe bound rejection",
+      "ordinary native arrays remain closed and dense"
+    ]
+  },
+  "actual_post_repair": {
+    "encoder_generation_command": "GOTOOLCHAIN=local /tmp/gondola-go-sdk/go/bin/go run ./compiled-frontend/coordination/reviews/r_abi_codec/generate_list_encoder.go /tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/app-ir.json /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/r_abi_codec/fresh-list-encoder.mjs",
+    "encoder_generation_source": "Current GenerateValueEncoder plus types unmarshaled from compiled list app-ir.json; compiled app module was not rebuilt.",
+    "probe_command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/r_abi_codec/post_repair_actual_list_probe.mjs",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+    "node": "v22.23.4",
+    "exit": 0,
+    "append_counts": [0, 1, 2, 3, 4, 5, 6],
+    "outcomes": "All encoded states accepted; visible row IDs equal 1..count. At count=3, length=3/capacity=4; count=5, length=5/capacity=8.",
+    "failures": []
+  },
+  "sha256": {
+    "js_encoder_go": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+    "js_encoder_test_go": "d6dcbda61dc4dcb425164fc45d396f799a0574981103ad4866d268fb3fb9aa9f",
+    "goscript_slice_source": "5f6da8d9bb986cc49f1323e1ba505c8ba779da6c54ebaacf6c1bd540e9a0bdea",
+    "build_manifest": "ab7f08e05f210f48f63c4bc7319383a6f2e08a3c89caf5c5a660fc91b64a7ae4",
+    "list_app_ir": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+    "list_compiled_module": "54b09d871576d33237c0bda34da1388b9ff9fa393ddafd4f26a71ca55cd75fd6",
+    "pre_repair_encoder": "3412bbb20b80098a35f7933db8ec382497f7853d079defb39fa5060801eabfb0",
+    "fresh_encoder": "8e1727393cd4a2af4a3fc8e8c156462d951bcbfe4990c04bb65ed02d5ec83723",
+    "generator_harness": "fef4d799f0ff0ab3d8e5f3088a9a4ccc19cabc455730bb58ac78a7321047387d",
+    "pre_repair_probe_stdout": "45b90395697f7d3f94fd64411ef5f737d3ab7a8a78e31182e72409d97ef3d207",
+    "post_repair_probe_stdout": "22aacbc08490d9bcc4c3a1cbe738c6fb0eaaef2a505548bbb2bb8180059c2fd2",
+    "root_go24_test_stdout": "7f271c718fe4e233ad1831bb4b75b255b4671f0064a32e64f32daf01072674b3"
+  },
+  "limits": [
+    "No all-four-app build, full runner, browser, or demo test was run in this lane.",
+    "The actual stress used the existing compiled list module and a fresh encoder generated from its AppIR metadata; it did not rebuild the module.",
+    "No general claim is made for every GoScript GoSlice element type, Float64Array-backed GoSlice wrappers, hostile proxies, or all possible descriptor shapes.",
+    "No general GoScript or end-to-end correctness claim is made."
+  ]
+}

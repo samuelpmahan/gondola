@@ -1,0 +1,188 @@
+{
+  "job_id": "R-CONFORMANCE",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Fresh R-ABI-CODEC/R3 build passed five deterministic native/direct-JavaScript/mounted-browser/checker profiles: four apps, 43 exact ticks, and zero mismatches. The added list-growth scenario exercises actual GoScript spare-capacity arrays at row counts three and five.",
+  "report_sha256": "1e6a0e7a770dae35a1faec2b38adc538925258ea9d8a2bf9461006ba0c925cf0",
+  "scope": [
+    "compiled-frontend/conformance/**",
+    "compiled-frontend/coordination/reports/R-CONFORMANCE.md",
+    "compiled-frontend/coordination/receipts/R-CONFORMANCE.json"
+  ],
+  "build": {
+    "fresh_output_dir": "compiled-frontend/artifacts/compiled",
+    "buildmanifest_sha256": "ab7f08e05f210f48f63c4bc7319383a6f2e08a3c89caf5c5a660fc91b64a7ae4",
+    "output_files_hashed_and_verified": 209,
+    "source_pins_before_after_equal": true,
+    "root_source_pin_count": 116,
+    "root_execution_receipt": "compiled-frontend/artifacts/execution.json",
+    "root_execution_receipt_sha256": "e4f2d958d76f5ed03079e00914d705b0514f7de29023231206c0b00869c8c7b5",
+    "root_run_status": "passed",
+    "visible_demo_smoke": "passed"
+  },
+  "environment": {
+    "root_compiler_go": "go1.27.3",
+    "root_go_compatibility_tests": "go1.24.0",
+    "n6_native_replay_go": "go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "chromium": "153.0.8010.0",
+    "chromium_path": "/tmp/chromium",
+    "random_seed": null,
+    "fixture_scripts_deterministic": true
+  },
+  "commands": {
+    "n6_capture": "compiled-frontend/conformance/raw/r-conformance-final/run.sh",
+    "n6_verify": "/tmp/gondola-node22/node_modules/node/bin/node compiled-frontend/conformance/raw/r-conformance-final/verify-five-profiles.mjs",
+    "node_tests": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/conformance/*.test.mjs"
+  },
+  "results": {
+    "total_profiles": 5,
+    "distinct_apps": 4,
+    "total_ticks": 43,
+    "total_mutation_controls_detected": 89,
+    "mismatches": 0,
+    "profiles": [
+      {
+        "name": "counter",
+        "fixture": "unchanged-counter-add-reset-disabled",
+        "ticks": 5,
+        "mutation_controls": 17,
+        "status": "matched",
+        "trace_sha256": "ce4db2d9ff3decf4ad59ef08ff7fcba29d5ecc99f34edf4d6884d7ad4bb87d4d"
+      },
+      {
+        "name": "form",
+        "fixture": "compiled-form-text-checked-literal-save-reset",
+        "ticks": 10,
+        "mutation_controls": 18,
+        "status": "matched",
+        "trace_sha256": "5cfb548f8eeb5988927bb94e669b8f72bb5d1f2beb60c41b3160d12d18b4626f"
+      },
+      {
+        "name": "list",
+        "fixture": "compiled-keyed-list-identity-empty-and-detached",
+        "ticks": 11,
+        "mutation_controls": 19,
+        "status": "matched",
+        "trace_sha256": "736fcd5ff10496dc3af9a35051f20abbcfc1170088f6816edc5ea4781a821973"
+      },
+      {
+        "name": "effect",
+        "fixture": "compiled-effect-commit-before-deterministic-reply",
+        "ticks": 5,
+        "mutation_controls": 18,
+        "status": "matched",
+        "trace_sha256": "63553a85f8ba98dc9cd6d614b0ddc93d6e2b44539cc44c198a51a238d58f529c"
+      },
+      {
+        "name": "list-growth",
+        "fixture": "compiled-list-growth-spare-capacity-edit-reorder-reset",
+        "ticks": 12,
+        "actions": 11,
+        "mutation_controls": 17,
+        "status": "matched",
+        "trace_sha256": "bc401c07986a5021a94b40534a2d22d306ddb36fd2c4f354e1cc60a22207130d"
+      }
+    ]
+  },
+  "list_growth": {
+    "fixture": "compiled-frontend/conformance/fixtures/list-growth.json",
+    "fixture_sha256": "1159fea3b6937b325d66f6fbc201f31b3e6edd22bb1426723bd92e6d2d76a0a0",
+    "trace_ticks": 12,
+    "state_expectations": "five Add states; edit Row 3; check Row 5; move Row 5 up; remove Row 3; reset to non-nil empty Rows; suppress disabled Reset",
+    "fresh_compiled_module_sha256": "33dc9ebcb7d26a505300014ec786ea9b9409e82e0ca95a5fb7d25800fab7a118",
+    "spare_capacity_observations": [
+      {
+        "add_count": 3,
+        "length": 3,
+        "capacity": 4,
+        "symbol": "goscript.spareZero",
+        "spare_slots_are_holes": true
+      },
+      {
+        "add_count": 5,
+        "length": 5,
+        "capacity": 8,
+        "symbol": "goscript.spareZero",
+        "spare_slots_are_holes": true
+      }
+    ]
+  },
+  "browser_gates": {
+    "all_profiles_zero_wasm_requests": true,
+    "all_profiles_zero_wasm_api_attempts": true,
+    "all_profiles_empty_physical_root_after_unmount": true,
+    "all_profiles_empty_renderer_snapshot_after_unmount": true,
+    "literal_action": {
+      "requested_value": "must not replace literal",
+      "observed_button_value": "",
+      "go_message_argument": "target.value"
+    },
+    "list_focus": {
+      "selection_start": 0,
+      "selection_end": 2,
+      "selection_direction": "backward",
+      "active_target_before_immediate_settled": true,
+      "same_keyed_node_after_reorder": true
+    },
+    "detached_callback": {
+      "stale_action_index": 7,
+      "stale_observation_count": 1,
+      "dispatch_count_unchanged": true
+    },
+    "effect": {
+      "request_observed_after_commit_tick_count": 4,
+      "pending_dom_visible_before_completion": true,
+      "request_disabled_before_completion": true,
+      "completion_delivered_once": true,
+      "duplicate_completion_rejected_without_tick": true
+    },
+    "growth_disabled_reset_suppressed": true
+  },
+  "provenance": {
+    "n6_direct_inputs_per_profile": 98,
+    "n6_browser_inputs_per_profile_including_bundle": 99,
+    "fixture_file_explicitly_pinned": true,
+    "direct_source_hashes_checked_before_loading_and_after_replay": true,
+    "browser_source_hashes_checked_before_loading_after_bundle_and_after_execution": true,
+    "root_global_source_pins_stable": true,
+    "root_build_outputs_stable": true
+  },
+  "focused_tests": {
+    "passed": 40,
+    "failed": 0,
+    "stdout": "compiled-frontend/conformance/raw/r-conformance-final/logs/conformance-tests.stdout.log",
+    "stdout_sha256": "ae24eed907ce3bf69526698a533690ac1c55226836f65de6343c2c0387c1df4f",
+    "stderr": "compiled-frontend/conformance/raw/r-conformance-final/logs/conformance-tests.stderr.log",
+    "stderr_sha256": "184e3615ffb3281d19bd2f53798518b31a6cc3a8ec6ef0e0c7bd388186f9e4ea"
+  },
+  "raw_evidence": {
+    "directory": "compiled-frontend/conformance/raw/r-conformance-final/",
+    "sha256_manifest": "compiled-frontend/conformance/raw/r-conformance-final/SHA256SUMS",
+    "sha256_manifest_sha256": "d866f4174fbb7ae69ba697b736036e1cf878d827341fb16ea7d0cf6a3f25832d",
+    "run_script_sha256": "73d8dcf4eadb278f1f5bf0544f3f62bbcd48791b83066a387c9a5810f8b15136",
+    "summary_sha256": "c6825a36ab4101e48792590b1c7d4d367ea7f37080d32195ac383f3d87dfb274",
+    "growth_abi_probe_sha256": "b3e725d1f2a59c0e1f533095832c2ca290b3166474d399ddad331b27a872f769"
+  },
+  "source_sha256": {
+    "compilercontract/js_encoder.go": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+    "compiled-frontend/frontend/react/renderer.mjs": "12e50f96ec61975551d4f63242a512912aa986727170186ccb83ad66a9902da0",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+    "compiled-frontend/conformance/browser.mjs": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea",
+    "compiled-frontend/conformance/direct-js.mjs": "94e0da9f2d177d1ab6840bddfed0774358db36a3abe368b79b044d89167308c0",
+    "compiled-frontend/conformance/provenance.mjs": "fbc3045cf31f02cedf7abf1341bcfe0b6f951a57dfa3d4f49d8397d25421127e",
+    "compiled-frontend/conformance/fixtures/list-growth.json": "1159fea3b6937b325d66f6fbc201f31b3e6edd22bb1426723bd92e6d2d76a0a0"
+  },
+  "limits": [
+    "A retained callback after runtime unmount remains not tested; the detached-node callback before unmount is tested.",
+    "No generic Go semantics equivalence claim is made outside the pinned compiled frontend profile and these five deterministic scripts."
+  ],
+  "historical_failure_preservation": {
+    "previous_job": "G-CONFORMANCE",
+    "receipt_sha256": "e76fd88490d8f701a68a0c4d8cba195eb7f2d83b51df524cabe7104599c56c50",
+    "raw_failures_preserved": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/",
+    "status": "historical R2 renderer rejection superseded by current R-ABI-CODEC/R3 build"
+  },
+  "reported_outcome": "accepted",
+  "native_schema_correction": "Repair packet includes changed harness/tests and a passing execution; mapped to supported mixed_change, retaining reported outcome in reported_outcome and raw history."
+}

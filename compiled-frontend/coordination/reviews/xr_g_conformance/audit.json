@@ -1,0 +1,123 @@
+{
+  "schema": "xr-g-conformance-audit/v1",
+  "job_id": "XR-G-CONFORMANCE",
+  "reviewer": "N4",
+  "decision": "amend",
+  "checkpoint": {
+    "n1_tree_sha256": "900dc38eee351e745717136cb54ae26d0765ec53d25c2d99e226b2b4ee620f2b",
+    "renderer_sha256": "9f10b75d194aab53cbe504321e8f6df26592c20b6a7123d7f267ba2e68868e5a",
+    "runtime_sha256": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+    "raw_directory": "conformance/raw/n6-source-900dc38-r2runtime"
+  },
+  "verified_partial_results": {
+    "native_direct": {
+      "method": "Node v22.23.4 read each of the four saved native/direct trace pairs and compared them with assertExactTraceValue; read-only rerun of the pinned verifier independently reported the same result.",
+      "total_ticks": 31,
+      "apps": [
+        { "app": "counter", "ticks": 5, "equality": "exact" },
+        { "app": "form", "ticks": 10, "equality": "exact" },
+        { "app": "list", "ticks": 11, "equality": "exact" },
+        { "app": "effect", "ticks": 5, "equality": "exact" }
+      ],
+      "log": "coordination/reviews/xr_g_conformance/native-direct-readonly.stdout.log",
+      "summary_sha256": "53f1db1fe9fb8f9208f28a2afbed1483ae1282a0f727e1ae1bae71fa429155ba"
+    },
+    "counter_browser": {
+      "status": "matched",
+      "ticks": 5,
+      "mutation_controls_detected": 17,
+      "wasm_requests": 0,
+      "wasm_api_attempts": 0,
+      "physical_root_empty_after_unmount": true,
+      "saved_checker_reproduced_exactly": true,
+      "check_sha256": "1af9f1d8ba44ddce2c7c5f202e2e2ed88d62a74b007d8549c5039b74d50ec72f",
+      "browser_evidence_sha256": "bdb47da9937cdf5223aabd3486f4802e15ef12710be942af59e304bfe78a34f7"
+    },
+    "browser_rejections": {
+      "form": { "stage": "mount-compiled-app", "action_index": null, "stable": true, "changed_inputs": [], "failure_sha256": "6d24533be2c05fd2e74e0ddf8f43eb5bb05067a98f92700c7c3d4cf743550b34" },
+      "list": { "stage": "run-browser-action", "action_index": 0, "stable": true, "changed_inputs": [], "failure_sha256": "511222aa9e34a2cd0deaf679e736bfdfc3c010ddc31ff20eed8ce83fa258cc8a" },
+      "effect": { "stage": "mount-compiled-app", "action_index": null, "stable": true, "changed_inputs": [], "failure_sha256": "c6e2a640717c34ec37ff46232710694f8004ba5a8874fdd5b75c36a21c4de80d" },
+      "common_error": "compiled React renderer: Node.Attrs.backing has unsupported symbol properties",
+      "manifest_failure_hashes_match": true
+    },
+    "abi_capture": {
+      "symbol": "Symbol(goscript.spareZero)",
+      "form_view_node_path": "0",
+      "slice_backing_length": 4,
+      "slice_offset": 0,
+      "slice_length": 3,
+      "slice_capacity": 4,
+      "descriptor": { "value_type": "function", "writable": true, "enumerable": true, "configurable": true },
+      "probe": "coordination/reviews/xr_r2_react/goscript-slice-probe.raw.json",
+      "probe_sha256": "2589ac6e1371c82bdc04f594a673e498f1b397518e84d69b1c0f6d12752d9517"
+    }
+  },
+  "provenance_audit": {
+    "legacy_parallel_run": {
+      "directory": "conformance/raw/n6-source-900dc38",
+      "form_stable": true,
+      "list_stable": false,
+      "effect_stable": false,
+      "changed_input_for_list_and_effect": "compiled-frontend/conformance/raw/n6-source-900dc38/form.browser.failed.bundle.mjs",
+      "classification": "evidence-output inclusion in the source walk, not a compiler or application source mutation"
+    },
+    "sequential_rerun": {
+      "directory": "conformance/raw/n6-source-900dc38-rerun",
+      "form_list_effect_stable": true,
+      "changed_inputs": [],
+      "input_count_per_failure": 95
+    },
+    "final_r2runtime_capture": {
+      "directory": "conformance/raw/n6-source-900dc38-r2runtime",
+      "form_list_effect_stable": true,
+      "changed_inputs": [],
+      "input_count_per_failure": 96,
+      "failure_json_hashes_match_manifests": true,
+      "additional_source_input": "compiled-frontend/frontend/runtime/r2_completion_probe.mjs",
+      "additional_source_sha256": "e824a273767a7e73d57fab0c57ae84559b1850ca1ece181b57adc6251315c695"
+    },
+    "artifact_hash_check": {
+      "command": "sha256sum -c compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/SHA256SUMS",
+      "exit_code": 0,
+      "verified_files": 57,
+      "log": "coordination/reviews/xr_g_conformance/r2runtime-artifact-check.log",
+      "log_sha256": "b5219e9237c9358d2dbb28df5d7120f6eb6a21ba03c4332a4d376bc96117d3de"
+    }
+  },
+  "metadata_finding": {
+    "severity": "low",
+    "reported_direct_inputs": 94,
+    "observed_direct_inputs": 95,
+    "reported_browser_inputs_with_bundle": 95,
+    "observed_browser_inputs_with_bundle": 96,
+    "evidence": "Each r2runtime direct manifest has 95 inputs; counter browser provenance and each failed browser manifest have 96. The extra source is the N4 runtime probe under frontend/runtime; browser adds its generated bundle.",
+    "required_amendment": "Correct the direct/browser provenance input counts in G-CONFORMANCE.md and G-CONFORMANCE.json. The partial result and the three browser failures remain accurately classified."
+  },
+  "test_verification": {
+    "requested_37_file_set": {
+      "toolchain": "Node v22.23.4",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/conformance/browser-options.test.mjs compiled-frontend/conformance/check.test.mjs compiled-frontend/conformance/compare.test.mjs compiled-frontend/conformance/direct-js.test.mjs compiled-frontend/conformance/dom-oracle.test.mjs compiled-frontend/conformance/fixture-expectations.test.mjs compiled-frontend/conformance/no-wasm.test.mjs compiled-frontend/conformance/observed-action.test.mjs compiled-frontend/conformance/provenance.test.mjs compiled-frontend/conformance/trace.test.mjs",
+      "passed": 37,
+      "failed": 0,
+      "stdout": "coordination/reviews/xr_g_conformance/conformance-tests-37.stdout.log",
+      "stdout_sha256": "61ad3403ab219ae77785fd1ef70108073a03f45095655467d06707adb8e2e332"
+    },
+    "current_glob_after_concurrent_test_additions": {
+      "passed": 40,
+      "failed": 0,
+      "new_test_files_seen": ["conformance/list-growth.test.mjs", "conformance/provenance-order.test.mjs"],
+      "scope_note": "Only the original 37-test set was audited; no new fixture feature review or four-app browser rerun was performed."
+    }
+  },
+  "scope_note": "The N6 verify-native-direct.mjs command was invoked once and rewrote native-direct-summary.json. The resulting bytes had the same SHA-256 as the preexisting G-CONFORMANCE receipt; no raw trace or failure artifact changed. Subsequent independent trace verification was read-only.",
+  "limits": [
+    "The counter is the only fixture with a completed mounted-browser checker pass in this capture.",
+    "Effect reply ordering, list focus/selection, and stale callback behavior beyond the reached stages remain unproven in mounted browser.",
+    "Renderer and codec repair gates were still open during this review; no four-app browser rerun was performed."
+  ],
+  "sha256": {
+    "G-CONFORMANCE.md": "4cbe347184cb1d5b8f0595b9662c905b6b9b6b3d5e1b531d5d38a434702947b4",
+    "G-CONFORMANCE.json": "e76fd88490d8f701a68a0c4d8cba195eb7f2d83b51df524cabe7104599c56c50",
+    "r2runtime_SHA256SUMS": "a68b48df1a888cc3b6771685eeb700a9c4789ba4cec8a1263542217504d97112"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "job_id": "XR-G-FIXTURES",
+  "worker": "N3",
+  "decision": "amend",
+  "summary": "Fresh native replay confirms all four current AppIRs produce the retained traces and expected source-forward messages. Amend because counter/effect AppIR input hashes drift from the prior receipt and the prior blobs are unavailable for a semantic diff.",
+  "evidence": {
+    "scope": "Read-only review of fixtures/compiled/{form,list,effect}, cmd/compiled-native, compiled-frontend/fixtures, current generated AppIRs, and retained native traces. Source/fixture/contract files were not modified.",
+    "toolchain": "go version go1.24.0 linux/amd64",
+    "test_command": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local /tmp/gondola-go/bin/go test -count=1 ./cmd/compiled-native ./fixtures/compiled/form ./fixtures/compiled/list ./fixtures/compiled/effect",
+    "test_result": {
+      "packages_passed": 4,
+      "packages_failed": 0,
+      "exit_code": 0
+    },
+    "native_command_template": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local /tmp/gondola-go/bin/go run ./cmd/compiled-native --app-ir /tmp/gondola-compiled-atomic/apps/<app-dir>/app-ir.json --script compiled-frontend/fixtures/<app>.json > /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_fixtures/<app>.native.trace.json 2> /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_fixtures/<app>.native.stderr.log",
+    "native_runs": [
+      {
+        "app": "counter",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/counter-b05e9eb0e4e6/app-ir.json",
+        "prior_receipt_app_ir_sha256": "6435630c8c9a8203a38641148f9541e76f3b4a294ce47f3802b50146d8edf8f6",
+        "current_app_ir_sha256": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+        "trace": "coordination/reviews/xr_g_fixtures/counter.native.trace.json",
+        "trace_sha256": "205adff25e733986a57ef108265223fc9eb925600b36b1c7f64176218e476f5f",
+        "retained_n5_trace_sha256": "205adff25e733986a57ef108265223fc9eb925600b36b1c7f64176218e476f5f",
+        "ticks": 5,
+        "action_attempts": 4,
+        "update_dispatches": 3,
+        "requests": 0,
+        "completions": 0,
+        "exit_code": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "app": "form",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/form-a3fe6b48b000/app-ir.json",
+        "prior_receipt_app_ir_sha256": "4c4ffefca78c86ac3914e0b3f410a4b49354a2b00c05d0b6d1c75e9ed96b19da",
+        "current_app_ir_sha256": "4c4ffefca78c86ac3914e0b3f410a4b49354a2b00c05d0b6d1c75e9ed96b19da",
+        "trace": "coordination/reviews/xr_g_fixtures/form.native.trace.json",
+        "trace_sha256": "d7a8a481c2630ce6eb654db7df6fb0141fb056356dcb2fe9fdac39f24103e53b",
+        "retained_n5_trace_sha256": "d7a8a481c2630ce6eb654db7df6fb0141fb056356dcb2fe9fdac39f24103e53b",
+        "ticks": 10,
+        "action_attempts": 9,
+        "update_dispatches": 8,
+        "requests": 0,
+        "completions": 0,
+        "exit_code": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "app": "list",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/app-ir.json",
+        "prior_receipt_app_ir_sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+        "current_app_ir_sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+        "trace": "coordination/reviews/xr_g_fixtures/list.native.trace.json",
+        "trace_sha256": "4efce0ba39837e1269e48b7735fb6f6462f20b3d1525e6a3fa48941603a0c408",
+        "retained_n5_trace_sha256": "4efce0ba39837e1269e48b7735fb6f6462f20b3d1525e6a3fa48941603a0c408",
+        "ticks": 11,
+        "action_attempts": 10,
+        "update_dispatches": 8,
+        "requests": 0,
+        "completions": 0,
+        "exit_code": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "app": "effect",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/effect-ff8449e8f5b2/app-ir.json",
+        "prior_receipt_app_ir_sha256": "b5ab162ea40e137442531d2e319e029d88d8865849b404f011f400bde89329bf",
+        "current_app_ir_sha256": "0cad7389539e3fd89951901e41f8766dd0fb81012931700febfe7acad71c3b7d",
+        "trace": "coordination/reviews/xr_g_fixtures/effect.native.trace.json",
+        "trace_sha256": "38f0e2cfae0741b0ae5103744022a6f1177f368fcd4aaa820e74f8376d852df5",
+        "retained_n5_trace_sha256": "38f0e2cfae0741b0ae5103744022a6f1177f368fcd4aaa820e74f8376d852df5",
+        "ticks": 5,
+        "action_attempts": 3,
+        "update_dispatches": 3,
+        "requests": 1,
+        "completions": 1,
+        "exit_code": 0,
+        "stderr_bytes": 0
+      }
+    ],
+    "independent_probe": {
+      "command": "python3 coordination/reviews/xr_g_fixtures/probe.py",
+      "result": "exit 0; validates current AppIR against build-four result, role signatures and state fields; resolves each script action against the preceding native ViewRecord; compares message forwarding, state expectations, and effect correlation; all four fresh trace hashes match retained traces",
+      "probe_sha256": "beeb340300618c9242596e3e99153e22e8f55ff56c1b31693ec66b433984fc34",
+      "result_sha256": "34e6c8a906d1388a2666ab12fcec0ee3c6992d40c69fa769c04d5428b9450f87"
+    },
+    "duplicate_host_step_probe": {
+      "command": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local /tmp/gondola-go/bin/go run ./cmd/compiled-native --app-ir /tmp/gondola-compiled-atomic/apps/effect-ff8449e8f5b2/app-ir.json --script /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_g_fixtures/effect.duplicate-host-step.json",
+      "script_sha256": "3baea0c58a4eaf0872fe2c276c9434ff12b668c18be537a60d4c23a7d66e4257",
+      "expected_failure": "exit 1; unused host steps: consumed 1 of 2; stdout empty",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9ff89c5e03e02e6cac86cb7121926e60c634f104c350c56661705e129e9adf86"
+    },
+    "current_build_result": {
+      "path": "toolchain/build-four/result.json",
+      "sha256": "f260cdebb939d588fdd213d59038a3f223ad3769c68385df66fff22f9ded76a3",
+      "verification": "The four /tmp AppIR JSON objects equal the current result.json apps and each matches its output hash."
+    },
+    "app_ir_hash_drift": {
+      "counter": {
+        "prior_receipt": "6435630c8c9a8203a38641148f9541e76f3b4a294ce47f3802b50146d8edf8f6",
+        "current": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+        "prior_blob_available": false
+      },
+      "effect": {
+        "prior_receipt": "b5ab162ea40e137442531d2e319e029d88d8865849b404f011f400bde89329bf",
+        "current": "0cad7389539e3fd89951901e41f8766dd0fb81012931700febfe7acad71c3b7d",
+        "prior_blob_available": false
+      },
+      "unchanged": {
+        "form": "4c4ffefca78c86ac3914e0b3f410a4b49354a2b00c05d0b6d1c75e9ed96b19da",
+        "list": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b"
+      }
+    },
+    "verified_facts": [
+      "All current generated AppIR package paths and Init/Update/View symbols/signatures match the current N1 build result and fixture source declarations.",
+      "Fresh native direct-Go runs reproduce the retained trace bytes for all four apps.",
+      "Text and checkbox bindings forward action values; literal form On.Arg remains target.value even when action.value differs.",
+      "Disabled reset/request actions record attempts without dispatching updates.",
+      "The list preserves nil Rows vs non-nil empty Rows in type-aware trace encoding.",
+      "The form trace reaches 9007199254740991 and a further save does not cross the safe-integer limit.",
+      "The effect trace has one fixture.request lookup request and one correlated complete reply; request pending state is in the trace before reply.",
+      "NegativeZero has exact bits 8000000000000000 in all effect ticks.",
+      "An extra duplicate HostScript step is rejected; direct Update test treats a duplicate complete message as no-op."
+    ],
+    "relocation": "The initial native command wrote four trace/stderr pairs under root coordination/reviews/xr_g_fixtures. Those eight files matched the nested copies byte-for-byte, were moved, and the duplicate root copies were removed. The CLI runs were repeated with absolute nested output paths; the root-level coordination/reviews/xr_g_fixtures directory is absent.",
+    "source_sha256": {
+      "cmd/compiled-native/replay.go": "39cf8cd7721d5cd4ecf1088a68558a7440bcb3acdc8745ded69f36d8afc5a637",
+      "cmd/compiled-native/replay_test.go": "40c8ffe93840dd777f02281304b364c2de5a7fe36e822920cc43c3dd5e0fccb6",
+      "counter/counter.go": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+      "fixtures/compiled/form/app.go": "ce5dd61731a40ba0aad82cfd8fc529bfb114aab19d4658bba2a3a25780c2435a",
+      "fixtures/compiled/form/view.go": "f4a253fd140be7769c3f46a6ab74186dc1bd9cebed651ed7eafde07f1403ea76",
+      "fixtures/compiled/form/form_test.go": "78d9498b62994631ac858411432ad654836e609fc087a8b40111bcf73f31a9e0",
+      "fixtures/compiled/list/app.go": "5b440b875b77db30814cb431f50b15d4df6180211b7acc79af120685e355b0f3",
+      "fixtures/compiled/list/view.go": "4f31b142e2641483844eaf36c37ecd3f3b091a2e73915abab36292c078571327",
+      "fixtures/compiled/list/list_test.go": "e2b83610a5fb4713321567e2dfddb2d597057dfc6467a256004738d7476ccfba",
+      "fixtures/compiled/effect/app.go": "a8f75a4666c5f2a2cdc47ea1ddb8217abb379acde8171ae4935d9de6d6125764",
+      "fixtures/compiled/effect/view.go": "8866de42cd8910a213e01473c6ae782f767d17b2e116dfaead6d797ea557c7f8",
+      "fixtures/compiled/effect/effect_test.go": "b6f5f32089732ff365d9efd28674dc1fb4749fe7dfb05101cf65fccbcec09287",
+      "compiled-frontend/fixtures/counter.json": "4d901b49172838dba47e4b424e9b3d06c20b3446058819b7125a80e3ccf5def5",
+      "compiled-frontend/fixtures/form.json": "b9223b9e70c6509fd8c536dcd7cd6be98bce30e4de941cc9b49398426408c209",
+      "compiled-frontend/fixtures/list.json": "2a2ae56220ec25743e9141b4142760cabd117c52c10b8893a59a686163f77312",
+      "compiled-frontend/fixtures/effect.json": "2db7fb4d27fa8f023e72cb907aa42f7a2e8709f69d709d5763d78648f271fb0e"
+    },
+    "limits": [
+      "The previous counter/effect AppIR blobs are missing, preventing semantic comparison against their prior receipt hashes; the mismatches remain unresolved.",
+      "Native traces use dom:null and do not prove emitted-JavaScript, mounted-browser, or physical keyed focus/selection parity.",
+      "The native effect trace verifies one request and one correlated completion. Duplicate completion suppression is an app Update test; the CLI itself has no external asynchronous delivery race because it replays host steps synchronously."
+    ]
+  }
+}
