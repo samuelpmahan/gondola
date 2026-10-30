@@ -1,0 +1,30 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-pr10-clean-ci-acceptance"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-C-ARTIFACT",
+      "kind": "extract",
+      "repair_of": "C-ARTIFACT",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "C-ARTIFACT report wording only; preserve original under history; R-C-ARTIFACT report/receipt only",
+      "summary": "Attribute head binding to GitHub artifact API and tree provenance to separate captured publication/checkout/local-tree evidence; no source, binary or test changes"
+    }
+  ]
+}

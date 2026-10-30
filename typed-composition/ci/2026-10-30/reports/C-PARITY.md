@@ -1,0 +1,7 @@
+# C-PARITY — fresh CI parity audit
+
+**Decision: confirmed reuse.** Primary run 41123116952/job 124294552127 succeeded; the CI metadata lists all 10 PR workflows completed successfully. The report at SHA-256 `338f88bcfc9dd62c1ae7909ad8f51eb677abf3350dab96a31397cea66c91591a` has status `matched`: 63 scripts/native executions, 2,463 actions/native frames, 4,926 actor-native comparisons, and zero mismatches. The mismatch artifact is `[]`.
+
+I parsed all 63 scenario shards: 3 fixed scripts and 60 seeded cases (30 each for seeds 20261030 and 20261031), with 3 additional control shards, 66 total. Across the scenarios, actions, native frames, model frames, and browser frames align per index; each action matches its native/model/browser frame. Native/model entries have `{action,result,frame}` with full `{tree,sessions,changes}` frames and per-session `{state,tree,bindings,messages}` snapshots. Candidate and reference actor records each carry full snapshots. Both actor comparisons are represented per native frame; no scenario reports browser errors or mismatches.
+
+Parent and stale-revision controls reject without changes. Separate controls detect reordered inbox sequence and a disabled-DOM mutation; retained callback after recreation is fenced with zero completion calls. These findings support the fresh artifact’s reported parity and controls. ZIP integrity and source/build pin provenance are covered by C-ARTIFACT, not this audit. No tests, checker, builds, browser, or repository writes were run.

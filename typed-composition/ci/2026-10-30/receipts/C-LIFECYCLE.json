@@ -1,0 +1,159 @@
+{
+  "job_id": "C-LIFECYCLE",
+  "worker": "N6",
+  "outcome": "confirmed_reuse",
+  "summary": "Verified a bounded five-shard sample from the successful fresh CI artifact: four candidate focus replacements preserve active backward selection; one blocked-disabled input per actor has zero native dispatch/events and a separate unchanged direct guard; fixed transport ordering is 8 calls per actor; the single post-disposal callback control makes zero Go Complete calls after cancel/recreation. New session IDs were observed but all generations remain 1. No ignored-cancel or later-host-generation claim; not exhaustive across 63 scripts.",
+  "evidence": {
+    "artifactReadySha256": "d29386448bdd57e3389401b14eddb4452f9ed6db3499d9ffded194bbd01c5717",
+    "zipSha256": "113bd9d8e7e7b862c6ec08f72af4d07cb6c3b0cb0d6a9d4534e58dc6e76a264e",
+    "reportSha256": "338f88bcfc9dd62c1ae7909ad8f51eb677abf3350dab96a31397cea66c91591a",
+    "reportManifestSha256": "3da91172800648a89c30b4b87cf43dd0c882b9b0ddd6dbead439e2873e9313ed",
+    "primaryRun": 41123116952,
+    "primaryJob": 124294552127,
+    "allTenPRWorkflows": "success",
+    "reportTotals": {
+      "scripts": 63,
+      "actions": 2463,
+      "nativeFrames": 2463,
+      "actorNativeFrameComparisons": 4926,
+      "mismatchCount": 0
+    },
+    "boundedSample": {
+      "rawShards": 5,
+      "fixedScenarios": 3,
+      "controlScenarios": 2,
+      "focusCandidate": 4,
+      "focusReference": 0,
+      "focusTemporalSamplesCandidate": 12,
+      "disabledBlockedCandidate": 1,
+      "disabledBlockedReference": 1,
+      "directGuardCallsCandidate": 1,
+      "directGuardCallsReference": 1,
+      "fixedTransportEventsCandidate": 8,
+      "fixedTransportEventsReference": 8,
+      "retainedCallbackControlActorRecords": 2,
+      "candidateGoCompleteCallsAfterDelivery": 0,
+      "controlMismatchFieldsRetainedCallback": 0,
+      "controlMismatchFieldsDisabledMutation": 4,
+      "observedLifecycleGenerationValues": [
+        1
+      ],
+      "observedRetainedCallbackHostGenerationValues": [
+        1
+      ],
+      "nativeDispatchesPerActor": 0,
+      "nativeDispatchesTotal": 0,
+      "nativeClickEventsPerActor": 0,
+      "nativeClickEventsTotal": 0,
+      "nativeInputEventsPerActor": 0,
+      "nativeInputEventsTotal": 0,
+      "directGuardCallsPerActor": 1,
+      "directGuardCallsTotal": 2,
+      "fixedTransportEventsTotal": 16,
+      "fixedTransportSameSequenceAcrossActors": true,
+      "fixedTransportSequenceByScenario": [
+        {
+          "shard": "0000-inputs-publication-races.json",
+          "events": [
+            [
+              1,
+              "start",
+              2,
+              1
+            ],
+            [
+              2,
+              "delivery",
+              2,
+              1
+            ]
+          ]
+        },
+        {
+          "shard": "0001-readonly-pending-reply.json",
+          "events": [
+            [
+              1,
+              "start",
+              2,
+              1
+            ],
+            [
+              2,
+              "delivery",
+              2,
+              1
+            ]
+          ]
+        },
+        {
+          "shard": "0002-grandchild-routing-disposal-and-recreation.json",
+          "events": [
+            [
+              1,
+              "start",
+              2,
+              1
+            ],
+            [
+              2,
+              "delivery",
+              2,
+              1
+            ],
+            [
+              3,
+              "start",
+              3,
+              1
+            ],
+            [
+              4,
+              "delivery",
+              3,
+              1
+            ]
+          ]
+        }
+      ],
+      "retainedCallbackTransportSequenceCandidate": [
+        [
+          1,
+          "start",
+          2,
+          1
+        ],
+        [
+          2,
+          "cancel",
+          2,
+          1,
+          "ignored:false"
+        ],
+        [
+          3,
+          "delivery",
+          2,
+          1,
+          "previousState:cancelled"
+        ]
+      ],
+      "retainedCallbackCompleteCallsReference": 0,
+      "laterHostGenerationObserved": false
+    },
+    "rawShardSha256": {
+      "0000-inputs-publication-races.json": "d7a9a532cc92814ae222081cf2e8d4dc91e3caa2f087c803fddeaeb5c5a252a6",
+      "0001-readonly-pending-reply.json": "23dfc94d6bc1e66ff7063b73ec4d868a7f8b625c1cecb7e66bb22d8ba699899b",
+      "0002-grandchild-routing-disposal-and-recreation.json": "b2833aa1d40934da232f76adb5ef3a1729675ed67f21d50a9d97eac8840584b8",
+      "0064-control-physical-disabled-mutation.json": "ce09bc82a2684bfe7bab645100f6b5bd8e822dbd17d650fd772087907bdf1819",
+      "0065-control-retained-callback-after-recreation.json": "cb63d6a25c6bb5129cc9c72b5d3928177bccc245804cc07408fc25dd4cfa65c6"
+    },
+    "limits": [
+      "Bounded sample only; focus, disabled, transport and callback counts are not exhaustive across all 63 scripts.",
+      "No keyboard-event count was recorded for the disabled-input witness.",
+      "The cancel was recorded ignored:false; the late delivery has no ignored flag, so ignored-cancel semantics are not established.",
+      "Recreated root/child session IDs do not increment hostGeneration; no later host generation is covered.",
+      "Recorded transport ordering is not a physical HTTP timing measurement."
+    ]
+  }
+}

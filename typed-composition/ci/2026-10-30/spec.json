@@ -1,0 +1,74 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-pr10-clean-ci-acceptance"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "C-ARTIFACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-ARTIFACT.md and receipts/C-ARTIFACT.json only",
+      "summary": "fresh ZIP integrity, all raw shard bindings and source/build pin provenance"
+    },
+    {
+      "id": "C-PARITY",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-PARITY.md and receipts/C-PARITY.json only",
+      "summary": "new report counts, native/action/frame envelopes and mismatch/control evidence"
+    },
+    {
+      "id": "C-GATES",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-GATES.md and receipts/C-GATES.json only",
+      "summary": "fresh CI command, Go/race/vet, Node/WASM/demo and exact runtime log evidence"
+    },
+    {
+      "id": "C-PUBLISH",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-PUBLISH.md and receipts/C-PUBLISH.json only",
+      "summary": "published PR head/base/tree, CAS publication facts and immutable M0 receipt preservation"
+    },
+    {
+      "id": "C-SCOPE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-SCOPE.md and receipts/C-SCOPE.json only",
+      "summary": "reproduction, tested versus untested guarantees and another renderer's required contract"
+    },
+    {
+      "id": "C-LIFECYCLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-LIFECYCLE.md and receipts/C-LIFECYCLE.json only",
+      "summary": "fresh raw focus, disabled event, effect ordering and retired-callback coverage/limits"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# C-GATES — fresh CI gate audit
+
+**Outcome: pending / insufficient evidence.** The required fresh typed-composition job is not complete: run `41123116952`, job `124294552127` (`typed-composition`) remains `in_progress` at its inherited-and-typed-composition gate. Fetching its job log returned GitHub `404 BlobNotFound`. `/tmp/gondola-pr10-ci-acceptance/artifact-ready.json` and the promised primary log are not present. Per the input gate, no acceptance conclusion is possible until the job passes and root records artifact readiness.
+
+I inspected the available completed inherited jobs. The eight completed runs listed in `inputs.json` conclude `success`; fetched logs include checkout of PR 10's merge ref at `db880b9ae3065805123b24a43f9514c91b823e0f`, Go `1.24.13`, Node `22.23.4` (one run reports `22.23.3`), npm `10.9.9`, and Chromium `156.0.8078.4`. HTTP-effects logs report `http-save-wasm bridge smoke passed` and the HTTP effects demo/parity passed. WASM API logs report exact Step/Reply schemas, atomic malformed-input rejection, valid reply recovery, outbox drain, audit, safe IDs, and unserializable-input recovery. These are inherited workflow results, not the new primary typed-composition result.
+
+The available inherited logs do not establish the fresh primary Go/race/vet command results or typed-composition Node test count, WASM admission, HTTP smoke, or exact source/build pins. No commands or tests were run locally. Recheck job `124294552127` after completion and bind its final logs/artifact to `artifact-ready.json` before closing this gate.

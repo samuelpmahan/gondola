@@ -1,0 +1,9 @@
+# C-PUBLISH — publication and historical-preservation audit
+
+**Outcome: mixed change; supported by the completed artifact gate.** GitHub PR metadata independently confirms PR 10 is open, draft, unmerged, with head `42df6883337605d901a23e9fed874768c7ce1824` and base `d6d425765ee9d48eae22342a3cb75fab2e2871ba`. The published head has tree `7204bcfbc8992f9c47ac5d1bfd9d639a37a65e67`; local commit `23307c38923c75d471b377e25549b3d8abb3f73d` has that same tree and parent, with different commit metadata. A bounded remote fetch of `composition/manager.go` returned blob `e17bfeb8b3029635480c614cea6163afc484dce5`, matching local.
+
+The GitHub and local PR diff filename sets match exactly: 269 paths, 260 added and 9 modified. GitHub confirms the fresh primary job succeeded and lists artifact `13009259933`. Root's `artifact-ready.json` binds all ten PR workflows to success, source tree `7204bcf...`, ZIP SHA-256 `113bd9d8...`, report SHA-256 `338f88bc...`, and primary-log SHA-256 `41688d55...`. These artifact contents and workflow aggregate are root-provided gate evidence.
+
+The inputs assert 263 newly uploaded unique blobs and two reused base blobs, each new SHA checked, followed by exact-tree creation, a commit parented at the base, branch creation, and PR readback. Those API write calls are lead-provided; I did not independently observe their history. Published refs/tree, the exact filename set, and representative remote blob corroborate the result.
+
+M0 `SHA256SUMS` has the same Git blob at M0, base, and local (`622970b0...`; SHA-256 `8b6ec10d...`). The recorded preflight reports 24/24 entries. I confirmed all eight predecessor delivery-manifest blobs and the session-tree XR-R-T3 report/receipt match base. Archived A-PRESERVATION report/receipt hashes match live copies. No repository mutation, test, build, or replay was performed. This audit does not inspect artifact shards.

@@ -1,0 +1,885 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-pr10-clean-ci-acceptance"
+  },
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "C-ARTIFACT": {
+      "id": "C-ARTIFACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-ARTIFACT.md and receipts/C-ARTIFACT.json only",
+      "summary": "fresh ZIP integrity, all raw shard bindings and source/build pin provenance",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T20:43:21.948407+00:00",
+      "finished_at": "2026-10-30T20:52:09.317385+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/C-ARTIFACT.json"
+    },
+    "C-PARITY": {
+      "id": "C-PARITY",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-PARITY.md and receipts/C-PARITY.json only",
+      "summary": "new report counts, native/action/frame envelopes and mismatch/control evidence",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-30T20:43:21.754716+00:00",
+      "finished_at": "2026-10-30T20:52:09.405287+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/C-PARITY.json"
+    },
+    "C-GATES": {
+      "id": "C-GATES",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-GATES.md and receipts/C-GATES.json only",
+      "summary": "fresh CI command, Go/race/vet, Node/WASM/demo and exact runtime log evidence",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T20:43:21.570956+00:00",
+      "finished_at": "2026-10-30T20:52:09.497463+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/C-GATES.json"
+    },
+    "C-PUBLISH": {
+      "id": "C-PUBLISH",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-PUBLISH.md and receipts/C-PUBLISH.json only",
+      "summary": "published PR head/base/tree, CAS publication facts and immutable M0 receipt preservation",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T20:43:21.852099+00:00",
+      "finished_at": "2026-10-30T20:52:09.588680+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/C-PUBLISH.json"
+    },
+    "C-SCOPE": {
+      "id": "C-SCOPE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-SCOPE.md and receipts/C-SCOPE.json only",
+      "summary": "reproduction, tested versus untested guarantees and another renderer's required contract",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T20:43:21.472468+00:00",
+      "finished_at": "2026-10-30T20:52:09.678549+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/C-SCOPE.json"
+    },
+    "C-LIFECYCLE": {
+      "id": "C-LIFECYCLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "/tmp/gondola-pr10-ci-acceptance/reports/C-LIFECYCLE.md and receipts/C-LIFECYCLE.json only",
+      "summary": "fresh raw focus, disabled event, effect ordering and retired-callback coverage/limits",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-30T20:43:21.661735+00:00",
+      "finished_at": "2026-10-30T20:56:56.982676+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/C-LIFECYCLE.json"
+    },
+    "XR-C-ARTIFACT": {
+      "id": "XR-C-ARTIFACT",
+      "kind": "review",
+      "depends_on": "C-ARTIFACT",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T20:52:09.875685+00:00",
+      "finished_at": "2026-10-30T20:55:05.257302+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-C-ARTIFACT.json"
+    },
+    "XR-C-PARITY": {
+      "id": "XR-C-PARITY",
+      "kind": "review",
+      "depends_on": "C-PARITY",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T20:52:09.982422+00:00",
+      "finished_at": "2026-10-30T20:55:05.345674+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-C-PARITY.json"
+    },
+    "XR-C-GATES": {
+      "id": "XR-C-GATES",
+      "kind": "review",
+      "depends_on": "C-GATES",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-30T20:52:10.077317+00:00",
+      "finished_at": "2026-10-30T20:55:05.076803+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-C-GATES.json"
+    },
+    "XR-C-PUBLISH": {
+      "id": "XR-C-PUBLISH",
+      "kind": "review",
+      "depends_on": "C-PUBLISH",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T20:52:10.193103+00:00",
+      "finished_at": "2026-10-30T20:57:51.433621+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-C-PUBLISH.json"
+    },
+    "XR-C-SCOPE": {
+      "id": "XR-C-SCOPE",
+      "kind": "review",
+      "depends_on": "C-SCOPE",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T20:52:10.282340+00:00",
+      "finished_at": "2026-10-30T20:55:05.168042+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-C-SCOPE.json"
+    },
+    "XR-C-LIFECYCLE": {
+      "id": "XR-C-LIFECYCLE",
+      "kind": "review",
+      "depends_on": "C-LIFECYCLE",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T20:56:57.193930+00:00",
+      "finished_at": "2026-10-30T21:00:37.368295+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-C-LIFECYCLE.json"
+    },
+    "R-C-ARTIFACT": {
+      "id": "R-C-ARTIFACT",
+      "kind": "extract",
+      "repair_of": "C-ARTIFACT",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "C-ARTIFACT report wording only; preserve original under history; R-C-ARTIFACT report/receipt only",
+      "summary": "Attribute head binding to GitHub artifact API and tree provenance to separate captured publication/checkout/local-tree evidence; no source, binary or test changes",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-30T20:57:51.633785+00:00",
+      "finished_at": "2026-10-30T21:00:37.255617+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/R-C-ARTIFACT.json"
+    },
+    "XR-R-C-ARTIFACT": {
+      "id": "XR-R-C-ARTIFACT",
+      "kind": "review",
+      "depends_on": "R-C-ARTIFACT",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T21:00:37.588921+00:00",
+      "finished_at": "2026-10-30T21:03:13.670454+00:00",
+      "receipt": "/tmp/gondola-pr10-ci-acceptance/receipts/XR-R-C-ARTIFACT.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T20:43:21.382294+00:00",
+      "ready_jobs": [
+        "C-ARTIFACT",
+        "C-PARITY",
+        "C-GATES",
+        "C-PUBLISH",
+        "C-SCOPE",
+        "C-LIFECYCLE"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N5": "C-SCOPE",
+        "N3": "C-GATES",
+        "N6": "C-LIFECYCLE",
+        "N2": "C-PARITY",
+        "N4": "C-PUBLISH",
+        "N1": "C-ARTIFACT"
+      },
+      "dispatch": {
+        "N5": "C-SCOPE",
+        "N3": "C-GATES",
+        "N6": "C-LIFECYCLE",
+        "N2": "C-PARITY",
+        "N4": "C-PUBLISH",
+        "N1": "C-ARTIFACT"
+      },
+      "native_seconds": 0.007112152001354843,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "C-ARTIFACT": 1,
+        "C-PARITY": 1,
+        "C-GATES": 1,
+        "C-PUBLISH": 1,
+        "C-SCOPE": 1,
+        "C-LIFECYCLE": 1,
+        "XR-C-ARTIFACT": 0,
+        "XR-C-PARITY": 0,
+        "XR-C-GATES": 0,
+        "XR-C-PUBLISH": 0,
+        "XR-C-SCOPE": 0,
+        "XR-C-LIFECYCLE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "C-ARTIFACT": [
+          "N1"
+        ],
+        "C-PARITY": [
+          "N2"
+        ],
+        "C-GATES": [
+          "N3"
+        ],
+        "C-PUBLISH": [
+          "N4"
+        ],
+        "C-SCOPE": [
+          "N5"
+        ],
+        "C-LIFECYCLE": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "C-ARTIFACT": 100,
+        "C-PARITY": 100,
+        "C-GATES": 100,
+        "C-PUBLISH": 100,
+        "C-SCOPE": 100,
+        "C-LIFECYCLE": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:43:21.472468+00:00",
+      "worker": "N5",
+      "job": "C-SCOPE",
+      "agent": "/root/compose_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:43:21.570956+00:00",
+      "worker": "N3",
+      "job": "C-GATES",
+      "agent": "/root/compose_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:43:21.661735+00:00",
+      "worker": "N6",
+      "job": "C-LIFECYCLE",
+      "agent": "/root/compose_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:43:21.754716+00:00",
+      "worker": "N2",
+      "job": "C-PARITY",
+      "agent": "/root/compose_bridge"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:43:21.852099+00:00",
+      "worker": "N4",
+      "job": "C-PUBLISH",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:43:21.948407+00:00",
+      "worker": "N1",
+      "job": "C-ARTIFACT",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:52:09.317385+00:00",
+      "worker": "N1",
+      "job": "C-ARTIFACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:52:09.405287+00:00",
+      "worker": "N2",
+      "job": "C-PARITY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:52:09.497463+00:00",
+      "worker": "N3",
+      "job": "C-GATES"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:52:09.588680+00:00",
+      "worker": "N4",
+      "job": "C-PUBLISH"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:52:09.678549+00:00",
+      "worker": "N5",
+      "job": "C-SCOPE"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T20:52:09.769632+00:00",
+      "ready_jobs": [
+        "XR-C-ARTIFACT",
+        "XR-C-PARITY",
+        "XR-C-GATES",
+        "XR-C-PUBLISH",
+        "XR-C-SCOPE"
+      ],
+      "pinned_workers": [
+        "N6"
+      ],
+      "assignments": {
+        "N4": "XR-C-ARTIFACT",
+        "N6": "C-LIFECYCLE",
+        "N5": "XR-C-PARITY",
+        "N2": "XR-C-GATES",
+        "N1": "XR-C-PUBLISH",
+        "N3": "XR-C-SCOPE"
+      },
+      "dispatch": {
+        "N4": "XR-C-ARTIFACT",
+        "N5": "XR-C-PARITY",
+        "N2": "XR-C-GATES",
+        "N1": "XR-C-PUBLISH",
+        "N3": "XR-C-SCOPE"
+      },
+      "native_seconds": 0.0048698499995225575,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 1000,
+      "native_score": 1000,
+      "caps": {
+        "C-ARTIFACT": 0,
+        "C-PARITY": 0,
+        "C-GATES": 0,
+        "C-PUBLISH": 0,
+        "C-SCOPE": 0,
+        "C-LIFECYCLE": 1,
+        "XR-C-ARTIFACT": 1,
+        "XR-C-PARITY": 1,
+        "XR-C-GATES": 1,
+        "XR-C-PUBLISH": 1,
+        "XR-C-SCOPE": 1,
+        "XR-C-LIFECYCLE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-C-ARTIFACT": [
+          "N2",
+          "N3",
+          "N4",
+          "N5"
+        ],
+        "XR-C-PARITY": [
+          "N1",
+          "N3",
+          "N4",
+          "N5"
+        ],
+        "XR-C-GATES": [
+          "N1",
+          "N2",
+          "N4",
+          "N5"
+        ],
+        "XR-C-PUBLISH": [
+          "N1",
+          "N2",
+          "N3",
+          "N5"
+        ],
+        "XR-C-SCOPE": [
+          "N1",
+          "N2",
+          "N3",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-C-ARTIFACT": 200,
+        "XR-C-PARITY": 200,
+        "XR-C-GATES": 200,
+        "XR-C-PUBLISH": 200,
+        "XR-C-SCOPE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/compose_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:52:09.875685+00:00",
+      "worker": "N4",
+      "job": "XR-C-ARTIFACT",
+      "agent": "/root/compose_model"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:52:09.982422+00:00",
+      "worker": "N5",
+      "job": "XR-C-PARITY",
+      "agent": "/root/compose_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:52:10.077317+00:00",
+      "worker": "N2",
+      "job": "XR-C-GATES",
+      "agent": "/root/compose_bridge"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:52:10.193103+00:00",
+      "worker": "N1",
+      "job": "XR-C-PUBLISH",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:52:10.282340+00:00",
+      "worker": "N3",
+      "job": "XR-C-SCOPE",
+      "agent": "/root/compose_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:55:05.076803+00:00",
+      "worker": "N2",
+      "job": "XR-C-GATES"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:55:05.168042+00:00",
+      "worker": "N3",
+      "job": "XR-C-SCOPE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:55:05.257302+00:00",
+      "worker": "N4",
+      "job": "XR-C-ARTIFACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:55:05.345674+00:00",
+      "worker": "N5",
+      "job": "XR-C-PARITY"
+    },
+    {
+      "type": "graph_extension",
+      "at": "2026-10-30T20:55:05.420304+00:00",
+      "spec": "repair-spec.json",
+      "specSHA256": "231487338ae5a3d190f775fbae97cdf7d7986beecfe61414663471baf8e3b69a",
+      "addedJobs": [
+        "R-C-ARTIFACT",
+        "XR-R-C-ARTIFACT"
+      ],
+      "method": "root merged jobs constructed by unmodified probe.make_state; preserved worker pins, jobs and prior events"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:56:56.982676+00:00",
+      "worker": "N6",
+      "job": "C-LIFECYCLE"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-30T20:56:57.089439+00:00",
+      "ready_jobs": [
+        "XR-C-LIFECYCLE",
+        "R-C-ARTIFACT"
+      ],
+      "pinned_workers": [
+        "N1"
+      ],
+      "assignments": {
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N6": "BENCH",
+        "N3": "BENCH",
+        "N1": "XR-C-PUBLISH",
+        "N5": "XR-C-LIFECYCLE"
+      },
+      "dispatch": {
+        "N5": "XR-C-LIFECYCLE"
+      },
+      "native_seconds": 0.004482878000999335,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "C-ARTIFACT": 0,
+        "C-PARITY": 0,
+        "C-GATES": 0,
+        "C-PUBLISH": 0,
+        "C-SCOPE": 0,
+        "C-LIFECYCLE": 0,
+        "XR-C-ARTIFACT": 0,
+        "XR-C-PARITY": 0,
+        "XR-C-GATES": 0,
+        "XR-C-PUBLISH": 1,
+        "XR-C-SCOPE": 0,
+        "XR-C-LIFECYCLE": 1,
+        "R-C-ARTIFACT": 1,
+        "XR-R-C-ARTIFACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-C-LIFECYCLE": [
+          "N2",
+          "N3",
+          "N4",
+          "N5"
+        ],
+        "R-C-ARTIFACT": []
+      },
+      "weights": {
+        "XR-C-LIFECYCLE": 200,
+        "R-C-ARTIFACT": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/compose_go",
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:56:57.193930+00:00",
+      "worker": "N5",
+      "job": "XR-C-LIFECYCLE",
+      "agent": "/root/compose_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T20:57:51.433621+00:00",
+      "worker": "N1",
+      "job": "XR-C-PUBLISH"
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-30T20:57:51.542490+00:00",
+      "ready_jobs": [
+        "R-C-ARTIFACT"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N3": "BENCH",
+        "N6": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N1": "R-C-ARTIFACT",
+        "N5": "XR-C-LIFECYCLE"
+      },
+      "dispatch": {
+        "N1": "R-C-ARTIFACT"
+      },
+      "native_seconds": 0.004204576998745324,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "C-ARTIFACT": 0,
+        "C-PARITY": 0,
+        "C-GATES": 0,
+        "C-PUBLISH": 0,
+        "C-SCOPE": 0,
+        "C-LIFECYCLE": 0,
+        "XR-C-ARTIFACT": 0,
+        "XR-C-PARITY": 0,
+        "XR-C-GATES": 0,
+        "XR-C-PUBLISH": 0,
+        "XR-C-SCOPE": 0,
+        "XR-C-LIFECYCLE": 1,
+        "R-C-ARTIFACT": 1,
+        "XR-R-C-ARTIFACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "R-C-ARTIFACT": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "R-C-ARTIFACT": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/compose_oracle",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T20:57:51.633785+00:00",
+      "worker": "N1",
+      "job": "R-C-ARTIFACT",
+      "agent": "/root/compose_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T21:00:37.255617+00:00",
+      "worker": "N1",
+      "job": "R-C-ARTIFACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T21:00:37.368295+00:00",
+      "worker": "N5",
+      "job": "XR-C-LIFECYCLE"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-30T21:00:37.489462+00:00",
+      "ready_jobs": [
+        "XR-R-C-ARTIFACT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N1": "BENCH",
+        "N3": "XR-R-C-ARTIFACT"
+      },
+      "dispatch": {
+        "N3": "XR-R-C-ARTIFACT"
+      },
+      "native_seconds": 0.005006364997825585,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "C-ARTIFACT": 0,
+        "C-PARITY": 0,
+        "C-GATES": 0,
+        "C-PUBLISH": 0,
+        "C-SCOPE": 0,
+        "C-LIFECYCLE": 0,
+        "XR-C-ARTIFACT": 0,
+        "XR-C-PARITY": 0,
+        "XR-C-GATES": 0,
+        "XR-C-PUBLISH": 0,
+        "XR-C-SCOPE": 0,
+        "XR-C-LIFECYCLE": 0,
+        "R-C-ARTIFACT": 0,
+        "XR-R-C-ARTIFACT": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-R-C-ARTIFACT": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-R-C-ARTIFACT": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T21:00:37.588921+00:00",
+      "worker": "N3",
+      "job": "XR-R-C-ARTIFACT",
+      "agent": "/root/compose_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T21:03:13.670454+00:00",
+      "worker": "N3",
+      "job": "XR-R-C-ARTIFACT"
+    }
+  ],
+  "epoch": 5,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

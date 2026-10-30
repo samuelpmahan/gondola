@@ -1,0 +1,45 @@
+{
+  "job_id": "XR-C-ARTIFACT",
+  "worker": "N4",
+  "decision": "amend",
+  "summary": "Reproduced ZIP digest/CRC (2,372 entries, no duplicates), all 75 build entries, all 66 raw shards, report/mismatch hashes and counts. Recomputed 49 pins/source-set; verified 43 sources vs local+git-show and six generated CI assets. Amend C-ARTIFACT wording: GitHub artifact metadata binds run/head SHA but exposes no tree; tree is in captured CI/gate metadata and local commit evidence.",
+  "hashes": {
+    "zip_sha256": "113bd9d8e7e7b862c6ec08f72af4d07cb6c3b0cb0d6a9d4534e58dc6e76a264e",
+    "artifact_id": 13009259933,
+    "report_sha256": "338f88bcfc9dd62c1ae7909ad8f51eb677abf3350dab96a31397cea66c91591a",
+    "report_manifest_sha256": "3da91172800648a89c30b4b87cf43dd0c882b9b0ddd6dbead439e2873e9313ed",
+    "mismatch_artifact_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "source_set_sha256": "f6dc04706c9437210b889935b5467cee179264d56b1e2955ce0557cd56e004f4",
+    "published_head_sha": "42df6883337605d901a23e9fed874768c7ce1824",
+    "captured_tree_sha": "7204bcfbc8992f9c47ac5d1bfd9d639a37a65e67",
+    "local_source_commit": "23307c38923c75d471b377e25549b3d8abb3f73d",
+    "ci_merge_checkout_commit": "db880b9ae3065805123b24a43f9514c91b823e0f",
+    "primary_log_sha256": "41688d55e3ce524ed3b9697d4937108f51f25e89ec45c85b4d16dbbeb44a766a"
+  },
+  "verified": {
+    "zip_bytes": 120563245,
+    "zip_entries": 2372,
+    "duplicate_paths": 0,
+    "crc_error": null,
+    "typed_composition_build_entries": 75,
+    "build_entries_equal_extracted": 75,
+    "raw_shards": 66,
+    "raw_shards_verified": 66,
+    "source_pins": 49,
+    "source_files_verified_against_local_and_git_show": 43,
+    "generated_assets_verified_against_extraction": 6,
+    "ci_generated_binaries_differing_from_local": 3,
+    "scripts": 63,
+    "native_executions": 63,
+    "actions": 2463,
+    "native_frames": 2463,
+    "actor_native_frame_comparisons": 4926,
+    "mismatch_count": 0
+  },
+  "limitations": [
+    "GitHub artifact metadata binds the run and head SHA, not a tree SHA",
+    "tree-to-head binding relies on captured commit/tree evidence; the published head object is absent locally",
+    "all-ten workflow status is read from captured ci.json/artifact-ready metadata; this review queried primary artifact metadata only",
+    "no build, tests, or repository mutation performed"
+  ]
+}
