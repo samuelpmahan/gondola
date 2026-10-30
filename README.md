@@ -47,4 +47,28 @@ React to render the row again, so the spec checks itself. There are 59 rows.
 | `counter/` | The smallest component, by convention: `Init`, `Update`, `View`. |
 | `EXPECTED.json`, `SHA256SUMS` | The receipts: versions, seed, hashes of the cases and the verdict, and of every source file. |
 
-Built output and installed packages are never committed. They are reproduced by `run.sh`.
+## Keyed collection editor
+
+The keyed collection milestone keeps row IDs, drafts, saved values, save status, and request IDs in one Go `collection.Session`. Its Gobi tree assigns stable keys to rows and controls. The browser updates retained DOM and React nodes by key; a renderer swap remounts the elements while restoring the focused input by logical key and selection. Saves use the same loopback Go HTTP lab as the HTTP-effects milestone. Go limits the collection to four rows; this lets every row have a held save while preserving browser connection slots for the lab's status and release requests.
+
+Run the complete inherited and keyed checks from the repository root:
+
+```sh
+bash run-keyed-editor.sh
+```
+
+The runner requires Go 1.24 and Node 22. Its default inherited chain provisions the pinned `interaction` dependencies on a fresh checkout before the keyed runner checks for `esbuild`; it then builds the collection WebAssembly bridge and React/reference bundles and runs native Go tests, the strict WASM smoke, keyed-editor Node tests, a real HTTP browser demo smoke, and the keyed three-way replay harness. The default runner always runs the inherited chain; it does not select a cached or partial path.
+
+Arguments are forwarded to the final keyed replay harness, after the inherited and keyed author gates have run. For example, `bash run-keyed-editor.sh --seeds 20261030,20261031 --cases 20 --max-actions 40` changes the replay parameters without skipping any earlier checks.
+
+After a successful run, start the local HTTP lab from the repository root and open the demo URL it serves:
+
+```sh
+./http-effects/build/http-lab -addr 127.0.0.1:8000 -root .
+```
+
+Open `http://127.0.0.1:8000/keyed-editor/demo.html`. Add, edit, reorder, save, cancel, and remove rows. Choose an HTTP mode before saving to hold a response, produce an error, retry, or exercise the malformed, wrong-ID, status, and dropped-connection paths. The page exposes the raw Go snapshot, tree, keys, bindings, messages, reply audit, transport log, server records, live input values, DOM identity counters, active logical key, and selection.
+
+The checks cover retained input identity during same-backend updates and completion, logical focus/selection restoration across a backend swap, monotonic row and request IDs, stale replies after deletion, and error retry over the real HTTP lab. IME composition, other browser engines, pixel matching, and production HTTP services are outside this milestone.
+
+Built output and installed packages are never committed. The original M0 outputs are reproduced by `run.sh`; keyed editor outputs are reproduced by `run-keyed-editor.sh`.

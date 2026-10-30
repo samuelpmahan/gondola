@@ -1,0 +1,54 @@
+name: Gobi keyed collection editor
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  keyed-editor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+
+      - name: Install pinned interaction dependencies
+        run: npm ci --prefix interaction --no-audit --no-fund
+
+      - name: Install Chromium for Playwright
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run inherited and keyed collection checks
+        env:
+          GONDOLA_SKIP_NPM_CI: "1"
+          GONDOLA_SKIP_BROWSER_INSTALL: "1"
+        run: bash run-keyed-editor.sh
+
+      - name: Upload renderer and keyed editor artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-keyed-editor-artifacts
+          path: |
+            interaction/build/
+            interaction/artifacts/
+            backend-replacement/build/
+            backend-replacement/artifacts/
+            controlled-input/build/
+            controlled-input/artifacts/
+            async-effects/build/
+            async-effects/artifacts/
+            http-effects/build/
+            http-effects/artifacts/
+            keyed-editor/build/
+          if-no-files-found: ignore
