@@ -1,0 +1,74 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-session-tree-authors"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "T1",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "multisession/manager.go, manager_test.go and new tree Go tests only",
+      "summary": "typed Go parent tree and atomic postorder disposal"
+    },
+    {
+      "id": "T2",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "cmd/multi-root-wasm main_wasm.go, smoke.html, new tree tests only",
+      "summary": "strict additive tree bridge"
+    },
+    {
+      "id": "T3",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "session-tree/host.mjs and host.test.mjs only",
+      "summary": "nested composition host"
+    },
+    {
+      "id": "T4",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "session-tree/reference.mjs, scripts.mjs and their tests only",
+      "summary": "independent tree/React model and deterministic schedules"
+    },
+    {
+      "id": "T5",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "session-tree/check.mjs, check.test.mjs, fixture.mjs, fixture.html only",
+      "summary": "actual-browser replay with required native comparison"
+    },
+    {
+      "id": "T6",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "session-tree demo/browser-smoke/README/RESULTS, run-session-tree.sh and .github/workflows/session-tree.yml only",
+      "summary": "executable nested demo, full runner and CI"
+    }
+  ]
+}

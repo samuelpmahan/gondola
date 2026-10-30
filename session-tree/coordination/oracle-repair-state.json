@@ -1,0 +1,343 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-session-tree-final-oracle-repair"
+  },
+  "workers": {
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "R-T4B": {
+      "id": "R-T4B",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "session-tree/scripts.mjs and scripts.test.mjs only",
+      "summary": "fixed cap-four and stale callback after same-name child tree recreation witnesses; fixed counts 29,21,18",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T17:33:27.241535+00:00",
+      "finished_at": "2026-10-30T17:36:04.364065+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/session-tree/coordination/receipts/R-T4B.json"
+    },
+    "R-T5": {
+      "id": "R-T5",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "session-tree/check.mjs, check.test.mjs, fixture.mjs and fixture.html only",
+      "summary": "actual globally sequenced transport invocations, independent disabled expectations and post-recreation stale fence; browser acceptance waits for R-T4B freeze",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-30T17:33:27.355730+00:00",
+      "finished_at": "2026-10-30T17:45:46.870559+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/session-tree/coordination/receipts/R-T5.json"
+    },
+    "XR-R-T4B": {
+      "id": "XR-R-T4B",
+      "kind": "review",
+      "depends_on": "R-T4B",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-30T17:36:09.325857+00:00",
+      "finished_at": "2026-10-30T17:37:08.086511+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/session-tree/coordination/receipts/XR-R-T4B.json"
+    },
+    "XR-R-T5": {
+      "id": "XR-R-T5",
+      "kind": "review",
+      "depends_on": "R-T5",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-30T17:45:52.086668+00:00",
+      "finished_at": "2026-10-30T17:49:14.614043+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola/session-tree/coordination/receipts/XR-R-T5.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T17:33:27.129049+00:00",
+      "ready_jobs": [
+        "R-T4B",
+        "R-T5"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "BENCH",
+        "N2": "BENCH",
+        "N5": "R-T5",
+        "N4": "R-T4B"
+      },
+      "dispatch": {
+        "N5": "R-T5",
+        "N4": "R-T4B"
+      },
+      "native_seconds": 0.004490596999858099,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 4 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "R-T4B": 1,
+        "R-T5": 1,
+        "XR-R-T4B": 0,
+        "XR-R-T5": 0,
+        "BENCH": 4
+      },
+      "eligible": {
+        "R-T4B": [
+          "N4"
+        ],
+        "R-T5": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "R-T4B": 100,
+        "R-T5": 100
+      },
+      "agent_by_worker": {
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T17:33:27.241535+00:00",
+      "worker": "N4",
+      "job": "R-T4B",
+      "agent": "/root/accept_evidence"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T17:33:27.355730+00:00",
+      "worker": "N5",
+      "job": "R-T5",
+      "agent": "/root/multiroot_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T17:36:04.364065+00:00",
+      "worker": "N4",
+      "job": "R-T4B"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-30T17:36:04.508370+00:00",
+      "ready_jobs": [
+        "XR-R-T4B"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N3": "XR-R-T4B",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N5": "R-T5"
+      },
+      "dispatch": {
+        "N3": "XR-R-T4B"
+      },
+      "native_seconds": 0.007806547000654973,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 4 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "R-T4B": 0,
+        "R-T5": 1,
+        "XR-R-T4B": 1,
+        "XR-R-T5": 0,
+        "BENCH": 4
+      },
+      "eligible": {
+        "XR-R-T4B": [
+          "N2",
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-R-T4B": 200
+      },
+      "agent_by_worker": {
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/multiroot_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T17:36:09.325857+00:00",
+      "worker": "N3",
+      "job": "XR-R-T4B",
+      "agent": "/root/accept_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T17:37:08.086511+00:00",
+      "worker": "N3",
+      "job": "XR-R-T4B"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T17:45:46.870559+00:00",
+      "worker": "N5",
+      "job": "R-T5"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-30T17:45:46.998721+00:00",
+      "ready_jobs": [
+        "XR-R-T5"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "BENCH",
+        "N2": "BENCH",
+        "N5": "BENCH",
+        "N4": "XR-R-T5"
+      },
+      "dispatch": {
+        "N4": "XR-R-T5"
+      },
+      "native_seconds": 0.003839637000055518,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 4 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "R-T4B": 0,
+        "R-T5": 0,
+        "XR-R-T4B": 0,
+        "XR-R-T5": 1,
+        "BENCH": 4
+      },
+      "eligible": {
+        "XR-R-T5": [
+          "N2",
+          "N3",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-R-T5": 200
+      },
+      "agent_by_worker": {
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T17:45:52.086668+00:00",
+      "worker": "N4",
+      "job": "XR-R-T5",
+      "agent": "/root/accept_evidence"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-30T17:49:14.614043+00:00",
+      "worker": "N4",
+      "job": "XR-R-T5"
+    }
+  ],
+  "epoch": 3,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

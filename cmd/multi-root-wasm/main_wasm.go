@@ -31,6 +31,24 @@ func main() {
 		}
 		return float64(id)
 	}))
+	api.Set("createChild", method("createChild", 1, func(args []js.Value) any {
+		parentID, err := decodeSessionID(args[0])
+		if err != nil {
+			return errorResult(err.Error())
+		}
+		id, err := manager.CreateChild(parentID)
+		if err != nil {
+			return errorResult(err.Error())
+		}
+		return float64(id)
+	}))
+	api.Set("tree", method("tree", 0, func(args []js.Value) any {
+		sessions := manager.Tree()
+		if sessions == nil {
+			sessions = []multisession.SessionInfo{}
+		}
+		return toJS(sessions)
+	}))
 	api.Set("snapshot", method("snapshot", 1, func(args []js.Value) any {
 		id, err := decodeSessionID(args[0])
 		if err != nil {
@@ -113,6 +131,20 @@ func main() {
 			commands = []collection.Command{}
 		}
 		return toJS(commands)
+	}))
+	api.Set("disposeTree", method("disposeTree", 1, func(args []js.Value) any {
+		id, err := decodeSessionID(args[0])
+		if err != nil {
+			return errorResult(err.Error())
+		}
+		disposals, err := manager.DisposeTree(id)
+		if err != nil {
+			return errorResult(err.Error())
+		}
+		if disposals == nil {
+			disposals = []multisession.Disposal{}
+		}
+		return toJS(disposals)
 	}))
 	api.Set("list", method("list", 0, func(args []js.Value) any {
 		ids := manager.List()

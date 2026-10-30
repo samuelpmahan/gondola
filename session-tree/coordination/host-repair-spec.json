@@ -1,0 +1,25 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-session-tree-host-repair"
+  },
+  "workers": [
+    "N1",
+    "N3"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-T3",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "session-tree/host.mjs and host.test.mjs only",
+      "summary": "reserve composition operation before authoritative subtree disposal and restore on error"
+    }
+  ]
+}

@@ -30,8 +30,8 @@ window.__multiRootSmoke = (async () => {
   await waitFor(() => globalThis.gobiMultiRoot);
 
   const api = globalThis.gobiMultiRoot;
-  const names = ["audit", "complete", "create", "decodeHTTP", "dispatch", "dispose",
-    "effects", "encodeHTTP", "list", "snapshot"];
+  const names = ["audit", "complete", "create", "createChild", "decodeHTTP", "dispatch", "dispose",
+    "disposeTree", "effects", "encodeHTTP", "list", "snapshot", "tree"];
   assert(Object.keys(api).sort().join(",") === names.join(","),
     "multi-root bridge must publish the exact method table");
 
@@ -41,6 +41,9 @@ window.__multiRootSmoke = (async () => {
     "create must return increasing positive safe-integer session IDs");
   assert(unwrap(api.list(), "list sessions").join(",") === "1,2,3",
     "all three sessions must remain registered simultaneously");
+  assert(JSON.stringify(unwrap(api.tree(), "tree sessions")) === JSON.stringify(ids.map((SessionID) =>
+    ({ SessionID, ParentID: 0, Depth: 1 }))),
+    "tree must report independent roots in ascending ID order with depth one");
   for (const id of ids) {
     const snapshot = unwrap(api.snapshot(id), `snapshot ${id}`);
     assert(snapshot.state.Rows.length === 0 && snapshot.state.NextID === 0 &&
@@ -111,10 +114,16 @@ window.__multiRootSmoke = (async () => {
   for (const invalidID of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "2", new Number(2)]) {
     assert(isError(api.snapshot(invalidID)), "session IDs must be primitive positive safe integers");
   }
+  for (const invalidID of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "2", new Number(2)]) {
+    assert(isError(api.createChild(invalidID)) && isError(api.disposeTree(invalidID)),
+      "tree methods must reject non-primitive, non-positive, fractional, and unsafe session IDs");
+  }
   assert(isError(api.create("extra")) && isError(api.list("extra")) &&
     isError(api.snapshot(ids[2], "extra")) && isError(api.effects(ids[2], "extra")) &&
     isError(api.complete(ids[2], { ID: 1, Value: "x", Error: "" }, "extra")) &&
     isError(api.dispose(ids[2], "extra")) && isError(api.audit(ids[2], "extra")) &&
+    isError(api.createChild()) && isError(api.createChild(ids[2], "extra")) &&
+    isError(api.tree("extra")) && isError(api.disposeTree()) && isError(api.disposeTree(ids[2], "extra")) &&
     isError(api.encodeHTTP(1, "x", "extra")) && isError(api.decodeHTTP(1, 200, "{}", "extra")),
     "every method must enforce exact arity");
 
@@ -133,8 +142,82 @@ window.__multiRootSmoke = (async () => {
   unwrap(api.dispose(ids[2]), "dispose remaining session");
   assert(unwrap(api.list(), "list after cleanup").length === 0,
     "all smoke sessions must be independently removable");
+
+  const treeRoot = unwrap(api.create(), "create tree root");
+  const siblingRoot = unwrap(api.create(), "create unaffected sibling root");
+  const firstChild = unwrap(api.createChild(treeRoot), "create first child");
+  const grandchild = unwrap(api.createChild(firstChild), "create grandchild");
+  const secondChild = unwrap(api.createChild(treeRoot), "create second child");
+  assert([treeRoot, siblingRoot, firstChild, grandchild, secondChild].join(",") === "4,5,6,7,8",
+    "child creation must allocate fresh globally increasing IDs");
+  assert(JSON.stringify(unwrap(api.tree(), "tree with nested sessions")) === JSON.stringify([
+    { SessionID: treeRoot, ParentID: 0, Depth: 1 },
+    { SessionID: siblingRoot, ParentID: 0, Depth: 1 },
+    { SessionID: firstChild, ParentID: treeRoot, Depth: 2 },
+    { SessionID: grandchild, ParentID: firstChild, Depth: 3 },
+    { SessionID: secondChild, ParentID: treeRoot, Depth: 2 },
+  ]), "tree must report parent IDs and depths in ascending session ID order");
+  const dispatchSave = (id, value) => {
+    dispatch(id, "0", "click", "", "add");
+    dispatch(id, "2/0/0", "input", value, "row-1-input");
+    dispatch(id, "2/0/5", "click", "", "row-1-save");
+  };
+  for (const [id, value] of [
+    [treeRoot, "root draft"], [siblingRoot, "sibling draft"], [firstChild, "child draft"],
+    [grandchild, "grandchild draft"], [secondChild, "second child draft"],
+  ]) dispatchSave(id, value);
+
+  const treeBeforeLeafDispose = JSON.stringify(unwrap(api.tree(), "tree before rejected leaf disposal"));
+  const rootBeforeLeafDispose = JSON.stringify(unwrap(api.snapshot(treeRoot), "root before rejected leaf disposal"));
+  assert(isError(api.dispose(treeRoot)), "single-session dispose must reject a non-leaf");
+  assert(JSON.stringify(unwrap(api.tree(), "tree after rejected leaf disposal")) === treeBeforeLeafDispose &&
+    JSON.stringify(unwrap(api.snapshot(treeRoot), "root after rejected leaf disposal")) === rootBeforeLeafDispose,
+    "rejected non-leaf disposal must leave tree and session state unchanged");
+  assert(JSON.stringify(unwrap(api.effects(treeRoot), "root effects after rejected leaf disposal")) ===
+    JSON.stringify([{ Kind: "start", ID: 1, Value: "root draft" }]),
+    "rejected non-leaf disposal must not drain queued effects");
+
+  const subtreeDisposals = unwrap(api.disposeTree(treeRoot), "dispose nested subtree");
+  const expectedDisposals = [grandchild, firstChild, secondChild, treeRoot].map((SessionID) => ({
+    SessionID, Commands: [{ Kind: "cancel", ID: 1, Value: "" }],
+  }));
+  assert(JSON.stringify(subtreeDisposals) === JSON.stringify(expectedDisposals),
+    "subtree disposal must cancel each local request in deterministic depth-first postorder");
+  assert(JSON.stringify(unwrap(api.tree(), "tree after subtree disposal")) === JSON.stringify([
+    { SessionID: siblingRoot, ParentID: 0, Depth: 1 },
+  ]), "subtree disposal must preserve the unrelated root");
+  assert(unwrap(api.snapshot(siblingRoot), "sibling after subtree disposal").state.Rows[0].PendingID === 1 &&
+    JSON.stringify(unwrap(api.effects(siblingRoot), "sibling effects after subtree disposal")) ===
+      JSON.stringify([{ Kind: "start", ID: 1, Value: "sibling draft" }]),
+    "subtree disposal must preserve sibling state and effects despite identical local request IDs");
+  for (const staleID of [treeRoot, firstChild, grandchild, secondChild]) {
+    for (const late of [
+      () => api.snapshot(staleID),
+      () => api.dispatch(staleID, { Path: "0", Event: "click", Value: "", Key: "add" }),
+      () => api.effects(staleID),
+      () => api.complete(staleID, { ID: 1, Value: "late", Error: "" }),
+      () => api.audit(staleID),
+      () => api.dispose(staleID),
+      () => api.disposeTree(staleID),
+    ]) assert(isError(late()), `stale session ${staleID} must reject calls after subtree deletion`);
+  }
+
+  const beforeInvalidParents = JSON.stringify(unwrap(api.tree(), "tree before invalid parents"));
+  for (const invalidParent of [0, treeRoot, 9000, 1.5, "5", Number.MAX_SAFE_INTEGER + 1]) {
+    assert(isError(api.createChild(invalidParent)), "zero, dead, unknown, or malformed parents must be rejected");
+  }
+  assert(JSON.stringify(unwrap(api.tree(), "tree after invalid parents")) === beforeInvalidParents,
+    "invalid or dead parent creation must not allocate a session");
+  const afterInvalidParents = unwrap(api.create(), "create after invalid parent attempts");
+  assert(afterInvalidParents === 9, "invalid or dead parent attempts must not consume session IDs");
+  unwrap(api.dispose(afterInvalidParents), "dispose post-check root");
+  unwrap(api.dispose(siblingRoot), "dispose unaffected sibling root");
+  assert(JSON.stringify(unwrap(api.tree(), "empty session tree")) === "[]",
+    "tree must return an empty array after final cleanup");
   return { ok: true, sessions: ids, sharedLocalRequestIDs: [1, 1, 1],
-    disposedCancellation: cancels, siblingCompletion: "saved two", lateRepliesRejected: true };
+    disposedCancellation: cancels, siblingCompletion: "saved two", lateRepliesRejected: true,
+    nestedTree: [treeRoot, firstChild, grandchild, secondChild], subtreePostorder: subtreeDisposals.map((item) => item.SessionID),
+    invalidParentsRejected: true };
 })().catch((error) => {
   window.__multiRootSmokeError = String(error?.stack ?? error);
   throw error;

@@ -1,0 +1,148 @@
+{
+  "status": "matched",
+  "seeds": [
+    20261030,
+    20261031
+  ],
+  "casesPerSeed": 30,
+  "maxActions": 40,
+  "scripts": 63,
+  "actions": 1591,
+  "globalTicks": 1654,
+  "candidateSessionObservations": 5176,
+  "referenceSessionObservations": 5176,
+  "sessionObservations": 10352,
+  "nativeFramePairs": 5176,
+  "nativeActorFrames": 10352,
+  "nativeComparisons": 546,
+  "nativeMatched": 546,
+  "mismatchCount": 0,
+  "negativeControl": {
+    "status": "detected",
+    "actions": 5,
+    "globalTicks": 6,
+    "candidateSessionObservations": 5,
+    "referenceSessionObservations": 5,
+    "mismatchFields": [
+      "parity.negative.inputs",
+      "parity.negative.focus",
+      "replace.focus-selection"
+    ],
+    "nativeResults": [
+      {
+        "scenario": "focus-loss-negative-control",
+        "name": "negative",
+        "generation": 1,
+        "ticks": 5,
+        "status": "matched",
+        "input": "/workspace/scratch/39a56936f173/gondola/session-tree/build/replay-accepted-native/native-063-000.json",
+        "diff": {
+          "Tick": 0,
+          "Part": "",
+          "Want": "",
+          "Got": "",
+          "Found": false
+        }
+      }
+    ]
+  },
+  "cancelOrderNegative": {
+    "status": "detected",
+    "mutation": {
+      "status": "reordered",
+      "sequenceSlots": [
+        7,
+        8
+      ],
+      "sessionIDs": [
+        3,
+        2
+      ],
+      "localTransportLogsUnchanged": true,
+      "goBundlesUnchanged": true
+    },
+    "mismatchFields": [
+      "parity.transport-invocation-order",
+      "dispose.cancel-invocation-order"
+    ],
+    "baselineScenario": "nested-postorder-cancel-and-sibling-isolation",
+    "nativeFramesUnchanged": true
+  },
+  "disabledNegativeControls": [
+    {
+      "kind": "add-at-cap",
+      "status": "rejected-bilaterally",
+      "tickIndex": 25,
+      "sessionName": "oak",
+      "expectedField": "session.control-disabled.add",
+      "issueActors": [
+        "candidate",
+        "reference"
+      ],
+      "unexpectedFields": []
+    },
+    {
+      "kind": "reset-empty",
+      "status": "rejected-bilaterally",
+      "tickIndex": 1,
+      "sessionName": "oak",
+      "expectedField": "session.control-disabled.reset",
+      "issueActors": [
+        "candidate",
+        "reference"
+      ],
+      "unexpectedFields": []
+    },
+    {
+      "kind": "up-first-row",
+      "status": "rejected-bilaterally",
+      "tickIndex": 6,
+      "sessionName": "leaf",
+      "expectedField": "session.control-disabled.up",
+      "issueActors": [
+        "candidate",
+        "reference"
+      ],
+      "unexpectedFields": []
+    }
+  ],
+  "browser": {
+    "chromium": "153.0.8010.0",
+    "react": "19.3.1",
+    "reactDOM": "19.3.1",
+    "fixtureStatus": "Go session tree, GoDOM, and React reference are ready.",
+    "errors": []
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "platform": "linux",
+    "go": "go version go1.24.0 linux/amd64",
+    "goComparator": "/workspace/scratch/39a56936f173/gondola/session-tree/build/compare-interaction"
+  },
+  "sha256": {
+    "session-tree/check.mjs": "60cc9e94481f557e5d27935097e2b0d75db6830c50b001298495a49cd6619109",
+    "session-tree/check.test.mjs": "b3c9c0d2b06a7534d316162dacf27c7e5f3be3255b792fa7d7dbb3c67196606c",
+    "session-tree/fixture.mjs": "4ca46fed7cf88b7eb92db8dc8b2133f0c267b27d2686a912cb8344e6afa3bf5d",
+    "session-tree/fixture.html": "556867d0f6b93aae63ab23e702f398e37a60a09b1a45b34c064276dc1086e885",
+    "session-tree/host.mjs": "bf128868e63b70637faf4e8febaf6d739deb687e8f7551a2d12d52693971f4e3",
+    "session-tree/reference.mjs": "97e3dce4fa1147abf9da86c4fa091c8a8102bafdd9ee9caae965f9b866e53d3c",
+    "session-tree/scripts.mjs": "17707f0ca1b6147a25cd6a121e444189900f5b06ed512906d43766cda0e01631",
+    "multi-root/host.mjs": "cb6c7bf89acdef036e82c539d7a52b64763020cfcdee639a4b15df43fa7fa560",
+    "keyed-editor/host.mjs": "14643fc9f2deeb993191505cb0abb1d589084a5741b5abf35ca85dfdaf858164",
+    "session-tree/build/multi-root.wasm": "8c3c279ab1f38f7efde2a8f993d049c96dd26defffdb73a1f6d35b65ada249bc",
+    "session-tree/build/godom.wasm": "0e6a37b39c3bdbbfecd4b65e9b3039e5318548d8dddc273d48cf9d85e5525728",
+    "session-tree/build/react.bundle.mjs": "091e9e8a2f17a9d148803f568720614a911cd22d0fed6db7cbd55c47597e17a6",
+    "session-tree/build/reference.bundle.mjs": "fca350ec76c1addf4bde3325ab5b04b0f75e7495ac213fd1c9ccdaebbe9c21a2",
+    "session-tree/build/compare-interaction": "24d0e47644f26adb9dbfdb427cbf456950bf1043893829a0e2c2c84803bdaeed"
+  },
+  "schema": "gobi.session-tree-final-execution/v1",
+  "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH CHROMIUM_EXECUTABLE_PATH=/tmp/chromium GO_COMPARE_BIN=$PWD/session-tree/build/compare-interaction node session-tree/check.mjs --output session-tree/build/replay-accepted.json",
+  "exit_code": 0,
+  "summary_sha256": "b01f01ccb5ede1a98e20fe5f74fa617cd191ca0a2851931a3744e1b6d59497d7",
+  "scenario_hashes_verified": 63,
+  "negative_scenario_hashes_verified": 1,
+  "nonempty_native_envelopes_verified": 547,
+  "node_tests_passed": 34,
+  "external_blur_control": "one injected blur detected by three focus-related checks",
+  "inherited_full_runner": "Exited zero before final oracle/script repair; unchanged runtime/inherited gates reused, affected final Node/browser/native gates rerun. Fresh CI full entrypoint pending."
+}

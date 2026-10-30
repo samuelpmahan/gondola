@@ -94,3 +94,15 @@ bash run-multi-root.sh
 ```
 
 The default runner executes `run-renderer-conformance.sh` before building the multi-session and GoDOM WebAssembly bridges, copying the matching Go runtime, and running the new Go, Node, browser demo, and seeded replay gates. It requires Go 1.24, Node 22, the pinned interaction packages, and Playwright Chromium. See [multi-root/README.md](multi-root/README.md) for the manual demo and [multi-root/RESULTS.md](multi-root/RESULTS.md) for result status and the evidence schema.
+
+## Nested session ownership
+
+Go sessions can form an immutable parent tree. Parent and child collections retain independent state, renderer, and effect lanes; replacing a parent renderer preserves its mounted descendants. Disposing a subtree fences callbacks and returns child-first cancellation bundles while unrelated roots continue.
+
+```sh
+bash run-session-tree.sh
+./http-effects/build/http-lab -addr 127.0.0.1:8000 -root .
+# Open http://127.0.0.1:8000/session-tree/demo.html
+```
+
+The runner includes every inherited gate, nested-session tests, a real HTTP demonstration, and deterministic browser/native comparison with an independent pinned React reference. See [session-tree/README.md](session-tree/README.md), [the Go/host contract](session-tree/DESIGN.md), and [executed results and limits](session-tree/RESULTS.md).
