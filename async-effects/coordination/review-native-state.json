@@ -1,0 +1,324 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {
+    "name": "gondola-async-independent-review"
+  },
+  "workers": {
+    "W1": {
+      "job": "XR-E2",
+      "agent": "/root/async_ref"
+    },
+    "W2": {
+      "job": "XR-E1",
+      "agent": "/root/async_adversarial"
+    },
+    "W3": {
+      "job": "XR-E4",
+      "agent": "/root/async_demo"
+    },
+    "W4": {
+      "job": "XR-E5",
+      "agent": "/root/async_go"
+    },
+    "W5": {
+      "job": "XR-E3",
+      "agent": "/root/async_host"
+    },
+    "W6": {
+      "job": "XR-E6",
+      "agent": "/root/async_harness"
+    }
+  },
+  "jobs": {
+    "XR-E1": {
+      "id": "XR-E1",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W4",
+      "author_agent": "/root/async_go",
+      "author_packet": "E1",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ],
+      "status": "running",
+      "worker": "W2",
+      "started_at": "2026-10-30T09:19:46.864771+00:00",
+      "finished_at": null
+    },
+    "XR-E2": {
+      "id": "XR-E2",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W5",
+      "author_agent": "/root/async_host",
+      "author_packet": "E2",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ],
+      "status": "running",
+      "worker": "W1",
+      "started_at": "2026-10-30T09:19:46.978201+00:00",
+      "finished_at": null
+    },
+    "XR-E3": {
+      "id": "XR-E3",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W1",
+      "author_agent": "/root/async_ref",
+      "author_packet": "E3",
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "status": "running",
+      "worker": "W5",
+      "started_at": "2026-10-30T09:19:46.652498+00:00",
+      "finished_at": null
+    },
+    "XR-E4": {
+      "id": "XR-E4",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W6",
+      "author_agent": "/root/async_harness",
+      "author_packet": "E4",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ],
+      "status": "running",
+      "worker": "W3",
+      "started_at": "2026-10-30T09:19:47.178431+00:00",
+      "finished_at": null
+    },
+    "XR-E5": {
+      "id": "XR-E5",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W3",
+      "author_agent": "/root/async_demo",
+      "author_packet": "E5",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "status": "running",
+      "worker": "W4",
+      "started_at": "2026-10-30T09:19:46.749836+00:00",
+      "finished_at": null
+    },
+    "XR-E6": {
+      "id": "XR-E6",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W2",
+      "author_agent": "/root/async_adversarial",
+      "author_packet": "E6",
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "status": "running",
+      "worker": "W6",
+      "started_at": "2026-10-30T09:19:47.090855+00:00",
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-30T09:18:57.944799+00:00",
+      "ready_jobs": [
+        "XR-E1",
+        "XR-E2",
+        "XR-E3",
+        "XR-E4",
+        "XR-E5",
+        "XR-E6"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "W5": "XR-E3",
+        "W4": "XR-E5",
+        "W2": "XR-E1",
+        "W1": "XR-E2",
+        "W6": "XR-E6",
+        "W3": "XR-E4"
+      },
+      "dispatch": {
+        "W5": "XR-E3",
+        "W4": "XR-E5",
+        "W2": "XR-E1",
+        "W1": "XR-E2",
+        "W6": "XR-E6",
+        "W3": "XR-E4"
+      },
+      "native_seconds": 0.005221298997639678,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "XR-E1": 1,
+        "XR-E2": 1,
+        "XR-E3": 1,
+        "XR-E4": 1,
+        "XR-E5": 1,
+        "XR-E6": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-E1": [
+          "W1",
+          "W2",
+          "W3",
+          "W5",
+          "W6"
+        ],
+        "XR-E2": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W6"
+        ],
+        "XR-E3": [
+          "W2",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-E4": [
+          "W1",
+          "W2",
+          "W3",
+          "W4",
+          "W5"
+        ],
+        "XR-E5": [
+          "W1",
+          "W2",
+          "W4",
+          "W5",
+          "W6"
+        ],
+        "XR-E6": [
+          "W1",
+          "W3",
+          "W4",
+          "W5",
+          "W6"
+        ]
+      },
+      "weights": {
+        "XR-E1": 100,
+        "XR-E2": 100,
+        "XR-E3": 100,
+        "XR-E4": 100,
+        "XR-E5": 100,
+        "XR-E6": 100
+      },
+      "agent_by_worker": {
+        "W1": null,
+        "W2": null,
+        "W3": null,
+        "W4": null,
+        "W5": null,
+        "W6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T09:19:46.652498+00:00",
+      "worker": "W5",
+      "job": "XR-E3",
+      "agent": "/root/async_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T09:19:46.749836+00:00",
+      "worker": "W4",
+      "job": "XR-E5",
+      "agent": "/root/async_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T09:19:46.864771+00:00",
+      "worker": "W2",
+      "job": "XR-E1",
+      "agent": "/root/async_adversarial"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T09:19:46.978201+00:00",
+      "worker": "W1",
+      "job": "XR-E2",
+      "agent": "/root/async_ref"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T09:19:47.090855+00:00",
+      "worker": "W6",
+      "job": "XR-E6",
+      "agent": "/root/async_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-30T09:19:47.178431+00:00",
+      "worker": "W3",
+      "job": "XR-E4",
+      "agent": "/root/async_demo"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

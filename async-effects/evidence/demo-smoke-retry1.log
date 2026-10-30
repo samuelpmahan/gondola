@@ -1,0 +1,18 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS initial Go editor: backend=dom, status=idle, pending=0, saved="", audit=0
+PASS manual request A starts: backend=dom, status=pending, pending=1, saved="", audit=0
+PASS request A remains pending after renderer swap: backend=react, status=pending, pending=1, saved="", audit=0
+PASS request B supersedes A after renderer swap: backend=react, status=pending, pending=2, saved="", audit=0
+PASS late A reply is recorded and ignored: backend=react, status=pending, pending=2, saved="", audit=1
+PASS current B reply is accepted: backend=react, status=saved, pending=0, saved="request B", audit=2
+PASS duplicate B reply is ignored: backend=react, status=saved, pending=0, saved="request B", audit=3
+PASS manual request C starts: backend=react, status=pending, pending=3, saved="request B", audit=3
+PASS request C is canceled: backend=react, status=cancelled, pending=0, saved="request B", audit=3
+PASS reset clears the canceled editor but keeps IDs monotonic: backend=react, status=idle, pending=0, saved="", audit=3
+PASS late C reply after cancel and reset is ignored: backend=react, status=idle, pending=0, saved="", audit=4
+PASS timer request stays pending through an immediate renderer swap: backend=dom, status=pending, pending=4, saved="", audit=4
+PASS setTimeout reply is accepted after the renderer swap: backend=dom, status=saved, pending=0, saved="timed save", audit=5
+PASS rejected reply preserves the previous saved result: backend=dom, status=error: demo transport rejected the save, pending=0, saved="timed save", audit=6
+PASS retry receives a new request ID: backend=dom, status=saved, pending=0, saved="retry me", audit=7
+Async-effects demo smoke passed: manual stale/error/duplicate replies, reset, timer delivery, and live DOM matched.

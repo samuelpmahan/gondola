@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Async save effects across Gobi renderers</title>
+  <style>
+    :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+    body { max-width: 68rem; margin: 2.5rem auto; padding: 0 1.25rem; }
+    h1 { line-height: 1.15; }
+    h2 { margin-bottom: .45rem; }
+    section { margin: 1.6rem 0; }
+    .controls, .mode-controls { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+    button { font: inherit; padding: .45rem .8rem; cursor: pointer; }
+    button[aria-pressed="true"] { outline: 2px solid currentColor; outline-offset: 2px; }
+    input[type="number"] { font: inherit; width: 5rem; }
+    #editor-root { border: 1px solid #8888; border-radius: .6rem; margin: 1rem 0; min-height: 8rem; padding: 1rem; }
+    #editor-root .editor { display: grid; gap: .8rem; }
+    #editor-root input[type="text"] { box-sizing: border-box; font: inherit; max-width: 42rem; padding: .45rem .6rem; width: 100%; }
+    #editor-root p { margin: 0; overflow-wrap: anywhere; }
+    #error { color: #b42318; background: #b4231815; border-left: .25rem solid currentColor; padding: .65rem .8rem; }
+    pre { max-height: 24rem; overflow: auto; border: 1px solid #8888; border-radius: .5rem; padding: .8rem; }
+    .audit-grid pre, #dom-snapshot { max-height: 12rem; }
+    code { font-family: ui-monospace, monospace; }
+    .muted { opacity: .75; }
+    .reply-list { display: grid; gap: .55rem; }
+    .reply-row { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; border: 1px solid #8885; border-radius: .5rem; padding: .55rem .7rem; }
+    .reply-row code { overflow-wrap: anywhere; }
+    .audit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 0 1rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Async save effects across replaceable renderers</h1>
+    <p>Go owns the editor and request IDs. Save starts a transport command; a later reply returns to the same Go session. Switch renderers while work is pending to see the request stay live.</p>
+
+    <section aria-labelledby="renderer-heading">
+      <h2 id="renderer-heading">Renderer</h2>
+      <div class="controls" role="group" aria-label="Choose renderer">
+        <button type="button" data-backend="dom" aria-pressed="true">Gobi DOM</button>
+        <button type="button" data-backend="react" aria-pressed="false">Gobi React</button>
+        <span>Active: <strong id="active-backend">Loading…</strong></span>
+      </div>
+    </section>
+
+    <section aria-labelledby="transport-heading">
+      <h2 id="transport-heading">Reply transport</h2>
+      <div class="mode-controls">
+        <label><input id="auto-reply" type="checkbox"> Reply with a timer</label>
+        <label for="delay-ms">Delay</label>
+        <input id="delay-ms" type="number" min="0" max="5000" step="50" value="700"> ms
+        <span class="muted">Off: choose each reply below. On: a local timer replies with the saved draft.</span>
+      </div>
+    </section>
+
+    <section aria-labelledby="editor-heading">
+      <h2 id="editor-heading">Draft editor</h2>
+      <div id="editor-root" aria-live="polite"></div>
+    </section>
+
+    <section aria-labelledby="manual-heading">
+      <h2 id="manual-heading">Manual replies</h2>
+      <p class="muted">Every manual request stays available after cancel or delivery, so you can send late, rejected, or duplicate replies on purpose.</p>
+      <div id="manual-replies" class="reply-list"><p class="muted">No manual requests yet.</p></div>
+    </section>
+
+    <p id="error" role="alert" hidden></p>
+
+    <section aria-labelledby="runtime-heading">
+      <h2 id="runtime-heading">Go runtime JSON</h2>
+      <p class="muted">Current state, rendered Gobi tree, input binding, and ordered message history.</p>
+      <pre id="runtime-snapshot">Waiting for WebAssembly…</pre>
+      <div class="audit-grid">
+        <div>
+          <h2>Go completion audit</h2>
+          <pre id="completion-audit">Waiting for the first reply…</pre>
+        </div>
+        <div>
+          <h2>Transport commands and replies</h2>
+          <pre id="transport-log">Waiting for the first save…</pre>
+        </div>
+      </div>
+      <h2>Active renderer and actual DOM</h2>
+      <p class="muted">Includes live HTML, disabled controls, the input value property, and its disabled property.</p>
+      <pre id="dom-snapshot">Waiting for the first render…</pre>
+    </section>
+  </main>
+
+  <script src="/async-effects/build/wasm_exec.js"></script>
+  <script type="module" src="/async-effects/demo.mjs"></script>
+</body>
+</html>
