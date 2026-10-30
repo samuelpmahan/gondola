@@ -1,0 +1,12 @@
+# Initial integration findings
+
+These are actual pre-final observations, preserved separately from final gates.
+
+1. Root `go test ./...` initially failed because httplab/server_test.go referenced an undefined response while the new lane was still being written. Full output: initial-go.log. Owner repaired the test scope before the inherited composed runner started.
+2. Native Go codec vs independent JS response decoder differed for `{"ID":1,"Value":"\ud800","Error":""}`. `go run /tmp/gondola-http-codec-probe.go` printed Value U+FFFD; Node22 importing http-effects/reference.mjs printed escaped lone D800. E1 subsequently tightened the wire contract to reject unpaired escaped surrogates; E3 aligned the independent decoder and both added tests. Raw browser UTF-8 decoding and direct native byte rejection are separate boundaries.
+3. Actual httptest probe POST `/api/save?lane=probe&mode=success`, content-type application/json, body `{"ID":1,"Value":null}` returned200 and `{"ID":1,"Value":"","Error":""}`. Go json.Unmarshal(null,&string) succeeds. E6 was assigned strict primitive-type rejection with regression cases.
+4. Source review found releaseRequest examined saved request context cancellation before terminal state, allowing a later duplicate release to rewrite a completed record as cancelled after net/http ended the context normally. E6 was assigned an actual socket completion/duplicate-release/record-retention check and terminal-state-first guard. Final report must distinguish this source finding from the earlier executed null probe.
+
+5. Root injected a valid fake HTTP200 reply whose delivery callback throws, waited one setImmediate, then called transport.settled(). It incorrectly resolved because completed rejected work was removed before observation. E2 now retains unexpected work/delivery errors until settled consumes them exactly once; the requested regression passes.
+6. Root first all-Node pre-review run had19 pass/1 fail: CLI range test expected the word positive while the actual error specified1 through40. E4 aligned the assertion to the actual bound; this was a test-text mismatch, not accepted as a successful gate.
+7. A first inherited attempt overlapped E6 regression-test edits and failed on a transient variable declaration at server_test.go175. Owner completed/froze Go files and the complete inherited runner was restarted. See inherited-initial-failure.log.
