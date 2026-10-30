@@ -44,8 +44,9 @@ most 40 actions each. Its report schema is documented in [RESULTS.md](RESULTS.md
 
 The full default runner passed, including inherited regressions and the demo.
 Final replay: 63 scripts, 1,896 actions, 11,754 actor observations, zero
-mismatches and 193/193 native segments. Independent review of the final
-lifecycle-oracle repair remains pending because the assigned Luna worker hit
-its usage limit. See [RESULTS.md](RESULTS.md) for exact evidence and limits.
+mismatches and 193/193 native segments. Resumed review repaired an additional
+backend-transition oracle gap, and follow-up audits added duplicate-root and
+bounded-callback GoDOM lifecycle repairs. See [RESULTS.md](RESULTS.md) for the
+passing historical CI run and the fresh revision's review/execution status.
 
 The feature scope and explicit non-goals are in [DESIGN.md](DESIGN.md).

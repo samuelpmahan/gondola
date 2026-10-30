@@ -1,0 +1,54 @@
+{
+  "job_id": "A-EVIDENCE",
+  "worker": "W5",
+  "outcome": "mixed_change",
+  "summary": "Verified all 24 root hashes and 650 historical pins (646 current matches, four intentional renderer changes whose prior bytes match base commit 4772857); verified the final raw replay hash and all eight PR #8 workflows, including successful run 41079481294. Published review status is accurate for that commit, but follow-up review found replay-oracle backend rollback and GoDOM duplicate-root/callback-lifetime gaps; repairs and independent review are pending.",
+  "report": "multi-root/coordination/reports/A-EVIDENCE.md",
+  "evidence": {
+    "published_head": "bd8455a0656a28d303266e8bc0f39e893769a0bd",
+    "workflow_runs": [
+      {"name": "Counter interaction parity", "run_id": 41079481264, "conclusion": "success"},
+      {"name": "Gobi async effects", "run_id": 41079481266, "conclusion": "success"},
+      {"name": "Gobi renderer conformance", "run_id": 41079481284, "conclusion": "success"},
+      {"name": "Gobi multi-root sessions", "run_id": 41079481294, "conclusion": "success"},
+      {"name": "Gobi controlled input", "run_id": 41079481398, "conclusion": "success"},
+      {"name": "Gobi keyed collection editor", "run_id": 41079481335, "conclusion": "success"},
+      {"name": "Gobi backend replacement", "run_id": 41079481384, "conclusion": "success"},
+      {"name": "Gobi HTTP effects", "run_id": 41079481500, "conclusion": "success"}
+    ],
+    "root_sha256": {"checked": 24, "passed": 24},
+    "historical_pins": {"checked": 650, "current_matches": 646, "intentional_changes": 4, "missing": 0},
+    "raw_report": {
+      "path": "multi-root/build/replay-seeds-20261030-20261031.json",
+      "bytes": 350530239,
+      "sha256": "9a07a712e25ebaee207bfd8589d42bf030394af37157d224cf36a5d9c92009aa"
+    },
+    "multi_root_ci": {
+      "run_id": 41079481294,
+      "tests_passed": 34,
+      "browser_assertions_passed": 5,
+      "scripts": 63,
+      "actions": 1896,
+      "ticks": 1959,
+      "actor_observations": 11754,
+      "mismatches": 0,
+      "native_segments_matched": 193
+    },
+    "followup_review": {
+      "receipt": "multi-root/coordination/receipts/XR-RE5-RE5.json",
+      "decision": "amend",
+      "finding": "A renderer-failure trace can change the candidate active backend while the replay oracle returns no mismatch.",
+      "current_local_focused_tests": "40 passed, 0 failed under Node v24.22.1",
+      "independent_followup": "XR-BACKEND pending"
+    },
+    "active_source_review": {
+      "area": "GoDOM bridge",
+      "reported_findings": [
+        "Duplicate-root mount interference",
+        "Seven Go callbacks retained per mount"
+      ],
+      "repair": "R-GODOM active under W2",
+      "independent_review": "pending"
+    }
+  }
+}

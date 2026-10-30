@@ -403,6 +403,20 @@ export function validateReplayScenario(scenario) {
       const pair = tick.roots[root];
       if (!validObject(pair)) continue;
       const isTargetAction = action?.root === root;
+      if (tickIndex > 0) {
+        const before = ticks[tickIndex - 1]?.roots?.[root];
+        for (const participant of candidates) {
+          const prior = before?.[participant];
+          const next = pair[participant];
+          if (prior?.mounted && next?.mounted && prior.sessionID === next.sessionID) {
+            const expectedBackend = isTargetAction && action?.kind === "replace" && participant === "candidate"
+              ? action.backend : prior.backend;
+            if (next.backend !== expectedBackend) issue(issues, "backend-transition", {
+              tick: tickIndex, root, participant, expected: expectedBackend, actual: next.backend,
+            });
+          }
+        }
+      }
       if (isTargetAction && ["add", "fill", "save", "click"].includes(action.kind)) {
         const previousPair = ticks[tickIndex - 1]?.roots?.[root];
         for (const participant of candidates) compareMessagesForAction(

@@ -96,6 +96,20 @@ test("lifecycle events reject duplicate records and wrong session or generation 
   assert.ok(validateReplayScenario(wrongGeneration).some((issue) => issue.field === "lifecycle-event-semantics"));
 });
 
+test("failed renderer replacement preserves the accepted backend", () => {
+  const value = scenario();
+  const next = structuredClone(value.ticks[0]);
+  next.index = 1;
+  next.action = { kind: "renderer-failure", root: "alpha", backend: "throw-on-mount" };
+  next.events = [{ sequence: 7, kind: "renderer-failure", root: "alpha", participant: "candidate", sessionID: 1, backend: "throw-on-mount", error: "failed to mount" }];
+  next.roots.alpha.candidate.lifecycleEvents.push({ sequence: 7, kind: "renderer-failure", sessionID: 1, backend: "throw-on-mount", error: "failed to mount" });
+  value.actions = [next.action];
+  value.ticks.push(next);
+  assert.deepEqual(validateReplayScenario(value), []);
+  next.roots.alpha.candidate.backend = "react";
+  assert.ok(validateReplayScenario(value).some((issue) => issue.field === "backend-transition" && issue.root === "alpha"));
+});
+
 test("parity rejects synchronized no-op actions when dispatch receipts and state do not advance", () => {
   const before = scenario();
   const after = structuredClone(before.ticks[0]);

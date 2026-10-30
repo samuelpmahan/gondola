@@ -48,6 +48,20 @@ window.__godomSmoke = (async () => {
     rendererFailed(error) { failureA = error; },
   };
   const rendererA = unwrap(api.mount(root, facade), "mount root A");
+  const rootBeforeDuplicateMount = root.innerHTML;
+  let duplicateInitCalled = false;
+  const duplicateMount = api.mount(root, {
+    init() {
+      duplicateInitCalled = true;
+      throw new Error("a duplicate root must be rejected before facade.init()");
+    },
+    dispatch() {},
+  });
+  assert(duplicateMount && Object.keys(duplicateMount).join(",") === "error" &&
+    typeof duplicateMount.error === "string", "mounting an already-owned root must return an exact error object");
+  assert(!duplicateInitCalled && root.innerHTML === rootBeforeDuplicateMount &&
+    rendererA.snapshot().state.Rows.length === 0,
+    "duplicate-root rejection must happen before initialization and leave the live renderer DOM/state unchanged");
 
   let sideVersion = 0;
   let sideDispatches = 0;
@@ -76,8 +90,21 @@ window.__godomSmoke = (async () => {
     bindings: [],
     messages: [],
   });
+  let reentrantDuplicateInitCalled = false;
   const sideFacade = {
-    init() { return sideSnapshot(); },
+    init() {
+      const reentrantMount = api.mount(rootB, {
+        init() {
+          reentrantDuplicateInitCalled = true;
+          throw new Error("a re-entrant duplicate root must be rejected before facade.init()");
+        },
+        dispatch() {},
+      });
+      assert(reentrantMount && typeof reentrantMount.error === "string" &&
+        !reentrantDuplicateInitCalled && rootB.childNodes.length === 0,
+        "mounting facade.init() must not re-enter a mount on its root");
+      return sideSnapshot();
+    },
     dispatch(step) {
       assert(step && step.Event === "click" && step.Value === "B" && step.Key === "side-button",
         "root B must dispatch its own click event");
@@ -283,6 +310,76 @@ window.__godomSmoke = (async () => {
     "a stale handle must not mutate a fresh instance mounted on its former root");
   unwrap(freshRenderer.unmount(), "unmount fresh root A instance");
 
+  for (let cycle = 0; cycle < 100; cycle += 1) {
+    const repeated = unwrap(api.mount(root, freshFacade), `mount root in cleanup cycle ${cycle}`);
+    assert(repeated.snapshot().state.version === 3, `cleanup cycle ${cycle} must start with a fresh renderer`);
+    unwrap(repeated.unmount(), `unmount root in cleanup cycle ${cycle}`);
+    assert(repeated.snapshot().error && root.childNodes.length === 0,
+      `cleanup cycle ${cycle} must fence the stale handle and clear the root`);
+  }
+
+  const cleanupRenderer = unwrap(api.mount(root, freshFacade), "mount root for re-entrant cleanup check");
+  const originalReplaceChildren = root.replaceChildren;
+  let cleanupMountInitCalled = false;
+  let cleanupMountError = null;
+  root.replaceChildren = function (...args) {
+    const nested = api.mount(root, {
+      init() {
+        cleanupMountInitCalled = true;
+        return sideSnapshot();
+      },
+      dispatch() {},
+    });
+    cleanupMountError = nested && nested.error;
+    return originalReplaceChildren.apply(root, args);
+  };
+  try {
+    unwrap(cleanupRenderer.unmount(), "unmount root with re-entrant cleanup");
+    assert(typeof cleanupMountError === "string" && !cleanupMountInitCalled && root.childNodes.length === 0,
+      "a root must stay reserved until unmount cleanup finishes");
+  } finally {
+    root.replaceChildren = originalReplaceChildren;
+  }
+
+  const bindFailureReplaceChildren = root.replaceChildren;
+  const originalFunctionBind = Function.prototype.bind;
+  let bindFailureNestedInitCalled = false;
+  let bindFailureNestedMountError = null;
+  let insideBindFailureCleanup = false;
+  root.replaceChildren = function (...args) {
+    if (!insideBindFailureCleanup) {
+      insideBindFailureCleanup = true;
+      try {
+        const nested = api.mount(root, {
+          init() {
+            bindFailureNestedInitCalled = true;
+            return sideSnapshot();
+          },
+          dispatch() {},
+        });
+        bindFailureNestedMountError = nested && nested.error;
+      } finally {
+        insideBindFailureCleanup = false;
+      }
+    }
+    return bindFailureReplaceChildren.apply(root, args);
+  };
+  let bindFailureMount;
+  try {
+    Function.prototype.bind = function () {
+      throw new Error("forced bound-method construction failure");
+    };
+    bindFailureMount = api.mount(root, freshFacade);
+  } finally {
+    Function.prototype.bind = originalFunctionBind;
+    root.replaceChildren = bindFailureReplaceChildren;
+  }
+  assert(bindFailureMount && typeof bindFailureMount.error === "string" &&
+    typeof bindFailureNestedMountError === "string" && !bindFailureNestedInitCalled && root.childNodes.length === 0,
+    "API construction failure cleanup must keep its root lease through re-entrant DOM cleanup");
+  const afterBindFailure = unwrap(api.mount(root, freshFacade), "reuse root after API construction failure");
+  unwrap(afterBindFailure.unmount(), "unmount root reused after API construction failure");
+
   return {
     ok: true,
     simultaneousInstances: 2,
@@ -297,6 +394,9 @@ window.__godomSmoke = (async () => {
     idempotentUnmountAndStaleHandleFence: true,
     independentCallbackFailureFence: true,
     rootReuseAfterUnmount: true,
+    mountUnmountCycles: 100,
+    reentrantUnmountMountRejected: true,
+    apiConstructionFailureCleanupFenced: true,
   };
 })().catch((error) => {
   window.__godomSmokeError = String(error?.stack ?? error);

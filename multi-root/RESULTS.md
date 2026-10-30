@@ -1,5 +1,36 @@
 # Multi-root verification results
 
+## Review follow-up
+
+All eight PR workflows passed for initial head
+`bd8455a0656a28d303266e8bc0f39e893769a0bd`, including the full entrypoint
+on Go 1.24.13 / Node 22.23.4 / Chromium 156.0.8078.4. See
+[ci-initial-head.json](evidence/ci-initial-head.json) for logs and artifact digest.
+
+Resumed review found a failed renderer replacement could change the accepted
+backend without an oracle mismatch. A red regression reproduced it; the
+checker now requires backend continuity except for successful targeted swaps.
+XR-BACKEND independently accepts the repair. Node 24.22.1 checks pass 40/40;
+offline revalidation of the retained full browser trace passes all 63 scripts
+and 11,754 observations. That is not a new browser execution.
+
+Five native-allocated audits filled the other Luna slots alongside the resumed
+reviewer. The GoDOM audit found duplicate-root mount interference and seven
+permanently retained Go callbacks per mount. The bridge repair rejects active
+or reserved roots before initialization, reserves roots through teardown,
+routes bound instance IDs through eight shared Go callbacks, and removes
+retired routes. The smoke adds duplicate/reentrant rejection and 100 cycles.
+R-GODOM and XR-R-GODOM record review status. Fresh CI must validate the new
+bridge revision: local Go and Chromium installations were pruned, so no local
+build or new browser execution is claimed for it.
+
+The records below describe the original checkpoint. Follow-up hashes, reviews
+and limits are in [followup-final.json](evidence/followup-final.json).
+Historical receipts remain unchanged. The legacy singleton-shaped test-double
+adapter is not a simultaneous-root backend; the real bridge uses handles.
+
+## Original checkpoint
+
 The full entrypoint exited zero on 2026-10-30. This draft awaits independent
 review of the final RE5 oracle repair: the assigned Luna reviewer exhausted
 its usage allowance before acceptance. XR-E5's original amend is preserved.

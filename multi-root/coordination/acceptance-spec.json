@@ -1,0 +1,68 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-pr8-acceptance-audit"
+  },
+  "workers": [
+    "W1",
+    "W2",
+    "W3",
+    "W5",
+    "W6"
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  },
+  "jobs": [
+    {
+      "id": "A-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "W1"
+      ],
+      "owner": "multi-root/coordination/reports/A-GO.md and receipts/A-GO.json only",
+      "summary": "Go session ownership/cancel disposal"
+    },
+    {
+      "id": "A-WASM",
+      "kind": "extract",
+      "allow_workers": [
+        "W3"
+      ],
+      "owner": "multi-root/coordination/reports/A-WASM.md and receipts/A-WASM.json only",
+      "summary": "Strict WASM session boundary"
+    },
+    {
+      "id": "A-GODOM",
+      "kind": "extract",
+      "allow_workers": [
+        "W2"
+      ],
+      "owner": "multi-root/coordination/reports/A-GODOM.md and receipts/A-GODOM.json only",
+      "summary": "Independent GoDOM renderer handles"
+    },
+    {
+      "id": "A-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "W6"
+      ],
+      "owner": "multi-root/coordination/reports/A-HOST.md and receipts/A-HOST.json only",
+      "summary": "Host transport/lifecycle/failure isolation"
+    },
+    {
+      "id": "A-EVIDENCE",
+      "kind": "extract",
+      "allow_workers": [
+        "W5"
+      ],
+      "owner": "multi-root/coordination/reports/A-EVIDENCE.md and receipts/A-EVIDENCE.json only",
+      "summary": "Historical receipts and executed evidence"
+    }
+  ]
+}
