@@ -1,0 +1,38 @@
+{
+  "job_id": "XR-harness",
+  "worker": "W2",
+  "reviewer_agent": "/root/dom_adapter",
+  "decision": "accepted",
+  "recorded_at": "2026-10-30T06:13:04.055401+00:00",
+  "summary": "Accepted with two non-blocking findings: demo.html is not smoke-tested by the inline fixture, and comments claiming fresh sessions do not match cumulative messages because Reset does not reinitialize/remount.",
+  "review_report": "XR-harness review outcome: ACCEPT with two non-blocking findings. Evidence: interaction/check.mjs uses Playwright Chromium, serves .wasm as application/wasm, loads mountGobi/WASM, compares state/tree/messages plus rendered html/outerHTML and disabled paths, and drives child-index paths 1/2; this matches current DOM adapter. Findings: (1) its browser page is an inline parity fixture, so interaction/demo.html itself is not smoke-tested despite root's request to test the mounted demo if feasible; (2) comments say each script starts in a fresh session, but code only clicks Reset and does not call runtime init, so messages remains cumulative across scenario boundaries. Reviewer sent the same findings to harness; recommend add demo smoke and either reinitialize/remount or change the fresh-session claim.",
+  "findings": [
+    "interaction/demo.html is not smoke-tested; browser check covers only the inline parity fixture.",
+    "Scenario comments claim fresh sessions, but Reset leaves the cumulative message log intact; reinitialize/remount or revise the claim."
+  ],
+  "author_followup": {
+    "recorded_at": "2026-10-30T06:18:34.010230+00:00",
+    "source_status": "Harness author reports final sources frozen; follow-up changes address the initial fresh-session/demo-smoke notes.",
+    "reported_verification": {
+      "node_syntax": "pass",
+      "interaction_js_tests": 8,
+      "seed_20261030": {
+        "scripts": 107,
+        "user_actions": 4366,
+        "ticks": 4473,
+        "mismatches": 0,
+        "native_comparisons": "all matched"
+      },
+      "seed_20261031": {
+        "scripts": 107,
+        "user_actions": 4145,
+        "ticks": 4252,
+        "mismatches": 0,
+        "native_comparisons": "all matched"
+      },
+      "demo_smoke": "initial 0 / disabled reset; add to 1; reset to 0; extra disabled reset unchanged",
+      "chromium": "153.0.8010.0"
+    },
+    "independent_re_review": "not received; original W2 decision remains ACCEPT with two non-blocking findings. Author follow-up and execution results are not represented as an independent reviewer decision."
+  }
+}

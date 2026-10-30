@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gobi Go WASM counter</title>
+    <style>
+      :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+      body { max-width: 44rem; margin: 3rem auto; padding: 0 1.25rem; }
+      #counter-root { margin: 1.5rem 0; }
+      #counter-root button { margin-right: .5rem; padding: .45rem .8rem; }
+      pre { overflow: auto; padding: 1rem; border-radius: .5rem; background: color-mix(in srgb, CanvasText 8%, Canvas); }
+      .status { color: GrayText; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Gobi Go WASM counter</h1>
+      <p class="status">The counter state and view come from Go. This page mounts the returned Node tree and sends declared DOM events back to the Go runtime.</p>
+      <div id="counter-root" aria-live="polite"></div>
+      <h2>Runtime and DOM snapshot</h2>
+      <pre id="snapshot" aria-live="polite">Loading Go WebAssembly…</pre>
+    </main>
+
+    <script src="./build/wasm_exec.js"></script>
+    <script type="module">
+      import { mountGobi } from "./dom.mjs";
+
+      const output = document.querySelector("#snapshot");
+      const reportError = (error) => {
+        output.textContent = error?.stack ?? String(error);
+      };
+
+      try {
+        if (typeof globalThis.Go !== "function") {
+          throw new Error("Go WebAssembly support did not load from ./build/wasm_exec.js");
+        }
+
+        const response = await fetch("./build/counter.wasm");
+        if (!response.ok) throw new Error(`Could not load ./build/counter.wasm (${response.status})`);
+
+        const go = new globalThis.Go();
+        let wasm;
+        try {
+          wasm = await WebAssembly.instantiateStreaming(response.clone(), go.importObject);
+        } catch {
+          wasm = await WebAssembly.instantiate(await response.arrayBuffer(), go.importObject);
+        }
+
+        // A Go program that retains js.Func callbacks stays alive after this
+        // promise begins running; the exported runtime is installed during Go.run.
+        const runPromise = go.run(wasm.instance);
+        runPromise.catch(reportError);
+
+        const deadline = Date.now() + 10000;
+        while (typeof globalThis.gobiCounter?.init !== "function") {
+          if (Date.now() >= deadline) throw new Error("Go WASM did not expose globalThis.gobiCounter.init()");
+          await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+
+        const mounted = mountGobi(document.querySelector("#counter-root"), globalThis.gobiCounter);
+        mounted.subscribe((runtimeSnapshot) => {
+          output.textContent = JSON.stringify({
+            runtime: runtimeSnapshot,
+            dom: mounted.domSnapshot(),
+          }, null, 2);
+        });
+        globalThis.gobiCounterMount = mounted;
+      } catch (error) {
+        reportError(error);
+      }
+    </script>
+  </body>
+</html>

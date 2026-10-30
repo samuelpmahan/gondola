@@ -1,0 +1,115 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-cross-review",
+    "scope": "six-lane-independent-review"
+  },
+  "workers": [
+    "W1",
+    "W2",
+    "W3",
+    "W4",
+    "W5",
+    "W6"
+  ],
+  "jobs": [
+    {
+      "id": "XR-runtime",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "runtime",
+      "author_worker": "W1",
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files."
+    },
+    {
+      "id": "XR-dom_adapter",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "dom_adapter",
+      "author_worker": "W2",
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files."
+    },
+    {
+      "id": "XR-harness",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "harness",
+      "author_worker": "W3",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files."
+    },
+    {
+      "id": "XR-compare",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "compare",
+      "author_worker": "W4",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files."
+    },
+    {
+      "id": "XR-environment",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "environment",
+      "author_worker": "W5",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files."
+    },
+    {
+      "id": "XR-rebalancer",
+      "kind": "extract",
+      "packet_type": "independent_cross_review",
+      "lane": "rebalancer",
+      "author_worker": "W6",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ],
+      "review_scope": "Read the lane diff and its direct call sites; report concrete correctness, API, boundary, and test gaps without editing the owner's files."
+    }
+  ],
+  "review_policy": {
+    "enabled": false
+  },
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 100,
+    "repair_priority": 100
+  }
+}
