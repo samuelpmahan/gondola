@@ -1,0 +1,559 @@
+{
+  "analysisDiagnostics": [
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer arithmetic is not proven within the v1 safe-integer profile",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/cross_function_safe_numeric_parameter/app.go",
+        "startByte": 422,
+        "endByte": 427
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer increment/decrement lacks a safe bound guard",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/if_else_guard_leak/app.go",
+        "startByte": 325,
+        "endByte": 334
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer increment/decrement lacks a safe bound guard",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/inclusive_max_safe_increment/app.go",
+        "startByte": 302,
+        "endByte": 311
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/int32_declared_width/app.go",
+        "startByte": 295,
+        "endByte": 316
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/int8_declared_width/app.go",
+        "startByte": 287,
+        "endByte": 301
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer increment/decrement lacks a safe bound guard",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/loop_inclusive_bound/app.go",
+        "startByte": 308,
+        "endByte": 311
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/lower_guard_large_compound_sub/app.go",
+        "startByte": 302,
+        "endByte": 329
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer increment/decrement lacks a safe bound guard",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/multi_case_or_guard/app.go",
+        "startByte": 319,
+        "endByte": 328
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer increment/decrement lacks a safe bound guard",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/mutation_invalidates_guard/app.go",
+        "startByte": 331,
+        "endByte": 340
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/safe_compound_add_control/app.go",
+        "startByte": 301,
+        "endByte": 313
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/signed_negative_operand/app.go",
+        "startByte": 301,
+        "endByte": 314
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/unsafe_helper_numeric_parameter/app.go",
+        "startByte": 387,
+        "endByte": 409
+      },
+      "related": []
+    },
+    {
+      "code": "analyze.numeric-profile",
+      "severity": "error",
+      "message": "integer compound assignment has no v1 operand and range proof",
+      "span": {
+        "file": "coordination/reviews/numeric/fixture-scratch-994827510/upper_guard_large_compound_add/app.go",
+        "startByte": 301,
+        "endByte": 328
+      },
+      "related": []
+    }
+  ],
+  "cases": [
+    {
+      "name": "mutation_invalidates_guard",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count++",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer increment/decrement lacks a safe bound guard",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/mutation_invalidates_guard/app.go",
+            "startByte": 331,
+            "endByte": 340
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "upper_guard_large_compound_add",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count += 9007199254740991",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/upper_guard_large_compound_add/app.go",
+            "startByte": 301,
+            "endByte": 328
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "if_else_guard_leak",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count++",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer increment/decrement lacks a safe bound guard",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/if_else_guard_leak/app.go",
+            "startByte": 325,
+            "endByte": 334
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "multi_case_or_guard",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count++",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer increment/decrement lacks a safe bound guard",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/multi_case_or_guard/app.go",
+            "startByte": 319,
+            "endByte": 328
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "inclusive_max_safe_increment",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count++",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer increment/decrement lacks a safe bound guard",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/inclusive_max_safe_increment/app.go",
+            "startByte": 302,
+            "endByte": 311
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "loop_inclusive_bound",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "i++",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer increment/decrement lacks a safe bound guard",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/loop_inclusive_bound/app.go",
+            "startByte": 308,
+            "endByte": 311
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "signed_negative_operand",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count += -1",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/signed_negative_operand/app.go",
+            "startByte": 301,
+            "endByte": 314
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "lower_guard_large_compound_sub",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count -= 9007199254740991",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/lower_guard_large_compound_sub/app.go",
+            "startByte": 302,
+            "endByte": 329
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "int8_declared_width",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count += 127",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/int8_declared_width/app.go",
+            "startByte": 287,
+            "endByte": 301
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "int32_declared_width",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "s.Count += 2147483647",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/int32_declared_width/app.go",
+            "startByte": 295,
+            "endByte": 316
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "unsafe_helper_numeric_parameter",
+      "expectedReject": true,
+      "expectedAccept": false,
+      "accepted": false,
+      "target": "v -= -9007199254740991",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/unsafe_helper_numeric_parameter/app.go",
+            "startByte": 387,
+            "endByte": 409
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "safe_upper_guard_control",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": true,
+      "target": "s.Count++",
+      "targetSpanMatched": false,
+      "diagnostics": null,
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "safe_lower_guard_control",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": true,
+      "target": "s.Count--",
+      "targetSpanMatched": false,
+      "diagnostics": null,
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "safe_int8_width_control",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": true,
+      "target": "s.Count++",
+      "targetSpanMatched": false,
+      "diagnostics": null,
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "safe_int32_width_control",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": true,
+      "target": "s.Count++",
+      "targetSpanMatched": false,
+      "diagnostics": null,
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "safe_compound_add_control",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": false,
+      "target": "s.Count += 1",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer compound assignment has no v1 operand and range proof",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/safe_compound_add_control/app.go",
+            "startByte": 301,
+            "endByte": 313
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": true,
+      "optional": true
+    },
+    {
+      "name": "exact_lower_boundary_control",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": true,
+      "target": "s.Count--",
+      "targetSpanMatched": false,
+      "diagnostics": null,
+      "falseAccept": false,
+      "falseReject": false,
+      "optional": false
+    },
+    {
+      "name": "cross_function_safe_numeric_parameter",
+      "expectedReject": false,
+      "expectedAccept": true,
+      "accepted": false,
+      "target": "v + 1",
+      "targetSpanMatched": true,
+      "diagnostics": [
+        {
+          "code": "analyze.numeric-profile",
+          "severity": "error",
+          "message": "integer arithmetic is not proven within the v1 safe-integer profile",
+          "span": {
+            "file": "coordination/reviews/numeric/fixture-scratch-994827510/cross_function_safe_numeric_parameter/app.go",
+            "startByte": 422,
+            "endByte": 427
+          },
+          "related": []
+        }
+      ],
+      "falseAccept": false,
+      "falseReject": true,
+      "optional": true
+    }
+  ],
+  "encoderBoundary": {
+    "nativeIntMaxAccepted": true,
+    "nativeIntMaxText": "9007199254740991",
+    "nativeIntAboveMaxAccepted": false,
+    "nativeIntAboveMaxText": "",
+    "nativeIntMinAccepted": true,
+    "nativeIntMinText": "-9007199254740991",
+    "nativeIntBelowMinAccepted": false,
+    "nativeUintMaxAccepted": true,
+    "nativeUintMaxText": "9007199254740991",
+    "nativeUintAboveMaxAccepted": false,
+    "nativeUintAboveMaxText": "",
+    "nativeInt64FullWidthAccepted": true,
+    "nativeInt64FullWidthText": "9223372036854775807",
+    "nativeUint64FullWidthAccepted": true,
+    "nativeUint64FullWidthText": "18446744073709551615",
+    "jsIntMaxAccepted": true,
+    "jsIntMaxText": "9007199254740991",
+    "jsIntAboveMaxAccepted": false,
+    "jsIntMinAccepted": true,
+    "jsIntMinText": "-9007199254740991",
+    "jsIntBelowMinAccepted": false,
+    "jsUintMaxAccepted": true,
+    "jsUintMaxText": "9007199254740991",
+    "jsUintAboveMaxAccepted": false,
+    "jsInt64FullWidthAccepted": true,
+    "jsInt64FullWidthText": "9223372036854775807",
+    "jsUint64FullWidthAccepted": true,
+    "jsUint64FullWidthText": "18446744073709551615",
+    "jsNodeOutput": "{\"intMax\":{\"accepted\":true,\"value\":\"9007199254740991\"},\"intAboveMax\":{\"accepted\":false},\"intMin\":{\"accepted\":true,\"value\":\"-9007199254740991\"},\"intBelowMin\":{\"accepted\":false},\"uintMax\":{\"accepted\":true,\"value\":\"9007199254740991\"},\"uintAboveMax\":{\"accepted\":false},\"int64FullWidth\":{\"accepted\":true,\"value\":\"9223372036854775807\"},\"uint64FullWidth\":{\"accepted\":true,\"value\":\"18446744073709551615\"}}"
+  },
+  "fourFixturePositive": {
+    "appCount": 4,
+    "diagnostics": [],
+    "ok": true
+  },
+  "mode": "post",
+  "sourceRoot": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend"
+}

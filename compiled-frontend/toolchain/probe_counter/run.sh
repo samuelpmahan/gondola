@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+expected_module='module github.com/samuelpmahan/gondola/compiled-frontend'
+actual_module=$(sed -n '1p' go.mod 2>/dev/null || true)
+if [[ "$actual_module" != "$expected_module" || ! -f go.mod ]]; then
+	printf 'wrong cwd: %s (expected nested module %s)\n' "$PWD" "$expected_module" >&2
+	exit 90
+fi
+
+go_bin=${GONDOLA_GO_BIN:-/tmp/gondola-go/bin/go}
+node_bin=${GONDOLA_NODE_BIN:-/tmp/gondola-node22/node_modules/node/bin/node}
+output=/tmp/gondola-counter-probe
+results="$PWD/toolchain/probe_counter/results"
+mkdir -p "$results/emitted/counter" "$results/emitted/adapter" "$results/emitted/semantics" "$results/emitted/gobi" "$results/emitted/strconv"
+rm -rf "$output"
+
+GOTOOLCHAIN=go1.27.3 "$go_bin" run ./toolchain/probe_counter -out "$output" >"$results/compiler.stdout.log" 2>"$results/compiler.stderr.log"
+GOTOOLCHAIN=go1.27.3 "$go_bin" run ./toolchain/probe_counter/native >"$results/native.json" 2>"$results/native.stderr.log"
+"$node_bin" ./toolchain/probe_counter/run_counter.mjs "$output" >"$results/node.stdout.json" 2>"$results/node.stderr.log"
+
+cp "$output/@goscript/github.com/samuelpmahan/gondola/counter/index.ts" "$results/emitted/counter/index.ts"
+cp "$output/@goscript/github.com/samuelpmahan/gondola/counter/counter.gs.ts" "$results/emitted/counter/counter.gs.ts"
+cp "$output/@goscript/github.com/samuelpmahan/gondola/compiled-frontend/toolchain/probe_counter/adapter/index.ts" "$results/emitted/adapter/index.ts"
+cp "$output/@goscript/github.com/samuelpmahan/gondola/compiled-frontend/toolchain/probe_counter/adapter/adapter.gs.ts" "$results/emitted/adapter/adapter.gs.ts"
+cp "$output/@goscript/github.com/samuelpmahan/gondola/compiled-frontend/toolchain/probe_counter/semantics/index.ts" "$results/emitted/semantics/index.ts"
+cp "$output/@goscript/github.com/samuelpmahan/gondola/compiled-frontend/toolchain/probe_counter/semantics/semantics.gs.ts" "$results/emitted/semantics/semantics.gs.ts"
+cp "$output/@goscript/github.com/samuelpmahan/gondola/gobi/node.gs.ts" "$results/emitted/gobi/node.gs.ts"
+cp "$output/@goscript/strconv/ftoa.gs.ts" "$results/emitted/strconv/ftoa.gs.ts"
+cp /root/go/pkg/mod/cache/download/github.com/s4wave/goscript/@v/v0.6.2.info "$results/module-origin.json"
+
+{
+	printf 'go: '
+	GOTOOLCHAIN=go1.27.3 "$go_bin" version
+	printf 'node: '
+	"$node_bin" --version
+	printf 'esbuild: '
+	"$node_bin" -p "require('../interaction/node_modules/esbuild/package.json').version"
+	printf 'goscript module: github.com/s4wave/goscript@v0.6.2\n'
+	printf 'compiler cwd: %s\n' "$PWD"
+	printf 'counter package dir: %s\n' "$PWD/../counter"
+	printf 'semantic fixture package dir: %s\n' "$PWD/toolchain/probe_counter/semantics"
+	printf 'adapter package dir: %s\n' "$PWD/toolchain/probe_counter/adapter"
+} >"$results/environment.txt" 2>"$results/environment.stderr.log"
+
+sha256sum \
+	../counter/counter.go \
+	go.mod \
+	go.sum \
+	package.json \
+	package-lock.json \
+	semantic/ABI.md \
+	toolchain/probe_counter/run.sh \
+	toolchain/probe_counter/main.go \
+	toolchain/probe_counter/semantics/semantics.go \
+	toolchain/probe_counter/adapter/adapter.go \
+	toolchain/probe_counter/native/main.go \
+	toolchain/probe_counter/run_counter.mjs \
+	toolchain/probe_counter/results/native.json \
+	toolchain/probe_counter/results/native.stderr.log \
+	toolchain/probe_counter/results/node.stdout.json \
+	toolchain/probe_counter/results/compiler.stdout.log \
+	toolchain/probe_counter/results/compiler.stderr.log \
+	toolchain/probe_counter/results/node.stderr.log \
+	toolchain/probe_counter/results/environment.txt \
+	toolchain/probe_counter/results/emitted/counter/index.ts \
+	toolchain/probe_counter/results/emitted/counter/counter.gs.ts \
+	toolchain/probe_counter/results/emitted/adapter/index.ts \
+	toolchain/probe_counter/results/emitted/adapter/adapter.gs.ts \
+	toolchain/probe_counter/results/emitted/semantics/index.ts \
+	toolchain/probe_counter/results/emitted/semantics/semantics.gs.ts \
+	toolchain/probe_counter/results/emitted/gobi/node.gs.ts \
+	toolchain/probe_counter/results/emitted/strconv/ftoa.gs.ts \
+	toolchain/probe_counter/results/module-origin.json \
+	> "$results/SHA256SUMS"
+
+printf 'probe passed; evidence: %s\n' "$results"

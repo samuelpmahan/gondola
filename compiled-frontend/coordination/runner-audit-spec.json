@@ -1,0 +1,26 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "A-RUNNER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "read-only root integration; coordination/reviews/runner and named report/receipt only",
+      "summary": "Independently audit full vs partial runner, CI/browser/toolchain routes, source-pin closure, demo API and deliverability before frozen execution"
+    }
+  ]
+}

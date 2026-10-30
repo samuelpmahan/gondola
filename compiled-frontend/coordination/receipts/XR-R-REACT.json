@@ -1,0 +1,63 @@
+{
+  "job_id": "XR-R-REACT",
+  "worker": "N4",
+  "decision": "amend",
+  "summary": "Independently reviewed N3's React changes. Focused Node and Go emitter suites pass and source behavior matches the lowerCamel Action, Go Message, slice target and physical unmount requirements. A Proxy get trap bypasses the own target descriptor check, so strict slice admission needs one amendment before acceptance.",
+  "evidence": {
+    "source_review": {
+      "react_receipt": "coordination/receipts/R-REACT.json",
+      "react_report": "coordination/reports/R-REACT.md",
+      "confirmed": [
+        "Renderer callbacks use lowerCamel {path,event,value} Action and uppercase {Name,Arg} Go Message.",
+        "GoScript slice wrappers require exactly backing/capacity/length/offset/target own keys, with enumerable own data descriptors and target undefined.",
+        "Post-unmount domSnapshot checks the physical container childNodes are empty before returning empty HTML and controls; viewRecord returns null.",
+        "Emitter metadata correction is confined to emit/backend_test.go; focused test fixture now describes the actual seven-field gobi.Node and nested metadata."
+      ]
+    },
+    "finding": {
+      "severity": "medium",
+      "summary": "listOrEmpty validates property descriptors but then reads GoScript slice fields with ordinary gets. A Proxy can return target:undefined while its own target data descriptor contains {}.",
+      "required_repair": "Validate from descriptor.value snapshots; copy dense native-array elements and GoScript backing arrays before later indexing/slicing; avoid ordinary property access and backing.slice gets on caller-owned values.",
+      "reproduction": "coordination/reviews/xr_r_react/proxy-slice-repro.mjs",
+      "reproduction_sha256": "e9b8a7abe9fd62b757aacf22db8cd7b30e7b5b3f800e76bc1d075ad08f6fb40e",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/xr_r_react/proxy-slice-repro.mjs",
+      "result": "exit 0; {\"accepted\":true}",
+      "raw_json": "coordination/reviews/xr_r_react/proxy-slice-repro.raw.json",
+      "raw_json_sha256": "11a49f853eb8befe94fef278d487125cd20930b9e41c4c0934394443e7f00878",
+      "renderer_source_sha256": "458383ffeb719937e6a4b9a331f635cd2358c6593c8b34ce05e58cc3ba1d6906"
+    },
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 15,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "coordination/reviews/xr_r_react/node-tests.log",
+        "log_sha256": "e15fe016785e938cc68e9dd73fe069da4f2e795109171b435fe46799fa201055"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 -v ./emit",
+        "toolchain": "go1.27.3 linux/amd64",
+        "passed": 4,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "coordination/reviews/xr_r_react/go-tests.log",
+        "log_sha256": "7d03388bd0953a2be8cb39918bc0dd5de26f4621f2a464104fe76804573b25bd"
+      }
+    ],
+    "sha256": {
+      "frontend/react/renderer.mjs": "458383ffeb719937e6a4b9a331f635cd2358c6593c8b34ce05e58cc3ba1d6906",
+      "frontend/react/renderer.test.mjs": "1430c7ebc246b6f9547498c4947d72054139470b1e5d2b5eb762e7714280599b",
+      "frontend/react/bindings.mjs": "ac9b40e56039e385adf5d5b66f7476092aedaec7887dd51b00026def6f2e105b",
+      "frontend/react/bindings.test.mjs": "3ecbf7d0958e0ca4c330c2136ed615d6154e84d7efe79af5526cc38fb09249e9",
+      "emit/backend_test.go": "e389a072b96397b5c6f9d11656d2b3a25d61ce75ba955483553419dca3d33c04",
+      "semantic/ABI.md": "123a3d0e75b06409572906107924f3389e3d63149486bd72cde61b5f7d8c4519"
+    },
+    "limits": [
+      "N3's focused Node tests exercise lowerView without mounting a browser DOM.",
+      "N6 still owns mounted-browser physical unmount and fresh generated-app integration checks.",
+      "This independent React review does not accept or assess N4 runtime correctness."
+    ]
+  }
+}

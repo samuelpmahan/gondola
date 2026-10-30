@@ -1,0 +1,75 @@
+{
+  "job_id": "XR-R-ABI-CODEC",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently replayed the old encoder failure at three actual list appends and verified that the current generated encoder accepts actual list states from zero through six appends with matching visible IDs. The focused Go 1.24 compilercontract suite passed. Review is bounded to this encoder path and recorded ABI limits.",
+  "source_scope": [
+    "compilercontract/js_encoder.go",
+    "compilercontract/js_encoder_test.go"
+  ],
+  "reviewed_sha256": {
+    "compilercontract/js_encoder.go": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+    "compilercontract/js_encoder_test.go": "d6dcbda61dc4dcb425164fc45d396f799a0574981103ad4866d268fb3fb9aa9f",
+    "goscript_v0.6.2_gs_builtin_slice.ts": "5f6da8d9bb986cc49f1323e1ba505c8ba779da6c54ebaacf6c1bd540e9a0bdea"
+  },
+  "evidence": {
+    "toolchains": {
+      "go": "go version go1.24.0 linux/amd64",
+      "node": "v22.23.4",
+      "go_version_file_sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3",
+      "node_version_file_sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    "actual_module": {
+      "path": "/tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/gobi-compiled.mjs",
+      "sha256": "54b09d871576d33237c0bda34da1388b9ff9fa393ddafd4f26a71ca55cd75fd6",
+      "app_ir_path": "/tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/app-ir.json",
+      "app_ir_sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+      "goscript": "github.com/s4wave/goscript v0.6.2"
+    },
+    "independent_old_encoder_replay": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-frontend/coordination/reviews/xr_r_abi_codec/pre-repair-actual-list.mjs",
+      "exit": 1,
+      "old_encoder_sha256": "3412bbb20b80098a35f7933db8ec382497f7853d079defb39fa5060801eabfb0",
+      "failure": "At append count 3, the actual GoSlice has offset=0, length=3, capacity=4 and the old encoder rejects backing index 3 as not an own data property.",
+      "raw_json": "compiled-frontend/coordination/reviews/xr_r_abi_codec/evidence/pre-repair-actual-list.json",
+      "raw_json_sha256": "d46f7d3dbd307bd3535e9a9e8f9241443bde7400e5d71b1f4c37a5374af6179c",
+      "stderr": "compiled-frontend/coordination/reviews/xr_r_abi_codec/evidence/pre-repair-actual-list.stderr",
+      "stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "independent_fresh_encoder_replay": {
+      "encoder_generation_command": "GOTOOLCHAIN=local /tmp/gondola-go-sdk/go/bin/go run ./compiled-frontend/coordination/reviews/xr_r_abi_codec/generate_list_encoder.go /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_r_abi_codec/evidence/list-app-ir.json /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/xr_r_abi_codec/fresh-list-encoder.mjs",
+      "generator_sha256": "fef4d799f0ff0ab3d8e5f3088a9a4ccc19cabc455730bb58ac78a7321047387d",
+      "encoder_sha256": "8e1727393cd4a2af4a3fc8e8c156462d951bcbfe4990c04bb65ed02d5ec83723",
+      "probe_command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-frontend/coordination/reviews/xr_r_abi_codec/post_repair_actual_list_probe.mjs",
+      "exit": 0,
+      "append_counts": [0, 1, 2, 3, 4, 5, 6],
+      "visible_row_ids_match": true,
+      "failures": [],
+      "raw_json": "compiled-frontend/coordination/reviews/xr_r_abi_codec/evidence/actual-list.json",
+      "raw_json_sha256": "22aacbc08490d9bcc4c3a1cbe738c6fb0eaaef2a505548bbb2bb8180059c2fd2",
+      "stderr": "compiled-frontend/coordination/reviews/xr_r_abi_codec/evidence/actual-list.stderr",
+      "stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "focused_go_package_test": {
+      "command": "GOTOOLCHAIN=local GONDOLA_NODE_BIN=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go-sdk/go/bin/go test -count=1 ./compilercontract",
+      "exit": 0,
+      "stdout": "ok   github.com/samuelpmahan/gondola/compilercontract 0.077s",
+      "log": "compiled-frontend/coordination/reviews/xr_r_abi_codec/evidence/compilercontract-go24.log",
+      "log_sha256": "8fe93f2b8bb6111db98b6d9715b26efa62a85255c4534763a0aec29eac0bfcfd"
+    },
+    "observed_contract": {
+      "wrapper": "Exact own GoSlice data-property fields; safe offset, length, capacity and sums; target undefined.",
+      "backing": "Array backing with canonical own index data descriptors; permits at most one non-global local symbol named goscript.spareZero with the observed own data descriptor and zero-factory function property shape.",
+      "window": "Visible elements are copied using own descriptors to a dense array. Holes are accepted only in the unused capacity interval. The factory is not called.",
+      "native_arrays": "Remain closed to unknown own properties/symbols and sparse elements.",
+      "value_semantics": "Focused regression covers nil versus empty, Number-backed int, BigInt-backed uint64 including max, and negative-zero float encoding."
+    }
+  },
+  "limits": [
+    "The private Symbol identity cannot be authenticated; admission is shape-based, so a distinct local symbol with the same description and observed shape can be admitted.",
+    "Float64Array-backed GoSlice wrapper behavior and its backing-window edge cases were not exercised; direct Float64Array values were covered.",
+    "No all-Go guarantee, full app build, browser, demo, full runner, hostile-proxy, or general end-to-end claim is made.",
+    "The actual list module was reused without rebuilding; only the encoder was regenerated from its preserved AppIR metadata."
+  ],
+  "production_changes_by_reviewer": false
+}

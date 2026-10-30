@@ -1,0 +1,68 @@
+{
+  "job_id": "XR-R2-RUNTIME",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "The latest completion-admission fence prevents an invalid outer completion from reentering through nested completion, dispatch, stale-action, or unmount calls. Error descriptor observation stays fenced; valid synchronous host replies see the committed pending view, queue, drain once, and reject duplicates.",
+  "reviewed_scope": [
+    "frontend/runtime/runtime.mjs",
+    "frontend/runtime/runtime.test.mjs"
+  ],
+  "reviewed_sha256": {
+    "frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+    "frontend/runtime/runtime.test.mjs": "efda3ddcf83cc0cde9ec2fb9b37a69abee313cced1bcf067ded5645a1d0ae296"
+  },
+  "evidence": {
+    "preserved_n5_finding": {
+      "original_probe": "coordination/reviews/xr_r2_runtime/n5-original-probe.mjs",
+      "original_probe_sha256": "fadc6eac0466695bc4febb2c3fe4765b65f34e0ddc9a3807174d1958cde6d311",
+      "original_raw_result": "coordination/reviews/xr_r2_runtime/n5-original-probe.raw.json",
+      "original_raw_result_sha256": "6cfb77a93f37c7dfa25c45fe58b34c913efdcf85fd945b846c4b61c268d1fe6f",
+      "observed_before_fix": "Outer invalid Proxy was rejected after nested valid completion was accepted; Update ran twice, Count became 1, Reply was reply-from-reentrant-trap. Original source/raw were preserved unchanged."
+    },
+    "focused_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/runtime/runtime.test.mjs",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "passed": 16,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "coordination/reviews/xr_r2_runtime/node-tests.log",
+      "log_sha256": "a3ae046c3a062709efe6689a4b610e99cdbe02f629102cdf20a029863cf71b1b"
+    },
+    "n4_adjusted_probe": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node frontend/runtime/r2_completion_probe.mjs",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "exit_code": 0,
+      "source": "coordination/reviews/xr_r2_runtime/n4-adjusted-probe.mjs",
+      "source_sha256": "e824a273767a7e73d57fab0c57ae84559b1850ca1ece181b57adc6251315c695",
+      "raw_result": "coordination/reviews/xr_r2_runtime/n4-adjusted-probe-rerun.json",
+      "raw_result_sha256": "e1a1e3e9ff64f02221b4d476f467560c8d0f3d7727b1f2f8d107c6a4599bf92f",
+      "result": "Nested valid reply rejected; outer invalid reply rejected; Count 0 and Reply empty; Update remains at one call for the pending request."
+    },
+    "independent_admission_probe": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/xr_r2_runtime/runtime-admission-probe.mjs",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "exit_code": 0,
+      "source": "coordination/reviews/xr_r2_runtime/runtime-admission-probe.mjs",
+      "source_sha256": "46d32da7ca96cef0918d4ba9a328d0c45e2aff81f71b10ebc65b9fd80e6081ab",
+      "raw_result": "coordination/reviews/xr_r2_runtime/runtime-admission-probe.raw.json",
+      "raw_result_sha256": "f5788e9f39c836fbe56ba23ba039f2ab7dfec2cbde891604155317b972269249",
+      "checked": {
+        "invalid_outer_completion": "one ownKeys trap; nested complete/dispatch/stale/unmount rejected; no extra host requests or updates; trace unchanged; Count 0; Reply empty; pending effect remains; runtime is mounted and not failed",
+        "error_message_descriptor": "getOwnPropertyDescriptor(message) trap attempted the same nested entrypoints while completion validation threw; all were rejected under the fence and state/trace/lifecycle remained unchanged",
+        "synchronous_host_reply": "host observed committed pending view and HTML plus two ticks; reply returned queued, then drained to one completion tick; duplicate rejected without another Update"
+      }
+    },
+    "source_freeze": {
+      "runtime_sha256": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+      "runtime_tests_sha256": "efda3ddcf83cc0cde9ec2fb9b37a69abee313cced1bcf067ded5645a1d0ae296"
+    }
+  },
+  "limits": [
+    "This review covers the JavaScript runtime contract and reproduced completion-admission behavior; it is not a general Go or JavaScript security audit.",
+    "Focused suite and independent probe use compiled-symbol, renderer, and effect-host stubs.",
+    "Root/N6 reports counter browser evidence as passing; form, list, and effect browser failures remain attributable to the separate React spareZero ABI-admission issue. No four-app pass is claimed here."
+  ]
+}

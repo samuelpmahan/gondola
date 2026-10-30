@@ -1,0 +1,31 @@
+{
+  "job_id": "XR-G-RUNTIME",
+  "worker": "N3",
+  "decision": "amend",
+  "summary": "Update forwarding and immutable snapshots follow N1’s ABI evidence, but runtime integration has action casing mismatch, accessor-triggered reentry before reservation, and late stale-tick failure after renderer unmount. Runtime effect host also accepts Name/Reply values rejected by the frozen Go validators. Unit tests pass only with stubs; no four-app/browser result is established.",
+  "evidence": {
+    "focused_test": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "passed": 9,
+      "failed": 0
+    },
+    "probe": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-frontend/coordination/reviews/xr_g_runtime_probe.mjs",
+      "source_sha256": "3b5f1c6c7984424e410661aef42eae2d0db22b9f9dc666158e18a490e369a146",
+      "result_sha256": "87b8fa610997e39e409193d9ad25bd7eb13fc17530526efd77a98b630b30a59d",
+      "facts": [
+        "PascalCase renderer action rejected at dispatch-input; zero Update calls.",
+        "Enumerable path getter reentered before busy reservation; nested and outer dispatch both accepted.",
+        "Post-unmount stale action returned accepted but appended no tick and set suppressed-action failure."
+      ]
+    },
+    "sha256": {
+      "runtime": "6252e457db9992bb14ae7b866b2bc893c04eebab1b2917a3c0da6fa53e0067df",
+      "runtime_tests": "90021458ce9d5810838a3aa8ed0cdb51763c9e49752a015ba897130fb79782f8",
+      "n1_abi_report": "123a3d0e75b06409572906107924f3389e3d63149486bd72cde61b5f7d8c4519",
+      "build_facade": "719c8495cdd131860b4879cba3108fc3e327aa967904037fd12dd3462ffa6277"
+    },
+    "contract_cross_check": "compilercontract ValidateTrace and ValidateHostScript require fixture.request Name=lookup and Reply=complete; runtime accepts any Name/Reply when kind matches.",
+    "limits": "No production edits, generated-app integration, or browser run. Runtime tests use stub symbols and renderer."
+  }
+}

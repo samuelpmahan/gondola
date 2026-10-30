@@ -1,0 +1,14 @@
+Working directory: /workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend
+Toolchain: Go 1.27.3, Node 22.23.4, esbuild 0.28.2 (the bundled CLI verifies esbuild and resolves the pinned workspace install at interaction/node_modules/esbuild)
+
+GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go build -o /tmp/gobi-build-n1 ./cmd/gobi-build
+GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-n1 < toolchain/build-four/request.json > toolchain/build-four/result.json 2> toolchain/build-four/stderr.log
+/tmp/gondola-node22/node_modules/node/bin/node ./toolchain/build-four/smoke.mjs /tmp/gondola-compiled-atomic toolchain/build-four/result.json > toolchain/build-four/smoke-result.json 2> toolchain/build-four/smoke-stderr.log
+
+Failure preservation probe, after the successful four-app output exists:
+GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-n1 < toolchain/build-four/failure-request.json > toolchain/build-four/failure-result.json 2> toolchain/build-four/failure-stderr.log
+/tmp/gondola-node22/node_modules/node/bin/node ./toolchain/build-four/verify-preservation.mjs /tmp/gondola-compiled-atomic toolchain/build-four/result.json toolchain/build-four/failure-result.json > toolchain/build-four/preservation-check.json
+
+Closed-input/exit-status probe:
+GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-n1 < toolchain/build-four/duplicate-field-request.json > toolchain/build-four/duplicate-field-result.json 2> toolchain/build-four/duplicate-field-stderr.log
+Both expected failure invocations exited 1; see the matching *-exit-code.txt files and JSON results.

@@ -1,0 +1,94 @@
+{
+  "job_id": "G-FIXTURES",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added form, keyed-list, and deterministic-effect Go fixtures plus strict direct-Go replay; unchanged counter and all four generated-AppIR native traces pass.",
+  "evidence": {
+    "toolchain": "go version go1.24.0 linux/amd64",
+    "test_command": "/tmp/gondola-go/bin/go test -count=1 ./cmd/compiled-native ./fixtures/compiled/form ./fixtures/compiled/list ./fixtures/compiled/effect",
+    "test_result": {
+      "packages_passed": 4,
+      "packages_failed": 0,
+      "exit_code": 0
+    },
+    "native_command_template": "/tmp/gondola-go/bin/go run ./cmd/compiled-native --app-ir /tmp/gondola-compiled-atomic/apps/<app-dir>/app-ir.json --script compiled-frontend/fixtures/<app>.json",
+    "native_runs": [
+      {
+        "app": "counter",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/counter-b05e9eb0e4e6/app-ir.json",
+        "app_ir_sha256": "6435630c8c9a8203a38641148f9541e76f3b4a294ce47f3802b50146d8edf8f6",
+        "trace": "/tmp/gondola-compiled-native/counter.trace.json",
+        "trace_sha256": "205adff25e733986a57ef108265223fc9eb925600b36b1c7f64176218e476f5f",
+        "ticks": 5,
+        "attempts": 4,
+        "actual_updates": 3,
+        "requests": 0,
+        "completions": 0,
+        "exit_code": 0
+      },
+      {
+        "app": "form",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/form-a3fe6b48b000/app-ir.json",
+        "app_ir_sha256": "4c4ffefca78c86ac3914e0b3f410a4b49354a2b00c05d0b6d1c75e9ed96b19da",
+        "trace": "/tmp/gondola-compiled-native/form.trace.json",
+        "trace_sha256": "d7a8a481c2630ce6eb654db7df6fb0141fb056356dcb2fe9fdac39f24103e53b",
+        "ticks": 10,
+        "attempts": 9,
+        "actual_updates": 8,
+        "requests": 0,
+        "completions": 0,
+        "exit_code": 0
+      },
+      {
+        "app": "list",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/list-f8359aa2866d/app-ir.json",
+        "app_ir_sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+        "trace": "/tmp/gondola-compiled-native/list.trace.json",
+        "trace_sha256": "4efce0ba39837e1269e48b7735fb6f6462f20b3d1525e6a3fa48941603a0c408",
+        "ticks": 11,
+        "attempts": 10,
+        "actual_updates": 8,
+        "requests": 0,
+        "completions": 0,
+        "exit_code": 0
+      },
+      {
+        "app": "effect",
+        "app_ir": "/tmp/gondola-compiled-atomic/apps/effect-ff8449e8f5b2/app-ir.json",
+        "app_ir_sha256": "b5ab162ea40e137442531d2e319e029d88d8865849b404f011f400bde89329bf",
+        "trace": "/tmp/gondola-compiled-native/effect.trace.json",
+        "trace_sha256": "38f0e2cfae0741b0ae5103744022a6f1177f368fcd4aaa820e74f8376d852df5",
+        "ticks": 5,
+        "attempts": 3,
+        "actual_updates": 3,
+        "requests": 1,
+        "completions": 1,
+        "exit_code": 0
+      }
+    ],
+    "source_sha256": {
+      "cmd/compiled-native/main.go": "1519b9a7e17dc1c35b37dfa3b41bc78a3a5570abc1f415773579809f8a05fec4",
+      "cmd/compiled-native/replay.go": "39cf8cd7721d5cd4ecf1088a68558a7440bcb3acdc8745ded69f36d8afc5a637",
+      "cmd/compiled-native/replay_test.go": "40c8ffe93840dd777f02281304b364c2de5a7fe36e822920cc43c3dd5e0fccb6",
+      "fixtures/compiled/form/app.go": "ce5dd61731a40ba0aad82cfd8fc529bfb114aab19d4658bba2a3a25780c2435a",
+      "fixtures/compiled/form/view.go": "f4a253fd140be7769c3f46a6ab74186dc1bd9cebed651ed7eafde07f1403ea76",
+      "fixtures/compiled/form/form_test.go": "78d9498b62994631ac858411432ad654836e609fc087a8b40111bcf73f31a9e0",
+      "fixtures/compiled/list/app.go": "5b440b875b77db30814cb431f50b15d4df6180211b7acc79af120685e355b0f3",
+      "fixtures/compiled/list/view.go": "4f31b142e2641483844eaf36c37ecd3f3b091a2e73915abab36292c078571327",
+      "fixtures/compiled/list/list_test.go": "e2b83610a5fb4713321567e2dfddb2d597057dfc6467a256004738d7476ccfba",
+      "fixtures/compiled/effect/app.go": "a8f75a4666c5f2a2cdc47ea1ddb8217abb379acde8171ae4935d9de6d6125764",
+      "fixtures/compiled/effect/view.go": "8866de42cd8910a213e01473c6ae782f767d17b2e116dfaead6d797ea557c7f8",
+      "fixtures/compiled/effect/effect_test.go": "b6f5f32089732ff365d9efd28674dc1fb4749fe7dfb05101cf65fccbcec09287",
+      "compiled-frontend/fixtures/README.md": "e9be7639a4b36312820c7295a80de084e3ed62319fd9b0accc6d1a2fcbc15061",
+      "compiled-frontend/fixtures/counter.json": "4d901b49172838dba47e4b424e9b3d06c20b3446058819b7125a80e3ccf5def5",
+      "compiled-frontend/fixtures/form.json": "b9223b9e70c6509fd8c536dcd7cd6be98bce30e4de941cc9b49398426408c209",
+      "compiled-frontend/fixtures/list.json": "2a2ae56220ec25743e9141b4142760cabd117c52c10b8893a59a686163f77312",
+      "compiled-frontend/fixtures/effect.json": "2db7fb4d27fa8f023e72cb907aa42f7a2e8709f69d709d5763d78648f271fb0e"
+    },
+    "limitations": [
+      "Native traces use dom:null and do not demonstrate emitted-JavaScript or mounted-browser parity.",
+      "The list focus/selection witness is fixture metadata for the browser lane; physical focus behavior is not established by this native run.",
+      "The AppIR and trace paths are temporary N1/N5 evidence artifacts under /tmp."
+    ]
+  }
+}

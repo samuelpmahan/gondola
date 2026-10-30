@@ -1,0 +1,148 @@
+{
+  "schema": "gobi.fixture-script/v1",
+  "name": "compiled-effect-commit-before-deterministic-reply",
+  "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effect",
+  "actions": [
+    {
+      "path": "1",
+      "event": "click",
+      "value": ""
+    },
+    {
+      "path": "0",
+      "event": "input",
+      "value": "sample request"
+    },
+    {
+      "path": "1",
+      "event": "click",
+      "value": ""
+    }
+  ],
+  "hostScript": {
+    "schema": "gobi.host-script/v1",
+    "steps": [
+      {
+        "request": {
+          "dispatchId": "dispatch-0002",
+          "effectIndex": 0,
+          "effect": {
+            "kind": "fixture.request",
+            "name": "lookup",
+            "arg": "sample request",
+            "reply": "complete"
+          }
+        },
+        "completion": {
+          "name": "complete",
+          "arg": "reply value"
+        }
+      }
+    ]
+  },
+  "focusWitnesses": [],
+  "initialState": {
+    "Input": "",
+    "Value": "",
+    "Status": "idle",
+    "Pending": false,
+    "Requests": 0,
+    "Completions": 0,
+    "NegativeZeroBits": "8000000000000000"
+  },
+  "expectations": [
+    {
+      "actionIndex": 0,
+      "message": null,
+      "dispatchId": null,
+      "state": {
+        "Input": "",
+        "Value": "",
+        "Status": "idle",
+        "Pending": false,
+        "Requests": 0,
+        "Completions": 0,
+        "NegativeZeroBits": "8000000000000000"
+      },
+      "requestedEffects": [],
+      "completedEffects": []
+    },
+    {
+      "actionIndex": 1,
+      "message": {
+        "name": "edit",
+        "arg": "sample request"
+      },
+      "state": {
+        "Input": "sample request",
+        "Value": "",
+        "Status": "idle",
+        "Pending": false,
+        "Requests": 0,
+        "Completions": 0,
+        "NegativeZeroBits": "8000000000000000"
+      },
+      "requestedEffects": [],
+      "dispatchId": "dispatch-0001",
+      "completedEffects": []
+    },
+    {
+      "actionIndex": 2,
+      "message": {
+        "name": "request",
+        "arg": ""
+      },
+      "dispatchId": "dispatch-0002",
+      "state": {
+        "Input": "sample request",
+        "Value": "",
+        "Status": "pending",
+        "Pending": true,
+        "Requests": 1,
+        "Completions": 0,
+        "NegativeZeroBits": "8000000000000000"
+      },
+      "requestedEffects": [
+        {
+          "dispatchId": "dispatch-0002",
+          "effectIndex": 0,
+          "effect": {
+            "kind": "fixture.request",
+            "name": "lookup",
+            "arg": "sample request",
+            "reply": "complete"
+          }
+        }
+      ],
+      "completedEffects": []
+    },
+    {
+      "completionIndex": 0,
+      "message": {
+        "name": "complete",
+        "arg": "reply value"
+      },
+      "dispatchId": "dispatch-0003",
+      "state": {
+        "Input": "sample request",
+        "Value": "reply value",
+        "Status": "complete",
+        "Pending": false,
+        "Requests": 1,
+        "Completions": 1,
+        "NegativeZeroBits": "8000000000000000"
+      },
+      "requestedEffects": [],
+      "completedEffects": [
+        {
+          "dispatchId": "dispatch-0002",
+          "effectIndex": 0,
+          "message": {
+            "name": "complete",
+            "arg": "reply value"
+          }
+        }
+      ]
+    }
+  ]
+}

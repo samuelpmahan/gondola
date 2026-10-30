@@ -1,0 +1,105 @@
+{
+  "job_id": "G-SEMANTIC",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Generated typed Go forwarding packages are compiled through pinned GoScript; the CLI publishes their exact Go and emitted TypeScript sources, role-binding provenance, AppIR, encoder, and bundles as one staged build. Closed request parsing and failed-build preservation are verified.",
+  "evidence": {
+    "source_checkpoint": {
+      "path": "compiled-frontend/toolchain/build-four/source-checkpoint.json",
+      "sha256": "900dc38eee351e745717136cb54ae26d0765ec53d25c2d99e226b2b4ee620f2b",
+      "file_count": 86,
+      "excludes": [
+        "the source-checkpoint.json self-manifest",
+        "compiled-frontend/build/compiled/**"
+      ]
+    },
+    "versions": {
+      "go": "go1.27.3 linux/amd64",
+      "node": "v22.23.4",
+      "esbuild": "0.28.2",
+      "goscript": "v0.6.2",
+      "goscript_commit": "d8f58a091947cff26a9171be7bd130892b0afad3"
+    },
+    "locks": {
+      "compiled-frontend/go.mod": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+      "compiled-frontend/go.sum": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b",
+      "compiled-frontend/package.json": "44a82612b14c35d123a7b7a429858a608110d187f725d4cd3613a0befe4ac5b0",
+      "compiled-frontend/package-lock.json": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079"
+    },
+    "n2_freeze": {
+      "compiled-frontend/analyze/analyze.go": "28270a69953b8a65d797b0187ca64cd50f48693a5cf283d9cd5edf16841f19c5",
+      "compiled-frontend/analyze/project.go": "32a2c6cee4d3a84a83d76733343f49c061910e3b6329d7fd153a1979a400868a",
+      "compilercontract/value.go": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f"
+    },
+    "commands": {
+      "go_test_build": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go test -count=1 ./build",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      "go_race_build": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go test -race -count=1 ./build",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      "go_vet_build": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH /tmp/gondola-go/bin/go vet ./build",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      "build_cli_binary": {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go build -o /tmp/gobi-build-n1 ./cmd/gobi-build",
+        "exit_code": 0,
+        "binary_sha256": "d3df8cc1636c65e34c69b82a075209acbf656eaf90f0c3ac83237079c331e3e8"
+      },
+      "four_app_build": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-n1 < toolchain/build-four/request.json > toolchain/build-four/result.json 2> toolchain/build-four/stderr.log",
+        "exit_code": 0,
+        "result_path": "compiled-frontend/toolchain/build-four/result.json",
+        "result_sha256": "3bbefc54f864e996494d6ad26865522e85838ea346b97536ac679f2f8517c7df",
+        "output_dir": "/tmp/gondola-compiled-atomic",
+        "ok": true,
+        "app_count": 4,
+        "output_file_count": 209,
+        "diagnostic_count": 0,
+        "emitted_typescript_count": 186,
+        "forwarder_source_count": 5
+      },
+      "emitted_smoke": {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node ./toolchain/build-four/smoke.mjs /tmp/gondola-compiled-atomic toolchain/build-four/result.json > toolchain/build-four/smoke-result.json 2> toolchain/build-four/smoke-stderr.log",
+        "exit_code": 0,
+        "result_path": "compiled-frontend/toolchain/build-four/smoke-result.json",
+        "result_sha256": "e8a36b89e4ae0aec19dde5557c2448c57d5ae298795373397c44f04f70c4db73",
+        "app_count": 4,
+        "module_imports": 4,
+        "role_exports_per_app": 3,
+        "build_result_hashes_and_bytes_verified": 209
+      },
+      "failed_build_preservation": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-n1 < toolchain/build-four/failure-request.json > toolchain/build-four/failure-result.json 2> toolchain/build-four/failure-stderr.log",
+        "exit_code": 1,
+        "result_path": "compiled-frontend/toolchain/build-four/failure-result.json",
+        "result_sha256": "bf2a5cd89088687f5c7cca4dfc3d09da5385f2b16fea2819a2ba07d70ba21ef4",
+        "ok": false,
+        "preserved_previous_output": true,
+        "reported_outputs": 0,
+        "previous_output_files_reverified": 209,
+        "preservation_check_path": "compiled-frontend/toolchain/build-four/preservation-check.json",
+        "preservation_check_sha256": "c978f9bec9efdfcec8bc61cbd5ebfc444722d2c87e3f0784556583c8735c1290"
+      },
+      "closed_duplicate_field": {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gobi-build-n1 < toolchain/build-four/duplicate-field-request.json > toolchain/build-four/duplicate-field-result.json 2> toolchain/build-four/duplicate-field-stderr.log",
+        "exit_code": 1,
+        "result_path": "compiled-frontend/toolchain/build-four/duplicate-field-result.json",
+        "result_sha256": "4a42efb4af20f23eca53d8d30b9e118b0d225ae46d0654b40a5f08d23848b831",
+        "ok": false,
+        "diagnostic": "decode build request: duplicate build request field \"backend\""
+      }
+    },
+    "limits": [
+      "The Go test, race, and vet commands were scoped to ./build; root owns the full nested module suite and inherited Go 1.24 suite.",
+      "The four-app smoke invoked actual emitted Init/Update/View exports and verified serialization/build inventory, but did not replay complete user action traces or assert browser DOM behavior.",
+      "The independent N6 direct-JavaScript/browser conformance result remains the authority for end-to-end claims; root owns its integrated build path, CI, and publication."
+    ]
+  }
+}

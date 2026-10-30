@@ -1,0 +1,55 @@
+{
+  "job_id": "A-RUNNER",
+  "worker": "N4",
+  "outcome": "insufficient_evidence",
+  "summary": "Static audit confirms the default Go 1.24 baseline to compiled Go 1.27.3 route, four-app JSON request and fail-fast native/direct/browser flow. Syntax checks passed. No fresh execution artifacts exist, so no CLI output inventory, conformance, browser, or demo result is claimed.",
+  "evidence": {
+    "scope": [
+      "run-compiled-frontend.sh",
+      "compiled-frontend/run.mjs",
+      "compiled-frontend/demo/**",
+      ".github/workflows/compiled-frontend.yml",
+      ".gitignore"
+    ],
+    "toolchain_observed": {
+      "node": "v22.23.4",
+      "base_go": "go1.24.0 linux/amd64",
+      "compiled_go": "configured as GOTOOLCHAIN=go1.27.3; no compiled-stage version was executed in this audit"
+    },
+    "syntax_checks": [
+      { "command": "bash -n run-compiled-frontend.sh", "result": "exit 0" },
+      { "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/run.mjs", "result": "exit 0" },
+      { "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/demo/app.mjs", "result": "exit 0" },
+      { "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/demo/build.mjs", "result": "exit 0" },
+      { "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/demo/smoke.mjs", "result": "exit 0" }
+    ],
+    "flow_checks": {
+      "default": "Runs run-typed-composition.sh first; inherited scripts hold GOTOOLCHAIN=local and check Go 1.24. The compiled stage then exports GOTOOLCHAIN=go1.27.3.",
+      "compiled_only": "Skips the inherited baseline. It still runs explicit root package checks under GOTOOLCHAIN=local and nested compiled module checks under the compiled profile; it assumes root React packages are already installed for ESM tests.",
+      "build_request": "BuildRequest JSON selects counter, form, list, and effect with backend react. Runner checks success, empty diagnostics, and four apps, locates each app AppIR, then executes native/direct/browser commands. It does not assert a fixed outputs[] count.",
+      "provenance_and_failure": "Source pins are captured before/after; direct and browser conformance capture their input provenance. execute() persists command logs and status and fails fast, preventing later checker steps from consuming an old good build. Old files are not cleared from artifacts, so isolated artifacts require a current passed execution receipt.",
+      "go_source_and_map": "Source pins recursively cover root counter/gobi/reactmap plus compiler/fixture sources and lockfiles. The nested React map is included in the source walk; compiled-frontend/.gitignore unignores frontend/react/react-map.gen.mjs despite the root basename ignore rule.",
+      "ci_browser": "Workflow installs interaction and compiled frontend npm lockfiles plus managed Playwright Chromium. Without CHROMIUM_PATH, compiled browser and demo use Playwright's managed browser; local /tmp/chromium is an optional override.",
+      "demo": "Build imports four actual compiled modules and encoders; app component IDs come from each module AppIR. The demo disables WebAssembly.Module/Instance and compile/instantiate entrypoints; browser smoke checks four app interactions and zero wasm requests."
+    },
+    "artifact_state": {
+      "compiled_frontend_artifacts_directory_present": false,
+      "fresh_cli_json": false,
+      "fresh_native_direct_browser_traces": false,
+      "fresh_browser_or_demo_result": false
+    },
+    "limits": [
+      "No full runner, build CLI, or integration checker was executed; no future pass is claimed.",
+      "The fixed output directory is not cleared at start. Fail-fast and a failed execution receipt prevent stale outputs from being accepted by the current run, but earlier files can remain for manual inspection.",
+      "The partial --compiled-only route does not provision root node_modules; on a clean checkout it depends on the root React dependencies already being installed.",
+      "This workspace provides no commit or remote payload boundary for verifying the generated React map's delivery beyond its explicit unignore rule and source-pinning inclusion."
+    ],
+    "retained_evidence": {
+      "review_folder": "coordination/reviews/runner/",
+      "source_hashes": "coordination/reviews/runner/source-hashes.sha256",
+      "source_hashes_sha256": "e2adfd8641ee249bc727a6c6e9bd48aec28815b162984cd86fa26d17918472db",
+      "syntax_checks": "coordination/reviews/runner/syntax-checks.txt",
+      "syntax_checks_sha256": "185a250f75454d3628a5a2bc9f25ad097902d847537788c026211bcd6c1779d2"
+    }
+  }
+}

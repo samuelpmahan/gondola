@@ -1,0 +1,122 @@
+{
+  "job_id": "XR-R2-REACT",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "The R2 descriptor snapshot fixes the prior Proxy get bypass but rejects a pinned GoScript spare-capacity symbol on actual emitted form, effect, and list backing arrays. Focused unit suites pass; actual browser integration fails for three apps.",
+  "source_scope": [
+    "frontend/react/renderer.mjs",
+    "frontend/react/renderer.test.mjs"
+  ],
+  "reviewed_sha256": {
+    "frontend/react/renderer.mjs": "9f10b75d194aab53cbe504321e8f6df26592c20b6a7123d7f267ba2e68868e5a",
+    "frontend/react/renderer.test.mjs": "51b9dd07d3ded887adde821f89c0485ad1f244726a26fea4f0a7d8dd51f67257",
+    "frontend/react/bindings.mjs": "ac9b40e56039e385adf5d5b66f7476092aedaec7887dd51b00026def6f2e105b",
+    "frontend/react/bindings.test.mjs": "3ecbf7d0958e0ca4c330c2136ed615d6154e84d7efe79af5526cc38fb09249e9"
+  },
+  "evidence": {
+    "abi_probe": {
+      "command": "NODE_NO_WARNINGS=1 /tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/xr_r2_react/goscript-slice-probe.mjs > coordination/reviews/xr_r2_react/goscript-slice-probe.raw.json",
+      "cwd": "compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "script": "coordination/reviews/xr_r2_react/goscript-slice-probe.mjs",
+      "script_sha256": "ae2edf2fec7bd28fab76d549f4c14e8f8e97a1e7c3dbdeec3e9f52d934cc91f2",
+      "raw_output": "coordination/reviews/xr_r2_react/goscript-slice-probe.raw.json",
+      "raw_output_sha256": "2589ac6e1371c82bdc04f594a673e498f1b397518e84d69b1c0f6d12752d9517",
+      "goscript": {
+        "module": "github.com/s4wave/goscript v0.6.2",
+        "nested_go_mod_sha256": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+        "slice_source": "/root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2/gs/builtin/slice.ts",
+        "slice_source_sha256": "5f6da8d9bb986cc49f1323e1ba505c8ba779da6c54ebaacf6c1bd540e9a0bdea",
+        "spare_zero_symbol": "const spareZero = Symbol('goscript.spareZero')",
+        "descriptor": "own data symbol property; enumerable/writable/configurable; value is a zero-factory function; Symbol.keyFor is undefined",
+        "locations": [
+          "form Init+View: Tree.Kids[0].Attrs.backing",
+          "effect Init+View: Tree.Kids[0].Attrs.backing",
+          "list after actual Update(add)+View: Tree.Kids[2/0/0].Attrs.backing"
+        ],
+        "counter": "no spareZero property found in inspected Init+View node slices",
+        "identity": "form, list, and effect keys are distinct runtime-local Symbols; none is exported across bundled modules"
+      },
+      "built_artifacts": {
+        "manifest_sha256": "ab7f08e05f210f48f63c4bc7319383a6f2e08a3c89caf5c5a660fc91b64a7ae4",
+        "modules": {
+          "counter": "e7fd6d515cb1c90a28d90db51b85ee4d06986ed5999ee2b7d15b64fba2acfeda",
+          "form": "a3bbf244004e10ae1b82a895dc717247731fbddad8d57dd1fbffc36c91ac6a4a",
+          "list": "54b09d871576d33237c0bda34da1388b9ff9fa393ddafd4f26a71ca55cd75fd6",
+          "effect": "7736585c8dea675a146861a840dbc7fec6afd3f0e4e70f2ea677dfbf757e038a"
+        },
+        "preserved_under": "coordination/reviews/xr_r2_react/pinned-output/"
+      }
+    },
+    "node_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/react/renderer.test.mjs frontend/react/bindings.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "passed": 20,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "coordination/reviews/xr_r2_react/node-tests.log",
+      "log_sha256": "0ff8e8da03050ccd939cd2087a94624cba5e08190f260459d937f8c279580489"
+    },
+    "go_emit_tests": {
+      "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 -v ./emit",
+      "toolchain": "go1.27.3 linux/amd64",
+      "passed": 4,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "coordination/reviews/xr_r2_react/go-emit-tests.log",
+      "log_sha256": "c410e1c5085fe292045730706603e23eb4222f0236c1a2ffc4d72cfa46a6b50b"
+    },
+    "proxy_reproduction": {
+      "source": "coordination/reviews/xr_r2_react/proxy-slice-repro.mjs",
+      "source_sha256": "e9b8a7abe9fd62b757aacf22db8cd7b30e7b5b3f800e76bc1d075ad08f6fb40e",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node coordination/reviews/xr_r_react/proxy-slice-repro.mjs",
+      "toolchain": "Node v22.23.4",
+      "exit_code": 1,
+      "result": "Expected rejection: Node.On has invalid GoScript slice bounds or backing",
+      "stdout": "coordination/reviews/xr_r2_react/proxy-slice-repro.raw.stdout",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "coordination/reviews/xr_r2_react/proxy-slice-repro.raw.stderr",
+      "stderr_sha256": "a93d5422375380b34365c5b1f4b28dc1a6d3aedf6dfd833d3ff26231423def08",
+      "exit_code_file": "coordination/reviews/xr_r2_react/proxy-slice-repro.exit-code",
+      "exit_code_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "n6_browser_conformance": {
+      "source_run": "n6-source-900dc38",
+      "counter": {
+        "path": "coordination/reviews/xr_r2_react/n6-source-900dc38/counter.browser.json",
+        "sha256": "eae3b114b843718bca18c841816fe4fd5c280f06760f80f42ac40b4e0f09e845",
+        "observed_ticks": 5
+      },
+      "form": {
+        "failure_path": "coordination/reviews/xr_r2_react/n6-source-900dc38/form.browser.failed.json",
+        "failure_sha256": "9c2818e39cafebc2e9ae7b661a5697f49c083cb983243a594cda0f28bc4c6e91",
+        "manifest_path": "coordination/reviews/xr_r2_react/n6-source-900dc38/form.browser.failed.manifest.json",
+        "manifest_sha256": "01d9ccffc5e582992b8923a975144de2ec60ba036c80f64182765a8969ad45b6",
+        "failure_point": "mount-compiled-app",
+        "error": "Node.Attrs.backing has unsupported symbol properties"
+      },
+      "list": {
+        "failure_path": "coordination/reviews/xr_r2_react/n6-source-900dc38/list.browser.failed.json",
+        "failure_sha256": "f72959ea2a8074c517ac326e493b5cfa44e8a330a52b148246bae4ac32ee48e8",
+        "manifest_path": "coordination/reviews/xr_r2_react/n6-source-900dc38/list.browser.failed.manifest.json",
+        "manifest_sha256": "8fd88b9f8ef413d243542c27d0248b03e365359457f838739ddd5a29ea615803",
+        "failure_point": "action 0, add/update",
+        "error": "Node.Attrs.backing has unsupported symbol properties"
+      },
+      "effect": {
+        "failure_path": "coordination/reviews/xr_r2_react/n6-source-900dc38/effect.browser.failed.json",
+        "failure_sha256": "717f4525d9f9ff0006991e1a4782f47b9a8f7b5c9fbc49bd974b42e0e579bd56",
+        "manifest_path": "coordination/reviews/xr_r2_react/n6-source-900dc38/effect.browser.failed.manifest.json",
+        "manifest_sha256": "0e29292df3a429b737ba61a8d3681602309250311f84b758a695b9952fe3382d",
+        "failure_point": "mount-compiled-app",
+        "error": "Node.Attrs.backing has unsupported symbol properties"
+      },
+      "conformance_claim": "No four-app browser pass; only the counter browser trace completed in this run."
+    }
+  },
+  "limits": [
+    "Structural admission uses exact own fields and descriptor values, then copies to trusted normalized records; it does not authenticate class identity or source prototypes.",
+    "Focused Node tests cover renderer/bindings logic, while the actual emitted browser integration evidence comes from N6's preserved failing run.",
+    "This review does not accept R2 for actual four-app React conformance until the known GoScript spareZero metadata is handled without executing or preserving its factory and N6 reruns all four apps."
+  ]
+}

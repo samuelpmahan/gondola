@@ -1,0 +1,50 @@
+{
+  "job_id": "R-RUNTIME",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Repaired compiled runtime action casing and pre-validation admission, exact marked GoScript effect admission and frozen effect descriptors, and post-unmount stale tick snapshots. Focused runtime suite passes 11/11; generated-app/browser evidence is pending N6.",
+  "evidence": {
+    "path_correction": "The first N4 draft was mistakenly written to the independent XR-G-RUNTIME.md/json paths. Its bytes were preserved under coordination/reviews/history/N4-miswrite-XR-G-RUNTIME.md/json, and the original N3 XR review files were restored from the initial captured contents.",
+    "focused_test": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "passed": 11,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "repaired_cases": [
+      "Only the renderer's closed lowerCamel {path,event,value} action shape is accepted; PascalCase is rejected.",
+      "Own data descriptors, closed keys, symbols/accessors/prototype checks, and admission reservation prevent getter/proxy reentry from dispatching an inner transition.",
+      "Effects admit the exact marked GoScript gobi.Effect shape and reject missing marker, accessor, extra own property, and unsupported Name/Reply before effect-host calls.",
+      "Effects and host scripts enforce fixture.request with Name lookup and Reply complete.",
+      "Post-unmount stale actions preserve the last logical view, capture the renderer's actual empty DOM, and do not set runtime failure."
+    ],
+    "pre_repair_probe": {
+      "source": "coordination/reviews/xr_g_runtime_probe.mjs",
+      "source_sha256": "3b5f1c6c7984424e410661aef42eae2d0db22b9f9dc666158e18a490e369a146",
+      "result": "coordination/reviews/xr_g_runtime_probe.json",
+      "result_sha256": "87b8fa610997e39e409193d9ad25bd7eb13fc17530526efd77a98b630b30a59d",
+      "findings": [
+        "PascalCase renderer action rejected at dispatch-input; zero Update calls.",
+        "Enumerable path getter reentered before busy reservation; nested and outer dispatch both accepted.",
+        "Post-unmount stale action returned accepted but appended no tick and set suppressed-action failure."
+      ]
+    },
+    "sha256": {
+      "runtime": "18a9565d8e80179a22240f1fbe109b3d7297cee1551aaa43ccc09b0f912b1908",
+      "runtime_tests": "05c1b193038df485b260e98c5e6705d036a1eba2b27f79f884b0598811833af8",
+      "pre_repair_runtime": "6252e457db9992bb14ae7b866b2bc893c04eebab1b2917a3c0da6fa53e0067df",
+      "miswrite_report_preserved": "e08d6ebd91a50ba52ef857705ff86c7b6f14f35d88a116d8b14ef451f1ec7cb6",
+      "miswrite_receipt_preserved": "edf7ba42ddb0352146b4e17222e584269e42760551e84ba897086b528b37bd7a",
+      "restored_original_xr_report": "2efee21bca476233ae54228a567794f39277a4a8ccbebdda565bb6155df24f4d",
+      "restored_original_xr_receipt": "624c70a498014a568ce7fc4f455301402fb83c3e005c658283590753e1854c21",
+      "n1_abi_report": "123a3d0e75b06409572906107924f3389e3d63149486bd72cde61b5f7d8c4519",
+      "build_facade": "719c8495cdd131860b4879cba3108fc3e327aa967904037fd12dd3462ffa6277"
+    },
+    "limits": [
+      "Runtime tests use stub symbols and renderer APIs.",
+      "The inherited probe renderer throws from domSnapshot() after unmount; the repaired React renderer returns an empty physical-root snapshot, and runtime lifecycle coverage uses a matching test stub.",
+      "Four-app generated-JavaScript and mounted-browser conformance are pending N6; no integration success is claimed yet."
+    ]
+  }
+}

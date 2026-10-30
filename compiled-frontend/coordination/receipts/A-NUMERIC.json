@@ -1,0 +1,107 @@
+{
+  "job_id": "A-NUMERIC",
+  "worker": "N5",
+  "outcome": "confirmed_reuse",
+  "summary": "The final source-level numeric gate rejected all 12 required unsafe arithmetic/constant probes and both unsupported package-global/init constructs with source spans; six safe boundary controls and all four approved app fixtures pass. Native EncodeValue now agrees with generated JS at Number safe-integer boundaries, while int64/uint64 BigInt values retain full declared width. Two safe cases remain conservatively rejected.",
+  "evidence": {
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH /tmp/gondola-go/bin/go run ./coordination/reviews/numeric/run_probes.go -mode=post > coordination/reviews/numeric/final-full-check.json 2> coordination/reviews/numeric/final-full-check.stderr.log",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+        "result": "exit 0; 12 unsafe numeric operations/constants and 2 package constructs rejected with target source spans; 6 required safe controls accepted; native/JS encoder boundary agrees; 4 real entry apps accepted"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH /tmp/gondola-go/bin/go run ./coordination/reviews/numeric/run_probes.go -mode=pre > coordination/reviews/numeric/pre-codec-repair.json 2> coordination/reviews/numeric/pre-codec-repair.stderr.log",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+        "result": "exit 0 before the native EncodeValue repair; recorded native int/uint acceptance beyond safe Number limits while generated JS rejected those same values"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 PATH=/tmp/gondola-go/bin:$PATH /tmp/gondola-go/bin/go run ./coordination/reviews/numeric/run_probes.go -mode=pre > coordination/reviews/numeric/pre-repair.json 2> coordination/reviews/numeric/pre-repair.stderr.log",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+        "result": "exit 1 during N2’s in-progress contract rename: analyze.go referenced undefined JSRepresentationArrayOrGoScriptSlice, JSRepresentationFloat64ArrayOrGoScriptSlice, and JSRepresentationGoScriptSlice; this attempt produced no independent pre-fix false-accept trace"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./analyze -run TestLoadSourcesAndAnalyzeRejectsUnsafeIntegerSource -v",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+        "attribution": "N2’s preserved pre-fix RED source-test run, reported by N2; N5 did not run this before the gate repair",
+        "result": "N2 reported failures at state.Mutated++, state.Add += 9007199254740991, state.Subtract -= 9007199254740991, and state.SwitchOr++; bounded state.Safe64++ did not fail. No separate stdout/stderr file was retained; the source repro remains in analyze/numeric_security_test.go."
+      },
+      {
+        "command": "/tmp/gondola-go/bin/go test -count=1 ./compilercontract -run 'TestEncodeValue(MatchesNumberAndBigIntIntegerABI|PreservesFullWidthIntegersAndRejectsNonFiniteFloats)' -v",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+        "attribution": "N2’s focused root-contract RED/GREEN run; N5 independently reran the equivalent encoder boundary in the final harness",
+        "result": "N2 reported pass after the native EncodeValue repair"
+      }
+    ],
+    "pre_repair_evidence": {
+      "author_red_source": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/analyze/numeric_security_test.go",
+      "n5_transient_compile_failure_log": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/numeric/pre-repair.stderr.log",
+      "pre_codec_native_js_mismatch": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/numeric/pre-codec-repair.json",
+      "preserved_earlier_post_trace": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/numeric/post-analyzer-pre-codec-repair.json",
+      "preserved_earlier_post_trace_sha256": "958fe1aeff8eb3f0290f6d12b026034c943ad6676fef145c89b451e49941e7fc",
+      "pre_codec_finding": "Native EncodeValue with int/uint Number representation accepted signed +/-9007199254740992 and unsigned 9007199254740992; generated JavaScript rejected all three. N2 fixed this in compilercontract/value.go."
+    },
+    "final_source_results": {
+      "unsafe_numeric_cases_rejected": 12,
+      "unsafe_numeric_cases_with_target_spans": 12,
+      "unsafe_numeric_case_names": [
+        "mutation_invalidates_guard",
+        "upper_guard_large_compound_add",
+        "if_else_guard_leak",
+        "multi_case_or_guard",
+        "inclusive_max_safe_increment",
+        "loop_inclusive_bound",
+        "signed_negative_operand",
+        "lower_guard_large_compound_sub",
+        "int8_declared_width",
+        "int32_declared_width",
+        "unsafe_helper_numeric_parameter",
+        "unsafe_constant_identifier"
+      ],
+      "source_level_fail_closed_cases": [
+        {"name": "mutable_package_global_fails_closed", "code": "source.package-global", "stage": "LoadSources", "span_matches_target": true},
+        {"name": "init_function_fails_closed", "code": "source.init-function", "stage": "LoadSources", "span_matches_target": true}
+      ],
+      "required_safe_controls_accepted": [
+        "safe_constant_guard_control",
+        "safe_upper_guard_control",
+        "safe_lower_guard_control",
+        "safe_int8_width_control",
+        "safe_int32_width_control",
+        "exact_lower_boundary_control"
+      ],
+      "conservative_safe_rejections": [
+        {"name": "safe_compound_add_control", "source": "if Count < MAX_SAFE { Count += 1 }", "result": "rejected with numeric-profile; analyzer does not prove this compound-operand range"},
+        {"name": "cross_function_safe_numeric_parameter", "source": "caller bound proves helper v+1 safe", "result": "rejected with numeric-profile; caller guard is not propagated into helper parameter"}
+      ],
+      "four_fixture_positive": {"apps": ["counter", "form", "list", "effect"], "app_count": 4, "diagnostics": 0},
+      "temporary_source_fixtures_remaining": 0
+    },
+    "encoder_boundary": {
+      "number_int": {"accepted": ["-9007199254740991", "9007199254740991"], "rejected": ["-9007199254740992", "9007199254740992"]},
+      "number_uint": {"accepted": ["9007199254740991"], "rejected": ["9007199254740992"]},
+      "bigint_int64": {"full_width_max_accepted": "9223372036854775807"},
+      "bigint_uint64": {"full_width_max_accepted": "18446744073709551615"},
+      "result_file": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend/coordination/reviews/numeric/final-full-check.json"
+    },
+    "sha256": {
+      "analyze_analyze_go": "28270a69953b8a65d797b0187ca64cd50f48693a5cf283d9cd5edf16841f19c5",
+      "analyze_project_go": "32a2c6cee4d3a84a83d76733343f49c061910e3b6329d7fd153a1979a400868a",
+      "analyze_numeric_security_test_go": "656f6c4d6f47941f05e307214b238d0a5c0fb2dd4899b1cc8013bc528532f609",
+      "compilercontract_value_go": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f",
+      "review_harness": "e57902ff2fb1c1b6fb69e442cc9b35d2fff17f11517027201410bf5f49853a9c",
+      "final_full_check": "68914c08fcb4b02f063ffc717a539eae9728e2d00131ac4b0b97bf9e5d7d73f6",
+      "pre_codec_check": "2c66f363b2a5c8c670fb071153ebc3858c6cf320b626c726c71ebca414edc227",
+      "transient_pre_repair_compile_log": "f05ec2cadc16d571223c5c84e8d679616f2b3520107d11f61cad718ad12d0d16",
+      "native_probe_json_actual_sha256": "3b34fc0e46e4122e033a6baf460438d4a4467293216b22064e670914038e63a4",
+      "xr_a_abi_receipt": "54180e932b2b8404603efb74bea221014b258a20e5ef41f31c6981a3e6be6e89"
+    },
+    "historical_receipt_correction": "The finished XR-A-ABI receipt was not modified. Its native_result SHA field is 32 hex characters; the actual 64-character SHA-256 for toolchain/probe_counter/results/native.json is 3b34fc0e46e4122e033a6baf460438d4a4467293216b22064e670914038e63a4.",
+    "limits": [
+      "N5’s first pre-fix harness attempt occurred during a transient contract/analyzer symbol rename and captured only the compile failure; N2 supplied the contemporaneous red test summary.",
+      "Negative numeric probe packages use minimal local Message/Effect/Node types to isolate the nested-module analyzer; four positive fixtures use the real root module sources and types.",
+      "The two safe conservative rejections show the analyzer is incomplete; this audit establishes no false accepts only for the named cases.",
+      "No claim of complete Go arithmetic/control-flow analysis, all standard-library semantics, frontend build success, or browser conformance is made."
+    ]
+  }
+}

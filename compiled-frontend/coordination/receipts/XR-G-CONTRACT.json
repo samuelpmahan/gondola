@@ -1,0 +1,93 @@
+{
+  "job_id": "XR-G-CONTRACT",
+  "worker": "N3",
+  "decision": "amend",
+  "summary": "The bounded Go/JSON and numeric contract passes focused review, including 14 unsafe source rejects, six safe controls, and Number/BigInt and slice-nullability boundaries. Amend for the confirmed actual GoScript spare-capacity ABI: N6 still fails form, list, and effect on renderer symbol rejection, and the existing state encoder's full-backing array walk is a separate unverified compatibility risk.",
+  "evidence": {
+    "report_sha256": "ff3de96e14aa3e391e133477255cfa987cbb9bf39f7c2b036aa42392787b7961",
+    "scope": [
+      "compiled-frontend/CONTRACT.md",
+      "compiled-frontend/semantic/ABI.md",
+      "compilercontract/**",
+      "compiled-frontend/analyze/**",
+      "compiled-frontend/coordination/reviews/xr_g_contract/**",
+      "compiled-frontend/coordination/reports/XR-G-CONTRACT.md",
+      "compiled-frontend/coordination/receipts/XR-G-CONTRACT.json"
+    ],
+    "tests": [
+      {
+        "command": "GOTOOLCHAIN=local /tmp/gondola-go/bin/go test -count=1 ./compilercontract -v",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled",
+        "toolchain": "go1.24.0",
+        "result": "exit 0; all compilercontract tests pass",
+        "raw_log": "coordination/reviews/xr_g_contract/go24-contract.log",
+        "raw_log_sha256": "c6811662ac264ef2edc39d0fc08972543e720e8d874a72ab4640016c3093eeea"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./analyze -v",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola-compiled/compiled-frontend",
+        "toolchain": "go1.27.3",
+        "result": "exit 0; all five analyze test groups pass, including four fixture packages, unsafe numeric sources, and entry-package global/init rejection",
+        "raw_log": "coordination/reviews/xr_g_contract/go27-analyze.log",
+        "raw_log_sha256": "cbaaab3f673b767b1ddbbf8516f9be32ffa5e3611563cda2496621465f5e473c"
+      }
+    ],
+    "numeric_audit": {
+      "raw": "coordination/reviews/numeric/final-full-check.json",
+      "raw_sha256": "68914c08fcb4b02f063ffc717a539eae9728e2d00131ac4b0b97bf9e5d7d73f6",
+      "cases": 22,
+      "unsafe_rejected_with_source_spans": 14,
+      "safe_controls_accepted": 6,
+      "optional_safe_false_rejects": [
+        "safe_compound_add_control",
+        "cross_function_safe_numeric_parameter"
+      ],
+      "unsafe_false_accepts": 0,
+      "integer_boundary": "Number-backed int/uint accept only safe values within declared Go width; explicit int64/uint64 use BigInt and preserve full width"
+    },
+    "encoder_shape_probe": {
+      "source": "coordination/reviews/xr_g_contract/encoder-shape-probe.mjs",
+      "source_sha256": "79f19d30bf07c9a14769eea05a8334303d3d61ae9a7b10a057a6e93dfed1c14f",
+      "raw": "coordination/reviews/xr_g_contract/encoder-shape-probe.raw.json",
+      "raw_sha256": "45654990cdf29a7d3010cd18447707629697f1125726f4fabc17bb419b8fb4b9",
+      "result": "valid form.State shape accepted; added string/symbol fields rejected; accessor rejected with zero getter calls; plain own-field object without clone accepted by the state encoder"
+    },
+    "actual_runtime_evidence": {
+      "pinned_goscript": "github.com/s4wave/goscript v0.6.2",
+      "slice_source": "/root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2/gs/builtin/slice.ts",
+      "slice_source_sha256": "5f6da8d9bb986cc49f1323e1ba505c8ba779da6c54ebaacf6c1bd540e9a0bdea",
+      "n1_probe_raw": "coordination/reviews/xr_r2_react/goscript-slice-probe.raw.json",
+      "n1_probe_raw_sha256": "2589ac6e1371c82bdc04f594a673e498f1b397518e84d69b1c0f6d12752d9517",
+      "observation": "A private, non-global Symbol(goscript.spareZero) with an own data function descriptor appears on actual grown GoSlice backing arrays; spare slots may remain holes until the slice grows. The renderer must snapshot only the validated visible window and must not invoke the factory. Ordinary arrays remain strict."
+    },
+    "browser_checkpoint": {
+      "raw_directory": "conformance/raw/n6-source-900dc38-final/",
+      "counter_result": "matched",
+      "form_failure_sha256": "95d32525277fbe1d52940f7e4656172e57d9e6e8e40cfff18534a6a457a4fde1",
+      "list_failure_sha256": "4d4041ab393d59ececf2ba79125856d2fde0a6306e8de6d5cae7d0ddb33da88e",
+      "effect_failure_sha256": "467e2c2398cd8843db5ff87e656126b5380e0d21b7adb347b7a16064d82a82b3",
+      "failure": "compiled React renderer rejects Node.Attrs.backing for unsupported symbol properties; form/effect fail at mount, list after action 0"
+    },
+    "state_encoder_followup": "compilercontract/js_encoder.go snapshots the full GoSlice backing with strict ownArray() before taking the visible window; that helper rejects spare symbols and holes. No source edit or growth probe was performed in this review. N2 owns the actual grown-state-slice probe/repair gate.",
+    "source_sha256": {
+      "compiled-frontend/CONTRACT.md": "eb6adaaf8f69d083ddf594b2aa5d68346e405ff58bf62014fa5c07b79cf2456a",
+      "compiled-frontend/semantic/ABI.md": "6da7fe9292c14317c29eb275be8e5074409fd683bd2e528ac0326e5c053e191d",
+      "compilercontract/contract.go": "fa3ef8b3c60f3ff1d4a0e80827bfa65dc21ad741b3c421c1f4634f6b3c0b363e",
+      "compilercontract/js_encoder.go": "45b90cc43cd02fb056a9836bcbc63fa392d34d0bc1003213b43d735c30301397",
+      "compilercontract/json.go": "1a6ddd715af3f8cd3659bc45496e905a62d4b94b0339f7c1bfdf5505024c053e",
+      "compilercontract/validation.go": "ccb28713bfa7dd0fd5b22fb5dd377945006d9f0517357c62f230666b91ec2e76",
+      "compilercontract/value.go": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f",
+      "compiled-frontend/analyze/analyze.go": "28270a69953b8a65d797b0187ca64cd50f48693a5cf283d9cd5edf16841f19c5",
+      "compiled-frontend/analyze/load.go": "5ab960705778e54ee3c46f6f975a47cc455f713ef626e81788c7960d867e5a8d",
+      "compiled-frontend/analyze/project.go": "32a2c6cee4d3a84a83d76733343f49c061910e3b6329d7fd153a1979a400868a",
+      "compiled-frontend/analyze/types.go": "50562366a1ec36c2c3b1ce19c1919ce451500f02cf90e80cc1bcbf82a05afbbf"
+    },
+    "limits": [
+      "The analyzer is a conservative validator for the finite approved profile, not general Go soundness proof; two safe numeric patterns remain false rejects.",
+      "Imported dependency initialization is not analyzed; the v1 profile assumes trusted fixture dependencies.",
+      "The encoder probe checks snapshot shape, not state transition cloning; clone behavior is evidenced separately at the emitted GoScript forwarding boundary.",
+      "No production source was changed by this review.",
+      "Four-app browser acceptance is not met until renderer and state-encoder GoSlice boundaries are verified against actual grown backing and all four apps pass a fresh integration run."
+    ]
+  }
+}

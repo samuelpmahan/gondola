@@ -1,0 +1,49 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-compiled-frontend"
+  },
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-REACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "repair_of": "G-REACT",
+      "owner": "frontend/react and emit only",
+      "summary": "Repair independent review action casing and exact GoSlice wrapper admission; retain honest retired DOM semantics"
+    },
+    {
+      "id": "R-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "repair_of": "G-RUNTIME",
+      "owner": "frontend/runtime only",
+      "summary": "Repair actual Go effect ABI/exact spec, input descriptor reentry, post-unmount stale trace"
+    },
+    {
+      "id": "A-NUMERIC",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "coordination/reviews/numeric and named report/receipt only; read-only analyzer audit",
+      "summary": "Adversarial real-source probes of integer guards, mutation invalidation, loop overflow and operand bounds"
+    }
+  ]
+}

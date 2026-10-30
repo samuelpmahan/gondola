@@ -1,0 +1,58 @@
+{
+  "job_id": "R2-RUNTIME",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Completion input admission is reserved before caller-controlled validation traps. Reentrant completion, dispatch, stale-action, and unmount calls are fenced during inspection, while valid synchronous effect-host replies remain deferred until the requesting commit finishes.",
+  "evidence": {
+    "pre_repair_red": {
+      "runtime_source": "coordination/reviews/history/runtime-18a956/runtime.mjs",
+      "runtime_sha256": "18a9565d8e80179a22240f1fbe109b3d7297cee1551aaa43ccc09b0f912b1908",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/runtime/runtime.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "passed": 13,
+      "failed": 2,
+      "result": "Expected red: an invalid outer completion's ownKeys trap admitted a nested valid reply; a prototype trap unmounted before the valid reply could commit."
+    },
+    "focused_test": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/runtime/runtime.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "passed": 16,
+      "failed": 0,
+      "result": "exit 0; existing experimental EnvHttpProxyAgent warning",
+      "log": "frontend/runtime/r2-node-tests.log",
+      "log_sha256": "21b739a9a6ec15e6ff237328e04bd54f5f211fae799bc940bd0983f24ddff9a4"
+    },
+    "independent_n5_probe": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node frontend/runtime/r2_completion_probe.mjs",
+      "toolchain": "Node v22.23.4",
+      "result": "exit 0; nested valid completion rejected, outer invalid completion rejected, Count remained 0, Reply remained empty, and Update stayed at 1 call for the pending request",
+      "source": "frontend/runtime/r2_completion_probe.mjs",
+      "source_sha256": "e824a273767a7e73d57fab0c57ae84559b1850ca1ece181b57adc6251315c695",
+      "raw_result": "frontend/runtime/r2_completion_probe.json",
+      "raw_result_sha256": "e1a1e3e9ff64f02221b4d476f467560c8d0f3d7727b1f2f8d107c6a4599bf92f"
+    },
+    "preserved_n5_finding": {
+      "source": "coordination/reviews/xr_r_runtime/probe.mjs",
+      "source_sha256": "fadc6eac0466695bc4febb2c3fe4765b65f34e0ddc9a3807174d1958cde6d311",
+      "raw_result": "coordination/reviews/xr_r_runtime/probe.json",
+      "raw_result_sha256": "6cfb77a93f37c7dfa25c45fe58b34c913efdcf85fd945b846c4b61c268d1fe6f",
+      "note": "Original probe and failing raw result preserved unchanged; the runtime-owned adjusted probe captures the repaired outcome."
+    },
+    "source_freeze": {
+      "runtime_sha256": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+      "n6_notified": true,
+      "focused_test_command": "/tmp/gondola-node22/node_modules/node/bin/node --test frontend/runtime/runtime.test.mjs"
+    },
+    "sha256": {
+      "frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+      "frontend/runtime/runtime.test.mjs": "efda3ddcf83cc0cde9ec2fb9b37a69abee313cced1bcf067ded5645a1d0ae296",
+      "frontend/runtime/r2_completion_probe.mjs": "e824a273767a7e73d57fab0c57ae84559b1850ca1ece181b57adc6251315c695",
+      "frontend/runtime/r2_completion_probe.json": "e1a1e3e9ff64f02221b4d476f467560c8d0f3d7727b1f2f8d107c6a4599bf92f",
+      "frontend/runtime/r2-node-tests.log": "21b739a9a6ec15e6ff237328e04bd54f5f211fae799bc940bd0983f24ddff9a4"
+    }
+  },
+  "limits": [
+    "Focused tests and the independent probe use stub symbols, renderer behavior, and effect-host delivery.",
+    "Generated-app and mounted-browser conformance remain with N6; no E2E success is claimed in this receipt."
+  ]
+}

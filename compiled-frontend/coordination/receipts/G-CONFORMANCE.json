@@ -1,0 +1,139 @@
+{
+  "job_id": "G-CONFORMANCE",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "N6 conformance tools and provenance are implemented. Native and independent direct-JavaScript replay match exactly across all four fixtures (31 ticks). Counter mounted-browser conformance passes; form, list, and effect browser execution are blocked by the R2 renderer rejecting GoScript's valid spareZero array marker.",
+  "scope": [
+    "compiled-frontend/conformance/**",
+    "compiled-frontend/coordination/reports/G-CONFORMANCE.md",
+    "compiled-frontend/coordination/receipts/G-CONFORMANCE.json"
+  ],
+  "source_checkpoint": {
+    "n1_tree_sha256": "900dc38eee351e745717136cb54ae26d0765ec53d25c2d99e226b2b4ee620f2b",
+    "n1_file_count": 86,
+    "n1_output_hashes_verified": 209,
+    "renderer_sha256": "9f10b75d194aab53cbe504321e8f6df26592c20b6a7123d7f267ba2e68868e5a",
+    "runtime_sha256": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+    "direct_js_provenance_input_count": 94,
+    "browser_provenance_input_count_with_bundle": 95
+  },
+  "environment": {
+    "go": "go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "chromium": "153.0.8010.0",
+    "chromium_path": "/tmp/chromium",
+    "random_seed": null,
+    "fixture_scripts_deterministic": true
+  },
+  "evidence": {
+    "raw_dir": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/",
+    "artifact_manifest": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/SHA256SUMS",
+    "artifact_manifest_sha256": "a68b48df1a888cc3b6771685eeb700a9c4789ba4cec8a1263542217504d97112",
+    "reproduction_script": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/run.sh",
+    "reproduction_script_sha256": "67fc735395a84d368a51f8a1d4b457c96d7d0ead721d4b3f037541b63210904b",
+    "native_direct_summary": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/native-direct-summary.json",
+    "native_direct_summary_sha256": "53f1db1fe9fb8f9208f28a2afbed1483ae1282a0f727e1ae1bae71fa429155ba",
+    "focused_node_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/conformance/*.test.mjs",
+      "passed": 37,
+      "failed": 0,
+      "stdout": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/logs/conformance-tests.stdout.log",
+      "stdout_sha256": "4d4267cc628d718f61849cfd5e2894dcd121138fd5e9684a80405f23ee9a0e4f",
+      "stderr": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/logs/conformance-tests.stderr.log",
+      "stderr_sha256": "3f42166c6f68c7f984aaa7f71ce31ec416468ab546d45b285888840f82add20b"
+    },
+    "native_direct": {
+      "status": "exact for all four fixtures",
+      "total_ticks": 31,
+      "apps": {
+        "counter": 5,
+        "form": 10,
+        "list": 11,
+        "effect": 5
+      },
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/verify-native-direct.mjs"
+    },
+    "browser": {
+      "counter": {
+        "status": "matched",
+        "ticks": 5,
+        "mutation_controls_detected": 17,
+        "no_wasm_requests": 0,
+        "no_wasm_api_attempts": 0,
+        "physical_root_empty_after_unmount": true,
+        "renderer_snapshot_empty_after_unmount": true,
+        "check_report": "compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/counter.check.json",
+        "check_report_sha256": "1af9f1d8ba44ddce2c7c5f202e2e2ed88d62a74b007d8549c5039b74d50ec72f",
+        "browser_evidence_sha256": "bdb47da9937cdf5223aabd3486f4802e15ef12710be942af59e304bfe78a34f7"
+      },
+      "form": {
+        "status": "rejected",
+        "stage": "mount-compiled-app",
+        "reason": "compiled React renderer: Node.Attrs.backing has unsupported symbol properties",
+        "source_hashes_stable": true,
+        "changed_inputs": [],
+        "failure_sha256": "6d24533be2c05fd2e74e0ddf8f43eb5bb05067a98f92700c7c3d4cf743550b34"
+      },
+      "list": {
+        "status": "rejected",
+        "stage": "run-browser-action",
+        "action_index": 0,
+        "reason": "compiled React renderer: Node.Attrs.backing has unsupported symbol properties",
+        "source_hashes_stable": true,
+        "changed_inputs": [],
+        "failure_sha256": "511222aa9e34a2cd0deaf679e736bfdfc3c010ddc31ff20eed8ce83fa258cc8a"
+      },
+      "effect": {
+        "status": "rejected",
+        "stage": "mount-compiled-app",
+        "reason": "compiled React renderer: Node.Attrs.backing has unsupported symbol properties",
+        "source_hashes_stable": true,
+        "changed_inputs": [],
+        "failure_sha256": "c6e2a640717c34ec37ff46232710694f8004ba5a8874fdd5b75c36a21c4de80d"
+      }
+    },
+    "runtime_finding": {
+      "symbol": "Symbol(goscript.spareZero)",
+      "descriptor": {
+        "value": "function",
+        "writable": true,
+        "enumerable": true,
+        "configurable": true
+      },
+      "observed_array_length": 4,
+      "slice": {
+        "offset": 0,
+        "length": 3,
+        "capacity": 4
+      },
+      "owner_confirmation": "N3 confirmed this is GoScript's private zero-value factory marker.",
+      "prior_effect_abi_failure": "not reached on the current checkpoint; browser execution fails earlier during renderer mount."
+    },
+    "provenance": {
+      "final_sequential_run_stable": true,
+      "changed_inputs": [],
+      "raw_evidence_excluded_from_source_hash_walk": true,
+      "first_parallel_batch_preserved": "compiled-frontend/conformance/raw/n6-source-900dc38/"
+    },
+    "native_build": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go build -o compiled-frontend/conformance/raw/n6-source-900dc38-r2runtime/compiled-native ./cmd/compiled-native",
+      "binary_sha256": "cb1e988e94e21414482b4f221de94d0d7b24eee949458dfe836c880b6774f1c9",
+      "note": "An earlier build without GOFLAGS=-buildvcs=false failed to obtain VCS status in this shared worktree; source bytes were unchanged."
+    }
+  },
+  "limits": [
+    "Four-app native/direct/browser equality is not complete: only counter passed browser comparison; form, list, and effect stop on the confirmed spareZero ABI mismatch.",
+    "Effect commit-before-completion and exactly-once delivery are unproven in browser on this checkpoint; the prior normalizeEffects issue is not reached by the current failed mount.",
+    "Keyed list focus/backward selection and stale callback after node removal are unproven in browser because list fails on action 0.",
+    "Post-runtime-unmount callback suppression was not tested; counter only proves actual empty physical DOM and renderer snapshot after unmount.",
+    "No generic Go equivalence claim is made."
+  ],
+  "sha256": {
+    "conformance_browser_mjs": "933309fcd56fbd57c290138cf99cdd2964993f961a19ae158ef6d5a0b45b7352",
+    "conformance_check_mjs": "762e694a9e879e52c6f3487cb217268c5621f44ca7aa2f9ea19468460b2875db",
+    "conformance_check_test_mjs": "e8c5d886ecc67efe0152bfed27611aa9137b6f6ed8b809e418d8fac407c07279",
+    "conformance_provenance_mjs": "fbc3045cf31f02cedf7abf1341bcfe0b6f951a57dfa3d4f49d8397d25421127e",
+    "conformance_observed_action_mjs": "6f4a970d2828d7446da7cee17ec984defd2a73ff65741b95ffe457f90713e088",
+    "conformance_browser_options_test_mjs": "4e93d30541fc4327ec41ff39a7d927c8ba7081203865e5616a6dcf5fb3d2b48a"
+  }
+}

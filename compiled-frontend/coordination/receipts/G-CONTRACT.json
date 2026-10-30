@@ -1,0 +1,88 @@
+{
+  "job_id": "G-CONTRACT",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Tightened the typed-source numeric validator for reproduced real-source guard/mutation failures and aligned the native value codec with the emitted Number/BigInt ABI. The profile remains bounded and does not claim general Go range analysis or final four-app bundle success.",
+  "evidence": {
+    "report_sha256": "9a07e2d96951a541a8e4ca2366dd8ad74f067f63762926ac9ea1f2123a99c947",
+    "scope": [
+      "compilercontract/**",
+      "compiled-frontend/analyze/**",
+      "compiled-frontend/CONTRACT.md",
+      "compiled-frontend/coordination/reports/G-CONTRACT.md",
+      "compiled-frontend/coordination/receipts/G-CONTRACT.json"
+    ],
+    "red": {
+      "analyzer_command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./analyze -run TestLoadSourcesAndAnalyzeRejectsUnsafeIntegerSource -v",
+      "confirmed_false_accepts": [
+        "guarded increment after assigning the variable to MAX_SAFE_INTEGER",
+        "guarded += MAX_SAFE_INTEGER",
+        "guarded -= MAX_SAFE_INTEGER",
+        "switch with case x < MAX_SAFE_INTEGER, true reusing the first case guard"
+      ],
+      "raw_failure_lines": [
+        "unsafe source line was accepted without a numeric-profile diagnostic: state.Mutated++",
+        "unsafe source line was accepted without a numeric-profile diagnostic: state.Add += 9007199254740991",
+        "unsafe source line was accepted without a numeric-profile diagnostic: state.Subtract -= 9007199254740991",
+        "unsafe source line was accepted without a numeric-profile diagnostic: state.SwitchOr++"
+      ],
+      "numeric_constant_command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./analyze -run TestLoadSourcesAndAnalyzeRejectsUnsafeIntegerSource -v",
+      "numeric_constant_failure_lines": [
+        "unsafe source line was accepted without a numeric-profile diagnostic: state.ConstValue = unsafeNumberConstant",
+        "safe bounded source line was rejected: state.SafeConst++ (integer increment/decrement lacks a safe bound guard)"
+      ],
+      "codec_command": "/tmp/gondola-go/bin/go test -count=1 ./compilercontract -run TestEncodeValueMatchesNumberAndBigIntIntegerABI -v",
+      "codec_failure_lines": [
+        "Number-backed integer outside the safe range was accepted: 9007199254740992",
+        "Number-backed integer outside the safe range was accepted: -9007199254740992",
+        "Number-backed integer outside the safe range was accepted: 9007199254740992",
+        "Number-backed tagged integer outside the safe range was accepted"
+      ]
+    },
+    "green": {
+      "analyzer_command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test -count=1 ./analyze -v",
+      "analyzer_passed": 5,
+      "analyzer_failed": 0,
+      "analyzer_cases": [
+        "TestLoadAndAnalyzeCompiledFixtures: counter, form, list, and effect entry packages pass LoadSources and Analyze",
+        "TestValidateOperationsRejectsUnknownCallAndUnsupportedNode",
+        "TestValidateOperationsRequiresSafeIntegerBounds",
+        "TestLoadSourcesAndAnalyzeRejectsUnsafeIntegerSource: unsafe probes reject and guarded int64/int8/int32/constant controls pass with source-relative non-empty spans",
+        "TestLoadSourcesRejectsMutablePackageGlobalsAndInitFunctions: both entry-package constructs reject with source spans"
+      ],
+      "codec_command": "/tmp/gondola-go/bin/go test -count=1 ./compilercontract -run 'TestEncodeValue(MatchesNumberAndBigIntIntegerABI|PreservesFullWidthIntegersAndRejectsNonFiniteFloats)' -v",
+      "codec_passed": 2,
+      "codec_failed": 0,
+      "codec_cases": [
+        "int and uint Number values at +/-MAX_SAFE boundaries pass; values immediately outside reject",
+        "ValidateValue and DecodeValueJSON reject unsafe Number-backed tagged integers",
+        "int64 and uint64 BigInt values preserve full Go width, including signed min/max and uint64 max"
+      ]
+    },
+    "limitations": [
+      "The analyzer is a conservative validator for a bounded subset, not a general Go range-analysis proof. It accepts guarded +1/++ and -1/-- plus bounded len(slice-or-array)*2 in make capacity; integer compound assignments and nonconstant integer conversions are rejected.",
+      "Entry-package mutable globals and init functions are rejected. Initialization effects in imported dependency packages are not analyzed; the four approved fixtures use trusted dependencies.",
+      "Guard facts are local/field-path scoped; arbitrary aliases, interprocedural mutations, and untested control-flow shapes are outside the demonstrated guarantee.",
+      "The four-app test proves LoadSources/Analyze admission only; final emitted bundle and browser conformance evidence belong to the other lanes/root."
+    ],
+    "source_sha256": {
+      "compilercontract/contract.go": "fa3ef8b3c60f3ff1d4a0e80827bfa65dc21ad741b3c421c1f4634f6b3c0b363e",
+      "compilercontract/contract_test.go": "be25c3acc722254e8dbb0b472510f81d4e0ca340dccd6812ce9c9b319e356332",
+      "compilercontract/js_encoder.go": "45b90cc43cd02fb056a9836bcbc63fa392d34d0bc1003213b43d735c30301397",
+      "compilercontract/json.go": "1a6ddd715af3f8cd3659bc45496e905a62d4b94b0339f7c1bfdf5505024c053e",
+      "compilercontract/trace.go": "de5aa3f70314fe3cc1e5661ce682c953de6ee12328cba3dd609a891657c5e627",
+      "compilercontract/validation.go": "ccb28713bfa7dd0fd5b22fb5dd377945006d9f0517357c62f230666b91ec2e76",
+      "compilercontract/value.go": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f",
+      "compilercontract/view.go": "cd57673458b025b860f39dbf0c4c23b7958db7c68d7380011e1aaed9bd6260c7",
+      "compiled-frontend/CONTRACT.md": "eb6adaaf8f69d083ddf594b2aa5d68346e405ff58bf62014fa5c07b79cf2456a",
+      "compiled-frontend/analyze/analyze.go": "28270a69953b8a65d797b0187ca64cd50f48693a5cf283d9cd5edf16841f19c5",
+      "compiled-frontend/analyze/analyze_test.go": "1333860cd91d0708bfed22364eeecd4162f7ac7834af33c77ef48ad39e7dbe1a",
+      "compiled-frontend/analyze/load.go": "5ab960705778e54ee3c46f6f975a47cc455f713ef626e81788c7960d867e5a8d",
+      "compiled-frontend/analyze/numeric_security_test.go": "656f6c4d6f47941f05e307214b238d0a5c0fb2dd4899b1cc8013bc528532f609",
+      "compiled-frontend/analyze/package_state_test.go": "e8ece8e1b9477afb4846b3c35023816ce8862f151bbea4da723c73e74d302003",
+      "compiled-frontend/analyze/project.go": "32a2c6cee4d3a84a83d76733343f49c061910e3b6329d7fd153a1979a400868a",
+      "compiled-frontend/analyze/types.go": "50562366a1ec36c2c3b1ce19c1919ce451500f02cf90e80cc1bcbf82a05afbbf"
+    },
+    "pending_independent_final_source_check": "N5 rerun was requested after numeric constant projection and entry-package global/init rejection; prior independent run passed 11 unsafe cases, five safe controls, codec boundaries, and fixture analyzer admission."
+  }
+}

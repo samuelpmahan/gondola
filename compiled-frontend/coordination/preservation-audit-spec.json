@@ -1,0 +1,26 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "A-PRESERVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "read-only original source/receipts and inherited run; named report/receipt/reviews/preserve only",
+      "summary": "Independently verify original24 SHA entries, exact predecessor tracked-source bytes, completed inherited full-run logs/counts/toolchain attribution, no main merge/deploy evidence"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "job_id": "A-ABI",
+  "worker": "N4",
+  "outcome": "confirmed_reuse",
+  "summary": "Confirmed the bounded pinned-GoScript ABI evidence and forwarding adapter semantics from hashed raw outputs. No public typed semantic-model API is exposed. Integration remains limited by unimplemented numeric validation and incomplete checksum-manifest coverage; no four-app/browser claim is made.",
+  "evidence": {
+    "commands": [
+      {
+        "command": "sha256sum -c toolchain/probe_counter/results/SHA256SUMS",
+        "result": "exit 0; 22 of 22 listed artifacts verified"
+      },
+      {
+        "command": "read-only Node JSON projection comparison of results/node.stdout.json against results/native.json",
+        "result": "counter, snapshot, format, and nodeSetFork projections all match; raw integerOverflow differences are exactly Int64 and Uint64"
+      },
+      {
+        "command": "source inspection of pinned module compiler/semantic-model-types.go and compiler/result.go",
+        "result": "SemanticModel data maps are unexported; CompilationResult exposes package lists, diagnostics, and async report"
+      }
+    ],
+    "toolchain": {
+      "goscript": "github.com/s4wave/goscript v0.6.2",
+      "commit": "d8f58a091947cff26a9171be7bd130892b0afad3",
+      "go": "go1.27.3",
+      "node": "v22.23.4",
+      "esbuild": "0.28.2"
+    },
+    "sha256": {
+      "manifest": "1df0acd14c811b88de67072bdcf6c2d97c29e25348a1fffa4bc0b562e5f7c3b4",
+      "abi_report_current_not_manifested": "41c7dc4c5235bc231a095e7bf7090d3fa8b386d8524c3e617771f9adf6fd2dee",
+      "module_origin": "31d90367c83521c9ecb90e868ebc0f8028dfad7919443543497f1f19d83c165a",
+      "native_json": "3b34fc0e46e4122e033a6baf460438d4a4467293216b22064e670914038e63a4",
+      "node_stdout_json": "2647a555b025318606cb785dfc1c7f09593c7b62f2d5592b0eebc960177d806e",
+      "counter_source": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+      "adapter_source": "838c6bf8ef202ffe4490f43f298da4ce8288b8c70e7abd97eadba96e477250cb",
+      "adapter_emitted": "07a1eb85a0eae641dc5e85cb9504dfa12add9b771acba2ed34e216afb52a8e9b",
+      "counter_emitted": "d041fab193cb6abf026ede3a6c8d80464f40d0b50b21c07cbb2c1a85575641bc",
+      "native_source": "21942abc5199e7ebd48dca7f34a16a2362e05f88b8467fe2ffed414a6e6a0df2",
+      "node_driver_source": "56d92852629d298d356774a2033e7ffd16b7a3009cdf3c4691c10b4b0b3e0dde",
+      "semantics_source": "d4f2060192054a781d4a5f32073bd94b836dffd6d881ee28dda45d8e365a2181"
+    },
+    "checksum_manifest_omissions": {
+      "go.mod": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+      "go.sum": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b",
+      "package.json": "44a82612b14c35d123a7b7a429858a608110d187f725d4cd3613a0befe4ac5b0",
+      "package-lock.json": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079",
+      "semantic/ABI.md": "41c7dc4c5235bc231a095e7bf7090d3fa8b386d8524c3e617771f9adf6fd2dee"
+    },
+    "limits": [
+      "No compiler or build rerun was performed.",
+      "Current analyzer source has no numeric range/overflow validator; the report’s analyzer-rejection sentence is not verified implementation.",
+      "GoSlice-after-append execution was observed for []Inner, []float64, and Gobi Attrs/On, not for every ordinary slice element type.",
+      "This is a bounded ABI audit, not evidence of four-app frontend or browser success."
+    ]
+  }
+}
