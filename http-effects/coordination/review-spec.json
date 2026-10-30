@@ -1,0 +1,109 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "service": {
+    "name": "gondola-http-independent-review"
+  },
+  "workers": [
+    "W1",
+    "W2",
+    "W3",
+    "W4",
+    "W5",
+    "W6"
+  ],
+  "jobs": [
+    {
+      "id": "XR-E1",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W4",
+      "author_agent": "/root/http_go",
+      "author_packet": "E1",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W5",
+        "W6"
+      ]
+    },
+    {
+      "id": "XR-E2",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W5",
+      "author_agent": "/root/http_transport",
+      "author_packet": "E2",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W6"
+      ]
+    },
+    {
+      "id": "XR-E3",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W1",
+      "author_agent": "/root/http_ref",
+      "author_packet": "E3",
+      "allow_workers": [
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ]
+    },
+    {
+      "id": "XR-E4",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W6",
+      "author_agent": "/root/http_harness",
+      "author_packet": "E4",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W5"
+      ]
+    },
+    {
+      "id": "XR-E5",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W3",
+      "author_agent": "/root/http_demo",
+      "author_packet": "E5",
+      "allow_workers": [
+        "W1",
+        "W2",
+        "W4",
+        "W5",
+        "W6"
+      ]
+    },
+    {
+      "id": "XR-E6",
+      "kind": "extract",
+      "task_kind": "independent_review",
+      "author_worker": "W2",
+      "author_agent": "/root/http_server",
+      "author_packet": "E6",
+      "allow_workers": [
+        "W1",
+        "W3",
+        "W4",
+        "W5",
+        "W6"
+      ]
+    }
+  ],
+  "review_policy": {
+    "enabled": false
+  }
+}

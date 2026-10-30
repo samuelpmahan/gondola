@@ -1,0 +1,62 @@
+{
+  "command": "CHROMIUM_EXECUTABLE_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node http-effects/harness-drop-probe.mjs --output http-effects/build/e4-drop-chromium-probe-reproduced.json",
+  "serverBinary": "/workspace/scratch/39a56936f173/gondola/http-effects/build/http-lab",
+  "readiness": "{\"url\":\"http://127.0.0.1:36897\"}",
+  "browserVersion": "153.0.8010.0",
+  "observation": {
+    "fetchResult": {
+      "status": 200,
+      "statusText": "OK",
+      "bodyError": "TypeError: Failed to fetch"
+    },
+    "records": {
+      "lane": "e4dropprobe",
+      "requests": [
+        {
+          "Lane": "e4dropprobe",
+          "ID": 1,
+          "Value": "drop probe",
+          "Mode": "drop",
+          "ResultMode": "drop",
+          "State": "dropped",
+          "CancelObserved": false,
+          "Status": 200,
+          "ResponseID": 0,
+          "Error": "connection dropped"
+        }
+      ]
+    }
+  },
+  "postResponses": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:36897/api/save?lane=e4dropprobe&mode=drop",
+      "status": 200,
+      "statusText": "OK"
+    }
+  ],
+  "requestFailures": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:36897/api/save?lane=e4dropprobe&mode=drop",
+      "failure": "net::ERR_CONTENT_LENGTH_MISMATCH"
+    }
+  ],
+  "consoleErrors": [
+    {
+      "text": "Failed to load resource: net::ERR_CONTENT_LENGTH_MISMATCH",
+      "location": {
+        "url": "http://127.0.0.1:36897/api/save?lane=e4dropprobe&mode=drop",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    }
+  ],
+  "assertions": {
+    "oneRetainedDroppedRecord": true,
+    "headersStatus200ThenBodyNetworkError": true,
+    "noDuplicateConflictReplay": true
+  }
+}
