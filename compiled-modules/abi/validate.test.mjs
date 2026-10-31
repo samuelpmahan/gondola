@@ -218,35 +218,39 @@ test('module metadata rejects unpaired UTF-16 values and keys before hashing', a
 
 test('app-ir.json rejects unpaired UTF-16 before artifact hashing or comparison', async () => {
   for (const surrogate of ['\ud800', '\udfff']) {
-    const module = (await makeValidTestPair()).parent;
-    const path = 'apps/moduleparent/app-ir.json';
-    const appIRBytes = new TextEncoder().encode(JSON.stringify({
-      ...module.appIR,
-      packagePath: `${module.appIR.packagePath}${surrogate}`,
-    }));
-    module.artifactBytes.set(path, appIRBytes);
-    const artifact = module.descriptor.artifacts.find((record) => record.path === path);
-    artifact.bytes = appIRBytes.byteLength;
-    artifact.sha256 = await sha256Hex(appIRBytes);
-    await rehashTestDescriptor(module.descriptor);
-    syncSidecar(module);
+    for (const mutate of [
+      (appIR) => { appIR.packagePath += surrogate; },
+      (appIR) => { appIR[`extra${surrogate}`] = true; },
+    ]) {
+      const module = (await makeValidTestPair()).parent;
+      const path = 'apps/moduleparent/app-ir.json';
+      const fileAppIR = structuredClone(module.appIR);
+      mutate(fileAppIR);
+      const appIRBytes = new TextEncoder().encode(JSON.stringify(fileAppIR));
+      module.artifactBytes.set(path, appIRBytes);
+      const artifact = module.descriptor.artifacts.find((record) => record.path === path);
+      artifact.bytes = appIRBytes.byteLength;
+      artifact.sha256 = await sha256Hex(appIRBytes);
+      await rehashTestDescriptor(module.descriptor);
+      syncSidecar(module);
 
-    const cryptoDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'crypto');
-    const realCrypto = globalThis.crypto;
-    let digestCalls = 0;
-    try {
-      Object.defineProperty(globalThis, 'crypto', {
-        configurable: true,
-        value: { subtle: { digest: async (...args) => {
-          digestCalls += 1;
-          return realCrypto.subtle.digest(...args);
-        } } },
-      });
-      await assert.rejects(validateModuleABI(module), /well-formed Unicode/);
-      assert.equal(digestCalls, 0, 'malformed app-ir.json must reject before artifact hashing');
-    } finally {
-      if (cryptoDescriptor) Object.defineProperty(globalThis, 'crypto', cryptoDescriptor);
-      else delete globalThis.crypto;
+      const cryptoDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'crypto');
+      const realCrypto = globalThis.crypto;
+      let digestCalls = 0;
+      try {
+        Object.defineProperty(globalThis, 'crypto', {
+          configurable: true,
+          value: { subtle: { digest: async (...args) => {
+            digestCalls += 1;
+            return realCrypto.subtle.digest(...args);
+          } } },
+        });
+        await assert.rejects(validateModuleABI(module), /well-formed Unicode/);
+        assert.equal(digestCalls, 0, 'malformed app-ir.json must reject before artifact hashing');
+      } finally {
+        if (cryptoDescriptor) Object.defineProperty(globalThis, 'crypto', cryptoDescriptor);
+        else delete globalThis.crypto;
+      }
     }
   }
 });

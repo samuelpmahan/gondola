@@ -288,6 +288,7 @@ async function execute(name, command, args, options = {}) {
 function parseSingleJSON(text, label) {
   const trimmed = text.trim();
   if (!trimmed) throw new Error(`${label} produced empty stdout`);
+  try { return JSON.parse(trimmed); } catch { /* fall back for commands that log before a JSON result */ }
   const lines = trimmed.split(/\r?\n/).filter(Boolean);
   for (let index = lines.length - 1; index >= 0; index -= 1) {
     try { return JSON.parse(lines[index]); } catch { /* parse the final JSON line */ }
