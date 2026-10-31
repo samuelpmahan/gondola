@@ -1,0 +1,114 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-FIX-RUNNER-ACCEPTANCE",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "status": "repair_prepared_pending_independent_review_and_full_rerun",
+  "summary": "Replaced the prose-substring inherited gate with structured fresh hash-bound lifecycle/method/backend/frontend receipt validation and made every non-passed final receipt produce a nonzero Node exit. Focused checks pass; full E-BUILD has not been rerun.",
+  "sourceCheckpoint": {
+    "headAtRepairStart": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "treeAtRepairStart": "d22b75e18c7bea70a743cc79d53461b287c7d045",
+    "oldFailedLocalCommit": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+    "oldFailedSourceTree": "d22b75e18c7bea70a743cc79d53461b287c7d045"
+  },
+  "originalFailure": {
+    "executionReceipt": {
+      "path": "compiled-capabilities/ci/2026-10-31/failed-local-031c/execution.json",
+      "sha256": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+      "status": "failed",
+      "failedStage": "inherited-static-and-interaction-lifecycle",
+      "failure": "fresh lifecycle receipt does not confirm the inherited full compiled-methods regression chain"
+    },
+    "actualRootCause": "Outer runner matched the prose substring 'inherited compiled-methods'; the nested fresh full lifecycle receipt instead recorded 'fresh full run-compiled-methods.sh completed' and bound the compiled-methods receipt by path and SHA-256.",
+    "rootObservedProcessExitCode": 0,
+    "commandLedger": "All 16 recorded commands exited zero even though the final receipt had one collected stage failure.",
+    "nestedLifecycleReceipt": {
+      "path": "compiled-lifecycle/coordination/receipts/E-BUILD.json",
+      "sha256": "3279277688f3bd8d475a2b6cd91291bfa4cc71dc579c5883ff747cf48673cccd",
+      "status": "passed",
+      "mode": "full",
+      "sourcePinsMatch": true,
+      "methodsReceipt": {
+        "path": "compiled-methods/coordination/receipts/E-DEMO.json",
+        "sha256": "b83a55b7130700310d67b01689b4d63e7aa495b669a88f23ad3be7226812e671",
+        "status": "passed",
+        "mode": "full",
+        "sourcePinsMatch": true
+      }
+    },
+    "failedArchive": {
+      "path": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/capabilities-artifacts.tar.gz",
+      "sha256": "adabec770f19f985e5ad499b87b1a2f8c0e3890822a905346432cd69133c7040",
+      "manifestPath": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/archive-manifest.json",
+      "manifestSha256": "f51970414a096529361b283733be90f7ebf8bd72ebf686b333bc590aba623c7c",
+      "note": "N5 verified archive integrity with completeAcceptance false; this cohort remains excluded from acceptance."
+    }
+  },
+  "implementation": {
+    "runner": {
+      "path": "compiled-capabilities/run.mjs",
+      "sha256": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b"
+    },
+    "acceptanceHelper": {
+      "path": "compiled-capabilities/runner-acceptance.mjs",
+      "sha256": "224ab2b6d6d1b8694fc51fa2c110fe9653d1ca5c5e4cfd26dea302b9b01c6c71"
+    },
+    "tests": {
+      "path": "compiled-capabilities/runner-acceptance.test.mjs",
+      "sha256": "f72b7c1f6e091b21824630173db72829dce9c0fd541d55c331850882831292e4"
+    },
+    "acceptanceFacts": [
+      "Lifecycle receipt is fresh relative to the outer run, full, passed, sourcePinsMatch true, failure-free, and has all-passed stages plus successful inherited run-compiled-methods.sh command.",
+      "Lifecycle receipt/report paths and hashes are checked; its inheritedRun must bind the actual methods receipt path, bytes, report, freshness, mode/status, command count, and copied execution.json archive member hash.",
+      "Methods receipt must be fresh, full, passed, sourcePinsMatch true, failure-free, include successful inherited run-compiled-backends.sh command, positive React/DOM output counts, matched method matrix, passed HTTP smoke, tests, and identical AppIR/encoder facts.",
+      "Methods receipt binds backend receipt and report hashes plus full/passed/fresh summary facts; backend receipt binds the frontend execution hash and stable frontend source pins.",
+      "Finalization applies exit code 1 whenever receipt.status is not passed, while preserving an existing nonzero code."
+    ],
+    "testStage": "runner-acceptance-regressions runs after sourceBefore pinning and before the inherited chain; helper and test source files are explicit source pins.",
+    "documentation": {
+      "readme": {"path": "compiled-capabilities/README.md", "sha256": "7b0bb2aec6ca429f068a55fd26c8d2f55f4dd96c3319b4f2f461b29a2e8d07f8"},
+      "results": {"path": "compiled-capabilities/RESULTS.md", "sha256": "c1553eda044b5de399d052bfd129272aa52f8714354a191ca66391ebeb14bec6"},
+      "manualDemoPath": "<receipt.attempt>/demo/site"
+    }
+  },
+  "verification": {
+    "nodeVersion": "v22.23.4",
+    "syntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs; same for runner-acceptance.mjs and runner-acceptance.test.mjs",
+      "status": "passed",
+      "log": "compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/logs/syntax.log",
+      "sha256": "1daed7f6941a5590f90ecfdc96fe472ac8687e9c4408791dd40c977203a01149"
+    },
+    "red": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/runner-acceptance.test.mjs",
+      "result": "Expected failure before run.mjs integration: 6/7 passed; the runner-wiring regression failed because structured validation/exit policy were not yet called.",
+      "log": "compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/logs/red.log",
+      "sha256": "cbaa576ab248a2a1692dd8eeaea8d606cea5281c3166a59cecd4ab24b8aac1ae"
+    },
+    "green": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/runner-acceptance.test.mjs",
+      "result": "passed 7/7; fail/cancelled/skipped/todo all zero",
+      "log": "compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/logs/green-final.log",
+      "sha256": "abc577273707db2548236fa91269d05fd78dbbb303eeb7b6cb06b2283e52c77e"
+    },
+    "actualNestedReceipts": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/verify-actual-nested.mjs",
+      "result": "passed against the preserved actual lifecycle, methods, backend, and frontend receipt bytes",
+      "script": "compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/verify-actual-nested.mjs",
+      "scriptSha256": "584ddb33a8d15730bd7fba00c7d5108fad4ed6ac5e78b110d7d4ee744ba82805",
+      "log": "compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/logs/actual-nested-receipt.log",
+      "sha256": "aa55ac91f490ae0d61b20e7a77877402bd2ccc65be73b078207958b38aa75893"
+    },
+    "fullRunner": "not run; requires independent source review first"
+  },
+  "limitations": [
+    "Focused receipt validation and seven regressions do not replace a fresh complete E-BUILD run.",
+    "Hosted provider artifact/log acceptance belongs to the separate result provenance packet.",
+    "The failed 031c462 receipt/archive remain preserved unchanged and must not be reused as the repaired full-run result."
+  ],
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-FIX-RUNNER-ACCEPTANCE.md",
+    "sha256": "e024438f5398486518585bbefbc07fdf2e128ed8c89a54fe5f514969014af1aa"
+  },
+  "publication": "No Git operation, commit, merge, or deployment was performed. Root owns checkpointing, review, and the fresh full run."
+}

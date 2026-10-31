@@ -1,26 +1,23 @@
 # Capability negotiation results
 
-## Execution status
+## Current status
 
-The integrated N6 runner and workflow are prepared. This author checkpoint did not launch the full runner because root owns the integrated run after the author and independent review lanes finish. No integration pass is claimed here.
+The 31 October full source cohort at local commit `031c462bcd72c0ae0bee2dc05a0972b3902ca40c` ended with an E-BUILD receipt marked `failed`. The nested lifecycle receipt itself was a fresh full pass with stable source pins; the outer runner rejected it because a prose check expected the phrase `inherited compiled-methods`, while the receipt used `fresh full run-compiled-methods.sh completed`. The full command nevertheless returned exit code 0 because a caught stage failure did not set the process exit status. The source and archive are preserved under `ci/2026-10-31/failed-local-031c/` and `builds/attempts/attempt-20261031T095356051Z/`. The archive verifies, but its bound receipt is failed, so it is not accepted as milestone evidence.
 
-Focused preflight evidence is available, but it does not satisfy milestone acceptance:
+E-FIX-RUNNER-ACCEPTANCE replaces that gate with structured, fresh full receipt checks: lifecycle → methods → backends → frontend. The chain binds receipt and report hashes, checks source-pin stability and command outcomes, and checks method build, matrix, and HTTP smoke status. Final E-BUILD status now determines the runner process exit code. The bounded regression suite passes **7/7**, including a real Node child-process exit check. The validator also accepted the preserved nested receipt bytes from the failed cohort. The full capability runner has not yet been rerun after this repair; acceptance remains pending independent review and a fresh complete run.
 
-- The clean worktree did not contain the ignored M0 `react-map.gen.mjs`. Go 1.24 regenerated it with `go run ./cmd/gobi emit react`; `sha256sum -c SHA256SUMS` then passed all 24 entries.
-- Actual GoScript CLI builds for React and DOM each returned `gobi.build-result/v1`, `ok: true`, and 67 output pins. Their AppIR capabilities were exactly `view.node`, `numeric.safe-integer`, `numeric.float64`, `effect.request-reply`, and `effect.cancel`.
-- N4's separate author receipt records 8/8 oracle tests passed. N5's separate author receipt records a focused HTTP smoke with 8 passing checks against the fresh React feasibility build. N3's complete integrated driver is not part of this author checkpoint.
+## Repair verification
 
-The root full run will replace the placeholder execution report and receipt with its own observed toolchains, commands, source pins, build hashes, browser captures, mismatch traces, and final stage outcomes. Acceptance requires a fresh passing `run-compiled-lifecycle.sh` receipt, actual React and DOM GoScript CLI builds, a passing N4 literal oracle, matched N3 native/direct/React/DOM replay, a passing N5 HTTP smoke, stable source pins, and a round-trip verified evidence archive.
+Node v22.23.4 syntax checks passed for `run.mjs`, `runner-acceptance.mjs`, and `runner-acceptance.test.mjs`. The focused test command passed 7/7. Direct validation against the preserved full-run receipts passed for the lifecycle receipt, the SHA-bound `compiled-methods/coordination/receipts/E-DEMO.json`, its nested backend receipt, and the bound compiled-frontend execution. The captured red/green test output and actual-receipt validation are under `coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/logs/`.
 
-## E-FIX-BUILD archive and checker repair
+Earlier focused evidence remains useful but does not replace the pending fresh integrated run:
 
-The runner now writes an immutable pre-archive execution snapshot into the tar and binds the outside manifest hash, archive hash, and post-archive source pins in the final outer receipt. N3 acceptance also requires raw state/view/DOM/pending preservation after rejected and compatible swaps, plus detection of all nine named capture mutation controls. The focused archive-helper test and syntax checks pass; the full capability runner remains unlaunched and acceptance remains pending root's integrated run. See `coordination/reports/E-FIX-BUILD.md` and `coordination/receipts/E-FIX-BUILD.json` for exact commands and results.
+- React and DOM GoScript CLI builds each emitted 67 pinned files and the declared AppIR profile.
+- N4's oracle, N3's conformance driver, and N5's HTTP demo passed during the failed full cohort.
+- The inherited lifecycle and compiled-methods receipt chains passed independently; only the old outer prose predicate failed.
 
-## Planned evidence
+The earlier `2324068` clean-start failure occurred before tests and is separately preserved and excluded from this full-run cohort.
 
-- `coordination/reports/E-BUILD.md` — concise execution report.
-- `coordination/receipts/E-BUILD.json` — exact commands, versions, stage results, source pins, and output references.
-- `builds/attempts/` — per-attempt build requests/results, generated React/DOM outputs, native trace, Node test transcript, browser traces, screenshots, logs, and archive.
-- `conformance/evidence/` — original N3 lifecycle and capability matrix outputs; the E-BUILD archive contains hashed copies.
+## Acceptance evidence required
 
-The fixed lifecycle scenario and independent capability expectations use no random seed. The runner records that fact alongside each command inventory; compiler profile, package versions, and existing npm lockfile hashes are recorded explicitly.
+A fresh full run after independent review must report a passed outer E-BUILD receipt, exit nonzero on every final failure, confirm the typed hash-bound inherited chain, pass all capability stages, maintain source pins through archive creation, and pass the archive verifier in complete mode. Hosted Actions records and any provider artifact must be checked against that exact source and receipt; a green workflow alone is insufficient.

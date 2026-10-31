@@ -13,6 +13,15 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { archiveAndVerify, createExclusiveAttemptDirectory, writeImmutableSnapshot } from "./archive-helper.mjs";
+import {
+  applyReceiptExitCode,
+  EXPECTED_BACKENDS_RECEIPT,
+  EXPECTED_BACKENDS_REPORT,
+  EXPECTED_FRONTEND_EXECUTION,
+  EXPECTED_METHODS_RECEIPT,
+  EXPECTED_METHODS_REPORT,
+  validateInheritedLifecycleEvidence,
+} from "./runner-acceptance.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -22,6 +31,7 @@ const canonicalReceipt = join(here, "coordination/receipts/E-BUILD.json");
 const fixturePackage = "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle";
 const fixturePath = join(root, "fixtures/compiled/lifecycle/scenario.json");
 const archiveHelperTest = join(here, "archive-helper.test.mjs");
+const runnerAcceptanceTest = join(here, "runner-acceptance.test.mjs");
 const conformanceDriver = join(here, "conformance/run.mjs");
 const oracleTest = join(here, "oracle/literal-oracle.test.mjs");
 const oracleExpectations = join(here, "oracle/expectations.json");
@@ -90,6 +100,8 @@ const sourceFiles = [
   "compiled-capabilities/PLAN.md",
   "compiled-capabilities/archive-helper.mjs",
   "compiled-capabilities/archive-helper.test.mjs",
+  "compiled-capabilities/runner-acceptance.mjs",
+  "compiled-capabilities/runner-acceptance.test.mjs",
   "compiled-capabilities/run.mjs",
   ".github/workflows/gobi-compiled-lifecycle.yml",
   ".github/workflows/gobi-compiled-capabilities.yml",
@@ -464,12 +476,43 @@ async function validateInheritedLifecycle() {
   const receiptPath = join(root, "compiled-lifecycle/coordination/receipts/E-BUILD.json");
   const reportPath = join(root, "compiled-lifecycle/coordination/reports/E-BUILD.md");
   const inherited = await readJSON(receiptPath);
-  const fresh = Date.parse(inherited.startedAt) >= Date.parse(receipt.startedAt);
-  if (!fresh || inherited.mode !== "full" || inherited.status !== "passed" || inherited.sourcePinsMatch !== true) {
-    throw new Error(`inherited lifecycle runner must be a fresh full pass with stable source pins (fresh=${fresh}, mode=${inherited.mode}, status=${inherited.status}, sourcePinsMatch=${inherited.sourcePinsMatch})`);
-  }
-  const reportBytes = await readFile(reportPath);
   const receiptBytes = await readFile(receiptPath);
+  const reportBytes = await readFile(reportPath);
+  if (inherited.inheritedRun?.path !== EXPECTED_METHODS_RECEIPT) {
+    throw new Error(`inherited lifecycle receipt must bind ${EXPECTED_METHODS_RECEIPT}`);
+  }
+  const methodsReceiptPath = join(root, EXPECTED_METHODS_RECEIPT);
+  const methodsBytes = await readFile(methodsReceiptPath);
+  const methods = JSON.parse(methodsBytes.toString("utf8"));
+  const methodsReportPath = join(root, EXPECTED_METHODS_REPORT);
+  const methodsReportBytes = await readFile(methodsReportPath);
+  if (methods.inheritedRun?.path !== EXPECTED_BACKENDS_RECEIPT) {
+    throw new Error(`compiled-methods receipt must bind ${EXPECTED_BACKENDS_RECEIPT}`);
+  }
+  const backendsReceiptPath = join(root, EXPECTED_BACKENDS_RECEIPT);
+  const backendsBytes = await readFile(backendsReceiptPath);
+  const backends = JSON.parse(backendsBytes.toString("utf8"));
+  const backendsReportPath = join(root, EXPECTED_BACKENDS_REPORT);
+  const backendsReportBytes = await readFile(backendsReportPath);
+  if (backends.inheritedExecution?.path !== EXPECTED_FRONTEND_EXECUTION) {
+    throw new Error(`compiled-backends receipt must bind ${EXPECTED_FRONTEND_EXECUTION}`);
+  }
+  const frontendExecutionPath = join(root, EXPECTED_FRONTEND_EXECUTION);
+  const frontendExecutionBytes = await readFile(frontendExecutionPath);
+  const frontendExecution = JSON.parse(frontendExecutionBytes.toString("utf8"));
+  const acceptanceEvidence = validateInheritedLifecycleEvidence({
+    lifecycle: inherited,
+    lifecycleReportBytes: reportBytes,
+    methods,
+    methodsBytes,
+    methodsReportBytes,
+    backends,
+    backendsBytes,
+    backendsReportBytes,
+    frontendExecution,
+    frontendExecutionBytes,
+    runStartedAt: receipt.startedAt,
+  });
   receipt.inheritedLifecycle = {
     command: "bash run-compiled-lifecycle.sh",
     path: rel(receiptPath),
@@ -481,7 +524,10 @@ async function validateInheritedLifecycle() {
     finishedAt: inherited.finishedAt,
     sourcePinsMatch: inherited.sourcePinsMatch,
     versions: inherited.versions,
-    checks: inherited.checks ?? [],
+    acceptanceEvidence,
+    methodsReceipt: acceptanceEvidence.methodsReceipt,
+    backendsReceipt: acceptanceEvidence.backendsReceipt,
+    frontendExecution: acceptanceEvidence.frontendExecution,
     inheritedRun: inherited.inheritedRun ?? null,
     attempt: inherited.attempt ?? null,
     archive: inherited.archive ?? null,
@@ -489,10 +535,7 @@ async function validateInheritedLifecycle() {
   };
   const lifecycleOutput = await readFile(join(logDirectory, "inherited-full-lifecycle.stdout.log"), "utf8");
   receipt.inheritedLifecycle.finalOutputLine = lifecycleOutput.trim().split("\n").at(-1) ?? null;
-  if (!inherited.checks?.some((line) => line.includes("inherited compiled-methods")) || inherited.inheritedRun?.status !== "passed") {
-    throw new Error("fresh lifecycle receipt does not confirm the inherited full compiled-methods regression chain");
-  }
-  receipt.checks.push("fresh bash run-compiled-lifecycle.sh completed its inherited full static/interaction regression chain before capability builds");
+  receipt.checks.push("fresh lifecycle and hash-bound methods/backend/frontend receipts passed structured full-mode status, freshness, source-pin, command, report, and output facts");
   await saveReceipt();
 }
 
@@ -660,6 +703,33 @@ async function runArchiveHelperTests() {
   receipt.checks.push("three archive helper regressions passed under Node 22 before the inherited lifecycle chain: missing attempts parent creation, exclusive duplicate-name rejection, and immutable archive round trip");
   await saveReceipt();
   return receipt.archiveHelperTests;
+}
+
+async function runRunnerAcceptanceTests() {
+  if (!await exists(runnerAcceptanceTest)) throw new Error("runner acceptance regression test is required");
+  const output = await execute("runner-acceptance-regressions", process.execPath, ["--test", runnerAcceptanceTest]);
+  const tap = Object.fromEntries(["tests", "pass", "fail", "cancelled", "skipped", "todo"].map((name) => {
+    const match = output.match(new RegExp(`^# ${name} (\\d+)$`, "m"));
+    return [name, match ? Number(match[1]) : null];
+  }));
+  receipt.runnerAcceptanceTests = {
+    status: "failed",
+    test: { path: rel(runnerAcceptanceTest), ...await hashPath(runnerAcceptanceTest) },
+    helper: { path: rel(join(here, "runner-acceptance.mjs")), ...await hashPath(join(here, "runner-acceptance.mjs")) },
+    stdoutPath: rel(join(logDirectory, "runner-acceptance-regressions.stdout.log")),
+    stderrPath: rel(join(logDirectory, "runner-acceptance-regressions.stderr.log")),
+    stdoutSha256: hash(Buffer.from(output)),
+    tap,
+    exitCode: 0,
+  };
+  await saveReceipt();
+  if (tap.tests !== 7 || tap.pass !== 7 || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {
+    throw new Error(`runner acceptance Node test stage did not report seven clean TAP passes: ${JSON.stringify(tap)}`);
+  }
+  receipt.runnerAcceptanceTests.status = "passed";
+  receipt.checks.push("seven Node 22 regressions verified fresh hash-bound nested full-run receipts and nonzero child-process exit on final failure");
+  await saveReceipt();
+  return receipt.runnerAcceptanceTests;
 }
 
 async function nextConformanceOutput() {
@@ -1108,7 +1178,8 @@ async function generateReport() {
     "",
     "## Negotiation and replay evidence",
     "",
-    `- Inherited lifecycle chain: ${receipt.inheritedLifecycle?.status ?? "not passed"} (full mode; M0/static/interaction checks are retained by its attempt archive)`,
+    `- Runner acceptance regressions: ${receipt.runnerAcceptanceTests?.status ?? "not run"} (${receipt.runnerAcceptanceTests?.tap?.pass ?? 0}/${receipt.runnerAcceptanceTests?.tap?.tests ?? 0} tests)`,
+    `- Inherited lifecycle chain: ${receipt.inheritedLifecycle?.acceptanceEvidence?.status ?? "not passed"} (lifecycle ${receipt.inheritedLifecycle?.status ?? "not passed"}; methods receipt ${receipt.inheritedLifecycle?.methodsReceipt?.sha256 ?? "not bound"}; backend receipt ${receipt.inheritedLifecycle?.backendsReceipt?.sha256 ?? "not bound"}; full mode; stable source pins)`,
     `- Native lifecycle trace: ${receipt.conformance?.nativeTrace?.path ?? "not produced"}`,
     `- N4 literal oracle: ${receipt.oracle?.summary ?? "not run"}`,
     `- N3 direct/native/React/DOM matrix: ${receipt.conformance?.status ?? "not run"}`,
@@ -1144,6 +1215,8 @@ async function main() {
   if (!m0) throw new Error("M0 source-pin preparation did not pass; inherited execution was withheld");
   receipt.sourceBefore = await sourcePins();
   await saveReceipt();
+  const runnerAcceptanceTests = await stage("runner-acceptance-regressions", runRunnerAcceptanceTests);
+  if (!runnerAcceptanceTests) throw new Error("runner acceptance regressions failed; inherited execution was withheld");
   await stage("inherited-static-and-interaction-lifecycle", runInheritedLifecycle);
   const react = await stage("react-goscript-build", () => buildProfile("react", reactRoot));
   const dom = await stage("dom-goscript-build", () => buildProfile("dom", domRoot));
@@ -1235,5 +1308,6 @@ try {
     process.exitCode = 1;
     await saveReceipt();
   }
+  applyReceiptExitCode(receipt);
   process.stdout.write(`compiled-capabilities: ${receipt.status} (${receipt.mode})\n`);
 }

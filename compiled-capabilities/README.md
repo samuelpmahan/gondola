@@ -19,7 +19,7 @@ The actual GoScript build uses the existing `fixtures/compiled/lifecycle` packag
 
 ## Full runner
 
-The default command always starts with `bash run-compiled-lifecycle.sh`. That inherited chain reruns the static and interaction gates, the original M0 checksum verification, and the previous compiled lifecycle evidence. The capability runner then builds fresh React and DOM GoScript outputs, runs N4's independent literal oracle, passes both backend builds and the Go 1.24 executable to N3's native/direct/React/DOM conformance driver, and builds and serves N5's HTTP demo with Chromium.
+The full command records its toolchain, runs the archive-startup regressions, regenerates and verifies the original M0 map, and runs seven runner-acceptance regressions. Those tests verify hash-bound full receipts for the inherited lifecycle and nested compiled-methods/backend/frontend chain, and check that a failed final receipt produces a nonzero Node child exit. It then runs `bash run-compiled-lifecycle.sh`, which reruns the static and interaction gates, original M0 verification, and previous compiled lifecycle evidence. The capability runner continues with fresh React and DOM GoScript outputs, N4's independent literal oracle, N3's native/direct/React/DOM conformance driver, and N5's HTTP demo smoke in Chromium.
 
 The runner requires Go 1.24 for the repository/native lifecycle, Go 1.27.3 for the compiler module, Node 22, the existing npm lockfiles, React/ReactDOM 19.3.1, and Chromium. It uses the existing package-lock files and adds no dependencies. CI installs with:
 
@@ -40,4 +40,11 @@ The source-pin set excludes installed packages, build outputs, evidence/logs, an
 bash run-compiled-capabilities.sh
 ```
 
-There is no partial mode: a passing result requires the inherited full run and every new capability stage.
+After a completed run, serve the actual compiled capability demo locally using the attempt recorded in the final receipt:
+
+```sh
+attempt="$(node -p 'JSON.parse(require("node:fs").readFileSync("compiled-capabilities/coordination/receipts/E-BUILD.json", "utf8")).attempt')"
+python3 -m http.server 8000 --directory "$attempt/demo/site"
+```
+
+Open [http://localhost:8000](http://localhost:8000) to try the React and DOM renderers, rejected swap, and recovery flow. There is no partial mode: a passing result requires the inherited full run and every capability stage.
