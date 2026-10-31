@@ -1,0 +1,27 @@
+package main
+
+import (
+	"fmt"
+
+	"github.com/samuelpmahan/gondola/compiled-frontend/emit"
+	"github.com/samuelpmahan/gondola/compilercontract"
+	"github.com/samuelpmahan/gondola/gobi"
+)
+
+func main() {
+	var backend gobi.Backend = &emit.GobiBackend{}
+	func() {
+		defer func() {
+			if value := recover(); value != nil {
+				fmt.Printf("zero GobiBackend Emit panic: %v\n", value)
+			}
+		}()
+		files, err := backend.Emit(gobi.App{})
+		fmt.Printf("zero GobiBackend Emit returned files=%d err=%v\n", len(files), err)
+	}()
+
+	// At base 184ccdaa, GobiBackend.Emit delegated this exact fallback call
+	// after its identity comparison. It returned an AppIR validation error.
+	files, err := emit.NewBackend().Emit(compilercontract.AppIR{})
+	fmt.Printf("base React fallback returned files=%d err=%v\n", len(files), err)
+}

@@ -123,6 +123,40 @@ func TestEmitProducesDeterministicReactMapAndVerifiedRoleMetadata(t *testing.T) 
 	}
 }
 
+func TestReactAndDOMEmitIdenticalBackendNeutralAppIRArtifacts(t *testing.T) {
+	app := testAppIR()
+	react, err := NewBackendFor("react")
+	if err != nil {
+		t.Fatal(err)
+	}
+	dom, err := NewBackendFor("dom")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if react.Name() != "react" || dom.Name() != "dom" {
+		t.Fatalf("selected emitter names = %q / %q", react.Name(), dom.Name())
+	}
+	reactFiles, err := react.Emit(app)
+	if err != nil {
+		t.Fatal(err)
+	}
+	domFiles, err := dom.Emit(app)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(reactFiles) != len(domFiles) {
+		t.Fatalf("React/DOM emitted file counts = %d / %d", len(reactFiles), len(domFiles))
+	}
+	for index := range reactFiles {
+		if reactFiles[index].Path != domFiles[index].Path || !bytes.Equal(reactFiles[index].Bytes, domFiles[index].Bytes) {
+			t.Fatalf("backend-neutral AppIR output differs at index %d: %q / %q", index, reactFiles[index].Path, domFiles[index].Path)
+		}
+	}
+	if got, ok := fileByPath(domFiles, ReactMapFile); !ok || string(got) != reactmap.Generate() {
+		t.Fatal("DOM emission omitted the shared Gobi node mapping")
+	}
+}
+
 func TestEmitRejectsInvalidAppIRWithoutReturningPartialFiles(t *testing.T) {
 	app := testAppIR()
 	app.Schema = "unknown"
@@ -151,10 +185,52 @@ func TestConfiguredGobiBackendChecksTheCapturedLegacyIdentity(t *testing.T) {
 	}
 }
 
+func TestGobiBackendEmitErrorsForNilReceiverAndUninitializedAdapter(t *testing.T) {
+	cases := []struct {
+		name    string
+		backend *GobiBackend
+		wantErr string
+	}{
+		{name: "nil receiver", backend: nil, wantErr: "nil configured Gobi backend"},
+		{name: "zero value", backend: &GobiBackend{}, wantErr: "invalid AppIR for React emission"},
+	}
+
+	for _, testCase := range cases {
+		t.Run(testCase.name, func(t *testing.T) {
+			files, err := testCase.backend.Emit(gobi.App{})
+			if err == nil || len(files) != 0 {
+				t.Fatalf("Emit(zero App) = %d files, %v; want no files and a configuration error", len(files), err)
+			}
+			if !strings.Contains(err.Error(), testCase.wantErr) {
+				t.Fatalf("Emit(zero App) error = %q, want error containing %q", err, testCase.wantErr)
+			}
+		})
+	}
+}
+
 func TestConfiguredGobiBackendRejectsIdentityOutsideValidatedAppIR(t *testing.T) {
 	identity := testLegacyApp()
 	identity.Root = "example/other"
 	if _, err := NewGobiBackend(testAppIR(), identity); err == nil {
 		t.Fatal("NewGobiBackend accepted a Root unrelated to the validated AppIR")
+	}
+}
+
+func TestConfiguredDOMGobiBackendKeepsLegacyIdentityGuard(t *testing.T) {
+	identity := testLegacyApp()
+	backend, err := NewGobiBackendFor("dom", testAppIR(), identity)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if backend.Name() != "dom" {
+		t.Fatalf("Name() = %q, want dom", backend.Name())
+	}
+	files, err := backend.Emit(identity)
+	if err != nil || len(files) != 2 {
+		t.Fatalf("Emit(configured identity) = %d files, %v", len(files), err)
+	}
+	identity.Components[0].Uses = []string{"other/component"}
+	if files, err := backend.Emit(identity); err == nil || len(files) != 0 {
+		t.Fatalf("Emit(changed identity) = %d files, %v; want rejected", len(files), err)
 	}
 }

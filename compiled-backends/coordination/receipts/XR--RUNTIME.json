@@ -1,0 +1,67 @@
+{
+  "job_id": "XR--RUNTIME",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "Core renderer swap lifecycle, callback leases, and effect microtask ordering pass independent review and the focused runtime suite passes 23/23. Amend for two protocol gaps: restoreFocus returning undefined is recorded as success, and a rejected Promise returned from a renderer method becomes an unhandled rejection after the runtime correctly fails closed.",
+  "source_scope": [
+    "compiled-frontend/frontend/runtime/runtime.mjs",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs",
+    "compiled-backends/coordination/reports/XR--RUNTIME.md",
+    "compiled-backends/coordination/receipts/XR--RUNTIME.json",
+    "compiled-backends/evidence/reviews/xr-runtime/**"
+  ],
+  "reviewed_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "a35338302fc391499575fe7d3c7c59c41a3eeaddce23a3039f0a13d84ac94ae2",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "f2fb585601675f60a2994b91b4c8feb4dd77507668bef27ff6e37200ad4c381d"
+  },
+  "evidence": {
+    "runtime_tests": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola-backends",
+      "toolchain": "Node v22.23.4",
+      "passed": 23,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-runtime/runtime-tests.log",
+      "log_sha256": "c3f134ba8d30799a5553498f2b01b09cb6d694f9a92e98e601652e29d7e70ad6"
+    },
+    "independent_failure_probe": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.mjs",
+      "toolchain": "Node v22.23.4",
+      "source": "compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.mjs",
+      "source_sha256": "d81457583bf6c0946238dea22f34f3a148e99be2834f15f067ee485b08bd7be3",
+      "result": "restoreFocus(undefined) committed and diagnostics reported focusRestored=true; nextRenderer.update() returning Promise.reject caused RuntimeFailure(stage=renderer-replacement) and a separate unhandledRejection event.",
+      "json": "compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.json",
+      "json_sha256": "fe35415ea582d02749f560dc4292c645ab6471890e83d7f7b3b91eeadd02b00d",
+      "stderr": "compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.stderr.log",
+      "stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "findings": [
+      {
+        "id": "XR-RUNTIME-1",
+        "severity": "moderate",
+        "location": "compiled-frontend/frontend/runtime/runtime.mjs:1029-1034",
+        "summary": "Any non-false restoreFocus return is reported as restored; undefined currently commits successfully. Validate the hook result and focusState record shape."
+      },
+      {
+        "id": "XR-RUNTIME-2",
+        "severity": "moderate",
+        "location": "compiled-frontend/frontend/runtime/runtime.mjs:414-418,1025-1026",
+        "summary": "Rejecting a returned native Promise throws the intended synchronous RuntimeFailure but leaves its rejection unhandled on the next turn. Observe/suppress the rejected renderer promise while preserving fail-closed swap behavior."
+      }
+    ],
+    "passed_invariants": [
+      "Successful swap uses the cached Go View and appends no application tick or dispatch ID; authored tests compare Init/Update/View call counts and trace history.",
+      "A valid completion injected during replacement is accepted and immediately duplicate-fenced, remains pending in the synchronous return snapshot, and commits once in a microtask after return.",
+      "Unmount before held completion drain cancels it without an application Update or resurrection.",
+      "Retired renderer callbacks are recorded out-of-band; a callback from the active renderer after runtime unmount records the existing suppressed attempted-action tick.",
+      "Declared async renderer methods reject before teardown; a returned thenable after teardown produces RuntimeFailure and renderer-unavailable snapshot behavior without rollback claims."
+    ],
+    "report_sha256": "6f7494c4a979cdbe03677580c1bdb5e64498214d055510673b55d47b9ffca0bd"
+  },
+  "limits": [
+    "The two findings concern malformed renderer protocol returns; the shipped React and DOM renderers return boolean focus results and synchronous updates.",
+    "Full React-to-DOM browser integration and physical focus transfer remain pending N3; this review does not claim that gate passed.",
+    "No production source was modified."
+  ]
+}

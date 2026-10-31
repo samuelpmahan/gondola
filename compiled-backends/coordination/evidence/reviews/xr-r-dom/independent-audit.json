@@ -1,0 +1,30 @@
+{
+  "job_id": "XR-R-DOM",
+  "reviewer": "N4",
+  "decision": "accepted",
+  "acceptance_scope": "Focused input serialization and checked-property repair only.",
+  "reviewed_hashes": {
+    "compiled-frontend/frontend/dom/renderer.mjs": "8037c0b9d3430310aa9492ab9d1041207e33276f8a6dce219b84b2af17efa166",
+    "compiled-frontend/frontend/dom/renderer.test.mjs": "8857f373a5d39c0f04b328021315867e6ffea34166ff18877f9dee3b44033efd",
+    "compiled-backends/coordination/reports/R-DOM.md": "f602779b8add80bbb27f167f3d585c59fbd4efa918078247466a73cd42a51a58",
+    "compiled-backends/coordination/receipts/R-DOM.json": "63ace9fe59aae5da59b0862d70bc67f144c51fdf01d9fe6d5fabe7eff9e337ab",
+    "compiled-backends/evidence/repairs/dom/before.sha256": "01e32ee58ec1813f33dacb60bfb41be4a747860dce47ae0f9d2f2b85c4bda391",
+    "compiled-backends/evidence/repairs/dom/input-order.red.log": "bcad347537fe08c4d1b33ab512b50a6fc578b479cc23dc99cc2ed71532f781ff",
+    "compiled-backends/evidence/repairs/dom/renderer.test.log": "0a164b4b3d112bedbde565591f7c90b25f8579282de56bfb2cec1f7e587a8dd4",
+    "compiled-backends/artifacts/conformance-captures/attempt-06/form.browser.failed.json": "4ea4e6eb7d3ddf79b4ae9e6e033d941ed0a6558b7c7003537c6534f59c9bcc09"
+  },
+  "checks": {
+    "input_order": "All non-type/value/checked input attributes retain source order and precede type then value; this matches the pinned form oracle example.",
+    "checked": "The repair omits checked from setAttribute ordering and applies it as the live input.checked property. The regression expects no checked HTML attribute and checked:true in the controls snapshot.",
+    "same_renderer_identity": "The new form regression checks strict node identity and focus after a state update; a separate existing test checks keyed reorder identity.",
+    "selection": "The new form regression checks selectionStart 1, selectionEnd 4, selectionDirection backward after update.",
+    "messages": "The new regression checks input and change dispatch action/message payloads.",
+    "red_green": "The preserved red log fails at the expected initial input HTML order; the preserved green log records 4 passing Chromium tests."
+  },
+  "n3_integration": {
+    "post_repair_matrix_reviewed": false,
+    "status_at_review": "Separate N3 four-app/five-fixture run was active; no current positive form receipt was available to this review.",
+    "cross_backend_focus_claimed": false
+  },
+  "review_method": "Inspected current production/test source, raw attempt-06 form failure capture, R-DOM receipt, preserved pre-repair hashes, red log, and green log. Did not relaunch Chromium while N3's full integration run was active."
+}

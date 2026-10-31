@@ -1,0 +1,78 @@
+{
+  "job_id": "XR-R-REACT-CHECKED",
+  "reviewer": "N4",
+  "decision": "accepted",
+  "acceptance_scope": "React physical checked-attribute cleanup for validated target.checked bindings only.",
+  "reviewed_hashes": {
+    "compiled-frontend/frontend/react/renderer.mjs": "35581215d912c0b19a63de9f122b75fef774c717100590d272cf9e7731943f6a",
+    "compiled-frontend/frontend/react/renderer.browser.test.mjs": "4e8cd936b0ebd0597f9011c5c9a448d07fc76a9b4919cdc74da3a73b420cb78c",
+    "compiled-frontend/frontend/react/renderer.test.mjs": "0d2c1483c19ff95cc320dab64aeb2f4ec795e0b14e4128b45fe9aa0dafc2e99f",
+    "compiled-frontend/frontend/react/bindings.test.mjs": "3ecbf7d0958e0ca4c330c2136ed615d6154e84d7efe79af5526cc38fb09249e9",
+    "compiled-frontend/frontend/shared/view.mjs": "ef2aaa7daf021b3e46dd5cec159951ec1e84d4ea3d7f3888ec6b8c27d7a959e0",
+    "compiled-backends/coordination/reports/R-REACT-CHECKED.md": "689f3be1d9d16aed86e3aaf7e0afeb8868ab211a8d426a906db1e5ce75714397",
+    "compiled-backends/coordination/receipts/R-REACT-CHECKED.json": "ea94c3cee8a145b4078b248ee10fa0ac449de11186b376120d17550f0a25e697"
+  },
+  "integration_witnesses": {
+    "form": {
+      "path": "compiled-backends/artifacts/conformance-captures/attempt-07/form.browser.failed.json",
+      "sha256": "8977d5d654083881227a28721f72c33533643b9aaeec1532287db60de3a8de5a",
+      "actual_controlled_input": "<input aria-label=\"Checked\" type=\"checkbox\" checked=\"\">",
+      "expected_controlled_input": "<input aria-label=\"Checked\" type=\"checkbox\">"
+    },
+    "list": {
+      "path": "compiled-backends/artifacts/conformance-captures/attempt-07/list.browser.failed.json",
+      "sha256": "ecd5796b533037949a2d5f0d48fa7dc99f15324217bb2c22453877fcc56e4951"
+    },
+    "list_growth": {
+      "path": "compiled-backends/artifacts/conformance-captures/attempt-07/list-growth.browser.failed.json",
+      "sha256": "7e01deffe0329be9d06ed1cb1b65f64ff5904dd7f4c3125ddfa953f816e4a6fc"
+    }
+  },
+  "verification": {
+    "preserved_red": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+      "toolchain": "Node v22.23.4; React/ReactDOM 19.3.1; Playwright 1.64.1; Chromium 153.0.8010.0 at /tmp/chromium",
+      "result": "0 passed, 1 failed on physical outerHTML containing checked=\"\" for a controlled input",
+      "log": "compiled-backends/evidence/repairs/react-checked/react-checked.red.log",
+      "sha256": "9c548e2eab5c7c16ad71ecab9f15ae32df929f486ac5754fd36af46c9fe740cd"
+    },
+    "preserved_green_raw_html": {
+      "command": "GOBI_CAPTURE_PHYSICAL_OUTERHTML=1 /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+      "result": "1 passed, 0 failed; captured raw physical markup and live state at mount, updates, and fresh-renderer remount",
+      "log": "compiled-backends/evidence/repairs/react-checked/react-checked.green.log",
+      "sha256": "65619aebe891ff0907a9efc2a7161e08e39f4177c1e0b79cfd903ee862b48ca2"
+    },
+    "preserved_full_suite": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.test.mjs compiled-frontend/frontend/react/renderer.browser.test.mjs compiled-frontend/frontend/react/bindings.test.mjs",
+      "result": "26 passed, 0 failed",
+      "log": "compiled-backends/evidence/repairs/react-checked/react-suite.log",
+      "sha256": "295eb8c3e2a419da72b0ceef5d4aa0e798c6d71785d2ae7a62fc777e43126842"
+    },
+    "independent_full_suite": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.test.mjs compiled-frontend/frontend/react/renderer.browser.test.mjs compiled-frontend/frontend/react/bindings.test.mjs",
+      "toolchain": "Node v22.23.4; React/ReactDOM 19.3.1; Playwright 1.64.1; Chromium 153.0.8010.0 at /tmp/chromium",
+      "result": "26 passed, 0 failed",
+      "log": "compiled-backends/coordination/evidence/reviews/xr-r-react-checked/current-26-suite.log",
+      "sha256": "3910f4beeeaa23e3dafdcfc8dc29a81c724be197a1dc6ef392daef7149e0f7dd"
+    },
+    "independent_raw_dom": {
+      "command": "GOBI_CAPTURE_PHYSICAL_OUTERHTML=1 PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+      "result": "1 passed, 0 failed",
+      "log": "compiled-backends/coordination/evidence/reviews/xr-r-react-checked/current-raw-dom.log",
+      "sha256": "e46dc986dada2ab2b44a7a54c438925648568fca46cb23b0637c48d0c1de828a",
+      "observed": "Controlled checked property is true/false/true while its checked attribute remains absent; static checked remains true with checked attribute present. The keyed controlled checkbox and draft remain the same nodes through updates; draft focus and backward selection remain intact. Fresh renderer remount retains controlled/static markup and checked property semantics."
+    }
+  },
+  "source_findings": {
+    "checked_binding_scope": "shared/view.mjs validates target.checked bindings as change events targeting input type=checkbox and validates checked state as a checked flag; the repair iterates only these normalized binding records.",
+    "go_state": "The cleanup helper reads/writes only the committed DOM element.checked property and removes its reflected attribute; it invokes no runtime callback or Go symbol. The focused test does not instantiate a Go runtime, so no integrated GoState assertion is claimed.",
+    "raw_snapshot": "domSnapshot reads renderedRoot.outerHTML; no snapshot normalization or DOM oracle change is part of the repair scope.",
+    "static_checked": "An unbound static checked input is not selected by the binding loop and retains its checked HTML attribute."
+  },
+  "limits": [
+    "The focused test mounts createReactRenderer with GoScript-shaped View values, not an emitted compiled application module.",
+    "The root has paused N3's full app matrix for the separate R-OBS runtime error-path repair; no full matrix acceptance is claimed.",
+    "This review accepts only the focused React controlled-checked repair and does not claim cross-renderer or universal browser behavior."
+  ],
+  "production_changes": false
+}

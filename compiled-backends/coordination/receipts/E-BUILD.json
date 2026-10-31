@@ -1,0 +1,135 @@
+{
+  "job_id": "E-BUILD",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Added DOM build request support through AppIR and legacy gobi.Backend emitter selectors. Four-app CLI builds succeeded for React and DOM; internal manifest tags identify the selected emitter. Exact cross-build hashes match for all non-manifest, non-bundle outputs. Raw bundled module hashes differ because of temporary source-label paths and are preserved without a normalization claim.",
+  "source_scope": [
+    "compiled-frontend/build/request.go",
+    "compiled-frontend/build/request_test.go",
+    "compiled-frontend/build/pipeline.go",
+    "compiled-frontend/build/pipeline_test.go",
+    "compiled-frontend/emit/backend.go",
+    "compiled-frontend/emit/backend_test.go",
+    "compiled-backends/coordination/reports/E-BUILD.md",
+    "compiled-backends/coordination/receipts/E-BUILD.json"
+  ],
+  "evidence": {
+    "report_sha256": "1ebf6fc305600642de8a3f90093c97f538a6b4ee08951443b126a79dc346ccc8",
+    "toolchains": {
+      "compiled_frontend_go": "go1.27.3 linux/amd64",
+      "root_contract_go": "go1.24.0 linux/amd64",
+      "node": "v22.23.4"
+    },
+    "tests": [
+      {
+        "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test ./emit ./build",
+        "working_directory": "compiled-frontend",
+        "exit_code": 0,
+        "result": "passed"
+      },
+      {
+        "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go test ./compilercontract",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed"
+      },
+      {
+        "command": "git diff --check -- compiled-frontend/build/request.go compiled-frontend/build/request_test.go compiled-frontend/build/pipeline.go compiled-frontend/build/pipeline_test.go compiled-frontend/emit/backend.go compiled-frontend/emit/backend_test.go",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed"
+      }
+    ],
+    "four_app_cli_builds": {
+      "runner": "Python stdin driver called subprocess.run([\"go\", \"run\", \"./cmd/gobi-build\"], input=json.dumps(request).encode(), ...) for each backend.",
+      "working_directory": "compiled-frontend",
+      "request_template": {
+        "schema": "gobi.build-request/v1",
+        "sourceRoot": "repository root",
+        "entryPackages": [
+          "github.com/samuelpmahan/gondola/counter",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/form",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/list",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/effect"
+        ],
+        "backend": "react or dom",
+        "outputDir": "separate temporary directory per backend"
+      },
+      "react": {
+        "exit_code": 0,
+        "apps": 4,
+        "output_files": 209,
+        "manifest_backend_tags": ["react", "react", "react", "react"],
+        "buildmanifest_sha256": "a2fa18abeab82a9d752ed3ecdf2c2734593eb0a292718a6b7e533e13701dbc5c",
+        "modules": [
+          {"packagePath": "github.com/samuelpmahan/gondola/counter", "path": "apps/counter-b05e9eb0e4e6/gobi-compiled.mjs", "sha256": "cec7070ff40af28407e70b1028ee9b89a6082e9ae2b972eb3e7111fdb836fdbd", "bytes": 495212},
+          {"packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/form", "path": "apps/form-a3fe6b48b000/gobi-compiled.mjs", "sha256": "61864655306d0a5bd30ce851eab343d1c4e67eada4e5c8303e4f40e882048641", "bytes": 1220114},
+          {"packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/list", "path": "apps/list-f8359aa2866d/gobi-compiled.mjs", "sha256": "59f6364cda585df31dd193ee85224f20f8cf9b7cccc24d989ecae8e94026b7d7", "bytes": 1223930},
+          {"packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effect", "path": "apps/effect-ff8449e8f5b2/gobi-compiled.mjs", "sha256": "c2177a8eed19f4f1a42502f19b4574206b442bdc1ba3220355f7141b7aab6e39", "bytes": 1219898}
+        ],
+        "encoder_sha256_by_package": {
+          "github.com/samuelpmahan/gondola/counter": "383bd7611e2175441e655f98aca6446523b30eec1fcfc5a7bc57048edc30d3f9",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/form": "e201c343e0ae473654c9c9da02f74ca17b6f6aa7dc97740e015e4280b770f5d8",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/list": "8e1727393cd4a2af4a3fc8e8c156462d951bcbfe4990c04bb65ed02d5ec83723",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/effect": "7c1335063cea7f98223fbc8bff2e81236cf59a7351a997b3b0ed92bcdbabfbbd"
+        }
+      },
+      "dom": {
+        "exit_code": 0,
+        "apps": 4,
+        "output_files": 209,
+        "manifest_backend_tags": ["dom", "dom", "dom", "dom"],
+        "buildmanifest_sha256": "5174d864a318fd7c7356d2158dc725ee2088d76aadc8c4f60c78ecb9447a9f11",
+        "modules": [
+          {"packagePath": "github.com/samuelpmahan/gondola/counter", "path": "apps/counter-b05e9eb0e4e6/gobi-compiled.mjs", "sha256": "504e9df992dc8c68c7bd413a3ac4e0d65642650e326876a9aee873c5dd89a33a", "bytes": 495212},
+          {"packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/form", "path": "apps/form-a3fe6b48b000/gobi-compiled.mjs", "sha256": "838e108a1ba4f9d51ee2c4b72a4782b9d0520a295adac7230f6e32405f8406ba", "bytes": 1220114},
+          {"packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/list", "path": "apps/list-f8359aa2866d/gobi-compiled.mjs", "sha256": "82b06c4ed8066166a0da6243254f8b3ff5663e5e917be3e8aa7e86e2bd30c091", "bytes": 1223930},
+          {"packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effect", "path": "apps/effect-ff8449e8f5b2/gobi-compiled.mjs", "sha256": "0647e3779ffd7e367a487ddf1ee3d74a2e550d0f8f4956de69dd86bf88b43aab", "bytes": 1219898}
+        ],
+        "encoder_sha256_by_package": {
+          "github.com/samuelpmahan/gondola/counter": "383bd7611e2175441e655f98aca6446523b30eec1fcfc5a7bc57048edc30d3f9",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/form": "e201c343e0ae473654c9c9da02f74ca17b6f6aa7dc97740e015e4280b770f5d8",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/list": "8e1727393cd4a2af4a3fc8e8c156462d951bcbfe4990c04bb65ed02d5ec83723",
+          "github.com/samuelpmahan/gondola/fixtures/compiled/effect": "7c1335063cea7f98223fbc8bff2e81236cf59a7351a997b3b0ed92bcdbabfbbd"
+        }
+      },
+      "comparison": {
+        "command": "Python recursive output-tree comparison of the two CLI build directories.",
+        "path_sets_identical": true,
+        "total_files_per_tree": 209,
+        "exact_nonmanifest_nonbundle_files": 204,
+        "intentionally_different": ["buildmanifest.json", "four gobi-compiled.mjs bundles"],
+        "result": "all other outputs matched byte-for-byte; module paths and byte counts match while raw module hashes differ"
+      }
+    },
+    "unsupported_backend_cli": {
+      "child_command": "go run ./cmd/gobi-build",
+      "request_backend": "svelte",
+      "exit_code": 1,
+      "ok": false,
+      "apps": 0,
+      "outputs": 0,
+      "previous_output_marker_unchanged": true
+    },
+    "diagnostic_run": {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test ./build -run TestBuildPublishesInspectableGoScriptTypeScript -count=1",
+      "status": "initially failed during an overstrict experiment that compared independent bundle bytes",
+      "reason": "esbuild output embeds distinct temporary staging and GoScript paths in source-label comments",
+      "disposition": "the unsafe normalization/comparison was removed; final package tests passed without a cross-build bundle identity claim"
+    },
+    "source_sha256": {
+      "compiled-frontend/build/request.go": "7d288b0cd06e480a7dea0098ece974432f5e9e89cc602ba52a5f697ec1c6d6e6",
+      "compiled-frontend/build/request_test.go": "477d1cc4d15693f34381e6c1db88e64c86f770ad04a5be123320367c5db5fd8e",
+      "compiled-frontend/build/pipeline.go": "1c3b98f253f011b00a01460eb7b1611d05fb27792e775bd2cd57ab17a5c79309",
+      "compiled-frontend/build/pipeline_test.go": "b8c8ece15090988a6ce03e6f69015af0b47e31556bfe3a9dc6413ca4cf515b28",
+      "compiled-frontend/emit/backend.go": "41c16e8fe42a4f9336f7860fc147bba283c068df3ac3fe2ece4f760103920468",
+      "compiled-frontend/emit/backend_test.go": "63c37185e1b7b02048d4f027acae21c9737828384e0f8a5e3fe27e0bff710bda"
+    },
+    "limits": [
+      "N4 did not mount a live application through both renderers; N3 owns the integration harness.",
+      "Cross-directory raw gobi-compiled.mjs hashes differ due esbuild temporary source labels; no normalized byte-identity claim is made.",
+      "The internal gobi.build-manifest/v1 metadata is additive and not part of compilercontract schemas."
+    ]
+  },
+  "reported_stage": "backend_request_emitter_and_four_app_cli_builds_verified_pending_renderer_harness"
+}

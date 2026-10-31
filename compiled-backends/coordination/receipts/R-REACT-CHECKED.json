@@ -1,0 +1,82 @@
+{
+  "job_id": "R-REACT-CHECKED",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "After React commit, controlled inputs with target.checked bindings now omit the reflected checked attribute while preserving the live checked property. Non-bound static checked attributes remain unchanged. Added a real Chromium React mount/update/remount regression covering raw outerHTML, control state, keyed identity, focus, and backward selection; focused and full React suites pass.",
+  "source_scope": [
+    "compiled-frontend/frontend/react/renderer.mjs",
+    "compiled-frontend/frontend/react/renderer.browser.test.mjs",
+    "compiled-backends/evidence/repairs/react-checked/**",
+    "compiled-backends/coordination/reports/R-REACT-CHECKED.md",
+    "compiled-backends/coordination/receipts/R-REACT-CHECKED.json"
+  ],
+  "evidence": {
+    "report_sha256": "689f3be1d9d16aed86e3aaf7e0afeb8868ab211a8d426a906db1e5ce75714397",
+    "toolchain": {
+      "node": "v22.23.4",
+      "react_react_dom": "19.3.1",
+      "playwright": "1.64.1",
+      "chromium": "153.0.8010.0 at /tmp/chromium"
+    },
+    "integration_witnesses": [
+      {
+        "fixture": "compiled-form-text-checked-literal-save-reset",
+        "swap": "second swap, DOM to React; first React-to-DOM swap passed",
+        "capture": "compiled-backends/artifacts/conformance-captures/attempt-07/form.browser.failed.json",
+        "capture_sha256": "8977d5d654083881227a28721f72c33533643b9aaeec1532287db60de3a8de5a",
+        "actual_html_fragment": "<input aria-label=\"Checked\" type=\"checkbox\" checked=\"\">",
+        "expected_html_fragment": "<input aria-label=\"Checked\" type=\"checkbox\">"
+      },
+      {
+        "capture": "compiled-backends/artifacts/conformance-captures/attempt-07/list.browser.failed.json",
+        "capture_sha256": "ecd5796b533037949a2d5f0d48fa7dc99f15324217bb2c22453877fcc56e4951"
+      },
+      {
+        "capture": "compiled-backends/artifacts/conformance-captures/attempt-07/list-growth.browser.failed.json",
+        "capture_sha256": "7e01deffe0329be9d06ed1cb1b65f64ff5904dd7f4c3125ddfa953f816e4a6fc"
+      }
+    ],
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+        "pre_repair": {
+          "result": "failed on initial raw outerHTML because the controlled checked input serialized checked=\"\"",
+          "passed": 0,
+          "failed": 1,
+          "exit_code": 1,
+          "log": "compiled-backends/evidence/repairs/react-checked/react-checked.red.log",
+          "log_sha256": "9c548e2eab5c7c16ad71ecab9f15ae32df929f486ac5754fd36af46c9fe740cd"
+        },
+        "post_repair_command": "GOBI_CAPTURE_PHYSICAL_OUTERHTML=1 /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+        "post_repair": {
+          "result": "passed; raw physical outerHTML and live state captured across mount, updates, and fresh-renderer remount",
+          "passed": 1,
+          "failed": 0,
+          "exit_code": 0,
+          "log": "compiled-backends/evidence/repairs/react-checked/react-checked.green.log",
+          "log_sha256": "65619aebe891ff0907a9efc2a7161e08e39f4177c1e0b79cfd903ee862b48ca2"
+        }
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.test.mjs compiled-frontend/frontend/react/renderer.browser.test.mjs compiled-frontend/frontend/react/bindings.test.mjs",
+        "result": "passed",
+        "passed": 26,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/repairs/react-checked/react-suite.log",
+        "log_sha256": "295eb8c3e2a419da72b0ceef5d4aa0e798c6d71785d2ae7a62fc777e43126842"
+      }
+    ],
+    "source_sha256": {
+      "compiled-frontend/frontend/react/renderer.mjs": "35581215d912c0b19a63de9f122b75fef774c717100590d272cf9e7731943f6a",
+      "compiled-frontend/frontend/react/renderer.browser.test.mjs": "4e8cd936b0ebd0597f9011c5c9a448d07fc76a9b4919cdc74da3a73b420cb78c",
+      "before_renderer": "2bb7c59b3d160c09ec9fea61d382df7c4e07ed97ba22c6c790f9682fa00a26c6"
+    },
+    "limits": [
+      "The focused browser test mounts the real React renderer with GoScript-shaped Views; it is not an emitted application-module integration run.",
+      "N3 owns the rerun of the affected app matrix against this source freeze; no integration pass is claimed.",
+      "The test run emitted a non-failing UNDICI-EHPA experimental EnvHttpProxyAgent warning."
+    ]
+  },
+  "reported_stage": "controlled_checked_markup_canonicalized_after_react_commit_full_react_suite_passed_n3_matrix_pending"
+}

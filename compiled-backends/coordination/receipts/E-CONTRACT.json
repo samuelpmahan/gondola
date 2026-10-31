@@ -1,0 +1,28 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CONTRACT",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Added bounded compiled DOM/React replacement contract and plan plus five passing semantic audit tests. Shared the no-app-tick swap semantics, pending completion microtask policy, lifecycle callback behavior, focus restoration, build-artifact comparison limits, and fail-closed no-rollback policy with peer lanes.",
+  "artifacts": [
+    "compiled-backends/CONTRACT.md",
+    "compiled-backends/PLAN.md",
+    "compiled-backends/evidence/semantic/swap-semantics.test.mjs",
+    "compiled-backends/evidence/semantic/module-normalization-vectors.json",
+    "compiled-backends/evidence/semantic/module-normalization-audit.md",
+    "compiled-backends/coordination/reports/E-CONTRACT.md"
+  ],
+  "execution": {
+    "runtime": "Node v22.23.4",
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-backends/evidence/semantic/swap-semantics.test.mjs",
+    "tests": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "limits": [
+    "The scoped runtime probe uses stub compiled symbols and mock renderers; four-app browser acceptance remains assigned to the integration lanes.",
+    "N1 reported 23 runtime tests passing; that result was not independently rerun by N6.",
+    "No bundle equivalence claim is made across separate temporary build roots; raw hashes are retained.",
+    "Independent cross-review is pending; this receipt is not self-approval."
+  ]
+}

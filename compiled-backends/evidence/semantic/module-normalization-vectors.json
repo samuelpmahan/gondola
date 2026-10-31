@@ -1,0 +1,36 @@
+{
+  "schema": "gobi.module-normalization-fixtures/v1",
+  "purpose": "A backend build comparator may remove only syntactic temporary source-label comments from generated modules. It must retain raw hashes and never erase string-literal, ordinary-comment, or code differences.",
+  "cases": [
+    {
+      "id": "source-label-only",
+      "left": "// ../tmp/react/gobi-goscript-counter.ts\nexport const value = 1;\n",
+      "right": "// ../tmp/dom/gobi-goscript-counter.ts\nexport const value = 1;\n",
+      "sameAfterNormalization": true
+    },
+    {
+      "id": "inline-string-label-change",
+      "left": "export const label = \"// ../tmp/react/gobi-goscript-counter.ts\";\n",
+      "right": "export const label = \"// ../tmp/dom/gobi-goscript-counter.ts\";\n",
+      "sameAfterNormalization": false
+    },
+    {
+      "id": "ordinary-comment-change",
+      "left": "// application comment: react\nexport const value = 1;\n",
+      "right": "// application comment: dom\nexport const value = 1;\n",
+      "sameAfterNormalization": false
+    },
+    {
+      "id": "generated-code-change",
+      "left": "// ../tmp/react/gobi-goscript-counter.ts\nexport const value = 1;\n",
+      "right": "// ../tmp/dom/gobi-goscript-counter.ts\nexport const value = 2;\n",
+      "sameAfterNormalization": false
+    },
+    {
+      "id": "multiline-template-label-looking-text",
+      "left": "export const text = `start\n// ../tmp/react/gobi-goscript-counter.ts\nend`;\n",
+      "right": "export const text = `start\n// ../tmp/dom/gobi-goscript-counter.ts\nend`;\n",
+      "sameAfterNormalization": false
+    }
+  ]
+}

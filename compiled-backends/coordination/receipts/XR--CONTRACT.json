@@ -1,0 +1,66 @@
+{
+  "job_id": "XR--CONTRACT",
+  "worker": "N4",
+  "outcome": "amend",
+  "decision": "amend",
+  "summary": "Contract scope and renderer-only architecture are bounded and accurately distinguish artifact comparisons from browser evidence. Amend failure phases: focus capture occurs before teardown and can reject while the old renderer remains active; only failures after old unmount is attempted fail closed without rollback. Also require restoreFocus to return a boolean; current runtime accepts undefined as success, a pre-repair behavior assigned to N1.",
+  "report": {
+    "path": "compiled-backends/coordination/reports/XR--CONTRACT.md",
+    "sha256": "b2e68fa43543a6468733998cf4c55233f632feb9576df76b23f0165ef4223043"
+  },
+  "reviewed_sources": {
+    "compiled-backends/CONTRACT.md": "82ee318d1f8e5788fe1a7b405855465292e9eaa7f5986d19ff43f489a87d073f",
+    "compiled-backends/PLAN.md": "c2fa778603e6fdb835b8d0ac778fbcd0c5ab0a011a298d631cb34cadcc9886cd",
+    "compiled-backends/evidence/semantic/swap-semantics.test.mjs": "dc2f4c7244a8c5bf1804c43e9710ec3b29085211de33df11fc032fa4b1e94b53",
+    "compiled-backends/evidence/semantic/module-normalization-vectors.json": "f8d18bd1da4304523536a87cd2219b2213cbc3f4cec73b30bd7f0ddf9386f509",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "a35338302fc391499575fe7d3c7c59c41a3eeaddce23a3039f0a13d84ac94ae2",
+    "compiled-frontend/frontend/dom/renderer.mjs": "86fed3d2bd883a1de533731148c6b5238ac220343ccf9db6b4cc5340a0a7a38e",
+    "compiled-frontend/build/pipeline.go": "1c3b98f253f011b00a01460eb7b1611d05fb27792e775bd2cd57ab17a5c79309",
+    "compiled-frontend/emit/backend.go": "41c16e8fe42a4f9336f7860fc147bba283c068df3ac3fe2ece4f760103920468"
+  },
+  "evidence": {
+    "semantic_suite": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-backends/evidence/semantic/swap-semantics.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "passed": 5,
+      "failed": 0,
+      "exit_code": 0,
+      "warning": "Existing experimental UNDICI-EHPA EnvHttpProxyAgent warning.",
+      "log": "compiled-backends/coordination/evidence/reviews/xr-contract/node22-semantic5.log",
+      "log_sha256": "0c6d1dddd97e6a0b8a2f3b77b2ecf9d76883307d8d03ea2f9c30d0fd88988308"
+    },
+    "runtime_limit_probes": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node compiled-backends/coordination/evidence/reviews/xr-contract/runtime-limit-probes.mjs",
+      "toolchain": "Node v22.23.4",
+      "exit_code": 0,
+      "script_sha256": "c54a1170fe850d259f1dce9ee22890616427e3716dfb78a18c6c48b176e0f06e",
+      "result_sha256": "9b4879df48ceb42ef1e1de302de2faf3f77a4f02b8ab3b10f06f6a43354816c2",
+      "observations": {
+        "focus_capture_throws_before_teardown": "replacement rejected; old unmount count 0; runtime failure null; snapshot remains available",
+        "declared_and_bound_async_methods": "rejected before teardown; old unmount count 0",
+        "restore_focus_undefined": "replacement committed and diagnostics recorded focusRestored true"
+      }
+    },
+    "prior_failure_history": [
+      {
+        "receipt": "compiled-backends/coordination/receipts/E-RUNTIME.json",
+        "history": "An earlier reentrancy probe had 22 passed/1 failed; the test injection was scoped to the first replacement update, and the focused rerun passed 23/23."
+      },
+      {
+        "receipt": "compiled-backends/coordination/receipts/E-DOM.json",
+        "history": "The expected pre-implementation red run failed because frontend/dom/renderer.mjs did not exist; focused DOM and React regressions subsequently passed."
+      },
+      {
+        "receipt": "compiled-backends/coordination/receipts/E-BUILD.json",
+        "history": "An overstrict raw bundle equality check failed because generated source-label comments included different temporary roots; the unsafe normalization approach was dropped and raw hashes retained."
+      }
+    ]
+  },
+  "limits": [
+    "The five semantic tests use stub compiled symbols and mock renderers; they do not establish real four-app browser conformance.",
+    "The normalization vectors are passive fixtures. No bundle normalizer or proof based on normalized bundle equality was used.",
+    "No hostile Proxy or side-effecting-getter security guarantee is claimed; the contract bounds renderers as trusted structural adapters.",
+    "The integrated four-app/five-fixture browser matrix is separate N3 evidence and was not part of this review."
+  ],
+  "production_changes": false
+}

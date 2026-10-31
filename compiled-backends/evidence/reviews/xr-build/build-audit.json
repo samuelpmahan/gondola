@@ -1,0 +1,70 @@
+{
+  "schema": "gobi.review-evidence/v1",
+  "review": "XR--BUILD",
+  "reviewer": "N6",
+  "sourceBase": {
+    "commit": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "baselineBackendGoSha256": "c602d9d196f61c1717b1ca72e36e50f22dbd0a55c24d0c7cd5d9b585d30dfb9c",
+    "currentBackendGoSha256": "41c16e8fe42a4f9336f7860fc147bba283c068df3ac3fe2ece4f760103920468"
+  },
+  "buildTrees": {
+    "reactDirectory": "/tmp/gobi-e-build-cli-smnn3g0r/react",
+    "domDirectory": "/tmp/gobi-e-build-cli-smnn3g0r/dom",
+    "sameRelativePathSet": true,
+    "reactFiles": 209,
+    "domFiles": 209,
+    "reactApps": 4,
+    "domApps": 4,
+    "reactBackendTags": ["react", "react", "react", "react"],
+    "domBackendTags": ["dom", "dom", "dom", "dom"],
+    "sameModulePaths": true,
+    "sameEncoderPaths": true,
+    "sameRoleBindings": true,
+    "sameAppIR": true,
+    "byteIdenticalCompanionFiles": 204,
+    "rawCompiledModuleHashesDiffer": true,
+    "bundlesComparedByNormalization": false,
+    "rawHashes": {
+      "react": {
+        "counter": "cec7070ff40af28407e70b1028ee9b89a6082e9ae2b972eb3e7111fdb836fdbd",
+        "form": "61864655306d0a5bd30ce851eab343d1c4e67eada4e5c8303e4f40e882048641",
+        "list": "59f6364cda585df31dd193ee85224f20f8cf9b7cccc24d989ecae8e94026b7d7",
+        "effect": "c2177a8eed19f4f1a42502f19b4574206b442bdc1ba3220355f7141b7aab6e39"
+      },
+      "dom": {
+        "counter": "504e9df992dc8c68c7bd413a3ac4e0d65642650e326876a9aee873c5dd89a33a",
+        "form": "838e108a1ba4f9d51ee2c4b72a4782b9d0520a295adac7230f6e32405f8406ba",
+        "list": "82b06c4ed806616a0da6243254f8b3ff5663e5e917be3e8aa7e86e2bd30c091",
+        "effect": "0647e3779ffd7e367a487ddf1ee3d74a2e550d0f8f4956de69dd86bf88b43aab"
+      }
+    }
+  },
+  "unsupportedBackendCli": {
+    "backend": "svelte",
+    "exitCode": 1,
+    "ok": false,
+    "apps": 0,
+    "outputs": 0,
+    "diagnostic": "unsupported backend \"svelte\"",
+    "previousMarkerUnchanged": true
+  },
+  "legacyZeroValueRepro": {
+    "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ../compiled-backends/evidence/reviews/xr-build/zero_backend_repro.go",
+    "workingDirectory": "compiled-frontend",
+    "output": [
+      "zero GobiBackend Emit panic: runtime error: invalid memory address or nil pointer dereference",
+      "base React fallback returned files=0 err=invalid AppIR for React emission: schema must be \"gobi.app-ir/v1\""
+    ]
+  },
+  "commands": [
+    {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test -count=1 ./emit ./build",
+      "workingDirectory": "compiled-frontend",
+      "result": "passed",
+      "output": [
+        "ok github.com/samuelpmahan/gondola/compiled-frontend/emit 0.007s",
+        "ok github.com/samuelpmahan/gondola/compiled-frontend/build 0.814s"
+      ]
+    }
+  ]
+}

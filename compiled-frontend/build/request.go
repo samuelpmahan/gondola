@@ -113,7 +113,7 @@ func ValidateRequest(request compilercontract.BuildRequest) error {
 		}
 		seen[canonical] = true
 	}
-	if request.Backend != "react" {
+	if request.Backend != "react" && request.Backend != "dom" {
 		return fmt.Errorf("unsupported backend %q", request.Backend)
 	}
 	if strings.TrimSpace(request.OutputDir) == "" {

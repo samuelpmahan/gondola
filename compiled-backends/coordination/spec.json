@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "E-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-frontend/frontend/runtime/runtime.mjs and runtime tests only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: RUNTIME"
+    },
+    {
+      "id": "E-DOM",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-frontend/frontend/dom/**; React renderer and new shared frontend validation helper only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: DOM"
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-backends/conformance/** only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: HARNESS"
+    },
+    {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-frontend/build/** emit/** compilercontract build-backend validation only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: BUILD"
+    },
+    {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-backends/demo/** run.mjs run-compiled-backends.sh .github/workflows/compiled-backends.yml only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: DEMO"
+    },
+    {
+      "id": "E-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-backends/CONTRACT.md PLAN.md evidence/** semantic audit tests only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: CONTRACT"
+    }
+  ]
+}

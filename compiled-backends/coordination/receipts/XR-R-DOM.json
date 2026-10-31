@@ -1,0 +1,62 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-R-DOM",
+  "worker": "N4",
+  "decision": "accepted",
+  "outcome": "accepted",
+  "summary": "Accepted the focused DOM input serialization and checked-property repair. Source and pinned evidence support the attempt-06 form fix, four focused browser tests, within-DOM keyed identity, focus, and backward-selection behavior. Full four-app/five-fixture integration and cross-backend focus restoration remain outside this acceptance.",
+  "report": {
+    "path": "compiled-backends/coordination/reports/XR-R-DOM.md",
+    "sha256": "7118e94769365248ab3e5357e87be6d2de5f77df3aa9391e2e576a8e327d49d0"
+  },
+  "source_scope": [
+    "compiled-backends/coordination/reports/XR-R-DOM.md",
+    "compiled-backends/coordination/receipts/XR-R-DOM.json",
+    "compiled-backends/coordination/evidence/reviews/xr-r-dom/**"
+  ],
+  "reviewed_change": {
+    "renderer_path": "compiled-frontend/frontend/dom/renderer.mjs",
+    "renderer_sha256": "8037c0b9d3430310aa9492ab9d1041207e33276f8a6dce219b84b2af17efa166",
+    "test_path": "compiled-frontend/frontend/dom/renderer.test.mjs",
+    "test_sha256": "8857f373a5d39c0f04b328021315867e6ffea34166ff18877f9dee3b44033efd",
+    "behavior": [
+      "For input elements, ordinary attributes remain in input order before type and value; checked is excluded from serialized attributes.",
+      "The checked flag is applied to the live input.checked property.",
+      "The GoScript-shaped browser test checks the form HTML, live controls, messages, keyed node retention, focus, and backward selection after update.",
+      "A separate test covers keyed reorder identity and selection within the DOM renderer."
+    ]
+  },
+  "evidence": {
+    "attempt_06_form_failure": {
+      "path": "compiled-backends/artifacts/conformance-captures/attempt-06/form.browser.failed.json",
+      "sha256": "4ea4e6eb7d3ddf79b4ae9e6e033d941ed0a6558b7c7003537c6534f59c9bcc09",
+      "expected_input": "<input aria-label=\"Draft\" type=\"text\" value=\"typed draft\">",
+      "old_actual_input": "<input type=\"text\" value=\"typed draft\" aria-label=\"Draft\">",
+      "stage": "first React-to-DOM swap after text edit"
+    },
+    "red_green": {
+      "before_hashes_path": "compiled-backends/evidence/repairs/dom/before.sha256",
+      "before_hashes_sha256": "01e32ee58ec1813f33dacb60bfb41be4a747860dce47ae0f9d2f2b85c4bda391",
+      "red_command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='matches React input attribute order' compiled-frontend/frontend/dom/renderer.test.mjs",
+      "red_result": "failed on the exact initial input outerHTML order against the pre-repair renderer",
+      "red_log": "compiled-backends/evidence/repairs/dom/input-order.red.log",
+      "red_log_sha256": "bcad347537fe08c4d1b33ab512b50a6fc578b479cc23dc99cc2ed71532f781ff",
+      "green_command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+      "green_toolchain": "Node v22.23.4; Playwright 1.64.1; Chromium 153.0.8010.0 at /tmp/chromium",
+      "green_result": "4 passed, 0 failed",
+      "green_log": "compiled-backends/evidence/repairs/dom/renderer.test.log",
+      "green_log_sha256": "0a164b4b3d112bedbde565591f7c90b25f8579282de56bfb2cec1f7e587a8dd4",
+      "warning": "The green run reports a non-failing UNDICI-EHPA experimental EnvHttpProxyAgent warning."
+    }
+  },
+  "review_evidence": {
+    "path": "compiled-backends/coordination/evidence/reviews/xr-r-dom/independent-audit.json",
+    "sha256": "ec7e5e66a3821a879ff43fab2aa33e2e8d4c936a09e6699e12351ecd72de5cc5"
+  },
+  "limits": [
+    "Reviewer inspected saved R-DOM source hashes and red/green logs; no second Chromium process was launched while N3's current integration run was active.",
+    "The focused identity and selection tests exercise updates/reordering inside the DOM renderer; they do not test React-to-DOM physical node identity or cross-backend focus transfer.",
+    "The current N3 four-app/five-fixture form-positive result was not available in this review; this acceptance covers only the focused R-DOM repair."
+  ],
+  "production_changes": false
+}

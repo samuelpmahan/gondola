@@ -1,0 +1,37 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "repair_of": "E-RUNTIME",
+      "owner": "runtime production/test ownedpaths andnamedrepairreport/receipt/evidence",
+      "summary": "Repair falsefocus-success onundefined and rejectedPromise unhandled; preservefailclosedstate and oldtests"
+    },
+    {
+      "id": "R-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "repair_of": "E-BUILD",
+      "owner": "Go build/emitter ownedpaths andnamedrepairreport/receipt/evidence",
+      "summary": "Zero-valuedexportedGobiBackend.Emit mustreturnerror notpanic; regressionsandactualbackendidentity"
+    }
+  ]
+}

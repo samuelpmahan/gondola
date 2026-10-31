@@ -1,0 +1,131 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-R-CONTRACT",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "Independently verified the nine focus/effect semantic cases and phase behavior. Rejected Promises from post-commit viewRecord/domSnapshot fail closed but leak unhandled rejections; the report also records a focus-pair wording ambiguity and a stale 8/8 count.",
+  "review_scope": [
+    "compiled-backends/CONTRACT.md",
+    "compiled-backends/PLAN.md",
+    "compiled-backends/evidence/semantic/swap-semantics.test.mjs",
+    "compiled-backends/coordination/reports/R-CONTRACT.md",
+    "compiled-backends/coordination/receipts/R-CONTRACT.json",
+    "compiled-frontend/frontend/runtime/runtime.mjs",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs",
+    "compiled-backends/evidence/reviews/xr-r-contract/**"
+  ],
+  "reviewed_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "e729e3b360892edf01511b64657d32f638db54b5f5b0d2767b980114bb6d3105",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "3ddaaded2db26d7b2acf9bcbd8e85584f1f4b57e1e89b325a602aff5dab39fcc",
+    "compiled-backends/CONTRACT.md": "7a221afaf0455ff6060b2634dde7660899c5c8abb40cea0de8874f31f583075b",
+    "compiled-backends/PLAN.md": "e91bc98abaf2aea117de2aedf88f332eab484f43336a914d2952d9d8505a4756",
+    "compiled-backends/evidence/semantic/swap-semantics.test.mjs": "4b8801a5382e1075d0d4f37482f097443179c1e2bdda82e637dc55e7fc972ebc",
+    "compiled-backends/coordination/reports/R-CONTRACT.md": "09dee1e6b2d0c612438e0c6db805ae4e1d73cddf5c6d2a15909fd9a5d0cd7070",
+    "compiled-backends/coordination/receipts/R-CONTRACT.json": "224b0f12b85573658e4a0f992772ccb8c79d7527d8fc58cd319ec43ae2c59f42"
+  },
+  "execution": {
+    "toolchain": "Node v22.23.4",
+    "semantic_syntax": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/evidence/semantic/swap-semantics.test.mjs",
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-r-contract/semantic-syntax.log",
+      "log_sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    "semantic_suite": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-backends/evidence/semantic/swap-semantics.test.mjs",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-r-contract/semantic-node22.log",
+      "log_sha256": "482b8485767cc91d4e1c8d7e0c35aa3ce1cafc33a992748924188fcefbe25a9e",
+      "warning": "Existing experimental UNDICI-EHPA EnvHttpProxyAgent warning."
+    },
+    "postcommit_observation_probe": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node compiled-backends/evidence/reviews/xr-r-contract/postcommit-observation-promise-probe.mjs",
+      "script": "compiled-backends/evidence/reviews/xr-r-contract/postcommit-observation-promise-probe.mjs",
+      "script_sha256": "cc6d2fa59a2dfef2dd25e3f6bab561bd20764bd4989d5e131e21d5a98d04ccf9",
+      "result": "compiled-backends/evidence/reviews/xr-r-contract/postcommit-observation-promise-probe.json",
+      "result_sha256": "a1aa98f2b808887d695b2cca107a2f4887dc44baaced37b957e8d80c9aa48555",
+      "exit_code": 0,
+      "finding": "Both viewRecord() and domSnapshot() returned rejected Promise values, caused RuntimeFailure(stage=renderer-replacement) after unmount and snapshot unavailability, but still emitted unhandledRejection for their rejection reasons."
+    }
+  },
+  "findings": [
+    {
+      "id": "XR-R-CONTRACT-01",
+      "severity": "moderate",
+      "path": "compiled-frontend/frontend/runtime/runtime.mjs",
+      "locations": [
+        "viewSnapshot(): renderer.viewRecord() result validation",
+        "domSnapshot(): renderer.domSnapshot() result validation",
+        "replaceRenderer(): post-commit snapshot at phase new-snapshot"
+      ],
+      "summary": "Rejected native Promise returns from post-commit observation methods are shape-rejected and fail closed, but the rejection is never observed. Contract promises all renderer method results are checked for thenables; add guarded synchronous checks and regressions for both methods."
+    },
+    {
+      "id": "XR-R-CONTRACT-02",
+      "severity": "minor",
+      "path": "compiled-backends/CONTRACT.md",
+      "location": "runtime.replaceRenderer step 2",
+      "summary": "Focus capture is performed only when both the old and candidate renderer provide the optional pair; current wording says capture whenever the old renderer has the pair."
+    },
+    {
+      "id": "XR-R-CONTRACT-03",
+      "severity": "minor",
+      "path": "compiled-backends/coordination/reports/R-CONTRACT.md",
+      "location": "line 28",
+      "summary": "Report says N6 result was 8/8 despite execution and receipt recording 9/9."
+    }
+  ],
+  "preservation": {
+    "historical_xr_contract": {
+      "report": "compiled-backends/coordination/reports/XR--CONTRACT.md",
+      "report_sha256": "b2e68fa43543a6468733998cf4c55233f632feb9576df76b23f0165ef4223043",
+      "receipt": "compiled-backends/coordination/receipts/XR--CONTRACT.json",
+      "receipt_sha256": "29b7a5076a5abab2819f6a5b9a91799f632b4324ce0adb859f0f0712388e8054"
+    },
+    "historical_xr_build": {
+      "report_sha256": "c775352b26a6a52e8baf218304773ea3cf45e421bd2697fb2ed8450155bd9dbd",
+      "receipt_sha256": "baf7e7a5b6e837628fa287c71759ab166a13ba7b18d604d9143a9559062c680d",
+      "audit_sha256": "6f34de936802975cb28fd40e89a2f7d9986949c771e1188dd3d36783d518a04e",
+      "renamed_reproducer": "compiled-backends/evidence/reviews/xr-build/zero_backend_repro.go.txt",
+      "reproducer_sha256": "f5cd990adeb80587d8decbfd9fdf13e6f7e779cbb11499f6f99502668f083196",
+      "old_go_path_absent": true,
+      "go_sources_under_evidence": 0
+    },
+    "r_contract_failure_history": "Earlier E-RUNTIME, E-DOM, and E-BUILD failure histories remain cited in the R-CONTRACT report/receipt; no historical review artifact was modified."
+  },
+  "n3_integration_boundary": {
+    "attempt": "compiled-backends/artifacts/conformance-captures/attempt-07",
+    "effect_run_sha256": "f548027253eaf4b3e7bad9bb4bc85c2ec9101f81f5df998cb97ea4794fd4f8ff",
+    "effect_browser_sha256": "90ba9775487080fc1924719642fb6becbad6d83619e90ba2cbfc75d515c6a4d2",
+    "effect_focus": "Browser data shows matching focus identity and selection on swaps 1 and 2; fixture declares no focus witness. Captured checker hash differs from current checker hash.",
+    "other_browser_failures": [
+      "form",
+      "list",
+      "list-growth"
+    ],
+    "conclusion": "These captures are separate and pin prior source versions; no universal four-app acceptance is claimed."
+  },
+  "production_changes": false,
+  "report": {
+    "path": "compiled-backends/coordination/reports/XR-R-CONTRACT.md",
+    "sha256": "23e4880ad9362b1c7effdca62da0688db97725af21771120643214ef6fe62214"
+  },
+  "evidence_files": {
+    "audit": "compiled-backends/evidence/reviews/xr-r-contract/audit.md",
+    "audit_sha256": "f300b468182c594556a052776a275a4c088be2f82c7e33ebe78b5257968f64d9",
+    "semantic_syntax_log_sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+    "semantic_suite_log_sha256": "482b8485767cc91d4e1c8d7e0c35aa3ce1cafc33a992748924188fcefbe25a9e",
+    "node_version": "v22.23.4"
+  },
+  "preserved_pre_amendment": {
+    "compiled-backends/CONTRACT.md": "82ee318d1f8e5788fe1a7b405855465292e9eaa7f5986d19ff43f489a87d073f",
+    "compiled-backends/PLAN.md": "c2fa778603e6fdb835b8d0ac778fbcd0c5ab0a011a298d631cb34cadcc9886cd",
+    "compiled-backends/evidence/semantic/swap-semantics.test.mjs": "dc2f4c7244a8c5bf1804c43e9710ec3b29085211de33df11fc032fa4b1e94b53",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "a35338302fc391499575fe7d3c7c59c41a3eeaddce23a3039f0a13d84ac94ae2",
+    "compiled-backends/coordination/evidence/reviews/xr-contract/runtime-limit-probes.mjs": "c54a1170fe850d259f1dce9ee22890616427e3716dfb78a18c6c48b176e0f06e",
+    "compiled-backends/coordination/evidence/reviews/xr-contract/runtime-limit-probes.json": "9b4879df48ceb42ef1e1de302de2faf3f77a4f02b8ab3b10f06f6a43354816c2"
+  }
+}

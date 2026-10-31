@@ -1,0 +1,73 @@
+{
+  "job_id": "R-OBSERVATION",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Added no-thenable rejection observation before validating renderer viewRecord/domSnapshot results and before active unmount reports success. Added two runtime regression tests; Node v22.23.4 runtime suite passes 27/27.",
+  "target_job": "R-RUNTIME",
+  "source_scope": [
+    "compiled-frontend/frontend/runtime/runtime.mjs",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs",
+    "compiled-backends/coordination/reports/R-OBSERVATION.md",
+    "compiled-backends/coordination/receipts/R-OBSERVATION.json",
+    "compiled-backends/evidence/repairs/observation/**"
+  ],
+  "before_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "e729e3b360892edf01511b64657d32f638db54b5f5b0d2767b980114bb6d3105",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "3ddaaded2db26d7b2acf9bcbd8e85584f1f4b57e1e89b325a602aff5dab39fcc"
+  },
+  "source_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "39790809f3392bb47b3f48d17bfdc40b6fe8628961513f0b1ddf3e69a014e907"
+  },
+  "preserved_independent_finding": {
+    "job_id": "XR-R-CONTRACT",
+    "report": "compiled-backends/coordination/reports/XR-R-CONTRACT.md",
+    "receipt": "compiled-backends/coordination/receipts/XR-R-CONTRACT.json",
+    "probe": "compiled-backends/evidence/reviews/xr-r-contract/postcommit-observation-promise-probe.mjs",
+    "probe_sha256": "cc6d2fa59a2dfef2dd25e3f6bab561bd20764bd4989d5e131e21d5a98d04ccf9",
+    "result": "compiled-backends/evidence/reviews/xr-r-contract/postcommit-observation-promise-probe.json",
+    "result_sha256": "a1aa98f2b808887d695b2cca107a2f4887dc44baaced37b957e8d80c9aa48555"
+  },
+  "execution": {
+    "toolchain": "Node v22.23.4",
+    "runtime_suite": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola-backends",
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/repairs/observation/runtime-node22.log",
+      "log_sha256": "0e62b5e5bf903bb54f83ec6c8ca11d7fd64fdbaa7a415b7caf583188246dd788",
+      "warning": "Node emitted the existing experimental UNDICI-EHPA EnvHttpProxyAgent warning."
+    },
+    "syntax_checks": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/runtime/runtime.mjs",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/repairs/observation/runtime-syntax.log",
+        "log_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/repairs/observation/test-syntax.log",
+        "log_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    ],
+    "behavior": [
+      "Rejected Promise returns from viewRecord() and domSnapshot() are observed before synchronous record-shape validation; replacement failure remains post-teardown and fail-closed.",
+      "Active runtime unmount checks its result before reporting success; a rejected Promise reports stage unmount and returns false.",
+      "Regression tests verify no unhandled rejection, Go Update, or application trace mutation for these failure paths."
+    ]
+  },
+  "limits": [
+    "No full Go build or composed React-to-DOM browser matrix was run by this runtime lane.",
+    "The rejection sink handles native Promise results within the trusted renderer protocol; no arbitrary Proxy/getter sandbox guarantee is claimed.",
+    "Regular functions returning thenables are detected after invocation. Replacement snapshot rejection happens after teardown and has no rollback guarantee."
+  ],
+  "report": {
+    "path": "compiled-backends/coordination/reports/R-OBSERVATION.md",
+    "sha256": "b6cf35cb82e2ef4cb12f0a30c1969f9b3a1c6668c233bdc6fea7571eb88c0365"
+  }
+}

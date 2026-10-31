@@ -1,0 +1,61 @@
+{
+  "job_id": "R-DOM",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Fixed exact input outerHTML ordering and live checked-property handling in the compiled DOM renderer. Added a GoScript-shaped post-input browser regression for HTML, control state, callback messages, keyed node identity, focus, and backward selection. The focused Chromium suite passes 4/4; N3's full app matrix remains pending and is not claimed.",
+  "source_scope": [
+    "compiled-frontend/frontend/dom/renderer.mjs",
+    "compiled-frontend/frontend/dom/renderer.test.mjs",
+    "compiled-backends/evidence/repairs/dom/before.sha256",
+    "compiled-backends/evidence/repairs/dom/input-order.red.log",
+    "compiled-backends/evidence/repairs/dom/renderer.test.log",
+    "compiled-backends/coordination/reports/R-DOM.md",
+    "compiled-backends/coordination/receipts/R-DOM.json"
+  ],
+  "evidence": {
+    "report_sha256": "f602779b8add80bbb27f167f3d585c59fbd4efa918078247466a73cd42a51a58",
+    "toolchain": {
+      "node": "v22.23.4",
+      "playwright": "1.64.1",
+      "chromium": "153.0.8010.0 at /tmp/chromium"
+    },
+    "integration_witness": {
+      "fixture": "compiled-form-text-checked-literal-save-reset",
+      "capture": "compiled-backends/artifacts/conformance-captures/attempt-06/form.browser.failed.json",
+      "capture_sha256": "4ea4e6eb7d3ddf79b4ae9e6e033d941ed0a6558b7c7003537c6534f59c9bcc09",
+      "expected_html_fragment": "<input aria-label=\"Draft\" type=\"text\" value=\"typed draft\">",
+      "old_actual_html_fragment": "<input type=\"text\" value=\"typed draft\" aria-label=\"Draft\">",
+      "oracle_changed": false
+    },
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+        "result": "passed",
+        "passed": 4,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/repairs/dom/renderer.test.log",
+        "log_sha256": "0a164b4b3d112bedbde565591f7c90b25f8579282de56bfb2cec1f7e587a8dd4"
+      }
+    ],
+    "red_green": {
+      "red_command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='matches React input attribute order' compiled-frontend/frontend/dom/renderer.test.mjs",
+      "red_result": "failed on the exact initial outerHTML-v1 input attribute order before the renderer repair",
+      "red_log": "compiled-backends/evidence/repairs/dom/input-order.red.log",
+      "red_log_sha256": "bcad347537fe08c4d1b33ab512b50a6fc578b479cc23dc99cc2ed71532f781ff",
+      "green_test": "matches React input attribute order while keeping checked as live property state"
+    },
+    "source_sha256": {
+      "compiled-frontend/frontend/dom/renderer.mjs": "8037c0b9d3430310aa9492ab9d1041207e33276f8a6dce219b84b2af17efa166",
+      "compiled-frontend/frontend/dom/renderer.test.mjs": "8857f373a5d39c0f04b328021315867e6ffea34166ff18877f9dee3b44033efd",
+      "before_renderer": "86fed3d2bd883a1de533731148c6b5238ac220343ccf9db6b4cc5340a0a7a38e",
+      "before_test": "7c7d472e2994869a1798bad82c7b466ba653734e35abdaaad9d0295e5347ca29"
+    },
+    "limits": [
+      "N2 did not rerun the full four-app/five-fixture integration matrix; N3 owns that post-freeze run.",
+      "This focused regression verifies within-renderer node identity and selection preservation; cross-backend swap restoration remains an integration claim for N3.",
+      "Node emitted a non-failing UNDICI-EHPA experimental EnvHttpProxyAgent warning."
+    ]
+  },
+  "reported_stage": "input_outerhtml_order_repaired_focused_dom_browser_suite_passed_full_matrix_pending"
+}

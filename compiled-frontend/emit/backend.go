@@ -1,4 +1,4 @@
-// Package emit emits the React-side schema and binding metadata for compiled
+// Package emit emits backend-neutral schema and binding metadata for compiled
 // Gobi applications. It never contains application transitions.
 package emit
 
@@ -23,17 +23,60 @@ const (
 // compiler build. The emitted module contains only checked AppIR/role data.
 type Backend struct{}
 
+// AppIREmitter emits metadata derived from an already analyzed AppIR.
+type AppIREmitter interface {
+	Name() string
+	Emit(compilercontract.AppIR) ([]gobi.File, error)
+}
+
+// DOMBackend shares the canonical Gobi node mapping and AppIR component role
+// metadata with React. The selected runtime renderer is supplied by the host.
+type DOMBackend struct{}
+
 // NewBackend returns the AppIR emitter expected by the compiled frontend CLI.
 func NewBackend() Backend { return Backend{} }
+
+// NewDOMBackend returns the AppIR emitter used with the native DOM renderer.
+func NewDOMBackend() DOMBackend { return DOMBackend{} }
+
+// NewBackendFor selects a supported AppIR emitter without changing AppIR or
+// compiled application symbols.
+func NewBackendFor(name string) (AppIREmitter, error) {
+	switch name {
+	case "react":
+		return NewBackend(), nil
+	case "dom":
+		return NewDOMBackend(), nil
+	default:
+		return nil, fmt.Errorf("unsupported backend %q", name)
+	}
+}
+
+func (Backend) Name() string    { return "react" }
+func (DOMBackend) Name() string { return "dom" }
 
 // Emit returns the canonical React name map and the AppIR component role table.
 func (Backend) Emit(app compilercontract.AppIR) ([]gobi.File, error) {
 	if diagnostics := compilercontract.ValidateAppIR(app); len(diagnostics) != 0 {
 		return nil, fmt.Errorf("invalid AppIR for React emission: %s", diagnostics[0].Message)
 	}
+	return emitAppIR(app)
+}
+
+// Emit returns the same validated, backend-neutral AppIR metadata as React.
+// The DOM renderer is selected by the runtime host, so this emitter does not
+// generate framework code or application transitions.
+func (DOMBackend) Emit(app compilercontract.AppIR) ([]gobi.File, error) {
+	if diagnostics := compilercontract.ValidateAppIR(app); len(diagnostics) != 0 {
+		return nil, fmt.Errorf("invalid AppIR for DOM emission: %s", diagnostics[0].Message)
+	}
+	return emitAppIR(app)
+}
+
+func emitAppIR(app compilercontract.AppIR) ([]gobi.File, error) {
 	appJSON, err := json.Marshal(app)
 	if err != nil {
-		return nil, fmt.Errorf("marshal AppIR for React emission: %w", err)
+		return nil, fmt.Errorf("marshal AppIR for backend emission: %w", err)
 	}
 	components := emitComponents(appJSON)
 	return []gobi.File{
@@ -68,15 +111,26 @@ export const componentRoles = Object.freeze(appIR.components.map((component) => 
 // identity. The identity is captured at construction and must match exactly at
 // Emit time; no AppIR or source data is synthesized from gobi.App.
 type GobiBackend struct {
-	appIR  compilercontract.AppIR
-	legacy gobi.App
+	emitter AppIREmitter
+	appIR   compilercontract.AppIR
+	legacy  gobi.App
 }
 
 // NewGobiBackend configures the legacy Backend interface with an already
 // analyzed AppIR and its source-derived gobi.App identity.
 func NewGobiBackend(app compilercontract.AppIR, identity gobi.App) (gobi.Backend, error) {
+	return NewGobiBackendFor("react", app, identity)
+}
+
+// NewGobiBackendFor configures the legacy gobi.Backend interface with an
+// already analyzed AppIR and its source-derived gobi.App identity.
+func NewGobiBackendFor(name string, app compilercontract.AppIR, identity gobi.App) (gobi.Backend, error) {
+	emitter, err := NewBackendFor(name)
+	if err != nil {
+		return nil, err
+	}
 	if diagnostics := compilercontract.ValidateAppIR(app); len(diagnostics) != 0 {
-		return nil, fmt.Errorf("invalid AppIR for legacy React adapter: %s", diagnostics[0].Message)
+		return nil, fmt.Errorf("invalid AppIR for legacy %s adapter: %s", name, diagnostics[0].Message)
 	}
 	if err := validateLegacyIdentity(app, identity); err != nil {
 		return nil, err
@@ -85,22 +139,32 @@ func NewGobiBackend(app compilercontract.AppIR, identity gobi.App) (gobi.Backend
 	if err != nil {
 		return nil, fmt.Errorf("copy verified AppIR: %w", err)
 	}
-	return &GobiBackend{appIR: appCopy, legacy: cloneLegacyApp(identity)}, nil
+	return &GobiBackend{emitter: emitter, appIR: appCopy, legacy: cloneLegacyApp(identity)}, nil
 }
 
 // Name implements gobi.Backend.
-func (*GobiBackend) Name() string { return "react" }
+func (backend *GobiBackend) Name() string {
+	if backend == nil || backend.emitter == nil {
+		return ""
+	}
+	return backend.emitter.Name()
+}
 
 // Emit implements gobi.Backend and rejects any identity drift from the
-// source-derived gobi.App captured by NewGobiBackend.
+// source-derived gobi.App captured by NewGobiBackendFor.
 func (backend *GobiBackend) Emit(app gobi.App) ([]gobi.File, error) {
 	if backend == nil {
-		return nil, fmt.Errorf("nil configured Gobi React backend")
+		return nil, fmt.Errorf("nil configured Gobi backend")
 	}
 	if !reflect.DeepEqual(app, backend.legacy) {
-		return nil, fmt.Errorf("gobi.App identity changed after React backend configuration")
+		return nil, fmt.Errorf("gobi.App identity changed after %s backend configuration", backend.Name())
 	}
-	return Backend{}.Emit(backend.appIR)
+	if backend.emitter == nil {
+		// Before the adapter retained a configured emitter, its zero value
+		// delegated to the default React AppIR emitter. Preserve that error path.
+		return Backend{}.Emit(backend.appIR)
+	}
+	return backend.emitter.Emit(backend.appIR)
 }
 
 func validateLegacyIdentity(app compilercontract.AppIR, identity gobi.App) error {

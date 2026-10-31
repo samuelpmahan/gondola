@@ -1,0 +1,715 @@
+{
+  "job_id": "E-HARNESS",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Added the native/direct-JavaScript/React/DOM conformance driver and completed the frozen-source five-fixture matrix. Attempt-10 matched counter, form, list, effect, and list-growth; all five recorded 34 stable before/after source pins and exact native/direct trace equality. The checker covers state-preserving swaps, focused keyed controls, effect reply/correlation, retired callback fencing, disabled controls, unmount, and mutations.",
+  "source_scope": [
+    "compiled-backends/conformance/browser.mjs",
+    "compiled-backends/conformance/check.mjs",
+    "compiled-backends/conformance/run.mjs",
+    "compiled-backends/conformance/swap-schedules.json",
+    "compiled-backends/conformance/check.test.mjs",
+    "compiled-backends/coordination/reports/E-HARNESS.md",
+    "compiled-backends/coordination/receipts/E-HARNESS.json"
+  ],
+  "evidence": {
+    "report_sha256": "118ac39d25345aaf42f62815a36912906c0a1e0a529ded03358aabff7558c477",
+    "toolchain": {
+      "node": "v22.23.4",
+      "playwright": "1.64.1",
+      "chromium": "153.0.8010.0 at /tmp/chromium",
+      "go": "go1.24.0"
+    },
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/conformance/browser.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/conformance/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --test compiled-backends/conformance/check.test.mjs",
+        "result": "passed",
+        "passed": 5,
+        "failed": 0,
+        "exit_code": 0,
+        "covers": [
+          "mutation rejection",
+          "literal vs bound messages and actual target values",
+          "focus with and without declared witnesses",
+          "retired callback out-of-band fencing",
+          "active missing-target callback attempt",
+          "no double tick and no wrong-lifetime attribution"
+        ]
+      }
+    ],
+    "native_oracle": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go build -o compiled-backends/artifacts/compiled-native ./cmd/compiled-native",
+      "sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186"
+    },
+    "historical_counter_attempt": {
+      "fixture": "unchanged-counter-add-reset-disabled",
+      "status": "matched against the attempt's captured source snapshot only",
+      "summary": {
+        "ticks": 5,
+        "swaps": 4,
+        "focusSwaps": 0,
+        "mutationControlsDetected": 8,
+        "sourceStableDuringRun": true,
+        "sourcePins": 33
+      },
+      "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-backends/conformance/run.mjs --app-ir /tmp/gobi-e-build-cli-smnn3g0r/react/apps/counter-b05e9eb0e4e6/app-ir.json --compiled /tmp/gobi-e-build-cli-smnn3g0r/react/apps/counter-b05e9eb0e4e6/gobi-compiled.mjs --helpers /tmp/gobi-e-build-cli-smnn3g0r/react/apps/counter-b05e9eb0e4e6/encoder.mjs --native-bin compiled-backends/artifacts/compiled-native --fixture compiled-frontend/fixtures/counter.json --output compiled-backends/artifacts/conformance-captures/attempt-06/counter",
+      "input_sha256": {
+        "app_ir": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+        "compiled_module": "cec7070ff40af28407e70b1028ee9b89a6082e9ae2b972eb3e7111fdb836fdbd",
+        "encoder": "383bd7611e2175441e655f98aca6446523b30eec1fcfc5a7bc57048edc30d3f9"
+      },
+      "output_sha256": {
+        "native_trace": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+        "direct_trace": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+        "browser_evidence": "4f3a9653869f0f11cef4381ef3d870fa05d6012cd05b9989eeb15fe80b607b03",
+        "checker": "e1fa7b2ec05748d71ceb331f154f6c1639444551a8d8b64c80582b2b049c4d96",
+        "run": "d67a113f58773df3c4c021184740c97746fcfba17eab98afe2a9fca754c61e0a",
+        "bundle": "dcf75608247f2ccccb743b0f72063638bd41c654cf235b1c1a29b0b03d26adb6"
+      },
+      "qualification": "The run captured browser.mjs SHA c53d76f80aacc6f37e95ab0e6054ecb01867ca6324af0ed37bbc7490abb2c4c9 and check.mjs SHA b59cc0edc00494193a5512cc4666b443bf1a37b5bf720f8daf729d6aa885d382e, which differ from the current files. It predates the latest effect reorder-control addition and is not a current-source integration pass.",
+      "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-06"
+    },
+    "form_swap_failure": {
+      "fixture": "compiled-form-text-checked-literal-save-reset",
+      "status": "rejected during first React-to-DOM swap after text input",
+      "error": "new renderer DOM differs from the independent DOM oracle after swap",
+      "observed_mismatch": "Input outerHTML serializes aria-label before type/value in React, while the DOM renderer serializes type/value before aria-label; the form tree and edited live control value are retained in partial evidence.",
+      "sourceStableDuringRun": true,
+      "partial_native_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+      "partial_direct_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+      "failure_sha256": "4ea4e6eb7d3ddf79b4ae9e6e033d941ed0a6558b7c7003537c6534f59c9bcc09",
+      "bundle_sha256": "7703ce35614243e3a4acce8f8bb3476c0dff1e036722225e324162aae50707c53",
+      "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-06"
+    },
+    "preserved_diagnostics": [
+      "attempt-01/counter: old renderer was queried after shared-container remount",
+      "attempt-02/counter: harness ReferenceError action is not defined",
+      "attempt-03/counter: checker compared browser DOM prefix to native trace ticks with dom:null",
+      "attempt-05/counter: post-unmount callback probe lacked a Go message",
+      "attempt-06/counter: historical pass against old harness pin",
+      "attempt-06/form: renderer/oracle input attribute-order mismatch",
+      "attempt-07: counter matched then-current pin; form/list/list-growth exposed checked outerHTML from a checked controlled React remount; effect focus was preserved but old checker required an undeclared witness",
+      "attempt-08: counter/form/effect/list-growth matched; list harness used retired React callback where active DOM missing-target probe was required",
+      "attempt-09: targeted list matrix matched after N3 lifetime/classification fix",
+      "attempt-10: all five fixture matrices matched with stable source pins"
+    ],
+    "current_source_sha256": {
+      "compiled-backends/conformance/browser.mjs": "9c0f4e41c918c1104b10fb29a0a218bd2b723280bcf6573a5350952041a5179e",
+      "compiled-backends/conformance/check.mjs": "8445bb81fa6fc3822f58ca7d090d48eaa91596e99585d14c88180c30f9c201a3",
+      "compiled-backends/conformance/run.mjs": "bb4d5036f95695600a07c55b01852c784e98ad0fd7357e08fe22a33fa3bfe73b",
+      "compiled-backends/conformance/swap-schedules.json": "f0bf47cf0ac5c17f876a316508729e6d29082feecf08df9813538c5a49b24053",
+      "compiled-backends/conformance/check.test.mjs": "5cbab8a25128b39ebb78fc1b942f9f931faad67671b6793e59f8020f2a781b66"
+    },
+    "acceptance_gate": "Acceptance matrix complete: attempt-10 matched all five fixtures on the frozen runtime, React, DOM, and build sources. All 34 before/after pins per fixture are stable; N5 may consume the driver and artifact paths.",
+    "attempt_07": {
+      "toolchain": {
+        "node": "v22.23.4",
+        "playwright": "1.64.1",
+        "chromium": "153.0.8010.0 at /tmp/chromium",
+        "native_go": "go1.24.0",
+        "frontend_build_go": "go1.27.3"
+      },
+      "fresh_build_outputs": {
+        "react_dir": "/tmp/gobi-e-build-frozen/react",
+        "dom_dir": "/tmp/gobi-e-build-frozen/dom",
+        "apps_each": 4,
+        "files_each": 209,
+        "matching_path_sets": true,
+        "nonmanifest_nonbundle_byte_identical": 204,
+        "react_manifest_sha256": "a2fa18abeab82a9d752ed3ecdf2c2734593eb0a292718a6b7e533e13701dbc5c",
+        "dom_manifest_sha256": "5174d864a318fd7c7356d2158dc725ee2088d76aadc8c4f60c78ecb9447a9f11"
+      },
+      "native_binary_sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+      "per_fixture": {
+        "counter": {
+          "status": "matched",
+          "source_stable": true,
+          "source_pin_count": 33,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": {
+            "appId": "github.com/samuelpmahan/gondola/counter",
+            "fixture": "unchanged-counter-add-reset-disabled",
+            "ticks": 5,
+            "swaps": 4,
+            "focusSwaps": 0,
+            "mutationControlsDetected": 8
+          },
+          "error": null,
+          "native_direct_trace_sha256_equal": true,
+          "native_trace_sha256": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+          "direct_trace_sha256": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+          "outputs_sha256": {
+            "native.json": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+            "direct.json": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+            "browser.json": "f23ee67f69922cac2b3e65d4075d34d5a919fa4f166fc7433d3d765d18b45d07",
+            "check.json": "7863c5595acd4bc948aab7be1a20a992aea2c7980f83540b60382f4698df4320",
+            "manifest.json": "2570a58a7c5d8037d52b361babd7b934facea817808921f0caef8883f28f360e",
+            "run.json": "5c94f0a993f9ec09108c31aa0fdb2a8fdfef037688d503f8ca18063dda5f7ede",
+            "browser.bundle.mjs": "e97bcf7efa5175d891d1a75bb91e89bb666d821b17c673a7ca4b7913450e9d90"
+          },
+          "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-07/counter"
+        },
+        "form": {
+          "status": "rejected",
+          "source_stable": true,
+          "source_pin_count": 33,
+          "versions": {},
+          "summary": null,
+          "error": "new renderer DOM differs from the independent DOM oracle after swap",
+          "native_direct_trace_sha256_equal": true,
+          "native_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+          "direct_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+          "outputs_sha256": {
+            "native.json": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+            "direct.json": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+            "run.json": "12ea5182ba13bdefa80d5f02dfcfd3ecd6429f4a798e0e1405fd6f209aa3e8bf",
+            "browser.bundle.mjs": "8591a5e8b3feb652eda5d1f396fb8de1de0025fc419e5035499ac2e628c04ebd",
+            "browser.failed.json": "8977d5d654083881227a28721f72c33533643b9aaeec1532287db60de3a8de5a"
+          },
+          "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-07/form"
+        },
+        "list": {
+          "status": "rejected",
+          "source_stable": true,
+          "source_pin_count": 33,
+          "versions": {},
+          "summary": null,
+          "error": "new renderer DOM differs from the independent DOM oracle after swap",
+          "native_direct_trace_sha256_equal": true,
+          "native_trace_sha256": "0f1aea8abb605a57797ff97f7b812b92b33f480270e24d7e3683a29c0c506d87",
+          "direct_trace_sha256": "0f1aea8abb605a57797ff97f7b812b92b33f480270e24d7e3683a29c0c506d87",
+          "outputs_sha256": {
+            "native.json": "0f1aea8abb605a57797ff97f7b812b92b33f480270e24d7e3683a29c0c506d87",
+            "direct.json": "0f1aea8abb605a57797ff97f7b812b92b33f480270e24d7e3683a29c0c506d87",
+            "run.json": "cd7165c6ae62ecd9f27077d7ded1e836d2a21a8d02a94fa5c69993e43fa34c4d",
+            "browser.bundle.mjs": "565715fb201ed9e59ff8b7dd2361f52ee2b000a24850708c365b0b704a03ad6a",
+            "browser.failed.json": "ecd5796b533037949a2d5f0d48fa7dc99f15324217bb2c22453877fcc56e4951"
+          },
+          "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-07/list"
+        },
+        "effect": {
+          "status": "rejected",
+          "source_stable": true,
+          "source_pin_count": 33,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": null,
+          "error": "swap 1 lost the keyed input focus or selection witness",
+          "native_direct_trace_sha256_equal": true,
+          "native_trace_sha256": "c7d87c47dadd585c337c65e1c8421c4c926b8186048833d41dbb980c7da2795b",
+          "direct_trace_sha256": "c7d87c47dadd585c337c65e1c8421c4c926b8186048833d41dbb980c7da2795b",
+          "outputs_sha256": {
+            "native.json": "c7d87c47dadd585c337c65e1c8421c4c926b8186048833d41dbb980c7da2795b",
+            "direct.json": "c7d87c47dadd585c337c65e1c8421c4c926b8186048833d41dbb980c7da2795b",
+            "browser.json": "90ba9775487080fc1924719642fb6becbad6d83619e90ba2cbfc75d515c6a4d2",
+            "run.json": "f548027253eaf4b3e7bad9bb4bc85c2ec9101f81f5df998cb97ea4794fd4f8ff",
+            "browser.bundle.mjs": "b0d746dd3b629a845c0028c06ec69284dbe1438102cafb0cbafc1db8a4e979a0"
+          },
+          "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-07/effect"
+        },
+        "list-growth": {
+          "status": "rejected",
+          "source_stable": true,
+          "source_pin_count": 33,
+          "versions": {},
+          "summary": null,
+          "error": "new renderer DOM differs from the independent DOM oracle after swap",
+          "native_direct_trace_sha256_equal": true,
+          "native_trace_sha256": "e4c461c4a8a0c754d4cd1e45c7254eb71ded406b880efd983564f20259f85e3b",
+          "direct_trace_sha256": "e4c461c4a8a0c754d4cd1e45c7254eb71ded406b880efd983564f20259f85e3b",
+          "outputs_sha256": {
+            "native.json": "e4c461c4a8a0c754d4cd1e45c7254eb71ded406b880efd983564f20259f85e3b",
+            "direct.json": "e4c461c4a8a0c754d4cd1e45c7254eb71ded406b880efd983564f20259f85e3b",
+            "run.json": "3c23b0c42a7c2b6af68939fa565d50da37b7f876d7adc8efc8989eb18a0a19c5",
+            "browser.bundle.mjs": "5f876a42efcb8e67c9697e9626f531da8709d89e9b5218153fbe129abcf10acd",
+            "browser.failed.json": "7e01deffe0329be9d06ed1cb1b65f64ff5904dd7f4c3125ddfa953f816e4a6fc"
+          },
+          "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-07/list-growth"
+        }
+      },
+      "effect_focus_observation": {
+        "swap_events": 3,
+        "focus_preserved": true,
+        "focus_captured_and_restored": true,
+        "undeclared_fixture_focus_witness": true,
+        "prepatch_checker_error": "swap 1 lost the keyed input focus or selection witness",
+        "disposition": "checker fixed offline; full effect rerun pending React repair"
+      },
+      "checked_attribute_diagnosis": {
+        "fixtures": [
+          "form",
+          "list",
+          "list-growth"
+        ],
+        "actual": "React renderer newly mounts checked controlled inputs with checked=\"\" in outerHTML",
+        "oracle": "checked is represented in live controls and omitted from outerHTML",
+        "disposition": "root assigned a separate React renderer repair; oracle and N3 fixture expectations were not weakened"
+      },
+      "preserved_matrix_commands": {
+        "node": "/tmp/gondola-node22/node_modules/node/bin/node",
+        "chromium_env": "CHROMIUM_PATH=/tmp/chromium",
+        "entry": "compiled-backends/conformance/run.mjs",
+        "fixture_map": {
+          "counter": "compiled-frontend/fixtures/counter.json",
+          "form": "compiled-frontend/fixtures/form.json",
+          "list": "compiled-frontend/fixtures/list.json",
+          "effect": "compiled-frontend/fixtures/effect.json",
+          "list-growth": "compiled-frontend/conformance/fixtures/list-growth.json"
+        },
+        "output_dir": "compiled-backends/artifacts/conformance-captures/attempt-07"
+      }
+    },
+    "attempt_09": {
+      "targeted_fixture": "compiled-keyed-list-identity-empty-and-detached",
+      "status": "matched",
+      "source_stable": true,
+      "summary": {
+        "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/list",
+        "fixture": "compiled-keyed-list-identity-empty-and-detached",
+        "ticks": 11,
+        "swaps": 10,
+        "focusSwaps": 5,
+        "mutationControlsDetected": 8
+      },
+      "capture_stem": "compiled-backends/artifacts/conformance-captures/attempt-09/list"
+    },
+    "attempt_10": {
+      "toolchain": {
+        "node": "v22.23.4",
+        "playwright": "1.64.1",
+        "chromium": "153.0.8010.0 at /tmp/chromium",
+        "native_go": "go1.24.0",
+        "frontend_build_go": "go1.27.3"
+      },
+      "build_outputs": {
+        "react_dir": "/tmp/gobi-e-build-frozen/react",
+        "dom_dir": "/tmp/gobi-e-build-frozen/dom",
+        "apps_each": 4,
+        "files_each": 209,
+        "path_sets_identical": true,
+        "nonmanifest_nonbundle_byte_identical": 204,
+        "react_manifest_sha256": "a2fa18abeab82a9d752ed3ecdf2c2734593eb0a292718a6b7e533e13701dbc5c",
+        "dom_manifest_sha256": "5174d864a318fd7c7356d2158dc725ee2088d76aadc8c4f60c78ecb9447a9f11"
+      },
+      "native_binary_sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+      "totals": {
+        "fixtures": 5,
+        "application_ticks": 43,
+        "swaps": 37,
+        "focus_swaps": 9,
+        "mutation_controls_detected": 45,
+        "all_matched": true
+      },
+      "per_fixture": {
+        "counter": {
+          "status": "matched",
+          "source_stable": true,
+          "source_pin_count_before": 34,
+          "source_pin_count_after": 34,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": {
+            "appId": "github.com/samuelpmahan/gondola/counter",
+            "fixture": "unchanged-counter-add-reset-disabled",
+            "ticks": 5,
+            "swaps": 4,
+            "focusSwaps": 0,
+            "mutationControlsDetected": 8
+          },
+          "native_direct_exact_sha256_equal": true,
+          "native_trace_sha256": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+          "direct_trace_sha256": "648fca8cf711f1e94f0215029ffe8d95697cc9c71c763cd4c36e98f9300c6179",
+          "input_pins": {
+            "app_ir": {
+              "sha256": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+              "bytes": 4512
+            },
+            "compiled_module": {
+              "sha256": "af3f866ab08297a09424af2924eb8faca439a5f70d30847c237420f703cb49f1",
+              "bytes": 495198
+            },
+            "encoder": {
+              "sha256": "383bd7611e2175441e655f98aca6446523b30eec1fcfc5a7bc57048edc30d3f9",
+              "bytes": 14482
+            },
+            "native_oracle": {
+              "sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+              "bytes": 3546411
+            }
+          },
+          "output_sha256": {
+            "browser": "bd9285b0f710a75950ffade3a6224b614307fcb813a711f8f010522ebcbcc974",
+            "checker": "91933cb5207b01f8c1940b70aef5067b7a30126cd5f637c7c6c6fb6e348c37ee",
+            "manifest": "d587b8f97d1cbc541940992c5a7cf2a1e552a1ce175697bba4a5778b92c6bf9b",
+            "run": "4a3374eccf4a956944604f0a9d9cd5486b87735c80e62d87db43039846c009b6",
+            "browser_bundle": "7156dc1512be8ed6e209d935d490b554f2001249c37ce76ffea082b875e43808"
+          },
+          "mutation_controls": [
+            "react-dom-html",
+            "dom-control-order",
+            "fixture-action-order",
+            "disabled-reset-physical-gate",
+            "swap-added-tick",
+            "missing-swap-observation",
+            "old-root-after-swap",
+            "swap-backend-order"
+          ],
+          "capture_stem": "compiled-backends/artifacts/conformance-captures/attempt-10/counter",
+          "command": [
+            "/tmp/gondola-node22/node_modules/node/bin/node",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/conformance/run.mjs",
+            "--app-ir",
+            "/tmp/gobi-e-build-frozen/react/apps/counter-b05e9eb0e4e6/app-ir.json",
+            "--compiled",
+            "/tmp/gobi-e-build-frozen/react/apps/counter-b05e9eb0e4e6/gobi-compiled.mjs",
+            "--helpers",
+            "/tmp/gobi-e-build-frozen/react/apps/counter-b05e9eb0e4e6/encoder.mjs",
+            "--native-bin",
+            "compiled-backends/artifacts/compiled-native",
+            "--fixture",
+            "compiled-frontend/fixtures/counter.json",
+            "--output",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/artifacts/conformance-captures/attempt-10/counter"
+          ]
+        },
+        "form": {
+          "status": "matched",
+          "source_stable": true,
+          "source_pin_count_before": 34,
+          "source_pin_count_after": 34,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": {
+            "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/form",
+            "fixture": "compiled-form-text-checked-literal-save-reset",
+            "ticks": 10,
+            "swaps": 9,
+            "focusSwaps": 1,
+            "mutationControlsDetected": 10
+          },
+          "native_direct_exact_sha256_equal": true,
+          "native_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+          "direct_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+          "input_pins": {
+            "app_ir": {
+              "sha256": "4c4ffefca78c86ac3914e0b3f410a4b49354a2b00c05d0b6d1c75e9ed96b19da",
+              "bytes": 5767
+            },
+            "compiled_module": {
+              "sha256": "b677c42dfba0da6a11392113bd072d9f07e2402c08378014303fa6d43eb49511",
+              "bytes": 1220100
+            },
+            "encoder": {
+              "sha256": "e201c343e0ae473654c9c9da02f74ca17b6f6aa7dc97740e015e4280b770f5d8",
+              "bytes": 15396
+            },
+            "native_oracle": {
+              "sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+              "bytes": 3546411
+            }
+          },
+          "output_sha256": {
+            "browser": "c19190ead37fe798a5edc62e3b457824cd1900a030e00d3c177c035903968881",
+            "checker": "6ae1a8dbe6efa5b63a1bac1abb22b6d3c5cf082e34ae5b6103ad94576e068b52",
+            "manifest": "ca41e1163e66337187aa3df71c4c19be17b3107587c75da9f254883f42a6eff8",
+            "run": "feff8b63b48aab39570ddc25d7eaa0207c8b507381bfb147aa6c6b2115612061",
+            "browser_bundle": "36194256545022a1a34f0c85f848f8adc97ffe60cccca982e0d21c956be46075"
+          },
+          "mutation_controls": [
+            "react-dom-html",
+            "dom-control-order",
+            "action-target-value",
+            "literal-message-vs-bound-value",
+            "fixture-action-order",
+            "disabled-reset-physical-gate",
+            "swap-added-tick",
+            "missing-swap-observation",
+            "old-root-after-swap",
+            "swap-backend-order"
+          ],
+          "capture_stem": "compiled-backends/artifacts/conformance-captures/attempt-10/form",
+          "command": [
+            "/tmp/gondola-node22/node_modules/node/bin/node",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/conformance/run.mjs",
+            "--app-ir",
+            "/tmp/gobi-e-build-frozen/react/apps/form-a3fe6b48b000/app-ir.json",
+            "--compiled",
+            "/tmp/gobi-e-build-frozen/react/apps/form-a3fe6b48b000/gobi-compiled.mjs",
+            "--helpers",
+            "/tmp/gobi-e-build-frozen/react/apps/form-a3fe6b48b000/encoder.mjs",
+            "--native-bin",
+            "compiled-backends/artifacts/compiled-native",
+            "--fixture",
+            "compiled-frontend/fixtures/form.json",
+            "--output",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/artifacts/conformance-captures/attempt-10/form"
+          ]
+        },
+        "list": {
+          "status": "matched",
+          "source_stable": true,
+          "source_pin_count_before": 34,
+          "source_pin_count_after": 34,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": {
+            "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/list",
+            "fixture": "compiled-keyed-list-identity-empty-and-detached",
+            "ticks": 11,
+            "swaps": 10,
+            "focusSwaps": 5,
+            "mutationControlsDetected": 8
+          },
+          "native_direct_exact_sha256_equal": true,
+          "native_trace_sha256": "0f1aea8abb605a57797ff97f7b812b92b33f480270e24d7e3683a29c0c506d87",
+          "direct_trace_sha256": "0f1aea8abb605a57797ff97f7b812b92b33f480270e24d7e3683a29c0c506d87",
+          "input_pins": {
+            "app_ir": {
+              "sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+              "bytes": 7172
+            },
+            "compiled_module": {
+              "sha256": "7cd76a6455f8d04b087c062e60f4225aadf5de9b36bdd4a056bf544030d80beb",
+              "bytes": 1223916
+            },
+            "encoder": {
+              "sha256": "8e1727393cd4a2af4a3fc8e8c156462d951bcbfe4990c04bb65ed02d5ec83723",
+              "bytes": 15840
+            },
+            "native_oracle": {
+              "sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+              "bytes": 3546411
+            }
+          },
+          "output_sha256": {
+            "browser": "8a2a5491b5c152d3a53b2e2024ca7acea76b3d2b8ee4728fbbca4c21e6847c53",
+            "checker": "2e1c101cfaa9b1e7ab9c3628d52ca5ac3fbf536c982ec8ada6b9f04a19c42d67",
+            "manifest": "a710bbb8c576c5c55ad2d574b1cd64737938591b641e95af38a7927ef28780f2",
+            "run": "cb2c36f79358a39cc1b1c7785c3c5624faf36116e126657a56e658d1620a074e",
+            "browser_bundle": "d1f8843f8a92474906d01344f1009428ccf19d7873dcb12875f245611ec25a2d"
+          },
+          "mutation_controls": [
+            "react-dom-html",
+            "dom-control-order",
+            "fixture-action-order",
+            "disabled-reset-physical-gate",
+            "swap-added-tick",
+            "missing-swap-observation",
+            "old-root-after-swap",
+            "swap-backend-order"
+          ],
+          "capture_stem": "compiled-backends/artifacts/conformance-captures/attempt-10/list",
+          "command": [
+            "/tmp/gondola-node22/node_modules/node/bin/node",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/conformance/run.mjs",
+            "--app-ir",
+            "/tmp/gobi-e-build-frozen/react/apps/list-f8359aa2866d/app-ir.json",
+            "--compiled",
+            "/tmp/gobi-e-build-frozen/react/apps/list-f8359aa2866d/gobi-compiled.mjs",
+            "--helpers",
+            "/tmp/gobi-e-build-frozen/react/apps/list-f8359aa2866d/encoder.mjs",
+            "--native-bin",
+            "compiled-backends/artifacts/compiled-native",
+            "--fixture",
+            "compiled-frontend/fixtures/list.json",
+            "--output",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/artifacts/conformance-captures/attempt-10/list"
+          ]
+        },
+        "effect": {
+          "status": "matched",
+          "source_stable": true,
+          "source_pin_count_before": 34,
+          "source_pin_count_after": 34,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": {
+            "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/effect",
+            "fixture": "compiled-effect-commit-before-deterministic-reply",
+            "ticks": 5,
+            "swaps": 3,
+            "focusSwaps": 2,
+            "mutationControlsDetected": 11
+          },
+          "native_direct_exact_sha256_equal": true,
+          "native_trace_sha256": "c7d87c47dadd585c337c65e1c8421c4c926b8186048833d41dbb980c7da2795b",
+          "direct_trace_sha256": "c7d87c47dadd585c337c65e1c8421c4c926b8186048833d41dbb980c7da2795b",
+          "input_pins": {
+            "app_ir": {
+              "sha256": "0cad7389539e3fd89951901e41f8766dd0fb81012931700febfe7acad71c3b7d",
+              "bytes": 5974
+            },
+            "compiled_module": {
+              "sha256": "9f093f14189881c0039b3b4795657885e1f1153f69e68ff4609d53f4c392f838",
+              "bytes": 1219884
+            },
+            "encoder": {
+              "sha256": "7c1335063cea7f98223fbc8bff2e81236cf59a7351a997b3b0ed92bcdbabfbbd",
+              "bytes": 15539
+            },
+            "native_oracle": {
+              "sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+              "bytes": 3546411
+            }
+          },
+          "output_sha256": {
+            "browser": "0658dbf73bc4862d98788cee85dc5271fc9f0a73546e2c66328fd98e3b25b375",
+            "checker": "0046d923f06a572e65f62a3978de686d5693b441bd4d32aac1dc3a99e1548934",
+            "manifest": "bef756792283a3940b0f631fc6052b88558c20793987d0a1539702bf6a3c128e",
+            "run": "6faf5ca33b69dfe0211c3884a3a7bf7b07ba9935d79d89556cbfb896939aa432",
+            "browser_bundle": "b3a13889101dd59d9f30eaf476a3b4d6feeab45d0a94c02932b1e8da4a72b91f"
+          },
+          "mutation_controls": [
+            "react-dom-html",
+            "dom-control-order",
+            "fixture-action-order",
+            "disabled-reset-physical-gate",
+            "swap-added-tick",
+            "missing-swap-observation",
+            "old-root-after-swap",
+            "swap-backend-order",
+            "effect-reorder-rejection",
+            "effect-reply-before-request",
+            "effect-completion-correlation"
+          ],
+          "capture_stem": "compiled-backends/artifacts/conformance-captures/attempt-10/effect",
+          "command": [
+            "/tmp/gondola-node22/node_modules/node/bin/node",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/conformance/run.mjs",
+            "--app-ir",
+            "/tmp/gobi-e-build-frozen/react/apps/effect-ff8449e8f5b2/app-ir.json",
+            "--compiled",
+            "/tmp/gobi-e-build-frozen/react/apps/effect-ff8449e8f5b2/gobi-compiled.mjs",
+            "--helpers",
+            "/tmp/gobi-e-build-frozen/react/apps/effect-ff8449e8f5b2/encoder.mjs",
+            "--native-bin",
+            "compiled-backends/artifacts/compiled-native",
+            "--fixture",
+            "compiled-frontend/fixtures/effect.json",
+            "--output",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/artifacts/conformance-captures/attempt-10/effect"
+          ]
+        },
+        "list-growth": {
+          "status": "matched",
+          "source_stable": true,
+          "source_pin_count_before": 34,
+          "source_pin_count_after": 34,
+          "versions": {
+            "chromium": "153.0.8010.0",
+            "playwright": "1.64.1"
+          },
+          "summary": {
+            "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/list",
+            "fixture": "compiled-list-growth-spare-capacity-edit-reorder-reset",
+            "ticks": 12,
+            "swaps": 11,
+            "focusSwaps": 1,
+            "mutationControlsDetected": 8
+          },
+          "native_direct_exact_sha256_equal": true,
+          "native_trace_sha256": "e4c461c4a8a0c754d4cd1e45c7254eb71ded406b880efd983564f20259f85e3b",
+          "direct_trace_sha256": "e4c461c4a8a0c754d4cd1e45c7254eb71ded406b880efd983564f20259f85e3b",
+          "input_pins": {
+            "app_ir": {
+              "sha256": "14d93e7c0e22d184ef99d428b0c0b1c2339766211a3785b25a4762a756cb1e4b",
+              "bytes": 7172
+            },
+            "compiled_module": {
+              "sha256": "7cd76a6455f8d04b087c062e60f4225aadf5de9b36bdd4a056bf544030d80beb",
+              "bytes": 1223916
+            },
+            "encoder": {
+              "sha256": "8e1727393cd4a2af4a3fc8e8c156462d951bcbfe4990c04bb65ed02d5ec83723",
+              "bytes": 15840
+            },
+            "native_oracle": {
+              "sha256": "fbbc867acb4a7baf0a0c6e5f26ab1abf524b5d2011b992cce1e5a30d75c3a186",
+              "bytes": 3546411
+            }
+          },
+          "output_sha256": {
+            "browser": "7ffb1025e389a1e2c5a2f09fabc450823a4ec172c775cf8206a6e3181de7160c",
+            "checker": "f526d9226df4377fdb75edd82bf19045f3e286611a0d873c47b613b72cbf631c",
+            "manifest": "ee42a17368fc1ee37c2aaf05c32479268fa00c5ae39968e5f438cd3ecb41d87c",
+            "run": "a1007dd80785eba6f370a6f6949cc9a3bfab8593d92755d3246a68ed84eb994b",
+            "browser_bundle": "d0a55b14aaa5bdb5fd1f1b9a33670a62652fd98c0ef998971c1d29b636e12e73"
+          },
+          "mutation_controls": [
+            "react-dom-html",
+            "dom-control-order",
+            "fixture-action-order",
+            "disabled-reset-physical-gate",
+            "swap-added-tick",
+            "missing-swap-observation",
+            "old-root-after-swap",
+            "swap-backend-order"
+          ],
+          "capture_stem": "compiled-backends/artifacts/conformance-captures/attempt-10/list-growth",
+          "command": [
+            "/tmp/gondola-node22/node_modules/node/bin/node",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/conformance/run.mjs",
+            "--app-ir",
+            "/tmp/gobi-e-build-frozen/react/apps/list-f8359aa2866d/app-ir.json",
+            "--compiled",
+            "/tmp/gobi-e-build-frozen/react/apps/list-f8359aa2866d/gobi-compiled.mjs",
+            "--helpers",
+            "/tmp/gobi-e-build-frozen/react/apps/list-f8359aa2866d/encoder.mjs",
+            "--native-bin",
+            "compiled-backends/artifacts/compiled-native",
+            "--fixture",
+            "compiled-frontend/conformance/fixtures/list-growth.json",
+            "--output",
+            "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/artifacts/conformance-captures/attempt-10/list-growth"
+          ]
+        }
+      },
+      "effect_checks": {
+        "requests": 1,
+        "manual_completions": 1,
+        "reorder_controls": 1,
+        "duplicate_controls": 1,
+        "swaps": 3,
+        "focus_swaps": 2,
+        "completion_tick_indexes": [
+          4
+        ]
+      },
+      "stale_action_evidence": {
+        "action_index": 7,
+        "classification": "retired-renderer-probe-plus-active-missing-target-attempt",
+        "retired_renderer_id": 7,
+        "retired_probe_ticks_before": 8,
+        "retired_probe_ticks_after": 8,
+        "retired_fence": {
+          "generation": 7,
+          "kind": "stale",
+          "renderEpoch": 1
+        },
+        "active_renderer_id": 8,
+        "active_action_tick_index": 8,
+        "ticks_before_active_attempt": 8,
+        "ticks_after_active_attempt": 9,
+        "dispatch_count_before": 7,
+        "dispatch_count_after": 7,
+        "stale_callbacks_before": 0,
+        "stale_callbacks_after": 2
+      },
+      "capture_directory": "compiled-backends/artifacts/conformance-captures/attempt-10"
+    }
+  },
+  "reported_stage": "final_frozen_source_five_fixture_matrix_matched_all_source_and_output_pins_stable"
+}

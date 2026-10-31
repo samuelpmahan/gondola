@@ -1,0 +1,63 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-R-RUNTIME",
+  "worker": "N6",
+  "target_job": "R-RUNTIME",
+  "decision": "accepted",
+  "outcome": "accepted",
+  "summary": "Independently accepted N1's bounded focus-record validation, strict restoreFocus result, and rejected-Promise sink repair. Fresh Node 22 runtime tests pass 25/25; an added probe covers rejected Promise subclasses and confirms custom then methods are not invoked.",
+  "report": {
+    "path": "compiled-backends/coordination/reports/XR-R-RUNTIME.md",
+    "sha256": "0d377b437592432275e64ae11710ff9fa4f3fc44362ec926263937f74ee037f6"
+  },
+  "source_scope": [
+    "compiled-backends/coordination/reports/XR-R-RUNTIME.md",
+    "compiled-backends/coordination/receipts/XR-R-RUNTIME.json",
+    "compiled-backends/evidence/reviews/xr-r-runtime/**"
+  ],
+  "reviewed_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "e729e3b360892edf01511b64657d32f638db54b5f5b0d2767b980114bb6d3105",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "3ddaaded2db26d7b2acf9bcbd8e85584f1f4b57e1e89b325a602aff5dab39fcc",
+    "compiled-backends/coordination/reports/R-RUNTIME.md": "f1a383087f2babbd54ae046a9ece18b502c68a08d697048dc3795cee217e6f4f",
+    "compiled-backends/coordination/receipts/R-RUNTIME.json": "ea6070e1c37844aaaec048f624fbac1475888cf01fef61b2728896087eae32d9"
+  },
+  "prior_defect_baseline": {
+    "runtime_sha256": "a35338302fc391499575fe7d3c7c59c41a3eeaddce23a3039f0a13d84ac94ae2",
+    "runtime_test_sha256": "f2fb585601675f60a2994b91b4c8feb4dd77507668bef27ff6e37200ad4c381d",
+    "independent_probe": "compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.mjs",
+    "independent_probe_sha256": "d81457583bf6c0946238dea22f34f3a148e99be2834f15f067ee485b08bd7be3"
+  },
+  "evidence": {
+    "runtime_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "working_directory": "repository root",
+      "toolchain": "Node v22.23.4",
+      "passed": 25,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-r-runtime/runtime-node22.log",
+      "log_sha256": "dda621c7a01b5f6d5845522cff7aa32012c7dc3e64827bcd06c6dc1ce0ebc873",
+      "warning": "Existing experimental UNDICI-EHPA EnvHttpProxyAgent warning."
+    },
+    "promise_edge_probe": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-backends/evidence/reviews/xr-r-runtime/promise-edge-probe.mjs",
+      "toolchain": "Node v22.23.4",
+      "source": "compiled-backends/evidence/reviews/xr-r-runtime/promise-edge-probe.mjs",
+      "source_sha256": "3c11b07dcd5d948b4ed6c0a5409b1795378af9034ab8c82fe36193f91c2fbffb",
+      "result": "passed: rejected Promise subclass from focusState rejected before teardown with old runtime usable; rejected Promise subclass from update failed closed after teardown; overridden Promise subclass then and custom thenable then methods were not invoked; no unhandled rejection was observed",
+      "log": "compiled-backends/evidence/reviews/xr-r-runtime/promise-edge-probe.log",
+      "log_sha256": "baa118a9525c8f06a2b6b66db462f644519f74ae62c21442a30e8594d778f1e1"
+    },
+    "review_evidence": {
+      "path": "compiled-backends/evidence/reviews/xr-r-runtime/audit.md",
+      "sha256": "d20328ffb3d21fb803994a7561869a9244ad2711d971fe4c12b628df2d220872"
+    },
+    "review_findings": []
+  },
+  "limits": [
+    "The Node runtime unit suite and focused probe do not establish the N3 four-app React-to-DOM matrix or the separate DOM checked-property remount repair.",
+    "No sandbox guarantee is made for arbitrary Proxy traps, side-effecting getters, or hostile Promise species constructors; the custom then function itself is not invoked.",
+    "No production files were changed during this review."
+  ],
+  "production_changes": false
+}

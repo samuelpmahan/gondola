@@ -1,0 +1,68 @@
+{
+  "job_id": "R-RUNTIME",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Fixed malformed focus-result reporting and unhandled rejection leakage for rejected Promise renderer returns. Final runtime suite passes 25/25 on Node v22.23.4; full composed browser matrix remains with N3.",
+  "target_job": "E-RUNTIME",
+  "source_scope": [
+    "compiled-frontend/frontend/runtime/runtime.mjs",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs",
+    "compiled-backends/coordination/reports/R-RUNTIME.md",
+    "compiled-backends/coordination/receipts/R-RUNTIME.json",
+    "compiled-backends/evidence/repairs/runtime/**"
+  ],
+  "before_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "a35338302fc391499575fe7d3c7c59c41a3eeaddce23a3039f0a13d84ac94ae2",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "f2fb585601675f60a2994b91b4c8feb4dd77507668bef27ff6e37200ad4c381d"
+  },
+  "source_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "e729e3b360892edf01511b64657d32f638db54b5f5b0d2767b980114bb6d3105",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "3ddaaded2db26d7b2acf9bcbd8e85584f1f4b57e1e89b325a602aff5dab39fcc"
+  },
+  "evidence": {
+    "independent_pre_fix_probe": {
+      "source": "compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.mjs",
+      "source_sha256": "d81457583bf6c0946238dea22f34f3a148e99be2834f15f067ee485b08bd7be3",
+      "result": "compiled-backends/evidence/reviews/xr-runtime/replacement-failure-probe.json",
+      "result_sha256": "fe35415ea582d02749f560dc4292c645ab6471890e83d7f7b3b91eeadd02b00d",
+      "observed": "restoreFocus(undefined) committed as restored; rejected native Promise caused RuntimeFailure and a separate unhandledRejection."
+    },
+    "runtime_tests": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola-backends",
+      "toolchain": "Node v22.23.4",
+      "passed": 25,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/repairs/runtime/runtime-node22.log",
+      "log_sha256": "a98eeb3c8e1cd6cac949997f5f585eb3c134ec61e3dec9fec046b0c0e192b0c0",
+      "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+    },
+    "syntax_checks": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --check compiled-frontend/frontend/runtime/runtime.mjs",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/repairs/runtime/runtime-syntax.log",
+        "log_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --check compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/repairs/runtime/test-syntax.log",
+        "log_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    ],
+    "behavior": [
+      "Only null means no focus; focusState records are validated before teardown.",
+      "Only restoreFocus(true) reports focus restored; false and non-boolean results fail closed after teardown.",
+      "Rejected native Promise returns receive an intrinsic rejection handler before the synchronous failure is surfaced.",
+      "Promise test verifies an own then getter capable of reentry is not read; no app Update, trace tick, or unhandled rejection occurs."
+    ]
+  },
+  "limits": [
+    "No full Go build or N3 React-to-DOM browser matrix was run in this runtime lane.",
+    "The native Promise sink relies on trusted renderer structural returns and runtime reentrancy guards; it does not claim protection from arbitrary Proxy/getter behavior.",
+    "A regular function returning a thenable is detected only after invocation; after teardown this remains a fail-closed replacement error without rollback."
+  ],
+  "report_sha256": "f1a383087f2babbd54ae046a9ece18b502c68a08d697048dc3795cee217e6f4f"
+}
