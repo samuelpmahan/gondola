@@ -156,6 +156,59 @@ func Update(state State, _ gobi.Message) (State, []gobi.Effect) {
 	}
 }
 
+func TestEffectCancelCapabilityUsesGoZeroValueForOmittedReply(t *testing.T) {
+	root := filepath.Clean(filepath.Join("..", ".."))
+	const prelude = `package effectcancelzerovalueprobe
+import "github.com/samuelpmahan/gondola/gobi"
+type State struct{ Count float64 }
+func Init() State { return State{} }
+func View(State) gobi.Node { return gobi.Node{} }
+`
+	cases := []struct {
+		name       string
+		replyField string
+		want       bool
+	}{
+		{name: "omitted reply is Go zero value", want: true},
+		{name: "explicit empty reply", replyField: `, Reply: ""`, want: true},
+		{name: "nonempty literal reply", replyField: `, Reply: "complete"`, want: false},
+		{name: "computed reply", replyField: `, Reply: message.Arg`, want: false},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			source := prelude + `
+func Update(state State, message gobi.Message) (State, []gobi.Effect) {
+	return state, []gobi.Effect{{Kind: "lifecycle.cancel", Name: "cancel", Arg: message.Arg` + tc.replyField + `}}
+}
+`
+			_, _, result := loadAndAnalyzeProbe(t, root, source)
+			if len(result.Diagnostics) != 0 || len(result.Apps) != 1 {
+				t.Fatalf("Analyze diagnostics: apps=%d diagnostics=%+v", len(result.Apps), result.Diagnostics)
+			}
+			if got := hasCapability(result.Apps[0], compilercontract.CapabilityEffectCancel); got != tc.want {
+				t.Fatalf("effect.cancel capability = %v, want %v", got, tc.want)
+			}
+		})
+	}
+
+	t.Run("wrong effect type", func(t *testing.T) {
+		source := prelude + `
+type OtherEffect struct { Kind, Name, Arg, Reply string }
+func Update(state State, message gobi.Message) (State, []gobi.Effect) {
+	_ = OtherEffect{Kind: "lifecycle.cancel", Name: "cancel", Arg: message.Arg}
+	return state, nil
+}
+`
+		_, _, result := loadAndAnalyzeProbe(t, root, source)
+		if len(result.Diagnostics) != 0 || len(result.Apps) != 1 {
+			t.Fatalf("Analyze diagnostics: apps=%d diagnostics=%+v", len(result.Apps), result.Diagnostics)
+		}
+		if hasCapability(result.Apps[0], compilercontract.CapabilityEffectCancel) {
+			t.Fatal("wrong effect type declared effect.cancel")
+		}
+	})
+}
+
 func hasCapability(app compilercontract.AppIR, capability compilercontract.Capability) bool {
 	for _, component := range app.Components {
 		for _, declared := range component.Capabilities {

@@ -1010,7 +1010,11 @@ func hasLifecycleCancelDescriptor(types []compilercontract.TypeInfo, reachable [
 			}
 			kind, kindOK := literalString(fields["Kind"])
 			name, nameOK := literalString(fields["Name"])
-			reply, replyOK := literalString(fields["Reply"])
+			replyField, hasReplyField := fields["Reply"]
+			reply, replyOK := "", !hasReplyField
+			if hasReplyField {
+				reply, replyOK = literalString(replyField)
+			}
 			arg, argOK := fields["Arg"]
 			if kindOK && nameOK && replyOK && argOK && isStringType(arg.TypeID, types) &&
 				kind == "lifecycle.cancel" && name == "cancel" && reply == "" {

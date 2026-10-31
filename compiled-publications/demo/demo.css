@@ -1,0 +1,52 @@
+:root {
+  color-scheme: light;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #f3f6fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+.shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 64px; }
+.hero { margin-bottom: 24px; }
+.eyebrow { margin: 0 0 8px; color: #53668b; font-size: .76rem; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: 12px; font-size: clamp(2rem, 4vw, 3.25rem); letter-spacing: -.04em; line-height: 1.05; }
+h2 { margin-bottom: 0; font-size: 1.28rem; }
+h3 { margin: 0 0 8px; font-size: .86rem; }
+.intro { max-width: 760px; margin-bottom: 18px; color: #536176; font-size: 1.05rem; line-height: 1.55; }
+.status { width: fit-content; margin: 0; padding: 8px 12px; border: 1px solid #ced7e6; border-radius: 999px; background: #fff; color: #43516a; font-size: .9rem; }
+.status[data-state="ready"] { border-color: #a9ddc0; background: #effbf4; color: #17643a; }
+.status[data-state="error"] { border-color: #e2a3a3; background: #fff1f1; color: #9c2929; }
+.host-panel, .view-panel, .diagnostics { margin-top: 20px; border: 1px solid #d7deea; border-radius: 16px; background: #fff; box-shadow: 0 8px 28px rgb(23 32 51 / 5%); }
+.host-panel, .view-panel { padding: 20px; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.renderer-badge { margin: 0; padding: 7px 10px; border-radius: 999px; background: #eef2fa; color: #415578; font-size: .85rem; font-weight: 700; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; }
+.toolbar button, .go-view button { border: 1px solid #bfcbe0; border-radius: 8px; padding: 8px 12px; background: #fff; color: #1c2b46; cursor: pointer; }
+.toolbar button:hover, .go-view button:hover:not(:disabled) { border-color: #536fa8; background: #f4f7fd; }
+.toolbar button[aria-pressed="true"] { border-color: #375a9c; background: #eaf0fc; color: #183f82; }
+button:disabled { cursor: not-allowed; opacity: .45; }
+.subtle { margin: 12px 0; color: #66738a; font-size: .9rem; }
+.subtle[data-state="rejected"] { color: #8c531c; }
+.capability-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 18px; }
+.capability-grid > div { min-height: 80px; padding: 12px; border-radius: 10px; background: #f6f8fc; }
+.capability-grid ul { margin: 0; padding-left: 18px; color: #57647a; font-size: .86rem; line-height: 1.6; }
+.host-replies { margin-top: 16px; padding-top: 12px; border-top: 1px solid #e8edf4; }
+.reply-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.reply-list button { border: 1px solid #bfcbe0; border-radius: 8px; padding: 7px 10px; background: #f7f9fd; color: #1c2b46; cursor: pointer; }
+#host-action-status[data-state="accepted"] { color: #17643a; }
+#host-action-status[data-state="rejected"] { color: #8c531c; }
+.go-view { min-height: 180px; }
+.diagnostics { overflow: hidden; }
+.diagnostics details + details { border-top: 1px solid #e4e8f0; }
+.diagnostics summary { padding: 14px 18px; cursor: pointer; font-weight: 700; }
+.diagnostics pre { max-height: 420px; overflow: auto; margin: 0; padding: 14px 18px 18px; border-top: 1px solid #edf0f5; background: #fbfcfe; color: #394760; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+@media (max-width: 620px) {
+  .shell { width: min(100% - 20px, 1120px); padding-top: 24px; }
+  .host-panel, .view-panel { padding: 15px; }
+  .panel-heading { align-items: flex-start; flex-direction: column; }
+}
