@@ -153,7 +153,6 @@ async function execute(name, command, args, options = {}) {
     cwd: options.cwd ?? root,
     env: { ...process.env, ...(options.env ?? {}) },
     input: options.input,
-    encoding: "buffer",
     maxBuffer: 256 * 1024 * 1024,
   });
   const stdout = result.stdout ?? Buffer.alloc(0);
