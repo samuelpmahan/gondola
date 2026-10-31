@@ -31,7 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GOBI_PORTABLE_REPOSITORY_COMMIT: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
-      GOBI_PORTABLE_OUTPUT_DIR: ${{ runner.temp }}/gobi-portable-qualification-${{ github.run_id }}-${{ github.run_attempt }}
       GOFLAGS: -buildvcs=false
     steps:
       - uses: actions/checkout@v4
@@ -46,6 +45,8 @@ jobs:
           go-version: 1.24.x
 
       - name: Verify the published archive with Go
+        env:
+          GOBI_PORTABLE_OUTPUT_DIR: ${{ runner.temp }}/gobi-portable-qualification-${{ github.run_id }}-${{ github.run_attempt }}
         run: bash run-portable-qualification.sh
 
       - name: Preserve portable verification evidence
