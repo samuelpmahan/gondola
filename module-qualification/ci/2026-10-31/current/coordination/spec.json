@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-CAPTURES",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "modulequalification/semantics.go and semantics_test.go",
+      "summary": "Implement bounded native Go qualification of PR20 independent module runs, read CONTRACT.md before changes"
+    },
+    {
+      "id": "E-ARCHIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "modulequalification/archive.go archive_test.go json.go json_test.go",
+      "summary": "Implement bounded native Go qualification of PR20 independent module runs, read CONTRACT.md before changes"
+    },
+    {
+      "id": "E-ABI",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "modulequalification/abi.go abi_test.go",
+      "summary": "Implement bounded native Go qualification of PR20 independent module runs, read CONTRACT.md before changes"
+    },
+    {
+      "id": "E-ADVERSARIAL",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "modulequalification/adversarial_test.go and module-qualification/controls/**",
+      "summary": "Implement bounded native Go qualification of PR20 independent module runs, read CONTRACT.md before changes"
+    },
+    {
+      "id": "E-CLI",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "modulequalification/verify.go verify_test.go cmd/module-qualify/**",
+      "summary": "Implement bounded native Go qualification of PR20 independent module runs, read CONTRACT.md before changes"
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "run-module-qualification.sh module-qualification/run.mjs README.md RESULTS.md .github/workflows/gobi-native-module-qualification.yml",
+      "summary": "Implement bounded native Go qualification of PR20 independent module runs, read CONTRACT.md before changes"
+    }
+  ]
+}

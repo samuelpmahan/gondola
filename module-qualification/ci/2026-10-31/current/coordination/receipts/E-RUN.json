@@ -1,0 +1,152 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-RUN",
+  "worker": "N6",
+  "outcome": "confirmed_reuse",
+  "summary": "Fresh full acceptance passed on the clean frozen source commit: 12 React/DOM module-pair profiles, 3 seeds, native directory/archive checks, all focused Go tests and 10 named mutations, M0 over 5000 cases, and counter parity over 107 scripts/4473 ticks. No source changes. The evidence bundle archives 18 successful commands; two successful post-archive Git checks are preserved separately with exact hashes.",
+  "sourceIdentity": {
+    "sourceCommit": "4395d41ade7e4196878b6885d4c46dd4d8ec85f1",
+    "tree": "5835ca66f5c4903c711e04aa7e8d14212632bc3a",
+    "workingTreeClean": true,
+    "sourcePinsUnchanged": true,
+    "finalSourceRechecked": true
+  },
+  "execution": {
+    "command": "PATH=\"/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH\" GOBI_GO_BIN=/tmp/gondola-go/go/bin/go GOBI_NODE_BIN=/tmp/gondola-node22/node_modules/node/bin/node GOBI_PYTHON_BIN=/tmp/rebalancer-env/bin/python CHROMIUM_EXECUTABLE_PATH=/tmp/chromium-portable bash run-module-qualification.sh --source-commit 4395d41ade7e4196878b6885d4c46dd4d8ec85f1 --chromium /tmp/chromium-portable",
+    "exitCode": 0,
+    "attempt": "attempt-20261031T230513555Z-8",
+    "producerAttempt": "attempt-20261031T230514281Z-99",
+    "tools": {
+      "goVerifier": "go1.24.0 linux/amd64",
+      "goCompiler": "go1.27.3 linux/amd64",
+      "node": "v22.23.4",
+      "python": "3.12.14",
+      "chromium": "153.0.8010.0"
+    },
+    "profile": {
+      "status": "matched",
+      "fixedEvents": 24,
+      "fixedGoUpdates": 16,
+      "fixedStateCheckpoints": 17,
+      "browserProfiles": 12,
+      "seeds": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "eventsPerSeed": 40,
+      "captureEvents": 144,
+      "captureGoUpdates": 99,
+      "pageErrors": 0
+    },
+    "abi": {
+      "status": "passed",
+      "builds": 4,
+      "pairs": 2
+    },
+    "archiveVerification": {
+      "status": "passed",
+      "members": 529,
+      "bytes": 6376501,
+      "sourceCommit": "4395d41ade7e4196878b6885d4c46dd4d8ec85f1"
+    },
+    "focusedGoTests": {
+      "command": "go test -json -count=1 ./modulequalification/... ./cmd/module-qualify/...",
+      "status": "passed",
+      "failedTests": 0,
+      "skippedTests": 0,
+      "actualCaptureMutationsDetected": 10,
+      "verifierSourceFiles": 43
+    },
+    "regressions": {
+      "milestoneZero": {
+        "status": "passed",
+        "cases": 5000
+      },
+      "counterInteraction": {
+        "status": "passed",
+        "scripts": 107,
+        "ticks": 4473,
+        "seed": 20261030,
+        "nodeTestsPassed": 8
+      }
+    },
+    "portableToolResolutionTests": {
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    "evidenceBundle": {
+      "path": "/workspace/scratch/39a56936f173/gondola/module-qualification/output/attempts/attempt-20261031T230513555Z-8/module-qualification-evidence.tar.gz",
+      "bytes": 6616802,
+      "sha256": "98a1c68ed0c2453775a4e069482256b186f6446af40dd3ec0c7837d116914e9e",
+      "manifestPath": "/workspace/scratch/39a56936f173/gondola/module-qualification/output/attempts/attempt-20261031T230513555Z-8/module-qualification-evidence.manifest.json",
+      "manifestSHA256": "e7567785384c06242aee247026de57245ba68c26fc9f9d5de2c3f72359c092f2",
+      "members": 123,
+      "expandedBytes": 8509794,
+      "sourceInputs": 529,
+      "outerConsumer": "passed"
+    },
+    "upstreamRuntimeArchive": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-modules/output/attempts/attempt-20261031T230514281Z-99.tar.gz",
+      "bytes": 6376501,
+      "sha256": "05c71d20f7d7e25281b885a5bed20c337540d9bd6bb9728b23aeaf845f70066d",
+      "manifestSHA256": "4d0e4a7b7362d2d206f32785d3844a1c326f9796ce243252c0dd0ecd31f808c9",
+      "members": 529,
+      "producerSourcePins": 147
+    },
+    "commandInventory": {
+      "archivedCount": 18,
+      "allArchivedExitCodesZero": true,
+      "attemptDirectoryCount": 20,
+      "postArchiveCommands": [
+        "git-final-head",
+        "git-final-status"
+      ],
+      "postArchiveCommandsExitCodesZero": true,
+      "postArchiveRecords": "/workspace/scratch/39a56936f173/native-module-coordination/rawlogs/E-RUN/finalization/postarchive-git-checks/",
+      "interpretation": "The immutable archive summary and its 18 command records agree; two final Git checks were added after archive creation and are separately preserved."
+    }
+  },
+  "independentConsumerAttempts": [
+    {
+      "path": "rawlogs/E-RUN/outer-consumer.py",
+      "exitCode": 1,
+      "reason": "The checker double-prefixed member paths and rejected a name-set mismatch despite actual and expected member counts both being 123. This was a checker expectation error."
+    },
+    {
+      "path": "rawlogs/E-RUN/outer-consumer-retry.py",
+      "exitCode": 0,
+      "result": "Verified outer archive, exact member set, lengths and hashes, 123 members, and embedded upstream runtime archive."
+    },
+    {
+      "path": "rawlogs/E-RUN/finalization/command-inventory.py",
+      "exitCode": 1,
+      "reason": "The checker expected bundle/evidence-manifest.json inside the tar; the authoritative manifest is external. It failed before emitting an inventory."
+    },
+    {
+      "path": "rawlogs/E-RUN/finalization/command-inventory-retry.py",
+      "exitCode": 0,
+      "result": "Read archived bundle/summary.json and verified 18 archived command records versus 20 attempt-directory records, isolating the two post-archive Git checks."
+    }
+  ],
+  "rawEvidence": {
+    "indexPath": "/workspace/scratch/39a56936f173/native-module-coordination/rawlogs/E-RUN/rawlog-index.json",
+    "indexBytes": 5150,
+    "indexSHA256": "557776cf1ce1e6d58ba51864353641681b1ecaf3660ddcd11d83a9ea5f951f17",
+    "indexedFileCount": 30,
+    "runnerStdoutSHA256": "87b0e1e957fa11f842c56bb1c388b18f9d7a498994aa8198d53e47dffbe95436",
+    "summarySHA256": "4165398faaabee7d0fb9e434979efc8f0e79cd54a22821de6fedfaa29ee82424",
+    "postArchiveCommandInventorySHA256": "bf267ea0d7601570343688d00175bfcdc97efcffd1951f27d7c2340e94a4d1f1"
+  },
+  "report": {
+    "path": "/workspace/scratch/39a56936f173/native-module-coordination/reports/E-RUN.md",
+    "sha256": "c347bd32a849c328ec64837dd04fad3140a33a6c847619d62eceb2b2382c5465"
+  },
+  "scope": {
+    "productionPathsModified": [],
+    "gitOrNativeSchedulerChanged": false,
+    "boundedGuarantees": "Finite accepted React/DOM parent-child profile and its fixed/seeded browser evidence. The Go consumer does not launch browsers and this does not establish arbitrary frontend qualification or malicious evidence-producer resistance.",
+    "ci": "No hosted CI claim is made by this local run."
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-ABI",
+  "worker": "N2",
+  "decision": "accepted",
+  "outcome": "confirmed_reuse",
+  "summary": "Independently accepted the sealed four-profile ABI admission: all packet/source/artifact pins match, exact AppIR and module ABI descriptors pair correctly, and focused actual-build plus symlink rejection checks pass.",
+  "scope": {
+    "ownedPaths": [
+      "native-module-coordination/reports/XR-ABI.md",
+      "native-module-coordination/receipts/XR-ABI.json",
+      "native-module-coordination/rawlogs/XR-ABI/**"
+    ],
+    "productionPathsModified": [],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "reviewedPacket": {
+    "report": {
+      "path": "native-module-coordination/reports/E-ABI.md",
+      "bytes": 3586,
+      "sha256": "d39800acaa6563f51d720706b60590b1354072fa7fea6c6d258e72b18ba5e006"
+    },
+    "receipt": {
+      "path": "native-module-coordination/receipts/E-ABI.json",
+      "bytes": 4869,
+      "sha256": "edc08f716c6bf4117a9102db224375c8cc4a3f2e5905b9c9c2f84b27917387fa"
+    },
+    "seal": {
+      "path": "native-module-coordination/seals/E-ABI/seal.json",
+      "bytes": 169,
+      "sha256": "305c46372d8a96708c0b595dd0ff2b860d17dae1188d92764afc18e702d5d8dd"
+    },
+    "sourceInventory": {
+      "path": "native-module-coordination/seals/E-ABI/source-inventory.json",
+      "bytes": 311,
+      "sha256": "d26ca531cb183526381cc875375b2cbadfcd3e7466219daf1c624f0c20fafacb"
+    },
+    "rawIndex": {
+      "path": "native-module-coordination/rawlogs/E-ABI/index.json",
+      "bytes": 2135,
+      "sha256": "96a13b89c1df409393f5483d41ffd9d60590e601f170872ceb2f9d9a2b9420e4"
+    }
+  },
+  "independentChecks": {
+    "authorRawFiles": {
+      "count": 10,
+      "allHashesMatch": true
+    },
+    "sourcePins": {
+      "count": 6,
+      "allHashesMatch": true
+    },
+    "captureFiles": {
+      "count": 26,
+      "allHashesMatch": true,
+      "metadataCount": 2,
+      "profiles": 4,
+      "perProfileBuildFiles": 6,
+      "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+      "sourceTree": "bcc71cef48f3a4e141daf181b43f8e12a2132f83",
+      "captureMetadataSourceClean": true
+    },
+    "reviewedBuildSummary": {
+      "path": "native-module-coordination/rawlogs/XR-ABI/build-descriptor-summary.json",
+      "bytes": 9862,
+      "sha256": "da748f62428096e191d894212b0db2e5017f2e86f3e73e68adf9a5d4bf664e08",
+      "profileCount": 4
+    }
+  },
+  "focusedTests": {
+    "status": "passed",
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "command": {
+      "path": "native-module-coordination/rawlogs/XR-ABI/focused-review.command.json",
+      "bytes": 1319,
+      "sha256": "404e1e43a334cda052373214c8ac170632660873c2b4563a21b41a300079705e"
+    },
+    "exitCode": 0,
+    "stdout": {
+      "path": "native-module-coordination/rawlogs/XR-ABI/focused-review.stdout.log",
+      "bytes": 35,
+      "sha256": "8827df69eff11af09f0e1ed199757cfc5b0f1edc9ba2b01c148f7c796c9e3ee8"
+    },
+    "stderr": {
+      "path": "native-module-coordination/rawlogs/XR-ABI/focused-review.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "negativeControls": [
+      "duplicate AppIR property",
+      "unknown sidecar property",
+      "unsafe sidecar path",
+      "changed generated module bytes",
+      "symlinked generated module path"
+    ]
+  },
+  "limits": [
+    "Fixed four React/DOM parent-child build outputs only; no mounted runtime/full profile run in this review.",
+    "Captured bytes are checked but Go source is not rebuilt and publisher authenticity is not established.",
+    "Path checks reject observed symlinked paths but do not claim race-free protection from concurrent filesystem mutation."
+  ],
+  "rawlogs": {
+    "path": "native-module-coordination/rawlogs/XR-ABI",
+    "index": {
+      "path": "native-module-coordination/rawlogs/XR-ABI/index.json",
+      "bytes": 2675,
+      "sha256": "dc5680eea992561b6a2bcdc1e173a37ada028724c61f772e1622cfbe2da92f27"
+    },
+    "indexedFiles": 13
+  },
+  "report": {
+    "path": "native-module-coordination/reports/XR-ABI.md",
+    "bytes": 3214,
+    "sha256": "04b210c602ba77faa42405c4eb04c2a06fbd0f13e40dacf5addaf785c7a84a60"
+  }
+}

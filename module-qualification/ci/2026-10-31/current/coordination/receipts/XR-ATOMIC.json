@@ -1,0 +1,123 @@
+{
+  "authorPacket": {
+    "rawlogIndex": {
+      "bytes": 3159,
+      "path": "native-module-coordination/rawlogs/E-ATOMIC/index.json",
+      "sha256": "db720c3911abe825bf6b3a45c21411039bbcf7807994f59a1b939ac097461e1e"
+    },
+    "receipt": {
+      "path": "native-module-coordination/seals/E-ATOMIC/E-ATOMIC.json",
+      "sha256": "8dd82fcb0a65430015f74d6276ac547a36ca3c32537dc8279c4c511fe913c59c"
+    },
+    "report": {
+      "path": "native-module-coordination/seals/E-ATOMIC/E-ATOMIC.md",
+      "sha256": "d260da829eed24445f10a8bc6f63523609bbc06289406df02987761a6d7ed850"
+    },
+    "sourceInventory": [
+      {
+        "bytes": 23308,
+        "path": "modulequalification/archive.go",
+        "sha256": "4093d21f61f9e0a12df2980e92a2ea65efaa3a502ecae92ec785c66d5e7a14e7"
+      },
+      {
+        "bytes": 19385,
+        "path": "modulequalification/archive_test.go",
+        "sha256": "5a7d33ded3a1f246f7bb10d46552bc949655dda94732e546d54abe1d7547f6a8"
+      },
+      {
+        "bytes": 1185,
+        "path": "modulequalification/install_linux_amd64.go",
+        "sha256": "3118e2404cf454df86eb21b1705ee0e10f63be41086cef2c293c9824c0ab0109"
+      },
+      {
+        "bytes": 434,
+        "path": "modulequalification/install_other.go",
+        "sha256": "73d4b15863a19cbcdb8a59d552d3faedf59483e96d0f696da09a7f4e2cf2f394"
+      },
+      {
+        "bytes": 2055,
+        "path": "modulequalification/install_test.go",
+        "sha256": "d18c7548f66f51065433542581b1b1a2726671266809b66bdd17baa5a37a2716"
+      }
+    ]
+  },
+  "checks": {
+    "expectedSourceContract": {
+      "freshPipelineRunClaimed": false,
+      "freshRunnerProvidesValue": true,
+      "missingValueNegativeControl": "expected failure"
+    },
+    "focusedGoTests": {
+      "actualArchiveIntegration": true,
+      "command": "/tmp/gondola-go/go/bin/go test ./modulequalification/archive.go ./modulequalification/archive_test.go ./modulequalification/json.go ./modulequalification/json_test.go ./modulequalification/install_linux_amd64.go ./modulequalification/install_test.go -count=1 -v",
+      "goVersion": "go version go1.24.0 linux/amd64",
+      "status": "passed",
+      "topLevelTestsPassed": 15
+    },
+    "linuxNoReplacePrimitive": {
+      "architecture": "linux/amd64",
+      "existingEmptyDestinationPreserved": true,
+      "flag": "RENAME_NOREPLACE=1",
+      "noOverwriteFallback": true,
+      "number": 316,
+      "status": "passed",
+      "syscall": "renameat2"
+    },
+    "sourceAndEvidencePins": {
+      "indexedAuthorRawlogs": 15,
+      "ownedSourceFiles": 5,
+      "packetCurrentSourcePins": 6,
+      "preservedPriorPackets": [
+        "E-ARCHIVE",
+        "XR-ARCHIVE"
+      ],
+      "status": "passed"
+    },
+    "unsupportedPlatform": {
+      "executionClaimed": false,
+      "fallbackReturnsUnsupportedError": true,
+      "status": "compile-only passed",
+      "target": "darwin/arm64"
+    }
+  },
+  "decision": "accepted",
+  "job_id": "XR-ATOMIC",
+  "limits": [
+    "No package-wide modulequalification pass is claimed.",
+    "Darwin arm64 was compile-checked but not executed.",
+    "No end-to-end concurrent VerifyArchive stress reproduction was run; the primitive test and Linux RENAME_NOREPLACE semantics support the no-replace conclusion.",
+    "Archive/source hashes do not authenticate publisher identity or establish source ancestry."
+  ],
+  "rawlogs": {
+    "index": {
+      "bytes": 2910,
+      "files": 19,
+      "path": "native-module-coordination/rawlogs/XR-ATOMIC/index.json",
+      "sha256": "2ff22a28cc9b7b597f31c0a6906826f99d57dc0ef767b0e7258d330e96babca6"
+    },
+    "path": "native-module-coordination/rawlogs/XR-ATOMIC"
+  },
+  "report": {
+    "bytes": 3895,
+    "path": "native-module-coordination/reports/XR-ATOMIC.md",
+    "sha256": "569ad6c66cd7b1ee1e821ef5e9983de92d9f8901adc3e9856dde10283375c306"
+  },
+  "reviewedInputs": {
+    "archive": {
+      "bytes": 6373581,
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.tar.gz",
+      "sha256": "039e6b8f7d074c6c4873fc4a04ebc56f6b7110250046906e222eb1d17503e20c"
+    },
+    "archiveMembers": 529,
+    "manifest": {
+      "bytes": 125900,
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.manifest.json",
+      "sha256": "ef2f332d15e306daabc290d127a42bfc2f9486fa43219785192f1674d7804fb2"
+    },
+    "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "sourcePins": 147
+  },
+  "schema": "gobi.native-independent-review/v1",
+  "summary": "Atomic no-replace publication closes the reviewed empty-destination replacement window on Linux/amd64; focused archive/install tests, source/input pins, and fail-closed platform compile checks passed.",
+  "worker": "N3"
+}

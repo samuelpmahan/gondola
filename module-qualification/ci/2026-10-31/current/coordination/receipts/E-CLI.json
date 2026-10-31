@@ -1,0 +1,194 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CLI",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added a standalone Go verifier and CLI for direct and archived module qualification profiles. It validates source pin bytes, composes N1 capture and N3 ABI checks, inventories actual inputs, and passed focused package tests plus real direct-directory and archive CLI smoke against the 529-member 7bd profile.",
+  "scope": {
+    "ownedPaths": [
+      "modulequalification/verify.go",
+      "modulequalification/verify_test.go",
+      "cmd/module-qualify/**",
+      "native-module-coordination/reports/E-CLI.md",
+      "native-module-coordination/receipts/E-CLI.json",
+      "native-module-coordination/rawlogs/E-CLI/**"
+    ],
+    "productionPathsModified": [
+      "modulequalification/verify.go",
+      "modulequalification/verify_test.go",
+      "cmd/module-qualify/main.go",
+      "cmd/module-qualify/main_test.go"
+    ],
+    "otherLaneFilesModified": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-cli-tested-source-pins/v1",
+    "repositoryHead": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "files": {
+      "modulequalification/verify.go": {
+        "bytes": 17470,
+        "sha256": "9364afe971892bf4866d2ab1576b5704db1fede2f89de63211e06c1a385e81ba"
+      },
+      "modulequalification/verify_test.go": {
+        "bytes": 5335,
+        "sha256": "3397127791dd6768b2755fb195e0cecf4931040a807f07556481700416aac0ba"
+      },
+      "cmd/module-qualify/main.go": {
+        "bytes": 3970,
+        "sha256": "9c38a3eb1786a5c0125a8a144373fa99d8490d435268c84741e06effb9e743ea"
+      },
+      "cmd/module-qualify/main_test.go": {
+        "bytes": 2267,
+        "sha256": "c0d745255b59272faefda017531a6ab6bd5910be75bf466381586a3d0fd2e6f9"
+      },
+      "modulequalification/archive.go": {
+        "bytes": 23308,
+        "sha256": "4093d21f61f9e0a12df2980e92a2ea65efaa3a502ecae92ec785c66d5e7a14e7"
+      },
+      "modulequalification/abi.go": {
+        "bytes": 13596,
+        "sha256": "a3db3751c3264de50ab745bef6d69d42aa6e50867284ff4995d216ecfe3412db"
+      },
+      "modulequalification/semantics.go": {
+        "bytes": 74533,
+        "sha256": "f00677f33b1a6f74f3f02be78543a6a7fdb201419715c704ff16e93242afdf3a"
+      },
+      "modulequalification/json.go": {
+        "bytes": 7872,
+        "sha256": "24a7dc9edcfc123bc33ee8441ee39007b97e73a618de635d62dc1c9d5f7a6491"
+      }
+    },
+    "note": "Hashes identify exact observed review inputs at final smoke time. Other lanes own archive.go, abi.go, semantics.go, and json.go; this packet did not edit them. Root may schedule later integrated revalidation if those owners revise their files."
+  },
+  "tests": {
+    "schema": "gobi.e-cli-focused-tests/v1",
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "environment": {
+      "GOTOOLCHAIN": "local",
+      "GOFLAGS": "-buildvcs=false",
+      "nodeRequired": false
+    },
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./modulequalification",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "ok github.com/samuelpmahan/gondola/modulequalification 24.511s",
+        "coverageNote": "Includes N1 actual capture tests, N2 archive/strict-JSON tests, N3 actual ABI tests, N4 real-capture mutation corpus (10 cases), and N5 source identity/input inventory tests."
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./cmd/module-qualify",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "ok github.com/samuelpmahan/gondola/cmd/module-qualify 0.006s",
+        "coverageNote": "Directory/archive flag modes, duplicate/mixed/missing/unknown arguments, help, and no-stdout failure behavior."
+      }
+    ],
+    "midWriteAttempts": [
+      "attempt-001-partial-semantics-failure.json",
+      "attempt-002-partial-semantics-failure.json",
+      "attempt-003-partial-semantics-failure.json",
+      "attempt-004-real-directory-failure.json",
+      "attempt-005-midwrite-compile-failure.json",
+      "attempt-006-focused-package-results.json",
+      "attempt-009-raced-capture-mismatch.json"
+    ],
+    "finalStableCheckpoint": "go tests and direct/archive CLI succeeded after N1 reported healthy 12-profile capture validation passed"
+  },
+  "actualProfile": {
+    "attempt": "attempt-20261031T213332911Z-35",
+    "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "archiveSHA256": "039e6b8f7d074c6c4873fc4a04ebc56f6b7110250046906e222eb1d17503e20c",
+    "manifestSHA256": "ef2f332d15e306daabc290d127a42bfc2f9486fa43219785192f1674d7804fb2",
+    "reportSummary": {
+      "schema": "gobi.e-cli-final-smoke/v1",
+      "directory": {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-qualify --directory /tmp/gobi-published-restore-check",
+        "exitCode": 0,
+        "stdout": {
+          "path": "attempt-010-directory.stdout.json",
+          "bytes": 102929,
+          "sha256": "6b87484cf1b954525b0005ce93de6176ca13ea831e8a86da0655de665a16dfc8"
+        },
+        "stderrBytes": 0
+      },
+      "archive": {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-qualify --archive compiled-modules/output/attempts/attempt-20261031T213332911Z-35.tar.gz --manifest compiled-modules/output/attempts/attempt-20261031T213332911Z-35.manifest.json",
+        "exitCode": 0,
+        "stdout": {
+          "path": "attempt-010-archive.stdout.json",
+          "bytes": 103054,
+          "sha256": "37182053941c25863b91a65f94821f9550b1fd10810c75d9cf941d0327a6b4a5"
+        },
+        "stderrBytes": 0,
+        "archive": {
+          "members": 529,
+          "bytes": 6373581,
+          "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0"
+        }
+      },
+      "reportsEqualForVerifiedInputsAndChecks": true,
+      "inputs": 529,
+      "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+      "sourceIdentity": {
+        "head": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+        "dirty": false,
+        "sourcePinsMatch": true,
+        "beforeStatus": "",
+        "afterStatus": "",
+        "sourcePinCount": 147,
+        "sourcePinBytes": 1321637,
+        "archivedSourceChecks": 147
+      },
+      "capture": {
+        "profiles": 12,
+        "events": 144,
+        "updates": 99,
+        "seeds": [
+          20261031,
+          20261032,
+          20261033
+        ],
+        "mutationControls": 0
+      },
+      "abi": {
+        "status": "passed",
+        "builds": 4,
+        "pairs": 2
+      },
+      "scope": [
+        "source identity and embedded source pins checked against actual source/<path> bytes",
+        "Go-native ABI checks for the four React/DOM parent/child builds and two module pairs",
+        "Go-native fixed and seeded capture checks returned by CheckCaptures",
+        "no browser is launched by this verifier",
+        "producer-captured mutation-control metadata is not treated as Go-executed negative-control proof",
+        "sourceCommit is checked for format and internal consistency; this report does not authenticate Git history or verifier-build provenance"
+      ]
+    },
+    "claimBoundary": [
+      "capture mutationControls remains 0 in the Go checker report",
+      "ten mutation controls were executed by the Go package test separately",
+      "no browser is launched by this CLI",
+      "recorded sourceCommit is not Git-authenticated and does not establish verifier build provenance"
+    ]
+  },
+  "limits": [
+    "No full repository pipeline, fresh profile producer, or CI run was executed by N5.",
+    "The report verifies embedded source pins but does not authenticate Git history or prove that the CLI binary was built from those source bytes.",
+    "N1, N2, and N3 own semantics/archive/ABI source; exact tested dependency hashes are recorded and later integrated changes may require a root rerun."
+  ],
+  "report": {
+    "path": "native-module-coordination/reports/E-CLI.md",
+    "bytes": 4399,
+    "sha256": "2a0ba0c0721355815662170443c94f570fffb8ce05024ec9e5417d6ef8064e0c"
+  },
+  "rawlogs": {
+    "path": "native-module-coordination/rawlogs/E-CLI/index.json",
+    "index": "native-module-coordination/rawlogs/E-CLI/index.json",
+    "bytes": 3710,
+    "sha256": "033efb2202dd2a5ec08f62470a3caca8415e5dbe5aa8beaa7bbd15971b30c21e",
+    "indexedFiles": 23,
+    "indexExcludesItself": true
+  }
+}

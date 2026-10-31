@@ -1,0 +1,265 @@
+{
+  "authorPacket": {
+    "rawEvidence": [
+      {
+        "bytes": 447,
+        "path": "rawlogs/E-CAPTURES/final-capture-tests/command.json",
+        "sha256": "f9ff6cdd92edc514eb541a0087fd61433e11902d8f4e6d46cdc24724332aba42"
+      },
+      {
+        "bytes": 677,
+        "path": "rawlogs/E-CAPTURES/final-capture-tests/result.json",
+        "sha256": "f87ae3ccb3748604bb6b5bc2126ea40bd369eecb794052f416bb8addca217376"
+      },
+      {
+        "bytes": 65,
+        "path": "rawlogs/E-CAPTURES/final-capture-tests/stdout.log",
+        "sha256": "530392360f09255081686f0b29feed381ac66bbe3a36de4db1cf7f175e514acc"
+      },
+      {
+        "bytes": 0,
+        "path": "rawlogs/E-CAPTURES/final-capture-tests/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 2,
+        "path": "rawlogs/E-CAPTURES/final-capture-tests/exit-code",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "bytes": 558,
+        "path": "rawlogs/E-ADVERSARIAL/attempt-020-frozen-positive-and-10-mutations.command.json",
+        "sha256": "a2e39b86bd144fb0504e949ef09e1b4d21224773b5ee5c0fb56219d8c4c2c1c3"
+      },
+      {
+        "bytes": 4304,
+        "path": "rawlogs/E-ADVERSARIAL/attempt-020-frozen-positive-and-10-mutations.stdout.log",
+        "sha256": "2e82e8efa48487bc4d1ce33051faea286cc67f06d923d94798265913813c2375"
+      }
+    ],
+    "receipt": {
+      "path": "native-module-coordination/seals/E-CAPTURES/E-CAPTURES.json",
+      "sha256": "21e3ec71133552414c638affb4492d1aa8f22e4718f1faef9625b6e3cb11ae44"
+    },
+    "report": {
+      "path": "native-module-coordination/seals/E-CAPTURES/E-CAPTURES.md",
+      "sha256": "9f957300a84d00deba63159cd540a75b984d7f8568bff0b1337f50f62fbf943b"
+    },
+    "sourceInventory": [
+      {
+        "bytes": 80145,
+        "path": "modulequalification/semantics.go",
+        "sha256": "9283255ef119718d3fb59ba3ce9d103dd3871d8d0aa8177afb403b241ab5cff4"
+      },
+      {
+        "bytes": 1581,
+        "path": "modulequalification/semantics_test.go",
+        "sha256": "7a0757ab98dce3b46e91e6f6fb25947820bcd4e6c9df511906a46645483f44c7"
+      }
+    ]
+  },
+  "checks": {
+    "baselineReplay": {
+      "command": "/tmp/gondola-go/go/bin/go test ./modulequalification -run ^TestCheckCapturesAgainstRestoredModuleRun$ -count=1 -v",
+      "events": 144,
+      "goVersion": "go version go1.24.0 linux/amd64",
+      "mutationControls": 0,
+      "profiles": 12,
+      "seeds": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "status": "passed",
+      "updates": 99
+    },
+    "falseAcceptances": [
+      {
+        "baselineBrowserSHA256": "3b10a88c3ffd91046976414154b3e101a9c773eb44a42056e6b7b02e60c0cd0b",
+        "baselineRoot": "/tmp/gobi-published-restore-check",
+        "checkerAccepted": true,
+        "checkerExitCode": 0,
+        "control": "backend-identity-mismatch",
+        "mutatedBrowserSHA256": "7f8d4c39b7ec171bd38fe5435e97efc29479860d0de255193b21fdbb821cc60a",
+        "mutation": {
+          "after": [
+            "dom",
+            "dom"
+          ],
+          "before": [
+            "react",
+            "react"
+          ],
+          "path": "profiles.react.initialBackend and profiles.react.trace.backend"
+        },
+        "schema": "gobi.xr-captures-mutation/v1"
+      },
+      {
+        "baselineBrowserSHA256": "3b10a88c3ffd91046976414154b3e101a9c773eb44a42056e6b7b02e60c0cd0b",
+        "baselineRoot": "/tmp/gobi-published-restore-check",
+        "checkerAccepted": true,
+        "checkerExitCode": 0,
+        "control": "seed-metadata-mismatch",
+        "mutatedBrowserSHA256": "2fc5e63f90d7532605d455a3133ab164fdf100c7decb162fcd8de1cce228481b",
+        "mutation": {
+          "after": 20261032,
+          "before": 20261031,
+          "path": "profiles.seeded.seed-20261031-react.seed"
+        },
+        "schema": "gobi.xr-captures-mutation/v1"
+      },
+      {
+        "checkerAccepted": true,
+        "checkerExitCode": 0,
+        "control": "null-child-counter-count",
+        "file": "conformance/module-pair.fixed.native.json",
+        "mutatedCaptureSHA256": "93c552941ee828249cb9a8a0521865a2986f990e76b36fc0ebe82c197c37407a",
+        "mutation": "null",
+        "originalCaptureSHA256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec",
+        "originalValue": 0,
+        "pointer": "/initial/childState/Counter/Count",
+        "schema": "gobi.xr-captures-mutation/v1"
+      },
+      {
+        "checkerAccepted": true,
+        "checkerExitCode": 0,
+        "control": "missing-child-counter-count",
+        "file": "conformance/module-pair.fixed.native.json",
+        "mutatedCaptureSHA256": "46525a17f493e726e8fc74a3562f9e0a40ee9a64f95680f97dac8507f0e60676",
+        "mutation": "missing",
+        "originalCaptureSHA256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec",
+        "originalValue": 0,
+        "pointer": "/initial/childState/Counter/Count",
+        "schema": "gobi.xr-captures-mutation/v1"
+      },
+      {
+        "checkerAccepted": true,
+        "checkerExitCode": 0,
+        "control": "null-parent-published-count",
+        "file": "conformance/module-pair.fixed.native.json",
+        "mutatedCaptureSHA256": "a692492efb1d1393ab380424f395075c34f4cd3996402ea7acbcd7539abeeabb",
+        "mutation": "null",
+        "originalCaptureSHA256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec",
+        "originalValue": 0,
+        "pointer": "/initial/parentState/PublishedCount",
+        "schema": "gobi.xr-captures-mutation/v1"
+      }
+    ],
+    "missingRegisteredProfile": {
+      "control": {
+        "baselineBrowserSHA256": "3b10a88c3ffd91046976414154b3e101a9c773eb44a42056e6b7b02e60c0cd0b",
+        "checkerAccepted": false,
+        "checkerExitCode": 1,
+        "control": "missing-registered-profile",
+        "mutatedBrowserSHA256": "5e30cd3d231e9d74715fc050ecc503763938c7fb8f41558b85c385d893e9c8a5",
+        "mutation": {
+          "removed": "profiles.seeded.seed-20261031-react"
+        },
+        "schema": "gobi.xr-captures-mutation/v1"
+      },
+      "status": "rejected as expected"
+    },
+    "sourceAndEvidencePins": {
+      "authorRawEvidenceEntries": 7,
+      "captureFiles": 7,
+      "sourceAndFixturePins": 12,
+      "status": "passed"
+    }
+  },
+  "decision": "amend",
+  "findings": [
+    {
+      "diagnosis": "typed native decode loses the distinction between absent/null zero-valued primitives and explicitly captured zero values",
+      "evidence": [
+        "null-child-counter-count accepted",
+        "missing-child-counter-count accepted",
+        "null-parent-published-count accepted"
+      ],
+      "id": "native-zero-field-presence",
+      "remedy": "Require exact presence and JSON types for native state fields before typed equality.",
+      "severity": "must-fix"
+    },
+    {
+      "diagnosis": "react profile label is not tied to initialBackend or trace.backend",
+      "evidence": "both backend fields changed from react to dom while CheckCaptures exited 0",
+      "id": "browser-backend-identity",
+      "remedy": "Validate actual backend metadata and swap sequence against each expected profile.",
+      "severity": "must-fix"
+    },
+    {
+      "diagnosis": "checkBrowserProfile discards its expected seed parameter",
+      "evidence": "seed-20261031-react seed changed to 20261032 while CheckCaptures exited 0",
+      "id": "seed-profile-identity",
+      "remedy": "Compare each seeded browser record seed to its independently generated seed.",
+      "severity": "must-fix"
+    }
+  ],
+  "job_id": "XR-CAPTURES",
+  "limits": [
+    "No source edits were made.",
+    "The checker does not execute JavaScript or browser code; this review evaluates captured browser evidence against Go replay.",
+    "No broad package/pipeline run was performed; focused Go test reruns used the actual restored capture root."
+  ],
+  "rawlogs": {
+    "index": {
+      "bytes": 6188,
+      "files": 38,
+      "path": "native-module-coordination/rawlogs/XR-CAPTURES/index.json",
+      "sha256": "63325958996ef3c463adc280d5ff68638d67275e842ae01fd9c399e70385c753"
+    },
+    "path": "native-module-coordination/rawlogs/XR-CAPTURES"
+  },
+  "report": {
+    "bytes": 4533,
+    "path": "native-module-coordination/reports/XR-CAPTURES.md",
+    "sha256": "b9346e1609fa74608609bd7399df72a36508fa19799e2c1e48323ea108678341"
+  },
+  "reviewedInputs": {
+    "capturePins": [
+      {
+        "bytes": 209146,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.fixed.native.json",
+        "sha256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec"
+      },
+      {
+        "bytes": 1298827,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.fixed.direct.json",
+        "sha256": "e7321b92f5f21641b821d6e2e1acb63a5af5c9d5d3f24cd6784083182db1954e"
+      },
+      {
+        "bytes": 31814267,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.browser.json",
+        "sha256": "3b10a88c3ffd91046976414154b3e101a9c773eb44a42056e6b7b02e60c0cd0b"
+      },
+      {
+        "bytes": 373436,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seed-20261031.native.json",
+        "sha256": "e2c479d97fdb19e639a63b6c9092208d4d2984b1f1d0f85e951cb6f3f975b365"
+      },
+      {
+        "bytes": 348904,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seed-20261032.native.json",
+        "sha256": "a608333a3b77392b821f81b5af6e44863b1b53793deebc49f5992fa2bc66e92a"
+      },
+      {
+        "bytes": 348628,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seed-20261033.native.json",
+        "sha256": "393d897e13fdf950ebe10ba35af81338cb232531848173940231ed7853e857dd"
+      },
+      {
+        "bytes": 6827437,
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seeded.direct.json",
+        "sha256": "7b73a2687e0946e11f675cce68e60355203167ed3560d39079a2f39417eb3e0d"
+      }
+    ],
+    "captureRoot": "/tmp/gobi-published-restore-check",
+    "reportedN4Controls": {
+      "passed": 10,
+      "stdoutSHA256": "2e82e8efa48487bc4d1ce33051faea286cc67f06d923d94798265913813c2375"
+    },
+    "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0"
+  },
+  "schema": "gobi.native-independent-review/v1",
+  "summary": "The actual Go replay and required-profile lookup pass, but independent overlays exposed accepted omissions of zero-valued native state and inconsistent browser backend/seed identity fields.",
+  "worker": "N3"
+}

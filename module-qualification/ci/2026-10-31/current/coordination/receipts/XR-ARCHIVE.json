@@ -1,0 +1,106 @@
+{
+  "authorPacket": {
+    "rawlogIndex": {
+      "bytes": 1512,
+      "path": "native-module-coordination/rawlogs/E-ARCHIVE/index.json",
+      "sha256": "89e73555adc2429fc45a0d6ebf4dfea733cfed04fbee4a957e55f9c07dd0cb5c"
+    },
+    "receipt": {
+      "path": "native-module-coordination/seals/E-ARCHIVE/E-ARCHIVE.json",
+      "sha256": "9cc9120f494263e72f01a48d59eafc6da20cef68182c3d55dcad31f8413f2f68"
+    },
+    "report": {
+      "path": "native-module-coordination/seals/E-ARCHIVE/E-ARCHIVE.md",
+      "sha256": "8c1bf69dde6e2533b28a776a33eb7566f64196d54b412bc5e6a60b4f8cf10ad9"
+    },
+    "sourceInventory": [
+      {
+        "bytes": 23229,
+        "path": "modulequalification/archive.go",
+        "sha256": "f9851f426a17831fca2e1458d4253ef8b34d9156b47bb5add5974ecb2f30c0a3"
+      },
+      {
+        "bytes": 17218,
+        "path": "modulequalification/archive_test.go",
+        "sha256": "90e74702dfa4377cc6f70ed54b8eb1f87ea6087c399ec7c2a642d7f0daf6b2c1"
+      },
+      {
+        "bytes": 7872,
+        "path": "modulequalification/json.go",
+        "sha256": "24a7dc9edcfc123bc33ee8441ee39007b97e73a618de635d62dc1c9d5f7a6491"
+      },
+      {
+        "bytes": 2020,
+        "path": "modulequalification/json_test.go",
+        "sha256": "e9285ace0b0e4eee784c585847b717ca33a02f21422a97e7dc2438e2ac5c2974"
+      }
+    ]
+  },
+  "checks": {
+    "atomicDestinationPublication": {
+      "finding": "check-then-rename can replace an empty destination created after final Lstat on Unix",
+      "primitiveProbe": "passed",
+      "status": "amend"
+    },
+    "focusedGoTests": {
+      "actualArchiveExtraction": true,
+      "command": "/tmp/gondola-go/go/bin/go test modulequalification/archive.go modulequalification/archive_test.go modulequalification/json.go modulequalification/json_test.go -count=1 -v",
+      "goVersion": "go version go1.24.0 linux/amd64",
+      "status": "passed",
+      "topLevelTestsPassed": 12
+    },
+    "independentTarAudit": {
+      "allMemberByteHashesMatched": true,
+      "exactMemberInventory": true,
+      "regularFilesOnly": true,
+      "snapshotPinMapMatchesManifest": true,
+      "status": "passed"
+    },
+    "rawlogAndSourcePins": {
+      "archiveAndManifestPins": true,
+      "authorIndexedRawlogs": 10,
+      "sealedSourceFiles": 4,
+      "status": "passed"
+    }
+  },
+  "decision": "amend",
+  "job_id": "XR-ARCHIVE",
+  "limits": [
+    "No package-wide green claim; the captured concurrent package run was red in N1 CheckCaptures stub tests.",
+    "Archive and source pins are internally consistent but do not authenticate publisher identity or prove the stated Git commit produced those bytes.",
+    "No end-to-end concurrent VerifyArchive race reproduction was performed; source ordering plus an independent POSIX rename primitive probe establishes the race window."
+  ],
+  "rawlogs": {
+    "index": {
+      "bytes": 1844,
+      "files": 12,
+      "path": "native-module-coordination/rawlogs/XR-ARCHIVE/index.json",
+      "sha256": "0331c5797f6cb70779e6f9f09711ac94182d70362e0cce18c629198072dd5271"
+    },
+    "path": "native-module-coordination/rawlogs/XR-ARCHIVE"
+  },
+  "report": {
+    "bytes": 4595,
+    "path": "native-module-coordination/reports/XR-ARCHIVE.md",
+    "sha256": "85b328c24b72a983ae1dcac5f3447d632caa244262c4116cdfba757f39713c4e"
+  },
+  "reviewedArtifact": {
+    "archive": {
+      "bytes": 6373581,
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.tar.gz",
+      "sha256": "039e6b8f7d074c6c4873fc4a04ebc56f6b7110250046906e222eb1d17503e20c"
+    },
+    "expandedMemberDataBytes": 67486104,
+    "manifest": {
+      "bytes": 125900,
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.manifest.json",
+      "sha256": "ef2f332d15e306daabc290d127a42bfc2f9486fa43219785192f1674d7804fb2"
+    },
+    "members": 529,
+    "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "sourcePins": 147
+  },
+  "schema": "gobi.native-independent-review/v1",
+  "summary": "Archive byte/source-pin validation and strict JSON controls passed independently; identified a POSIX check-then-rename race that can replace an empty destination created before publication.",
+  "worker": "N3"
+}

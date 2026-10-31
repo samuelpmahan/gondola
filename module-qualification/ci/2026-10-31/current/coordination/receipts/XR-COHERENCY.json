@@ -1,0 +1,348 @@
+{
+  "schema": "gobi.native-review-receipt/v1",
+  "job_id": "XR-COHERENCY",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independent hard-link-overlay replay confirms E-COHERENCY rejects all prior profile/backend, seed metadata, and zero-valued native field false-acceptance witnesses while accepting the unmodified zero/false/null-pointer capture.",
+  "reviewTarget": {
+    "authorJob": "E-COHERENCY",
+    "authorWorker": "N1",
+    "authorDecision": "mixed_change",
+    "authorReportSHA256": "be7a319dcf9e9b6e93cf297e42ce3fc3a0e858271947bca0c83eb060ad6b3f30",
+    "authorReceiptSHA256": "89729c95f002896b73eed0888b90029fcd38381cdf15dff12f657e92bc346491",
+    "authorSealSHA256": "7930197e305f1a9e8a55fa190dc898409669610f722128939926c2d1909ec2df",
+    "contractSHA256": "aa0624430ec565bd346701d052d853aa6ea3ca6877a5899a796b7e639d77e289",
+    "sourcePins": [
+      {
+        "path": "gondola/modulequalification/semantics.go",
+        "bytes": 89156,
+        "sha256": "91bd74cdcdd8abfd37aca2f2056d5754c181e1bb4ac1b31a147389df83db1e13"
+      },
+      {
+        "path": "gondola/modulequalification/semantics_test.go",
+        "bytes": 7252,
+        "sha256": "2c34657133632c838e847fa8b85b13e0b97432d964151088ceb31d0e885f3b6c"
+      }
+    ],
+    "authorSourcePinsVerified": [
+      {
+        "path": "modulequalification/json.go",
+        "bytes": 7872,
+        "sha256": "24a7dc9edcfc123bc33ee8441ee39007b97e73a618de635d62dc1c9d5f7a6491"
+      },
+      {
+        "path": "compilercontract/contract.go",
+        "bytes": 7144,
+        "sha256": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188"
+      },
+      {
+        "path": "compilercontract/trace.go",
+        "bytes": 9152,
+        "sha256": "de5aa3f70314fe3cc1e5661ce682c953de6ee12328cba3dd609a891657c5e627"
+      },
+      {
+        "path": "cmd/module-qualify/main.go",
+        "bytes": 3970,
+        "sha256": "9c38a3eb1786a5c0125a8a144373fa99d8490d435268c84741e06effb9e743ea"
+      }
+    ],
+    "captureRoot": "/tmp/gobi-published-restore-check",
+    "captureSourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "capturePins": [
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.fixed.native.json",
+        "bytes": 209146,
+        "sha256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec"
+      },
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.fixed.direct.json",
+        "bytes": 1298827,
+        "sha256": "e7321b92f5f21641b821d6e2e1acb63a5af5c9d5d3f24cd6784083182db1954e"
+      },
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.browser.json",
+        "bytes": 31814267,
+        "sha256": "3b10a88c3ffd91046976414154b3e101a9c773eb44a42056e6b7b02e60c0cd0b"
+      },
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seed-20261031.native.json",
+        "bytes": 373436,
+        "sha256": "e2c479d97fdb19e639a63b6c9092208d4d2984b1f1d0f85e951cb6f3f975b365"
+      },
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seed-20261032.native.json",
+        "bytes": 348904,
+        "sha256": "a608333a3b77392b821f81b5af6e44863b1b53793deebc49f5992fa2bc66e92a"
+      },
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seed-20261033.native.json",
+        "bytes": 348628,
+        "sha256": "393d897e13fdf950ebe10ba35af81338cb232531848173940231ed7853e857dd"
+      },
+      {
+        "path": "/tmp/gobi-published-restore-check/conformance/module-pair.seeded.direct.json",
+        "bytes": 6827437,
+        "sha256": "7b73a2687e0946e11f675cce68e60355203167ed3560d39079a2f39417eb3e0d"
+      }
+    ]
+  },
+  "method": {
+    "command": "/tmp/gondola-go/go/bin/go test ./modulequalification -run ^TestCheckCapturesAgainstRestoredModuleRun$ -count=1 -v",
+    "workingDirectory": "/workspace/scratch/39a56936f173/gondola",
+    "environment": {
+      "GOTOOLCHAIN": "local",
+      "GOFLAGS": "-buildvcs=false",
+      "GOBI_MODULE_CAPTURE_ROOT": "<isolated hard-link overlay>"
+    },
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "actualCaptureTestCount": 9,
+    "expectedRejections": 8,
+    "expectedAcceptances": 1,
+    "result": "all matched expectation; no false acceptance observed"
+  },
+  "findings": [
+    {
+      "id": "XRCOH-1",
+      "severity": "must-fix",
+      "status": "closed by reviewed source",
+      "description": "React initialBackend and trace.backend, tested together and independently, reject mismatched renderer claims."
+    },
+    {
+      "id": "XRCOH-2",
+      "severity": "must-fix",
+      "status": "closed by reviewed source",
+      "description": "Seed metadata mismatch rejects against independent replay."
+    },
+    {
+      "id": "XRCOH-3",
+      "severity": "must-fix",
+      "status": "closed by reviewed source",
+      "description": "Null or absent typed child Count and null parent PublishedCount reject before zero-value decoding."
+    },
+    {
+      "id": "XRCOH-4",
+      "severity": "guard check",
+      "status": "pass",
+      "description": "Deleting a registered browser profile is rejected."
+    },
+    {
+      "id": "XRCOH-5",
+      "severity": "positive preservation",
+      "status": "pass",
+      "description": "Actual zero counters, false Locked value, and nullable Message pointer values remain accepted."
+    }
+  ],
+  "independentReviewScope": "Bounded frozen fixture/capture review; no browser launch or fresh capture generation.",
+  "rawEvidence": [
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/author-pin-validation.json",
+      "bytes": 11818,
+      "sha256": "866e25da9140977f137f64f375717cd78d36fb8676f59a95995aef10f0f4faf8"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-both-fields.command.json",
+      "bytes": 505,
+      "sha256": "8239ced22c17f9c75cc71596e6308cba58db3cfde32c0eec20114457fc68f02e"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-both-fields.result.json",
+      "bytes": 383,
+      "sha256": "7e9e3faa545e9927e3b55b95ab65c40358e5a08028822eb655d6353042d98a58"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-both-fields.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-both-fields.stdout.log",
+      "bytes": 354,
+      "sha256": "7adda13a6df2429c1a3f0971c07793fe102f17e886754a663c01c0c7a4156845"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-initial-only.command.json",
+      "bytes": 505,
+      "sha256": "4045e8be7290a355bcad611a94cb578c1890b5dcbd5c053ef26ba2d573d378c1"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-initial-only.result.json",
+      "bytes": 384,
+      "sha256": "7144e89376e59643f33abe8fa9b36e71a48785a77778837fa74e011120ee273f"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-initial-only.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-initial-only.stdout.log",
+      "bytes": 354,
+      "sha256": "96065a276508ff71909f89cc99c928fb87c7c58a4b4c591b51b5ec5c64ad538e"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-trace-only.command.json",
+      "bytes": 504,
+      "sha256": "d5d9fd6de939af368758b000707344a76bd8c63ca82a2feac2669c552c0c7061"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-trace-only.result.json",
+      "bytes": 381,
+      "sha256": "019333f587f919a9d7f54e1aca6def67fd45067424926ae27ef12b9fc8a37f77"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-trace-only.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/backend-trace-only.stdout.log",
+      "bytes": 353,
+      "sha256": "ad6332776afd3c789db8f62fc93212c92b1dd66c11bafef18757bd207482cd73"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-missing.command.json",
+      "bytes": 504,
+      "sha256": "54cea1d1e671bd179cd3f9e316d1f829121811e0cb6cf9a7389aac1067d7c1a1"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-missing.result.json",
+      "bytes": 382,
+      "sha256": "f434ebaaa03644faa879734cc262b9c9cfbe4e5ab2c6581364f36bc3e5c38172"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-missing.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-missing.stdout.log",
+      "bytes": 382,
+      "sha256": "f6db022e722081eef9156748fa0457b3acd14e15df5866de665375df8ef8c5a0"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-null.command.json",
+      "bytes": 504,
+      "sha256": "77bdca2e03465ab658e0250803b89d9c712e4af0a43a967857eba9230076fccf"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-null.result.json",
+      "bytes": 379,
+      "sha256": "e50a4fbf38021eaf56562ce4ab801d083bea38f5c67576449dd0e85150f9c0aa"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-null.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/child-count-null.stdout.log",
+      "bytes": 388,
+      "sha256": "1243e5bb4dfe5482e29009b44567d1976f32ed7f862d368b0c5d93708f56fbd4"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/go-version.txt",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/index.json",
+      "bytes": 3890,
+      "sha256": "d94b29a8330a27852fef178fb58c8b80901764868e917b11a21f8fb53e6e2c23"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/missing-registered-profile.command.json",
+      "bytes": 498,
+      "sha256": "58497c7673eb18a0762cdd44b1ba1568557fe967003b48a0ab1df326b954ad9f"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/missing-registered-profile.result.json",
+      "bytes": 383,
+      "sha256": "056978df09d5232003005aaa00dfef7059762e5992d68907d6a94e469b2dc471"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/missing-registered-profile.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/missing-registered-profile.stdout.log",
+      "bytes": 326,
+      "sha256": "2af5e69790049ea50f312b4f4544c18e2d7ff2d16d352f77ede87c939a89b536"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/native-receipt-validation.json",
+      "bytes": 406,
+      "sha256": "4646830a5cb59ce7b6f9d459a9a95db7e42fc1c9cf3cf0e347254bb62e3a7181"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/parent-published-null.command.json",
+      "bytes": 505,
+      "sha256": "626dba4965dff92a5f9940215e59df55d8ad011001b00078f0dcc804a00c610a"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/parent-published-null.result.json",
+      "bytes": 385,
+      "sha256": "c3d70a49a3194347ab578c97a211fc190efea8e55aa5ebb27fe8a2ad203365cc"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/parent-published-null.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/parent-published-null.stdout.log",
+      "bytes": 390,
+      "sha256": "eddfd21b9c678caf8773318ae620e40a3abdb19a05c064d9c9b08a2e624944a1"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/positive-actual-baseline.command.json",
+      "bytes": 478,
+      "sha256": "42dc19c8ede5d5dcb4608a36194f9b8c232391ef7b895f9752b5de57c067f2c8"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/positive-actual-baseline.result.json",
+      "bytes": 361,
+      "sha256": "ee7e9aae275686a3e2dcc5df193cecb4b8bf146e787f20d097426276b8b31075"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/positive-actual-baseline.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/positive-actual-baseline.stdout.log",
+      "bytes": 183,
+      "sha256": "874014475a7ff1ac501347b64656a9bfc8dd2b030a50148167732bfe565d299c"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/positive-baseline-fields.json",
+      "bytes": 670,
+      "sha256": "474440f9f1efbc85bd50433ea7c9f773c248ce1aaec277c352b8cf1a87870910"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/run-probes.py",
+      "bytes": 5638,
+      "sha256": "30d5759c17bf4f458d8c3587824ba57e5daf90da0ed118d17290d5030acf6f43"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/seed-metadata.command.json",
+      "bytes": 495,
+      "sha256": "211a9fbc717ad6df2e1507ecee64c324cae05b5994cb327a6236f07c10a81eec"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/seed-metadata.result.json",
+      "bytes": 367,
+      "sha256": "46677fd17f3449981db8f10dd658659edcd476b620218bba54bfc96c75751dc0"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/seed-metadata.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-module-coordination/rawlogs/XR-COHERENCY/seed-metadata.stdout.log",
+      "bytes": 388,
+      "sha256": "5d8a814751ddc0ea8253e4c38e6b9399737a9fb44ef6b8a5e2bb1e72c6036e33"
+    }
+  ]
+}

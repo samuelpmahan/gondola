@@ -1,0 +1,84 @@
+{
+  "epoch": 4,
+  "at": "2026-10-31T22:29:06.144177+00:00",
+  "ready_jobs": [
+    "E-ATOMIC"
+  ],
+  "pinned_workers": [
+    "N1",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "assignments": {
+    "N2": "E-ATOMIC",
+    "N3": "BENCH",
+    "N4": "E-ADVERSARIAL",
+    "N6": "E-DELIVERY",
+    "N1": "E-CAPTURES",
+    "N5": "E-CLI"
+  },
+  "dispatch": {
+    "N2": "E-ATOMIC"
+  },
+  "native_seconds": 0.003553562999513815,
+  "native_constraints": {
+    "solved": true,
+    "brokenVal": 0,
+    "brokenCount": 0,
+    "constraints": [
+      {
+        "name": "independent_review",
+        "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+        "value": 0
+      },
+      {
+        "name": "pin_in_flight",
+        "desc": "avoidMovingSpec: Avoid moving 4 objects",
+        "value": 0
+      },
+      {
+        "name": "ready_packet_capacity",
+        "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+        "value": 0
+      }
+    ]
+  },
+  "independent_capacity_check": true,
+  "independent_eligibility_check": true,
+  "exact_score": 300,
+  "native_score": 300,
+  "caps": {
+    "E-CAPTURES": 1,
+    "E-ARCHIVE": 0,
+    "E-ABI": 0,
+    "E-ADVERSARIAL": 1,
+    "E-CLI": 1,
+    "E-DELIVERY": 1,
+    "XR-CAPTURES": 0,
+    "XR-ARCHIVE": 0,
+    "XR-ABI": 0,
+    "XR-ADVERSARIAL": 0,
+    "XR-CLI": 0,
+    "XR-DELIVERY": 0,
+    "E-ATOMIC": 1,
+    "XR-ATOMIC": 0,
+    "BENCH": 6
+  },
+  "eligible": {
+    "E-ATOMIC": [
+      "N2"
+    ]
+  },
+  "weights": {
+    "E-ATOMIC": 300
+  },
+  "agent_by_worker": {
+    "N1": "/root/children_go",
+    "N2": null,
+    "N3": null,
+    "N4": "/root/children_harness",
+    "N5": "/root/children_oracle",
+    "N6": "/root/children_delivery"
+  }
+}

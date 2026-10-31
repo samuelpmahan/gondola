@@ -1,0 +1,237 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ADVERSARIAL",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Added independent hard-link-overlay mutation tests; the actual 12-profile capture, four ABI builds, source pins, and all ten semantic mutations passed the final focused Go command.",
+  "scope": {
+    "ownedPaths": [
+      "modulequalification/adversarial_test.go",
+      "module-qualification/controls/**",
+      "native-module-coordination/reports/E-ADVERSARIAL.md",
+      "native-module-coordination/receipts/E-ADVERSARIAL.json",
+      "native-module-coordination/rawlogs/E-ADVERSARIAL/**"
+    ],
+    "productionPathsModified": [
+      "modulequalification/adversarial_test.go",
+      "module-qualification/controls/mutations.json"
+    ],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "contract": {
+    "path": "native-module-coordination/CONTRACT.md",
+    "bytes": 4956,
+    "sha256": "aa0624430ec565bd346701d052d853aa6ea3ca6877a5899a796b7e639d77e289"
+  },
+  "sourceIdentity": {
+    "commit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "captureRoot": "/tmp/gobi-published-restore-check",
+    "captureStatus": "matched",
+    "captureRootIsAuthoritativeSourceCommit": false
+  },
+  "sourcePins": {
+    "owned": [
+      {
+        "path": "modulequalification/adversarial_test.go",
+        "bytes": 15993,
+        "sha256": "e12f0a69bb2830995be1d8c842a964219dff0653fbb0c46ea193bb220d03ad14"
+      },
+      {
+        "path": "module-qualification/controls/mutations.json",
+        "bytes": 4383,
+        "sha256": "59d0b059d4bf36574020181cbceb1908c12b96acd877b42729fc92f9c974d25e"
+      }
+    ],
+    "dependencies": [
+      {
+        "path": "modulequalification/semantics.go",
+        "bytes": 80145,
+        "sha256": "9283255ef119718d3fb59ba3ce9d103dd3871d8d0aa8177afb403b241ab5cff4"
+      },
+      {
+        "path": "modulequalification/abi.go",
+        "bytes": 13596,
+        "sha256": "a3db3751c3264de50ab745bef6d69d42aa6e50867284ff4995d216ecfe3412db"
+      },
+      {
+        "path": "modulequalification/verify.go",
+        "bytes": 17470,
+        "sha256": "9364afe971892bf4866d2ab1576b5704db1fede2f89de63211e06c1a385e81ba"
+      },
+      {
+        "path": "modulequalification/json.go",
+        "bytes": 7872,
+        "sha256": "24a7dc9edcfc123bc33ee8441ee39007b97e73a618de635d62dc1c9d5f7a6491"
+      },
+      {
+        "path": "moduleabi/descriptor.go",
+        "bytes": 37686,
+        "sha256": "d255480f6a10792e1f7f4e6d2204014f128fbb764cd98be8bd23797016b51ced"
+      },
+      {
+        "path": "compilercontract/contract.go",
+        "bytes": 7144,
+        "sha256": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188"
+      }
+    ]
+  },
+  "checks": {
+    "positiveActualAttempt": {
+      "status": "passed",
+      "root": "/tmp/gobi-published-restore-check",
+      "profiles": 12,
+      "aggregateSourceEvents": 144,
+      "aggregateGoUpdates": 99,
+      "seeds": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "fixedEvents": 24,
+      "fixedUpdates": 16,
+      "fixedCheckpoints": 17,
+      "eventsPerSeed": 40,
+      "producerSummaryStatus": "matched",
+      "checkerExecutedMutationControls": 0,
+      "abiBuilds": 4,
+      "abiPairs": 2,
+      "directorySourcePinsValidated": true
+    },
+    "mutationControls": [
+      {
+        "id": "native-typed-state",
+        "status": "detected",
+        "diagnostic": "initial Go state/view/bridge checkpoint differs from replay"
+      },
+      {
+        "id": "native-node-record-tree",
+        "status": "detected",
+        "diagnostic": "initial Go state/view/bridge checkpoint differs from replay"
+      },
+      {
+        "id": "compiled-direct-typed-state",
+        "status": "detected",
+        "diagnostic": "initial.childState differs from independently replayed Go value"
+      },
+      {
+        "id": "browser-physical-dom",
+        "status": "detected",
+        "diagnostic": "profiles.react.snapshot.child.dom differs from independently replayed Go value"
+      },
+      {
+        "id": "browser-disabled-control",
+        "status": "detected",
+        "diagnostic": "profiles.react.snapshot.child.dom differs from independently replayed Go value; HTML and both control records changed coherently"
+      },
+      {
+        "id": "direct-bridge-order",
+        "status": "detected",
+        "diagnostic": "react.events[0].bridgeCalls differs from independently replayed Go value"
+      },
+      {
+        "id": "native-schema-with-matched-summary",
+        "status": "detected",
+        "diagnostic": "header schema/name mismatch; summary stayed matched"
+      },
+      {
+        "id": "abi-descriptor-role",
+        "status": "detected",
+        "diagnostic": "invalid role identity at index 0"
+      },
+      {
+        "id": "compiled-module-source-bytes",
+        "status": "detected",
+        "diagnostic": "artifact bytes mismatch for gobi-compiled.mjs"
+      },
+      {
+        "id": "fixture-source-bytes",
+        "status": "detected",
+        "diagnostic": "source pin mismatch at source/fixtures/compiled/moduleparent/app.go"
+      }
+    ],
+    "overlaySafety": {
+      "strategy": "hard-link regular files; unlink and replace only target in per-case temp directory",
+      "baselineTargetHashesRechecked": true,
+      "producerSummaryMutated": false
+    },
+    "finalFocusedTests": {
+      "status": "passed",
+      "goVersion": "go version go1.24.0 linux/amd64",
+      "command": {
+        "path": "native-module-coordination/rawlogs/E-ADVERSARIAL/attempt-020-frozen-positive-and-10-mutations.command.json",
+        "bytes": 558,
+        "sha256": "a2e39b86bd144fb0504e949ef09e1b4d21224773b5ee5c0fb56219d8c4c2c1c3"
+      },
+      "stdout": {
+        "path": "native-module-coordination/rawlogs/E-ADVERSARIAL/attempt-020-frozen-positive-and-10-mutations.stdout.log",
+        "bytes": 4304,
+        "sha256": "2e82e8efa48487bc4d1ce33051faea286cc67f06d923d94798265913813c2375"
+      },
+      "exitCode": 0,
+      "durationSeconds": 27.507,
+      "testNames": [
+        "TestCapturedFixtureIsActuallyAccepted",
+        "TestRealCaptureMutationControls"
+      ],
+      "mutationSubtests": 10
+    },
+    "inputPins": {
+      "path": "native-module-coordination/rawlogs/E-ADVERSARIAL/evidence-inputs.json",
+      "bytes": 4390,
+      "sha256": "e412761acc608873166e75dba3934e779f0a5fbe0a564a5888e40bb726c4343f"
+    },
+    "preservedFirstAttempts": [
+      {
+        "id": "001",
+        "issue": "test used two-value CheckABIs return; fixed to error-only API"
+      },
+      {
+        "id": "002-004",
+        "issue": "captured while N1 checker source was incomplete; compile failures preserved"
+      },
+      {
+        "id": "005",
+        "issue": "N1 snapshot DOM lookup initially expected a top-level DOM field"
+      },
+      {
+        "id": "006-008",
+        "issue": "JSON token overlay initially included the object colon; corrected and semantically tightened ABI assertion"
+      },
+      {
+        "id": "010",
+        "issue": "N1 initial seed swap snapshot count omitted injected events"
+      },
+      {
+        "id": "011",
+        "issue": "expected diagnostic path too broad for observed contextual path; corrected"
+      },
+      {
+        "id": "012",
+        "issue": "captured while N1 source was being edited; compile failures preserved"
+      },
+      {
+        "id": "013-018",
+        "issue": "N1 healthy replay progressed through seeded swap and browser trace mapping mismatches; reported and fixed upstream"
+      }
+    ]
+  },
+  "limits": [
+    "Tests consume the finite restored capture; this lane did not launch Chromium or rebuild frontend artifacts.",
+    "Coverage is the known single parent/child module pair and four existing React/DOM builds.",
+    "Captured summary and producer mutation-control fields are consistency metadata, not verifier proof."
+  ],
+  "rawlogs": {
+    "path": "native-module-coordination/rawlogs/E-ADVERSARIAL",
+    "index": {
+      "path": "native-module-coordination/rawlogs/E-ADVERSARIAL/index.json",
+      "bytes": 9398,
+      "sha256": "7ee724c38bf71f6a11d092609f9efe60ad7814ab06c6cdd5a06f14ddbbf33f27"
+    },
+    "indexedFiles": 41
+  },
+  "report": {
+    "path": "native-module-coordination/reports/E-ADVERSARIAL.md",
+    "bytes": 4421,
+    "sha256": "67bd413037e98a73640ab2cd088a7844afde1bd5949dc3376c1cc49c7deb2fcb"
+  }
+}

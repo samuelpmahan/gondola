@@ -1,0 +1,138 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ABI",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Implemented native ABI admission for the four captured React/DOM module builds. Focused Go 1.24 tests passed against actual artifact bytes, including strict AppIR/sidecar rejection cases and pair validation.",
+  "scope": {
+    "ownedPaths": [
+      "modulequalification/abi.go",
+      "modulequalification/abi_test.go",
+      "native-module-coordination/reports/E-ABI.md",
+      "native-module-coordination/receipts/E-ABI.json",
+      "native-module-coordination/rawlogs/E-ABI/**"
+    ],
+    "productionPathsModified": [
+      "modulequalification/abi.go",
+      "modulequalification/abi_test.go"
+    ],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "contract": {
+    "path": "native-module-coordination/CONTRACT.md",
+    "bytes": 4956,
+    "sha256": "aa0624430ec565bd346701d052d853aa6ea3ca6877a5899a796b7e639d77e289"
+  },
+  "sourceIdentity": {
+    "commit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "tree": "bcc71cef48f3a4e141daf181b43f8e12a2132f83",
+    "captureRoot": "/tmp/gobi-published-restore-check",
+    "captureSourceCommitMatches": true
+  },
+  "sourcePins": {
+    "owned": [
+      {
+        "path": "gondola/modulequalification/abi.go",
+        "bytes": 13596,
+        "sha256": "a3db3751c3264de50ab745bef6d69d42aa6e50867284ff4995d216ecfe3412db"
+      },
+      {
+        "path": "gondola/modulequalification/abi_test.go",
+        "bytes": 5724,
+        "sha256": "ceaf3f31b680b44b7f601b8ff56be1738b1eba4be5fc9ebebb13f817533889a0"
+      }
+    ],
+    "dependencies": [
+      {
+        "path": "gondola/modulequalification/json.go",
+        "bytes": 7872,
+        "sha256": "24a7dc9edcfc123bc33ee8441ee39007b97e73a618de635d62dc1c9d5f7a6491"
+      },
+      {
+        "path": "gondola/moduleabi/descriptor.go",
+        "bytes": 37686,
+        "sha256": "d255480f6a10792e1f7f4e6d2204014f128fbb764cd98be8bd23797016b51ced"
+      },
+      {
+        "path": "gondola/compilercontract/contract.go",
+        "bytes": 7144,
+        "sha256": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188"
+      },
+      {
+        "path": "gondola/compilercontract/validation.go",
+        "bytes": 20785,
+        "sha256": "43b7ca7356782caa23ed8826b8778e5ce91eabaab50dcd06580a10d70deadc8e"
+      }
+    ]
+  },
+  "checks": {
+    "abiAdmission": {
+      "status": "passed",
+      "profiles": [
+        "react-parent",
+        "react-child",
+        "dom-parent",
+        "dom-child"
+      ],
+      "pairValidations": [
+        "react parent/child",
+        "dom parent/child"
+      ],
+      "actualBuildInputs": {
+        "path": "native-module-coordination/rawlogs/E-ABI/actual-build-pins.json",
+        "bytes": 8188,
+        "sha256": "ddec0b88a1d8e1554d6f2d86123e97ee6d3041fa8560de09c1fd49e653a1180b"
+      }
+    },
+    "focusedTests": {
+      "status": "passed",
+      "goVersion": "go version go1.24.0 linux/amd64",
+      "command": {
+        "path": "native-module-coordination/rawlogs/E-ABI/focused-abi-tests.command.json",
+        "bytes": 1072,
+        "sha256": "54689c6daf89f3521e6dbabf7a2c7add21cf5767a56c59288e6ef955cee8fab7"
+      },
+      "positiveActualFourBuilds": 1,
+      "negativeControls": [
+        "duplicate AppIR property",
+        "unknown sidecar property",
+        "unsafe sidecar path",
+        "changed generated module bytes"
+      ]
+    },
+    "preservedFirstRed": {
+      "path": "native-module-coordination/rawlogs/E-ABI/first-assertion-red.json",
+      "bytes": 936,
+      "sha256": "5064bd65e1ee79487688b6b6b81ab00910dbf4326d80f47cc513f0c8597e89d5"
+    },
+    "nativeReceiptValidation": {
+      "status": "passed",
+      "stateUnchanged": true,
+      "stateSHA256": "dd92e39a88e36097a14c89e2dc66624a471e56d530c33e95d7fa3f93b013bead",
+      "command": {
+        "path": "native-module-coordination/rawlogs/E-ABI/native-receipt-validation.command.json",
+        "bytes": 951,
+        "sha256": "62ab53e636b45aefcc8ddad3bc97d6589e92f3172720e66f3173d23b4bf6b085"
+      }
+    }
+  },
+  "limits": [
+    "This check covers only the fixed one-parent/one-child fixture and two configured backends.",
+    "Descriptor and artifact hashes provide exact byte consistency, not signatures, publisher authenticity, or malicious-code isolation.",
+    "The verifier does not rebuild Go source or establish arbitrary module graph compatibility."
+  ],
+  "rawlogs": {
+    "path": "native-module-coordination/rawlogs/E-ABI",
+    "index": {
+      "path": "native-module-coordination/rawlogs/E-ABI/index.json",
+      "bytes": 2135,
+      "sha256": "96a13b89c1df409393f5483d41ffd9d60590e601f170872ceb2f9d9a2b9420e4"
+    },
+    "indexedFiles": 10
+  },
+  "report": {
+    "path": "native-module-coordination/reports/E-ABI.md",
+    "bytes": 3586,
+    "sha256": "d39800acaa6563f51d720706b60590b1354072fa7fea6c6d258e72b18ba5e006"
+  }
+}

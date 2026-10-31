@@ -1,0 +1,171 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ATOMIC",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Closed the archive destination replacement race with atomic no-replace publication on Linux/amd64 and fail-closed behavior elsewhere; focused archive tests and real 529-member extraction passed.",
+  "scope": {
+    "ownedPaths": [
+      "modulequalification/archive.go",
+      "modulequalification/archive_test.go",
+      "modulequalification/install*.go",
+      "native-module-coordination/reports/E-ATOMIC.md",
+      "native-module-coordination/receipts/E-ATOMIC.json",
+      "native-module-coordination/rawlogs/E-ATOMIC/**"
+    ],
+    "productionPathsModified": [
+      "modulequalification/archive.go",
+      "modulequalification/archive_test.go",
+      "modulequalification/install_linux_amd64.go",
+      "modulequalification/install_other.go",
+      "modulequalification/install_test.go"
+    ],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "sourcePins": {
+    "current": [
+      {
+        "path": "gondola/modulequalification/archive.go",
+        "bytes": 23308,
+        "sha256": "4093d21f61f9e0a12df2980e92a2ea65efaa3a502ecae92ec785c66d5e7a14e7"
+      },
+      {
+        "path": "gondola/modulequalification/archive_test.go",
+        "bytes": 19385,
+        "sha256": "5a7d33ded3a1f246f7bb10d46552bc949655dda94732e546d54abe1d7547f6a8"
+      },
+      {
+        "path": "gondola/modulequalification/install_linux_amd64.go",
+        "bytes": 1185,
+        "sha256": "3118e2404cf454df86eb21b1705ee0e10f63be41086cef2c293c9824c0ab0109"
+      },
+      {
+        "path": "gondola/modulequalification/install_other.go",
+        "bytes": 434,
+        "sha256": "73d4b15863a19cbcdb8a59d552d3faedf59483e96d0f696da09a7f4e2cf2f394"
+      },
+      {
+        "path": "gondola/modulequalification/install_test.go",
+        "bytes": 2055,
+        "sha256": "d18c7548f66f51065433542581b1b1a2726671266809b66bdd17baa5a37a2716"
+      },
+      {
+        "path": "gondola/modulequalification/json.go",
+        "bytes": 7872,
+        "sha256": "24a7dc9edcfc123bc33ee8441ee39007b97e73a618de635d62dc1c9d5f7a6491"
+      }
+    ],
+    "priorEArchivePinsAndPreservation": "native-module-coordination/rawlogs/E-ATOMIC/source-and-input-pins.json"
+  },
+  "archiveInput": {
+    "archive": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.tar.gz",
+      "bytes": 6373581,
+      "sha256": "039e6b8f7d074c6c4873fc4a04ebc56f6b7110250046906e222eb1d17503e20c",
+      "matchesEArchivePin": true
+    },
+    "manifest": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.manifest.json",
+      "bytes": 125900,
+      "sha256": "ef2f332d15e306daabc290d127a42bfc2f9486fa43219785192f1674d7804fb2",
+      "matchesEArchivePin": true
+    }
+  },
+  "implementation": {
+    "api": "modulequalification.VerifyArchive(archivePath, manifestPath, dest string) (ArchiveReport,error)",
+    "installFunction": "installDirectoryNoReplace(stage, dest)",
+    "linuxAMD64": "syscall.Syscall6(renameat2=316, RENAME_NOREPLACE=1); any syscall error fails closed",
+    "otherPlatforms": "build-tagged helper returns unsupported error; no overwrite fallback",
+    "stagingCleanup": "VerifyArchive deferred cleanup remains active on install failure"
+  },
+  "verification": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "focusedTests": {
+      "status": "passed",
+      "command": {
+        "path": "native-module-coordination/rawlogs/E-ATOMIC/focused-tests.command.json",
+        "bytes": 1416,
+        "sha256": "efa5f858926c93bc024c682f0dabb08745bc305188a74f49cdd9a2fee05c3286"
+      },
+      "stdout": {
+        "path": "native-module-coordination/rawlogs/E-ATOMIC/focused-tests.stdout.log",
+        "bytes": 5362,
+        "sha256": "42bb86ea37bd4f9d789a762e89674c67c2a4a5c16d718190d47b71823506c6f0"
+      },
+      "stderr": {
+        "path": "native-module-coordination/rawlogs/E-ATOMIC/focused-tests.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCode": 0,
+      "coversActualArchive": true,
+      "actualArchiveMembers": 529,
+      "actualSourcePins": 147,
+      "negativeAndRaceControls": [
+        "existing empty destination is preserved by inode and remains empty",
+        "destination created during extraction survives; stage is removed",
+        "malformed archive and strict JSON cases remain rejected",
+        "integration rejects missing independently supplied expected source"
+      ]
+    },
+    "fallbackCompile": {
+      "status": "passed compile only",
+      "command": {
+        "path": "native-module-coordination/rawlogs/E-ATOMIC/fallback-darwin-compile.command.json",
+        "bytes": 1147,
+        "sha256": "7d074352506792fb3865f9a3f0b124e03a5ffc3b51318d3f658ac568823821c1"
+      },
+      "exitCode": 0,
+      "target": "darwin/arm64"
+    }
+  },
+  "preservedPriorPackets": {
+    "E-ARCHIVE": {
+      "report": {
+        "path": "/workspace/scratch/39a56936f173/native-module-coordination/reports/E-ARCHIVE.md",
+        "bytes": 3375,
+        "sha256": "8c1bf69dde6e2533b28a776a33eb7566f64196d54b412bc5e6a60b4f8cf10ad9",
+        "matchesSeal": true
+      },
+      "receipt": {
+        "path": "/workspace/scratch/39a56936f173/native-module-coordination/receipts/E-ARCHIVE.json",
+        "bytes": 8683,
+        "sha256": "9cc9120f494263e72f01a48d59eafc6da20cef68182c3d55dcad31f8413f2f68",
+        "matchesSeal": true
+      }
+    },
+    "XR-ARCHIVE": {
+      "report": {
+        "path": "/workspace/scratch/39a56936f173/native-module-coordination/reports/XR-ARCHIVE.md",
+        "bytes": 4595,
+        "sha256": "85b328c24b72a983ae1dcac5f3447d632caa244262c4116cdfba757f39713c4e",
+        "matchesSeal": true
+      },
+      "receipt": {
+        "path": "/workspace/scratch/39a56936f173/native-module-coordination/receipts/XR-ARCHIVE.json",
+        "bytes": 4205,
+        "sha256": "2e98a3b60c5be008eaf4a87f762f052fc41b9b464322b18e2a924bb05d121c03",
+        "matchesSeal": true
+      }
+    }
+  },
+  "limits": [
+    "No full modulequalification package run is claimed while N1 verifier work is concurrent.",
+    "The Darwin target was cross-compiled but not executed.",
+    "No arbitrary filesystem race stress test or publisher authenticity claim is made; the no-replace guarantee is the Linux renameat2 kernel primitive."
+  ],
+  "rawlogs": {
+    "path": "native-module-coordination/rawlogs/E-ATOMIC",
+    "index": {
+      "path": "native-module-coordination/rawlogs/E-ATOMIC/index.json",
+      "bytes": 3159,
+      "sha256": "db720c3911abe825bf6b3a45c21411039bbcf7807994f59a1b939ac097461e1e"
+    },
+    "indexedFiles": 15
+  },
+  "report": {
+    "path": "native-module-coordination/reports/E-ATOMIC.md",
+    "bytes": 3333,
+    "sha256": "d260da829eed24445f10a8bc6f63523609bbc06289406df02987761a6d7ed850"
+  }
+}

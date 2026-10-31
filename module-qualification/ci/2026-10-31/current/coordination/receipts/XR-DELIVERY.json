@@ -1,0 +1,171 @@
+{
+  "schema": "gobi.native-independent-review/v1",
+  "job_id": "XR-DELIVERY",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "Static review found the runner defaults to local-only Go and Python /tmp paths that the committed hosted workflow does not provide.",
+  "authorPacket": {
+    "report": {
+      "path": "native-module-coordination/seals/E-DELIVERY/E-DELIVERY.md",
+      "sha256": "40002ea6c8ffaba989b201b26a6fdf15a7f3b960f6a5b5afd74ee53012807c26",
+      "bytes": 4877
+    },
+    "receipt": {
+      "path": "native-module-coordination/seals/E-DELIVERY/E-DELIVERY.json",
+      "sha256": "c5fdfbf9828356cf2b52cea1d15ae6f883c8f27f1d3f0ab70e05ad0f5fcb6fa7",
+      "bytes": 5938
+    },
+    "seal": {
+      "path": "native-module-coordination/seals/E-DELIVERY/seal.json",
+      "sha256": "fca99f642d9a6e832592c1d28bd8c32e37a88063c84d2b97e5a2c4013606fc2a"
+    },
+    "sourceInventory": {
+      "path": "native-module-coordination/seals/E-DELIVERY/source-inventory.json",
+      "sha256": "43c2af29e87657c592b5b660e25ead892a64eb5c8149086c43945bd229eeb6c1",
+      "bytes": 952
+    },
+    "rawIndex": {
+      "path": "native-module-coordination/rawlogs/E-DELIVERY/index.json",
+      "sha256": "45c84e0ffd3a0d5a5ee0df67fad607f8a56af94cfd45a257c77a1057cc79e04f",
+      "bytes": 4085,
+      "files": 26,
+      "allFilesMatch": true
+    }
+  },
+  "sourcePins": [
+    {
+      "path": "gondola/run-module-qualification.sh",
+      "bytes": 1240,
+      "sha256": "feb168c1da49b47519973d4d560baf400ac64e628b1199c1c8b0a0ce9aa258c3",
+      "matches": true
+    },
+    {
+      "path": "gondola/module-qualification/run.mjs",
+      "bytes": 40714,
+      "sha256": "f978907fae873672ca488fce11ba0284472874d7358fd27c2c800ec089724331",
+      "matches": true
+    },
+    {
+      "path": "gondola/module-qualification/README.md",
+      "bytes": 3266,
+      "sha256": "903458fdc2751e4b2f0a432553e326fbf845c70ed68f042375715d53b06e1209",
+      "matches": true
+    },
+    {
+      "path": "gondola/module-qualification/RESULTS.md",
+      "bytes": 547,
+      "sha256": "5e720b9b60ff12a5e87142322a34d6549534ac0cb1cddfeb8402e0e1ea6cb18a",
+      "matches": true
+    },
+    {
+      "path": "gondola/module-qualification/.gitignore",
+      "bytes": 20,
+      "sha256": "9507c286389267e96f4d03f6a2c091087ebacf3e1d486b7fd586bd261108866a",
+      "matches": true
+    },
+    {
+      "path": "gondola/.github/workflows/gobi-native-module-qualification.yml",
+      "bytes": 4360,
+      "sha256": "2c5288ac329a94fbd82db5df9e83de9e6243b1e6e52db824c8fd3d7875109a24",
+      "matches": true
+    },
+    {
+      "path": "gondola/module-qualification/controls/mutations.json",
+      "bytes": 4383,
+      "sha256": "59d0b059d4bf36574020181cbceb1908c12b96acd877b42729fc92f9c974d25e",
+      "matches": true
+    },
+    {
+      "path": "gondola/compiled-capabilities/archive-helper.mjs",
+      "bytes": 3691,
+      "sha256": "df6c99a645d9164461889b8f0585fc79d3c486fc399a84ff7016e8648d2e7e5f",
+      "matches": true
+    },
+    {
+      "path": "gondola/run-compiled-modules.sh",
+      "bytes": 1247,
+      "sha256": "930b4b4bcab4423b000bfbecc7051d010fe7185da2b93cebd32c09ed8192d9a9",
+      "matches": true
+    }
+  ],
+  "checks": {
+    "sourceAndRawlogPins": {
+      "status": "passed",
+      "sourceFiles": 9,
+      "rawFiles": 26,
+      "allMatch": true
+    },
+    "staticSyntaxAndHelp": {
+      "status": "passed",
+      "node": "v22.23.4",
+      "go": "go version go1.24.0 linux/amd64",
+      "nodeCheck": true,
+      "bashSyntax": true,
+      "wrapperHelp": true
+    },
+    "workflow": {
+      "status": "passed",
+      "yamlParsed": true,
+      "pushPullFiltersEqual": true,
+      "paths": 38,
+      "runner": "ubuntu-latest",
+      "setupGo": "1.24.x",
+      "setupNode": "22"
+    },
+    "goDependencyClosure": {
+      "status": "passed",
+      "packages": 11,
+      "currentFileAssociations": 45,
+      "authorSnapshotFileCount": 44,
+      "requiredMutationCorpusExplicitlyIncludedByRunner": true
+    },
+    "focusedGoTestGate": {
+      "status": "source-reviewed",
+      "realCaptureTestRequired": true,
+      "skipsRejected": true,
+      "tenMutationNamesComparedToCorpus": true,
+      "fourCaptureEnvironmentValuesPassed": true
+    },
+    "directoryArchiveParityGate": {
+      "status": "source-reviewed",
+      "captureAbiAndInputInventoriesCompared": true
+    },
+    "freshProducerOrFullPipeline": {
+      "status": "not-run",
+      "reason": "reserved for root clean-candidate E-RUN"
+    },
+    "hostedWorkflowExecution": {
+      "status": "not-run"
+    }
+  },
+  "finding": {
+    "severity": "must-fix",
+    "path": "gondola/module-qualification/run.mjs",
+    "lines": [
+      470,
+      471
+    ],
+    "detail": "When GOBI_GO_BIN and GOBI_PYTHON_BIN are unset, the runner hardcodes /tmp/gondola-go/go/bin/go and /tmp/rebalancer-env/bin/python. The GitHub workflow installs tools on ubuntu-latest but sets neither variable. The shell wrapper PATH preflight does not affect the executable path selected by the Node runner; hosted execution will fail at tool-go-version unless those task-local paths happen to exist. Overriding Go alone still leaves Python unavailable.",
+    "evidence": "native-module-coordination/rawlogs/XR-DELIVERY/runner-path-finding.txt",
+    "hostedExecutionObserved": false
+  },
+  "limits": [
+    "No fresh producer, browser, full Go suite, M0/counter regression, or hosted workflow was run in this review.",
+    "Author E-DELIVERY correctly marks those checks as not run; this packet does not claim the end-to-end runner is otherwise accepted.",
+    "The older archive mismatch remains preserved as an older-capture failure and was not reproduced or attributed."
+  ],
+  "rawlogs": {
+    "path": "native-module-coordination/rawlogs/XR-DELIVERY",
+    "index": {
+      "path": "native-module-coordination/rawlogs/XR-DELIVERY/index.json",
+      "bytes": 2827,
+      "sha256": "34c74bdc66b687cb6066d9911894eb9f860abebc4ffd06fb8a3ec6b53b00b97f",
+      "files": 18
+    }
+  },
+  "report": {
+    "path": "native-module-coordination/reports/XR-DELIVERY.md",
+    "bytes": 4218,
+    "sha256": "cdd2126a25c64fbf0ff7083e7b177ccc88e79801de5dd1597a1813b61b0b28ce"
+  }
+}
