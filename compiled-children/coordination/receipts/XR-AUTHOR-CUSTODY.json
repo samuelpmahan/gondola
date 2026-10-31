@@ -1,0 +1,934 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-AUTHOR-CUSTODY",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Accepted the historical author/review archive as bounded custody: independently streamed all 875 members and 40 nested gzip members; recomputed the 235/258 rawlog cutoff, checked current selected-source equality, snapshot and preserved originals, and verified exclusion ledgers. This does not accept later full runtime or CI.",
+  "reviewed_job": {
+    "job_id": "E-AUTHOR-CUSTODY",
+    "worker": "N5",
+    "outcome": "mixed_change"
+  },
+  "archive": {
+    "path": "compiled-children/evidence-preflight/pre-repair-author-review-history.final.tar.gz",
+    "bytes": 164464000,
+    "sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e",
+    "mode": "0444",
+    "members": 875,
+    "uncompressed_member_bytes": 2206776977,
+    "nested_gzip_members": 40,
+    "nested_gzip_streams": 40,
+    "nested_gzip_uncompressed_bytes": 328628073,
+    "external_inventory": {
+      "path": "compiled-children/evidence-preflight/archive-inventory.final.json",
+      "bytes": 189820,
+      "sha256": "e48e7cd189dc1038dc3f964937b07edaa73459d104554b5a2f619877ae960470"
+    }
+  },
+  "cutoff": {
+    "utc": "2026-10-31T12:52:30Z",
+    "source_rawlog_records": 258,
+    "included": 235,
+    "excluded_after_cutoff": 23,
+    "selected_current_sources_equal": 235,
+    "selected_current_sources_changed": 0,
+    "selected_current_sources_missing": 0,
+    "receipt_report_pairs": 17,
+    "n4_attempt_files": 251,
+    "n4_attempt_range": "01-12",
+    "demo_output_dirs": [
+      "author-smoke-20261031",
+      "author-smoke-20261031-rerun1"
+    ],
+    "selection_path": "compiled-children/evidence-preflight/selection-rawlogs-235.json",
+    "excluded_ledger_path": "compiled-children/evidence-preflight/rawlogs/excluded-rawlogs-after-cut.json"
+  },
+  "historical_snapshot": {
+    "utc": "2026-10-31T12:51:44Z",
+    "epoch": 11,
+    "state_bytes": 50171,
+    "state_sha256": "ee3bfa067e027a16d6efb8cc9c189da77066a9240a342fdd45a109dcf12e7611",
+    "member_count": 10,
+    "all_members_match_archive": true,
+    "live_at_review_epoch": 18,
+    "live_at_review_sha256": "f7c48085f5808ebd26e7c3d4eeb73bf94ff3aa12a9b128535c61dba965d35a37",
+    "differs_from_live_at_review": true,
+    "interpretation": "Historical snapshot claims apply to epoch 11 only; review-time mutable state is separate."
+  },
+  "preservation": {
+    "repair_manifest_count": 5,
+    "original_file_count": 15,
+    "all_original_hashes_and_lengths_match": true,
+    "no_wasm_live_path_not_second_archive_copy": {
+      "source_path": "compiled-frontend/conformance/no-wasm.mjs",
+      "preserved_original_member": "project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/no-wasm.mjs",
+      "live_source_bytes_at_cut": 5498,
+      "live_source_sha256_at_cut": "d4afe368a26c295c8bbdc8863a5109c7e3783e08d5e65ce08173387939c7cfa1",
+      "preserved_original_bytes": 2772,
+      "preserved_original_sha256": "512d3debbcb8c8bb1f9edd01cb6b930a6364bcd680d7a6580c2096c5dc37ed29"
+    },
+    "unavailable_E_ORACLE_source": {
+      "receipt_pinned_sha256": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+      "present": false,
+      "current_and_custody_copy_sha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+      "current_and_custody_copy_bytes": 7470,
+      "restoration_claim": false
+    },
+    "old_XR_ORACLE_rawlog_bytecounts": [
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit.py",
+        "historical": 1497,
+        "actual": 1958,
+        "sha256": "eff4958928028b670df9a59623e55da4278fe53dbef5ba7b3ed3410fe7f38304"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit.log",
+        "historical": 224,
+        "actual": 238,
+        "sha256": "63064f499064af9e68aa1809c630b30213d56663687cdf924bb9abf2be4f650a"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit-exit.log",
+        "historical": 20,
+        "actual": 21,
+        "sha256": "91188f5648886a2f3d710ba5ead1fd361ff21ffa82e15ecb2bdbb7f9431a7888"
+      }
+    ],
+    "retry1": {
+      "bytes": 167917858,
+      "sha256": "954bad6b31df16f92c8297d64a53029c26159c3aeede1694d53a626a90c4f1a7",
+      "included_in_final": false
+    },
+    "ambient_partials": 5,
+    "unlisted_temp_captures": [
+      {
+        "bytes": 45875200,
+        "sha256": "4a37a3cb6ec5f94c36773cc54027f0ef821bf9be97cec101a655b0b65e53e36e",
+        "in_retry1_only": true,
+        "included_in_final": false
+      },
+      {
+        "bytes": 29884416,
+        "sha256": "5893d3aea92f4513b911cdfd08dcf41018720dd556a85a2be604d5ea172ee296",
+        "included_in_final": false
+      }
+    ],
+    "unknown_origin_or_completion_cause_assigned": false
+  },
+  "independent_audit": {
+    "result": "independent_stream_audit_passed",
+    "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.py",
+    "success_output": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.json",
+    "success_exit_code": 0,
+    "extraction_or_second_archive_copy": false,
+    "cutoff_recomputed_from": "archive-root/CONTENT-INVENTORY.json",
+    "failed_checker_iterations_are_preserved": true,
+    "known_false_checker_assumptions": [
+      "The final archive content inventory is pruned and cannot be used as the source inventory for recomputing post-cut paths.",
+      "A live source file path need not also appear as a second archive member when its original bytes are explicitly preserved under the repair-original path."
+    ]
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.py > compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.json 2> compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.stderr.log",
+      "exit_code": 0,
+      "result": "Independent streaming archive, nested gzip, cutoff, snapshot, and preservation audit passed.",
+      "stdout": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.json",
+      "stderr": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.stderr.log",
+      "exit_log": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.exit-code"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation.py",
+      "exit_code": 0,
+      "result": "Native validate_receipt and all final source, rawlog, and report pins passed.",
+      "script": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation.py",
+      "stdout_capture": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-success.log",
+      "exit_log": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-final.exit-code"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation.py > compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation.log 2>&1",
+      "exit_code": 1,
+      "preserved_first_pass_failure": true,
+      "reason": "The wrapper overwrote the success log before checking its pinned hash; it was rerun after separating stable output and failure records.",
+      "stderr_log": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-self-overwrite-failure.log"
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "path": "compiled-children/coordination/receipts/E-AUTHOR-CUSTODY.json",
+      "bytes": 23826,
+      "sha256": "32820e5b23f721b435606e8a16d45367ce701c7f76829c194cc7f3148f22cc4f"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-AUTHOR-CUSTODY.md",
+      "bytes": 7344,
+      "sha256": "23b31314ba22bea550d1a787d60191745038dbffcd3fb139175fc04d9e60a5ed"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-inventory.final.json",
+      "bytes": 189820,
+      "sha256": "e48e7cd189dc1038dc3f964937b07edaa73459d104554b5a2f619877ae960470"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-inventory.retry1.json",
+      "bytes": 195810,
+      "sha256": "cec1e261e9ac5da9adb00b32b4e06c72852f371122053df2708a50085d47567a"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/CONTENT-INVENTORY.json",
+      "bytes": 403551,
+      "sha256": "c5ca425065d1359685e991815591120adbbef844885b80dffc21d802a3abe1bd"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/native-state-snapshot/compiled-children/coordination/state.json",
+      "bytes": 50171,
+      "sha256": "ee3bfa067e027a16d6efb8cc9c189da77066a9240a342fdd45a109dcf12e7611"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/native-state-snapshot/snapshot-time.txt",
+      "bytes": 21,
+      "sha256": "d0807d31388a8346343451db107d8f9a155d49f897db02b8a98726d0b0163b55"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-CHECKER-TESTS.json",
+      "bytes": 7114,
+      "sha256": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-COMPILER.json",
+      "bytes": 10435,
+      "sha256": "e9919644a59b88b9684f2f7c1dad1f4d1120d64d24e8dccc79bf86b20bc66371"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-DELIVERY.json",
+      "bytes": 10856,
+      "sha256": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-FIX-ORACLE-CUSTODY.json",
+      "bytes": 24606,
+      "sha256": "cc31343d78c0848d5d980defb875b6467c6db46968a4e8e8202394b3eec31fff"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-FIX-SEEDED-ASSERTIONS.json",
+      "bytes": 11249,
+      "sha256": "9287df8211b0c683e154762920f6b24073b123f60f625e5ab61f7ac7b6949d8d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-GO.json",
+      "bytes": 1849,
+      "sha256": "68e04d07077ba3464deccd5ecbc8f2e2c2f8bda6ae820ed583ce2601a394caa7"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-HARNESS.json",
+      "bytes": 16513,
+      "sha256": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-HOST.json",
+      "bytes": 5232,
+      "sha256": "1bf52505195803e4c8e905d17dfbd398e858ad70be5c05ff14016af2f6b28a12"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-ORACLE.json",
+      "bytes": 6866,
+      "sha256": "17ccb1bf8f8e6fbe288e24826f4dea5b830faf1d0052c27fd2f8c07dde034b2d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-CHECKER-TESTS.json",
+      "bytes": 13832,
+      "sha256": "233de4d480baabcf3d1f85095f63a564bf9026e18d47ee1b316645f75cfc8131"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-COMPILER.json",
+      "bytes": 18271,
+      "sha256": "c5ce15244bc2cc93b327b41689b604865042da56bc87d33204e5991121027383"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-DELIVERY.json",
+      "bytes": 17847,
+      "sha256": "b4607f04dc2e13b42a15dceb47fd9ec7e5284f8f0c9069ce6063f06210c8d469"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-FIX-ORACLE-CUSTODY.json",
+      "bytes": 20412,
+      "sha256": "5b0a3001d1c94f86415d15dfd7047cecd0c04c24d401bdbb5b16efd091da4323"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-GO.json",
+      "bytes": 9242,
+      "sha256": "c2b3d5a7a5974efe2b0846cc3487e69bd067371b53ea213209181cb9f7340345"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-HARNESS.json",
+      "bytes": 14503,
+      "sha256": "240218ddfc24da525bb7187e69796a93170b5fb004c931195a9313d31b3de7c4"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-HOST.json",
+      "bytes": 5893,
+      "sha256": "f4fda2c2aeb4e5ef0acba658a4f115c1a690f85f9e9790228facf276973dda0a"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-ORACLE.json",
+      "bytes": 9898,
+      "sha256": "af1f9d448e1081c1ed6b2be0b27517f7dd7fbf762f2c8c5d6f6e972e2abfec63"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/E-HARNESS.json",
+      "bytes": 16513,
+      "sha256": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/E-HARNESS.md",
+      "bytes": 4553,
+      "sha256": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/check.mjs",
+      "bytes": 37922,
+      "sha256": "518778418a7e9be880e4e48ee792dd784c7676ddadaf489a12485c2589d39f68"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/manifest.json",
+      "bytes": 1218,
+      "sha256": "54d6868c039ede21052c8c1178610d77e17a9e2630e8a1ec2ad872eb2c70c22e"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/run.mjs",
+      "bytes": 30357,
+      "sha256": "588f0cb1d3a1e93cb13c39272d3c27a889b83237de454136a4d0548c83ecb8ac"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/E-DELIVERY.json",
+      "bytes": 10856,
+      "sha256": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/E-DELIVERY.md",
+      "bytes": 6150,
+      "sha256": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/manifest.json",
+      "bytes": 1053,
+      "sha256": "059dcc76943b8d6af9fcab8dd8492a4934afd747e00ccb85a19f5cb690887624"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/run.mjs",
+      "bytes": 56894,
+      "sha256": "a279e6b28f5ed0166b0d5264e587c0f01abcd550ea1a9c7d7866a8c568f0333d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/E-CHECKER-TESTS.json",
+      "bytes": 7114,
+      "sha256": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/E-CHECKER-TESTS.md",
+      "bytes": 3981,
+      "sha256": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/manifest.json",
+      "bytes": 978,
+      "sha256": "79761defaf242d51ac66b8f4f2630cecc74a23c0cefa0bcebee76642a73eb066"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/seeded.test.mjs",
+      "bytes": 6679,
+      "sha256": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/browser.mjs",
+      "bytes": 8362,
+      "sha256": "d36b6bae1dd606e4b5e4bf069d7ec7a9d8303833b8451c953d9eb6edd0d4693d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/manifest.json",
+      "bytes": 912,
+      "sha256": "7f6ba5c151f4a1aac1556e96775ded6aec27b661e610f859eda151a769e128ed"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/no-wasm.mjs",
+      "bytes": 2772,
+      "sha256": "512d3debbcb8c8bb1f9edd01cb6b930a6364bcd680d7a6580c2096c5dc37ed29"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/smoke.mjs",
+      "bytes": 16837,
+      "sha256": "607aac6378610c425de5aeeb0925deb10d8643306a5b6e017a86f3edc4c5bab1"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/README.md",
+      "bytes": 3009,
+      "sha256": "4eaf45dafbd59ca4ed8058a578e9f4105fc4d1d129274e7252474f92df013f28"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/RESULTS.md",
+      "bytes": 4595,
+      "sha256": "dbe475a81b94e3ed37cf0e161df95f9ff0e2f31b584c772e3fcb93b0e38ce67d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/manifest.json",
+      "bytes": 592,
+      "sha256": "baa60a3eaf2d280a26d3e02854f5e9b75660c75b1bac555015ccf736c5eafb16"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-CHECKER-TESTS.md",
+      "bytes": 3981,
+      "sha256": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-COMPILER.md",
+      "bytes": 6656,
+      "sha256": "28e271c19584ef89ba5ff1f1cc64f54e9f6e842d7800b02c16ceb8f7f796a67d"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-DELIVERY.md",
+      "bytes": 6150,
+      "sha256": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-FIX-ORACLE-CUSTODY.md",
+      "bytes": 5905,
+      "sha256": "b5d8e5bdbb03e7c27a18e57ba5a67398521a05c71c8b3a3e0cc76a79d5b222da"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-FIX-SEEDED-ASSERTIONS.md",
+      "bytes": 4524,
+      "sha256": "939a351168489bb5f98e86412495e9a5e91d0c799b3b0c1e5efe652c0509eb34"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-GO.md",
+      "bytes": 4240,
+      "sha256": "b391368ac7c0253c6447fdfd5567a5a3c702f03240fa30f5ddb8b6391c57e497"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-HARNESS.md",
+      "bytes": 4553,
+      "sha256": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-HOST.md",
+      "bytes": 3731,
+      "sha256": "8a862b29b98019b5b158c164db98c22b48ef261c7fb202c34a855d992d335383"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-ORACLE.md",
+      "bytes": 5674,
+      "sha256": "f9583a4d9a5e6faa23a8ddeeb5bee5b0209f910912736b403d423456f7e74556"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-RELEASE-DOCS.md",
+      "bytes": 2139,
+      "sha256": "cc495d55d04d2f2ec608edf33f0c18a37bf2947a21f6db6a87254d45857cabef"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-CHECKER-TESTS.md",
+      "bytes": 5809,
+      "sha256": "0c8afe595f9eb19b5bb3f43eae88c0bbd13fa50711adab31763f49b7c0752e64"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-COMPILER.md",
+      "bytes": 4413,
+      "sha256": "c382ca26ba85b20a6e7f170c7bef0f0f189c7ad8e5f6960b1cd96759e6f137da"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-DELIVERY.md",
+      "bytes": 7313,
+      "sha256": "5492636a52831341ab09e2d61067c30b166784488f788f1197ec5cfd23df3e15"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-FIX-ORACLE-CUSTODY.md",
+      "bytes": 3915,
+      "sha256": "a71b4e3a2c0ed49d6e6fe131669b131983677c92365392235c2ab7d7742d4e1b"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-GO.md",
+      "bytes": 6395,
+      "sha256": "058b286bb6c447d025f0e73e0adda19b5b61e6d3591f40ad28aa618a27d1d0b7"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-HARNESS.md",
+      "bytes": 5144,
+      "sha256": "98a2a4d9507dbcfc08412bd31871ba4241ac82520d54514462f0e3624cbf671f"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-HOST.md",
+      "bytes": 4223,
+      "sha256": "3461dbe530b7d957d16ababdfa6050895d691144890922759168d26d4e1a7e0b"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-ORACLE.md",
+      "bytes": 5774,
+      "sha256": "d6c23bc75c6cbb260708af0b42854d39404e1f215a4728b42d6d22b4eec18f60"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/capacity.json",
+      "bytes": 338,
+      "sha256": "4be249afa0e74f4ca5952583802e4d45b4908af9e6fe48b4f867123ce7b760f8"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/dispatch.json",
+      "bytes": 1302,
+      "sha256": "3c82f7c1f23c89f947d7ee11fa896e9208a99d0b365a3b7369078fece7687d58"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/epoch-10.log",
+      "bytes": 8076,
+      "sha256": "af8530f47014f457e183dbff91b73a13a5d0e075e5f6a7fff8b95d1d10c5c7a2"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/gates.json",
+      "bytes": 1840,
+      "sha256": "22ad7806011b36813fa0df4b4e76251bd56db3ee5a52da2b94350d27e5cf75da"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/native/epoch-10.bundle",
+      "bytes": 2430,
+      "sha256": "604ea568e25801b49195d396d3fddb4254296c2b434dd2e406bae677ab641c39"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/native/epoch-10.json",
+      "bytes": 2349,
+      "sha256": "0ce3db90f0306c68db0b8f2d44253e2f8dbf6114e7881799213d7c4c0a138fd9"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/spec-history.json",
+      "bytes": 929,
+      "sha256": "5ea344691ced3bb4902955236cf4e285bc386f712413513d7c7f7f24f12f199f"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/spec.json",
+      "bytes": 6928,
+      "sha256": "2f2fa3c24f0c398f0a310d984bf2481b1f9c64754ac75fe073c9eb9065f2ba4e"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/state.json",
+      "bytes": 50171,
+      "sha256": "ee3bfa067e027a16d6efb8cc9c189da77066a9240a342fdd45a109dcf12e7611"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/frozen/native-state/snapshot-time.txt",
+      "bytes": 21,
+      "sha256": "d0807d31388a8346343451db107d8f9a155d49f897db02b8a98726d0b0163b55"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/pre-repair-author-review-history.final.tar.gz",
+      "bytes": 164464000,
+      "sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/pre-repair-author-review-history.retry1.tar.gz",
+      "bytes": 167917858,
+      "sha256": "954bad6b31df16f92c8297d64a53029c26159c3aeede1694d53a626a90c4f1a7"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/ambient-partials-readonly.json",
+      "bytes": 2977,
+      "sha256": "d32237b8edadabffd9a7a78d891dfe88e070bfeb3a866ec2102f95c4923e5fb2"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/archive-final.log",
+      "bytes": 455,
+      "sha256": "e4fd5da5fcbc9618b2fc83e69fe1feb227a95758339a7db9c5b8fe89202cc240"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/archive-retry1.log",
+      "bytes": 225,
+      "sha256": "a8aebf7afa9b10fa676dfa26bdb519d78b3f306b102eaf2ccc1469e2f84ec18c"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/excluded-rawlogs-after-cut.json",
+      "bytes": 11213,
+      "sha256": "368d4fbb4634da7b540e28130f688e1afd9e875c49736c1490f98e8aadf36565"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/final-stage-prep-v2.log",
+      "bytes": 110,
+      "sha256": "06345401920da1409bbc4488ae9961c4ca0318668d94637f865edefbe4882f1c"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/final-stage-prep-v3.log",
+      "bytes": 220,
+      "sha256": "68777aaee1644c13af1b785140c7e952f8d40deb4bab568bad98ae6c2ee76423"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/final-stage-prep.log",
+      "bytes": 110,
+      "sha256": "06345401920da1409bbc4488ae9961c4ca0318668d94637f865edefbe4882f1c"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/inner-gzip-integrity.log",
+      "bytes": 4279,
+      "sha256": "c13ec8496cb3ad21b257ac0670de4df1500c65013359ca5b4d57836bf903b640"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/prepare.stdout.log",
+      "bytes": 760,
+      "sha256": "c3724deb76f09848e6d4c24bc45976e62b80553716a415479ca5204a2b899835"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/tar-input-pre-repair-author-review-history.final.tar.nul",
+      "bytes": 70358,
+      "sha256": "eb33285a056c2cb0ff096953a28cff7d007c3f74e858e4c420acfee5c209369e"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/tar-input-pre-repair-author-review-history.retry1.tar.nul",
+      "bytes": 72857,
+      "sha256": "45309818ac6a678217c8d1a42fbdfa8c2a624b96058d868a6697ef66bc0a90bd"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/tool-versions.json",
+      "bytes": 682,
+      "sha256": "26a31afedb748a7893a2ba3399742af7d379453ee89c42f4d58bad19c6b3c8b4"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/unlisted-temp-captures.json",
+      "bytes": 1734,
+      "sha256": "028e56a2b476d2aa6ef6400d8bdfad3b2f8b172e5f1d69cfcce163bda145ccb2"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/verify-final.log",
+      "bytes": 469,
+      "sha256": "e31302aa9b0e24a485e6e64351da615f21804c915685b29dc984979ab747f9af"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/rawlogs/verify-retry1.log",
+      "bytes": 464,
+      "sha256": "3edfb437146639135f39c6c5fd61d18b4d7510874d9065466ff39ff82faf9703"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/selection-rawlogs-235.json",
+      "bytes": 110369,
+      "sha256": "5e7c8762a03511acc2aa4a0af65082e6bb9d8d1fa9d35f7e0a4ecc3e49439932"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/tools/archive_final_stage.py",
+      "bytes": 2052,
+      "sha256": "5a00bfd8edd0a59bbe7c98eb89f07ed7ecb79a1cf6c64cce66c2d2e7305868fa"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/tools/archive_staged.py",
+      "bytes": 1152,
+      "sha256": "c3d3bb5242064d47487da19aa6a5966de8ed0123c3bdb72bb300f18fd392d21e"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/tools/prepare_archive.py",
+      "bytes": 16212,
+      "sha256": "f2807373ee3d51d5c9ee033358233dd21b5644d9ea84bead81895f618d86c228"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/tools/prepare_final_stage.py",
+      "bytes": 16879,
+      "sha256": "170be3c3cfb386379a81e048fac6c002db3daae5efc6ca71ed9e7e19fb9f996c"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/tools/select_rawlogs.py",
+      "bytes": 1709,
+      "sha256": "a7f9d3e8a41782cc86df4089cb35fe6b4f4212cf9ee72b024368288e2d1d3e29"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/tools/verify_archive.py",
+      "bytes": 3137,
+      "sha256": "f82cae24b31673870e6c47974f13ecf117fbd67f3ac61dfc1a03f94a4093f6fa"
+    }
+  ],
+  "sourceSha256": {
+    "compiled-children/coordination/receipts/E-AUTHOR-CUSTODY.json": "32820e5b23f721b435606e8a16d45367ce701c7f76829c194cc7f3148f22cc4f",
+    "compiled-children/coordination/reports/E-AUTHOR-CUSTODY.md": "23b31314ba22bea550d1a787d60191745038dbffcd3fb139175fc04d9e60a5ed",
+    "compiled-children/evidence-preflight/archive-inventory.final.json": "e48e7cd189dc1038dc3f964937b07edaa73459d104554b5a2f619877ae960470",
+    "compiled-children/evidence-preflight/archive-inventory.retry1.json": "cec1e261e9ac5da9adb00b32b4e06c72852f371122053df2708a50085d47567a",
+    "compiled-children/evidence-preflight/archive-root/CONTENT-INVENTORY.json": "c5ca425065d1359685e991815591120adbbef844885b80dffc21d802a3abe1bd",
+    "compiled-children/evidence-preflight/archive-root/native-state-snapshot/compiled-children/coordination/state.json": "ee3bfa067e027a16d6efb8cc9c189da77066a9240a342fdd45a109dcf12e7611",
+    "compiled-children/evidence-preflight/archive-root/native-state-snapshot/snapshot-time.txt": "d0807d31388a8346343451db107d8f9a155d49f897db02b8a98726d0b0163b55",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-CHECKER-TESTS.json": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-COMPILER.json": "e9919644a59b88b9684f2f7c1dad1f4d1120d64d24e8dccc79bf86b20bc66371",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-DELIVERY.json": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-FIX-ORACLE-CUSTODY.json": "cc31343d78c0848d5d980defb875b6467c6db46968a4e8e8202394b3eec31fff",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-FIX-SEEDED-ASSERTIONS.json": "9287df8211b0c683e154762920f6b24073b123f60f625e5ab61f7ac7b6949d8d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-GO.json": "68e04d07077ba3464deccd5ecbc8f2e2c2f8bda6ae820ed583ce2601a394caa7",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-HARNESS.json": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-HOST.json": "1bf52505195803e4c8e905d17dfbd398e858ad70be5c05ff14016af2f6b28a12",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/E-ORACLE.json": "17ccb1bf8f8e6fbe288e24826f4dea5b830faf1d0052c27fd2f8c07dde034b2d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-CHECKER-TESTS.json": "233de4d480baabcf3d1f85095f63a564bf9026e18d47ee1b316645f75cfc8131",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-COMPILER.json": "c5ce15244bc2cc93b327b41689b604865042da56bc87d33204e5991121027383",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-DELIVERY.json": "b4607f04dc2e13b42a15dceb47fd9ec7e5284f8f0c9069ce6063f06210c8d469",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-FIX-ORACLE-CUSTODY.json": "5b0a3001d1c94f86415d15dfd7047cecd0c04c24d401bdbb5b16efd091da4323",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-GO.json": "c2b3d5a7a5974efe2b0846cc3487e69bd067371b53ea213209181cb9f7340345",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-HARNESS.json": "240218ddfc24da525bb7187e69796a93170b5fb004c931195a9313d31b3de7c4",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-HOST.json": "f4fda2c2aeb4e5ef0acba658a4f115c1a690f85f9e9790228facf276973dda0a",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/receipts/XR-ORACLE.json": "af1f9d448e1081c1ed6b2be0b27517f7dd7fbf762f2c8c5d6f6e972e2abfec63",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/E-HARNESS.json": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/E-HARNESS.md": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/check.mjs": "518778418a7e9be880e4e48ee792dd784c7676ddadaf489a12485c2589d39f68",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/manifest.json": "54d6868c039ede21052c8c1178610d77e17a9e2630e8a1ec2ad872eb2c70c22e",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/run.mjs": "588f0cb1d3a1e93cb13c39272d3c27a889b83237de454136a4d0548c83ecb8ac",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/E-DELIVERY.json": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/E-DELIVERY.md": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/manifest.json": "059dcc76943b8d6af9fcab8dd8492a4934afd747e00ccb85a19f5cb690887624",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-INHERITED-GATE/originals/run.mjs": "a279e6b28f5ed0166b0d5264e587c0f01abcd550ea1a9c7d7866a8c568f0333d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/E-CHECKER-TESTS.json": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/E-CHECKER-TESTS.md": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/manifest.json": "79761defaf242d51ac66b8f4f2630cecc74a23c0cefa0bcebee76642a73eb066",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/seeded.test.mjs": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/browser.mjs": "d36b6bae1dd606e4b5e4bf069d7ec7a9d8303833b8451c953d9eb6edd0d4693d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/manifest.json": "7f6ba5c151f4a1aac1556e96775ded6aec27b661e610f859eda151a769e128ed",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/no-wasm.mjs": "512d3debbcb8c8bb1f9edd01cb6b930a6364bcd680d7a6580c2096c5dc37ed29",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/smoke.mjs": "607aac6378610c425de5aeeb0925deb10d8643306a5b6e017a86f3edc4c5bab1",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/README.md": "4eaf45dafbd59ca4ed8058a578e9f4105fc4d1d129274e7252474f92df013f28",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/RESULTS.md": "dbe475a81b94e3ed37cf0e161df95f9ff0e2f31b584c772e3fcb93b0e38ce67d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/manifest.json": "baa60a3eaf2d280a26d3e02854f5e9b75660c75b1bac555015ccf736c5eafb16",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-CHECKER-TESTS.md": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-COMPILER.md": "28e271c19584ef89ba5ff1f1cc64f54e9f6e842d7800b02c16ceb8f7f796a67d",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-DELIVERY.md": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-FIX-ORACLE-CUSTODY.md": "b5d8e5bdbb03e7c27a18e57ba5a67398521a05c71c8b3a3e0cc76a79d5b222da",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-FIX-SEEDED-ASSERTIONS.md": "939a351168489bb5f98e86412495e9a5e91d0c799b3b0c1e5efe652c0509eb34",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-GO.md": "b391368ac7c0253c6447fdfd5567a5a3c702f03240fa30f5ddb8b6391c57e497",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-HARNESS.md": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-HOST.md": "8a862b29b98019b5b158c164db98c22b48ef261c7fb202c34a855d992d335383",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-ORACLE.md": "f9583a4d9a5e6faa23a8ddeeb5bee5b0209f910912736b403d423456f7e74556",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/E-RELEASE-DOCS.md": "cc495d55d04d2f2ec608edf33f0c18a37bf2947a21f6db6a87254d45857cabef",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-CHECKER-TESTS.md": "0c8afe595f9eb19b5bb3f43eae88c0bbd13fa50711adab31763f49b7c0752e64",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-COMPILER.md": "c382ca26ba85b20a6e7f170c7bef0f0f189c7ad8e5f6960b1cd96759e6f137da",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-DELIVERY.md": "5492636a52831341ab09e2d61067c30b166784488f788f1197ec5cfd23df3e15",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-FIX-ORACLE-CUSTODY.md": "a71b4e3a2c0ed49d6e6fe131669b131983677c92365392235c2ab7d7742d4e1b",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-GO.md": "058b286bb6c447d025f0e73e0adda19b5b61e6d3591f40ad28aa618a27d1d0b7",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-HARNESS.md": "98a2a4d9507dbcfc08412bd31871ba4241ac82520d54514462f0e3624cbf671f",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-HOST.md": "3461dbe530b7d957d16ababdfa6050895d691144890922759168d26d4e1a7e0b",
+    "compiled-children/evidence-preflight/archive-root/project/compiled-children/coordination/reports/XR-ORACLE.md": "d6c23bc75c6cbb260708af0b42854d39404e1f215a4728b42d6d22b4eec18f60",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/capacity.json": "4be249afa0e74f4ca5952583802e4d45b4908af9e6fe48b4f867123ce7b760f8",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/dispatch.json": "3c82f7c1f23c89f947d7ee11fa896e9208a99d0b365a3b7369078fece7687d58",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/epoch-10.log": "af8530f47014f457e183dbff91b73a13a5d0e075e5f6a7fff8b95d1d10c5c7a2",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/gates.json": "22ad7806011b36813fa0df4b4e76251bd56db3ee5a52da2b94350d27e5cf75da",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/native/epoch-10.bundle": "604ea568e25801b49195d396d3fddb4254296c2b434dd2e406bae677ab641c39",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/native/epoch-10.json": "0ce3db90f0306c68db0b8f2d44253e2f8dbf6114e7881799213d7c4c0a138fd9",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/spec-history.json": "5ea344691ced3bb4902955236cf4e285bc386f712413513d7c7f7f24f12f199f",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/spec.json": "2f2fa3c24f0c398f0a310d984bf2481b1f9c64754ac75fe073c9eb9065f2ba4e",
+    "compiled-children/evidence-preflight/frozen/native-state/compiled-children/coordination/state.json": "ee3bfa067e027a16d6efb8cc9c189da77066a9240a342fdd45a109dcf12e7611",
+    "compiled-children/evidence-preflight/frozen/native-state/snapshot-time.txt": "d0807d31388a8346343451db107d8f9a155d49f897db02b8a98726d0b0163b55",
+    "compiled-children/evidence-preflight/pre-repair-author-review-history.final.tar.gz": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0",
+    "compiled-children/evidence-preflight/pre-repair-author-review-history.retry1.tar.gz": "954bad6b31df16f92c8297d64a53029c26159c3aeede1694d53a626a90c4f1a7",
+    "compiled-children/evidence-preflight/rawlogs/ambient-partials-readonly.json": "d32237b8edadabffd9a7a78d891dfe88e070bfeb3a866ec2102f95c4923e5fb2",
+    "compiled-children/evidence-preflight/rawlogs/archive-final.log": "e4fd5da5fcbc9618b2fc83e69fe1feb227a95758339a7db9c5b8fe89202cc240",
+    "compiled-children/evidence-preflight/rawlogs/archive-retry1.log": "a8aebf7afa9b10fa676dfa26bdb519d78b3f306b102eaf2ccc1469e2f84ec18c",
+    "compiled-children/evidence-preflight/rawlogs/excluded-rawlogs-after-cut.json": "368d4fbb4634da7b540e28130f688e1afd9e875c49736c1490f98e8aadf36565",
+    "compiled-children/evidence-preflight/rawlogs/final-stage-prep-v2.log": "06345401920da1409bbc4488ae9961c4ca0318668d94637f865edefbe4882f1c",
+    "compiled-children/evidence-preflight/rawlogs/final-stage-prep-v3.log": "68777aaee1644c13af1b785140c7e952f8d40deb4bab568bad98ae6c2ee76423",
+    "compiled-children/evidence-preflight/rawlogs/final-stage-prep.log": "06345401920da1409bbc4488ae9961c4ca0318668d94637f865edefbe4882f1c",
+    "compiled-children/evidence-preflight/rawlogs/inner-gzip-integrity.log": "c13ec8496cb3ad21b257ac0670de4df1500c65013359ca5b4d57836bf903b640",
+    "compiled-children/evidence-preflight/rawlogs/prepare.stdout.log": "c3724deb76f09848e6d4c24bc45976e62b80553716a415479ca5204a2b899835",
+    "compiled-children/evidence-preflight/rawlogs/tar-input-pre-repair-author-review-history.final.tar.nul": "eb33285a056c2cb0ff096953a28cff7d007c3f74e858e4c420acfee5c209369e",
+    "compiled-children/evidence-preflight/rawlogs/tar-input-pre-repair-author-review-history.retry1.tar.nul": "45309818ac6a678217c8d1a42fbdfa8c2a624b96058d868a6697ef66bc0a90bd",
+    "compiled-children/evidence-preflight/rawlogs/tool-versions.json": "26a31afedb748a7893a2ba3399742af7d379453ee89c42f4d58bad19c6b3c8b4",
+    "compiled-children/evidence-preflight/rawlogs/unlisted-temp-captures.json": "028e56a2b476d2aa6ef6400d8bdfad3b2f8b172e5f1d69cfcce163bda145ccb2",
+    "compiled-children/evidence-preflight/rawlogs/verify-final.log": "e31302aa9b0e24a485e6e64351da615f21804c915685b29dc984979ab747f9af",
+    "compiled-children/evidence-preflight/rawlogs/verify-retry1.log": "3edfb437146639135f39c6c5fd61d18b4d7510874d9065466ff39ff82faf9703",
+    "compiled-children/evidence-preflight/selection-rawlogs-235.json": "5e7c8762a03511acc2aa4a0af65082e6bb9d8d1fa9d35f7e0a4ecc3e49439932",
+    "compiled-children/evidence-preflight/tools/archive_final_stage.py": "5a00bfd8edd0a59bbe7c98eb89f07ed7ecb79a1cf6c64cce66c2d2e7305868fa",
+    "compiled-children/evidence-preflight/tools/archive_staged.py": "c3d3bb5242064d47487da19aa6a5966de8ed0123c3bdb72bb300f18fd392d21e",
+    "compiled-children/evidence-preflight/tools/prepare_archive.py": "f2807373ee3d51d5c9ee033358233dd21b5644d9ea84bead81895f618d86c228",
+    "compiled-children/evidence-preflight/tools/prepare_final_stage.py": "170be3c3cfb386379a81e048fac6c002db3daae5efc6ca71ed9e7e19fb9f996c",
+    "compiled-children/evidence-preflight/tools/select_rawlogs.py": "a7f9d3e8a41782cc86df4089cb35fe6b4f4212cf9ee72b024368288e2d1d3e29",
+    "compiled-children/evidence-preflight/tools/verify_archive.py": "f82cae24b31673870e6c47974f13ecf117fbd67f3ac61dfc1a03f94a4093f6fa"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-AUTHOR-CUSTODY.md",
+    "bytes": 5972,
+    "sha256": "6247b8ded788846cdb21a0fbd98cf90a0cb31072a4e50386abb6b184d7be9843"
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-build.py",
+      "bytes": 13163,
+      "sha256": "cf9e9771d9cca0fe963eddbf3081c34b371e7903faeac04407fdbf32ff7fa439"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-final.command.txt",
+      "bytes": 121,
+      "sha256": "b2a2aa3e06b745828edafd05ef48d474a324c876d49048f149b6ca6157c338ca"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-final.exit-code",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-self-overwrite-failure.log",
+      "bytes": 598,
+      "sha256": "15b8ede81b692ce424f3945198c84d1a73eb078f0b26ee7e2274ae855bad2b1f"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-self-overwrite.command.txt",
+      "bytes": 211,
+      "sha256": "16e18b68b7c39941e1c0f7a0bed5939ecf53abaf4a0a4f5f2de93ba08512f67b"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-self-overwrite.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation-success.log",
+      "bytes": 99,
+      "sha256": "b130c958f4ab5151161a3ac61b17938b4ec82760b73de1f191a41c12d7c5e7ae"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-receipt-validation.py",
+      "bytes": 1000,
+      "sha256": "f5572e614e42869497484731dccc92011f3b2a355e0295ca696c810e693ab600"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun1.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun1.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun1.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun1.stderr.log",
+      "bytes": 554,
+      "sha256": "0599f309f2b1bfa9ecbd184494c6d0ec3f9c48b149ed65e54fa7d16a1a920a37"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun2.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun2.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun2.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun2.stderr.log",
+      "bytes": 600,
+      "sha256": "4049065f8a9b424a74ca8629839708ad8e288fb8b8d17c05bea6407f220abc1a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun3.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun3.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun3.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun3.stderr.log",
+      "bytes": 490,
+      "sha256": "d105ed8cda42180e62b615c08993990504d69aef425e2d8614be5becbaa5ba74"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun4.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun4.exit-code",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun4.json",
+      "bytes": 6587,
+      "sha256": "d19672b5510d55261d4da958bc2361cd76cb0551774bee66a0a8bcdaea94d9b0"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun4.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun5.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun5.exit-code",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun5.json",
+      "bytes": 6686,
+      "sha256": "44deec54a8b5f28ce909de9a26370b4f010630bcb88c24e1bd060ae3a1a04e91"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun5.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.exit-code",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.json",
+      "bytes": 6891,
+      "sha256": "b647c88d0aaeb84581baa9235e581f61782f1cb16a1b126acc0476f96fe3beb3"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit-rerun6.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.command.txt",
+      "bytes": 115,
+      "sha256": "6b12fc705a66b6a597178594c0264072b0979ca157345ee6a0efffad4b11c412"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.py",
+      "bytes": 32399,
+      "sha256": "de538c8cbc00ac0daf9c0b1dc374d911d657071f82dabc27380d8eb65ad15423"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-AUTHOR-CUSTODY-stream-audit.stderr.log",
+      "bytes": 536,
+      "sha256": "aceae358fd866ef65972abda8be28f238589751227ab578470d4c4158ba0b91b"
+    }
+  ],
+  "limitations": [
+    "This accepts historical archive custody only. It is not a full-run, final runtime, browser-parity, or CI acceptance decision.",
+    "The unavailable 7b124f\u2026 E-ORACLE audit-script bytes remain unavailable; the f814c0\u2026 copy is not represented as recovered original bytes.",
+    "This read-only review did not modify source, archive, Git, or native scheduler state."
+  ],
+  "publication": "No source changes, Git operations, scheduler writes, full runtime run, CI run, merge, deployment, or publication."
+}

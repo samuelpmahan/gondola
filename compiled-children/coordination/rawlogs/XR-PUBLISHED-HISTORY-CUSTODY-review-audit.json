@@ -1,0 +1,87 @@
+{
+  "review": "XR-PUBLISHED-HISTORY-CUSTODY",
+  "reviewer": "N3",
+  "decision": "accepted",
+  "author_packet": {
+    "report": {
+      "path": "compiled-children/coordination/reports/E-PUBLISHED-HISTORY-CUSTODY.md",
+      "bytes": 4801,
+      "sha256": "85cc5578ad55402fc6249a3dc3ffcd04609496ed5f9b3daef116fd6eaaa9a061"
+    },
+    "receipt": {
+      "path": "compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json",
+      "bytes": 40071,
+      "sha256": "33bf39394f250c04df3082877851af11d8102ce67d87a190528662d03851165a"
+    }
+  },
+  "git_verification": {
+    "command": "GIT_NO_LAZY_FETCH=1 python3 compiled-children/coordination/rawlogs/N2-E-PUBLISHED-HISTORY-CUSTODY-verify-final.py",
+    "exit_code": 0,
+    "verifier_script": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-PUBLISHED-HISTORY-CUSTODY-verify-final.py",
+      "bytes": 11267,
+      "sha256": "2d0ba1abad42e16f2bc4a72e424ee14c6e404e2187d09ee50e28fe25c6000780"
+    },
+    "output": {
+      "path": "compiled-children/coordination/rawlogs/XR-PUBLISHED-HISTORY-CUSTODY-verifier-output.json",
+      "bytes": 39013,
+      "sha256": "49f54d2012542fad2c358361da036432f9d91a06ae7104029387f379fa59aae9"
+    },
+    "stderr": {
+      "path": "compiled-children/coordination/rawlogs/XR-PUBLISHED-HISTORY-CUSTODY-verifier.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "matchesN2RecordedOutputByteForByte": true
+  },
+  "published_history": {
+    "commit": "45317abb8d6f7c1153ea9999927727fa43203710",
+    "tree": "375dda6c5ac7d3973a5b37d1e0deb6275a0c183d",
+    "parent": "9bd6c88a577f519d80b7be860f698363adcd1c05",
+    "head_at_review": "9bd6c88a577f519d80b7be860f698363adcd1c05",
+    "changed_path_count": 43,
+    "subtree": "compiled-children/ci/2026-10-31/history/",
+    "file_count": 43,
+    "archive_bytes": 164464000,
+    "archive_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0",
+    "manifest_git_blob_sha1": "8ceff2f13048f25a16827fe28167d567b8799a1b",
+    "manifest_sha256": "afab2e266b8489eb42bca6c6c8b6524b1b23964cec724df5edac89f8edf11a3c",
+    "chunk_count": 40,
+    "chunk_sizes": {
+      "full_size_bytes": 4194304,
+      "full_size_count": 39,
+      "final_part_bytes": 886144
+    }
+  },
+  "custody_correction": {
+    "old_receipt_path": "compiled-children/coordination/receipts/XR-AUTHOR-CUSTODY.json",
+    "old_receipt_sha256": "fee129ad46c531f5e5005b4607a0e54edb2df2d64bc56e007bf3550cf4230c77",
+    "old_sha256_field": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e",
+    "old_field_chars": 63,
+    "correct_full_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0",
+    "archiveCorruption": false,
+    "oldReceiptChanged": false
+  },
+  "artifact_pin_validation": {
+    "source_and_rawlog_entries_checked": 30,
+    "mismatches": [],
+    "EpublishedReportMatchesPin": true,
+    "all43GitBlobsIndependentlyChecked": true
+  },
+  "checks": {
+    "commitTreeParentAndHeadMatch": true,
+    "exact43HistoryPathsOnly": true,
+    "all43GitObjectsValidated": true,
+    "orderedStreamMatchesManifestAndEAuthor": true,
+    "XRReceiptMalformedFieldIs63CharsAndMatchesMissingFinalZero": true,
+    "XRReceiptBytesRemainAtPinnedHistoricalHash": true,
+    "EAuthorReceiptAndReportCarryFullHash": true,
+    "EpublishedSourceAndRawlogPinsMatch": true,
+    "rerunOutputMatchesN2RecordedVerifier": true,
+    "historicalOnlyBoundaryPreserved": true
+  },
+  "limits": [
+    "History publication verification only; it establishes no current runtime or CI acceptance.",
+    "The read-only verifier streamed chunk Git objects for hashing and did not construct a duplicate archive. No runtime test, npm, Git write, or native state write was performed."
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-SEEDED-ASSERTIONS",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Repaired the seeded input checker to validate full operation tuples and derive the six-live-key input bound from valid add/remove/clear inputs and parent lifetime. Both requested negative controls reject bad operation and lied bound mutations; targeted Node 22 tests pass.",
+  "reviewed_job": {
+    "job_id": "XR-CHECKER-TESTS",
+    "worker": "N6",
+    "decision": "amend"
+  },
+  "finding": "Batch checks covered only argument values and the live-child bound trusted declared metadata rather than deriving occupancy from generated input actions.",
+  "repair": {
+    "exclusive_source": "compiled-children/conformance/seeded.test.mjs",
+    "originals_manifest": "compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/manifest.json",
+    "original_seeded_test_sha256": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559",
+    "old_E_CHECKER_report_receipt_preserved": true,
+    "input_only": true,
+    "uses_Go_or_counter_or_effect_reducer": false,
+    "fabricates_browser_capture": false,
+    "derived_live_key_bound": 6,
+    "bound_inputs": {
+      "initial_live_keys": [
+        "oak",
+        "elm"
+      ],
+      "valid_key_grammar": "[a-z][a-z0-9_-]{0,15}",
+      "actions": [
+        "child.add",
+        "child.remove",
+        "children.clear",
+        "parent.remove",
+        "parent.remount"
+      ]
+    },
+    "exact_batches": [
+      "child.add x6",
+      "duplicate child.add",
+      "counter.add x6",
+      "child.request x6",
+      "duplicate child.request"
+    ],
+    "negative_controls": [
+      "wrong operation rejected",
+      "metadata maximumChildren=7 rejected"
+    ],
+    "preserved_coverage": {
+      "default_seeds": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "physical_first_click": true,
+      "accepted_uint32_boundaries": [
+        0,
+        4294967295
+      ]
+    }
+  },
+  "toolchains": {
+    "node": "v22.23.4",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-next"
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --version",
+      "exit_code": 0,
+      "result": "v22.23.4",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-version.log",
+        "bytes": 9,
+        "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+      }
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/seeded.test.mjs",
+      "exit_code": 0,
+      "result": "Syntax check passed.",
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-check.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-check.stderr.log",
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/seeded.test.mjs",
+      "exit_code": 0,
+      "result": "4 passed, 0 failed; includes exact-operation assertions, wrong-operation negative control, lied-bound negative control, default seeds and uint32 boundary checks.",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-seeded-test.log",
+        "bytes": 1275,
+        "sha256": "1b01fcb874ded3432597a9b74a605b056e8bef842af7129752d5e8287c23b364"
+      },
+      "exit_log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-command-exits.log",
+        "bytes": 26,
+        "sha256": "a3980ba2b2ea663c0d1785705407cb81cb85a395ab71d85ae0f7affdbc64064a"
+      }
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.py",
+      "exit_code": 0,
+      "result": "Original source backup matches its recorded hash; prior E-CHECKER-TESTS report and receipt are unchanged from their preserved copies.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.py",
+        "bytes": 1022,
+        "sha256": "340cd92e11ea4e6b6d6ffbbd861a596f689ff1b86e8629561e5bb748b7e3a81a"
+      },
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.log",
+        "bytes": 1060,
+        "sha256": "0bacb83afabe1952e04bbeb55d9a41a8b4fa28c239883b4ee5378d9fd011dae2"
+      }
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.py",
+      "exit_code": 0,
+      "result": "Native validate_receipt accepted the E-FIX-SEEDED-ASSERTIONS/N3 packet; all recorded source, report and rawlog hashes/byte counts matched.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.py",
+        "bytes": 1132,
+        "sha256": "639a05bbd7f7c3f1131c4acc93c8d8df6996d5bbc91c80208b87c6cecff1cd0e"
+      },
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.log",
+        "bytes": 62,
+        "sha256": "804724c52d73fabcc854aa68a04ed1ce5f10cd0c396a2cb05b99c728386eb366"
+      }
+    }
+  ],
+  "sourceSha256": {
+    "compiled-children/CONTRACT.md": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902",
+    "compiled-children/conformance/seeded.mjs": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52",
+    "compiled-children/conformance/seeded.test.mjs": "404a94cb93f4c0f1646062b1ddcb283084b7f6e00a776f687ec513659542ec83",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-command-exits.log": "a3980ba2b2ea663c0d1785705407cb81cb85a395ab71d85ae0f7affdbc64064a",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-check.stderr.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-check.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-version.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.log": "0bacb83afabe1952e04bbeb55d9a41a8b4fa28c239883b4ee5378d9fd011dae2",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.py": "340cd92e11ea4e6b6d6ffbbd861a596f689ff1b86e8629561e5bb748b7e3a81a",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.py": "639a05bbd7f7c3f1131c4acc93c8d8df6996d5bbc91c80208b87c6cecff1cd0e",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-seeded-test.log": "1b01fcb874ded3432597a9b74a605b056e8bef842af7129752d5e8287c23b364",
+    "compiled-children/coordination/receipts/E-CHECKER-TESTS.json": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c",
+    "compiled-children/coordination/receipts/XR-CHECKER-TESTS.json": "233de4d480baabcf3d1f85095f63a564bf9026e18d47ee1b316645f75cfc8131",
+    "compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/E-CHECKER-TESTS.json": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c",
+    "compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/E-CHECKER-TESTS.md": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a",
+    "compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/manifest.json": "79761defaf242d51ac66b8f4f2630cecc74a23c0cefa0bcebee76642a73eb066",
+    "compiled-children/coordination/repairs/E-FIX-SEEDED-ASSERTIONS/originals/seeded.test.mjs": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559",
+    "compiled-children/coordination/reports/E-CHECKER-TESTS.md": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a",
+    "compiled-children/coordination/reports/XR-CHECKER-TESTS.md": "0c8afe595f9eb19b5bb3f43eae88c0bbd13fa50711adab31763f49b7c0752e64",
+    "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.log": "804724c52d73fabcc854aa68a04ed1ce5f10cd0c396a2cb05b99c728386eb366"
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-command-exits.log",
+      "bytes": 26,
+      "sha256": "a3980ba2b2ea663c0d1785705407cb81cb85a395ab71d85ae0f7affdbc64064a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-check.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-check.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-node-version.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.log",
+      "bytes": 1060,
+      "sha256": "0bacb83afabe1952e04bbeb55d9a41a8b4fa28c239883b4ee5378d9fd011dae2"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-preservation-check.py",
+      "bytes": 1022,
+      "sha256": "340cd92e11ea4e6b6d6ffbbd861a596f689ff1b86e8629561e5bb748b7e3a81a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.py",
+      "bytes": 1132,
+      "sha256": "639a05bbd7f7c3f1131c4acc93c8d8df6996d5bbc91c80208b87c6cecff1cd0e"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-seeded-test.log",
+      "bytes": 1275,
+      "sha256": "1b01fcb874ded3432597a9b74a605b056e8bef842af7129752d5e8287c23b364"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-SEEDED-ASSERTIONS-receipt-validation.log",
+      "bytes": 62,
+      "sha256": "804724c52d73fabcc854aa68a04ed1ce5f10cd0c396a2cb05b99c728386eb366"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/E-FIX-SEEDED-ASSERTIONS.md",
+    "bytes": 4524,
+    "sha256": "939a351168489bb5f98e86412495e9a5e91d0c799b3b0c1e5efe652c0509eb34"
+  },
+  "limitations": [
+    "These tests validate deterministic input schedules only; they do not execute the Go transition or claim browser capture evidence.",
+    "Only the targeted seeded test file was run; no full pipeline was run."
+  ],
+  "integration": "seeded test source frozen for N6 harness/source pin; awaiting independent XR-FIX-SEEDED-ASSERTIONS review",
+  "publication": "No Git or native scheduler state write; no source outside the authorized seeded test was changed."
+}

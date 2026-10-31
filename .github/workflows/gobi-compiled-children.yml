@@ -1,0 +1,66 @@
+name: Gobi compiled keyed child collections
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  compiled-children:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run the full inherited capability chain and keyed child collection checks
+        env:
+          GONDOLA_SKIP_NPM_CI: "1"
+          GONDOLA_SKIP_BROWSER_INSTALL: "1"
+          GOFLAGS: -buildvcs=false
+        run: bash run-compiled-children.sh
+
+      - name: Preserve keyed child collection delivery artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-compiled-children-artifacts
+          path: |
+            compiled-children/demo/output/attempts/**
+            compiled-children/coordination/reports/E-DELIVERY.md
+            compiled-children/coordination/receipts/E-DELIVERY.json
+            compiled-children/conformance/evidence/**
+            compiled-children/oracle/evidence/**
+            compiled-capabilities/builds/attempts/**
+            compiled-capabilities/coordination/reports/E-BUILD.md
+            compiled-capabilities/coordination/receipts/E-BUILD.json
+            compiled-lifecycle/builds/attempts/**
+            compiled-lifecycle/coordination/reports/E-BUILD.md
+            compiled-lifecycle/coordination/receipts/E-BUILD.json
+            compiled-methods/artifacts/attempts/**
+            compiled-methods/coordination/reports/E-DEMO.md
+            compiled-methods/coordination/receipts/E-DEMO.json
+            compiled-backends/artifacts/**
+            compiled-backends/coordination/reports/E-DEMO.md
+            compiled-backends/coordination/receipts/E-DEMO.json
+            compiled-frontend/artifacts/**
+          if-no-files-found: warn

@@ -1,0 +1,120 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CHECKER-TESTS",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added adversarial native checker tests against pinned actual Go trace and independent literal expectations, plus deterministic bounded seeded input schedule tests; final suite passed 9/9.",
+  "artifacts": [
+    "compiled-children/conformance/check.test.mjs",
+    "compiled-children/conformance/seeded.test.mjs",
+    "compiled-children/coordination/reports/E-CHECKER-TESTS.md",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-test.log",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-initial-seeded-assertion-failure.log",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-version.log",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-go-version.log",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-oracle-audit-custody.txt",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-audit-current-custody-copy.mjs"
+  ],
+  "toolchains": {
+    "node": "v22.23.4",
+    "go": "go1.24.0 linux/amd64",
+    "goToolchainMode": "GOTOOLCHAIN=local"
+  },
+  "seeds": {
+    "default": [20261031, 20261032, 20261033],
+    "acceptedBoundaries": [0, 4294967295],
+    "rejected": [
+      -1,
+      4294967296,
+      1.5,
+      "NaN",
+      "Infinity",
+      "20261031",
+      null,
+      "1n",
+      "Symbol(seed)"
+    ],
+    "seededTestsValidateSchedulesOnly": true
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --version",
+      "exit_code": 0,
+      "result": "v22.23.4",
+      "rawlog": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-version.log",
+      "rawlog_sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "command": "GOTOOLCHAIN=local /tmp/gondola-go/bin/go version",
+      "exit_code": 0,
+      "result": "go version go1.24.0 linux/amd64",
+      "rawlog": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-go-version.log",
+      "rawlog_sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/check.test.mjs",
+      "exit_code": 0,
+      "result": "Syntax check passed."
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/seeded.test.mjs",
+      "exit_code": 0,
+      "result": "Syntax check passed."
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs 2>&1 | tee compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-test.log",
+      "exit_code": 0,
+      "result": "9 passed, 0 failed. Includes the positive pinned-trace comparison and five corruption rejection checks; seed validation asserts schedule shape only.",
+      "rawlog": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-test.log",
+      "rawlog_bytes": 2454,
+      "rawlog_sha256": "4318a62c171d1d07aeb4026244ae7e8592340c5035b0514ee836ab5f031179a2"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs 2>&1 | tee compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-test.log",
+      "exit_code": 1,
+      "phase": "initial attempt after N4 added a physical click to each generated schedule",
+      "result": "The seeded test's event-kind allowlist still omitted click. Updated the test to assert the keyed click's path, message, and metadata; the final command above passed.",
+      "rawlog": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-initial-seeded-assertion-failure.log",
+      "rawlog_bytes": 3488,
+      "rawlog_sha256": "0b853ec1ef0cdcd28d1108df09cfd15aba0b3eb31f6535d4a58d71d90b8b323a"
+    },
+    {
+      "command": "Read N1 pinned native trace and compare with assertNative(native, fixture, expectations)",
+      "exit_code": 0,
+      "result": "The checker accepted the actual pinned native trace against the independent literal projections; its SHA-256 was verified before comparison.",
+      "trace": "fixtures/compiled/children/evidence/rawlogs/native-trace.json",
+      "trace_sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "expectations": "compiled-children/oracle/expectations.json",
+      "expectations_sha256": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774"
+    }
+  ],
+  "oracleAuditCustodyIncident": {
+    "path": "compiled-children/oracle/audit-native-protocol.mjs",
+    "expectedSha256": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+    "knownModifiedSha256": "28ab2daa20114712745d62d876cd7193e53ae31d9054d824b7273ad472c2740c",
+    "currentObservedRestoredSha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+    "currentBytes": 7470,
+    "currentCustodyCopy": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-audit-current-custody-copy.mjs",
+    "custodyCopySha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+    "restorationMethod": "Reconstructed from conversationally available material after transient modified bytes were unavailable; no exact pre-closure backup was available.",
+    "originalAvailable": false,
+    "claimsExactRestoration": false,
+    "custodyAnnotation": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-oracle-audit-custody.txt",
+    "custodyAnnotationSha256": "c852818bbf2e2c94d04c37b314d77a834826c4cc18fc6fdc1c360f51ecb5c484",
+    "closedEOracleReceiptOrReportEdited": false
+  },
+  "sourceSha256": {
+    "compiled-children/conformance/check.test.mjs": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833",
+    "compiled-children/conformance/seeded.test.mjs": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559",
+    "compiled-children/conformance/check.mjs": "518778418a7e9be880e4e48ee792dd784c7676ddadaf489a12485c2589d39f68",
+    "compiled-children/conformance/seeded.mjs": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52",
+    "fixtures/compiled/children/scenario.json": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407",
+    "fixtures/compiled/children/evidence/rawlogs/native-trace.json": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774",
+    "compiled-children/coordination/reports/E-CHECKER-TESTS.md": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a"
+  },
+  "environmentWarnings": [
+    "Node commands emit the environment's [UNDICI-EHPA] experimental EnvHttpProxyAgent warning; final syntax and test commands passed."
+  ],
+  "boundary": "No Go/native state implementation, oracle file, checker implementation, browser capture, protocol state, Git state, or publication artifact was changed by this lane."
+}

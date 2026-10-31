@@ -1,0 +1,156 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-ORACLE",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "The independent 42-event oracle and fresh 38-step native Go trace match across 39 state checkpoints, Gobi trees, effects, and validated Go-view click paths. The closed E-ORACLE source pin for audit-native-protocol.mjs does not match current bytes, and the pinned original is unavailable; a custody-corrected author packet is required.",
+  "contract": "compiled-children/CONTRACT.md",
+  "reviewed_job": {
+    "job_id": "E-ORACLE",
+    "worker": "N5",
+    "outcome": "mixed_change"
+  },
+  "reviewed_source_sha256": {
+    "compiled-children/CONTRACT.md": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902",
+    "fixtures/compiled/children/scenario.json": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407",
+    "fixtures/compiled/children/app.go": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+    "fixtures/compiled/children/view.go": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185",
+    "cmd/compiled-children-native/main.go": "2d87f25ff5bb7125cb8265ac310ffcd98cce9a81f001f5197b2ac2ba09c77ca9",
+    "compiled-children/oracle/scenario.json": "8860dbd7ef32c04506d0e8672061235debf6316b02a72b10a5314d59b33b405d",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774",
+    "compiled-children/oracle/oracle.mjs": "c5cebcbbca6dcfb4ebb5110722bfd3b48dd6b7ad7d9e9d380aa78812f6e70388",
+    "compiled-children/oracle/oracle.test.mjs": "18f778de875fa838b4e565224b08ac1e21473b4838e1b2ca437d36d0bae77f22",
+    "compiled-children/oracle/audit-native-protocol.mjs": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+    "compiled-children/oracle/evidence/native.json": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+    "compiled-children/oracle/evidence/oracle-green.log": "81f9a13d734b4e36cf64a815b9d5b2c252fcaa5e687fd4f519a96bea445fdd21",
+    "compiled-children/oracle/evidence/native-protocol-audit.json": "6259956fc498b83d55186cb8e3b5431f97e57e4538f269b2efed97de1ebdef09",
+    "compiled-children/coordination/reports/E-ORACLE.md": "f9583a4d9a5e6faa23a8ddeeb5bee5b0209f910912736b403d423456f7e74556",
+    "compiled-children/coordination/receipts/E-ORACLE.json": "17ccb1bf8f8e6fbe288e24826f4dea5b830faf1d0052c27fd2f8c07dde034b2d"
+  },
+  "author_pin_audit": {
+    "path": "compiled-children/oracle/audit-native-protocol.mjs",
+    "closed_receipt_sha256": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+    "current_sha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+    "status": "mismatch",
+    "original_pinned_bytes_available": false,
+    "basis": "N5/root custody incident; independently confirmed by source-pin recalculation."
+  },
+  "findings": [
+    {
+      "severity": "must-fix-custody",
+      "path": "compiled-children/oracle/audit-native-protocol.mjs",
+      "expected_sha256": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+      "actual_sha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+      "summary": "E-ORACLE is closed with a source hash that does not match current audit script bytes. The original pinned bytes are unavailable, so the receipt's audit-source provenance cannot be reconstructed; N5 must provide a new hash-consistent author packet for independent review."
+    }
+  ],
+  "semantic_review": {
+    "scenario_events": 42,
+    "native_steps": 38,
+    "state_checkpoints_including_initial": 39,
+    "literal_state_snapshots": true,
+    "oracle_runs_go_update_reducer": false,
+    "all_state_fields_and_order_compared": true,
+    "independent_gobi_tree_projection_count": 39,
+    "independent_dom_projection_count": 39,
+    "negative_controls_passed": [
+      "child-first cancellation order mutation",
+      "Go value-slice order mutation",
+      "Gobi key mutation",
+      "DOM text mutation",
+      "native Go-view invalid-path mutation"
+    ],
+    "renderer_swap_and_stale_callback_are_native_preflight_metadata": true,
+    "browser_parity_pending": "N4"
+  },
+  "toolchains": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "python": "3.12.14",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-next"
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "result": "9 passed, 0 failed; scenario, expectations, native capture and four committed mutation controls passed.",
+      "rawlog": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-node-test.log",
+      "rawlog_sha256": "57911bb1cb4f00a917c72ca68e35c91a7afc351f94074dd25b98c695617ae475"
+    },
+    {
+      "command": "GOTOOLCHAIN=local /tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script fixtures/compiled/children/scenario.json > compiled-children/coordination/rawlogs/N2-XR-ORACLE-native-fresh.json 2> compiled-children/coordination/rawlogs/N2-XR-ORACLE-native-fresh.stderr.log",
+      "exit_code": 0,
+      "result": "Fresh 42-event / 38-step trace; byte-identical to N5 saved trace.",
+      "stdout": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-native-fresh.json",
+      "stdout_bytes": 653879,
+      "stdout_sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "stderr": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-native-fresh.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/coordination/rawlogs/N2-XR-ORACLE-compare.mjs",
+      "exit_code": 0,
+      "result": "Exact native trace comparison passed; 42 events, 38 steps, 39 projections; all expected snapshots contain state, Gobi view, view record and normalized DOM.",
+      "script": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-compare.mjs",
+      "script_sha256": "c343c57d59fb1423cad795c2d4f4aa1ec1a64e30c3cf29683c4a938ae1d50f18",
+      "rawlog": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-compare-replay.log",
+      "rawlog_sha256": "58369ca3f4b899682982f46e69e8c01f74235a6c45565c59c2186b48d1092a3f"
+    },
+    {
+      "command": "GOTOOLCHAIN=local /tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script compiled-children/coordination/rawlogs/N2-XR-ORACLE-path-mutation.input.json > compiled-children/coordination/rawlogs/N2-XR-ORACLE-path-mutation.stdout.log 2> compiled-children/coordination/rawlogs/N2-XR-ORACLE-path-mutation.stderr.log",
+      "exit_code": 1,
+      "expected_failure": true,
+      "result": "Invalid event-0 path is rejected before trace output: event 0: path \"99/99\" has invalid child index \"99\".",
+      "scenario": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-path-mutation.input.json",
+      "scenario_sha256": "f4d788636f05c25878a64d8582369aa3132605cd677c4540f02b57bbf77d7c49",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "44e6f84c15be812eb88421af8fbb5cd28f89e849f7927a37ab9c688a05e7cc6d"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-ORACLE-source-pins.py",
+      "exit_code": 1,
+      "expected_failure": true,
+      "result": "The recalculation confirmed five E-ORACLE source pins, the report, saved test log and protocol audit output, and found only audit-native-protocol.mjs hash mismatch.",
+      "script": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-source-pins.py",
+      "script_sha256": "7932d441b8eb0f1b7a657b96c88284cedc4e1e3bb5dbc1c5ec72155173797df7",
+      "rawlog": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-source-pins.log",
+      "rawlog_sha256": "648f0d1791cd9757d1bfe2158160745a2b234586655b1f5d605b4efd64020182"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit.py",
+      "exit_code": 0,
+      "result": "Read-only native validate_receipt accepted active XR-ORACLE/N2 packet; reviewed source, report, referenced command-log hashes and report byte count all match.",
+      "script": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit.py",
+      "script_sha256": "eff4958928028b670df9a59623e55da4278fe53dbef5ba7b3ed3410fe7f38304"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-ORACLE.md",
+    "bytes": 5774,
+    "sha256": "d6c23bc75c6cbb260708af0b42854d39404e1f215a4728b42d6d22b4eec18f60"
+  },
+  "limitations": [
+    "Expected DOM projections are not browser captures; actual mounted DOM and renderer parity remain N4 integration work.",
+    "Renderer-swap and stale-callback semantics are not established by the native CLI's preflight metadata records.",
+    "E-ORACLE remains unchanged; the audit script source pin mismatch requires a fresh author packet before acceptance."
+  ],
+  "integration": "awaiting N5 custody-corrected audit packet and N4 direct/React/DOM parity run",
+  "publication": "No production changes, Git commit, merge, deployment, or scheduler-state edit.",
+  "reviewer_rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit.py",
+      "sha256": "eff4958928028b670df9a59623e55da4278fe53dbef5ba7b3ed3410fe7f38304",
+      "bytes": 1497
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit.log",
+      "sha256": "63064f499064af9e68aa1809c630b30213d56663687cdf924bb9abf2be4f650a",
+      "bytes": 224
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-ORACLE-receipt-audit-exit.log",
+      "sha256": "91188f5648886a2f3d710ba5ead1fd361ff21ffa82e15ecb2bdbb7f9431a7888",
+      "bytes": 20
+    }
+  ]
+}

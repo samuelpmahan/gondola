@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { spawn } from "node:child_process";
+import { existsSync, unlinkSync, writeFileSync } from "node:fs";
 import { mkdtemp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { randomBytes } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -49,6 +52,18 @@ async function filePaths(directory) {
     else if (entry.isFile()) paths.push(path);
   }
   return paths;
+}
+
+function runChild(command, args, cwd) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.setEncoding("utf8").on("data", (chunk) => { stdout += chunk; });
+    child.stderr.setEncoding("utf8").on("data", (chunk) => { stderr += chunk; });
+    child.once("error", reject);
+    child.once("close", (status, signal) => resolve({ status, signal, stdout, stderr }));
+  });
 }
 
 test("pre-archive provenance stays immutable and round-trips in a tar with an externally bound manifest", async () => {
@@ -130,5 +145,105 @@ test("pre-archive provenance stays immutable and round-trips in a tar with an ex
     ]);
   } finally {
     await rm(attemptRoot, { recursive: true, force: true });
+  }
+});
+
+test("real tar archives only the frozen inventory while an unlisted hidden file churns", async () => {
+  const workspace = await mkdtemp(join(tmpdir(), "gobi-cap-archive-churn-"));
+  const attemptRoot = join(workspace, "attempt");
+  const harnessRoot = join(attemptRoot, "harness");
+  try {
+    await mkdir(harnessRoot, { recursive: true });
+    const listedPath = join(harnessRoot, "listed.bin");
+    await writeFile(listedPath, randomBytes(12 * 1024 * 1024));
+    const snapshot = { schema: "gobi.compiled-capabilities-execution-before-archive/v1", archivePending: true };
+    const snapshotPath = join(attemptRoot, "execution-before-archive.json");
+    const written = await writeImmutableSnapshot(snapshotPath, snapshot);
+    const members = [
+      { path: "harness/listed.bin", ...await hashPath(listedPath) },
+      { path: "execution-before-archive.json", bytes: written.byteLength, sha256: sha256(written.bytes) },
+    ].sort((left, right) => left.path.localeCompare(right.path));
+    const archivePath = join(workspace, "artifacts.tar.gz");
+    const verifyRoot = join(workspace, "verify");
+    const unlistedPath = join(harnessRoot, ".run.browser.json.temporary");
+    let churnCount = 0;
+    const execute = async (name, command, args) => {
+      if (name === "archive-capability-artifacts") {
+        writeFileSync(unlistedPath, "temp entry before tar\n");
+        const childPromise = runChild(command, args, attemptRoot);
+        const timer = setInterval(() => {
+          try {
+            if (existsSync(unlistedPath)) unlinkSync(unlistedPath);
+            else writeFileSync(unlistedPath, "temp entry during tar\n");
+            churnCount += 1;
+          } catch { /* The tar child may finish between interval ticks. */ }
+        }, 1);
+        const result = await childPromise;
+        clearInterval(timer);
+        if (existsSync(unlistedPath)) unlinkSync(unlistedPath);
+        assert(churnCount > 0, "unlisted temporary entry did not change while tar was running");
+        assert.equal(result.status, 0, result.stderr);
+        return result.stdout;
+      }
+      const result = spawnSync(command, args, { cwd: attemptRoot, encoding: "utf8" });
+      assert.equal(result.status, 0, result.stderr);
+      return result.stdout ?? "";
+    };
+
+    const archived = await archiveAndVerify({
+      attemptRoot,
+      archivePath,
+      verifyRoot,
+      includePaths: ["harness", "execution-before-archive.json"],
+      members,
+      execute,
+      hashPath,
+      readJSON: async (path) => JSON.parse(await readFile(path, "utf8")),
+    });
+
+    assert.equal(archived.archivedSnapshot.archivePending, true);
+    const archiveMembers = (await runChild("tar", ["-tzf", archivePath], workspace)).stdout
+      .trim().split("\n").filter(Boolean).sort();
+    assert.deepEqual(archiveMembers, members.map((item) => item.path).sort());
+    assert.equal(archiveMembers.includes("harness/.run.browser.json.temporary"), false);
+  } finally {
+    await rm(workspace, { recursive: true, force: true });
+  }
+});
+
+test("real tar round trip rejects a listed byte that changes after inventory capture", async () => {
+  const workspace = await mkdtemp(join(tmpdir(), "gobi-cap-archive-listed-mutation-"));
+  const attemptRoot = join(workspace, "attempt");
+  const harnessRoot = join(attemptRoot, "harness");
+  try {
+    await mkdir(harnessRoot, { recursive: true });
+    const listedPath = join(harnessRoot, "listed.txt");
+    await writeFile(listedPath, "inventory bytes\n");
+    const snapshot = { schema: "gobi.compiled-capabilities-execution-before-archive/v1", archivePending: true };
+    const snapshotPath = join(attemptRoot, "execution-before-archive.json");
+    const written = await writeImmutableSnapshot(snapshotPath, snapshot);
+    const members = [
+      { path: "harness/listed.txt", ...await hashPath(listedPath) },
+      { path: "execution-before-archive.json", bytes: written.byteLength, sha256: sha256(written.bytes) },
+    ];
+    const execute = async (name, command, args) => {
+      if (name === "archive-capability-artifacts") await writeFile(listedPath, "changed after inventory\n");
+      const result = spawnSync(command, args, { cwd: attemptRoot, encoding: "utf8" });
+      assert.equal(result.status, 0, result.stderr);
+      return result.stdout ?? "";
+    };
+
+    await assert.rejects(archiveAndVerify({
+      attemptRoot,
+      archivePath: join(workspace, "artifacts.tar.gz"),
+      verifyRoot: join(workspace, "verify"),
+      includePaths: ["harness", "execution-before-archive.json"],
+      members,
+      execute,
+      hashPath,
+      readJSON: async (path) => JSON.parse(await readFile(path, "utf8")),
+    }), /archive round-trip mismatch: harness\/listed\.txt/);
+  } finally {
+    await rm(workspace, { recursive: true, force: true });
   }
 });

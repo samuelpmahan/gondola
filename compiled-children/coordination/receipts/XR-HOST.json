@@ -1,0 +1,125 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-HOST",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently reviewed E-HOST against the frozen keyed-children contract and shared compiled runtime; source, tests, report, receipt, and raw-log evidence are consistent, with no must-fix defect found.",
+  "reviewed_job": {
+    "job_id": "E-HOST",
+    "worker": "N3",
+    "decision": "accepted"
+  },
+  "source_sha256": {
+    "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+    "compiled-children/runtime/runtime.test.mjs": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47"
+  },
+  "reviewed_evidence": [
+    {
+      "path": "compiled-children/coordination/reports/E-HOST.md",
+      "sha256": "8a862b29b98019b5b158c164db98c22b48ef261c7fb202c34a855d992d335383",
+      "bytes": 3731
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-HOST.json",
+      "sha256": "1bf52505195803e4c8e905d17dfbd398e858ad70be5c05ff14016af2f6b28a12",
+      "bytes": 5232
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HOST-red-runtime.log",
+      "sha256": "23e3174d17b287597c434720e5290ee87d4d17ff651b9d2fc1d6ad2a15b499e9",
+      "bytes": 7048,
+      "observed": "5 expected failures before the host API existed"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HOST-correction-replay.log",
+      "sha256": "e969e8a08b75cb0773d8352b9287c56a7e75b396aa29a14aff18cd5bc2b710bf",
+      "bytes": 3688,
+      "observed": "4 passed and 2 test-assumption failures in the initial assertion replay"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HOST-green-all-runtime.log",
+      "sha256": "a9fe041cbe4087c12fcad7bfe5a3c6cc6c018ab90384e3ac02c17262d993260a",
+      "bytes": 10085,
+      "observed": "42 passed, 0 failed"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HOST-green-static.log",
+      "sha256": "081a535de7672724eb87e0a36973eb15b76bdabcf7d1e73628207ddc9e132757",
+      "bytes": 349,
+      "observed": "Node syntax checks and git diff --check completed"
+    }
+  ],
+  "execution": {
+    "runtime": "Node v22.23.4",
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/runtime/runtime.test.mjs compiled-frontend/frontend/runtime/runtime.test.mjs",
+    "tests": 42,
+    "passed": 42,
+    "failed": 0,
+    "syntax_checks": [
+      "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/runtime/runtime.mjs",
+      "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/runtime/runtime.test.mjs"
+    ]
+  },
+  "findings": [],
+  "coverage_notes": [
+    "E-HOST tests use a synthetic compiled ABI module. They do not prove actual Go fixture delivery; N4/root own that integration gate.",
+    "The E-HOST incompatible-candidate test checks preserved snapshot, renderer, and callback after completing its request. N4 browser harness code separately asserts pending-set preservation for compatible and rejected swaps; that cross-lane browser run is outside this review.",
+    "The candidate regex newline concern was tested against the pinned Node validator and rejected for LF, CR, CRLF, U+2028, and U+2029. Probe raw log: compiled-children/coordination/rawlogs/XR-HOST-token-newline-probe.log."
+  ],
+  "review_artifacts": [
+    {
+      "path": "compiled-children/coordination/reports/XR-HOST.md",
+      "sha256": "3461dbe530b7d957d16ababdfa6050895d691144890922759168d26d4e1a7e0b",
+      "bytes": 4223
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-node-version.log",
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "bytes": 9
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-runtime-tests.log",
+      "sha256": "1470c80fad656ec89efaa1f0e7ad94f5f27084afe6fba421e2b4572ffdd9c0c5",
+      "bytes": 10089
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-runtime-check.log",
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "bytes": 174
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-tests-check.log",
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "bytes": 174
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-token-newline-probe.log",
+      "sha256": "bbad5858fc274990e49fff071b5ad6c1343007dd0800e305c2e2a9f21b0c92a7",
+      "bytes": 260
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-target-receipt-validation.log",
+      "sha256": "1a7d094bb989848958120f96f11dacfad60f05c67c1c45877bcd34e12af66977",
+      "bytes": 68
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-review-receipt-validation-initial-failure.log",
+      "sha256": "13f8de86ff2001a0d951096b538337382c74eb3f21c7fec9132bc6a44917e2eb",
+      "bytes": 87,
+      "observed": "validator wrapper stopped before validation because it searched for generated XR-HOST in the static extraction spec"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-review-receipt-validation-final.log",
+      "sha256": "d00f20c8f7aab7bce810f5b33c6f9daaf5425e2eb33d945653d2595277c02980",
+      "bytes": 138
+    }
+  ],
+  "receipt_validation": {
+    "command": "/tmp/gondola-rebalancer-env/bin/python direct read-only probe.validate_receipt(receipt, job, worker)",
+    "targets": ["E-HOST / N3", "XR-HOST / N1"],
+    "result": "accepted",
+    "initial_wrapper_attempt": "Exited before validation because review jobs are generated by the probe rather than listed in spec.json; the corrected call passed the review job object directly.",
+    "final_rawlog": "compiled-children/coordination/rawlogs/XR-HOST-review-receipt-validation-final.log",
+    "state_mutation": false
+  }
+}

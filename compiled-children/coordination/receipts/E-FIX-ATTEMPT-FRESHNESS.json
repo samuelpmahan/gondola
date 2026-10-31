@@ -1,0 +1,181 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-ATTEMPT-FRESHNESS",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Closed the inherited attempt freshness gap by requiring the attempt-directory timestamp to be at or after the invocation start; reproduced the one-millisecond witness before the fix and passed focused boundary/adversarial validation tests.",
+  "repair": {
+    "files_changed": {
+      "compiled-children/inherited-acceptance.mjs": "bb78a18b23bc92a3c287710ea125af9a4d14d77f9980cff3afb2082c3df68ffc",
+      "compiled-children/inherited-acceptance.test.mjs": "a6fc52c6d196e2382bf7124cc8e423baa69692702d79bf34643df7cd38b8c3a7"
+    },
+    "rule": "attempt timestamp >= inheritedInvocationStartedAt; existing attempt timestamp <= startedAt and maximum 60-second age are retained",
+    "witness": {
+      "attempt": "2026-10-31T12:00:01.000Z",
+      "invocationStartedAt": "2026-10-31T12:00:01.001Z",
+      "startedAt": "2026-10-31T12:00:01.002Z",
+      "preFix": "accepted",
+      "postFix": "rejected"
+    },
+    "boundaries": {
+      "equalTimestamp": "accepted",
+      "attemptOneMillisecondAfterInvocation": "accepted"
+    },
+    "preservedOriginalManifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-ATTEMPT-FRESHNESS/originals/manifest.json",
+      "bytes": 1322,
+      "sha256": "a2e567ccdba3354b164a63604f5a0554fe717e85bfec6c53ab685ea509c7685e"
+    },
+    "preservedOriginals": [
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-ATTEMPT-FRESHNESS/originals/inherited-acceptance.mjs",
+        "bytes": 12687,
+        "sha256": "476757c84f2a793aa2af1561be3e5156b7ee28538428a5ccae0f82d498e566af"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-ATTEMPT-FRESHNESS/originals/inherited-acceptance.test.mjs",
+        "bytes": 7634,
+        "sha256": "c4576f4a5f28298d45cea3fd00f6c42604b4ed65c0443e19559ee891f5b2cabb"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-ATTEMPT-FRESHNESS/originals/E-FIX-INHERITED-GATE.json",
+        "bytes": 10000,
+        "sha256": "1275b0759439fa4528fc795454d3c5dd72627e6416d9f96573fa6e1b6ff47c50"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-ATTEMPT-FRESHNESS/originals/E-FIX-INHERITED-GATE.md",
+        "bytes": 4176,
+        "sha256": "1a1c2c4c377812d15aabde43756ae52362febd61c2f9b689db8c7ffae9ef8565"
+      }
+    ]
+  },
+  "verification": {
+    "validatorTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/inherited-acceptance.test.mjs",
+      "exitCode": 0,
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-validator-tests.log",
+        "bytes": 2985,
+        "sha256": "1e29b44d56e187b7450f90f596c9af9747d3b93141b030937a7e21ba079200c5"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-validator-tests.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "syntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/inherited-acceptance.mjs",
+      "exitCode": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-syntax.log",
+        "bytes": 290,
+        "sha256": "7197f1b4eceb2e3326de7a473f3aaece12300e9a302d476a41d626cf57640fe2"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-syntax.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "preFixWitness": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='rejects an attempt timestamp one millisecond before the inherited invocation' compiled-children/inherited-acceptance.test.mjs",
+      "exitCode": 1,
+      "expectedRed": true,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-red.log",
+        "bytes": 1669,
+        "sha256": "2e5a86d084dfccd14a0b61a4a8b642f119099fcb61de4fb4397ff0042c0e7ab2"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-red.exit-code",
+        "bytes": 2,
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      }
+    },
+    "preservedOriginalsCheck": {
+      "exitCode": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-preserved-originals.log",
+        "bytes": 811,
+        "sha256": "8610a6b83c74aecab205ef3cd7a2326b9ff1ce7ff68d2dfc6a1e6e69664a79cd"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-preserved-originals.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    }
+  },
+  "source_sha256": {
+    "compiled-children/inherited-acceptance.mjs": "bb78a18b23bc92a3c287710ea125af9a4d14d77f9980cff3afb2082c3df68ffc",
+    "compiled-children/inherited-acceptance.test.mjs": "a6fc52c6d196e2382bf7124cc8e423baa69692702d79bf34643df7cd38b8c3a7"
+  },
+  "artifacts": [
+    {
+      "path": "compiled-children/inherited-acceptance.mjs",
+      "bytes": 12830,
+      "sha256": "bb78a18b23bc92a3c287710ea125af9a4d14d77f9980cff3afb2082c3df68ffc"
+    },
+    {
+      "path": "compiled-children/inherited-acceptance.test.mjs",
+      "bytes": 8389,
+      "sha256": "a6fc52c6d196e2382bf7124cc8e423baa69692702d79bf34643df7cd38b8c3a7"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-ATTEMPT-FRESHNESS.md",
+      "bytes": 1739,
+      "sha256": "530129022d7caf7a48b8c63bd549fc147808dda6987001e5c4b4c02ec0c30226"
+    }
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-red.log",
+      "bytes": 1669,
+      "sha256": "2e5a86d084dfccd14a0b61a4a8b642f119099fcb61de4fb4397ff0042c0e7ab2"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-red.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-validator-tests.log",
+      "bytes": 2985,
+      "sha256": "1e29b44d56e187b7450f90f596c9af9747d3b93141b030937a7e21ba079200c5"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-validator-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-syntax.log",
+      "bytes": 290,
+      "sha256": "7197f1b4eceb2e3326de7a473f3aaece12300e9a302d476a41d626cf57640fe2"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-syntax.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-preserved-originals.log",
+      "bytes": 811,
+      "sha256": "8610a6b83c74aecab205ef3cd7a2326b9ff1ce7ff68d2dfc6a1e6e69664a79cd"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ATTEMPT-FRESHNESS-preserved-originals.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "limitations": [
+    "The full inherited delivery pipeline was not run."
+  ],
+  "integration": "Ready for independent review; source is frozen.",
+  "publication": "No Git, scheduler, or native state edit."
+}

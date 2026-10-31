@@ -1,0 +1,180 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-CI-BROWSER-ID",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Fixed the Playwright Chromium version check to accept strict Chromium and Google Chrome for Testing CLI formats without rewriting the reported raw browser string; focused tests pass in the isolated worktree.",
+  "worktree": {
+    "path": "/workspace/scratch/39a56936f173/gondola-children-ci",
+    "head": "9bd6 (root-provided; no Git commands run)"
+  },
+  "source_sha256": {
+    "compiled-children/run.mjs": "22f4915c6aa0b300a23ed8a5ffe3a2d8a710c50d7f08c33e1d9e5d82c45e44ac",
+    "compiled-children/browser-version.mjs": "624fc3369d9f6e47d7d84d23de41e0bdbe07d6ce925c878a8623d08765b4f6ee",
+    "compiled-children/conformance/browser-version.test.mjs": "6c465496d274480ad79bf2fd74f4e6566095edc4022f83361b1d9c400a6586e6"
+  },
+  "repair": {
+    "acceptedFormats": [
+      "Chromium <major>.<minor>.<build>.<patch>",
+      "Google Chrome for Testing <major>.<minor>.<build>.<patch>"
+    ],
+    "validation": "Four decimal components, no leading zero on nonzero components, safe-integer components, positive major; exact prefix/suffix match.",
+    "rawStringPreserved": "collectVersions stores the trimmed CLI text in versions.chromium and calls the predicate without reassigning or normalizing it.",
+    "helperAndTestPinnedAndRun": [
+      "compiled-children/browser-version.mjs",
+      "compiled-children/conformance/browser-version.test.mjs"
+    ],
+    "ciWitness": {
+      "run": "41206230269",
+      "job": "124551739981",
+      "cliOutput": "Google Chrome for Testing 156.0.8078.4",
+      "rawCiLogAvailableInWorkspace": false
+    },
+    "preservedSource": {
+      "path": "compiled-children/coordination/repairs/E-FIX-CI-BROWSER-ID/originals/run.mjs",
+      "bytes": 60431,
+      "sha256": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f"
+    },
+    "preservationManifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-CI-BROWSER-ID/originals/manifest.json",
+      "bytes": 329,
+      "sha256": "b930ee55fb5403b79a2d32f93fa220866237402217f926b34b2d6a4b430f972e"
+    }
+  },
+  "verification": {
+    "focusedBrowserVersionTest": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/browser-version.test.mjs",
+      "exitCode": 0,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-green-final.log",
+        "bytes": 1005,
+        "sha256": "60f72e80e0a4277c5ee37cc02a4e5888d09d1907155ca848eafd8c8b0866694c"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-green-final.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "runnerSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/run.mjs",
+      "exitCode": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-runner-syntax.log",
+        "bytes": 273,
+        "sha256": "50fba77eec0bb95e3d9d738f67b4f7e0efa1443f2d5ee2b7cb6898b2b7516d36"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-runner-syntax.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "helperSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/browser-version.mjs",
+      "exitCode": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-helper-syntax.log",
+        "bytes": 285,
+        "sha256": "eff5f70c06e4718f8d731bfd467f51b4cfb90049710c97c13e009eb7ab1d1bbb"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-helper-syntax.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "testFirstRed": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/browser-version.test.mjs (before helper existed)",
+      "exitCode": 1,
+      "expectedRed": true,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-red.log",
+        "bytes": 2806,
+        "sha256": "4fe6db29de54de3e3e015a24eaef17b5607950d77b54ee99d2096beabd19a546"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-red.exit-code",
+        "bytes": 2,
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      }
+    },
+    "preservationAudit": {
+      "exitCode": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-preservation-check.log",
+        "bytes": 571,
+        "sha256": "f61e1d90e5a7768934380095626a7b676fb37bed2131ea314771345fc31ea7da"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-preservation-check.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    }
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/E-FIX-CI-BROWSER-ID.md",
+    "bytes": 2989,
+    "sha256": "445bd347a6dfa473db61fa3d2315f53f4921ccf4aa1a12ae61e6fdec2104d596"
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-red.log",
+      "bytes": 2806,
+      "sha256": "4fe6db29de54de3e3e015a24eaef17b5607950d77b54ee99d2096beabd19a546"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-red.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-green-final.log",
+      "bytes": 1005,
+      "sha256": "60f72e80e0a4277c5ee37cc02a4e5888d09d1907155ca848eafd8c8b0866694c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-green-final.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-runner-syntax.log",
+      "bytes": 273,
+      "sha256": "50fba77eec0bb95e3d9d738f67b4f7e0efa1443f2d5ee2b7cb6898b2b7516d36"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-runner-syntax.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-helper-syntax.log",
+      "bytes": 285,
+      "sha256": "eff5f70c06e4718f8d731bfd467f51b4cfb90049710c97c13e009eb7ab1d1bbb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-helper-syntax.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-preservation-check.log",
+      "bytes": 571,
+      "sha256": "f61e1d90e5a7768934380095626a7b676fb37bed2131ea314771345fc31ea7da"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-CI-BROWSER-ID-preservation-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "limitations": [
+    "No full pipeline, npm install, or CI rerun was performed. The CI witness identifiers and CLI output were supplied by root; no raw CI job log was present in the workspace."
+  ],
+  "publication": "No Git, scheduler, or primary runtime source edit."
+}

@@ -1,0 +1,66 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "schema": "gobi.compiled-children-checker-mutation-review/v1",
+  "node": "v22.23.4",
+  "trace": {
+    "path": "fixtures/compiled/children/evidence/rawlogs/native-trace.json",
+    "bytes": 653879,
+    "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+  },
+  "oracle": {
+    "path": "compiled-children/oracle/expectations.json",
+    "sha256": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774"
+  },
+  "positiveControl": "actual pinned native trace accepted against fixture and independent literal expectations",
+  "mutationCount": 5,
+  "rejectedMutationCount": 5,
+  "mutations": [
+    {
+      "id": "count",
+      "field": "child counter count",
+      "sourceEventIndex": 0,
+      "rejected": true,
+      "errorName": "TraceMismatchError",
+      "mismatchPath": "$.review-mutated-count.steps[0].state.Children[0].Counter.Count",
+      "error": "$.review-mutated-count.steps[0].state.Children[0].Counter.Count: value differs; expected 1, got 2"
+    },
+    {
+      "id": "reusedGeneration",
+      "field": "reused child generation",
+      "sourceEventIndex": 15,
+      "rejected": true,
+      "errorName": "TraceMismatchError",
+      "mismatchPath": "$.review-mutated-reusedGeneration.steps[11].state.Children[2].Generation",
+      "error": "$.review-mutated-reusedGeneration.steps[11].state.Children[2].Generation: value differs; expected 5, got 2"
+    },
+    {
+      "id": "requestSeq",
+      "field": "child request sequence",
+      "sourceEventIndex": 4,
+      "rejected": true,
+      "errorName": "TraceMismatchError",
+      "mismatchPath": "$.review-mutated-requestSeq.steps[4].state.Children[0].RequestSeq",
+      "error": "$.review-mutated-requestSeq.steps[4].state.Children[0].RequestSeq: value differs; expected 1, got 2"
+    },
+    {
+      "id": "clearCancellationOrder",
+      "field": "children.clear effect order",
+      "sourceEventIndex": 24,
+      "rejected": true,
+      "errorName": "TraceMismatchError",
+      "mismatchPath": "$.review-mutated-clearCancellationOrder.steps[20].effects[0].arg",
+      "error": "$.review-mutated-clearCancellationOrder.steps[20].effects[0].arg: value differs; expected \"child:oak:g5:r2\", got \"child:elm:g3:r2\""
+    },
+    {
+      "id": "nodeKey",
+      "field": "complete Gobi child key after reorder",
+      "sourceEventIndex": 8,
+      "rejected": true,
+      "errorName": "TraceMismatchError",
+      "mismatchPath": "$.review-mutated-nodeKey.steps[8].view.kids[1].kids[1].key",
+      "error": "$.review-mutated-nodeKey.steps[8].view.kids[1].kids[1].key: value differs; expected \"child-oak\", got \"child-ash\""
+    }
+  ],
+  "note": "Each negative capture begins as a structured clone of the actual pinned native trace and changes one specified field before assertNative; no Go, direct, browser, or seeded result is fabricated."
+}

@@ -1,0 +1,459 @@
+{
+  "schema": "gobi.compiled-children-execution/v1",
+  "job_id": "E-HARNESS",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "status": "matched",
+  "summary": "Matched 42 source events and 38 Go updates across native Go, direct React/DOM compiled modules, and three mounted browser profiles; detected 12 captured-data mutations; ran 3 bounded seeded schedules.",
+  "startedAt": "2026-10-31T12:56:31.169Z",
+  "finishedAt": "2026-10-31T12:56:53.999Z",
+  "invocation": [
+    "/tmp/gondola-node22/node_modules/node/bin/node",
+    "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/run.mjs",
+    "--native-go",
+    "/tmp/gondola-go/bin/go",
+    "--fixture",
+    "fixtures/compiled/children/scenario.json",
+    "--expectations",
+    "compiled-children/oracle/expectations.json",
+    "--react-manifest",
+    "compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json",
+    "--dom-manifest",
+    "compiled-children/compiler-evidence/build/dom/buildmanifest.json",
+    "--chromium",
+    "/tmp/chromium",
+    "--output",
+    "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay"
+  ],
+  "versions": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "playwright": "1.64.1"
+  },
+  "inputs": {
+    "fixture": "/workspace/scratch/39a56936f173/gondola-next/fixtures/compiled/children/scenario.json",
+    "expectations": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/oracle/expectations.json",
+    "reactManifest": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json",
+    "domManifest": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/compiler-evidence/build/dom/buildmanifest.json",
+    "nativeGo": "/tmp/gondola-go/bin/go",
+    "chromium": "/tmp/chromium"
+  },
+  "inputPinScope": "Hashes the consumed fixture, literal oracle core, harness/runtime/frontend code, Go fixture/native CLI, and emitted build inputs before and after replay. Oracle custody repair artifacts are separately owned and are excluded because this harness does not import or execute them.",
+  "commands": [
+    {
+      "name": "native-go-version",
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "version"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "checker-and-seeded-unit-tests",
+      "command": [
+        "/tmp/gondola-node22/node_modules/node/bin/node",
+        "--test",
+        "compiled-children/conformance/check.test.mjs",
+        "compiled-children/conformance/seeded.test.mjs",
+        "compiled-children/conformance/swap-contract.test.mjs"
+      ],
+      "exitCode": 0,
+      "tap": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "native-fixed",
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "run",
+        "./cmd/compiled-children-native",
+        "--script",
+        "/workspace/scratch/39a56936f173/gondola-next/fixtures/compiled/children/scenario.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "native-seed-20261031",
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "run",
+        "./cmd/compiled-children-native",
+        "--script",
+        "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.seed-20261031.scenario.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "native-seed-20261032",
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "run",
+        "./cmd/compiled-children-native",
+        "--script",
+        "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.seed-20261032.scenario.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "native-seed-20261033",
+      "command": [
+        "/tmp/gondola-go/bin/go",
+        "run",
+        "./cmd/compiled-children-native",
+        "--script",
+        "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.seed-20261033.scenario.json"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "unitTests": {
+    "status": "passed",
+    "command": [
+      "/tmp/gondola-node22/node_modules/node/bin/node",
+      "--test",
+      "compiled-children/conformance/check.test.mjs",
+      "compiled-children/conformance/seeded.test.mjs",
+      "compiled-children/conformance/swap-contract.test.mjs"
+    ],
+    "tap": {
+      "tests": 18,
+      "pass": 18,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "stdout": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stdout.log",
+    "stderr": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stderr.log"
+  },
+  "outputs": {
+    "native": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.native.json",
+    "directReact": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.direct.react.json",
+    "directDom": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.direct.dom.json",
+    "browser": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.browser.json",
+    "check": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.check.json",
+    "seeded": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.seeded.json",
+    "unitTestStdout": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stdout.log",
+    "unitTestStderr": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stderr.log",
+    "run": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.run.json",
+    "manifest": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.manifest.json",
+    "failure": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.failed.json"
+  },
+  "seeds": [
+    {
+      "seed": 20261031,
+      "events": 60,
+      "goUpdates": 59,
+      "stateTreeDomParity": true,
+      "metadata": {
+        "seed": 20261031,
+        "eventCount": 60,
+        "keyOrder": [
+          "k5",
+          "k2",
+          "k3",
+          "k4",
+          "k1",
+          "k0"
+        ],
+        "physicalStartKey": "elm",
+        "counterOrder": [
+          "k2",
+          "k0",
+          "k4",
+          "k5",
+          "k3",
+          "k1"
+        ],
+        "pendingSwapPair": [
+          "k4",
+          "k5"
+        ],
+        "alternatingKey": "alt",
+        "reusedKey": "k5",
+        "oldToken": "child:k5:g4:r1",
+        "newToken": "child:k5:g10:r1",
+        "bounds": {
+          "maximumChildren": 6,
+          "events": 60
+        },
+        "coverage": [
+          "physical-keyed-child-counter-click",
+          "growth-beyond-initial-slice-capacity",
+          "empty-collection-clear",
+          "malformed-key-and-swap-no-ops",
+          "unknown-remove-request-counter-no-ops",
+          "duplicate-add-and-request-no-ops",
+          "alternating-add-remove-reuse",
+          "pending-reorder",
+          "stale-generation-reducer-completion",
+          "child-first-clear-cancellation",
+          "parent-remove-and-remount-generation"
+        ]
+      }
+    },
+    {
+      "seed": 20261032,
+      "events": 60,
+      "goUpdates": 59,
+      "stateTreeDomParity": false,
+      "metadata": {
+        "seed": 20261032,
+        "eventCount": 60,
+        "keyOrder": [
+          "k1",
+          "k4",
+          "k3",
+          "k5",
+          "k2",
+          "k0"
+        ],
+        "physicalStartKey": "elm",
+        "counterOrder": [
+          "k2",
+          "k4",
+          "k1",
+          "k0",
+          "k5",
+          "k3"
+        ],
+        "pendingSwapPair": [
+          "k0",
+          "k2"
+        ],
+        "alternatingKey": "alt",
+        "reusedKey": "k1",
+        "oldToken": "child:k1:g4:r1",
+        "newToken": "child:k1:g10:r1",
+        "bounds": {
+          "maximumChildren": 6,
+          "events": 60
+        },
+        "coverage": [
+          "physical-keyed-child-counter-click",
+          "growth-beyond-initial-slice-capacity",
+          "empty-collection-clear",
+          "malformed-key-and-swap-no-ops",
+          "unknown-remove-request-counter-no-ops",
+          "duplicate-add-and-request-no-ops",
+          "alternating-add-remove-reuse",
+          "pending-reorder",
+          "stale-generation-reducer-completion",
+          "child-first-clear-cancellation",
+          "parent-remove-and-remount-generation"
+        ]
+      }
+    },
+    {
+      "seed": 20261033,
+      "events": 60,
+      "goUpdates": 59,
+      "stateTreeDomParity": false,
+      "metadata": {
+        "seed": 20261033,
+        "eventCount": 60,
+        "keyOrder": [
+          "k5",
+          "k3",
+          "k1",
+          "k4",
+          "k2",
+          "k0"
+        ],
+        "physicalStartKey": "elm",
+        "counterOrder": [
+          "k3",
+          "k5",
+          "k2",
+          "k4",
+          "k0",
+          "k1"
+        ],
+        "pendingSwapPair": [
+          "k1",
+          "k3"
+        ],
+        "alternatingKey": "alt",
+        "reusedKey": "k5",
+        "oldToken": "child:k5:g4:r1",
+        "newToken": "child:k5:g10:r1",
+        "bounds": {
+          "maximumChildren": 6,
+          "events": 60
+        },
+        "coverage": [
+          "physical-keyed-child-counter-click",
+          "growth-beyond-initial-slice-capacity",
+          "empty-collection-clear",
+          "malformed-key-and-swap-no-ops",
+          "unknown-remove-request-counter-no-ops",
+          "duplicate-add-and-request-no-ops",
+          "alternating-add-remove-reuse",
+          "pending-reorder",
+          "stale-generation-reducer-completion",
+          "child-first-clear-cancellation",
+          "parent-remove-and-remount-generation"
+        ]
+      }
+    }
+  ],
+  "mismatches": [],
+  "failures": [],
+  "evidencePins": [
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.native.json",
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "bytes": 653879
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.direct.react.json",
+      "sha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93",
+      "bytes": 3214325
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.direct.dom.json",
+      "sha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7",
+      "bytes": 3214323
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.browser.json",
+      "sha256": "e5d972e4bdc732b5ba4762d0797d15d821c6128976fece2bf0893c995fb90f8c",
+      "bytes": 70126670
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.check.json",
+      "sha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff",
+      "bytes": 2089
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.seeded.json",
+      "sha256": "7a30780413d90c90cd1fe9da3cd0f0745ac02b5882f40df6bfba5a8e8ee06bdc",
+      "bytes": 6674
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stdout.log",
+      "sha256": "4930ebf09e4f4abf2e5cfe3a5bfca533f3852c525063dbf1a77b99357f4203c7",
+      "bytes": 4512
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stderr.log",
+      "sha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621",
+      "bytes": 175
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.browser.capture.json",
+      "sha256": "e5d972e4bdc732b5ba4762d0797d15d821c6128976fece2bf0893c995fb90f8c",
+      "bytes": 70126670
+    }
+  ],
+  "traceArtifacts": [
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.native.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/native.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "sourceBytes": 653879,
+      "archiveSha256": "999d18da2b9203ae7f72d8c50fe5de49fb1920c6872ee1567089f9d4811389e3",
+      "archiveBytes": 13388
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.direct.react.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/direct-react.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93",
+      "sourceBytes": 3214325,
+      "archiveSha256": "9ed4af83c757198f1da67baa6b939113aa8662dd6215fe1433f827fde59b911c",
+      "archiveBytes": 126542
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.direct.dom.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/direct-dom.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7",
+      "sourceBytes": 3214323,
+      "archiveSha256": "f3360a23d51ea233a3c315171b0696c3ca853cc99a3717f77d7a3a094c795e2c",
+      "archiveBytes": 126541
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.browser.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/browser.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "e5d972e4bdc732b5ba4762d0797d15d821c6128976fece2bf0893c995fb90f8c",
+      "sourceBytes": 70126670,
+      "archiveSha256": "464cef00c9dbc7955d47e4a96c2fa2418ecc50aa12e879619ae1b3e347e06202",
+      "archiveBytes": 2970320
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.check.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/check.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff",
+      "sourceBytes": 2089,
+      "archiveSha256": "8d7a1e494db3c3f760abe7619492fa097f073df0609913179e58a73d590ae910",
+      "archiveBytes": 685
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.seeded.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/seeded.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "7a30780413d90c90cd1fe9da3cd0f0745ac02b5882f40df6bfba5a8e8ee06bdc",
+      "sourceBytes": 6674,
+      "archiveSha256": "6bdee345d2dbf989e8ac652fab3b43dbe1e38a352c9f7294fede510a33ff6aac",
+      "archiveBytes": 913
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stdout.log",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/unit-test-stdout.log.gz",
+      "compression": "gzip",
+      "sourceSha256": "4930ebf09e4f4abf2e5cfe3a5bfca533f3852c525063dbf1a77b99357f4203c7",
+      "sourceBytes": 4512,
+      "archiveSha256": "6d774ec8f87e03904770991133988900e5a7dac01877f509b64b2b87046fd5ec",
+      "archiveBytes": 1071
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.unit-tests.stderr.log",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/unit-test-stderr.log.gz",
+      "compression": "gzip",
+      "sourceSha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621",
+      "sourceBytes": 175,
+      "archiveSha256": "9ae9ecd94fbf5cd97ed0d3fdf69fd1e8d9fd154dab12d35000e520cee011d8a5",
+      "archiveBytes": 161
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.run.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/run.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "a9de9d909de0da6f4662bdd69cb7e7e7dc8b8ffe8e95076db8bffd3a78a697bc",
+      "sourceBytes": 50221,
+      "archiveSha256": "6682b7655273230a765bdff0eb191e07699a5896ab9ca6b40d7116e7f18be92f",
+      "archiveBytes": 7442
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay.manifest.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/manifest.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "581eabfac55bd888577d277b0dc74c815aee3d58cee34bcb4fd136d15dc69bcd",
+      "sourceBytes": 42403,
+      "archiveSha256": "cf9f7c918399562d14bec0bd7eebc301c505ee24851c6c477e82caea8995aa56",
+      "archiveBytes": 5881
+    }
+  ],
+  "rawLog": {
+    "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2/trace-index.json",
+    "traceDirectory": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T125654.208Z-2"
+  },
+  "exactCommands": [
+    "/tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script fixtures/compiled/children/scenario.json",
+    "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/conformance/run.mjs --native-go /tmp/gondola-go/bin/go --fixture fixtures/compiled/children/scenario.json --expectations compiled-children/oracle/expectations.json --react-manifest compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json --dom-manifest compiled-children/compiler-evidence/build/dom/buildmanifest.json --chromium /tmp/chromium --output /workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay"
+  ],
+  "limitations": [
+    "Seeded sequences are bounded differential replays and do not claim universal behavior coverage."
+  ]
+}

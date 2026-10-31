@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <link rel="icon" href="data:,">
+    <title>Compiled Go child collections</title>
+    <link rel="stylesheet" href="/demo.css">
+    <script type="module" src="/demo.bundle.mjs"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">GOBI · COMPILED GO</p>
+        <h1>Keyed child collections</h1>
+        <p class="lede">Go owns the parent, keyed children, order, generations, counters, and pending replies. React and DOM render the same live Go view.</p>
+        <div class="status-row">
+          <span id="status" class="status-pill" role="status" data-state="loading">Loading compiled Go module…</span>
+          <span id="active-renderer" class="renderer-label">Renderer: —</span>
+        </div>
+      </header>
+
+      <section class="layout" aria-label="Compiled Go keyed child collection demo">
+        <section class="card live-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">LIVE GO VIEW</p>
+              <h2>Parent and children</h2>
+            </div>
+            <div class="renderer-switch" role="group" aria-label="Compatible renderer">
+              <button type="button" data-renderer="react" aria-pressed="false">React</button>
+              <button type="button" data-renderer="dom" aria-pressed="true">DOM</button>
+            </div>
+          </div>
+          <p class="card-note">The controls below come from the compiled Go <code>View</code>; each enabled click dispatches to Go <code>Update</code>.</p>
+          <div id="go-view" class="go-view" aria-label="Mounted compiled Go child collection"></div>
+
+          <div class="negotiation">
+            <div>
+              <p class="eyebrow">PROFILE NEGOTIATION</p>
+              <p id="swap-status" class="swap-status" role="status" data-state="idle">No renderer negotiation attempted yet.</p>
+            </div>
+            <button id="reject-incompatible" type="button">Try renderer missing view.node</button>
+          </div>
+
+          <div class="host-controls">
+            <div>
+              <p class="eyebrow">MANUAL GO REPLY HOST</p>
+              <p id="pending-count" class="host-summary">No pending replies</p>
+            </div>
+          </div>
+          <div id="pending-list" class="token-list" aria-label="Pending Go replies"></div>
+          <div class="cancelled-block">
+            <p class="eyebrow">CANCELLED REPLIES</p>
+            <p class="card-note">Try a cancelled token to see the host reject a stale reply.</p>
+            <div id="cancelled-list" class="token-list" aria-label="Cancelled Go replies"></div>
+          </div>
+        </section>
+
+        <aside class="inspector" aria-label="Compiled child collection inspector">
+          <section class="card inspector-card">
+            <p class="eyebrow">COMPILED REQUIREMENTS</p>
+            <h2>AppIR profile</h2>
+            <ul id="compiled-requirements" class="capability-list"></ul>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">HOST SUPPORT</p>
+            <h2>Effect host</h2>
+            <ul id="host-support" class="capability-list"></ul>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">RENDERER SUPPORT</p>
+            <h2>Active view profile</h2>
+            <ul id="renderer-support" class="capability-list"></ul>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">GO STATE</p>
+            <h2>Collection and view</h2>
+            <pre id="state-snapshot" class="data-panel">Waiting for Go Init…</pre>
+          </section>
+        </aside>
+      </section>
+
+      <section class="card trace-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">HOST EVENT ORDER</p>
+            <h2>Requests and cancellations</h2>
+          </div>
+          <span id="host-action-status" class="trace-hint" data-state="idle">No host reply action yet</span>
+        </div>
+        <pre id="host-events" class="data-panel trace-panel">Waiting for Go effects…</pre>
+      </section>
+
+      <footer class="page-footer">
+        <span>Actual GoScript collection · manual effect delivery</span>
+        <span>React 19.3.1 + DOM · no WebAssembly</span>
+      </footer>
+    </main>
+  </body>
+</html>

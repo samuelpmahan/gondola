@@ -1,0 +1,21 @@
+XR-HARNESS review helper iteration notes
+
+These are reviewer-script/setup errors, not N4 application or conformance failures.
+
+Attempt 1: the first ad-hoc archive reader assumed native.gz; the actual pinned
+archive is native.json.gz. Result: ENOENT opening
+compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/native.gz.
+Correction: read the actual path from trace-index.json.
+
+Attempt 2: replay-review.mjs looked for inputPinScope in the attempt run object;
+N4 records it in E-HARNESS.json. Result: assertion received undefined.
+Correction: load the E-HARNESS receipt and check its inputPinScope field.
+Captured output is in replay-review.log.
+
+Attempt 3: replay-review.mjs expected noWasm.wasmAPIAttempts; the capture's
+actual field is noWasm.apiAttempts. Result: TypeError reading length of undefined.
+Correction: use the field names present in the real browser capture.
+
+After these corrections, replay-review.mjs passed against the archived attempt12
+traces and recorded a separate accepted-swap backend mutation witness. No N4
+source or original attempt evidence was changed.

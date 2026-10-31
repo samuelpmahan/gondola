@@ -1,0 +1,79 @@
+{
+  "job_id": "E-HOST",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Added a compiled-children-specific closed request/cancel host driver around the shared compiled mount; Go retains collection identity and lifetime state while the host records effect correlations and manual replies.",
+  "contract": {
+    "parent_token": "parent:g<generation>:r<requestSeq>",
+    "child_token": "child:<key>:g<generation>:r<requestSeq>",
+    "child_key_pattern": "[a-z][a-z0-9_-]{0,15}",
+    "id_bounds": "canonical positive decimal, <= Number.MAX_SAFE_INTEGER",
+    "request_profile": ["fixture.request", "lookup", "token", "complete"],
+    "cancel_profile": ["lifecycle.cancel", "cancel", "token", ""],
+    "completion_message": { "name": "complete", "arg": "exact token" }
+  },
+  "api": {
+    "module": "compiled-children/runtime/runtime.mjs",
+    "capability_export": "COMPILED_CHILDREN_HOST_CAPABILITIES",
+    "mount": "mountCompiledChildrenApp({module, componentId?, appId?, encoder, renderer, onTick?, onFailure?}) -> {runtime, effects}",
+    "runtime": ["snapshot", "trace", "dispatch", "complete", "replaceRenderer", "unmount"],
+    "effects": ["pending", "records", "deliver(token)"]
+  },
+  "toolchains": {
+    "node": "v22.23.4"
+  },
+  "checks": [
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/runtime/runtime.test.mjs 2>&1 | tee compiled-children/coordination/rawlogs/E-HOST-red-runtime.log",
+      "working_directory": "repository root",
+      "exit_code": 1,
+      "result": "Expected red before implementation: 5 tests failed because mountCompiledChildrenApp and the host exports were not yet present.",
+      "rawlog": "compiled-children/coordination/rawlogs/E-HOST-red-runtime.log",
+      "rawlog_sha256": "23e3174d17b287597c434720e5290ee87d4d17ff651b9d2fc1d6ad2a15b499e9",
+      "rawlog_bytes": 7048
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/coordination/rawlogs/E-HOST-correction-replay.test.mjs 2>&1 | tee compiled-children/coordination/rawlogs/E-HOST-correction-replay.log",
+      "working_directory": "repository root",
+      "exit_code": 1,
+      "result": "A temporary replay of the first post-implementation test assumptions reproduced two test-only failures: the shared completion return has no completedEffects array, and a renderer declaring view.node is compatible. The replay source was removed after capturing the log; final assertions inspect the host completion record and reject a renderer with no view capabilities.",
+      "rawlog": "compiled-children/coordination/rawlogs/E-HOST-correction-replay.log",
+      "rawlog_sha256": "e969e8a08b75cb0773d8352b9287c56a7e75b396aa29a14aff18cd5bc2b710bf",
+      "rawlog_bytes": 3688
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/runtime/runtime.test.mjs compiled-frontend/frontend/runtime/runtime.test.mjs 2>&1 | tee compiled-children/coordination/rawlogs/E-HOST-green-all-runtime.log",
+      "working_directory": "repository root",
+      "exit_code": 0,
+      "result": "Passed: 42 tests, 42 passed, 0 failed (6 host tests and 36 shared-runtime tests).",
+      "rawlog": "compiled-children/coordination/rawlogs/E-HOST-green-all-runtime.log",
+      "rawlog_sha256": "a9fe041cbe4087c12fcad7bfe5a3c6cc6c018ab90384e3ac02c17262d993260a",
+      "rawlog_bytes": 10085
+    },
+    {
+      "command": "set -o pipefail\n(\n  /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/runtime/runtime.mjs &&\n  /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/runtime/runtime.test.mjs &&\n  git diff --check -- compiled-children/runtime\n) 2>&1 | tee compiled-children/coordination/rawlogs/E-HOST-green-static.log",
+      "working_directory": "repository root",
+      "exit_code": 0,
+      "result": "Passed both Node syntax checks and git diff --check for the owned runtime directory.",
+      "rawlog": "compiled-children/coordination/rawlogs/E-HOST-green-static.log",
+      "rawlog_sha256": "081a535de7672724eb87e0a36973eb15b76bdabcf7d1e73628207ddc9e132757",
+      "rawlog_bytes": 349
+    }
+  ],
+  "source_sha256": {
+    "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+    "compiled-children/runtime/runtime.test.mjs": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/E-HOST.md",
+    "bytes": 3731,
+    "sha256": "8a862b29b98019b5b158c164db98c22b48ef261c7fb202c34a855d992d335383"
+  },
+  "limitations": [
+    "The focused host suite uses a synthetic compiled-ABI module to isolate host behavior; actual Go fixture parity is owned by the N4 harness and root full-run.",
+    "The shared compiled frontend runtime and existing compiled-lifecycle wrapper were not modified.",
+    "The whole native allocation/receipt protocol and React/DOM/native integration remain root acceptance gates."
+  ],
+  "integration": "pending N4 actual Go replay, N6 delivery runner, and root read-only native protocol audit",
+  "publication": "No Git commit, merge, or deployment."
+}

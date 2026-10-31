@@ -1,0 +1,212 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-FIX-HARNESS-LIVENESS",
+  "worker": "N4",
+  "outcome": null,
+  "decision": "accepted",
+  "summary": "Accepted E-FIX-HARNESS-LIVENESS. The original React/id 2 to DOM/id 1 false-accept witness now fails; accepted/rejected renderer identity and later physical-click callback metadata are bound. The fresh source-pinned replay matches with 12/12 mutations detected, and canonical E-HARNESS custody plus archived evidence verify.",
+  "reviewed_job": {
+    "job_id": "E-FIX-HARNESS-LIVENESS",
+    "worker": "N6",
+    "outcome": "mixed_change"
+  },
+  "prior_review": {
+    "job_id": "XR-HARNESS",
+    "worker": "N5",
+    "decision": "amend",
+    "receipt": {
+      "path": "compiled-children/coordination/receipts/XR-HARNESS.json",
+      "bytes": 14503,
+      "sha256": "240218ddfc24da525bb7187e69796a93170b5fb004c931195a9313d31b3de7c4"
+    },
+    "report": {
+      "path": "compiled-children/coordination/reports/XR-HARNESS.md",
+      "bytes": 5144,
+      "sha256": "98a2a4d9507dbcfc08412bd31871ba4241ac82520d54514462f0e3624cbf671f"
+    }
+  },
+  "findings": [
+    {
+      "id": "XR-FIX-HARNESS-LIVENESS-1",
+      "decision_effect": "accepted",
+      "summary": "The preserved wrong-active-renderer witness is rejected because the accepted swap result no longer matches the unique captured React renderer candidate. Separate negative controls also reject retired-renderer callback backend/ID and detached action metadata mutations.",
+      "oldWitness": {
+        "path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/wrong-active-renderer-browser.json.gz",
+        "archiveBytes": 352321,
+        "archiveSha256": "dfd8a37b439369754fe3574ca1fc93b1ee7090fc74109275fed2656d8d5b8835",
+        "uncompressedBytes": 19446557,
+        "uncompressedSha256": "86731f80e91cead461973ec4521a54f002ed7c1783633bfc010a51f34fa41fbb",
+        "mutation": {
+          "acceptedSwapAfterRenderer": { "backend": "dom", "id": 1 },
+          "postRejectionPhysicalClickEventIndex": 13,
+          "operationActionDispatchRenderer": { "backend": "dom", "id": 1 }
+        },
+        "currentCheckerResult": "rejected",
+        "error": "TraceMismatchError: expected \"react\", got \"dom\""
+      }
+    }
+  ],
+  "checks": {
+    "acceptedRendererCandidateIdentityBound": true,
+    "rejectedCandidateRetainsActiveRendererIdentity": true,
+    "postRejectionPhysicalClickUsesReactRendererId2": true,
+    "operationSnapshotActionAndDispatchIdentityCrossChecked": true,
+    "nativeCompleteStateAndOrderedGoStepsComparedToLiteralOracle": true,
+    "compiledTypedStateAndGobiViewComparedToLiteralOracle": true,
+    "rawDOMAndPhysicalClickRecordsChecked": true,
+    "noJavaScriptApplicationReducer": true,
+    "mutationControls": {
+      "count": 12,
+      "allDetected": true,
+      "includesNoWasmCoverageEntryRemoval": true
+    },
+    "sourceAndBuildPins": {
+      "sourceBeforeAfterStable": 85,
+      "buildOutputsBeforeAfterStable": 8
+    },
+    "compressedTraceArchivesIndependentlyVerified": 10,
+    "targetedTests": { "tests": 18, "passed": 18, "failed": 0 }
+  },
+  "fixedReplay": {
+    "name": "replay-custody-safe",
+    "status": "matched",
+    "events": 42,
+    "goUpdates": 38,
+    "stateCheckpoints": 39,
+    "browserProfiles": ["react", "dom", "swap"],
+    "physicalClicksPerProfile": 27,
+    "requests": 12,
+    "cancellations": 6,
+    "staleRepliesRejected": 1,
+    "seeds": [
+      { "seed": 20261031, "events": 60, "goUpdates": 59, "mountedBrowser": true },
+      { "seed": 20261032, "events": 60, "goUpdates": 59, "mountedBrowser": false },
+      { "seed": 20261033, "events": 60, "goUpdates": 59, "mountedBrowser": false }
+    ],
+    "noWasmGuardCoverage": {
+      "status": "complete",
+      "entries": 10,
+      "apiAttempts": 0,
+      "wasmRequests": 0,
+      "failures": 0
+    }
+  },
+  "custody": {
+    "canonicalAuthorFilesRestoredByteExact": [
+      {
+        "path": "compiled-children/coordination/reports/E-HARNESS.md",
+        "bytes": 4553,
+        "sha256": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021"
+      },
+      {
+        "path": "compiled-children/coordination/receipts/E-HARNESS.json",
+        "bytes": 16513,
+        "sha256": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782"
+      }
+    ],
+    "generatedOverwriteBytesPreserved": [
+      {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/auto-generated-E-HARNESS.report.md",
+        "bytes": 5069,
+        "sha256": "e375b7b2caf6387507544714adabe919e751f3059c87d8e78bcba34813a42bb2"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/auto-generated-E-HARNESS.receipt.json",
+        "bytes": 18856,
+        "sha256": "bc8c28337e473f7483f381277713b338abffb4d516ec9bb773ebdb632b9c6718"
+      }
+    ],
+    "runnerUsesUniquePerAttemptCaptureDirectory": true,
+    "runnerRefusesExistingOutputStem": true,
+    "runnerWritesCanonicalReportOrReceipt": false
+  },
+  "sourceSha256": {
+    "compiled-children/conformance/check.mjs": "e34d01e98d2f3f1b16a84d5108de91ea2c60b5ee01414b5d5e80c8e627ee069e",
+    "compiled-children/conformance/run.mjs": "bf97c267ee8c3a5277e5542a367fa44f37c5ac88424414b1dd698e0eda93f4d3",
+    "compiled-children/conformance/swap-contract.test.mjs": "1dd0772388e37f220462e1d11e47251c9d497f3cbb9e360e22e67c79543f180f"
+  },
+  "evidencePins": [
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-HARNESS-LIVENESS.md",
+      "bytes": 7017,
+      "sha256": "c6dbd38fc9d71058095fa48913dd5e48fe4a854075f801d398b526a056f4813a"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-FIX-HARNESS-LIVENESS.json",
+      "bytes": 63945,
+      "sha256": "969c146350ab10995d90330bff37162c7285000b4fa0e346c5c1618411f43c79"
+    },
+    {
+      "path": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.run.json",
+      "bytes": 50559,
+      "sha256": "d69944a5d22e7a057ba24b5885c7e2f532bf518fc57a484e205b617a50073cb2"
+    },
+    {
+      "path": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.check.json",
+      "bytes": 2089,
+      "sha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff"
+    },
+    {
+      "path": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.json",
+      "bytes": 70126683,
+      "sha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913"
+    },
+    {
+      "path": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.seeded.json",
+      "bytes": 6843,
+      "sha256": "49740fcdf820652ed3250313a569c10ae9a78ca4c72417d88c8becfb402e3214"
+    },
+    {
+      "path": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.manifest.json",
+      "bytes": 42663,
+      "sha256": "fc45edf40abd6b17bbf9a76cf306b17988edf802530f49132cb2fd392f6d1a61"
+    }
+  ],
+  "reviewRawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/replay-old-witness.mjs",
+      "bytes": 3323,
+      "sha256": "0bee01a8bc61a8ac0212c7c6f97ca9d983e29c2bfafdb8925e70625998d8ac1c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/old-witness-replay.stdout.json",
+      "bytes": 1183,
+      "sha256": "d10791445a86421f6d5d97ce90bcbd43f2035bdb44d5379c8a1da41e6dff8a3d"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/review-audit.mjs",
+      "bytes": 10243,
+      "sha256": "05bdc29c7954ac0582e125d8ee2378fda0118a1a68e2c3074dfb5fb3094c6543"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/review-audit.stdout.json",
+      "bytes": 4809,
+      "sha256": "3ffab7c39b158a5f875dddfef5c27c152ea26393c9eb22823651f49568ebd3ec"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/targeted-tests.stdout.log",
+      "bytes": 4513,
+      "sha256": "a94e45dd7b34b58a8788cf150fbbe2a5b486dc108f21601b74505ca6c3cf7ffc"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/targeted-tests.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-HARNESS-LIVENESS-20261031-01/independent-replay-verifier.stdout.json",
+      "bytes": 3334,
+      "sha256": "e6579f999262fa8488853ac7de4c8800d95b504d8fe2e4af25e89facbe1edfa0"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-FIX-HARNESS-LIVENESS.md",
+    "bytes": 5048,
+    "sha256": "46009d66e1aca224f873af9f23e9250c44c6f4a92bada1e0e55bcc43d0f570c6"
+  },
+  "limits": [
+    "This targeted review does not claim root’s later full acceptance or CI result.",
+    "Attempt-12 capture is an adversarial test input; fresh replay evidence is replay-custody-safe.",
+    "Seeds 20261032 and 20261033 have native/direct runs only; mounted-browser evidence exists for seed 20261031 only."
+  ]
+}

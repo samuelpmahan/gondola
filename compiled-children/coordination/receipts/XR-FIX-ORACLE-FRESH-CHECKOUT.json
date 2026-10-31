@@ -1,0 +1,260 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-FIX-ORACLE-FRESH-CHECKOUT",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Accepted the fresh native Go oracle capture repair. The ignored evidence capture dependency is removed; direct fresh Go output passes the 9-test literal oracle in both absent-capture and runner-path runs, and the runner records, hashes, and archives the attempt-scoped native trace.",
+  "reviewed_job": {
+    "job_id": "E-FIX-ORACLE-FRESH-CHECKOUT",
+    "worker": "N5",
+    "outcome": "mixed_change"
+  },
+  "source_sha256": {
+    "compiled-children/oracle/oracle.test.mjs": "0811d45cdd9b1fe252a7961efdaccba7133d2e82d95222c1fff302a00f6c9208",
+    "compiled-children/run.mjs": "c86427aacdbfd9344861481664f88f4ce1f10ba6fba38c01a6642eaca3d7f229",
+    "compiled-children/oracle/oracle.mjs": "c5cebcbbca6dcfb4ebb5110722bfd3b48dd6b7ad7d9e9d380aa78812f6e70388",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774",
+    "compiled-children/oracle/scenario.json": "8860dbd7ef32c04506d0e8672061235debf6316b02a72b10a5314d59b33b405d",
+    "compiled-capabilities/archive-helper.mjs": "ad424b1fa1b92368f29fea12b8ff78d49d4ee2348b78962ec420e0585080682d",
+    "compiled-capabilities/archive-helper.test.mjs": "2dd1d91f8f9fd73054c5bb9bd46b2c4c0fb758f77f5f077090e6321777125cff"
+  },
+  "review_summary": {
+    "changedSourcePinsMatchReceipt": true,
+    "unchangedOraclePinsMatchReceipt": true,
+    "originalsManifestAndCopiesMatch": true,
+    "allAuthorRawlogPinsMatch": true,
+    "oldIgnoredCaptureDependencyVerifiedAndRemoved": true,
+    "freshAbsentCaptureTestPasses9of9": true,
+    "runnerCapturePathTestPasses9of9": true,
+    "freshCaptureMatchesAuthorBytesAnd42Event38UpdateShape": true,
+    "runnerAttemptReceiptAndArchiveBindingVerified": true,
+    "domainOracleExpectationsAndScenarioUnchanged": true,
+    "previouslyAcceptedArchiveHelperSourcesUnchanged": true,
+    "auxiliaryCountProbeFailureCorrectedAndSeparated": true,
+    "noFullRunnerRun": true
+  },
+  "fresh_trace": {
+    "bytes": 653879,
+    "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+    "schema": "gobi.compiled-children-native/v1",
+    "events": 42,
+    "update_steps": 38,
+    "capture_path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json"
+  },
+  "execution": {
+    "node": "v22.23.4",
+    "go": "go1.24.0 linux/amd64",
+    "fresh_absent_run": {
+      "command": "env -u GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE GOBI_GO_EXECUTABLE=/tmp/gondola-go/bin/go GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola-children-archive",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "exit_code": 0,
+      "ignoredEvidencePathAbsentBeforeAndAfter": true
+    },
+    "runner_path_simulation": {
+      "command": "env GOBI_GO_EXECUTABLE=/tmp/gondola-go/bin/go GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE=<primary-rawlogs>/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola-children-archive",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "syntax_checks": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/oracle/oracle.test.mjs",
+        "exit_code": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/run.mjs",
+        "exit_code": 0
+      }
+    ],
+    "not_run": [
+      "full delivery runner",
+      "full capability chain",
+      "npm install"
+    ]
+  },
+  "runner_binding": {
+    "sourceDirectoryPin": "compiled-children/oracle",
+    "attemptCapture": "attempt/oracle/native.json",
+    "runnerEnv": "GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE",
+    "captureHashRecorded": true,
+    "nativeCaptureListedInArchivedInputs": true,
+    "oracleDirectoryIncludedInArchive": true,
+    "fullArchiveCreatedInReview": false
+  },
+  "reviewed_evidence": [
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-ORACLE-FRESH-CHECKOUT.md",
+      "bytes": 3646,
+      "sha256": "be012821da993372c255be00c9e9af7800ed0e9c8cc60e8770eddaa67dc058a1"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-FIX-ORACLE-FRESH-CHECKOUT.json",
+      "bytes": 9566,
+      "sha256": "ecdc3ef27248e9fc1095bc998dea0caedf5392e02a847a34f8d57ff5ee6af457"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-ORACLE-FRESH-CHECKOUT/originals/manifest.json",
+      "bytes": 954,
+      "sha256": "58f7022fc8ee693ee107f90510ef0915894c62cbebc078da403b85522885e7b9"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-ORACLE-FRESH-CHECKOUT/originals/oracle.test.mjs",
+      "bytes": 4860,
+      "sha256": "18f778de875fa838b4e565224b08ac1e21473b4838e1b2ca437d36d0bae77f22"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-ORACLE-FRESH-CHECKOUT/originals/run.mjs",
+      "bytes": 60808,
+      "sha256": "22f4915c6aa0b300a23ed8a5ffe3a2d8a710c50d7f08c33e1d9e5d82c45e44ac"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-clean-absent-final.log",
+      "bytes": 2375,
+      "sha256": "7dd0983d73bdccdbea328a77108db1e86faab537d96188d890d29758ca5eda08"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-poisoned-ambient-final.log",
+      "bytes": 2374,
+      "sha256": "416ed1245865b9a614e9658412df7f9475069f21ac2bb73a56be7293a5b70c0c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path.log",
+      "bytes": 2374,
+      "sha256": "f9fa4ee67c38074491adade859c5f90157db06cea9382166ce46db1a65a8b92d"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json",
+      "bytes": 653879,
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-syntax-diffcheck-final.log",
+      "bytes": 452,
+      "sha256": "0ced93bde41250890ec7fd08d8fea04998f21da80fef6d3c451630d29d0c3777"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-path-probe-miss.log",
+      "bytes": 414,
+      "sha256": "be54434edcb7fc14671f4cb800b1f78764ca6f5dfc6ce63bbe84d72606e0ee41"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-final.log",
+      "bytes": 575,
+      "sha256": "1951a86ffea0bb4fbb8360dc268767e945d107e26c5a9026007b31d50bdc3457"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path-structure-check-initial-miss.log",
+      "bytes": 579,
+      "sha256": "78db7c0df5fb59209be49460e12e54e55a06638f678d094a55c5102a7b0338c1"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path-structure-check.log",
+      "bytes": 249,
+      "sha256": "3789f84cd05fd0c9310a4b90ab3b461a26ffdfd021c706168cdac58c4d84d952"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-path-probe-miss.log",
+      "bytes": 414,
+      "sha256": "be54434edcb7fc14671f4cb800b1f78764ca6f5dfc6ce63bbe84d72606e0ee41"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-final.log",
+      "bytes": 575,
+      "sha256": "1951a86ffea0bb4fbb8360dc268767e945d107e26c5a9026007b31d50bdc3457"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-review-audit.json",
+      "bytes": 8663,
+      "sha256": "22c3ed0198bff5e93228e7bce7c0f74831b8a965ee5c6471c36c3a37fb8a9dcc"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-clean-absent.log",
+      "bytes": 2203,
+      "sha256": "306eefcc3a53894f39d2af56842f97baa320d6916a0b441d4dcabaa462dab7c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-clean-absent.stderr.log",
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-clean-absent.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-path.log",
+      "bytes": 2201,
+      "sha256": "8b0fdad6a88003df68d62ced8244e99e7bff61f6c3a9a0bc20ee3f022226e7ed"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-path.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-path.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-oracle-test-check.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-oracle-test-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-check.log",
+      "bytes": 175,
+      "sha256": "84336e09f9c0a345a4a73eca39b2d51e444ce40180e89f516a0d99adc233b163"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-node-version.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-node-version.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-go-version.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-go-version.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json",
+      "bytes": 653879,
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-FIX-ORACLE-FRESH-CHECKOUT.md",
+    "bytes": 2757,
+    "sha256": "c43c628fff0f957b3c69fc247b02383369aee2af884cd5abc81c73bdd5f11085"
+  },
+  "limitations": [
+    "Focused source test and runner-path capture only; does not replace root full integration acceptance.",
+    "No Git operation or native state write was performed."
+  ]
+}

@@ -1,0 +1,20 @@
+E-GO verification commands (worktree root: /workspace/scratch/39a56936f173/gondola-next)
+
+Go tool: /tmp/gondola-go/bin/go version
+Observed: go version go1.24.0 linux/amd64
+
+Reducer/native tests:
+/tmp/gondola-go/bin/go test -count=1 -v ./fixtures/compiled/children ./cmd/compiled-children-native
+Exit: 0
+Raw stdout: evidence/rawlogs/go-test-verbose.stdout.log
+Raw stderr: evidence/rawlogs/go-test-verbose.stderr.log (empty)
+Result: 11 top-level test functions pass, including 2 correlation subtests (13 cases total).
+
+Native scenario trace:
+/tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script fixtures/compiled/children/scenario.json
+Exit: 0
+Raw stdout: evidence/rawlogs/native-trace.json
+Raw stderr: evidence/rawlogs/native-trace.stderr.log (empty)
+Result: 42 source events, 38 Go update/reply steps, tick-free event indexes 9, 10, 11, 12.
+
+Scenario is fixed and deterministic; no random seed is used by E-GO.

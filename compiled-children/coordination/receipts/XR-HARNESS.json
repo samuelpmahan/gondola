@@ -1,0 +1,228 @@
+{
+  "job_id": "XR-HARNESS",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "Attempt12 native/direct/React/DOM/swap captures and seeded replays match when independently replayed, but a wrong-active-renderer mutation in the accepted swap and post-rejection live callback still passes checkChildrenConformance. The required renderer identity is not bound by the current checker.",
+  "reviewed_scope": [
+    "compiled-children/conformance/browser-entry.mjs",
+    "compiled-children/conformance/browser.mjs",
+    "compiled-children/conformance/direct.mjs",
+    "compiled-children/conformance/check.mjs",
+    "compiled-children/conformance/run.mjs",
+    "compiled-children/conformance/seeded.mjs",
+    "compiled-children/coordination/reports/E-HARNESS.md",
+    "compiled-children/coordination/receipts/E-HARNESS.json",
+    "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2"
+  ],
+  "excluded_from_quality_decision": {
+    "reason": "These two conformance unit files are N5-owned; their presence in attempt12 input pins is provenance only.",
+    "files": [
+      "compiled-children/conformance/check.test.mjs",
+      "compiled-children/conformance/seeded.test.mjs"
+    ],
+    "captured_sha256": {
+      "compiled-children/conformance/check.test.mjs": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833",
+      "compiled-children/conformance/seeded.test.mjs": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559"
+    }
+  },
+  "findings": [
+    {
+      "id": "XR-HARNESS-1",
+      "severity": "must-fix",
+      "decision_effect": "amend",
+      "path": "compiled-children/conformance/check.mjs",
+      "lines": [362, 375, 483, 501],
+      "summary": "The browser checker does not bind the accepted renderer identity or the post-rejection live click callback to the candidate renderer. A cloned capture relabeled from React renderer id 2 to DOM renderer id 1 still returns matched.",
+      "evidence": {
+        "unmutatedCapture": {
+          "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/browser.json.gz",
+          "archive_sha256": "b578feb89f9c1b8c23cb25c946811d207391e535ddb0e9be00ef98826cb9979a",
+          "source_sha256": "31ef47512d037ab7e7c64a5c0789e5a7d69a067b1e9819a267e23b28fdfae26d",
+          "source_bytes": 70120368,
+          "actual_post_swap_backend": "react",
+          "actual_post_swap_renderer_id": 2
+        },
+        "mutatedWitness": {
+          "path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/wrong-active-renderer-browser.json.gz",
+          "archive_sha256": "dfd8a37b439369754fe3574ca1fc93b1ee7090fc74109275fed2656d8d5b8835",
+          "archive_bytes": 352321,
+          "uncompressed_sha256": "86731f80e91cead461973ec4521a54f002ed7c1783633bfc010a51f34fa41fbb",
+          "uncompressed_bytes": 19446557,
+          "checker_result": "matched",
+          "mutation_script": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/replay-review.mjs",
+          "mutation_script_sha256": "f901715022172fd7d9791b44f16b744df02bd57cf64d70f7c7282cad76619291"
+        },
+        "mutated_fields": [
+          "profiles.swap.swaps[eventIndex=10].after.renderer.backend and id",
+          "profiles.swap.events[eventIndex=13].operation.observed.backend and rendererId",
+          "profiles.swap.actions[eventIndex=13].observed.backend and rendererId",
+          "profiles.swap.observations.dispatch[eventIndex=13].backend and rendererId"
+        ]
+      },
+      "requested_check": "Assert the accepted active renderer is the candidate and that a real post-rejection click observation uses that renderer identity; retain the rejected-swap active identity assertion and add a negative capture mutation for incorrect backend/renderer id."
+    }
+  ],
+  "reviewed_source_sha256": {
+    "compiled-children/conformance/browser-entry.mjs": "c916521fc57fc5a55634443ad3c0177d2488724b2d35ba4959e0fa3a95ed0734",
+    "compiled-children/conformance/browser.mjs": "d36b6bae1dd606e4b5e4bf069d7ec7a9d8303833b8451c953d9eb6edd0d4693d",
+    "compiled-children/conformance/direct.mjs": "6e7afeb56a117c4f2f5aafee0f9df3766a6ce6edc01a24883fa79503a184c728",
+    "compiled-children/conformance/check.mjs": "518778418a7e9be880e4e48ee792dd784c7676ddadaf489a12485c2589d39f68",
+    "compiled-children/conformance/run.mjs": "588f0cb1d3a1e93cb13c39272d3c27a889b83237de454136a4d0548c83ecb8ac",
+    "compiled-children/conformance/seeded.mjs": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52"
+  },
+  "fixed_input_sha256": {
+    "fixtures/compiled/children/scenario.json": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774"
+  },
+  "compiled_build_output_sha256": {
+    "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/app-ir.json": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+    "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/encoder.mjs": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+    "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/gobi-compiled.mjs": "a20ff53f736993b5cc255fee1a5229a8282589e424dec2904e5bba06768ed885",
+    "compiled-children/compiler-evidence/build/dom/buildmanifest.json": "63e87624b7de3bd52c1852b7f2517d4dcb882b8c845cf1b46f13b0e90e6bef31",
+    "compiled-children/compiler-evidence/build/react/apps/children-cdeeb3bd6f70/app-ir.json": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+    "compiled-children/compiler-evidence/build/react/apps/children-cdeeb3bd6f70/encoder.mjs": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+    "compiled-children/compiler-evidence/build/react/apps/children-cdeeb3bd6f70/gobi-compiled.mjs": "5eeae82d216c2f93fac5887ee8f18c6519e0ee2f3b0b8f8b81ec2d96f29b1fa0",
+    "compiled-children/compiler-evidence/build/react/buildmanifest.json": "2266dbb1d21072e0d829fb6695615471b30ba37b75fb4e93aac5d9412b59797c"
+  },
+  "author_evidence_sha256": {
+    "compiled-children/coordination/reports/E-HARNESS.md": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021",
+    "compiled-children/coordination/receipts/E-HARNESS.json": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782",
+    "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/trace-index.json": "679af0e463b61f117deef3a3ef3473289abae8fd853144a81a7b452eda47acb6"
+  },
+  "verified_trace_archives": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/native.json.gz",
+      "archive_sha256": "999d18da2b9203ae7f72d8c50fe5de49fb1920c6872ee1567089f9d4811389e3",
+      "source_sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "source_bytes": 653879
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/direct-react.json.gz",
+      "archive_sha256": "9ed4af83c757198f1da67baa6b939113aa8662dd6215fe1433f827fde59b911c",
+      "source_sha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93",
+      "source_bytes": 3214325
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/direct-dom.json.gz",
+      "archive_sha256": "f3360a23d51ea233a3c315171b0696c3ca853cc99a3717f77d7a3a094c795e2c",
+      "source_sha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7",
+      "source_bytes": 3214323
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/browser.json.gz",
+      "archive_sha256": "b578feb89f9c1b8c23cb25c946811d207391e535ddb0e9be00ef98826cb9979a",
+      "source_sha256": "31ef47512d037ab7e7c64a5c0789e5a7d69a067b1e9819a267e23b28fdfae26d",
+      "source_bytes": 70120368
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/check.json.gz",
+      "archive_sha256": "324f127cb68430c66eca722cd3170a5375701adc093629630df47e6bfd80fed1",
+      "source_sha256": "a58786ad891ba0add4fe5774ba8a58ea6c83e106ec671093d3f9d795b5bb8216",
+      "source_bytes": 1373
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/seeded.json.gz",
+      "archive_sha256": "c60e211875a306774f84383e7cbcfc624e51029e60ea6653f7f1b09ccb7099cd",
+      "source_sha256": "df9f6d1790f969c237de663743cac9620b4ed6b591e35f9e5342f765a5b16d4a",
+      "source_bytes": 5452
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/unit-test-stdout.log.gz",
+      "archive_sha256": "65714af27e646dad54b4880ab623736bbaf6b71281b80d06b17fcee4902b07ef",
+      "source_sha256": "739c6a7d43386109cd9324ff4b30ce222e0b6433ce95e63be3165385be91a0ed",
+      "source_bytes": 2278
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/unit-test-stderr.log.gz",
+      "archive_sha256": "032af0a32aab8e5c8556cad68ccf4e2471c3aa97a41b251e75aac7a2b081914c",
+      "source_sha256": "d9c56a595b6760c52e3cee6d5a172455d1c3ff49ea79f2469bcc3fc01bf3f6f6",
+      "source_bytes": 175
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/run.json.gz",
+      "archive_sha256": "2851743764da36a86aefc3f05dd5529d6e1b479494137a8d1a46a92f650ae38a",
+      "source_sha256": "850096e3d6b544892d09cec9d7714f69958f023cdbc4787b1f85e3dc4802dc3c",
+      "source_bytes": 44509
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/manifest.json.gz",
+      "archive_sha256": "54e2ab6ae52b01f91c5c229f1fa8749477b4e75ecbb4b7e573b2eaa1cbe60fd0",
+      "source_sha256": "543fb1e5bf45016eb654cb80a84da224d7315c6e2b38b0a84521873ba8bee621",
+      "source_bytes": 38051
+    }
+  ],
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/replay-review.mjs",
+      "exit_code": 0,
+      "result": "All archived source/archive hashes verified; the fixed checker replay matched; all 83 source pins and 8 build-output pins matched before/after and current files; three seeded traces replayed, including the first mounted browser sample. The wrong-active-renderer mutation still returned matched.",
+      "rawlog": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/replay-review-final.log",
+      "rawlog_sha256": "2b8bb1de641da9defb8a75fd92ade45ed17ca439107eeca3a11a1d2302689cb3"
+    },
+    {
+      "command": "gzip -t each of the 10 attempt12 .gz artifacts and sha256sum each archive",
+      "exit_code": 0,
+      "result": "All gzip archives passed integrity checks; archive hashes match trace-index.json. Replay-review.mjs additionally verified each decompressed hash and byte count."
+    }
+  ],
+  "pin_review": {
+    "source_pin_count": 83,
+    "build_output_pin_count": 8,
+    "source_pins_stable": true,
+    "build_outputs_stable": true,
+    "current_files_match_pins": true,
+    "oracleCustodyPathsExcluded": true,
+    "exclusion_evidence": "run.mjs walkFiles skips directories named custody; attempt12 run inputPinScope states that oracle/custody repair artifacts are excluded.",
+    "attempt12_includes_n5_test_hashes_as_inputs": true,
+    "test_quality_decision_excludes_n5_files": true
+  },
+  "capture_review": {
+    "fixture_events": 42,
+    "native_updates": 38,
+    "literal_state_projections": 39,
+    "browser_profiles": ["react", "dom", "swap"],
+    "physicalClicksPerProfile": 27,
+    "mutationControlsDetected": 6,
+    "compatibleSwapAccepted": true,
+    "compatibleSwapPendingPreserved": true,
+    "incompatibleSwapRejected": true,
+    "incompatibleSwapPreservesReactRendererAndPending": true,
+    "disabledClickFenced": true,
+    "retiredCallbackRejected": true,
+    "cancelledOldReplyRejected": true,
+    "clearCancellationOrder": ["child:oak:g5:r2", "child:elm:g3:r2"],
+    "parentRemovalCancellationOrder": ["child:oak:g7:r1", "child:pine:g6:r1", "parent:g1:r2"],
+    "noWasmApiAttempts": 0,
+    "noWasmRequests": 0,
+    "seededRuns": [
+      {"seed": 20261031, "events": 60, "goUpdates": 59, "mountedBrowserProfile": true},
+      {"seed": 20261032, "events": 60, "goUpdates": 59, "mountedBrowserProfile": false},
+      {"seed": 20261033, "events": 60, "goUpdates": 59, "mountedBrowserProfile": false}
+    ]
+  },
+  "review_tooling_failures": {
+    "summary": "Three reviewer helper setup mismatches were corrected (archive extension, inputPinScope location, and noWasm field name); they are not implementation failures.",
+    "rawlog": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/review-tooling-failures.log",
+    "rawlog_sha256": "195e87c1ce8e3cce24dd5779b51033a596346b8f76b230e134150d82f922f6d8"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-HARNESS.md",
+    "bytes": 5144,
+    "sha256": "98a2a4d9507dbcfc08412bd31871ba4241ac82520d54514462f0e3624cbf671f"
+  },
+  "review_rawlogs": [
+    {"path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/replay-review.mjs", "bytes": 12355, "sha256": "f901715022172fd7d9791b44f16b744df02bd57cf64d70f7c7282cad76619291"},
+    {"path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/replay-review.log", "bytes": 722, "sha256": "d7b69a71c320e81f9bc62b6ee2187a0088543d689af1a05b742be537aa3074da"},
+    {"path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/replay-review-final.log", "bytes": 7726, "sha256": "2b8bb1de641da9defb8a75fd92ade45ed17ca439107eeca3a11a1d2302689cb3"},
+    {"path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/review-tooling-failures.log", "bytes": 1101, "sha256": "195e87c1ce8e3cce24dd5779b51033a596346b8f76b230e134150d82f922f6d8"},
+    {"path": "compiled-children/coordination/rawlogs/XR-HARNESS-20261031-01/wrong-active-renderer-browser.json.gz", "bytes": 352321, "sha256": "dfd8a37b439369754fe3574ca1fc93b1ee7090fc74109275fed2656d8d5b8835"}
+  ],
+  "limitations": [
+    "No full inherited capability suite or new browser run was performed; the final captured checker and seeded outputs were replayed directly.",
+    "No N4 source, Go/native implementation, literal oracle, N5 unit-test source, original E-HARNESS receipt/report, capture, Git state, or scheduler state was changed."
+  ],
+  "runtime": {
+    "node": "v22.23.4",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-next"
+  }
+}

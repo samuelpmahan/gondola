@@ -1,0 +1,1321 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-HARNESS-LIVENESS",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Repaired renderer lifecycle checks to bind accepted swap candidate identity and all live physical-click callback metadata; added no-WASM coverage validation and mutation controls. The final source-bound native/direct/browser replay matched with 12/12 captured-data mutations detected, and its compressed archives and immutable canonical packet were independently verified.",
+  "reviewed_job": {
+    "job_id": "XR-HARNESS",
+    "worker": "N6",
+    "decision": "amend"
+  },
+  "finding": "The checker accepted a mutated active renderer backend/ID and post-rejection physical callback on the retired renderer despite the actual browser capture using the retained React renderer.",
+  "repair": {
+    "owned_paths": [
+      "compiled-children/conformance/check.mjs",
+      "compiled-children/conformance/run.mjs",
+      "compiled-children/conformance/swap-contract.test.mjs"
+    ],
+    "rendererLifecycle": {
+      "acceptedCandidateMustMatchToAndCapturedIdentity": true,
+      "rejectedSwapMustRetainCurrentIdentity": true,
+      "clickMetadataCheckedAcrossEventSnapshotActionAndDispatch": true,
+      "pendingCheckedAtBeforeAndAfterBoundaries": true,
+      "usesJSApplicationReducer": false,
+      "captureSource": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/browser.json.gz",
+      "archiveSha256": "b578feb89f9c1b8c23cb25c946811d207391e535ddb0e9be00ef98826cb9979a",
+      "uncompressedSha256": "31ef47512d037ab7e7c64a5c0789e5a7d69a067b1e9819a267e23b28fdfae26d"
+    },
+    "noWasmCoverage": {
+      "status": "complete",
+      "entries": [
+        {
+          "name": "WebAssembly.compile",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.compileStreaming",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.instantiate",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.instantiateStreaming",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.validate",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Module",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Instance",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Memory",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Table",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Global",
+          "kind": "constructor",
+          "status": "installed"
+        }
+      ],
+      "failures": [],
+      "apiAttempts": 0,
+      "wasmRequests": 0
+    },
+    "mutationControls": [
+      "native-full-state-generation",
+      "native-ordered-go-step",
+      "direct-typed-state-request-token",
+      "browser-raw-physical-dom",
+      "browser-disabled-control",
+      "browser-child-first-cancellation-order",
+      "browser-accepted-swap-wrong-backend",
+      "browser-accepted-swap-wrong-renderer-id",
+      "browser-post-rejection-live-callback-wrong-backend",
+      "browser-post-rejection-live-callback-wrong-id",
+      "browser-post-rejection-action-metadata-mismatch",
+      "browser-no-wasm-guard-coverage-entry-removed"
+    ],
+    "preservedPriorCanonical": [
+      {
+        "source": "compiled-children/coordination/receipts/E-HARNESS.json",
+        "preserved": "compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/E-HARNESS.json",
+        "bytes": 16513,
+        "sha256": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782"
+      },
+      {
+        "source": "compiled-children/coordination/reports/E-HARNESS.md",
+        "preserved": "compiled-children/coordination/repairs/E-FIX-HARNESS-LIVENESS/originals/E-HARNESS.md",
+        "bytes": 4553,
+        "sha256": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021"
+      }
+    ]
+  },
+  "finalReplay": {
+    "status": "matched",
+    "command": [
+      "/tmp/gondola-node22/node_modules/node/bin/node",
+      "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/run.mjs",
+      "--native-go",
+      "/tmp/gondola-go/bin/go",
+      "--fixture",
+      "fixtures/compiled/children/scenario.json",
+      "--expectations",
+      "compiled-children/oracle/expectations.json",
+      "--react-manifest",
+      "compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json",
+      "--dom-manifest",
+      "compiled-children/compiler-evidence/build/dom/buildmanifest.json",
+      "--chromium",
+      "/tmp/chromium",
+      "--output",
+      "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe"
+    ],
+    "versions": {
+      "node": "v22.23.4",
+      "go": "go version go1.24.0 linux/amd64",
+      "chromium": "153.0.8010.0",
+      "playwright": "1.64.1",
+      "compilerGo": "go1.27.3 linux/amd64",
+      "compilerNode": "v22.23.4",
+      "compilerGoScript": "github.com/s4wave/goscript v0.6.2"
+    },
+    "counts": {
+      "events": 42,
+      "goUpdates": 38,
+      "stateCheckpoints": 39,
+      "physicalClicksPerProfile": 27,
+      "acceptedSwaps": 1,
+      "rejectedSwaps": 1,
+      "requests": 12,
+      "cancellations": 6,
+      "staleRepliesRejected": 1,
+      "mutationsDetected": 12
+    },
+    "seeds": [
+      {
+        "seed": 20261031,
+        "events": 60,
+        "goUpdates": 59,
+        "mountedBrowser": true,
+        "metadata": {
+          "seed": 20261031,
+          "eventCount": 60,
+          "keyOrder": [
+            "k5",
+            "k2",
+            "k3",
+            "k4",
+            "k1",
+            "k0"
+          ],
+          "physicalStartKey": "elm",
+          "counterOrder": [
+            "k2",
+            "k0",
+            "k4",
+            "k5",
+            "k3",
+            "k1"
+          ],
+          "pendingSwapPair": [
+            "k4",
+            "k5"
+          ],
+          "alternatingKey": "alt",
+          "reusedKey": "k5",
+          "oldToken": "child:k5:g4:r1",
+          "newToken": "child:k5:g10:r1",
+          "bounds": {
+            "maximumChildren": 6,
+            "events": 60
+          },
+          "coverage": [
+            "physical-keyed-child-counter-click",
+            "growth-beyond-initial-slice-capacity",
+            "empty-collection-clear",
+            "malformed-key-and-swap-no-ops",
+            "unknown-remove-request-counter-no-ops",
+            "duplicate-add-and-request-no-ops",
+            "alternating-add-remove-reuse",
+            "pending-reorder",
+            "stale-generation-reducer-completion",
+            "child-first-clear-cancellation",
+            "parent-remove-and-remount-generation"
+          ]
+        }
+      },
+      {
+        "seed": 20261032,
+        "events": 60,
+        "goUpdates": 59,
+        "mountedBrowser": false,
+        "metadata": {
+          "seed": 20261032,
+          "eventCount": 60,
+          "keyOrder": [
+            "k1",
+            "k4",
+            "k3",
+            "k5",
+            "k2",
+            "k0"
+          ],
+          "physicalStartKey": "elm",
+          "counterOrder": [
+            "k2",
+            "k4",
+            "k1",
+            "k0",
+            "k5",
+            "k3"
+          ],
+          "pendingSwapPair": [
+            "k0",
+            "k2"
+          ],
+          "alternatingKey": "alt",
+          "reusedKey": "k1",
+          "oldToken": "child:k1:g4:r1",
+          "newToken": "child:k1:g10:r1",
+          "bounds": {
+            "maximumChildren": 6,
+            "events": 60
+          },
+          "coverage": [
+            "physical-keyed-child-counter-click",
+            "growth-beyond-initial-slice-capacity",
+            "empty-collection-clear",
+            "malformed-key-and-swap-no-ops",
+            "unknown-remove-request-counter-no-ops",
+            "duplicate-add-and-request-no-ops",
+            "alternating-add-remove-reuse",
+            "pending-reorder",
+            "stale-generation-reducer-completion",
+            "child-first-clear-cancellation",
+            "parent-remove-and-remount-generation"
+          ]
+        }
+      },
+      {
+        "seed": 20261033,
+        "events": 60,
+        "goUpdates": 59,
+        "mountedBrowser": false,
+        "metadata": {
+          "seed": 20261033,
+          "eventCount": 60,
+          "keyOrder": [
+            "k5",
+            "k3",
+            "k1",
+            "k4",
+            "k2",
+            "k0"
+          ],
+          "physicalStartKey": "elm",
+          "counterOrder": [
+            "k3",
+            "k5",
+            "k2",
+            "k4",
+            "k0",
+            "k1"
+          ],
+          "pendingSwapPair": [
+            "k1",
+            "k3"
+          ],
+          "alternatingKey": "alt",
+          "reusedKey": "k5",
+          "oldToken": "child:k5:g4:r1",
+          "newToken": "child:k5:g10:r1",
+          "bounds": {
+            "maximumChildren": 6,
+            "events": 60
+          },
+          "coverage": [
+            "physical-keyed-child-counter-click",
+            "growth-beyond-initial-slice-capacity",
+            "empty-collection-clear",
+            "malformed-key-and-swap-no-ops",
+            "unknown-remove-request-counter-no-ops",
+            "duplicate-add-and-request-no-ops",
+            "alternating-add-remove-reuse",
+            "pending-reorder",
+            "stale-generation-reducer-completion",
+            "child-first-clear-cancellation",
+            "parent-remove-and-remount-generation"
+          ]
+        }
+      }
+    ],
+    "sourcePins": [
+      {
+        "path": "cmd/compiled-children-native/main.go",
+        "sha256": "2d87f25ff5bb7125cb8265ac310ffcd98cce9a81f001f5197b2ac2ba09c77ca9",
+        "bytes": 13242
+      },
+      {
+        "path": "cmd/compiled-children-native/main_test.go",
+        "sha256": "1d81ddb843c2aed17df35f89d89d80f06ea6d2070cb1165111059f1278748b19",
+        "bytes": 5492
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/app-ir.json",
+        "sha256": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+        "bytes": 17751
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/encoder.mjs",
+        "sha256": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+        "bytes": 16059
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/gobi-compiled.mjs",
+        "sha256": "a20ff53f736993b5cc255fee1a5229a8282589e424dec2904e5bba06768ed885",
+        "bytes": 528849
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/buildmanifest.json",
+        "sha256": "63e87624b7de3bd52c1852b7f2517d4dcb882b8c845cf1b46f13b0e90e6bef31",
+        "bytes": 4640
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/app-ir.json",
+        "sha256": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+        "bytes": 17751
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/encoder.mjs",
+        "sha256": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+        "bytes": 16059
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/gobi-compiled.mjs",
+        "sha256": "32d4592f0d1d93bafe482297dc64bc2becd9eb2f1f3c3ef4143dfbe3b14bf694",
+        "bytes": 528883
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json",
+        "sha256": "2266dbb1d21072e0d829fb6695615471b30ba37b75fb4e93aac5d9412b59797c",
+        "bytes": 4642
+      },
+      {
+        "path": "compiled-children/conformance/browser-entry.mjs",
+        "sha256": "c916521fc57fc5a55634443ad3c0177d2488724b2d35ba4959e0fa3a95ed0734",
+        "bytes": 28606
+      },
+      {
+        "path": "compiled-children/conformance/browser.mjs",
+        "sha256": "5f2a47999f0861e2ad3977066ed1903e265d48a4d169f07fab15bc6a45f22ab9",
+        "bytes": 8422
+      },
+      {
+        "path": "compiled-children/conformance/check.mjs",
+        "sha256": "e34d01e98d2f3f1b16a84d5108de91ea2c60b5ee01414b5d5e80c8e627ee069e",
+        "bytes": 53966
+      },
+      {
+        "path": "compiled-children/conformance/check.test.mjs",
+        "sha256": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833",
+        "bytes": 3159
+      },
+      {
+        "path": "compiled-children/conformance/direct.mjs",
+        "sha256": "6e7afeb56a117c4f2f5aafee0f9df3766a6ce6edc01a24883fa79503a184c728",
+        "bytes": 16338
+      },
+      {
+        "path": "compiled-children/conformance/run.mjs",
+        "sha256": "bf97c267ee8c3a5277e5542a367fa44f37c5ac88424414b1dd698e0eda93f4d3",
+        "bytes": 27042
+      },
+      {
+        "path": "compiled-children/conformance/seeded.mjs",
+        "sha256": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52",
+        "bytes": 6436
+      },
+      {
+        "path": "compiled-children/conformance/seeded.test.mjs",
+        "sha256": "404a94cb93f4c0f1646062b1ddcb283084b7f6e00a776f687ec513659542ec83",
+        "bytes": 9456
+      },
+      {
+        "path": "compiled-children/conformance/swap-contract.test.mjs",
+        "sha256": "1dd0772388e37f220462e1d11e47251c9d497f3cbb9e360e22e67c79543f180f",
+        "bytes": 5073
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/browser.json.gz",
+        "sha256": "b578feb89f9c1b8c23cb25c946811d207391e535ddb0e9be00ef98826cb9979a",
+        "bytes": 2969491
+      },
+      {
+        "path": "compiled-children/oracle/audit-native-protocol.mjs",
+        "sha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+        "bytes": 7470
+      },
+      {
+        "path": "compiled-children/oracle/expectations.json",
+        "sha256": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774",
+        "bytes": 515314
+      },
+      {
+        "path": "compiled-children/oracle/oracle.mjs",
+        "sha256": "c5cebcbbca6dcfb4ebb5110722bfd3b48dd6b7ad7d9e9d380aa78812f6e70388",
+        "bytes": 22093
+      },
+      {
+        "path": "compiled-children/oracle/oracle.test.mjs",
+        "sha256": "18f778de875fa838b4e565224b08ac1e21473b4838e1b2ca437d36d0bae77f22",
+        "bytes": 4860
+      },
+      {
+        "path": "compiled-children/oracle/scenario.json",
+        "sha256": "8860dbd7ef32c04506d0e8672061235debf6316b02a72b10a5314d59b33b405d",
+        "bytes": 6460
+      },
+      {
+        "path": "compiled-children/runtime/runtime.mjs",
+        "sha256": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+        "bytes": 12303
+      },
+      {
+        "path": "compiled-children/runtime/runtime.test.mjs",
+        "sha256": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47",
+        "bytes": 11265
+      },
+      {
+        "path": "compiled-frontend/conformance/browser-options.test.mjs",
+        "sha256": "4e93d30541fc4327ec41ff39a7d927c8ba7081203865e5616a6dcf5fb3d2b48a",
+        "bytes": 632
+      },
+      {
+        "path": "compiled-frontend/conformance/browser.mjs",
+        "sha256": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea",
+        "bytes": 36591
+      },
+      {
+        "path": "compiled-frontend/conformance/check.mjs",
+        "sha256": "762e694a9e879e52c6f3487cb217268c5621f44ca7aa2f9ea19468460b2875db",
+        "bytes": 19773
+      },
+      {
+        "path": "compiled-frontend/conformance/check.test.mjs",
+        "sha256": "e8c5d886ecc67efe0152bfed27611aa9137b6f6ed8b809e418d8fac407c07279",
+        "bytes": 10482
+      },
+      {
+        "path": "compiled-frontend/conformance/compare.mjs",
+        "sha256": "29426a90c823c55a07c5302255f7f0567823459eb9a54833134e02f6ff8d12cc",
+        "bytes": 5383
+      },
+      {
+        "path": "compiled-frontend/conformance/compare.test.mjs",
+        "sha256": "1d5f0ba40decef4aa14691aa0f7ebca68cba3a9f9a05602b8f0d9f28d9efbc54",
+        "bytes": 2511
+      },
+      {
+        "path": "compiled-frontend/conformance/direct-js.mjs",
+        "sha256": "94e0da9f2d177d1ab6840bddfed0774358db36a3abe368b79b044d89167308c0",
+        "bytes": 12950
+      },
+      {
+        "path": "compiled-frontend/conformance/direct-js.test.mjs",
+        "sha256": "41b125356e18d5d64d21f34f0cb938fc79ac78c2702cb097d53167f3d7498438",
+        "bytes": 2682
+      },
+      {
+        "path": "compiled-frontend/conformance/dom-oracle.mjs",
+        "sha256": "e3f50a6d450dacce6b12fdeec2ac1fdcacfd5a1520c67f6dbc8b439efbaa46e8",
+        "bytes": 5316
+      },
+      {
+        "path": "compiled-frontend/conformance/dom-oracle.test.mjs",
+        "sha256": "fa85f22c069149ca4b96fdb8e8579f690d74a3a1f80e187dbb451437407f7f95",
+        "bytes": 2762
+      },
+      {
+        "path": "compiled-frontend/conformance/fixture-expectations.mjs",
+        "sha256": "e4dc571f9b18cd490493b26f6f45d217b1d4c520af851d474f60ccd4570408ff",
+        "bytes": 6635
+      },
+      {
+        "path": "compiled-frontend/conformance/fixture-expectations.test.mjs",
+        "sha256": "3407209fd312b24cf50454b5bfe642b0d6019922fe7a7766066198761b025ff2",
+        "bytes": 3180
+      },
+      {
+        "path": "compiled-frontend/conformance/fixtures/list-growth.json",
+        "sha256": "1159fea3b6937b325d66f6fbc201f31b3e6edd22bb1426723bd92e6d2d76a0a0",
+        "bytes": 5635
+      },
+      {
+        "path": "compiled-frontend/conformance/list-growth.test.mjs",
+        "sha256": "155066ac9237e64c442073a9ca984be1e55666ec64ea51f76b2ec931417163f9",
+        "bytes": 4785
+      },
+      {
+        "path": "compiled-frontend/conformance/no-wasm.mjs",
+        "sha256": "d4afe368a26c295c8bbdc8863a5109c7e3783e08d5e65ce08173387939c7cfa1",
+        "bytes": 5498
+      },
+      {
+        "path": "compiled-frontend/conformance/no-wasm.test.mjs",
+        "sha256": "529149d9856254bacb049032716e9c978d18dd62de4dec77005495790f49ad5e",
+        "bytes": 6941
+      },
+      {
+        "path": "compiled-frontend/conformance/observed-action.mjs",
+        "sha256": "6f4a970d2828d7446da7cee17ec984defd2a73ff65741b95ffe457f90713e088",
+        "bytes": 1336
+      },
+      {
+        "path": "compiled-frontend/conformance/observed-action.test.mjs",
+        "sha256": "d58871b2fcc198baab7c861ce1a2310f8df871fd88482b0138aa780d96cefd4c",
+        "bytes": 1227
+      },
+      {
+        "path": "compiled-frontend/conformance/provenance-order.test.mjs",
+        "sha256": "79ed3052918db6f5a6fd6fa8189eda93ddcc47eaa6bd4c61687fa33be3b0e9cd",
+        "bytes": 1770
+      },
+      {
+        "path": "compiled-frontend/conformance/provenance.mjs",
+        "sha256": "fbc3045cf31f02cedf7abf1341bcfe0b6f951a57dfa3d4f49d8397d25421127e",
+        "bytes": 3996
+      },
+      {
+        "path": "compiled-frontend/conformance/provenance.test.mjs",
+        "sha256": "a4d9e05bf6dbf0a9f027cb86309cc760de746efcba7c6ca57ad21d067087a5e0",
+        "bytes": 2441
+      },
+      {
+        "path": "compiled-frontend/conformance/trace.mjs",
+        "sha256": "d4764cef001b8ed6236aa0ca3a5128a4c14f154d4154a1885b2e733aa7f710e3",
+        "bytes": 20768
+      },
+      {
+        "path": "compiled-frontend/conformance/trace.test.mjs",
+        "sha256": "733914a9c675809b47ae2f3361700037e44791e20ef24befa016e8282bc1706a",
+        "bytes": 9843
+      },
+      {
+        "path": "compiled-frontend/frontend/dom/renderer.mjs",
+        "sha256": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54",
+        "bytes": 16327
+      },
+      {
+        "path": "compiled-frontend/frontend/dom/renderer.test.mjs",
+        "sha256": "df7debccbb92954722b953f743e126e757ebe14b3a4e4eefa3014c59a098791e",
+        "bytes": 10877
+      },
+      {
+        "path": "compiled-frontend/frontend/react/bindings.mjs",
+        "sha256": "29711c7dea81be8e71549984246c7efdb97e8163096f9cf49d6e04ab1917e02b",
+        "bytes": 8970
+      },
+      {
+        "path": "compiled-frontend/frontend/react/bindings.test.mjs",
+        "sha256": "c116688c8d6a39df0f87469718acf46d6115e78c684e8e7fa7e027cf8da530d5",
+        "bytes": 4003
+      },
+      {
+        "path": "compiled-frontend/frontend/react/react-map.gen.mjs",
+        "sha256": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54",
+        "bytes": 3320
+      },
+      {
+        "path": "compiled-frontend/frontend/react/renderer.browser.test.mjs",
+        "sha256": "75f9b3447ee804b92bbd47b324e210bc6a90df28525d0edfb2b7bd1d5461190e",
+        "bytes": 8380
+      },
+      {
+        "path": "compiled-frontend/frontend/react/renderer.mjs",
+        "sha256": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4",
+        "bytes": 14863
+      },
+      {
+        "path": "compiled-frontend/frontend/react/renderer.test.mjs",
+        "sha256": "0d2c1483c19ff95cc320dab64aeb2f4ec795e0b14e4128b45fe9aa0dafc2e99f",
+        "bytes": 17229
+      },
+      {
+        "path": "compiled-frontend/frontend/react/review-evidence/r2-proxy-slice-after.raw.json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "compiled-frontend/frontend/react/review-evidence/r2-proxy-slice-before.raw.json",
+        "sha256": "11a49f853eb8befe94fef278d487125cd20930b9e41c4c0934394443e7f00878",
+        "bytes": 17
+      },
+      {
+        "path": "compiled-frontend/frontend/runtime/r2_completion_probe.json",
+        "sha256": "e1a1e3e9ff64f02221b4d476f467560c8d0f3d7727b1f2f8d107c6a4599bf92f",
+        "bytes": 1000
+      },
+      {
+        "path": "compiled-frontend/frontend/runtime/r2_completion_probe.mjs",
+        "sha256": "e824a273767a7e73d57fab0c57ae84559b1850ca1ece181b57adc6251315c695",
+        "bytes": 7132
+      },
+      {
+        "path": "compiled-frontend/frontend/runtime/runtime.mjs",
+        "sha256": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+        "bytes": 62312
+      },
+      {
+        "path": "compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "sha256": "f7ff36753e93f3c8e84db73dbbef8289605eaad53b8cdf2282357cdffd510064",
+        "bytes": 61150
+      },
+      {
+        "path": "compilercontract/contract.go",
+        "sha256": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188",
+        "bytes": 7144
+      },
+      {
+        "path": "compilercontract/contract_test.go",
+        "sha256": "124b45e184e6ed0e5ed2f92b7b7963eea4ff796f794871924dc7fb4a7c4749e4",
+        "bytes": 14268
+      },
+      {
+        "path": "compilercontract/js_encoder.go",
+        "sha256": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+        "bytes": 12467
+      },
+      {
+        "path": "compilercontract/js_encoder_test.go",
+        "sha256": "d6dcbda61dc4dcb425164fc45d396f799a0574981103ad4866d268fb3fb9aa9f",
+        "bytes": 7450
+      },
+      {
+        "path": "compilercontract/json.go",
+        "sha256": "1a6ddd715af3f8cd3659bc45496e905a62d4b94b0339f7c1bfdf5505024c053e",
+        "bytes": 4989
+      },
+      {
+        "path": "compilercontract/trace.go",
+        "sha256": "de5aa3f70314fe3cc1e5661ce682c953de6ee12328cba3dd609a891657c5e627",
+        "bytes": 9152
+      },
+      {
+        "path": "compilercontract/validation.go",
+        "sha256": "43b7ca7356782caa23ed8826b8778e5ce91eabaab50dcd06580a10d70deadc8e",
+        "bytes": 20785
+      },
+      {
+        "path": "compilercontract/value.go",
+        "sha256": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f",
+        "bytes": 13601
+      },
+      {
+        "path": "compilercontract/view.go",
+        "sha256": "cd57673458b025b860f39dbf0c4c23b7958db7c68d7380011e1aaed9bd6260c7",
+        "bytes": 934
+      },
+      {
+        "path": "counter/counter.go",
+        "sha256": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+        "bytes": 827
+      },
+      {
+        "path": "fixtures/compiled/children/app.go",
+        "sha256": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+        "bytes": 8346
+      },
+      {
+        "path": "fixtures/compiled/children/app_test.go",
+        "sha256": "0def0cc80e63017e4712e0fe5f8b15a13531798e31a595a50c15e892cb65a628",
+        "bytes": 9731
+      },
+      {
+        "path": "fixtures/compiled/children/scenario.json",
+        "sha256": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407",
+        "bytes": 4632
+      },
+      {
+        "path": "fixtures/compiled/children/view.go",
+        "sha256": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185",
+        "bytes": 2934
+      },
+      {
+        "path": "gobi/build.go",
+        "sha256": "ddf183ec2eb7769441d0a12494bbf267e67bceeb9ae9022ec9e2d60923ad0b95",
+        "bytes": 3228
+      },
+      {
+        "path": "gobi/compare_interaction.go",
+        "sha256": "ee9c32eb30c8edd24a13acf2b4a4aac7d8c796ec8bc07637d7966f2ae20a65f7",
+        "bytes": 2949
+      },
+      {
+        "path": "gobi/compare_interaction_test.go",
+        "sha256": "f4efad610d072c2b50815eacb4e40ad83823abbb2b1420372dbfa8815199706b",
+        "bytes": 4170
+      },
+      {
+        "path": "gobi/html.go",
+        "sha256": "0f9e67d623b4ea464fd1fd6e8bd71e658c22e84f4c7fefbb0deaa79ee00cbdf0",
+        "bytes": 12480
+      },
+      {
+        "path": "gobi/names.go",
+        "sha256": "50fad5eba08e27090331bb21e079f2e11ab36776c9d34162f2a32b2b20e508a6",
+        "bytes": 4697
+      },
+      {
+        "path": "gobi/node.go",
+        "sha256": "e51a1970f0a8e72ffd3d5aaf06f8fcce2137fd87113bb7412f692671743bcc93",
+        "bytes": 3071
+      },
+      {
+        "path": "gobi/rules_test.go",
+        "sha256": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+        "bytes": 13244
+      }
+    ],
+    "buildOutputPins": [
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/app-ir.json",
+        "sha256": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+        "bytes": 17751
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/encoder.mjs",
+        "sha256": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+        "bytes": 16059
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/gobi-compiled.mjs",
+        "sha256": "a20ff53f736993b5cc255fee1a5229a8282589e424dec2904e5bba06768ed885",
+        "bytes": 528849
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/dom/buildmanifest.json",
+        "sha256": "63e87624b7de3bd52c1852b7f2517d4dcb882b8c845cf1b46f13b0e90e6bef31",
+        "bytes": 4640
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/app-ir.json",
+        "sha256": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+        "bytes": 17751
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/encoder.mjs",
+        "sha256": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+        "bytes": 16059
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/gobi-compiled.mjs",
+        "sha256": "32d4592f0d1d93bafe482297dc64bc2becd9eb2f1f3c3ef4143dfbe3b14bf694",
+        "bytes": 528883
+      },
+      {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json",
+        "sha256": "2266dbb1d21072e0d829fb6695615471b30ba37b75fb4e93aac5d9412b59797c",
+        "bytes": 4642
+      }
+    ],
+    "evidencePins": [
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.native.json",
+        "bytes": 653879,
+        "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.react.json",
+        "bytes": 3214325,
+        "sha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.dom.json",
+        "bytes": 3214323,
+        "sha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.json",
+        "bytes": 70126683,
+        "sha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.check.json",
+        "bytes": 2089,
+        "sha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.seeded.json",
+        "bytes": 6843,
+        "sha256": "49740fcdf820652ed3250313a569c10ae9a78ca4c72417d88c8becfb402e3214"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stdout.log",
+        "bytes": 4514,
+        "sha256": "49197ef4e8acba3f00635a0fc31e170b80063c67e156be6f1751750fb49a542a"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stderr.log",
+        "bytes": 175,
+        "sha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621"
+      },
+      {
+        "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.capture.json",
+        "bytes": 70126683,
+        "sha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913"
+      }
+    ],
+    "traceArtifacts": [
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.native.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/native.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+        "sourceBytes": 653879,
+        "archiveSha256": "999d18da2b9203ae7f72d8c50fe5de49fb1920c6872ee1567089f9d4811389e3",
+        "archiveBytes": 13388
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.react.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/direct-react.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93",
+        "sourceBytes": 3214325,
+        "archiveSha256": "9ed4af83c757198f1da67baa6b939113aa8662dd6215fe1433f827fde59b911c",
+        "archiveBytes": 126542
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.dom.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/direct-dom.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7",
+        "sourceBytes": 3214323,
+        "archiveSha256": "f3360a23d51ea233a3c315171b0696c3ca853cc99a3717f77d7a3a094c795e2c",
+        "archiveBytes": 126541
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/browser.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913",
+        "sourceBytes": 70126683,
+        "archiveSha256": "dee654920a78d4f751f0153f1d9719e55e9aeb7af04132700794bf3e1345924f",
+        "archiveBytes": 2970330
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.check.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/check.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff",
+        "sourceBytes": 2089,
+        "archiveSha256": "8d7a1e494db3c3f760abe7619492fa097f073df0609913179e58a73d590ae910",
+        "archiveBytes": 685
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.seeded.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/seeded.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "49740fcdf820652ed3250313a569c10ae9a78ca4c72417d88c8becfb402e3214",
+        "sourceBytes": 6843,
+        "archiveSha256": "ecd5ddf81617b4bae78b7512fdcd05c4236ba04c7e874cf8473331153ead254f",
+        "archiveBytes": 921
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stdout.log",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/unit-test-stdout.log.gz",
+        "compression": "gzip",
+        "sourceSha256": "49197ef4e8acba3f00635a0fc31e170b80063c67e156be6f1751750fb49a542a",
+        "sourceBytes": 4514,
+        "archiveSha256": "dc560aff202841657b8e9b085c86592de98e871f5d5b549122667f8e1cd6080a",
+        "archiveBytes": 1078
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stderr.log",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/unit-test-stderr.log.gz",
+        "compression": "gzip",
+        "sourceSha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621",
+        "sourceBytes": 175,
+        "archiveSha256": "9ae9ecd94fbf5cd97ed0d3fdf69fd1e8d9fd154dab12d35000e520cee011d8a5",
+        "archiveBytes": 161
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.run.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/run.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "d69944a5d22e7a057ba24b5885c7e2f532bf518fc57a484e205b617a50073cb2",
+        "sourceBytes": 50559,
+        "archiveSha256": "549357447bf1f87d820d8ccae57a93b6310fea83934f5d8b8a9786cf7f1afdb5",
+        "archiveBytes": 7453
+      },
+      {
+        "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.manifest.json",
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/manifest.json.gz",
+        "compression": "gzip",
+        "sourceSha256": "fc45edf40abd6b17bbf9a76cf306b17988edf802530f49132cb2fd392f6d1a61",
+        "sourceBytes": 42663,
+        "archiveSha256": "5d614846ff055d6d453b95bd150aaafdec4d799170d7e4a99124e6b1a95527df",
+        "archiveBytes": 5896
+      }
+    ],
+    "rawTrace": {
+      "directory": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2",
+      "traceIndex": {
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/trace-index.json",
+        "sha256": "280981c72aaa46e485b456f6fdb4db13d1c755f8eaa4d97e8ac9f53c3c03417d"
+      },
+      "attemptSummary": {
+        "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/attempt-summary.json",
+        "sha256": "b1258915d5dd5b3a68e4549c2e16e848ebfb4df30aa97d5dfc5669e770de1db9"
+      },
+      "independentlyVerifiedArchives": 10
+    }
+  },
+  "canonicalCustody": {
+    "incident": "The first fresh N6 conformance replay auto-wrote N4-labeled canonical E-HARNESS files through the existing runner side effect.",
+    "attribution": "This is a writer-side labeling incident, not a native scheduler dispatch. No N4 task dispatch was initiated by this replay.",
+    "generatedN6RunBytesPreserved": {
+      "report": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/auto-generated-E-HARNESS.report.md",
+        "bytes": 5069,
+        "sha256": "e375b7b2caf6387507544714adabe919e751f3059c87d8e78bcba34813a42bb2"
+      },
+      "receipt": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/auto-generated-E-HARNESS.receipt.json",
+        "bytes": 18856,
+        "sha256": "bc8c28337e473f7483f381277713b338abffb4d516ec9bb773ebdb632b9c6718"
+      }
+    },
+    "originalAuthorPacketRestored": {
+      "report": {
+        "path": "compiled-children/coordination/reports/E-HARNESS.md",
+        "bytes": 4553,
+        "sha256": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021"
+      },
+      "receipt": {
+        "path": "compiled-children/coordination/receipts/E-HARNESS.json",
+        "bytes": 16513,
+        "sha256": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782"
+      }
+    },
+    "finalRunnerPolicy": "writes unique per-attempt run/manifest/trace artifacts; never overwrites canonical E-HARNESS report or receipt"
+  },
+  "readOnlyValidation": {
+    "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/receipt-validation.py",
+    "coordinationStateSha256": "aba2eb812751d213f319147072bf2cb88d9faf54bb3fe7c3e70d8de428b01ff7",
+    "expectedStdoutPath": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/receipt-validation.stdout.log",
+    "stderrPath": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/receipt-validation.stderr.log"
+  },
+  "sourceSha256": {
+    "cmd/compiled-children-native/main.go": "2d87f25ff5bb7125cb8265ac310ffcd98cce9a81f001f5197b2ac2ba09c77ca9",
+    "cmd/compiled-children-native/main_test.go": "1d81ddb843c2aed17df35f89d89d80f06ea6d2070cb1165111059f1278748b19",
+    "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/app-ir.json": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+    "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/encoder.mjs": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+    "compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/gobi-compiled.mjs": "a20ff53f736993b5cc255fee1a5229a8282589e424dec2904e5bba06768ed885",
+    "compiled-children/compiler-evidence/build/dom/buildmanifest.json": "63e87624b7de3bd52c1852b7f2517d4dcb882b8c845cf1b46f13b0e90e6bef31",
+    "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/app-ir.json": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f",
+    "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/encoder.mjs": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7",
+    "compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/gobi-compiled.mjs": "32d4592f0d1d93bafe482297dc64bc2becd9eb2f1f3c3ef4143dfbe3b14bf694",
+    "compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json": "2266dbb1d21072e0d829fb6695615471b30ba37b75fb4e93aac5d9412b59797c",
+    "compiled-children/conformance/browser-entry.mjs": "c916521fc57fc5a55634443ad3c0177d2488724b2d35ba4959e0fa3a95ed0734",
+    "compiled-children/conformance/browser.mjs": "5f2a47999f0861e2ad3977066ed1903e265d48a4d169f07fab15bc6a45f22ab9",
+    "compiled-children/conformance/check.mjs": "e34d01e98d2f3f1b16a84d5108de91ea2c60b5ee01414b5d5e80c8e627ee069e",
+    "compiled-children/conformance/check.test.mjs": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833",
+    "compiled-children/conformance/direct.mjs": "6e7afeb56a117c4f2f5aafee0f9df3766a6ce6edc01a24883fa79503a184c728",
+    "compiled-children/conformance/run.mjs": "bf97c267ee8c3a5277e5542a367fa44f37c5ac88424414b1dd698e0eda93f4d3",
+    "compiled-children/conformance/seeded.mjs": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52",
+    "compiled-children/conformance/seeded.test.mjs": "404a94cb93f4c0f1646062b1ddcb283084b7f6e00a776f687ec513659542ec83",
+    "compiled-children/conformance/swap-contract.test.mjs": "1dd0772388e37f220462e1d11e47251c9d497f3cbb9e360e22e67c79543f180f",
+    "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/browser.json.gz": "b578feb89f9c1b8c23cb25c946811d207391e535ddb0e9be00ef98826cb9979a",
+    "compiled-children/oracle/audit-native-protocol.mjs": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774",
+    "compiled-children/oracle/oracle.mjs": "c5cebcbbca6dcfb4ebb5110722bfd3b48dd6b7ad7d9e9d380aa78812f6e70388",
+    "compiled-children/oracle/oracle.test.mjs": "18f778de875fa838b4e565224b08ac1e21473b4838e1b2ca437d36d0bae77f22",
+    "compiled-children/oracle/scenario.json": "8860dbd7ef32c04506d0e8672061235debf6316b02a72b10a5314d59b33b405d",
+    "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+    "compiled-children/runtime/runtime.test.mjs": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47",
+    "compiled-frontend/conformance/browser-options.test.mjs": "4e93d30541fc4327ec41ff39a7d927c8ba7081203865e5616a6dcf5fb3d2b48a",
+    "compiled-frontend/conformance/browser.mjs": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea",
+    "compiled-frontend/conformance/check.mjs": "762e694a9e879e52c6f3487cb217268c5621f44ca7aa2f9ea19468460b2875db",
+    "compiled-frontend/conformance/check.test.mjs": "e8c5d886ecc67efe0152bfed27611aa9137b6f6ed8b809e418d8fac407c07279",
+    "compiled-frontend/conformance/compare.mjs": "29426a90c823c55a07c5302255f7f0567823459eb9a54833134e02f6ff8d12cc",
+    "compiled-frontend/conformance/compare.test.mjs": "1d5f0ba40decef4aa14691aa0f7ebca68cba3a9f9a05602b8f0d9f28d9efbc54",
+    "compiled-frontend/conformance/direct-js.mjs": "94e0da9f2d177d1ab6840bddfed0774358db36a3abe368b79b044d89167308c0",
+    "compiled-frontend/conformance/direct-js.test.mjs": "41b125356e18d5d64d21f34f0cb938fc79ac78c2702cb097d53167f3d7498438",
+    "compiled-frontend/conformance/dom-oracle.mjs": "e3f50a6d450dacce6b12fdeec2ac1fdcacfd5a1520c67f6dbc8b439efbaa46e8",
+    "compiled-frontend/conformance/dom-oracle.test.mjs": "fa85f22c069149ca4b96fdb8e8579f690d74a3a1f80e187dbb451437407f7f95",
+    "compiled-frontend/conformance/fixture-expectations.mjs": "e4dc571f9b18cd490493b26f6f45d217b1d4c520af851d474f60ccd4570408ff",
+    "compiled-frontend/conformance/fixture-expectations.test.mjs": "3407209fd312b24cf50454b5bfe642b0d6019922fe7a7766066198761b025ff2",
+    "compiled-frontend/conformance/fixtures/list-growth.json": "1159fea3b6937b325d66f6fbc201f31b3e6edd22bb1426723bd92e6d2d76a0a0",
+    "compiled-frontend/conformance/list-growth.test.mjs": "155066ac9237e64c442073a9ca984be1e55666ec64ea51f76b2ec931417163f9",
+    "compiled-frontend/conformance/no-wasm.mjs": "d4afe368a26c295c8bbdc8863a5109c7e3783e08d5e65ce08173387939c7cfa1",
+    "compiled-frontend/conformance/no-wasm.test.mjs": "529149d9856254bacb049032716e9c978d18dd62de4dec77005495790f49ad5e",
+    "compiled-frontend/conformance/observed-action.mjs": "6f4a970d2828d7446da7cee17ec984defd2a73ff65741b95ffe457f90713e088",
+    "compiled-frontend/conformance/observed-action.test.mjs": "d58871b2fcc198baab7c861ce1a2310f8df871fd88482b0138aa780d96cefd4c",
+    "compiled-frontend/conformance/provenance-order.test.mjs": "79ed3052918db6f5a6fd6fa8189eda93ddcc47eaa6bd4c61687fa33be3b0e9cd",
+    "compiled-frontend/conformance/provenance.mjs": "fbc3045cf31f02cedf7abf1341bcfe0b6f951a57dfa3d4f49d8397d25421127e",
+    "compiled-frontend/conformance/provenance.test.mjs": "a4d9e05bf6dbf0a9f027cb86309cc760de746efcba7c6ca57ad21d067087a5e0",
+    "compiled-frontend/conformance/trace.mjs": "d4764cef001b8ed6236aa0ca3a5128a4c14f154d4154a1885b2e733aa7f710e3",
+    "compiled-frontend/conformance/trace.test.mjs": "733914a9c675809b47ae2f3361700037e44791e20ef24befa016e8282bc1706a",
+    "compiled-frontend/frontend/dom/renderer.mjs": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54",
+    "compiled-frontend/frontend/dom/renderer.test.mjs": "df7debccbb92954722b953f743e126e757ebe14b3a4e4eefa3014c59a098791e",
+    "compiled-frontend/frontend/react/bindings.mjs": "29711c7dea81be8e71549984246c7efdb97e8163096f9cf49d6e04ab1917e02b",
+    "compiled-frontend/frontend/react/bindings.test.mjs": "c116688c8d6a39df0f87469718acf46d6115e78c684e8e7fa7e027cf8da530d5",
+    "compiled-frontend/frontend/react/react-map.gen.mjs": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54",
+    "compiled-frontend/frontend/react/renderer.browser.test.mjs": "75f9b3447ee804b92bbd47b324e210bc6a90df28525d0edfb2b7bd1d5461190e",
+    "compiled-frontend/frontend/react/renderer.mjs": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4",
+    "compiled-frontend/frontend/react/renderer.test.mjs": "0d2c1483c19ff95cc320dab64aeb2f4ec795e0b14e4128b45fe9aa0dafc2e99f",
+    "compiled-frontend/frontend/react/review-evidence/r2-proxy-slice-after.raw.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-frontend/frontend/react/review-evidence/r2-proxy-slice-before.raw.json": "11a49f853eb8befe94fef278d487125cd20930b9e41c4c0934394443e7f00878",
+    "compiled-frontend/frontend/runtime/r2_completion_probe.json": "e1a1e3e9ff64f02221b4d476f467560c8d0f3d7727b1f2f8d107c6a4599bf92f",
+    "compiled-frontend/frontend/runtime/r2_completion_probe.mjs": "e824a273767a7e73d57fab0c57ae84559b1850ca1ece181b57adc6251315c695",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "f7ff36753e93f3c8e84db73dbbef8289605eaad53b8cdf2282357cdffd510064",
+    "compilercontract/contract.go": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188",
+    "compilercontract/contract_test.go": "124b45e184e6ed0e5ed2f92b7b7963eea4ff796f794871924dc7fb4a7c4749e4",
+    "compilercontract/js_encoder.go": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+    "compilercontract/js_encoder_test.go": "d6dcbda61dc4dcb425164fc45d396f799a0574981103ad4866d268fb3fb9aa9f",
+    "compilercontract/json.go": "1a6ddd715af3f8cd3659bc45496e905a62d4b94b0339f7c1bfdf5505024c053e",
+    "compilercontract/trace.go": "de5aa3f70314fe3cc1e5661ce682c953de6ee12328cba3dd609a891657c5e627",
+    "compilercontract/validation.go": "43b7ca7356782caa23ed8826b8778e5ce91eabaab50dcd06580a10d70deadc8e",
+    "compilercontract/value.go": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f",
+    "compilercontract/view.go": "cd57673458b025b860f39dbf0c4c23b7958db7c68d7380011e1aaed9bd6260c7",
+    "counter/counter.go": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+    "fixtures/compiled/children/app.go": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+    "fixtures/compiled/children/app_test.go": "0def0cc80e63017e4712e0fe5f8b15a13531798e31a595a50c15e892cb65a628",
+    "fixtures/compiled/children/scenario.json": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407",
+    "fixtures/compiled/children/view.go": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185",
+    "gobi/build.go": "ddf183ec2eb7769441d0a12494bbf267e67bceeb9ae9022ec9e2d60923ad0b95",
+    "gobi/compare_interaction.go": "ee9c32eb30c8edd24a13acf2b4a4aac7d8c796ec8bc07637d7966f2ae20a65f7",
+    "gobi/compare_interaction_test.go": "f4efad610d072c2b50815eacb4e40ad83823abbb2b1420372dbfa8815199706b",
+    "gobi/html.go": "0f9e67d623b4ea464fd1fd6e8bd71e658c22e84f4c7fefbb0deaa79ee00cbdf0",
+    "gobi/names.go": "50fad5eba08e27090331bb21e079f2e11ab36776c9d34162f2a32b2b20e508a6",
+    "gobi/node.go": "e51a1970f0a8e72ffd3d5aaf06f8fcce2137fd87113bb7412f692671743bcc93",
+    "gobi/rules_test.go": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+    "compiled-children/compiler-evidence/receipt.json": "e9919644a59b88b9684f2f7c1dad1f4d1120d64d24e8dccc79bf86b20bc66371",
+    "compiled-children/compiler-evidence/build/react-repeat.stdout.json": "5953b0f6f49bbc9249bc674de57f8faf4efb2547667a195125bdaad7814ad6d8",
+    "compiled-children/compiler-evidence/build/dom-attempt3.stdout.json": "36f22cb4b7da714a2b962b92bad4789eac7425fbcf5b15d7f3ebd0bb4f44dc58",
+    "compiled-children/coordination/reports/E-DELIVERY.md": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706",
+    "compiled-children/coordination/receipts/E-DELIVERY.json": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d"
+  },
+  "sourceBrief": {
+    "compiled-children/conformance/check.mjs": "e34d01e98d2f3f1b16a84d5108de91ea2c60b5ee01414b5d5e80c8e627ee069e",
+    "compiled-children/conformance/run.mjs": "bf97c267ee8c3a5277e5542a367fa44f37c5ac88424414b1dd698e0eda93f4d3",
+    "compiled-children/conformance/swap-contract.test.mjs": "1dd0772388e37f220462e1d11e47251c9d497f3cbb9e360e22e67c79543f180f",
+    "compiled-children/conformance/seeded.test.mjs": "404a94cb93f4c0f1646062b1ddcb283084b7f6e00a776f687ec513659542ec83",
+    "compiled-frontend/conformance/no-wasm.mjs": "d4afe368a26c295c8bbdc8863a5109c7e3783e08d5e65ce08173387939c7cfa1",
+    "compiled-frontend/conformance/no-wasm.test.mjs": "529149d9856254bacb049032716e9c978d18dd62de4dec77005495790f49ad5e",
+    "compiled-children/conformance/browser.mjs": "5f2a47999f0861e2ad3977066ed1903e265d48a4d169f07fab15bc6a45f22ab9"
+  },
+  "buildLineagePins": [
+    {
+      "path": "compiled-children/compiler-evidence/receipt.json",
+      "bytes": 10435,
+      "sha256": "e9919644a59b88b9684f2f7c1dad1f4d1120d64d24e8dccc79bf86b20bc66371"
+    },
+    {
+      "path": "compiled-children/compiler-evidence/build/react-repeat.stdout.json",
+      "bytes": 27651,
+      "sha256": "5953b0f6f49bbc9249bc674de57f8faf4efb2547667a195125bdaad7814ad6d8"
+    },
+    {
+      "path": "compiled-children/compiler-evidence/build/dom-attempt3.stdout.json",
+      "bytes": 27651,
+      "sha256": "36f22cb4b7da714a2b962b92bad4789eac7425fbcf5b15d7f3ebd0bb4f44dc58"
+    }
+  ],
+  "traceArtifacts": [
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.native.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/native.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "sourceBytes": 653879,
+      "archiveSha256": "999d18da2b9203ae7f72d8c50fe5de49fb1920c6872ee1567089f9d4811389e3",
+      "archiveBytes": 13388
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.react.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/direct-react.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93",
+      "sourceBytes": 3214325,
+      "archiveSha256": "9ed4af83c757198f1da67baa6b939113aa8662dd6215fe1433f827fde59b911c",
+      "archiveBytes": 126542
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.dom.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/direct-dom.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7",
+      "sourceBytes": 3214323,
+      "archiveSha256": "f3360a23d51ea233a3c315171b0696c3ca853cc99a3717f77d7a3a094c795e2c",
+      "archiveBytes": 126541
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/browser.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913",
+      "sourceBytes": 70126683,
+      "archiveSha256": "dee654920a78d4f751f0153f1d9719e55e9aeb7af04132700794bf3e1345924f",
+      "archiveBytes": 2970330
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.check.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/check.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff",
+      "sourceBytes": 2089,
+      "archiveSha256": "8d7a1e494db3c3f760abe7619492fa097f073df0609913179e58a73d590ae910",
+      "archiveBytes": 685
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.seeded.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/seeded.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "49740fcdf820652ed3250313a569c10ae9a78ca4c72417d88c8becfb402e3214",
+      "sourceBytes": 6843,
+      "archiveSha256": "ecd5ddf81617b4bae78b7512fdcd05c4236ba04c7e874cf8473331153ead254f",
+      "archiveBytes": 921
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stdout.log",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/unit-test-stdout.log.gz",
+      "compression": "gzip",
+      "sourceSha256": "49197ef4e8acba3f00635a0fc31e170b80063c67e156be6f1751750fb49a542a",
+      "sourceBytes": 4514,
+      "archiveSha256": "dc560aff202841657b8e9b085c86592de98e871f5d5b549122667f8e1cd6080a",
+      "archiveBytes": 1078
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stderr.log",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/unit-test-stderr.log.gz",
+      "compression": "gzip",
+      "sourceSha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621",
+      "sourceBytes": 175,
+      "archiveSha256": "9ae9ecd94fbf5cd97ed0d3fdf69fd1e8d9fd154dab12d35000e520cee011d8a5",
+      "archiveBytes": 161
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.run.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/run.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "d69944a5d22e7a057ba24b5885c7e2f532bf518fc57a484e205b617a50073cb2",
+      "sourceBytes": 50559,
+      "archiveSha256": "549357447bf1f87d820d8ccae57a93b6310fea83934f5d8b8a9786cf7f1afdb5",
+      "archiveBytes": 7453
+    },
+    {
+      "source": "compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.manifest.json",
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T130145.278Z-2/manifest.json.gz",
+      "compression": "gzip",
+      "sourceSha256": "fc45edf40abd6b17bbf9a76cf306b17988edf802530f49132cb2fd392f6d1a61",
+      "sourceBytes": 42663,
+      "archiveSha256": "5d614846ff055d6d453b95bd150aaafdec4d799170d7e4a99124e6b1a95527df",
+      "archiveBytes": 5896
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.native.json",
+      "bytes": 653879,
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.react.json",
+      "bytes": 3214325,
+      "sha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.direct.dom.json",
+      "bytes": 3214323,
+      "sha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.json",
+      "bytes": 70126683,
+      "sha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.check.json",
+      "bytes": 2089,
+      "sha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.seeded.json",
+      "bytes": 6843,
+      "sha256": "49740fcdf820652ed3250313a569c10ae9a78ca4c72417d88c8becfb402e3214"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stdout.log",
+      "bytes": 4514,
+      "sha256": "49197ef4e8acba3f00635a0fc31e170b80063c67e156be6f1751750fb49a542a"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.unit-tests.stderr.log",
+      "bytes": 175,
+      "sha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/conformance/evidence/E-FIX-HARNESS-LIVENESS-20261031-01/replay-custody-safe.browser.capture.json",
+      "bytes": 70126683,
+      "sha256": "91dd032e4716e7881f789f8254ad962c8a1032cddf2a55ff26932c6a6b570913"
+    }
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/attempt12-swap-fields.json",
+      "bytes": 5346054,
+      "sha256": "a4340211169131c761e18c71915d873679f1c61dea49e9ffc4105a3c4cce9c6d"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/auto-generated-E-HARNESS.receipt.json",
+      "bytes": 18856,
+      "sha256": "bc8c28337e473f7483f381277713b338abffb4d516ec9bb773ebdb632b9c6718"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/auto-generated-E-HARNESS.report.md",
+      "bytes": 5069,
+      "sha256": "e375b7b2caf6387507544714adabe919e751f3059c87d8e78bcba34813a42bb2"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/canonical-custody-restoration.json",
+      "bytes": 2044,
+      "sha256": "b13b721fbccdee757c1ddd6b27804723cee5138c565c5d1a3ac7d52de5627e5c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/custody-restore.mjs",
+      "bytes": 4420,
+      "sha256": "312e3668337aeca841dd4a1c76b6c6f34ab3265d8fc16ae8419adfd5160d3341"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/custody-restore.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/custody-restore.stdout.json",
+      "bytes": 2044,
+      "sha256": "b13b721fbccdee757c1ddd6b27804723cee5138c565c5d1a3ac7d52de5627e5c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/finalize-receipt.mjs",
+      "bytes": 17218,
+      "sha256": "acd27837ab423804c0a5993086be0a7f3122965fee153c8e7d3f88159fc6177c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/independent-verification-attempt02.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/independent-verification-attempt02.stdout.json",
+      "bytes": 3334,
+      "sha256": "e6579f999262fa8488853ac7de4c8800d95b504d8fe2e4af25e89facbe1edfa0"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/independent-verification.stderr.log",
+      "bytes": 1087,
+      "sha256": "932cf3e207adb2e6814d98bbf795f197037a61c23039919848ab4ddd93bafd50"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/independent-verification.stdout.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/receipt-validation.py",
+      "bytes": 3311,
+      "sha256": "102b98d89cc72c7fce9dad18574f1b4345276e04f73fbcbcd9373dd619cc2e68"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/receipt-validation.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/receipt-validation.stdout.log",
+      "bytes": 139,
+      "sha256": "60157d1edd53c2c2be91142c2acd10c134aaab697ddad0b7941b445d6ffc1060"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-HARNESS-LIVENESS-20261031-01/verify-replay.mjs",
+      "bytes": 8765,
+      "sha256": "95712b3263ceb9f3f49fb3e1678ccdd5f202ed9526d996e4e7a471700373c31b"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/E-FIX-HARNESS-LIVENESS.md",
+    "bytes": 7017,
+    "sha256": "c6dbd38fc9d71058095fa48913dd5e48fe4a854075f801d398b526a056f4813a"
+  },
+  "limitations": [
+    "Root full integration and final acceptance remain pending.",
+    "The earlier local archive/container corruption incident recorded at immutable evidence 978eaea98831154f8152baa1a64f1d1356916596 remains unresolved; this fresh archive verification does not retroactively repair that historical incident.",
+    "Only the representative first seeded schedule has mounted-browser data; all three seeded schedules were checked against native Go and direct React/DOM replay.",
+    "The first independent verifier attempt failed only because the verifier duplicated an already repository-relative original path; the failure log is preserved and the corrected second attempt passed."
+  ]
+}

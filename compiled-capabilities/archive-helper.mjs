@@ -1,4 +1,5 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
 export async function createExclusiveAttemptDirectory(attemptPath) {
@@ -23,11 +24,36 @@ export async function archiveAndVerify({
   hashPath,
   readJSON,
 }) {
-  await execute("archive-capability-artifacts", "tar", ["-czf", archivePath, "-C", attemptRoot, ...includePaths]);
+  const roots = includePaths.map((path) => path.replaceAll("\\", "/").replace(/\/$/, ""));
+  const expected = members.map(({ path }) => path);
+  if (expected.some((path) => typeof path !== "string" || path.length === 0 || path.includes("\0") ||
+      path.includes("\\") || path.startsWith("/") || path.split("/").some((part) => part === "" || part === "." || part === ".."))) {
+    throw new TypeError("capability archive inventory must contain normalized relative file paths");
+  }
+  if (new Set(expected).size !== expected.length) {
+    throw new Error("capability archive inventory contains duplicate paths");
+  }
+  if (expected.some((path) => !roots.some((root) => path === root || path.startsWith(`${root}/`)))) {
+    throw new Error("capability archive inventory contains a path outside its include roots");
+  }
+  expected.sort();
+  const listRoot = await mkdtemp(join(tmpdir(), "gobi-capability-archive-list-"));
+  const listPath = join(listRoot, "members.nul");
+  try {
+    await writeFile(listPath, Buffer.from(`${expected.join("\0")}\0`));
+    await execute("archive-capability-artifacts", "tar", [
+      "-czf", archivePath,
+      "-C", attemptRoot,
+      "--no-recursion",
+      "--null",
+      "--files-from", listPath,
+    ]);
+  } finally {
+    await rm(listRoot, { recursive: true, force: true });
+  }
   const archive = await hashPath(archivePath);
   const listed = (await execute("list-capability-archive", "tar", ["-tzf", archivePath]))
     .trim().split("\n").filter((line) => line && !line.endsWith("/"));
-  const expected = members.map(({ path }) => path).sort();
   if (JSON.stringify(listed.sort()) !== JSON.stringify(expected)) {
     throw new Error("capability archive members differ from its pinned inventory");
   }

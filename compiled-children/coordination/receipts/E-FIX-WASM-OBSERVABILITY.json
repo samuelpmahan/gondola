@@ -1,0 +1,641 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-WASM-OBSERVABILITY",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Repaired WebAssembly guard observability to record per-hook coverage and fail closed for failed or missing observation; preserved existing evidence fields, added coverage to demo and browser captures, and verified unit plus live Chromium behavior.",
+  "repair": {
+    "exclusive_source_sha256": {
+      "compiled-frontend/conformance/no-wasm.mjs": "d4afe368a26c295c8bbdc8863a5109c7e3783e08d5e65ce08173387939c7cfa1",
+      "compiled-frontend/conformance/no-wasm.test.mjs": "529149d9856254bacb049032716e9c978d18dd62de4dec77005495790f49ad5e",
+      "compiled-children/demo/smoke.mjs": "5aa132962925b5c9c1a95ac6f81e4767648ff4e5c87984a5eab79ea5118fc8b0",
+      "compiled-children/conformance/browser.mjs": "5f2a47999f0861e2ad3977066ed1903e265d48a4d169f07fab15bc6a45f22ab9"
+    },
+    "guardCoverageShape": {
+      "status": [
+        "complete",
+        "absent"
+      ],
+      "entries": [
+        "name",
+        "kind",
+        "status",
+        "optional reason"
+      ],
+      "entryStatuses": [
+        "installed",
+        "absent"
+      ],
+      "failures": [],
+      "statusFailed": "assertClear throws"
+    },
+    "observedFunctions": [
+      "WebAssembly.compile",
+      "WebAssembly.compileStreaming",
+      "WebAssembly.instantiate",
+      "WebAssembly.instantiateStreaming",
+      "WebAssembly.validate"
+    ],
+    "observedConstructors": [
+      "WebAssembly.Module",
+      "WebAssembly.Instance",
+      "WebAssembly.Memory",
+      "WebAssembly.Table",
+      "WebAssembly.Global"
+    ],
+    "requestScope": "Existing .wasm URL suffix route pattern; attempts are blocked and recorded.",
+    "preservedFields": [
+      "wasmRequests",
+      "wasmAPIAttempts",
+      "browser noWasm.apiAttempts",
+      "browser noWasm.wasmRequests"
+    ],
+    "demoCoveragePath": "wasmGuardCoverage",
+    "browserCoveragePaths": [
+      "noWasm.guardCoverage",
+      "profiles[*].noWasm.guardCoverage"
+    ],
+    "preservedOriginalManifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/manifest.json",
+      "bytes": 912,
+      "sha256": "7f6ba5c151f4a1aac1556e96775ded6aec27b661e610f859eda151a769e128ed"
+    },
+    "preservedOriginals": [
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/smoke.mjs",
+        "bytes": 16837,
+        "sha256": "607aac6378610c425de5aeeb0925deb10d8643306a5b6e017a86f3edc4c5bab1",
+        "source": "compiled-children/demo/smoke.mjs"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/browser.mjs",
+        "bytes": 8362,
+        "sha256": "d36b6bae1dd606e4b5e4bf069d7ec7a9d8303833b8451c953d9eb6edd0d4693d",
+        "source": "compiled-children/conformance/browser.mjs"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-WASM-OBSERVABILITY/originals/no-wasm.mjs",
+        "bytes": 2772,
+        "sha256": "512d3debbcb8c8bb1f9edd01cb6b930a6364bcd680d7a6580c2096c5dc37ed29",
+        "source": "compiled-frontend/conformance/no-wasm.mjs"
+      }
+    ]
+  },
+  "stableAuthorBuild": {
+    "record": {
+      "path": "compiled-children/demo/output/author-smoke-20261031-rerun1/site/demo-build.json",
+      "bytes": 2715,
+      "sha256": "d3d0cb74be56cb06e035b65f410df47d0654e5aa7b501c84e39a637224428d0e"
+    },
+    "backend": "react",
+    "sourcePins": {
+      "compiled-children/demo/app.mjs": "1c0e51b8cc99c3dbde9ea7b4121d40853823647159adb3efd06035bdb37cd97d",
+      "compiled-children/demo/build.mjs": "7f21650f221f91a3eeddf4c151b0729068f606fb6ac7a6297668f7bf14514ff8",
+      "compiled-children/demo/demo.css": "9f2ec7fde3e0704ebedce07a69709e446b5b343ad31152d2fb23d2d59913f0fb",
+      "compiled-children/demo/index.html": "2012c9568559512b61b7ac67054d2e6f8f49773810a72197e4fb23d30f7b969d"
+    },
+    "bundle": {
+      "path": "compiled-children/demo/output/author-smoke-20261031-rerun1/site/demo.bundle.mjs",
+      "bytes": 1853920,
+      "sha256": "c2d5723c7c15a3bba3a59687a4f610682fe5d8cb387ed465118df79471a84ac9",
+      "manifestSha256": "2266dbb1d21072e0d829fb6695615471b30ba37b75fb4e93aac5d9412b59797c"
+    }
+  },
+  "authorSmoke": {
+    "result": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.json",
+      "bytes": 20533,
+      "sha256": "f3e7e0c215730591b2edcc8bff00c154e796e0a346b1015f4a145c3a1a7274c8"
+    },
+    "status": "passed",
+    "checkCount": 32,
+    "passedChecks": 32,
+    "failedChecks": [],
+    "browser": "Chromium 153.0.8010.0",
+    "url": "http://127.0.0.1:37795/",
+    "port": 37795,
+    "http": [
+      {
+        "method": "GET",
+        "path": "/",
+        "status": 200,
+        "bytes": 4548
+      },
+      {
+        "method": "GET",
+        "path": "/demo.css",
+        "status": 200,
+        "bytes": 4757
+      },
+      {
+        "method": "GET",
+        "path": "/demo.bundle.mjs",
+        "status": 200,
+        "bytes": 1853920
+      }
+    ],
+    "webAssemblyRequests": 0,
+    "webAssemblyApiCalls": 0,
+    "wasmGuardCoverage": {
+      "status": "complete",
+      "entries": [
+        {
+          "name": "WebAssembly.compile",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.compileStreaming",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.instantiate",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.instantiateStreaming",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.validate",
+          "kind": "function",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Module",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Instance",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Memory",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Table",
+          "kind": "constructor",
+          "status": "installed"
+        },
+        {
+          "name": "WebAssembly.Global",
+          "kind": "constructor",
+          "status": "installed"
+        }
+      ],
+      "failures": []
+    },
+    "browserErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "screenshot": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.png",
+      "bytes": 219022,
+      "sha256": "c9ee6fd06a30f5a353d9e1d46aeceda40149e3148040bffe4bc6bd1e0b8614b9"
+    }
+  },
+  "toolchains": {
+    "node": "v22.23.4",
+    "chromium": "Chromium 153.0.8010.0",
+    "chromiumExecutable": "/tmp/chromium"
+  },
+  "checks": [
+    {
+      "name": "Node 22 version",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --version",
+      "exitCode": 0,
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-node-version.log",
+        "bytes": 9,
+        "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-node-version.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "syntax checks",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/conformance/no-wasm.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/conformance/no-wasm.test.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/demo/smoke.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/browser.mjs",
+      "exitCode": 0,
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-syntax.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-syntax.stderr.log",
+        "bytes": 175,
+        "sha256": "d9c56a595b6760c52e3cee6d5a172455d1c3ff49ea79f2469bcc3fc01bf3f6f6"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-syntax.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "targeted Node regression suite",
+      "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/conformance/no-wasm.test.mjs compiled-children/runtime/runtime.test.mjs compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs compiled-children/oracle/oracle.test.mjs",
+      "exitCode": 0,
+      "result": "32 passed, 0 failed; includes two live Chromium guard tests and five VM coverage/descriptor cases",
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-tests.stdout.log",
+        "bytes": 7876,
+        "sha256": "d5ce075b0ab3fb4c78e65459abd58681a6fcb808b8f962e3b526ca35ef3c23c9"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-tests.stderr.log",
+        "bytes": 175,
+        "sha256": "65d155756948bbcacf42c3af999c911057de08d65a41b918a3edc3dcbea190b8"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-tests.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "standalone author HTTP smoke against stable N2 React build",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/demo/smoke.mjs --demo compiled-children/demo/output/author-smoke-20261031-rerun1/site --output compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.json --screenshot compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.png --chromium /tmp/chromium --port 0",
+      "exitCode": 0,
+      "result": "32/32 checks passed; endpoints /, /demo.css, /demo.bundle.mjs returned HTTP 200; ten listed hooks installed; zero covered API calls or .wasm requests",
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.stdout.log",
+        "bytes": 262,
+        "sha256": "6ab192f6896bc193c27d850fc34dd02eae70673d449ba5aeaa50988c9a3c22c4"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.stderr.log",
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      "smoke": {
+        "result": {
+          "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.json",
+          "bytes": 20533,
+          "sha256": "f3e7e0c215730591b2edcc8bff00c154e796e0a346b1015f4a145c3a1a7274c8"
+        },
+        "status": "passed",
+        "checkCount": 32,
+        "passedChecks": 32,
+        "failedChecks": [],
+        "browser": "Chromium 153.0.8010.0",
+        "url": "http://127.0.0.1:37795/",
+        "port": 37795,
+        "http": [
+          {
+            "method": "GET",
+            "path": "/",
+            "status": 200,
+            "bytes": 4548
+          },
+          {
+            "method": "GET",
+            "path": "/demo.css",
+            "status": 200,
+            "bytes": 4757
+          },
+          {
+            "method": "GET",
+            "path": "/demo.bundle.mjs",
+            "status": 200,
+            "bytes": 1853920
+          }
+        ],
+        "webAssemblyRequests": 0,
+        "webAssemblyApiCalls": 0,
+        "wasmGuardCoverage": {
+          "status": "complete",
+          "entries": [
+            {
+              "name": "WebAssembly.compile",
+              "kind": "function",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.compileStreaming",
+              "kind": "function",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.instantiate",
+              "kind": "function",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.instantiateStreaming",
+              "kind": "function",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.validate",
+              "kind": "function",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.Module",
+              "kind": "constructor",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.Instance",
+              "kind": "constructor",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.Memory",
+              "kind": "constructor",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.Table",
+              "kind": "constructor",
+              "status": "installed"
+            },
+            {
+              "name": "WebAssembly.Global",
+              "kind": "constructor",
+              "status": "installed"
+            }
+          ],
+          "failures": []
+        },
+        "browserErrors": [],
+        "consoleErrors": [],
+        "failedRequests": [],
+        "screenshot": {
+          "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.png",
+          "bytes": 219022,
+          "sha256": "c9ee6fd06a30f5a353d9e1d46aeceda40149e3148040bffe4bc6bd1e0b8614b9"
+        }
+      }
+    },
+    {
+      "name": "source/original/evidence pin audit",
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.py",
+      "exitCode": 0,
+      "result": "Four current source pins, three preserved originals, stable bundle, 32/32 smoke checks, 32/32 Node tests, and complete guard coverage match recorded pins.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.py",
+        "bytes": 5034,
+        "sha256": "35143cf7a0e39f6db376b7302f1a89f6adae2acde0636cacd8d741c09e3bdc18"
+      },
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.log",
+        "bytes": 345,
+        "sha256": "b6ae8a6a89364b605bdc9e9390a75c6d404701e555b3704c87804b535b622e63"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "receipt materialization",
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.py",
+      "exitCode": 0,
+      "result": "Materialized the author receipt from pinned sources and smoke evidence.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.py",
+        "bytes": 10160,
+        "sha256": "9c4b1bc704e1e346f76bfc45c1d0c4aceec849ad90c77600d1354b1bdf1aadd6"
+      },
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.log",
+        "bytes": 273,
+        "sha256": "cb5ac6b1d0abcf1587e0a226d023f3046d454c18338eada32200c9a1404850c4"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "read-only native protocol and evidence-pin validation",
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.py",
+      "exitCode": 0,
+      "result": "Native probe validated author packet identity/outcome; current source, report, preserved source, and referenced artifact hash/length pins matched.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.py",
+        "bytes": 2140,
+        "sha256": "72d1f72064c666cc8ccec556027c513a6b80736510417887750cef6196849ae7"
+      },
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.log",
+        "bytes": 232,
+        "sha256": "a6d643fb9909680613e7ddb28d364290cc5bb85c149c35dbb2ba4380fd089d8b"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    }
+  ],
+  "rawlogs": {
+    "N2-E-FIX-WASM-OBSERVABILITY-node-version.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-node-version.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-node-version.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-node-version.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-syntax.stdout.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-syntax.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-syntax.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-syntax.stderr.log",
+      "bytes": 175,
+      "sha256": "d9c56a595b6760c52e3cee6d5a172455d1c3ff49ea79f2469bcc3fc01bf3f6f6"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-syntax.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-syntax.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-tests.stdout.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-tests.stdout.log",
+      "bytes": 7876,
+      "sha256": "d5ce075b0ab3fb4c78e65459abd58681a6fcb808b8f962e3b526ca35ef3c23c9"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-tests.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-tests.stderr.log",
+      "bytes": 175,
+      "sha256": "65d155756948bbcacf42c3af999c911057de08d65a41b918a3edc3dcbea190b8"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-tests.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-tests.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-smoke.json": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.json",
+      "bytes": 20533,
+      "sha256": "f3e7e0c215730591b2edcc8bff00c154e796e0a346b1015f4a145c3a1a7274c8"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-smoke.png": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.png",
+      "bytes": 219022,
+      "sha256": "c9ee6fd06a30f5a353d9e1d46aeceda40149e3148040bffe4bc6bd1e0b8614b9"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-smoke.stdout.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.stdout.log",
+      "bytes": 262,
+      "sha256": "6ab192f6896bc193c27d850fc34dd02eae70673d449ba5aeaa50988c9a3c22c4"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-smoke.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-smoke.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-smoke.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-audit.py": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.py",
+      "bytes": 5034,
+      "sha256": "35143cf7a0e39f6db376b7302f1a89f6adae2acde0636cacd8d741c09e3bdc18"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-audit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.log",
+      "bytes": 345,
+      "sha256": "b6ae8a6a89364b605bdc9e9390a75c6d404701e555b3704c87804b535b622e63"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-audit.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-audit.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-audit.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-build.py": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.py",
+      "bytes": 10160,
+      "sha256": "9c4b1bc704e1e346f76bfc45c1d0c4aceec849ad90c77600d1354b1bdf1aadd6"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-build.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.log",
+      "bytes": 273,
+      "sha256": "cb5ac6b1d0abcf1587e0a226d023f3046d454c18338eada32200c9a1404850c4"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-build.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-build.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-build.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.py": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.py",
+      "bytes": 2140,
+      "sha256": "72d1f72064c666cc8ccec556027c513a6b80736510417887750cef6196849ae7"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.log",
+      "bytes": 232,
+      "sha256": "a6d643fb9909680613e7ddb28d364290cc5bb85c149c35dbb2ba4380fd089d8b"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.stdout.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.stderr.log",
+      "bytes": 1306,
+      "sha256": "588a1e139545bf66e1d1d31eb1559f66b9d654b55f5f326c2d456e4db26c92e7"
+    },
+    "N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.exit.log",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    }
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/E-FIX-WASM-OBSERVABILITY.md",
+    "bytes": 3670,
+    "sha256": "5f18e02248c3c0262a66fada67ba2b0ba44fd77f2b2f7c8d22fcb6fff818b6aa"
+  },
+  "limitations": [
+    "The observation scope is finite: the listed functions/constructors and .wasm URL suffix requests; it does not cover every conceivable engine path.",
+    "No full inherited compiled-capabilities/delivery chain was run.",
+    "Independent N6 checker/harness and the source-frozen overall pipeline remain required for broader acceptance."
+  ],
+  "integration": "Awaiting independent N6 fresh harness/checker and root-owned source-frozen full pipeline.",
+  "publication": "No Git commit, merge, deployment, or scheduler-state edit.",
+  "receiptAuthoringIncident": {
+    "status": "resolved",
+    "firstPassLogs": [
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.stderr.log",
+        "bytes": 1306,
+        "sha256": "588a1e139545bf66e1d1d31eb1559f66b9d654b55f5f326c2d456e4db26c92e7"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-WASM-OBSERVABILITY-receipt-validation-firstpass.exit.log",
+        "bytes": 2,
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      }
+    ],
+    "summary": "Initial read-only validator found a self-referential receipt-builder stdout pin recorded while shell redirection had truncated the target. The builder was corrected to exclude its own output files; the subsequent protocol and evidence-pin validation passed."
+  }
+}

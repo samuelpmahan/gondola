@@ -1,0 +1,58 @@
+{
+  "schema": "gobi.final-source-focused-verification/v1",
+  "at": "2026-10-31T14:25:21.414669+00:00",
+  "workspace": "/workspace/scratch/39a56936f173/gondola-children-archive",
+  "parent": "935cb00ce92d4a28f346ac431db302c9f580ea44",
+  "status": "passed",
+  "tests": 60,
+  "pass": 60,
+  "fail": 0,
+  "M0checksums": 24,
+  "commands": [
+    "go run ./cmd/gobi emit react",
+    "sha256sum -c --quiet SHA256SUMS",
+    "node --test compiled-capabilities/archive-helper.test.mjs compiled-children/oracle/oracle.test.mjs compiled-children/conformance/browser-version.test.mjs compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs compiled-children/conformance/swap-contract.test.mjs compiled-children/inherited-acceptance.test.mjs compiled-children/runtime/runtime.test.mjs compiled-frontend/conformance/no-wasm.test.mjs"
+  ],
+  "environment": {
+    "PATHprefix": [
+      "/tmp/gondola-go/bin",
+      "/tmp/gondola-node22/node_modules/node/bin"
+    ],
+    "GOTOOLCHAIN": "local",
+    "GOFLAGS": "-buildvcs=false",
+    "CHROMIUM_PATH": "/tmp/chromium"
+  },
+  "setupFailures": [
+    {
+      "command": "sha256sum -c --quiet SHA256SUMS",
+      "cause": "Fresh checkout had not yet generated ignored react-map.gen.mjs; fullrun.sh normally generates it beforechecking."
+    },
+    {
+      "command": "go run ./cmd/gobi emit react > react-map.gen.mjs",
+      "cause": "Operator wrongly redirected a generator that writes its own output; redirectedstatusline alteredgeneratedfile and checksum gate rejected it. Correct command regeneratedthefile, then24checkspassed. No M0source/receiptschanged."
+    }
+  ],
+  "logs": [
+    {
+      "path": "compiled-children/coordination/final-source-focus/emit-react.stdout.log",
+      "bytes": 24,
+      "sha256": "4a8f324447e1accffdcb7f243379ee3e8b34a401e607d6f73ad96c1058849832"
+    },
+    {
+      "path": "compiled-children/coordination/final-source-focus/m0-setup-red.log",
+      "bytes": 80,
+      "sha256": "1edf604df841282320a1799c85c847719b757847ab672e142c2f9b10388b0564"
+    },
+    {
+      "path": "compiled-children/coordination/final-source-focus/m0-sums.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/final-source-focus/node-tests.log",
+      "bytes": 14581,
+      "sha256": "06248a78042add83e77a1adb4c1a61d7a68ca4bc2e5f19ee1b1e05a13af6969f"
+    }
+  ],
+  "meaning": "Focused verification, not full integrated acceptance. Sourcefixes independently reviewed separately."
+}

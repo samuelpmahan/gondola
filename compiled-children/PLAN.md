@@ -1,0 +1,9 @@
+# Compiled typed keyed child collections
+
+Base source60b5aeff3172837ad7831c2b78b210454a3d81a2, prior accepted CI evidence978eaea98831154f8152baa1a64f1d1356916596. PR/branch reconnaissance found no overlapping child-collection work. Interactive counter is already complete. M0 files and receipts remain frozen; no main merge or deployment.
+
+Chosen composed milestone: Go owns a value-slice keyed child collection, stable identity, counts, generation-correlated pending work and removal/clear cancellation; React and DOM remain replaceable projections. Exercise append, reorder with pending work, selective remove, key reuse with new generation, stale reply/callback rejection, clear child-first cancellation, and compatible/rejected swaps. Existing fixed lifecycle remains unchanged and runs as inherited regression.
+
+Prefer a typed slice/value fixture supported by the existing compiler, rather than introducing a JS application manager or broad arbitrary-Go graph compiler. Contract freeze precedes dependent implementation; all six lanes may recon/scaffold in disjoint ownership first. Root owns Git, scheduler state and integration. Every author gets independent review through native solve/acknowledgement, no self-review. Actual capacity is seven advertised slots including root, six workers attempted and accepted spawns recorded separately. Native Rebalancer1.0.4/probe SHA5fa752...8066c from toolkit PR1 head989c295... unchanged.
+
+Acceptance requires actual native Go/direct compiled/React/DOM state/tree/DOM/order parity, disabled behavior, retained pending work across swaps/reorder, stale-generation isolation, closed capability admission, seeded sequences plus fixed edge cases, executable demo and fresh full inherited static/interaction regressions. Record all exact commands/versions/seeds/failures and byte-verified archives. Prior local archive corruption is not accepted evidence; independent post-command/delivery hashes remain mandatory.

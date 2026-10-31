@@ -1,0 +1,108 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ORACLE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added an independent 42-event keyed-child scenario, 39 literal Go state snapshots, Gobi tree and DOM projections, negative capture controls, and a read-only audit of native epochs 0–1. The actual native Go trace matches all 38 Go steps.",
+  "contract": {
+    "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/children",
+    "initialChildren": ["oak:g2", "elm:g3"],
+    "initialNextGeneration": 3,
+    "childToken": "child:<key>:g<generation>:r<requestSeq>",
+    "parentToken": "parent:g<generation>:r<requestSeq>",
+    "childClearCancellationOrder": ["child:oak:g5:r2", "child:elm:g3:r2"],
+    "parentRemovalCancellationOrder": ["child:oak:g7:r1", "child:pine:g6:r1", "parent:g1:r2"],
+    "rendererEvents": ["DOM to React accepted", "incompatible candidate rejected"],
+    "seed": "none; fixed deterministic scenario"
+  },
+  "artifacts": [
+    "compiled-children/oracle/scenario.json",
+    "compiled-children/oracle/expectations.json",
+    "compiled-children/oracle/oracle.mjs",
+    "compiled-children/oracle/oracle.test.mjs",
+    "compiled-children/oracle/audit-native-protocol.mjs",
+    "compiled-children/oracle/evidence/native.json",
+    "compiled-children/oracle/evidence/oracle-green.log",
+    "compiled-children/oracle/evidence/native-protocol-audit.json",
+    "compiled-children/oracle/evidence/native-protocol-audit.stderr.log",
+    "compiled-children/coordination/reports/E-ORACLE.md"
+  ],
+  "toolchains": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "nativeRebalancer": "1.0.4",
+    "probeSha256": "5fa75295203944df8b7e2112dbd900b9c89255209a1ac92d61c01bf035d8066c",
+    "toolkitPRHead": "989c295717511c812b69beda5d125817ffc054c9"
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script fixtures/compiled/children/scenario.json > compiled-children/oracle/evidence/native.json",
+      "exit_code": 0,
+      "result": "Native Go trace captured and matched to 42 independent source events, 38 Go steps, all state/effect checkpoints, and all Gobi tree snapshots.",
+      "trace_bytes": 653879,
+      "trace_sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/oracle/oracle.mjs",
+      "exit_code": 0,
+      "result": "Generated compact static expectations JSON from the manual Go snapshots and pure view/DOM projections.",
+      "expectations_bytes": 515314,
+      "expectations_sha256": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs 2>&1 | tee compiled-children/oracle/evidence/oracle-green.log",
+      "exit_code": 0,
+      "result": "9 tests passed, 0 failed. Positive checks cover event/state mapping and native trace parity; negative controls reject mutated Go order, Gobi key order, DOM text, and child-first cancellation order.",
+      "rawlog": "compiled-children/oracle/evidence/oracle-green.log",
+      "rawlog_bytes": 2375,
+      "rawlog_sha256": "81f9a13d734b4e36cf64a815b9d5b2c252fcaa5e687fd4f519a96bea445fdd21"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/oracle/audit-native-protocol.mjs > compiled-children/oracle/evidence/native-protocol-audit.json 2> compiled-children/oracle/evidence/native-protocol-audit.stderr.log",
+      "exit_code": 0,
+      "result": "Read-only protocol consistency checks passed for epochs 0–1, including native score/constraints, worker eligibility, six distinct accepted actual spawns, pinned in-flight assignments, and independent XR-GO/XR-HOST reviewers. These review packets remain running; whole-protocol closure is still root-owned.",
+      "audit_bytes": 1981,
+      "audit_sha256": "6259956fc498b83d55186cb8e3b5431f97e57e4538f269b2efed97de1ebdef09"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/oracle/oracle.mjs; /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/oracle/oracle.test.mjs; /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/oracle/audit-native-protocol.mjs",
+      "exit_code": 0,
+      "result": "All three Node syntax checks passed."
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "exit_code": 1,
+      "phase": "initial TDD red before oracle implementation",
+      "result": "Expected failure: ERR_MODULE_NOT_FOUND for compiled-children/oracle/oracle.mjs while the test was written first."
+    },
+    {
+      "command": "/tmp/gondola-go/bin/go1.24 version",
+      "exit_code": 127,
+      "phase": "toolchain path probe",
+      "result": "The advertised go1.24 executable path is absent; corrected to /tmp/gondola-go/bin/go, which reports go1.24.0."
+    }
+  ],
+  "environmentWarnings": [
+    "Node commands emit the environment's [UNDICI-EHPA] experimental EnvHttpProxyAgent warning; all final Node command exit codes are 0."
+  ],
+  "sourceSha256": {
+    "compiled-children/oracle/scenario.json": "8860dbd7ef32c04506d0e8672061235debf6316b02a72b10a5314d59b33b405d",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774",
+    "compiled-children/oracle/oracle.mjs": "c5cebcbbca6dcfb4ebb5110722bfd3b48dd6b7ad7d9e9d380aa78812f6e70388",
+    "compiled-children/oracle/oracle.test.mjs": "18f778de875fa838b4e565224b08ac1e21473b4838e1b2ca437d36d0bae77f22",
+    "compiled-children/oracle/audit-native-protocol.mjs": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+    "compiled-children/oracle/evidence/native.json": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/E-ORACLE.md",
+    "bytes": 5674,
+    "sha256": "f9583a4d9a5e6faa23a8ddeeb5bee5b0209f910912736b403d423456f7e74556"
+  },
+  "limitations": [
+    "N5 independently validated native Go state, effects, and Gobi tree projections. Browser DOM snapshots, mounted callbacks, and cross-renderer parity remain with N4's live harness.",
+    "The allocation audit covers currently recorded epochs 0–1. XR-GO and XR-HOST are still running, XR-ORACLE is pending E-ORACLE completion, and root must run the full read-only protocol audit before final closure.",
+    "No Git commit, merge, deployment, or scheduler-state edit was made."
+  ],
+  "integration": "awaiting N4 direct/React/DOM replay, N6 runner, independent XR-ORACLE review, and root final protocol audit",
+  "publication": "No Git commit, merge, or deployment."
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/children/**, cmd/compiled-children-native/**",
+      "summary": "Go-owned typed keyed child collection, native trace executable and tests. Propose/freeze the contract first; add/remove/reorder/reuse keys with generation-correlated pending requests and child-first clear cancellation, reuse counter/Gobi."
+    },
+    {
+      "id": "E-COMPILER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-frontend/analyze/**, compiled-frontend/build/**, compiled-frontend/emit/**, compilercontract/**",
+      "summary": "Compile the new Go slice/value collection through existing GoScript CLI and encoder; diagnose actual unsupported shape and minimally repair only if needed, preserving old profiles. Implementation gated on Go contract freeze."
+    },
+    {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-children/runtime/**, compiled-frontend/frontend/runtime/**",
+      "summary": "Reuse shared host and explicit capabilities, add closed collection effect token policy/driver; no JS domain reducer. Implementation gated on Go contract freeze."
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-children/conformance/**",
+      "summary": "Deterministic native/direct/React/DOM replay, real mounted events/swaps/stale callbacks, state/tree/DOM/disabled/event ordering and mutation controls. Gated on frozen Go/runtime/compiler interfaces."
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-children/oracle/**",
+      "summary": "Independent literal scenario/expectations and negative checker controls, review Go invariants without copying implementation. First propose scenario to Go owner; implementation gated on contract freeze."
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-children/demo/**, compiled-children/run.mjs, run-compiled-children.sh, .github/workflows/gobi-compiled-children.yml, compiled-children/README.md, compiled-children/RESULTS.md",
+      "summary": "Executable HTTP demo plus full inherited capability regression and new two-backend build/replay runner, immutable provenance/archive checks, scoped CI. Gated on frozen interfaces."
+    }
+  ]
+}
