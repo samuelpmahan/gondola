@@ -15,6 +15,7 @@ import {
   createExclusiveAttemptDirectory,
   writeImmutableSnapshot,
 } from "../compiled-capabilities/archive-helper.mjs";
+import { buildArchiveSourceInventory } from "./archive-source-inventory.mjs";
 import { isChromiumVersionOutput } from "../compiled-children/browser-version.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -87,6 +88,10 @@ const sourceFiles = [
   "backend-qualification/README.md",
   "backend-qualification/RESULTS.md",
   "backend-qualification/run.mjs",
+  "backend-qualification/archive-source-inventory.mjs",
+  "backend-qualification/archive-source-inventory.test.mjs",
+  "portable-qualification/testdata/runtime.manifest.json",
+  "portable-qualification/testdata/runtime-complete.manifest.json",
   "backend-qualification/build/build.mjs",
   "backend-qualification/adapters/qualification-decorator.mjs",
   "backend-qualification/conformance/qualification.mjs",
@@ -489,7 +494,10 @@ async function run() {
     for (const directory of nodeTestDirectories) {
       for (const path of await walkFiles(sourcePath(directory))) if (path.endsWith(".test.mjs")) testPaths.push(rel(path));
     }
-    const requiredSharedTests = ["compiled-children/conformance/browser-version.test.mjs"];
+    const requiredSharedTests = [
+      "backend-qualification/archive-source-inventory.test.mjs",
+      "compiled-children/conformance/browser-version.test.mjs",
+    ];
     for (const path of requiredSharedTests) {
       await access(sourcePath(path));
       testPaths.push(path);
@@ -608,7 +616,8 @@ async function run() {
       finalAcceptance: false,
     };
     const snapshot = await writeImmutableSnapshot(preArchivePath, preArchive);
-    const filePaths = (await walkFiles(attemptRoot, { includeOutput: true })).map((path) => relFrom(path, attemptRoot)).sort();
+    const observedPaths = (await walkFiles(attemptRoot, { includeOutput: true })).map((path) => relFrom(path, attemptRoot));
+    const filePaths = buildArchiveSourceInventory(observedPaths, beforePins);
     const members = [];
     for (const path of filePaths) members.push({ path, ...await hashFile(join(attemptRoot, path)) });
     const manifest = {
