@@ -1,0 +1,21 @@
+{
+  "schema": "gobi.git-readback-attempt-history/v1",
+  "attempts": [
+    {
+      "status": "failed",
+      "command": "python /tmp/modules-publish/git-readback.py a25d9d45cc708ac7c0102cd2324765caaf215897",
+      "failure": "Explicit multi-blob Git fetch: fatal bad revision9961157b2dba652186353180240ff3760bdf0b38 (README blob); remote did not send all necessary objects",
+      "rawOutputCustody": "Tool transcript only; this is a lead transcription; no original redirected stderr file"
+    },
+    {
+      "status": "failed",
+      "command": "git cat-file --batch-check=%(objectname) %(objecttype) over169 blob SHAs",
+      "failure": "subprocess.TimeoutExpired after60seconds in working partial clone; no readback accepted"
+    },
+    {
+      "status": "passed",
+      "command": "git init --bare /tmp/modules-publish/readback.git; git -C /tmp/modules-publish/readback.git fetch --depth=1 --filter=blob:limit=4m --no-tags https://github.com/samuelpmahan/gondola.git codex/gobi-independent-modules-acceptance-20261031; python git-readback-v2.py a25d9d45cc708ac7c0102cd2324765caaf215897",
+      "result": "All169 files/34 archiveparts/4112 archive members/147 sourcepins matched; clean originalsource7bd"
+    }
+  ]
+}
