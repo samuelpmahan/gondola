@@ -199,9 +199,10 @@ function comparePins(before, after) {
     before[path].bytes !== after[path].bytes || before[path].sha256 !== after[path].sha256);
 }
 
-async function gitMetadata() {
-  const head = await execute("git-head", "git", ["rev-parse", "HEAD"], { cwd: root, logDir: logsRoot, env: {} });
-  const status = await execute("git-status", "git", ["status", "--porcelain", "--untracked-files=all"], { cwd: root, logDir: logsRoot, env: {} });
+async function gitMetadata(phase) {
+  if (phase !== "before" && phase !== "after") throw new Error(`unknown Git metadata phase ${phase}`);
+  const head = await execute(`git-${phase}-head`, "git", ["rev-parse", "HEAD"], { cwd: root, logDir: logsRoot, env: {} });
+  const status = await execute(`git-${phase}-status`, "git", ["status", "--porcelain", "--untracked-files=all"], { cwd: root, logDir: logsRoot, env: {} });
   return { head: head.trim(), dirty: status.trim().length !== 0, status: status.trim() };
 }
 
@@ -392,14 +393,15 @@ async function runNativeTrace() {
 }
 
 async function discoverTests() {
-  const roots = [join(root, "compiled-capabilities"), join(here, "abi"), join(here, "runtime"), join(here, "conformance"), join(here, "oracle")];
+  const roots = [join(here, "abi"), join(here, "runtime"), join(here, "conformance"), join(here, "oracle")];
   const tests = [];
   for (const directory of roots) {
     let files = [];
     try { files = await walkFiles(directory); } catch (error) { if (error?.code !== "ENOENT") throw error; }
     tests.push(...files.filter((path) => path.endsWith(".test.mjs")));
   }
-  return tests.sort();
+  tests.push(join(root, "compiled-capabilities/archive-helper.test.mjs"));
+  return [...new Set(tests)].sort();
 }
 
 async function runFocusedTests() {
@@ -766,7 +768,7 @@ async function run(args) {
   }
   const chromiumVersion = await execute("chromium-version", chromiumPath, ["--version"], { env: {} });
   const playwrightPackage = JSON.parse(await readFile(join(root, "interaction/node_modules/playwright/package.json"), "utf8"));
-  gitStart = await gitMetadata();
+  gitStart = await gitMetadata("before");
   if (args.sourceCommit !== gitStart.head) throw new Error(`source commit argument ${args.sourceCommit} does not match verifier Git HEAD ${gitStart.head}`);
   if (gitStart.dirty && !args.allowDirty) throw new Error("working tree is dirty; use --allow-dirty for an author-only local run");
   sourcePinsBefore = await snapshotSourcePins();
@@ -812,7 +814,7 @@ async function run(args) {
   const sourcePinsAfter = await snapshotSourcePins();
   const changed = comparePins(sourcePinsBefore, sourcePinsAfter);
   if (changed.length !== 0) throw new Error(`source files changed during the profile: ${changed.join(", ")}`);
-  const gitEnd = await gitMetadata();
+  const gitEnd = await gitMetadata("after");
   if (gitEnd.head !== gitStart.head || gitEnd.status !== gitStart.status) {
     throw new Error("Git HEAD or working-tree status changed during the profile");
   }
