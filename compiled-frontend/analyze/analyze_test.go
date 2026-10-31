@@ -56,6 +56,174 @@ func TestLoadAndAnalyzeCompiledFixtures(t *testing.T) {
 	}
 }
 
+func TestAnalyzeIncludesOnlyCompleteTypedModuleBridgePairsAndTheirTypeClosure(t *testing.T) {
+	for _, side := range []string{"parent", "child"} {
+		t.Run(side, func(t *testing.T) {
+			program, entry := moduleBridgeProbeProgram(side)
+			result := Analyze(program, compilercontract.AnalyzeOptions{EntryPackages: []string{entry}})
+			if len(result.Diagnostics) != 0 || len(result.Apps) != 1 {
+				t.Fatalf("Analyze diagnostics: apps=%d diagnostics=%+v", len(result.Apps), result.Diagnostics)
+			}
+			app := result.Apps[0]
+			want := []string{"Init", "Update", "View"}
+			if side == "parent" {
+				want = append(want, "Output", "Receive")
+			} else {
+				want = append(want, "Input", "Publication")
+			}
+			got := make(map[string]bool, len(app.Symbols))
+			for _, symbol := range app.Symbols {
+				got[symbol.Name] = true
+			}
+			for _, name := range want {
+				if !got[name] {
+					t.Errorf("AppIR omits %s module/app role: symbols=%+v", name, app.Symbols)
+				}
+			}
+			for _, id := range []compilercontract.TypeID{
+				"github.com/samuelpmahan/gondola/fixtures/compiled/modulewire.Input",
+				"github.com/samuelpmahan/gondola/fixtures/compiled/modulewire.Publication",
+			} {
+				found := false
+				for _, info := range app.Types {
+					if info.ID == id {
+						found = true
+						break
+					}
+				}
+				if !found {
+					t.Errorf("AppIR type closure omits imported wire type %q: types=%+v", id, app.Types)
+				}
+			}
+		})
+	}
+}
+
+func TestAnalyzeRejectsPartialOrWrongModuleBridgeRoleSet(t *testing.T) {
+	for name, configure := range map[string]func(*compilercontract.TypedPackage){
+		"partial parent": func(pkg *compilercontract.TypedPackage) {
+			pkg.Functions = append(pkg.Functions, moduleBridgeFunction(pkg.ImportPath, "Output", []compilercontract.TypeID{"probe.State"}, []compilercontract.TypeID{"github.com/samuelpmahan/gondola/fixtures/compiled/modulewire.Input"}))
+		},
+		"wrong parent port": func(pkg *compilercontract.TypedPackage) {
+			pkg.Functions = append(pkg.Functions,
+				moduleBridgeFunction(pkg.ImportPath, "Output", []compilercontract.TypeID{"probe.State"}, []compilercontract.TypeID{"float64"}),
+				moduleBridgeFunction(pkg.ImportPath, "Receive", []compilercontract.TypeID{"probe.State", "github.com/samuelpmahan/gondola/fixtures/compiled/modulewire.Publication"}, []compilercontract.TypeID{"probe.State"}),
+			)
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			program, entry := moduleBridgeProbeProgram("legacy")
+			pkg := &program.Packages[0]
+			configure(pkg)
+			result := Analyze(program, compilercontract.AnalyzeOptions{EntryPackages: []string{entry}})
+			if len(result.Diagnostics) == 0 {
+				t.Fatal("invalid module bridge role set was accepted")
+			}
+		})
+	}
+	t.Run("mixed parent and child roles", func(t *testing.T) {
+		program, entry := moduleBridgeProbeProgram("parent")
+		program.Packages[0].Functions = append(program.Packages[0].Functions,
+			moduleBridgeFunction(entry, "Input", []compilercontract.TypeID{"probe.State", "github.com/samuelpmahan/gondola/fixtures/compiled/modulewire.Input"}, []compilercontract.TypeID{"probe.State"}),
+			moduleBridgeFunction(entry, "Publication", []compilercontract.TypeID{"probe.State"}, []compilercontract.TypeID{"github.com/samuelpmahan/gondola/fixtures/compiled/modulewire.Publication"}),
+		)
+		result := Analyze(program, compilercontract.AnalyzeOptions{EntryPackages: []string{entry}})
+		if len(result.Diagnostics) == 0 {
+			t.Fatal("mixed parent and child module bridge roles were accepted")
+		}
+	})
+	t.Run("wrong wire field order", func(t *testing.T) {
+		program, entry := moduleBridgeProbeProgram("parent")
+		wirePackage := "github.com/samuelpmahan/gondola/fixtures/compiled/modulewire"
+		for packageIndex := range program.Packages {
+			if program.Packages[packageIndex].ImportPath != wirePackage {
+				continue
+			}
+			for typeIndex := range program.Packages[packageIndex].Types {
+				if program.Packages[packageIndex].Types[typeIndex].ID == compilercontract.TypeID(wirePackage+".Input") {
+					fields := program.Packages[packageIndex].Types[typeIndex].Fields
+					fields[0], fields[1] = fields[1], fields[0]
+					program.Packages[packageIndex].Types[typeIndex].Fields = fields
+				}
+			}
+		}
+		result := Analyze(program, compilercontract.AnalyzeOptions{EntryPackages: []string{entry}})
+		if len(result.Diagnostics) == 0 {
+			t.Fatal("wire type with a different field order was accepted")
+		}
+	})
+}
+
+func moduleBridgeProbeProgram(side string) (compilercontract.TypedProgram, string) {
+	const entry = "probe"
+	const gobiPackage = "github.com/samuelpmahan/gondola/gobi"
+	const wirePackage = "github.com/samuelpmahan/gondola/fixtures/compiled/modulewire"
+	state := compilercontract.TypeID(entry + ".State")
+	message := compilercontract.TypeID(gobiPackage + ".Message")
+	node := compilercontract.TypeID(gobiPackage + ".Node")
+	effect := compilercontract.TypeID(gobiPackage + ".Effect")
+	effects := compilercontract.TypeID("[]" + string(effect))
+	input := compilercontract.TypeID(wirePackage + ".Input")
+	publication := compilercontract.TypeID(wirePackage + ".Publication")
+	stringType := compilercontract.TypeInfo{ID: "string", Kind: compilercontract.KindString, JSRepresentation: compilercontract.JSDirect}
+	intType := compilercontract.TypeInfo{ID: "int", Kind: compilercontract.KindInt, Bits: 64, JSRepresentation: compilercontract.JSNumber}
+	boolType := compilercontract.TypeInfo{ID: "bool", Kind: compilercontract.KindBool, JSRepresentation: compilercontract.JSDirect}
+	floatType := compilercontract.TypeInfo{ID: "float64", Kind: compilercontract.KindFloat64, JSRepresentation: compilercontract.JSNumber}
+	appTypes := []compilercontract.TypeInfo{
+		stringType,
+		intType,
+		boolType,
+		floatType,
+		{ID: state, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Count", Type: "float64"}}},
+		{ID: message, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Name", Type: "string"}, {Name: "Arg", Type: "string"}}},
+		{ID: node, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Tag", Type: "string"}}},
+		{ID: effect, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Kind", Type: "string"}, {Name: "Name", Type: "string"}, {Name: "Arg", Type: "string"}, {Name: "Reply", Type: "string"}}},
+		{ID: effects, Kind: compilercontract.KindSlice, ElemType: effect, JSRepresentation: compilercontract.JSArrayOrSlice},
+	}
+	gobiTypes := []compilercontract.TypeInfo{
+		{ID: message, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Name", Type: "string"}, {Name: "Arg", Type: "string"}}},
+		{ID: node, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Tag", Type: "string"}}},
+		{ID: effect, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Kind", Type: "string"}, {Name: "Name", Type: "string"}, {Name: "Arg", Type: "string"}, {Name: "Reply", Type: "string"}}},
+		{ID: effects, Kind: compilercontract.KindSlice, ElemType: effect, JSRepresentation: compilercontract.JSArrayOrSlice},
+	}
+	wireTypes := []compilercontract.TypeInfo{
+		intType, boolType, floatType,
+		{ID: input, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Step", Type: "int"}, {Name: "Locked", Type: "bool"}, {Name: "Revision", Type: "int"}}},
+		{ID: publication, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Count", Type: "float64"}, {Name: "Revision", Type: "int"}}},
+	}
+	functions := []compilercontract.TypedFunction{
+		moduleBridgeFunction(entry, "Init", nil, []compilercontract.TypeID{state}),
+		moduleBridgeFunction(entry, "Update", []compilercontract.TypeID{state, message}, []compilercontract.TypeID{state, effects}),
+		moduleBridgeFunction(entry, "View", []compilercontract.TypeID{state}, []compilercontract.TypeID{node}),
+	}
+	if side == "parent" {
+		functions = append(functions,
+			moduleBridgeFunction(entry, "Output", []compilercontract.TypeID{state}, []compilercontract.TypeID{input}),
+			moduleBridgeFunction(entry, "Receive", []compilercontract.TypeID{state, publication}, []compilercontract.TypeID{state}),
+		)
+	} else if side == "child" {
+		functions = append(functions,
+			moduleBridgeFunction(entry, "Input", []compilercontract.TypeID{state, input}, []compilercontract.TypeID{state}),
+			moduleBridgeFunction(entry, "Publication", []compilercontract.TypeID{state}, []compilercontract.TypeID{publication}),
+		)
+	}
+	appPackage := compilercontract.TypedPackage{ImportPath: entry, Types: appTypes, Functions: functions}
+	program := compilercontract.TypedProgram{Packages: []compilercontract.TypedPackage{
+		appPackage,
+		{ImportPath: gobiPackage, Types: gobiTypes},
+		{ImportPath: wirePackage, Types: wireTypes},
+	}}
+	return program, entry
+}
+
+func moduleBridgeFunction(packagePath, name string, params, results []compilercontract.TypeID) compilercontract.TypedFunction {
+	return compilercontract.TypedFunction{
+		ID: compilercontract.SymbolID(packagePath + "." + name), PackagePath: packagePath, Name: name,
+		Signature: compilercontract.Signature{Params: append([]compilercontract.TypeID{}, params...), Results: append([]compilercontract.TypeID{}, results...)},
+		Span:      compilercontract.Span{File: "probe.go", StartByte: 0, EndByte: 1}, Body: []compilercontract.Operation{},
+	}
+}
+
 func TestEffectCancelCapabilityRequiresReachableTypedDescriptor(t *testing.T) {
 	root := filepath.Clean(filepath.Join("..", ".."))
 	const prelude = `package effectcancelprobe

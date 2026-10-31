@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Independently compiled Go modules</title>
+    <style>
+      :root { color-scheme: light dark; font: 16px/1.45 system-ui, sans-serif; }
+      body { margin: 0; padding: 2rem; }
+      main { max-width: 70rem; margin: 0 auto; }
+      header, .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+      .toolbar { margin: 1rem 0; }
+      button { font: inherit; padding: .45rem .8rem; }
+      #module-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+      #module-pair > [data-gobi-module-root] { min-width: 0; padding: 1rem; border: 1px solid #8888; border-radius: .5rem; }
+      pre { overflow: auto; max-height: 24rem; padding: 1rem; background: #8882; border-radius: .5rem; }
+      [data-state="failed"] { color: #c33; }
+      @media (max-width: 42rem) { body { padding: 1rem; } #module-pair { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Independent Go modules</h1>
+          <p>The parent owns input controls. The child owns its counter. Typed records connect their separately compiled Go state.</p>
+        </div>
+        <output id="module-status" aria-live="polite" data-state="starting">Starting…</output>
+      </header>
+      <div class="toolbar" aria-label="Renderer controls">
+        <div>
+          <button type="button" data-module-backend="dom">Use DOM renderer</button>
+          <button type="button" data-module-backend="react">Use React renderer</button>
+        </div>
+        <div>
+          <button type="button" id="read-snapshot">Read snapshot</button>
+          <button type="button" id="read-trace">Read trace</button>
+        </div>
+      </div>
+      <section id="module-pair" aria-label="Compiled parent and child modules"></section>
+      <h2>Current pair snapshot</h2>
+      <pre id="module-snapshot" aria-live="polite"></pre>
+      <details>
+        <summary>Runtime trace</summary>
+        <pre id="module-trace"></pre>
+      </details>
+    </main>
+    <script type="module" src="./demo.bundle.mjs"></script>
+  </body>
+</html>

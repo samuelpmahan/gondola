@@ -12,6 +12,25 @@ import (
 
 const maxSafeInteger = "9007199254740991"
 
+const moduleWirePackage = "github.com/samuelpmahan/gondola/fixtures/compiled/modulewire"
+
+type moduleBridgeRoles struct {
+	input       *compilercontract.TypedFunction
+	publication *compilercontract.TypedFunction
+	output      *compilercontract.TypedFunction
+	receive     *compilercontract.TypedFunction
+}
+
+func (r moduleBridgeRoles) functions() []compilercontract.TypedFunction {
+	functions := make([]compilercontract.TypedFunction, 0, 2)
+	for _, function := range []*compilercontract.TypedFunction{r.input, r.publication, r.output, r.receive} {
+		if function != nil {
+			functions = append(functions, *function)
+		}
+	}
+	return functions
+}
+
 // Analyze discovers package-level Init/Update/View triples and fails closed on
 // unsupported reachable syntax or calls. Its output is neutral source/type
 // metadata, not an interpretation of application code.
@@ -96,8 +115,13 @@ func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.
 	if len(view.Signature.Results) == 1 && !viewShape(pkg.Types, view.Signature.Results[0]) {
 		diagnostics = append(diagnostics, diagnostic("analyze.view-result", "View result must be gobi.Node or compilercontract.View", view.Span))
 	}
+	bridgeRoles, bridgeDiagnostics := discoverModuleBridgeRoles(pkg, byName, stateType, sourceTypeIndex(program.Packages))
+	diagnostics = append(diagnostics, bridgeDiagnostics...)
 
 	roots := []compilercontract.SymbolID{init.ID, update.ID, view.ID}
+	for _, function := range bridgeRoles.functions() {
+		roots = append(roots, function.ID)
+	}
 	reachable, reachableDiagnostics := reachableFunctions(functions, roots)
 	diagnostics = append(diagnostics, reachableDiagnostics...)
 	diagnostics = append(diagnostics, ValidateOperations(program, roots)...)
@@ -115,6 +139,7 @@ func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.
 			}
 		}
 	}
+	types = mergeSignatureTypeClosure(types, reachable, sourceTypeIndex(program.Packages))
 	sort.SliceStable(types, func(i, j int) bool { return types[i].ID < types[j].ID })
 	appSymbols := make([]compilercontract.Symbol, 0, len(reachable))
 	for _, function := range reachable {
@@ -153,6 +178,148 @@ func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.
 	}
 	diagnostics = append(diagnostics, compilercontract.ValidateAppIR(app)...)
 	return app, diagnostics
+}
+
+func discoverModuleBridgeRoles(pkg compilercontract.TypedPackage, byName map[string][]compilercontract.TypedFunction, stateType compilercontract.TypeID, allTypes map[compilercontract.TypeID]compilercontract.TypeInfo) (moduleBridgeRoles, []compilercontract.Diagnostic) {
+	var roles moduleBridgeRoles
+	var diagnostics []compilercontract.Diagnostic
+	names := []string{"Input", "Publication", "Output", "Receive"}
+	any := false
+	for _, name := range names {
+		if len(byName[name]) != 0 {
+			any = true
+		}
+	}
+	if !any {
+		return roles, diagnostics
+	}
+
+	parentSide := len(byName["Output"]) != 0 || len(byName["Receive"]) != 0
+	childSide := len(byName["Input"]) != 0 || len(byName["Publication"]) != 0
+	if parentSide == childSide {
+		diagnostics = append(diagnostics, diagnostic("analyze.module-roles", "module bridge roles must be exactly the parent Output/Receive pair or child Input/Publication pair", compilercontract.Span{}))
+		return roles, diagnostics
+	}
+	roleNames := []string{"Output", "Receive"}
+	if childSide {
+		roleNames = []string{"Input", "Publication"}
+	}
+	for _, name := range roleNames {
+		matches := byName[name]
+		if len(matches) != 1 {
+			diagnostics = append(diagnostics, diagnostic("analyze.module-roles", fmt.Sprintf("module ABI requires exactly one package-level %s function", name), compilercontract.Span{}))
+			continue
+		}
+		function := matches[0]
+		switch name {
+		case "Input":
+			roles.input = &function
+		case "Publication":
+			roles.publication = &function
+		case "Output":
+			roles.output = &function
+		case "Receive":
+			roles.receive = &function
+		}
+	}
+	inputType := compilercontract.TypeID(moduleWirePackage + ".Input")
+	publicationType := compilercontract.TypeID(moduleWirePackage + ".Publication")
+	if roles.output != nil && (!signatureEquals(roles.output.Signature, []compilercontract.TypeID{stateType}, []compilercontract.TypeID{inputType})) {
+		diagnostics = append(diagnostics, diagnostic("analyze.module-signature", "parent Output must have signature func(State) modulewire.Input", roles.output.Span))
+	}
+	if roles.receive != nil && (!signatureEquals(roles.receive.Signature, []compilercontract.TypeID{stateType, publicationType}, []compilercontract.TypeID{stateType})) {
+		diagnostics = append(diagnostics, diagnostic("analyze.module-signature", "parent Receive must have signature func(State, modulewire.Publication) State", roles.receive.Span))
+	}
+	if roles.input != nil && (!signatureEquals(roles.input.Signature, []compilercontract.TypeID{stateType, inputType}, []compilercontract.TypeID{stateType})) {
+		diagnostics = append(diagnostics, diagnostic("analyze.module-signature", "child Input must have signature func(State, modulewire.Input) State", roles.input.Span))
+	}
+	if roles.publication != nil && (!signatureEquals(roles.publication.Signature, []compilercontract.TypeID{stateType}, []compilercontract.TypeID{publicationType})) {
+		diagnostics = append(diagnostics, diagnostic("analyze.module-signature", "child Publication must have signature func(State) modulewire.Publication", roles.publication.Span))
+	}
+	if info, ok := allTypes[inputType]; !ok || !exactModuleWireShape(info, compilercontract.JSClass, []compilercontract.TypeField{{Name: "Step", Type: "int"}, {Name: "Locked", Type: "bool"}, {Name: "Revision", Type: "int"}}) {
+		span := compilercontract.Span{}
+		if roles.input != nil {
+			span = roles.input.Span
+		} else if roles.output != nil {
+			span = roles.output.Span
+		}
+		diagnostics = append(diagnostics, diagnostic("analyze.module-wire-type", "modulewire.Input must be the exact exported struct {Step int; Locked bool; Revision int}", span))
+	}
+	if info, ok := allTypes[publicationType]; !ok || !exactModuleWireShape(info, compilercontract.JSClass, []compilercontract.TypeField{{Name: "Count", Type: "float64"}, {Name: "Revision", Type: "int"}}) {
+		span := compilercontract.Span{}
+		if roles.publication != nil {
+			span = roles.publication.Span
+		} else if roles.receive != nil {
+			span = roles.receive.Span
+		}
+		diagnostics = append(diagnostics, diagnostic("analyze.module-wire-type", "modulewire.Publication must be the exact exported struct {Count float64; Revision int}", span))
+	}
+	return roles, diagnostics
+}
+
+func signatureEquals(signature compilercontract.Signature, params, results []compilercontract.TypeID) bool {
+	if len(signature.Params) != len(params) || len(signature.Results) != len(results) {
+		return false
+	}
+	for index := range params {
+		if signature.Params[index] != params[index] {
+			return false
+		}
+	}
+	for index := range results {
+		if signature.Results[index] != results[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func exactModuleWireShape(info compilercontract.TypeInfo, representation compilercontract.JSRepresentation, fields []compilercontract.TypeField) bool {
+	if info.Kind != compilercontract.KindStruct || info.JSRepresentation != representation || len(info.Fields) != len(fields) {
+		return false
+	}
+	for index := range fields {
+		if info.Fields[index] != fields[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func mergeSignatureTypeClosure(types []compilercontract.TypeInfo, functions []compilercontract.TypedFunction, sourceTypes map[compilercontract.TypeID]compilercontract.TypeInfo) []compilercontract.TypeInfo {
+	known := make(map[compilercontract.TypeID]bool, len(types))
+	for _, info := range types {
+		known[info.ID] = true
+	}
+	queue := make([]compilercontract.TypeID, 0)
+	for _, function := range functions {
+		queue = append(queue, function.Signature.Params...)
+		queue = append(queue, function.Signature.Results...)
+	}
+	visited := make(map[compilercontract.TypeID]bool, len(queue))
+	for len(queue) != 0 {
+		id := queue[0]
+		queue = queue[1:]
+		if visited[id] {
+			continue
+		}
+		visited[id] = true
+		info, ok := sourceTypes[id]
+		if !ok {
+			continue
+		}
+		if !known[id] {
+			known[id] = true
+			types = append(types, info)
+		}
+		if info.ElemType != "" {
+			queue = append(queue, info.ElemType)
+		}
+		for _, field := range info.Fields {
+			queue = append(queue, field.Type)
+		}
+	}
+	return types
 }
 
 func ValidateOperations(program compilercontract.TypedProgram, roots []compilercontract.SymbolID) []compilercontract.Diagnostic {

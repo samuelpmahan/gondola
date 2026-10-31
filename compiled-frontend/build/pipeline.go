@@ -21,6 +21,7 @@ import (
 	"github.com/samuelpmahan/gondola/compiled-frontend/analyze"
 	"github.com/samuelpmahan/gondola/compiled-frontend/emit"
 	"github.com/samuelpmahan/gondola/compilercontract"
+	"github.com/samuelpmahan/gondola/moduleabi"
 )
 
 type manifestApp struct {
@@ -33,6 +34,7 @@ type manifestApp struct {
 	Module           string                `json:"module"`
 	Encoder          string                `json:"encoder"`
 	Components       string                `json:"components"`
+	ModuleABI        string                `json:"moduleABI,omitempty"`
 	ForwarderPackage string                `json:"forwarderPackage"`
 	RoleBindings     []manifestRoleBinding `json:"roleBindings"`
 }
@@ -232,7 +234,7 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 		if err := writeOutputFile(appDir, "app-ir.json", mustMarshal(app)); err != nil {
 			return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, err
 		}
-		encoder, err := compilercontract.GenerateValueEncoder(app.Types)
+		encoder, err := compilercontract.GenerateGoScriptValueEncoder(app.Types)
 		if err != nil {
 			return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("generate state encoder for %q: %w", app.PackagePath, err)
 		}
@@ -264,14 +266,48 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 		if err := os.Remove(entryPath); err != nil {
 			return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("remove temporary entry for %q: %w", app.PackagePath, err)
 		}
+		appIRPath := filepath.ToSlash(filepath.Join("apps", appDirName, "app-ir.json"))
+		modulePath := filepath.ToSlash(filepath.Join("apps", appDirName, "gobi-compiled.mjs"))
+		encoderPath := filepath.ToSlash(filepath.Join("apps", appDirName, "encoder.mjs"))
+		componentsPath := filepath.ToSlash(filepath.Join("apps", appDirName, emit.ComponentsFile))
+		moduleABIPath := ""
+		_, hasModuleBridges, err := moduleBridgeSymbols(app)
+		if err != nil {
+			return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, err
+		}
+		if hasModuleBridges {
+			artifactPaths := []string{appIRPath, modulePath, encoderPath, componentsPath}
+			artifactFiles := make(map[string][]byte, len(artifactPaths))
+			for _, artifactPath := range artifactPaths {
+				contents, err := os.ReadFile(filepath.Join(stage, filepath.FromSlash(artifactPath)))
+				if err != nil {
+					return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("read module ABI artifact %q: %w", artifactPath, err)
+				}
+				artifactFiles[artifactPath] = contents
+			}
+			descriptor, err := moduleabi.Describe(app, artifactFiles)
+			if err != nil {
+				return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("describe module ABI for %q: %w", app.PackagePath, err)
+			}
+			descriptorBytes, err := json.MarshalIndent(descriptor, "", "  ")
+			if err != nil {
+				return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("encode module ABI for %q: %w", app.PackagePath, err)
+			}
+			descriptorBytes = append(descriptorBytes, '\n')
+			moduleABIPath = filepath.ToSlash(filepath.Join("apps", appDirName, "module-abi.json"))
+			if err := writeOutputFile(stage, moduleABIPath, descriptorBytes); err != nil {
+				return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, err
+			}
+		}
 		manifest.Apps = append(manifest.Apps, manifestApp{
 			Backend:          backend.Name(),
 			ComponentID:      component.ID,
 			PackagePath:      app.PackagePath,
-			AppIR:            filepath.ToSlash(filepath.Join("apps", appDirName, "app-ir.json")),
-			Module:           filepath.ToSlash(filepath.Join("apps", appDirName, "gobi-compiled.mjs")),
-			Encoder:          filepath.ToSlash(filepath.Join("apps", appDirName, "encoder.mjs")),
-			Components:       filepath.ToSlash(filepath.Join("apps", appDirName, emit.ComponentsFile)),
+			AppIR:            appIRPath,
+			Module:           modulePath,
+			Encoder:          encoderPath,
+			Components:       componentsPath,
+			ModuleABI:        moduleABIPath,
 			ForwarderPackage: forwarder.PackagePath,
 			RoleBindings: []manifestRoleBinding{
 				{Role: "init", AppIRSymbol: string(component.Init), ForwarderExport: "GobiCompiledInit"},
@@ -320,6 +356,10 @@ func compiledModuleSource(app compilercontract.AppIR) ([]byte, error) {
 	if initName != "Init" || updateName != "Update" || viewName != "View" {
 		return nil, fmt.Errorf("app %q role symbols do not resolve to emitted Init/Update/View exports", app.PackagePath)
 	}
+	bridgeRoles, hasModuleBridges, err := moduleBridgeSymbols(app)
+	if err != nil {
+		return nil, err
+	}
 	packageImport := "@goscript/" + forwarderPackagePath(app) + "/index.js"
 	quotedImport, _ := json.Marshal(packageImport)
 	quotedSchema, _ := json.Marshal(compilercontract.CompiledModuleSchema)
@@ -329,6 +369,7 @@ func compiledModuleSource(app compilercontract.AppIR) ([]byte, error) {
 	source := fmt.Sprintf(`// Generated from validated AppIR. Do not edit.
 import * as emitted from %s;
 import { appIR } from "./components.gen.mjs";
+%s
 
 const component = appIR.components[0];
 if (!component || component.packagePath !== %q || component.init !== %s || component.update !== %s || component.view !== %s) {
@@ -336,10 +377,24 @@ if (!component || component.packagePath !== %q || component.init !== %s || compo
 }
 const symbols = Object.create(null);
 Object.defineProperty(symbols, %s, { value: emitted.GobiCompiledInit, enumerable: true });
-Object.defineProperty(symbols, %s, { value: emitted.GobiCompiledUpdate, enumerable: true });
-Object.defineProperty(symbols, %s, { value: emitted.GobiCompiledView, enumerable: true });
+Object.defineProperty(symbols, %s, { value: (state, message) => emitted.GobiCompiledUpdate(state, __gobiEncodeGoMessage(message)), enumerable: true });
+Object.defineProperty(symbols, %s, { value: (state) => __gobiDecodeGoView(emitted.GobiCompiledView(state)), enumerable: true });
 export const gobiCompiled = Object.freeze({ schema: %s, appIR, symbols: Object.freeze(symbols) });
-	`, string(quotedImport), app.PackagePath, string(quotedInitID), string(quotedUpdateID), string(quotedViewID), string(quotedInitID), string(quotedUpdateID), string(quotedViewID), string(quotedSchema))
+	`, string(quotedImport), goScriptStringBoundarySource, app.PackagePath, string(quotedInitID), string(quotedUpdateID), string(quotedViewID), string(quotedInitID), string(quotedUpdateID), string(quotedViewID), string(quotedSchema))
+	if hasModuleBridges {
+		var bridgeSource strings.Builder
+		bridgeSource.WriteString("\nexport const gobiModuleBridges = Object.freeze({\n")
+		if bridgeRoles["Input"].ID != "" {
+			bridgeSource.WriteString("  input: (state, input) => emitted.GobiModuleInput(state, input.Step, input.Locked, input.Revision),\n")
+			bridgeSource.WriteString("  publication: (state) => { const value = emitted.GobiModulePublication(state); return Object.freeze({ Count: value.Count, Revision: value.Revision }); },\n")
+		}
+		if bridgeRoles["Output"].ID != "" {
+			bridgeSource.WriteString("  output: (state) => { const value = emitted.GobiModuleOutput(state); return Object.freeze({ Step: value.Step, Locked: value.Locked, Revision: value.Revision }); },\n")
+			bridgeSource.WriteString("  receive: (state, publication) => emitted.GobiModuleReceive(state, publication.Count, publication.Revision),\n")
+		}
+		bridgeSource.WriteString("});\n")
+		source += bridgeSource.String()
+	}
 	return []byte(source), nil
 }
 
@@ -422,6 +477,21 @@ func forwarderSource(app compilercontract.AppIR) ([]byte, error) {
 			return nil, err
 		}
 	}
+	bridgeRoles, hasModuleBridges, err := moduleBridgeSymbols(app)
+	if err != nil {
+		return nil, err
+	}
+	if hasModuleBridges {
+		for _, name := range []string{"Input", "Publication", "Output", "Receive"} {
+			if symbol := bridgeRoles[name]; symbol.ID != "" {
+				for _, typeID := range append(append([]compilercontract.TypeID{}, symbol.Signature.Params...), symbol.Signature.Results...) {
+					if err := collectGoTypePackages(typeID, packageSet); err != nil {
+						return nil, err
+					}
+				}
+			}
+		}
+	}
 	packagePaths := make([]string, 0, len(packageSet))
 	for packagePath := range packageSet {
 		packagePaths = append(packagePaths, packagePath)
@@ -479,7 +549,140 @@ func forwarderSource(app compilercontract.AppIR) ([]byte, error) {
 	fmt.Fprintf(&source, "func GobiCompiledInit() %s {\n\treturn gobiApp.Init()\n}\n\n", initResult)
 	fmt.Fprintf(&source, "func GobiCompiledUpdate(%s) (%s, %s) {\n\treturn gobiApp.Update(state, message)\n}\n\n", strings.Join(updateParams, ", "), updateResults[0], updateResults[1])
 	fmt.Fprintf(&source, "func GobiCompiledView(state %s) %s {\n\treturn gobiApp.View(state)\n}\n", viewParam, viewResult)
+	if hasModuleBridges {
+		if symbol := bridgeRoles["Input"]; symbol.ID != "" {
+			stateType, err := goTypeExpression(symbol.Signature.Params[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			inputType, err := goTypeExpression(symbol.Signature.Params[1], aliases)
+			if err != nil {
+				return nil, err
+			}
+			stateResult, err := goTypeExpression(symbol.Signature.Results[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			fmt.Fprintf(&source, "\nfunc GobiModuleInput(state %s, step int, locked bool, revision int) %s {\n\treturn gobiApp.Input(state, %s{Step: step, Locked: locked, Revision: revision})\n}\n", stateType, stateResult, inputType)
+		}
+		if symbol := bridgeRoles["Publication"]; symbol.ID != "" {
+			stateType, err := goTypeExpression(symbol.Signature.Params[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			publicationType, err := goTypeExpression(symbol.Signature.Results[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			fmt.Fprintf(&source, "\nfunc GobiModulePublication(state %s) %s {\n\treturn gobiApp.Publication(state)\n}\n", stateType, publicationType)
+		}
+		if symbol := bridgeRoles["Output"]; symbol.ID != "" {
+			stateType, err := goTypeExpression(symbol.Signature.Params[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			inputType, err := goTypeExpression(symbol.Signature.Results[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			fmt.Fprintf(&source, "\nfunc GobiModuleOutput(state %s) %s {\n\treturn gobiApp.Output(state)\n}\n", stateType, inputType)
+		}
+		if symbol := bridgeRoles["Receive"]; symbol.ID != "" {
+			stateType, err := goTypeExpression(symbol.Signature.Params[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			publicationType, err := goTypeExpression(symbol.Signature.Params[1], aliases)
+			if err != nil {
+				return nil, err
+			}
+			stateResult, err := goTypeExpression(symbol.Signature.Results[0], aliases)
+			if err != nil {
+				return nil, err
+			}
+			fmt.Fprintf(&source, "\nfunc GobiModuleReceive(state %s, count float64, revision int) %s {\n\treturn gobiApp.Receive(state, %s{Count: count, Revision: revision})\n}\n", stateType, stateResult, publicationType)
+		}
+	}
 	return []byte(source.String()), nil
+}
+
+func moduleBridgeSymbols(app compilercontract.AppIR) (map[string]compilercontract.Symbol, bool, error) {
+	roles := make(map[string]compilercontract.Symbol, 4)
+	for _, symbol := range app.Symbols {
+		if symbol.PackagePath != app.PackagePath {
+			continue
+		}
+		switch symbol.Name {
+		case "Input", "Publication", "Output", "Receive":
+			if _, exists := roles[symbol.Name]; exists {
+				return nil, false, fmt.Errorf("app %q has duplicate module bridge role %q", app.PackagePath, symbol.Name)
+			}
+			if symbol.ID != compilercontract.SymbolID(app.PackagePath+"."+symbol.Name) {
+				return nil, false, fmt.Errorf("app %q module bridge role %q has non-canonical symbol ID %q", app.PackagePath, symbol.Name, symbol.ID)
+			}
+			roles[symbol.Name] = symbol
+		}
+	}
+	if len(roles) == 0 {
+		return roles, false, nil
+	}
+	parent := roles["Output"].ID != "" && roles["Receive"].ID != ""
+	child := roles["Input"].ID != "" && roles["Publication"].ID != ""
+	if parent == child || (parent && (roles["Input"].ID != "" || roles["Publication"].ID != "")) || (child && (roles["Output"].ID != "" || roles["Receive"].ID != "")) {
+		return nil, false, fmt.Errorf("app %q must declare exactly the parent Output/Receive or child Input/Publication bridge pair", app.PackagePath)
+	}
+	if len(app.Components) != 1 {
+		return nil, false, fmt.Errorf("app %q must have exactly one component for module bridges", app.PackagePath)
+	}
+	stateType := app.Components[0].StateType
+	if parent {
+		if !signatureMatches(roles["Output"].Signature, []compilercontract.TypeID{stateType}, []compilercontract.TypeID{moduleabi.InputTypeID}) ||
+			!signatureMatches(roles["Receive"].Signature, []compilercontract.TypeID{stateType, moduleabi.PublicationID}, []compilercontract.TypeID{stateType}) {
+			return nil, false, fmt.Errorf("app %q parent module bridge signatures are invalid", app.PackagePath)
+		}
+	} else if !signatureMatches(roles["Input"].Signature, []compilercontract.TypeID{stateType, moduleabi.InputTypeID}, []compilercontract.TypeID{stateType}) ||
+		!signatureMatches(roles["Publication"].Signature, []compilercontract.TypeID{stateType}, []compilercontract.TypeID{moduleabi.PublicationID}) {
+		return nil, false, fmt.Errorf("app %q child module bridge signatures are invalid", app.PackagePath)
+	}
+	typeIndex := make(map[compilercontract.TypeID]compilercontract.TypeInfo, len(app.Types))
+	for _, info := range app.Types {
+		typeIndex[info.ID] = info
+	}
+	if !matchesBridgeWireType(typeIndex[moduleabi.InputTypeID], "Input", []compilercontract.TypeField{{Name: "Step", Type: "int"}, {Name: "Locked", Type: "bool"}, {Name: "Revision", Type: "int"}}) ||
+		!matchesBridgeWireType(typeIndex[moduleabi.PublicationID], "Publication", []compilercontract.TypeField{{Name: "Count", Type: "float64"}, {Name: "Revision", Type: "int"}}) {
+		return nil, false, fmt.Errorf("app %q module wire types do not match the fixed Input/Publication ABI", app.PackagePath)
+	}
+	return roles, true, nil
+}
+
+func signatureMatches(signature compilercontract.Signature, params, results []compilercontract.TypeID) bool {
+	if len(signature.Params) != len(params) || len(signature.Results) != len(results) {
+		return false
+	}
+	for index := range params {
+		if signature.Params[index] != params[index] {
+			return false
+		}
+	}
+	for index := range results {
+		if signature.Results[index] != results[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func matchesBridgeWireType(info compilercontract.TypeInfo, name string, fields []compilercontract.TypeField) bool {
+	if info.ID != compilercontract.TypeID(moduleabi.WirePackage+"."+name) || info.Kind != compilercontract.KindStruct ||
+		info.JSRepresentation != compilercontract.JSClass || len(info.Fields) != len(fields) {
+		return false
+	}
+	for index := range fields {
+		if info.Fields[index] != fields[index] {
+			return false
+		}
+	}
+	return true
 }
 
 func collectGoTypePackages(typeID compilercontract.TypeID, packages map[string]bool) error {

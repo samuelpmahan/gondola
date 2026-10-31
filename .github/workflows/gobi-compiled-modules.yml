@@ -1,0 +1,159 @@
+name: Gobi independently compiled modules
+
+on:
+  push:
+    paths:
+      - 'cmd/compiled-modules-native/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'moduleabi/**'
+      - 'compiled-modules/**'
+      - 'compiled-frontend/analyze/**'
+      - 'compiled-frontend/build/**'
+      - 'compiled-frontend/cmd/gobi-build/**'
+      - 'compiled-frontend/emit/**'
+      - 'compiled-frontend/frontend/runtime/**'
+      - 'compiled-frontend/frontend/shared/**'
+      - 'compiled-frontend/frontend/react/**'
+      - 'compiled-frontend/frontend/dom/**'
+      - 'compiled-frontend/conformance/**'
+      - 'compiled-frontend/go.mod'
+      - 'compiled-frontend/go.sum'
+      - 'compiled-frontend/package.json'
+      - 'compiled-frontend/package-lock.json'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-children/conformance/browser-version.test.mjs'
+      - 'compiled-frontend/conformance/browser.mjs'
+      - 'compiled-frontend/conformance/no-wasm.mjs'
+      - 'compiled-frontend/conformance/direct-js.mjs'
+      - 'compiled-frontend/conformance/compare.mjs'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/package.json'
+      - 'interaction/package-lock.json'
+      - 'run.sh'
+      - 'EXPECTED.json'
+      - 'run-interaction.sh'
+      - 'run-compiled-modules.sh'
+      - '.github/workflows/gobi-compiled-modules.yml'
+  pull_request:
+    paths:
+      - 'cmd/compiled-modules-native/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'moduleabi/**'
+      - 'compiled-modules/**'
+      - 'compiled-frontend/analyze/**'
+      - 'compiled-frontend/build/**'
+      - 'compiled-frontend/cmd/gobi-build/**'
+      - 'compiled-frontend/emit/**'
+      - 'compiled-frontend/frontend/runtime/**'
+      - 'compiled-frontend/frontend/shared/**'
+      - 'compiled-frontend/frontend/react/**'
+      - 'compiled-frontend/frontend/dom/**'
+      - 'compiled-frontend/conformance/**'
+      - 'compiled-frontend/go.mod'
+      - 'compiled-frontend/go.sum'
+      - 'compiled-frontend/package.json'
+      - 'compiled-frontend/package-lock.json'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-children/conformance/browser-version.test.mjs'
+      - 'compiled-frontend/conformance/browser.mjs'
+      - 'compiled-frontend/conformance/no-wasm.mjs'
+      - 'compiled-frontend/conformance/direct-js.mjs'
+      - 'compiled-frontend/conformance/compare.mjs'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/package.json'
+      - 'interaction/package-lock.json'
+      - 'run.sh'
+      - 'EXPECTED.json'
+      - 'run-interaction.sh'
+      - 'run-compiled-modules.sh'
+      - '.github/workflows/gobi-compiled-modules.yml'
+
+jobs:
+  compiled-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run independent module profile
+        env:
+          GONDOLA_SKIP_NPM_CI: '1'
+          GONDOLA_SKIP_BROWSER_INSTALL: '1'
+          GOFLAGS: -buildvcs=false
+        run: bash run-compiled-modules.sh --source-commit "$GITHUB_SHA"
+
+      - name: Preserve module profile evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-compiled-modules-evidence
+          path: |
+            compiled-modules/output/attempts/**
+            compiled-modules/evidence/attempts/**
+          if-no-files-found: warn
+
+  milestone-zero-and-counter-regressions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run existing Milestone 0 check
+        run: bash run.sh
+
+      - name: Install existing interaction dependencies
+        run: |
+          npm ci --prefix interaction --no-audit --no-fund
+          interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run existing counter interaction regression
+        env:
+          GONDOLA_SKIP_NPM_CI: '1'
+          GONDOLA_SKIP_BROWSER_INSTALL: '1'
+        run: bash run-interaction.sh
