@@ -2,6 +2,7 @@ import { mountCompiledApp } from "../../compiled-frontend/frontend/runtime/runti
 
 const EFFECT_FIELDS = ["kind", "name", "arg", "reply"];
 const TOKEN_PATTERN = /^(parent|child|grandchild|sibling):g([1-9][0-9]*):r([1-9][0-9]*)$/;
+export const LIFECYCLE_HOST_CAPABILITIES = Object.freeze(["effect.request-reply", "effect.cancel"]);
 
 function cloneRecord(value) {
   if (value === null || typeof value !== "object") return value;
@@ -96,6 +97,23 @@ export function createLifecycleEffectDriver() {
     return runtime;
   }
 
+  function admissionInProgress() {
+    const hostRuntime = runtime;
+    return hostRuntime !== null && typeof hostRuntime.isAdmittingRendererCandidate === "function" &&
+      hostRuntime.isAdmittingRendererCandidate() === true;
+  }
+
+  function retryableAdmissionResult(token, item, error = "lifecycle delivery is paused during renderer candidate admission") {
+    return {
+      accepted: false,
+      outcome: "retryable",
+      retryable: true,
+      token,
+      correlation: cloneRecord(item.correlation),
+      error,
+    };
+  }
+
   function request(requestInput, deliver) {
     if (closed) throw new TypeError("lifecycle effect driver is closed");
     exactKeys(requestInput, ["dispatchId", "effectIndex", "effect"], "EffectRequest");
@@ -166,7 +184,8 @@ export function createLifecycleEffectDriver() {
       result = { accepted: false, error: error instanceof Error ? error.message : String(error) };
     }
     const accepted = result?.accepted === true;
-    event.outcome = accepted ? "accepted" : "rejected";
+    const retryable = result?.retryable === true;
+    event.outcome = accepted ? "accepted" : retryable ? "retryable" : "rejected";
     event.runtimeResult = cloneRecord(result ?? { accepted: false, error: "runtime returned no result" });
     return {
       accepted,
@@ -174,6 +193,7 @@ export function createLifecycleEffectDriver() {
       token,
       correlation: cloneRecord(item.correlation),
       runtimeResult: cloneRecord(event.runtimeResult),
+      ...(retryable ? { retryable: true } : {}),
       ...(accepted ? {} : { error: event.runtimeResult.error ?? "runtime rejected lifecycle completion" }),
     };
   }
@@ -181,6 +201,9 @@ export function createLifecycleEffectDriver() {
   function deliver(tokenInput) {
     const token = validateToken(tokenInput);
     const item = byToken.get(token);
+    if (item && item.status === "pending" && admissionInProgress()) {
+      return retryableAdmissionResult(token, item);
+    }
     if (!item || item.status !== "pending" || typeof item.deliver !== "function") {
       const reason = !item ? "unknown lifecycle request token" : `lifecycle request is ${item.status}`;
       record({
@@ -195,6 +218,11 @@ export function createLifecycleEffectDriver() {
     const callback = item.deliver;
     item.status = "delivering";
     const result = deliveryResult(token, item, "deliver", callback);
+    if (result.retryable) {
+      item.status = "pending";
+      item.deliver = callback;
+      return result;
+    }
     item.status = result.accepted ? "delivered" : "rejected";
     item.deliver = null;
     return result;
@@ -203,6 +231,9 @@ export function createLifecycleEffectDriver() {
   function forceDeliverRetired(tokenInput) {
     const token = validateToken(tokenInput);
     const item = byToken.get(token);
+    if (item && item.status === "cancelled" && admissionInProgress()) {
+      return retryableAdmissionResult(token, item);
+    }
     if (!item || item.status !== "cancelled" || typeof item.deliver !== "function") {
       const reason = !item ? "unknown lifecycle request token" :
         item.status === "unmounted" ? "callback was released on host unmount" :
@@ -220,6 +251,11 @@ export function createLifecycleEffectDriver() {
     const callback = item.deliver;
     item.status = "force-delivering";
     const result = deliveryResult(token, item, "force-deliver-retired", callback);
+    if (result.retryable) {
+      item.status = "cancelled";
+      item.deliver = callback;
+      return result;
+    }
     item.status = "force-delivered";
     item.deliver = null;
     return result;
@@ -227,8 +263,10 @@ export function createLifecycleEffectDriver() {
 
   function retireAll() {
     if (closed) return false;
-    closed = true;
     const hostRuntime = requireAttachedRuntime();
+    if (typeof hostRuntime.isAdmittingRendererCandidate === "function" &&
+        hostRuntime.isAdmittingRendererCandidate() === true) return false;
+    closed = true;
     for (const item of requests) {
       if (item.status === "pending") {
         const result = hostRuntime.cancelEffect(item.correlation);
@@ -302,6 +340,7 @@ export function mountLifecycleApp({
     renderer,
     effectHost: effects.effectHost,
     effectPolicy: validateLifecycleEffect,
+    hostCapabilities: LIFECYCLE_HOST_CAPABILITIES,
     onTick,
     onFailure,
   });

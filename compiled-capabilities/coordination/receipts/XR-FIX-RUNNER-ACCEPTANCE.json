@@ -1,0 +1,90 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "XR-FIX-RUNNER-ACCEPTANCE",
+  "worker": "N4",
+  "decision": "accepted",
+  "outcome": "accepted",
+  "status": "review_complete_bounded_scope",
+  "summary": "The frozen N6 runner-acceptance repair satisfies the bounded review. Structured inherited receipt validation, focused tamper/stale negatives, actual child exit behavior, test/helper source pins, and final report/exit-code ordering were independently verified. No full runner was launched.",
+  "sourceHashes": {
+    "compiled-capabilities/run.mjs": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b",
+    "compiled-capabilities/runner-acceptance.mjs": "224ab2b6d6d1b8694fc51fa2c110fe9653d1ca5c5e4cfd26dea302b9b01c6c71",
+    "compiled-capabilities/runner-acceptance.test.mjs": "f72b7c1f6e091b21824630173db72829dce9c0fd541d55c331850882831292e4",
+    "compiled-capabilities/README.md": "7b0bb2aec6ca429f068a55fd26c8d2f55f4dd96c3319b4f2f461b29a2e8d07f8",
+    "compiled-capabilities/RESULTS.md": "c1553eda044b5de399d052bfd129272aa52f8714354a191ca66391ebeb14bec6",
+    "authorReceipt": {
+      "path": "compiled-capabilities/coordination/receipts/E-FIX-RUNNER-ACCEPTANCE.json",
+      "sha256": "4c9c066d8e91e492df7f98cfe82f7316aebbbf8a507edc6404fa1082ce4a9660"
+    }
+  },
+  "review": {
+    "checks": [
+      "Old prose-substring inherited gate is absent; runner calls the structured validator after the actual inherited lifecycle command.",
+      "Lifecycle, methods, backend, and frontend records require structured full/pass/no-failure/freshness and source-pin facts; report, receipt, archive-copy, and nested receipt hash bindings are checked.",
+      "The acceptance helper and regression test are source-pinned before their stage runs, and the test stage precedes inherited execution.",
+      "Seven regression cases cover structured pass, prose-only rejection, tampering, stale/partial/failed evidence, structured matrix/backend mutations, actual Node child exit codes, and runner wiring.",
+      "applyReceiptExitCode runs after archive finalization, source-pin verification, receipt persistence, and report generation; report-generation failure sets failed status and exit code first.",
+      "README and RESULTS match the implementation order and retain the fresh full-run limitation."
+    ],
+    "toolchain": {
+      "nodeExecutable": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "nodeVersion": "v22.23.4"
+    },
+    "independentCommands": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs",
+        "exitCode": 0,
+        "stdout": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/syntax-runner.stdout.log",
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/syntax-runner.stderr.log",
+        "stderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/runner-acceptance.mjs",
+        "exitCode": 0,
+        "stdout": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/syntax-helper.stdout.log",
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/syntax-helper.stderr.log",
+        "stderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/runner-acceptance.test.mjs",
+        "exitCode": 0,
+        "stdout": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/syntax-tests.stdout.log",
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/syntax-tests.stderr.log",
+        "stderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/runner-acceptance.test.mjs",
+        "exitCode": 0,
+        "tap": {"tests": 7, "pass": 7, "fail": 0, "cancelled": 0, "skipped": 0, "todo": 0},
+        "stdout": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/focused.stdout.log",
+        "stdoutSha256": "2840ecfb554c28e55b90a9e6c0ec74d1def6684193f507fbef0568b9a9049ee4",
+        "stderr": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/focused.stderr.log",
+        "stderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/verify-actual-nested.mjs",
+        "exitCode": 0,
+        "result": {"status": "passed", "methodsStatus": "passed", "backendsStatus": "passed", "frontendStatus": "passed"},
+        "stdout": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/actual-nested.stdout.log",
+        "stdoutSha256": "cb94ba682a413eb4a7b35dca3f1ae6e7c06d9de8d2ad3666f20f2364b9eaedaf",
+        "stderr": "compiled-capabilities/coordination/reviews/XR-FIX-RUNNER-ACCEPTANCE/logs/actual-nested.stderr.log",
+        "stderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    ],
+    "finalExitPolicyLocation": "compiled-capabilities/run.mjs applies applyReceiptExitCode(receipt) after report generation and its failure handler.",
+    "fullRunnerLaunched": false,
+    "authorRedLogPreserved": "compiled-capabilities/coordination/reviews/E-FIX-RUNNER-ACCEPTANCE/logs/red.log"
+  },
+  "limitations": [
+    "This accepts only the bounded source repair and focused evidence; a fresh full capability run is still required.",
+    "No production, documentation, Git, dependency, or native-state files were modified by this review."
+  ],
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/XR-FIX-RUNNER-ACCEPTANCE.md",
+    "sha256": "2e9a51ced9e01f4a29a31e6969ac68e16392b716a9cb1fbeab764d8c585a1864"
+  },
+  "publication": "No Git operation, commit, merge, or deployment was performed."
+}

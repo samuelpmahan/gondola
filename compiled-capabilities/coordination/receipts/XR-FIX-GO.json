@@ -1,0 +1,54 @@
+{
+  "job_id": "XR-FIX-GO",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Verified that E-FIX-GO closes the XR-GO empty-Arg inference finding while retaining Update reachability, exact typed gobi.Effect, and literal kind/name/reply controls without app-ID hardcoding.",
+  "review_basis": {
+    "original_job": "E-GO",
+    "original_amendment": "XR-GO",
+    "repair": "E-FIX-GO",
+    "original_amendment_decision": "amend",
+    "repair_source_hashes_match_receipt": true
+  },
+  "findings": [],
+  "verified_properties": [
+    "The cancellation descriptor scan is rooted at the component Update symbol and follows Update-reachable helpers; it does not filter on an application or package ID.",
+    "The effect element type is derived from Update's second result slice and still must be github.com/samuelpmahan/gondola/gobi.Effect with string Kind, Name, Arg, and Reply fields.",
+    "Arg must be present and string-typed. Its payload content no longer gates the capability, so direct Arg: \"\" and parenthesized Arg: (\"\") infer effect.cancel consistently.",
+    "Kind, Name, and Reply still require literal strings equal to lifecycle.cancel, cancel, and empty string. Computed protocol fields still fail closed; keyed field form and Update reachability remain required.",
+    "Analyzer controls still cover mismatched protocol values, unrelated text, unreachable construction, and a computed Kind; the empty direct and parenthesized Arg regression cases are both present and pass.",
+    "AppIR contract validation still accepts effect.cancel and rejects duplicate capability declarations."
+  ],
+  "checks": [
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH go test -count=1 ./compilercontract",
+      "workdir": "repository root",
+      "toolchain": "go1.24.0",
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-GO/logs/go124-compilercontract.log"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test -count=1 ./analyze",
+      "workdir": "compiled-frontend/",
+      "toolchain": "go1.27.3",
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-GO/logs/go1273-analyze.log"
+    }
+  ],
+  "reviewed_source_sha256": {
+    "compilercontract/contract.go": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188",
+    "compilercontract/validation.go": "43b7ca7356782caa23ed8826b8778e5ce91eabaab50dcd06580a10d70deadc8e",
+    "compilercontract/contract_test.go": "124b45e184e6ed0e5ed2f92b7b7963eea4ff796f794871924dc7fb4a7c4749e4",
+    "compiled-frontend/analyze/analyze.go": "a637078d1b2ade9bf237ad015d53fff2191027fcd67f8956e55483cba8b48c2a",
+    "compiled-frontend/analyze/analyze_test.go": "1ff4aba8abba102b2d4399940586fb6c1f3f98a4842203be63474d887a87313b"
+  },
+  "log_sha256": {
+    "compiled-capabilities/coordination/reviews/XR-FIX-GO/logs/go124-compilercontract.log": "0363082c2bfbcba9dc03a24ceca8d5ec31dfb3a08a7358f610c0931e6b41680a",
+    "compiled-capabilities/coordination/reviews/XR-FIX-GO/logs/go1273-analyze.log": "fb3bf6f175793619ed3d73cbdb7ab8341eac7ab0abeaf872dac3feaff2153ed3"
+  },
+  "limitations": [
+    "This review was limited to the compiler contract and analyzer changes associated with E-GO/XR-GO/E-FIX-GO. The full capability milestone runner was not part of the requested verification."
+  ],
+  "integration": "The original XR-GO amendment remains recorded as amend; E-FIX-GO closes that finding and is accepted.",
+  "publication": "This review made no production edits. No commit, merge, or deploy was performed."
+}

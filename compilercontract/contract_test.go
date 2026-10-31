@@ -298,6 +298,21 @@ func TestGenerateValueEncoderRequiresPinnedSliceShapes(t *testing.T) {
 	}
 }
 
+func TestValidateAppIRRecognizesEffectCancelCapability(t *testing.T) {
+	app := effectTestAppIR()
+	app.Components[0].Capabilities = append(app.Components[0].Capabilities, CapabilityEffectCancel)
+	if diagnostics := ValidateAppIR(app); len(diagnostics) != 0 {
+		t.Fatalf("effect.cancel capability rejected: %+v", diagnostics)
+	}
+	app.Components[0].Capabilities = append(app.Components[0].Capabilities, CapabilityEffectCancel)
+	for _, diagnostic := range ValidateAppIR(app) {
+		if diagnostic.Code == "app.capability-duplicate" {
+			return
+		}
+	}
+	t.Fatal("duplicate effect.cancel capability was accepted")
+}
+
 func effectTestAppIR() AppIR {
 	return AppIR{
 		Schema: AppIRSchema, PackagePath: "example",

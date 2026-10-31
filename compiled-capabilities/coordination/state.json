@@ -1,0 +1,1993 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": "E-PREP-PROVENANCE",
+      "agent": "/root/cap_go"
+    },
+    "N2": {
+      "job": "XR-PREP-ARCHIVE",
+      "agent": "/root/cap_host"
+    },
+    "N3": {
+      "job": "XR-PREP-CUSTODY",
+      "agent": "/root/cap_harness"
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": "XR-PREP-SCHEDULER",
+      "agent": "/root/cap_demo"
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "E-GO": {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compilercontract/**, compiled-frontend/analyze/**",
+      "summary": "Go contract and analyzer capability discovery; freeze additive wire contract; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T09:08:29.227348+00:00",
+      "finished_at": "2026-10-31T09:11:22.470614+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-GO.json"
+    },
+    "E-HOST": {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-frontend/frontend/runtime/**, compiled-frontend/frontend/react/renderer.mjs, compiled-frontend/frontend/dom/renderer.mjs, compiled-lifecycle/runtime/runtime.mjs",
+      "summary": "Host and renderer admission, atomic rejected swaps, focused runtime tests; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T09:08:29.319266+00:00",
+      "finished_at": "2026-10-31T09:22:05.379143+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-HOST.json"
+    },
+    "E-HARNESS": {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-capabilities/conformance/**",
+      "summary": "Actual compiled React/DOM mounted conformance and rejection replay; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now.",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T09:08:29.404751+00:00",
+      "finished_at": "2026-10-31T09:26:31.493993+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-HARNESS.json"
+    },
+    "E-ORACLE": {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/oracle/**",
+      "summary": "Independent literal expectations, hostile descriptors, mutation controls; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:08:29.493685+00:00",
+      "finished_at": "2026-10-31T09:14:58.352343+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ORACLE.json"
+    },
+    "E-DEMO": {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/demo/**",
+      "summary": "Executable compatible/incompatible backend demonstration and smoke check; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:08:29.576999+00:00",
+      "finished_at": "2026-10-31T09:18:16.726421+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-DEMO.json"
+    },
+    "E-BUILD": {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/run.mjs, run-compiled-capabilities.sh, .github/workflows/gobi-compiled-capabilities.yml, compiled-capabilities/README.md, compiled-capabilities/RESULTS.md",
+      "summary": "End-to-end runner, inherited regressions, CI, documentation; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T09:08:29.681096+00:00",
+      "finished_at": "2026-10-31T09:24:29.683066+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-BUILD.json"
+    },
+    "XR-GO": {
+      "id": "XR-GO",
+      "kind": "review",
+      "depends_on": "E-GO",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:15:00.614465+00:00",
+      "finished_at": "2026-10-31T09:18:16.631462+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-GO.json"
+    },
+    "XR-HOST": {
+      "id": "XR-HOST",
+      "kind": "review",
+      "depends_on": "E-HOST",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:22:11.269238+00:00",
+      "finished_at": "2026-10-31T09:26:31.596299+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-HOST.json"
+    },
+    "XR-HARNESS": {
+      "id": "XR-HARNESS",
+      "kind": "review",
+      "depends_on": "E-HARNESS",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:26:44.212193+00:00",
+      "finished_at": "2026-10-31T09:32:37.852008+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-HARNESS.json"
+    },
+    "XR-ORACLE": {
+      "id": "XR-ORACLE",
+      "kind": "review",
+      "depends_on": "E-ORACLE",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T09:15:00.523336+00:00",
+      "finished_at": "2026-10-31T09:16:15.691906+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ORACLE.json"
+    },
+    "XR-DEMO": {
+      "id": "XR-DEMO",
+      "kind": "review",
+      "depends_on": "E-DEMO",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:18:31.987495+00:00",
+      "finished_at": "2026-10-31T09:22:05.468098+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-DEMO.json"
+    },
+    "XR-BUILD": {
+      "id": "XR-BUILD",
+      "kind": "review",
+      "depends_on": "E-BUILD",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:24:35.187309+00:00",
+      "finished_at": "2026-10-31T09:31:29.130467+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-BUILD.json"
+    },
+    "E-FIX-GO": {
+      "id": "E-FIX-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compilercontract/**, compiled-frontend/analyze/**",
+      "summary": "Repair XR-GO empty-token static capability inconsistency; present typed string payload is sufficient. Preserve original AMEND and tests.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T09:18:31.896079+00:00",
+      "finished_at": "2026-10-31T09:20:16.665003+00:00",
+      "repair_of": "XR-GO",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-GO.json"
+    },
+    "XR-FIX-GO": {
+      "id": "XR-FIX-GO",
+      "kind": "review",
+      "depends_on": "E-FIX-GO",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:20:19.093391+00:00",
+      "finished_at": "2026-10-31T09:22:05.555569+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-GO.json"
+    },
+    "E-FIX-BUILD": {
+      "id": "E-FIX-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/run.mjs, compiled-capabilities/README.md, RESULTS.md and narrow archive helper/tests if needed",
+      "repair_of": "XR-BUILD",
+      "summary": "Include immutable full-run execution/source-pin/command/version provenance snapshot in raw replay archive, with explicit archive-pending status and noncyclic final external receipt.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T09:31:31.561713+00:00",
+      "finished_at": "2026-10-31T09:37:33.654158+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-BUILD.json"
+    },
+    "XR-FIX-BUILD": {
+      "id": "XR-FIX-BUILD",
+      "kind": "review",
+      "depends_on": "E-FIX-BUILD",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T09:37:38.586673+00:00",
+      "finished_at": "2026-10-31T09:42:03.322858+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-BUILD.json"
+    },
+    "E-FIX-HARNESS": {
+      "id": "E-FIX-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-capabilities/conformance/**",
+      "repair_of": "XR-HARNESS",
+      "summary": "Construct real host option accessor, recompute raw rejected and compatible state/view/DOM/pending preservation, remove synthetic active-profile passthrough, and detect nine independent capture mutations.",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T09:32:40.040156+00:00",
+      "finished_at": "2026-10-31T09:37:33.554644+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-HARNESS.json"
+    },
+    "XR-FIX-HARNESS": {
+      "id": "XR-FIX-HARNESS",
+      "kind": "review",
+      "depends_on": "E-FIX-HARNESS",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T09:37:38.675385+00:00",
+      "finished_at": "2026-10-31T09:45:10.490205+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-HARNESS.json"
+    },
+    "E-PREP-PROVENANCE": {
+      "id": "E-PREP-PROVENANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/provenance/**",
+      "summary": "Prepare independent source-tree/full-receipt provenance audit; current/future execution distinguished, no unexecuted pass.",
+      "status": "running",
+      "worker": "N1",
+      "started_at": "2026-10-31T09:34:04.386142+00:00",
+      "finished_at": null
+    },
+    "XR-PREP-PROVENANCE": {
+      "id": "XR-PREP-PROVENANCE",
+      "kind": "review",
+      "depends_on": "E-PREP-PROVENANCE",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "E-PREP-SCHEDULER": {
+      "id": "E-PREP-SCHEDULER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/scheduler/**",
+      "summary": "Prepare independent native state/epoch/dispatch/receipt/capacity auditor including superseded AMENDs and rejected solver recommendations.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T09:34:04.481989+00:00",
+      "finished_at": "2026-10-31T09:40:01.720961+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-PREP-SCHEDULER.json"
+    },
+    "XR-PREP-SCHEDULER": {
+      "id": "XR-PREP-SCHEDULER",
+      "kind": "review",
+      "depends_on": "E-PREP-SCHEDULER",
+      "status": "running",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:40:05.769224+00:00",
+      "finished_at": null
+    },
+    "E-PREP-CUSTODY": {
+      "id": "E-PREP-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/custody/**",
+      "summary": "Freeze and hash immutable pre-repair author/review raw traces and failures into reconstructible archival chunks; no rewrite of originals.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:34:04.575714+00:00",
+      "finished_at": "2026-10-31T09:42:03.412251+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-PREP-CUSTODY.json"
+    },
+    "XR-PREP-CUSTODY": {
+      "id": "XR-PREP-CUSTODY",
+      "kind": "review",
+      "depends_on": "E-PREP-CUSTODY",
+      "status": "running",
+      "worker": "N3",
+      "started_at": "2026-10-31T09:42:06.227713+00:00",
+      "finished_at": null
+    },
+    "E-PREP-ARCHIVE": {
+      "id": "E-PREP-ARCHIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/archive/**",
+      "summary": "Prepare independent replay archive/provenance/command/version/source-pin verifier for repaired noncyclic archive protocol.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:34:04.665537+00:00",
+      "finished_at": "2026-10-31T09:39:15.469635+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-PREP-ARCHIVE.json"
+    },
+    "XR-PREP-ARCHIVE": {
+      "id": "XR-PREP-ARCHIVE",
+      "kind": "review",
+      "depends_on": "E-PREP-ARCHIVE",
+      "status": "running",
+      "worker": "N2",
+      "started_at": "2026-10-31T09:40:05.676697+00:00",
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-31T09:07:28.978420+00:00",
+      "ready_jobs": [
+        "E-GO",
+        "E-HOST",
+        "E-HARNESS",
+        "E-ORACLE",
+        "E-DEMO",
+        "E-BUILD"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "E-BUILD",
+        "N2": "E-HOST",
+        "N4": "E-ORACLE",
+        "N3": "E-HARNESS",
+        "N1": "E-GO",
+        "N5": "E-DEMO"
+      },
+      "dispatch": {
+        "N6": "E-BUILD",
+        "N2": "E-HOST",
+        "N4": "E-ORACLE",
+        "N3": "E-HARNESS",
+        "N1": "E-GO",
+        "N5": "E-DEMO"
+      },
+      "native_seconds": 0.005408320001151878,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-GO": 1,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DEMO": 1,
+        "E-BUILD": 1,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-GO": [
+          "N1"
+        ],
+        "E-HOST": [
+          "N2"
+        ],
+        "E-HARNESS": [
+          "N3"
+        ],
+        "E-ORACLE": [
+          "N4"
+        ],
+        "E-DEMO": [
+          "N5"
+        ],
+        "E-BUILD": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-GO": 100,
+        "E-HOST": 100,
+        "E-HARNESS": 100,
+        "E-ORACLE": 100,
+        "E-DEMO": 100,
+        "E-BUILD": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:08:29.227348+00:00",
+      "worker": "N1",
+      "job": "E-GO",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:08:29.319266+00:00",
+      "worker": "N2",
+      "job": "E-HOST",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:08:29.404751+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:08:29.493685+00:00",
+      "worker": "N4",
+      "job": "E-ORACLE",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:08:29.576999+00:00",
+      "worker": "N5",
+      "job": "E-DEMO",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:08:29.681096+00:00",
+      "worker": "N6",
+      "job": "E-BUILD",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-31T09:10:58.334422+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N6": "E-BUILD",
+        "N5": "E-DEMO",
+        "N3": "E-HARNESS",
+        "N1": "E-GO",
+        "N2": "E-HOST",
+        "N4": "E-ORACLE"
+      },
+      "dispatch": {},
+      "native_seconds": 0.0019869739990099333,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 6 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 1,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DEMO": 1,
+        "E-BUILD": 1,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:11:22.470614+00:00",
+      "worker": "N1",
+      "job": "E-GO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:14:58.352343+00:00",
+      "worker": "N4",
+      "job": "E-ORACLE"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-31T09:14:58.448747+00:00",
+      "ready_jobs": [
+        "XR-GO",
+        "XR-ORACLE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "E-HARNESS",
+        "N1": "XR-ORACLE",
+        "N4": "XR-GO",
+        "N5": "E-DEMO",
+        "N6": "E-BUILD",
+        "N2": "E-HOST"
+      },
+      "dispatch": {
+        "N1": "XR-ORACLE",
+        "N4": "XR-GO"
+      },
+      "native_seconds": 0.0038314570047077723,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DEMO": 1,
+        "E-BUILD": 1,
+        "XR-GO": 1,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": [
+          "N4"
+        ],
+        "XR-ORACLE": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-GO": 200,
+        "XR-ORACLE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:15:00.523336+00:00",
+      "worker": "N1",
+      "job": "XR-ORACLE",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:15:00.614465+00:00",
+      "worker": "N4",
+      "job": "XR-GO",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:16:15.691906+00:00",
+      "worker": "N1",
+      "job": "XR-ORACLE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:18:16.631462+00:00",
+      "worker": "N4",
+      "job": "XR-GO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:18:16.726421+00:00",
+      "worker": "N5",
+      "job": "E-DEMO"
+    },
+    {
+      "type": "extend-after-review-amend",
+      "at": "2026-10-31T09:18:16.760909+00:00",
+      "review": "XR-GO",
+      "decision": "amend",
+      "new_jobs": [
+        "E-FIX-GO",
+        "XR-FIX-GO"
+      ],
+      "note": "Lead-added bounded repair packets; native probe unmodified; subsequent assignment requires native solve/start."
+    },
+    {
+      "type": "native-recommendation-rejected",
+      "at": "2026-10-31T09:18:29.678274+00:00",
+      "log": "epoch-03-failed-nonoptimal.log",
+      "reason": "nonoptimal_native_score",
+      "dispatch_performed": false,
+      "followup": "Mark bounded repair with the probe-supported repair_of field, enabling its existing priority300 policy; rerun native solver."
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-31T09:18:29.797060+00:00",
+      "ready_jobs": [
+        "XR-DEMO",
+        "E-FIX-GO"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-FIX-GO",
+        "N4": "XR-DEMO",
+        "N5": "BENCH",
+        "N6": "E-BUILD",
+        "N2": "E-HOST",
+        "N3": "E-HARNESS"
+      },
+      "dispatch": {
+        "N1": "E-FIX-GO",
+        "N4": "XR-DEMO"
+      },
+      "native_seconds": 0.005128786004206631,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 500,
+      "native_score": 500,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 1,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 1,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 1,
+        "XR-FIX-GO": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-DEMO": [
+          "N1",
+          "N4"
+        ],
+        "E-FIX-GO": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-DEMO": 200,
+        "E-FIX-GO": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:18:31.896079+00:00",
+      "worker": "N1",
+      "job": "E-FIX-GO",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:18:31.987495+00:00",
+      "worker": "N4",
+      "job": "XR-DEMO",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:20:16.665003+00:00",
+      "worker": "N1",
+      "job": "E-FIX-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-31T09:20:16.775900+00:00",
+      "ready_jobs": [
+        "XR-FIX-GO"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "XR-FIX-GO",
+        "N1": "BENCH",
+        "N4": "XR-DEMO",
+        "N6": "E-BUILD",
+        "N2": "E-HOST",
+        "N3": "E-HARNESS"
+      },
+      "dispatch": {
+        "N5": "XR-FIX-GO"
+      },
+      "native_seconds": 0.004449815998668782,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 1,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 1,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-GO": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-FIX-GO": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:20:19.093391+00:00",
+      "worker": "N5",
+      "job": "XR-FIX-GO",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:22:05.379143+00:00",
+      "worker": "N2",
+      "job": "E-HOST"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:22:05.468098+00:00",
+      "worker": "N4",
+      "job": "XR-DEMO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:22:05.555569+00:00",
+      "worker": "N5",
+      "job": "XR-FIX-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 5,
+      "at": "2026-10-31T09:22:05.645055+00:00",
+      "ready_jobs": [
+        "XR-HOST"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N6"
+      ],
+      "assignments": {
+        "N2": "BENCH",
+        "N5": "BENCH",
+        "N1": "BENCH",
+        "N3": "E-HARNESS",
+        "N4": "XR-HOST",
+        "N6": "E-BUILD"
+      },
+      "dispatch": {
+        "N4": "XR-HOST"
+      },
+      "native_seconds": 0.004023542001959868,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 1,
+        "XR-GO": 0,
+        "XR-HOST": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-HOST": [
+          "N1",
+          "N4",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-HOST": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:22:11.269238+00:00",
+      "worker": "N4",
+      "job": "XR-HOST",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:24:29.683066+00:00",
+      "worker": "N6",
+      "job": "E-BUILD"
+    },
+    {
+      "type": "solve",
+      "epoch": 6,
+      "at": "2026-10-31T09:24:29.791166+00:00",
+      "ready_jobs": [
+        "XR-BUILD"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N4"
+      ],
+      "assignments": {
+        "N2": "BENCH",
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N3": "E-HARNESS",
+        "N4": "XR-HOST",
+        "N5": "XR-BUILD"
+      },
+      "dispatch": {
+        "N5": "XR-BUILD"
+      },
+      "native_seconds": 0.006271900005231146,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 1,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-BUILD": [
+          "N1",
+          "N2",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-BUILD": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:24:35.187309+00:00",
+      "worker": "N5",
+      "job": "XR-BUILD",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:26:31.493993+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:26:31.596299+00:00",
+      "worker": "N4",
+      "job": "XR-HOST"
+    },
+    {
+      "type": "solve",
+      "epoch": 7,
+      "at": "2026-10-31T09:26:31.706485+00:00",
+      "ready_jobs": [
+        "XR-HARNESS"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N6": "BENCH",
+        "N2": "BENCH",
+        "N4": "XR-HARNESS",
+        "N5": "XR-BUILD"
+      },
+      "dispatch": {
+        "N4": "XR-HARNESS"
+      },
+      "native_seconds": 0.008955775992944837,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 1,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-HARNESS": [
+          "N1",
+          "N2",
+          "N4",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-HARNESS": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:26:44.212193+00:00",
+      "worker": "N4",
+      "job": "XR-HARNESS",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:31:29.130467+00:00",
+      "worker": "N5",
+      "job": "XR-BUILD"
+    },
+    {
+      "type": "extend-after-review-amend",
+      "at": "2026-10-31T09:31:29.169536+00:00",
+      "review": "XR-BUILD",
+      "decision": "amend",
+      "new_jobs": [
+        "E-FIX-BUILD",
+        "XR-FIX-BUILD"
+      ],
+      "probe_modified": false
+    },
+    {
+      "type": "solve",
+      "epoch": 8,
+      "at": "2026-10-31T09:31:29.257360+00:00",
+      "ready_jobs": [
+        "E-FIX-BUILD"
+      ],
+      "pinned_workers": [
+        "N4"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N2": "BENCH",
+        "N5": "BENCH",
+        "N4": "XR-HARNESS",
+        "N6": "E-FIX-BUILD"
+      },
+      "dispatch": {
+        "N6": "E-FIX-BUILD"
+      },
+      "native_seconds": 0.004456773996935226,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 1,
+        "XR-FIX-BUILD": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIX-BUILD": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-FIX-BUILD": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:31:31.561713+00:00",
+      "worker": "N6",
+      "job": "E-FIX-BUILD",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:32:37.852008+00:00",
+      "worker": "N4",
+      "job": "XR-HARNESS"
+    },
+    {
+      "type": "extend-after-review-amend",
+      "at": "2026-10-31T09:32:37.885877+00:00",
+      "review": "XR-HARNESS",
+      "decision": "amend",
+      "new_jobs": [
+        "E-FIX-HARNESS",
+        "XR-FIX-HARNESS"
+      ],
+      "probe_modified": false
+    },
+    {
+      "type": "solve",
+      "epoch": 9,
+      "at": "2026-10-31T09:32:37.975070+00:00",
+      "ready_jobs": [
+        "E-FIX-HARNESS"
+      ],
+      "pinned_workers": [
+        "N6"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N5": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N3": "E-FIX-HARNESS",
+        "N6": "E-FIX-BUILD"
+      },
+      "dispatch": {
+        "N3": "E-FIX-HARNESS"
+      },
+      "native_seconds": 0.005375132997869514,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 1,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 1,
+        "XR-FIX-HARNESS": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIX-HARNESS": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "E-FIX-HARNESS": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:32:40.040156+00:00",
+      "worker": "N3",
+      "job": "E-FIX-HARNESS",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "extend-independent-evidence-preparation",
+      "at": "2026-10-31T09:34:01.127235+00:00",
+      "jobs": [
+        "E-PREP-PROVENANCE",
+        "E-PREP-SCHEDULER",
+        "E-PREP-CUSTODY",
+        "E-PREP-ARCHIVE"
+      ],
+      "gate": "preparation may run now; final source/full-run/archive acceptance remains blocked until real execution inputs exist",
+      "probe_modified": false
+    },
+    {
+      "type": "solve",
+      "epoch": 10,
+      "at": "2026-10-31T09:34:01.228486+00:00",
+      "ready_jobs": [
+        "E-PREP-PROVENANCE",
+        "E-PREP-SCHEDULER",
+        "E-PREP-CUSTODY",
+        "E-PREP-ARCHIVE"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "E-PREP-ARCHIVE",
+        "N6": "E-FIX-BUILD",
+        "N3": "E-FIX-HARNESS",
+        "N2": "E-PREP-SCHEDULER",
+        "N1": "E-PREP-PROVENANCE",
+        "N4": "E-PREP-CUSTODY"
+      },
+      "dispatch": {
+        "N5": "E-PREP-ARCHIVE",
+        "N2": "E-PREP-SCHEDULER",
+        "N1": "E-PREP-PROVENANCE",
+        "N4": "E-PREP-CUSTODY"
+      },
+      "native_seconds": 0.005976671003736556,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 1,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 1,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 1,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 1,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 1,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 1,
+        "XR-PREP-ARCHIVE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-PREP-PROVENANCE": [
+          "N1"
+        ],
+        "E-PREP-SCHEDULER": [
+          "N2"
+        ],
+        "E-PREP-CUSTODY": [
+          "N4"
+        ],
+        "E-PREP-ARCHIVE": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "E-PREP-PROVENANCE": 100,
+        "E-PREP-SCHEDULER": 100,
+        "E-PREP-CUSTODY": 100,
+        "E-PREP-ARCHIVE": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:34:04.386142+00:00",
+      "worker": "N1",
+      "job": "E-PREP-PROVENANCE",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:34:04.481989+00:00",
+      "worker": "N2",
+      "job": "E-PREP-SCHEDULER",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:34:04.575714+00:00",
+      "worker": "N4",
+      "job": "E-PREP-CUSTODY",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:34:04.665537+00:00",
+      "worker": "N5",
+      "job": "E-PREP-ARCHIVE",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:37:33.554644+00:00",
+      "worker": "N3",
+      "job": "E-FIX-HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:37:33.654158+00:00",
+      "worker": "N6",
+      "job": "E-FIX-BUILD"
+    },
+    {
+      "type": "solve",
+      "epoch": 11,
+      "at": "2026-10-31T09:37:33.769746+00:00",
+      "ready_jobs": [
+        "XR-FIX-BUILD",
+        "XR-FIX-HARNESS"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N5": "E-PREP-ARCHIVE",
+        "N4": "E-PREP-CUSTODY",
+        "N2": "E-PREP-SCHEDULER",
+        "N3": "XR-FIX-BUILD",
+        "N6": "XR-FIX-HARNESS",
+        "N1": "E-PREP-PROVENANCE"
+      },
+      "dispatch": {
+        "N3": "XR-FIX-BUILD",
+        "N6": "XR-FIX-HARNESS"
+      },
+      "native_seconds": 0.004755350993946195,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 1,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 1,
+        "E-PREP-PROVENANCE": 1,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 1,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 1,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 1,
+        "XR-PREP-ARCHIVE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-BUILD": [
+          "N3"
+        ],
+        "XR-FIX-HARNESS": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-FIX-BUILD": 200,
+        "XR-FIX-HARNESS": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": null,
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:37:38.586673+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-BUILD",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:37:38.675385+00:00",
+      "worker": "N6",
+      "job": "XR-FIX-HARNESS",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:39:15.469635+00:00",
+      "worker": "N5",
+      "job": "E-PREP-ARCHIVE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:40:01.720961+00:00",
+      "worker": "N2",
+      "job": "E-PREP-SCHEDULER"
+    },
+    {
+      "type": "solve",
+      "epoch": 12,
+      "at": "2026-10-31T09:40:01.816451+00:00",
+      "ready_jobs": [
+        "XR-PREP-SCHEDULER",
+        "XR-PREP-ARCHIVE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "E-PREP-CUSTODY",
+        "N5": "XR-PREP-SCHEDULER",
+        "N3": "XR-FIX-BUILD",
+        "N2": "XR-PREP-ARCHIVE",
+        "N6": "XR-FIX-HARNESS",
+        "N1": "E-PREP-PROVENANCE"
+      },
+      "dispatch": {
+        "N5": "XR-PREP-SCHEDULER",
+        "N2": "XR-PREP-ARCHIVE"
+      },
+      "native_seconds": 0.004179205992841162,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 1,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 1,
+        "E-PREP-PROVENANCE": 1,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 1,
+        "E-PREP-CUSTODY": 1,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-PREP-SCHEDULER": [
+          "N5"
+        ],
+        "XR-PREP-ARCHIVE": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-PREP-SCHEDULER": 200,
+        "XR-PREP-ARCHIVE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:40:05.676697+00:00",
+      "worker": "N2",
+      "job": "XR-PREP-ARCHIVE",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:40:05.769224+00:00",
+      "worker": "N5",
+      "job": "XR-PREP-SCHEDULER",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:42:03.322858+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-BUILD"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:42:03.412251+00:00",
+      "worker": "N4",
+      "job": "E-PREP-CUSTODY"
+    },
+    {
+      "type": "solve",
+      "epoch": 13,
+      "at": "2026-10-31T09:42:03.502757+00:00",
+      "ready_jobs": [
+        "XR-PREP-CUSTODY"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "XR-PREP-SCHEDULER",
+        "N2": "XR-PREP-ARCHIVE",
+        "N3": "XR-PREP-CUSTODY",
+        "N6": "XR-FIX-HARNESS",
+        "N4": "BENCH",
+        "N1": "E-PREP-PROVENANCE"
+      },
+      "dispatch": {
+        "N3": "XR-PREP-CUSTODY"
+      },
+      "native_seconds": 0.004305173002649099,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 1,
+        "E-PREP-PROVENANCE": 1,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 1,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 1,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-PREP-CUSTODY": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-PREP-CUSTODY": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": null,
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:42:06.227713+00:00",
+      "worker": "N3",
+      "job": "XR-PREP-CUSTODY",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:45:10.490205+00:00",
+      "worker": "N6",
+      "job": "XR-FIX-HARNESS"
+    }
+  ],
+  "epoch": 14,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

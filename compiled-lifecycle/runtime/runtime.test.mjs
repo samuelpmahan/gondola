@@ -69,6 +69,7 @@ function updateSignature(component, module) {
 
 function headlessRenderer() {
   return {
+    viewCapabilities: ["view.node"],
     update(view, callbacks) {
       this.view = view;
       this.callbacks = callbacks;
@@ -257,6 +258,67 @@ test("manual effect driver preserves Go request/cancel order and force-delivers 
     token: "grandchild:g1:r3",
     outcome: "rejected",
   });
+});
+
+test("renderer candidate admission pauses lifecycle deliveries without consuming callbacks", () => {
+  const driver = createLifecycleEffectDriver();
+  let admitting = true;
+  let callbackCalls = 0;
+  driver.attachRuntime({
+    isAdmittingRendererCandidate() { return admitting; },
+    cancelEffect(correlation) { return { accepted: true, cancelled: true, ...correlation }; },
+  });
+  driver.effectHost.request(
+    requestRecord("dispatch-0001", 0, requestIntent("request", "parent:g1:r1")),
+    () => { callbackCalls += 1; return { accepted: true }; },
+  );
+
+  const paused = driver.deliver("parent:g1:r1");
+  assert.deepEqual(paused, {
+    accepted: false,
+    outcome: "retryable",
+    retryable: true,
+    token: "parent:g1:r1",
+    correlation: { dispatchId: "dispatch-0001", effectIndex: 0 },
+    error: "lifecycle delivery is paused during renderer candidate admission",
+  });
+  assert.deepEqual(driver.pending().map(({ token }) => token), ["parent:g1:r1"]);
+  assert.deepEqual(driver.records().map(({ kind }) => kind), ["request"]);
+  assert.equal(driver.retireAll(), false);
+  assert.deepEqual(driver.pending().map(({ token }) => token), ["parent:g1:r1"]);
+  assert.equal(callbackCalls, 0);
+
+  admitting = false;
+  assert.equal(driver.deliver("parent:g1:r1").accepted, true);
+  assert.equal(callbackCalls, 1);
+  assert.deepEqual(driver.pending(), []);
+});
+
+test("renderer candidate admission preserves a retired lifecycle callback for retry", () => {
+  const driver = createLifecycleEffectDriver();
+  let admitting = false;
+  let callbackCalls = 0;
+  driver.attachRuntime({
+    isAdmittingRendererCandidate() { return admitting; },
+    cancelEffect(correlation) { return { accepted: true, cancelled: true, ...correlation }; },
+  });
+  driver.effectHost.request(
+    requestRecord("dispatch-0001", 0, requestIntent("request", "parent:g1:r1")),
+    () => { callbackCalls += 1; return { accepted: true }; },
+  );
+  driver.effectHost.request(
+    requestRecord("dispatch-0002", 0, requestIntent("cancel", "parent:g1:r1")),
+    () => undefined,
+  );
+  admitting = true;
+
+  assert.equal(driver.forceDeliverRetired("parent:g1:r1").retryable, true);
+  assert.deepEqual(driver.records().map(({ kind }) => kind), ["request", "cancel"]);
+  assert.equal(callbackCalls, 0);
+
+  admitting = false;
+  assert.equal(driver.forceDeliverRetired("parent:g1:r1").accepted, true);
+  assert.equal(callbackCalls, 1);
 });
 
 test("host unmount retires pending sibling requests and releases every callback", () => {

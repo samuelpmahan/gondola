@@ -59,6 +59,7 @@ export function installLifecycleBrowser({ gobiCompiled, encoder }) {
       lastObservation: null,
     };
     const renderer = {
+      viewCapabilities: core.viewCapabilities,
       update(view, hooks) {
         const callbacks = {
           dispatch(observed, message) {

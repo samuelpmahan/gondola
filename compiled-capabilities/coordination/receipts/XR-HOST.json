@@ -1,0 +1,72 @@
+{
+  "job_id": "XR-HOST",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independent review accepted N2 host-effect admission, separate renderer view capability negotiation, cancellation gates, candidate replacement atomicity, and lifecycle callback preservation against PLAN.md.",
+  "base": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+  "runtime": {
+    "node": "v22.23.4",
+    "chromium": "153.0.8010.0",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-capabilities"
+  },
+  "checks": [
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/runtime/runtime.test.mjs compiled-frontend/frontend/react/bindings.test.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HOST/logs/runtime-bindings.log",
+      "result": "passed: 40 tests, 40 passed, 0 failed",
+      "log": "compiled-capabilities/coordination/reviews/XR-HOST/logs/runtime-bindings.log",
+      "sha256": "c4da81ab33983dcc5fe106693b6ebeb500acb14c3422b56c84d0ec68eaa2d87b"
+    },
+    {
+      "command": "set -o pipefail\nCHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/dom/renderer.test.mjs compiled-frontend/frontend/react/renderer.test.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HOST/logs/renderers.log",
+      "result": "passed: 26 tests, 26 passed, 0 failed",
+      "log": "compiled-capabilities/coordination/reviews/XR-HOST/logs/renderers.log",
+      "sha256": "3323567adc248c046d94ec8e1ae579bf1ca08384184712f70d1480859a94ceed"
+    },
+    {
+      "command": "set -o pipefail\nGOBI_LIFECYCLE_APP_DIR=/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707 /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/runtime/runtime.test.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HOST/logs/lifecycle.log",
+      "result": "passed: 12 tests, 12 passed, 0 failed",
+      "log": "compiled-capabilities/coordination/reviews/XR-HOST/logs/lifecycle.log",
+      "sha256": "e680826b7b12e804f4bffc3c75667382114006a15242ff59f116ae0e4632a69f"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/oracle/literal-oracle.test.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HOST/logs/oracle.log",
+      "result": "passed: 8 tests, 8 passed, 0 failed",
+      "log": "compiled-capabilities/coordination/reviews/XR-HOST/logs/oracle.log",
+      "sha256": "1e993bebd5cad6be31d56ecbc741b53cf4a0838250b7837a2f3887806e7ba42a"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/XR-HOST/logs/profile-probes.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HOST/logs/profile-probes.log",
+      "result": "passed: 10 independent malformed host/renderer profile probes. Sparse, unknown, duplicate, extra-key, and accessor-item profiles reject; host rejection precedes Init; incompatible swaps preserve old renderer and trace; profile accessors are not invoked.",
+      "script_sha256": "39dcb9f8387d5200d2800d02a666f062ec59abe031456bf0126313b06f2e5379",
+      "log": "compiled-capabilities/coordination/reviews/XR-HOST/logs/profile-probes.log",
+      "sha256": "74ac2dd6cb6d06458469695e78b0e9ffa994df7d576b3268ce61f6892b14faf9"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/runtime/runtime.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/runtime/runtime.test.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/react/renderer.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/react/bindings.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/react/bindings.test.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-frontend/frontend/dom/renderer.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/runtime/runtime.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/runtime/runtime.test.mjs",
+      "result": "passed: all eight changed JavaScript modules; exit status 0"
+    }
+  ],
+  "reviewed_source_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "f7ff36753e93f3c8e84db73dbbef8289605eaad53b8cdf2282357cdffd510064",
+    "compiled-frontend/frontend/react/renderer.mjs": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4",
+    "compiled-frontend/frontend/react/bindings.mjs": "29711c7dea81be8e71549984246c7efdb97e8163096f9cf49d6e04ab1917e02b",
+    "compiled-frontend/frontend/react/bindings.test.mjs": "c116688c8d6a39df0f87469718acf46d6115e78c684e8e7fa7e027cf8da530d5",
+    "compiled-frontend/frontend/dom/renderer.mjs": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54",
+    "compiled-lifecycle/runtime/runtime.mjs": "a433ae736c33ac4df68a1e17db708db48161f601f84f5bc441ce6e6f21b1f4df",
+    "compiled-lifecycle/runtime/runtime.test.mjs": "156f18ec3be356250a25fcbe3cb87bf262905e224b2098fafad6cd47c5771d87",
+    "compiled-capabilities/PLAN.md": "a089703942af1be6f64ae33e0e59c83a74082379fe798e99c7861aac9384948a",
+    "compiled-capabilities/coordination/reports/E-HOST.md": "d6be36152116029e414b0de09a7a71f2f655a1c7071895efe323b73fc1e97792",
+    "compiled-capabilities/coordination/receipts/E-HOST.json": "ea1a9342baa056805ec22293c829f29f703b4aba9cd995ed88c26b5567109c30"
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reviews/XR-HOST.md",
+    "sha256": "ccf2b3dc40170d309f29159c98655f3e642a1b133aaa43a17c7fb1b4dc56ef02"
+  },
+  "limitations": [
+    "The reviewed scope does not complete the root-owned full integration chain; N3 browser/native integration and N6 review remain pending.",
+    "The authored E-HOST report states that its original intermediate candidate-proxy failure output was not captured. The final candidate-proxy guard test passed in the fresh runtime suite and this review independently checked its preserved-state behavior.",
+    "No failure was captured by this review. The independent literal oracle remains synthetic; it is not implementation fault injection."
+  ],
+  "publication": "No production edits, Git mutation, merge, or deployment."
+}

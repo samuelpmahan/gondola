@@ -1,0 +1,121 @@
+{
+  "job_id": "XR-HARNESS",
+  "worker": "N4",
+  "decision": "amend",
+  "outcome": "amend",
+  "summary": "The focused N3 native/direct/React/DOM capability run matched, but review found a mislabeled host-option accessor case and checker evidence that trusts browser-generated preservation labels instead of independently checking raw swap snapshots. A synthetic N4 renderer profile is also copied through as active-swap metadata.",
+  "base": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+  "runtime": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "playwright": "1.64.1"
+  },
+  "freshRun": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/conformance/run.mjs --react-app-ir compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/app-ir.json --react-compiled compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --react-helpers compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/encoder.mjs --react-manifest compiled-capabilities/builds/feasibility/react/output/buildmanifest.json --dom-app-ir compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/app-ir.json --dom-compiled compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --dom-helpers compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/encoder.mjs --dom-manifest compiled-capabilities/builds/feasibility/dom/output/buildmanifest.json --native-go /tmp/gondola-go/bin/go --fixture fixtures/compiled/lifecycle/scenario.json --expectations compiled-capabilities/oracle/expectations.json --chromium /tmp/chromium --output compiled-capabilities/coordination/reviews/XR-HARNESS/conformance",
+    "workdir": "/workspace/scratch/39a56936f173/gondola-capabilities",
+    "exitCode": 0,
+    "status": "matched",
+    "reportedAdmissionRows": 19,
+    "lifecycleTicks": 26,
+    "clicks": 16,
+    "requests": 7,
+    "cancellations": 3,
+    "inheritedMutationControls": 8,
+    "noWasmAPIAttempts": 0,
+    "noWasmRequests": 0,
+    "sourceStableThroughCheck": true,
+    "buildOutputsStableThroughCheck": true,
+    "stdout": {
+      "path": "compiled-capabilities/coordination/reviews/XR-HARNESS/logs/runner.stdout.log",
+      "sha256": "c0dfe403ce40d74f4a6c8829af89d5fa825fd3d5fd9371e11fbe0270852c5637"
+    },
+    "stderr": {
+      "path": "compiled-capabilities/coordination/reviews/XR-HARNESS/logs/runner.stderr.log",
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    }
+  },
+  "findings": [
+    {
+      "id": "host-option-accessor-row-is-nonarray",
+      "severity": "evidence_gap",
+      "detail": "accessor-host-capabilities-property maps to the literal string getter-property. rejectedAttempt assigns it as a data property; the descriptorGetter counter is never connected to a getter. The row proves non-array rejection, not that an options.hostCapabilities getter is rejected without invocation. The checker does not require a getter counter for this row. N2's runtime suite separately tests the production getter guard.",
+      "repair": "Create a real getter on the mount options for this case, return the profile from that getter, capture its counter, and require zero calls plus zero Init/Update/View and renderer calls in the checker."
+    },
+    {
+      "id": "checker-does-not-recompute-raw-swap-preservation",
+      "severity": "checker_gap",
+      "detail": "The independent checker accepts altered rejected-swap raw state, view, DOM, and pending-effect snapshots when the browser-generated observedPreserved label stays unchanged. The compatible swap does not serialize before/after snapshots, so the checker cannot independently compare those fields there. Existing browser code computes preservation labels from snapshots and asserts them before capture, but the checker trusts those labels.",
+      "repair": "Serialize compatible before/after snapshots and independently compare raw state, view, DOM, and pending-effect values for both rejected and compatible swaps. Keep callback identity as an observable post-rejection behavior/generation check, not a serialized function claim."
+    },
+    {
+      "id": "synthetic-profile-passthrough-is-not-active-swap-evidence",
+      "severity": "checker_labeling_gap",
+      "detail": "expectedIncompatibleRendererCapabilities is copied from the N4 synthetic oracle and compared to the same expectation. The actual lifecycle AppIR requires only view.node and the actual candidate profile is empty. The active rejection itself is valid and checks that view.node is missing, but the synthetic profile field is a passthrough rather than evidence about the active candidate.",
+      "repair": "Remove the synthetic profile field as active-swap proof and have the checker validate the actual candidate profile against the actual AppIR view requirements with the chosen missing capability removed."
+    }
+  ],
+  "checkerMutationProbe": {
+    "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/XR-HARNESS/logs/checker-probes.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HARNESS/logs/checker-probes.log",
+    "baseline": "matched",
+    "observedPreservationMutationRejected": true,
+    "admissionEvidenceMutationRejected": true,
+    "callbackFenceMutationRejected": true,
+    "rawRejectedStateMutationRejected": false,
+    "rawRejectedViewMutationRejected": false,
+    "rawRejectedDomMutationRejected": false,
+    "rawRejectedPendingMutationRejected": false,
+    "compatibleBeforeAfterSnapshotsSerialized": false,
+    "syntheticExpectedProfilePassthroughMutationRejected": false,
+    "scriptSha256": "6e5f3ea2ac484ebca4ad4887d6fa81fb03ba09dbea010b2918d8febe4ae202b0",
+    "logSha256": "93981c0c2a1d08eaf6645a965981e10412da1eeb771aa2cd99834930a4fa8ef3"
+  },
+  "n6ExpectedOutputSchemaProbe": {
+    "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/XR-HARNESS/logs/n6-schema-probe.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-HARNESS/logs/n6-schema-probe.log",
+    "result": "passed: 13 required flags, command/output schemas, 19 IDs, native trace/effects, and all 10 evidence files align with N6 runConformance checks",
+    "scriptSha256": "47ff96d5988ecdc66762a2a80791a866a372c15cf6ff7d2e9787e4f255488061",
+    "logSha256": "e72dc366c3c9be81bbabdc4cd358a5b48fbbd7f6ef7695917e1b545c4d0c817a"
+  },
+  "syntaxCheck": {
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/capability-browser-entry.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/capability-browser.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/browser-entry.mjs",
+    "result": "passed; exit status 0; Node emitted UNDICI-EHPA experimental environment warnings"
+  },
+  "reviewedSourceSha256": {
+    "compiled-capabilities/conformance/run.mjs": "e23d6e4139977aafd134ef936d6e6c5cc351df928efa7c2ae91f45542052d183",
+    "compiled-capabilities/conformance/check.mjs": "0fe976e8222bb4bb70e2c6e41c505ddb8a35ec4b05f68faca772b061d1a2d5c5",
+    "compiled-capabilities/conformance/capability-browser.mjs": "f75ca6fdf0ea1b8947476513125fdc347fcc0b2721d14ddfd74c386b3fae79fa",
+    "compiled-capabilities/conformance/capability-browser-entry.mjs": "894161f4a3f6f7e123c2ed165007e06705527a2d2d51116f249c3efaa340c7e3",
+    "compiled-lifecycle/conformance/browser-entry.mjs": "56ba9f2b2f6119b341360e78d0893572ea53a089bb4ebc0d83357166e86491f6",
+    "compiled-capabilities/oracle/expectations.json": "bce92447403c8afe81d23aedc67d4c6751e8c77a5bec18ecce9cc0df262855a4",
+    "compiled-capabilities/run.mjs": "b4990e1212ef743c2762c946662e18f813c94c3b54d739e3f5b62224cac9d7b3",
+    "compiled-capabilities/coordination/reports/E-HARNESS.md": "feffad7ee4ddb9bba1b3a8b97a86b08bbff326837e6eb7c3fa0585294a37ad43",
+    "compiled-capabilities/coordination/receipts/E-HARNESS.json": "3d069bde7f6d9edea1a6bcff5ab7f7662c1d6d01fdcd9afcfe02b1ccedae1069"
+  },
+  "freshOutputSha256": {
+    "run": "a384cedee2821a0d5140345271bd00ac8057f68d3206110014185eb5085410b6",
+    "capabilityCheck": "fd97f087952bdcb1c46b74961d8756e005f2523d719150fc338f44f299a08982",
+    "capabilityBrowserCapture": "455bf3e3a6b090de125bfc0c42fd443c7dfed4608c7b39e8be26c123779b7352",
+    "manifest": "f111651aba752b7450f580910a52bdba47291087198132493e6c7edc7c2d4dd5",
+    "lifecycleRun": "63aad6ef44c953ab7f70e98ba11b4d8c6d68e032c032467c69f16f23b89d418c",
+    "lifecycleCheck": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a"
+  },
+  "preservedAuthorFailures": {
+    "attempt01Reason": "composition omitted frozen contract, schedule, and browser-adapter arguments before native replay",
+    "attempt01StdoutSha256": "9b92b239d194bf5b0bd8515b667a10597225d94070e4a4b00f69d977ec640637",
+    "attempt01StderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "attempt02Reason": "inherited lifecycle wrapper omitted core.viewCapabilities",
+    "attempt02StdoutSha256": "044b0e47e5addc99dfd2e9cd1b73641ad4bd8617746d408a42d1dd3869748eab",
+    "attempt02StderrSha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "authorAttemptDirectoriesEdited": false
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reviews/XR-HARNESS.md",
+    "sha256": "45b2a4880ee7798f9c33e9a77a6354aa90e9e09fee46b09c8618950e58bcb0a5"
+  },
+  "limitations": [
+    "The fresh focused run used the existing feasibility React/DOM builds. The root-owned full milestone runner, fresh builds, inherited regression chain, and archive round trip remain pending.",
+    "This review found harness/checker evidence gaps, not a production runtime defect. N2 separately covers the production host option accessor guard.",
+    "No production files, Git state, dependencies, or original attempt directories were changed."
+  ],
+  "publication": "No commit, merge, deployment, or Git operation."
+}

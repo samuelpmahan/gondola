@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <link rel="icon" href="data:,">
+    <title>Compiled backend capabilities</title>
+    <link rel="stylesheet" href="/demo.css">
+    <script type="module" src="/demo.bundle.mjs"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">GOBI · COMPILED GO</p>
+        <h1>Backend capability exchange</h1>
+        <p class="lede">The lifecycle stays in compiled Go while the mounted view negotiates renderer support. Try a compatible swap, reject a candidate missing <code>view.node</code>, then recover and finish the pending request.</p>
+        <div class="status-row">
+          <span id="status" class="status-pill" role="status" data-state="loading">Loading compiled Go module…</span>
+          <span id="active-renderer" class="renderer-label">Renderer: —</span>
+        </div>
+      </header>
+
+      <section class="layout" aria-label="Compiled backend capability demo">
+        <section class="card live-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">LIVE GO VIEW</p>
+              <h2>Lifecycle and counters</h2>
+            </div>
+            <div class="renderer-switch" role="group" aria-label="Compatible renderer profile">
+              <button type="button" data-renderer="react" aria-pressed="false">React</button>
+              <button type="button" data-renderer="dom" aria-pressed="true">DOM</button>
+            </div>
+          </div>
+          <p class="card-note">These controls come from the compiled Go <code>View</code>; each enabled click dispatches to its Go <code>Update</code>.</p>
+          <div id="go-view" class="go-view" aria-label="Mounted compiled Go view"></div>
+
+          <div class="negotiation">
+            <div>
+              <p class="eyebrow">PROFILE NEGOTIATION</p>
+              <p id="swap-status" class="swap-status" role="status" data-state="idle">No profile negotiation attempted yet.</p>
+            </div>
+            <button id="reject-incompatible" type="button">Try profile missing view.node</button>
+          </div>
+
+          <div class="host-controls">
+            <div>
+              <p class="eyebrow">MANUAL EFFECT HOST</p>
+              <p id="pending-count" class="host-summary">No pending requests</p>
+            </div>
+            <button id="complete-next" type="button" disabled>Reply to oldest</button>
+          </div>
+          <div id="pending-list" class="pending-list" aria-label="Pending Go requests"></div>
+        </section>
+
+        <aside class="inspector" aria-label="Compiled capability inspector">
+          <section class="card inspector-card">
+            <p class="eyebrow">COMPILED REQUIREMENTS</p>
+            <h2>Lifecycle AppIR</h2>
+            <ul id="compiled-requirements" class="capability-list" aria-label="Compiled app requirements"></ul>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">HOST SUPPORT</p>
+            <h2>Lifecycle effect host</h2>
+            <ul id="host-support" class="capability-list" aria-label="Lifecycle host support"></ul>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">RENDERER SUPPORT</p>
+            <h2>Active view profile</h2>
+            <ul id="renderer-support" class="capability-list" aria-label="Active renderer support"></ul>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">GO STATE</p>
+            <h2>Current state and pending request</h2>
+            <pre id="state-snapshot" class="data-panel">Waiting for Go Init…</pre>
+          </section>
+        </aside>
+      </section>
+
+      <section class="card trace-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">EVENT ORDER</p>
+            <h2>Go ticks and renderer negotiation</h2>
+          </div>
+          <span class="trace-hint">Renderer negotiation does not run Go Update</span>
+        </div>
+        <pre id="runtime-trace" class="data-panel trace-panel">Waiting for the first Go tick…</pre>
+      </section>
+
+      <footer class="page-footer">
+        <span>Actual compiled Go lifecycle module</span>
+        <span>React 19.3.1 + DOM · no WebAssembly</span>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -101,6 +101,8 @@ func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.
 	reachable, reachableDiagnostics := reachableFunctions(functions, roots)
 	diagnostics = append(diagnostics, reachableDiagnostics...)
 	diagnostics = append(diagnostics, ValidateOperations(program, roots)...)
+	updateReachable, updateReachableDiagnostics := reachableFunctions(functions, []compilercontract.SymbolID{update.ID})
+	diagnostics = append(diagnostics, updateReachableDiagnostics...)
 
 	types := append([]compilercontract.TypeInfo{}, pkg.Types...)
 	for _, function := range reachable {
@@ -138,7 +140,8 @@ func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.
 		}
 		return appSymbols[i].ID < appSymbols[j].ID
 	})
-	capabilities := deriveCapabilities(types, reachable, stateType, view.ID)
+	effectType := updateEffectType(update.Signature.Results, types)
+	capabilities := deriveCapabilities(types, reachable, stateType, view.ID, updateReachable, effectType)
 	app := compilercontract.AppIR{
 		Schema: compilercontract.AppIRSchema, PackagePath: pkg.ImportPath,
 		Components: []compilercontract.Component{{
@@ -896,7 +899,7 @@ func firstType(types []compilercontract.TypeID) compilercontract.TypeID {
 	return types[0]
 }
 
-func deriveCapabilities(types []compilercontract.TypeInfo, reachable []compilercontract.TypedFunction, stateType compilercontract.TypeID, view compilercontract.SymbolID) []compilercontract.Capability {
+func deriveCapabilities(types []compilercontract.TypeInfo, reachable []compilercontract.TypedFunction, stateType compilercontract.TypeID, view compilercontract.SymbolID, updateReachable []compilercontract.TypedFunction, effectType compilercontract.TypeID) []compilercontract.Capability {
 	capabilities := []compilercontract.Capability{compilercontract.CapabilityViewNode}
 	seen := map[compilercontract.Capability]bool{compilercontract.CapabilityViewNode: true}
 	add := func(capability compilercontract.Capability) {
@@ -953,7 +956,84 @@ func deriveCapabilities(types []compilercontract.TypeInfo, reachable []compilerc
 			}
 		})
 	}
+	if hasLifecycleCancelDescriptor(types, updateReachable, effectType) {
+		add(compilercontract.CapabilityEffectCancel)
+	}
 	return capabilities
+}
+
+func updateEffectType(results []compilercontract.TypeID, types []compilercontract.TypeInfo) compilercontract.TypeID {
+	if len(results) < 2 {
+		return ""
+	}
+	info, ok := typeInfoByID(types, results[1])
+	if !ok || info.Kind != compilercontract.KindSlice {
+		return ""
+	}
+	return info.ElemType
+}
+
+// hasLifecycleCancelDescriptor recognizes the keyed Gobi effect descriptor,
+// rather than searching source text for the protocol strings. The descriptor
+// must be constructed in a function reachable from Update, have the actual
+// effect element type, and provide the cancel kind/name, a present string Arg
+// expression, and an empty reply. The Arg's payload content is left to runtime
+// policy. Non-literal kind/name/reply expressions, positional
+// composites, and descriptors returned by opaque external functions fail
+// closed. Such code can still emit cancellation at runtime without declaring
+// this capability; this static signal does not prove every runtime effect.
+func hasLifecycleCancelDescriptor(types []compilercontract.TypeInfo, reachable []compilercontract.TypedFunction, effectType compilercontract.TypeID) bool {
+	const gobiEffectType compilercontract.TypeID = "github.com/samuelpmahan/gondola/gobi.Effect"
+	if effectType != gobiEffectType {
+		return false
+	}
+	effect, ok := typeInfoByID(types, effectType)
+	if !ok || effect.Kind != compilercontract.KindStruct ||
+		structFieldType(types, effect, "Kind") != "string" ||
+		structFieldType(types, effect, "Name") != "string" ||
+		structFieldType(types, effect, "Arg") != "string" ||
+		structFieldType(types, effect, "Reply") != "string" {
+		return false
+	}
+	for _, function := range reachable {
+		found := false
+		walkOperations(function.Body, func(operation compilercontract.Operation) {
+			if found || operation.Kind != compilercontract.OpComposite || operation.TypeID != effectType {
+				return
+			}
+			fields := make(map[string]compilercontract.Operation, len(operation.Children))
+			for _, child := range operation.Children {
+				if child.Kind != compilercontract.OpKeyValue || len(child.Children) != 2 || child.Children[0].Kind != compilercontract.OpIdent {
+					continue
+				}
+				fields[child.Children[0].Operator] = child.Children[1]
+			}
+			kind, kindOK := literalString(fields["Kind"])
+			name, nameOK := literalString(fields["Name"])
+			reply, replyOK := literalString(fields["Reply"])
+			arg, argOK := fields["Arg"]
+			if kindOK && nameOK && replyOK && argOK && isStringType(arg.TypeID, types) &&
+				kind == "lifecycle.cancel" && name == "cancel" && reply == "" {
+				found = true
+			}
+		})
+		if found {
+			return true
+		}
+	}
+	return false
+}
+
+func literalString(operation compilercontract.Operation) (string, bool) {
+	if operation.Kind != compilercontract.OpLiteral || operation.Literal == nil || operation.Literal.String == nil {
+		return "", false
+	}
+	return *operation.Literal.String, true
+}
+
+func isStringType(id compilercontract.TypeID, types []compilercontract.TypeInfo) bool {
+	info, ok := typeInfoByID(types, id)
+	return ok && info.Kind == compilercontract.KindString
 }
 
 func reachableSetContains(functions []compilercontract.TypedFunction, id compilercontract.SymbolID) bool {

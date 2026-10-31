@@ -1,0 +1,35 @@
+{
+  "job_id": "E-ORACLE",
+  "worker": "N4",
+  "summary": "Added a literal capability oracle and adversarial Node runtime contract tests for host and renderer admission, cancellation gating, and atomic renderer replacement.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/oracle/literal-oracle.test.mjs 2>&1 | tee compiled-capabilities/oracle/node22-test.log",
+      "workdir": "repository root",
+      "result": "passed: Node v22.23.4; 8 tests, 8 passed, 0 failed, 0 skipped; raw TAP at compiled-capabilities/oracle/node22-test.log; SHA-256 f1e2e27b81dcb6bfccbbdee3cf3bd3e1fbdabad2373573d003adefae2756df1a"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/oracle/literal-oracle.test.mjs",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'JSON.parse(require(\"node:fs\").readFileSync(\"compiled-capabilities/oracle/expectations.json\", \"utf8\")); process.stdout.write(\"expectations.json parses\\n\")'",
+      "workdir": "repository root",
+      "result": "passed; SHA-256 bce92447403c8afe81d23aedc67d4c6751e8c77a5bec18ecce9cc0df262855a4"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'for (const path of [\"compiled-capabilities/oracle/expectations.json\", \"compiled-capabilities/coordination/receipts/E-ORACLE.json\"]) JSON.parse(require(\"node:fs\").readFileSync(path, \"utf8\")); process.stdout.write(\"oracle expectations and receipt parse\\n\")'",
+      "workdir": "repository root",
+      "result": "passed"
+    }
+  ],
+  "limitations": [
+    "The oracle uses a synthetic AppIR module and fake synchronous renderer; it does not establish behavior of freshly compiled GoScript or actual React/DOM adapters.",
+    "No pre-implementation RED run was captured.",
+    "Actual React/DOM integration and browser evidence remain owned by E-HARNESS and E-BUILD."
+  ],
+  "integration": "pending: the full capability-milestone runner and actual compiled React/DOM integration were not run by E-ORACLE",
+  "publication": "No commit, merge, or deploy."
+}

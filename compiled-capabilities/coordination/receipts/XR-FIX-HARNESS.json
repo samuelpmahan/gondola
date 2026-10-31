@@ -1,0 +1,163 @@
+{
+  "schema": "gobi.compiled-capabilities-review/v1",
+  "job_id": "XR-FIX-HARNESS",
+  "worker": "N6",
+  "decision": "accepted",
+  "outcome": "accepted",
+  "summary": "Independently reviewed the N3 harness repair, reran its exact focused CLI into a new review attempt, and verified the actual host option getter, raw state/view/DOM/pending preservation for both swaps, active candidate derivation from the compiled AppIR, and all nine ordered checker mutations.",
+  "runtime": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "playwright": "1.64.1"
+  },
+  "freshRun": {
+    "command": "mkdir -p compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/attempt-02/logs && set -o pipefail && GOTOOLCHAIN=local GOFLAGS=-buildvcs=false CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/conformance/run.mjs --react-app-ir compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/app-ir.json --react-compiled compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --react-helpers compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/encoder.mjs --react-manifest compiled-capabilities/builds/feasibility/react/output/buildmanifest.json --dom-app-ir compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/app-ir.json --dom-compiled compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --dom-helpers compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/encoder.mjs --dom-manifest compiled-capabilities/builds/feasibility/dom/output/buildmanifest.json --native-go /tmp/gondola-go/bin/go --fixture fixtures/compiled/lifecycle/scenario.json --expectations compiled-capabilities/oracle/expectations.json --chromium /tmp/chromium --output compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/attempt-02/conformance 2>compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/attempt-02/logs/runner.stderr.log | tee compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/attempt-02/logs/runner.stdout.log",
+    "workdir": "/workspace/scratch/39a56936f173/gondola-capabilities",
+    "exitCode": 0,
+    "status": "matched",
+    "reportedAdmissionCases": 19,
+    "lifecycleEvents": 26,
+    "lifecycleTicks": 26,
+    "physicalClicks": 16,
+    "requests": 7,
+    "cancellations": 3,
+    "inheritedMutationControlsDetected": 8,
+    "capabilityMutationControlsDetected": 9,
+    "noWasmAPIAttempts": 0,
+    "noWasmRequests": 0,
+    "sourceStableThroughCheck": true,
+    "buildOutputsStableThroughCheck": true,
+    "sourcePinCount": 15,
+    "buildPinCount": 8,
+    "stdout": {
+      "path": "compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/attempt-02/logs/runner.stdout.log",
+      "sha256": "aa2cae2f248b10509e926158bd18c3b9671f52ef64377bb35141e0f2dfce83ca"
+    },
+    "stderr": {
+      "path": "compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/attempt-02/logs/runner.stderr.log",
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    }
+  },
+  "reviewFindings": {
+    "hostOptionGetter": {
+      "constructedFromOwnGetterDescriptor": true,
+      "getterCalls": 0,
+      "initCalls": 0,
+      "updateCalls": 0,
+      "viewCalls": 0,
+      "rendererCalls": 0,
+      "containerEmpty": true,
+      "checkerRequiresDescriptorFlagAndZeroCalls": true
+    },
+    "swapPreservation": {
+      "rejected": {
+        "stateComparedFromSerializedSnapshots": true,
+        "viewComparedFromSerializedSnapshots": true,
+        "domComparedFromSerializedSnapshots": true,
+        "pendingComparedFromSerializedSnapshots": true,
+        "rawPreservationVerified": true
+      },
+      "compatible": {
+        "stateComparedFromSerializedSnapshots": true,
+        "viewComparedFromSerializedSnapshots": true,
+        "domComparedFromSerializedSnapshots": true,
+        "pendingComparedFromSerializedSnapshots": true,
+        "rawPreservationVerified": true
+      }
+    },
+    "activeCandidate": {
+      "source": "compiled lifecycle module AppIR component capabilities",
+      "initialAppIRUsedUnmodified": true,
+      "actualRequiredRendererCapabilities": ["view.node"],
+      "candidateCapabilities": [],
+      "missingCapability": "view.node",
+      "syntheticOracleProfileUsedAsActiveProof": false
+    },
+    "checkerMutations": {
+      "count": 9,
+      "ids": [
+        "rejected-state",
+        "rejected-view",
+        "rejected-dom",
+        "rejected-pending",
+        "compatible-state",
+        "compatible-view",
+        "compatible-dom",
+        "compatible-pending",
+        "host-option-accessor-construction"
+      ],
+      "allDetected": true,
+      "allHaveErrorStrings": true,
+      "browserLabelsKeptUnchanged": true
+    },
+    "n6GateCompatibility": {
+      "matchedN3CheckRequired": true,
+      "bothRawPreservationFieldsRequired": true,
+      "allNineOrderedRowsRequired": true,
+      "hostAccessorAssertionTransitiveThroughPinnedN3Checker": true
+    }
+  },
+  "reviewerVerification": {
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/verify-repair.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-FIX-HARNESS/verify-repair.log",
+    "result": "passed; independently checked run/check status, host descriptor and zero call counts, rejected/compatible raw snapshot values, actual AppIR requirement/candidate, nine ordered mutations, source/build stability, and absence of failure output",
+    "scriptSha256": "9000f37c2b953a56e0760252a8e1f75cc8fb4099368bb031bbc0f034ce3f246b",
+    "logSha256": "a21c044e3b60a235e65933c899e81d4a00011353d846608c2de9d4231571c469"
+  },
+  "reviewedSourceSha256": {
+    "compiled-capabilities/conformance/capability-browser-entry.mjs": "915fc87a6a77865a0c5db64920702d9c95cc30833fa11711a55e49028dd3033e",
+    "compiled-capabilities/conformance/capability-browser.mjs": "f75ca6fdf0ea1b8947476513125fdc347fcc0b2721d14ddfd74c386b3fae79fa",
+    "compiled-capabilities/conformance/check.mjs": "36f687ec7240b38898b8822352540a94585eeee3e757660c819ba2b1040dfca7",
+    "compiled-capabilities/conformance/run.mjs": "e23d6e4139977aafd134ef936d6e6c5cc351df928efa7c2ae91f45542052d183",
+    "compiled-capabilities/oracle/expectations.json": "bce92447403c8afe81d23aedc67d4c6751e8c77a5bec18ecce9cc0df262855a4",
+    "compiled-capabilities/run.mjs": "e506d0cf1ae26574d4229f02ed4486cdbbdd2bf8c6f9b0d836559827f4a5f29d",
+    "compiled-lifecycle/conformance/browser-entry.mjs": "56ba9f2b2f6119b341360e78d0893572ea53a089bb4ebc0d83357166e86491f6",
+    "XR-HARNESS.md": "45b2a4880ee7798f9c33e9a77a6354aa90e9e09fee46b09c8618950e58bcb0a5",
+    "XR-HARNESS.json": "083a1e519abf4f0eff4070e09db1b843836243a04fabd5b5e6ab82699475db38",
+    "E-FIX-HARNESS.md": "1c412b95822c0ef8396906c336793a35f5011b71f92910a17e455ea10777e01b",
+    "E-FIX-HARNESS.json": "b1c4630b4c45209d99baa7b996830f0443a255a99ae4bff4958654a49a95a727",
+    "E-HARNESS.md": "feffad7ee4ddb9bba1b3a8b97a86b08bbff326837e6eb7c3fa0585294a37ad43",
+    "E-HARNESS.json": "3d069bde7f6d9edea1a6bcff5ab7f7662c1d6d01fdcd9afcfe02b1ccedae1069"
+  },
+  "feasibilityBuildSha256": {
+    "reactAppIr": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+    "reactCompiled": "6b2eddfdfe5cdfa9e4929f4ac1cd7c3ee56d6b8e733dc2028a1ca99c3f6753e7",
+    "reactEncoder": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+    "reactManifest": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+    "domAppIr": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+    "domCompiled": "097b7e36da40f2aff6359e80d12c2d9439be945eb26b250923212dab5a847ba5",
+    "domEncoder": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+    "domManifest": "220ce759d04093c95185088a91ae8a6556be44a3aeebb6f327dc7281a473e4e4"
+  },
+  "freshOutputSha256": {
+    "stdout": "aa2cae2f248b10509e926158bd18c3b9671f52ef64377bb35141e0f2dfce83ca",
+    "stderr": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+    "capabilityBrowserCapture": "7a229987dd25867ae09c24f85e427ebcf3ae8907cb54c18e52471990d65a1bcc",
+    "capabilityCheck": "586031953d6e65aaa2466f2f53680c889082b33ec3c2b2d0ca00257cc56de0eb",
+    "manifest": "6aae7a762618ebc638cc70610e760bc684f03c99f0430b38184b1c9e8e23307d",
+    "run": "05db77013998c19619f0796d9efac411b978c3d1035b3a640f36c0c88c2f99aa",
+    "lifecycleNative": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+    "lifecycleDirect": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71",
+    "lifecycleBrowser": "da251f0ed925e3f3975f5abb0e2df877f5125ad7c3a9b4741eb3cf74370a0011",
+    "lifecycleCheck": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a",
+    "lifecycleManifest": "612ffe858960eaf1d8104bbd4454c6f4f368c08e1a245eeda88cd26f5614d214",
+    "lifecycleRun": "be51ed66a0bb5e5f2325d3674e1456b1605272fd9f179ef6408fd060560c0beb",
+    "capabilityBrowserBundle": "594eb8de7d8ad6840840a721f23dce03dcf9898ff892e44ff046d3a4ebb3f3d6",
+    "lifecycleBrowserBundle": "b97b64791beb731a1d751419b0ae91f8854e1e531608089e49e7d451b82f7ff1"
+  },
+  "preservedHistory": {
+    "originalAttempts01Through05Modified": false,
+    "xrHarnessAmendmentModified": false,
+    "eFixHarnessReceiptOrReportModified": false,
+    "eHarnessReceiptOrReportModified": false
+  },
+  "limitations": [
+    "This focused review uses feasibility React/DOM builds. The root-owned full fresh-build runner, inherited complete regression chain, and archive round trip remain pending.",
+    "No production files, dependencies, Git state, original author attempts, or original XR-HARNESS amendment files were changed."
+  ],
+  "report": {
+    "path": "compiled-capabilities/coordination/reviews/XR-FIX-HARNESS.md",
+    "sha256": "1c0b4f50d0858d56e20ec1a858e763a0654884e407f8cc85346a54ba70a1f07b"
+  },
+  "publication": "No commit, merge, deployment, or Git operation."
+}

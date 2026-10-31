@@ -13,6 +13,7 @@ import { createViewTools, ELEMENT, TEXT, FRAGMENT } from "../shared/view.mjs";
 const { Fragment, createElement } = React;
 const FORM_CONTROLS = new Set(["button", "input", "select", "textarea"]);
 const BOOLEAN_ATTRIBUTES = new Set(booleanAttributes);
+const VIEW_CAPABILITIES = Object.freeze(["view.node", "binding.value", "binding.checked"]);
 
 const viewTools = createViewTools({ rendererName: "compiled React renderer", eventNames, booleanAttributes });
 const {
@@ -353,6 +354,7 @@ export function createReactRenderer({ container, onFailure = null, strictMode = 
   }
 
   return {
+    viewCapabilities: VIEW_CAPABILITIES,
     update,
     snapshot: viewRecord,
     viewRecord,

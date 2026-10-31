@@ -1,0 +1,135 @@
+{
+  "schema": "gobi.compiled-capabilities-author-repair/v1",
+  "job_id": "E-FIX-BUILD",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Repaired the archive provenance gap and tightened N3 acceptance for raw swap preservation and all nine named capture controls. Focused syntax, helper round-trip, workflow YAML, and preserved-receipt checks passed. The full runner was not launched; integrated acceptance remains pending root.",
+  "runtime": {
+    "node": "v22.23.4",
+    "runnerStarted": false,
+    "fullRunnerStarted": false
+  },
+  "changes": {
+    "archivePayload": {
+      "member": "execution-before-archive.json",
+      "schema": "gobi.compiled-capabilities-execution-before-archive/v1",
+      "status": "archive_pending",
+      "immutableMode": "0444",
+      "fields": [
+        "sourceBefore",
+        "preArchiveSourcePins",
+        "sourcePinsAtEndOfCommandsAndPreArchive",
+        "sourcePinsMatchBeforeArchive",
+        "toolchainAndDependencies.versions",
+        "toolchainAndDependencies.dependencyInstall",
+        "commandLedger",
+        "stages",
+        "stageOutcomes",
+        "executionReceiptBeforeArchive",
+        "archivePending=true",
+        "archiveStatus=PENDING",
+        "acceptanceStatus=NOT_FINAL",
+        "finalAcceptance=false"
+      ],
+      "manifestPolicy": "The manifest remains outside the tar to avoid a self-hash cycle; the final outer receipt records its exact path, byte count, and SHA-256 together with the archive hash.",
+      "sourceAfterPolicy": "The outer receipt requires sourceAfter to match sourceBefore and the immutable pre-archive pins; the pre-archive pins must also match sourceBefore."
+    },
+    "n3Acceptance": {
+      "schema": "gobi.compiled-capability-check/v1",
+      "required": [
+        "swap.rejected.rawPreservationVerified=true",
+        "swap.compatible.rawPreservationVerified=true",
+        "capabilityMutationControlsDetected=9",
+        "capabilityMutationControls is the ordered nine-row list, with every row detected=true and a nonempty error string"
+      ],
+      "captureMutationControlIds": [
+        "rejected-state",
+        "rejected-view",
+        "rejected-dom",
+        "rejected-pending",
+        "compatible-state",
+        "compatible-view",
+        "compatible-dom",
+        "compatible-pending",
+        "host-option-accessor-construction"
+      ],
+      "receiptFields": [
+        "conformance.rawPreservationVerified",
+        "conformance.capabilityMutationControlsDetected",
+        "conformance.capabilityMutationControls"
+      ]
+    },
+    "preservedPriorArtifacts": {
+      "eBuildReceiptSha256": "65aaece092033ee46ae74812b4b16a538bce5f79d1c0d3c86482f54f7a487d71",
+      "eBuildReportSha256": "cb433943bbac3cf92c8ea5c8c8535a99e864c1b4a2829c47917d6554584fc914",
+      "xrBuildReceiptSha256": "e125eb7b5ca4eece2e038c1c5e8cba37907470fb84434816010f0fa459c0daf7",
+      "xrBuildReportSha256": "9b4bf73f8cfe19f5c89e2486d70ff5aff9cfe116061f129c26d2dcc4c6b1a0dc",
+      "eBuildAuthorReceiptMatchesArchivedFinalSnapshot": true,
+      "eBuildReceiptAndReportMatchXrBuildCapturedSourceHashes": true
+    },
+    "separateN3FocusedEvidence": {
+      "attempt": "compiled-capabilities/conformance/evidence/attempt-05/",
+      "runStatus": "matched",
+      "checkStatus": "matched",
+      "capabilityCheckSha256": "6800d53e9aa4d0a30e16c15e0a789e45ee4bdee3deebec9d01ef38483b377baf",
+      "runSha256": "b535ceb0e88850b181d7fd36985425581a60231ef2fb9be7b50ff1a50b69ed24",
+      "frozenFieldsVerifiedByN6ReadOnlyAssertion": true
+    }
+  },
+  "changedSourceSha256": {
+    "compiled-capabilities/run.mjs": "e506d0cf1ae26574d4229f02ed4486cdbbdd2bf8c6f9b0d836559827f4a5f29d",
+    "compiled-capabilities/archive-helper.mjs": "ad7b29dbd07c23a2e92a3774b4af4656366a3327490b2f32f3e9e8ce1d503b46",
+    "compiled-capabilities/archive-helper.test.mjs": "501929d72caf26f92228eab79aef788aca19a7a3bc3ee3c97c69bacd1223d924",
+    "compiled-capabilities/README.md": "7d733b06cad220b8e771a30c56c65c6ec8cd78a39212d5bd68df93c045b95a49",
+    "compiled-capabilities/RESULTS.md": "3bd580da6342d872ce12d6c135613b89348cb45d30a4a65bb44ceb9403c4384d"
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/archive-helper.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/archive-helper.test.mjs",
+      "workdir": "repository root",
+      "result": "passed; all three JavaScript files parsed under Node v22.23.4; Node emitted only the experimental EnvHttpProxyAgent warning"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "workdir": "repository root",
+      "result": "passed; 1/1 test; verified read-only write-once snapshot, required pending state, tar membership, member hashes, extraction round trip, and external manifest hash binding"
+    },
+    {
+      "command": "bash -n run-compiled-capabilities.sh",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "python -c 'import yaml; yaml.safe_load(open(\".github/workflows/gobi-compiled-capabilities.yml\", encoding=\"utf-8\")); print(\"workflow YAML parsed\")'",
+      "workdir": "repository root",
+      "result": "passed; workflow YAML parsed"
+    },
+    {
+      "command": "git diff --check -- compiled-capabilities/run.mjs compiled-capabilities/archive-helper.mjs compiled-capabilities/archive-helper.test.mjs compiled-capabilities/README.md compiled-capabilities/RESULTS.md",
+      "workdir": "repository root",
+      "result": "passed; no whitespace errors"
+    },
+    {
+      "command": "python -c 'import json,hashlib,pathlib; p=pathlib.Path(\"compiled-capabilities/coordination/receipts\"); r=json.loads((p/\"XR-BUILD.json\").read_text()); report=pathlib.Path(\"compiled-capabilities/coordination/reports/E-BUILD.md\"); receipt=p/\"E-BUILD.json\"; got=lambda x:hashlib.sha256(x.read_bytes()).hexdigest(); assert r[\"reviewed_source_sha256\"][\"compiled-capabilities/coordination/receipts/E-BUILD.json\"]==got(receipt); assert r[\"reviewed_source_sha256\"][\"compiled-capabilities/coordination/reports/E-BUILD.md\"]==got(report); assert got(receipt)==hashlib.sha256(pathlib.Path(\"compiled-capabilities/coordination/archive/authors-final-before-full/E-BUILD.json\").read_bytes()).hexdigest(); print(\"original E-BUILD receipt/report match the preserved XR-BUILD source hashes and receipt snapshot\")'",
+      "workdir": "repository root",
+      "result": "passed; the original E-BUILD receipt/report match XR-BUILD's recorded source hashes, and the E-BUILD receipt matches the archived final author snapshot"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'const fs=require(\"node:fs\"); const e=fs.readFileSync(\"compiled-capabilities/run.mjs\",\"utf8\"); for(const x of [\"rejected-state\",\"rejected-view\",\"rejected-dom\",\"rejected-pending\",\"compatible-state\",\"compatible-view\",\"compatible-dom\",\"compatible-pending\",\"host-option-accessor-construction\",\"rawPreservationVerified\",\"capabilityMutationControlsDetected === expectedMutationControlIds.length\"]) if(!e.includes(x)) throw new Error(`missing ${x}`); console.log(\"N3 frozen acceptance fields and all nine control IDs are wired into the runner\")'",
+      "workdir": "repository root",
+      "result": "passed; runner contains both rawPreservationVerified checks, the count check, and all nine required IDs"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'const fs=require(\"node:fs\"),assert=require(\"node:assert/strict\"); const p=\"compiled-capabilities/conformance/evidence/attempt-05/conformance.capability-check.json\"; const c=JSON.parse(fs.readFileSync(p,\"utf8\")); const ids=[\"rejected-state\",\"rejected-view\",\"rejected-dom\",\"rejected-pending\",\"compatible-state\",\"compatible-view\",\"compatible-dom\",\"compatible-pending\",\"host-option-accessor-construction\"]; assert.equal(c.schema,\"gobi.compiled-capability-check/v1\"); assert.equal(c.status,\"matched\"); assert.equal(c.swap.rejected.rawPreservationVerified,true); assert.equal(c.swap.compatible.rawPreservationVerified,true); assert.equal(c.capabilityMutationControlsDetected,9); assert.deepEqual(c.capabilityMutationControls.map(x=>x.id),ids); assert(c.capabilityMutationControls.every(x=>x.detected===true&&typeof x.error===\"string\"&&x.error.length>0)); const r=JSON.parse(fs.readFileSync(\"compiled-capabilities/conformance/evidence/attempt-05/conformance.run.json\",\"utf8\")); assert.equal(r.status,\"matched\"); console.log(\"N3 attempt-05 confirms both raw preservation fields and all nine ordered capture controls; run/check matched\")'",
+      "workdir": "repository root",
+      "result": "passed; the separate N3 focused attempt-05 run/check report matched, both raw preservation fields are true, and all nine ordered controls are detected with nonempty error strings"
+    }
+  ],
+  "limitations": [
+    "The full `bash run-compiled-capabilities.sh` chain was not launched. The archive test exercises the extracted archive helper with a synthetic temporary attempt; it is not a full-run archive or acceptance receipt.",
+    "N6 did not execute N3. The separate N3 focused attempt-05 evidence was read-only checked against the frozen fields; root's full run must confirm them again in the fresh integrated result.",
+    "No M0 checksum, dependency lock, unrelated production path, E-BUILD/XR-BUILD report, or receipt was changed."
+  ],
+  "integration": "pending root authorization of the full integrated run",
+  "publication": "No Git operation, commit, merge, or deployment."
+}

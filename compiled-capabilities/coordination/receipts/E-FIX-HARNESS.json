@@ -1,0 +1,188 @@
+{
+  "job_id": "E-FIX-HARNESS",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Repaired N3 capability harness evidence: a real host option getter, independent raw preservation checks for rejected and compatible swaps, active renderer requirements derived from compiled AppIR, and nine detected checker mutation controls.",
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/capability-browser-entry.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/capability-browser.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/run.mjs",
+      "workdir": "repository root",
+      "result": "passed; Node v22.23.4; all four modules parsed (Node emitted UNDICI-EHPA experimental environment warnings)"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/conformance/run.mjs --react-app-ir compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/app-ir.json --react-compiled compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --react-helpers compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/encoder.mjs --react-manifest compiled-capabilities/builds/feasibility/react/output/buildmanifest.json --dom-app-ir compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/app-ir.json --dom-compiled compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --dom-helpers compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/encoder.mjs --dom-manifest compiled-capabilities/builds/feasibility/dom/output/buildmanifest.json --native-go /tmp/gondola-go/bin/go --fixture fixtures/compiled/lifecycle/scenario.json --expectations compiled-capabilities/oracle/expectations.json --chromium /tmp/chromium --output compiled-capabilities/conformance/evidence/attempt-05/conformance",
+      "workdir": "repository root",
+      "result": "passed; exit 0; Node v22.23.4; Go go1.24.0; Chromium 153.0.8010.0; Playwright 1.64.1; run and independent check status matched"
+    }
+  ],
+  "repair": {
+    "hostOptionAccessor": {
+      "caseId": "accessor-host-capabilities-property",
+      "constructedFromOwnDescriptor": true,
+      "getterCalls": 0,
+      "initUpdateViewRendererCalls": 0
+    },
+    "swapPreservation": {
+      "rejectedRawPreservationVerified": true,
+      "compatibleRawPreservationVerified": true,
+      "fieldsCompared": [
+        "state",
+        "view",
+        "dom",
+        "pendingEffect"
+      ],
+      "oldRendererLeaseChecked": true,
+      "callbackIdentitySerialized": false,
+      "oldCallbackAfterRejection": "physical old-renderer click accepted on unchanged lease generation",
+      "oldCallbackAfterCommit": "stale callback rejected after generation advanced; trace unchanged"
+    },
+    "activeCandidate": {
+      "source": "unmodified compiled lifecycle AppIR component capabilities intersected with renderer known capabilities",
+      "actualRequiredRendererCapabilities": [
+        "view.node"
+      ],
+      "actualCandidateCapabilities": [],
+      "missingCapability": "view.node",
+      "syntheticOracleProfileUsedAsActiveProof": false
+    }
+  },
+  "focusedRun": {
+    "status": "matched",
+    "attempt": "compiled-capabilities/conformance/evidence/attempt-05",
+    "fixture": "compiled-lifecycle-parent-child-grandchild-remount-fence",
+    "capabilityAdmissionCases": 19,
+    "allAdmissionCasesRejectedBeforeInitOrRender": true,
+    "lifecycleEvents": 26,
+    "lifecycleTicks": 26,
+    "physicalClicks": 16,
+    "requests": 7,
+    "cancellations": 3,
+    "inheritedLifecycleMutationControlsDetected": 8,
+    "capabilityMutationControlsDetected": 9,
+    "capabilityMutationControls": [
+      {
+        "id": "rejected-state",
+        "detected": true,
+        "error": "rejected raw state preservation: values differ"
+      },
+      {
+        "id": "rejected-view",
+        "detected": true,
+        "error": "rejected raw view preservation: values differ"
+      },
+      {
+        "id": "rejected-dom",
+        "detected": true,
+        "error": "rejected raw DOM preservation: values differ"
+      },
+      {
+        "id": "rejected-pending",
+        "detected": true,
+        "error": "rejected raw pending-effect preservation: values differ"
+      },
+      {
+        "id": "compatible-state",
+        "detected": true,
+        "error": "compatible raw state preservation: values differ"
+      },
+      {
+        "id": "compatible-view",
+        "detected": true,
+        "error": "compatible raw view preservation: values differ"
+      },
+      {
+        "id": "compatible-dom",
+        "detected": true,
+        "error": "compatible raw DOM preservation: values differ"
+      },
+      {
+        "id": "compatible-pending",
+        "detected": true,
+        "error": "compatible raw pending-effect preservation: values differ"
+      },
+      {
+        "id": "host-option-accessor-construction",
+        "detected": true,
+        "error": "host option property case did not construct an own getter descriptor"
+      }
+    ],
+    "sourceStableThroughCheck": true,
+    "buildOutputsStableThroughCheck": true,
+    "noWasmApiAttempts": 0,
+    "noWasmRequests": 0
+  },
+  "versions": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "playwright": "1.64.1"
+  },
+  "inputs": {
+    "fixture": {
+      "path": "fixtures/compiled/lifecycle/scenario.json",
+      "sha256": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650"
+    },
+    "expectations": {
+      "path": "compiled-capabilities/oracle/expectations.json",
+      "sha256": "bce92447403c8afe81d23aedc67d4c6751e8c77a5bec18ecce9cc0df262855a4"
+    },
+    "react": {
+      "manifestSha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+      "appIrSha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+      "compiledModuleSha256": "6b2eddfdfe5cdfa9e4929f4ac1cd7c3ee56d6b8e733dc2028a1ca99c3f6753e7",
+      "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    },
+    "dom": {
+      "manifestSha256": "220ce759d04093c95185088a91ae8a6556be44a3aeebb6f327dc7281a473e4e4",
+      "appIrSha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+      "compiledModuleSha256": "097b7e36da40f2aff6359e80d12c2d9439be945eb26b250923212dab5a847ba5",
+      "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    },
+    "componentCapabilities": [
+      "view.node",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ]
+  },
+  "sourceCheckpoint": {
+    "compiled-capabilities/conformance/capability-browser-entry.mjs": "915fc87a6a77865a0c5db64920702d9c95cc30833fa11711a55e49028dd3033e",
+    "compiled-capabilities/conformance/check.mjs": "36f687ec7240b38898b8822352540a94585eeee3e757660c819ba2b1040dfca7",
+    "compiled-capabilities/conformance/capability-browser.mjs": "f75ca6fdf0ea1b8947476513125fdc347fcc0b2721d14ddfd74c386b3fae79fa",
+    "compiled-capabilities/conformance/run.mjs": "e23d6e4139977aafd134ef936d6e6c5cc351df928efa7c2ae91f45542052d183"
+  },
+  "attemptHistory": [
+    {
+      "attempt": "compiled-capabilities/conformance/evidence/attempt-04",
+      "status": "rejected",
+      "reason": "Checker assertion read initialAppIRUsedUnmodified from the swap object instead of the browser capture root; native, direct, lifecycle browser, and capability browser stages completed.",
+      "runnerStdoutSha256": "847527fa08d66ce67da60ef9006860d11b765b66f045735c1040b435b1d7197b",
+      "runnerStderrSha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    {
+      "attempt": "compiled-capabilities/conformance/evidence/attempt-05",
+      "status": "matched",
+      "runJsonSha256": "b535ceb0e88850b181d7fd36985425581a60231ef2fb9be7b50ff1a50b69ed24",
+      "capabilityCheckSha256": "6800d53e9aa4d0a30e16c15e0a789e45ee4bdee3deebec9d01ef38483b377baf",
+      "browserCaptureSha256": "f047c07b303f77edf106e74a064788194b5f1b1396702ef1572438e3606895db",
+      "manifestSha256": "95d61ffffce86629e3f90fe2c30f39a3738b285ea9ac554d1b9ef4fe1ab66faf",
+      "runnerStdoutSha256": "d56f73266c6185f69576e0e4122b104a53be3d31d16b9d7404147776003cd8e3",
+      "runnerStderrSha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    }
+  ],
+  "preservedHistory": {
+    "originalAttempts01Through03Modified": false,
+    "xrHarnessReviewModified": false,
+    "eHarnessReportOrReceiptModified": false
+  },
+  "limitations": [
+    "The focused run used feasibility React/DOM builds. The root-owned full fresh-build chain and final milestone acceptance remain pending.",
+    "No production runtime files, Git state, dependency locks, or full outer runner were changed."
+  ],
+  "publication": "No commit, merge, deploy, or Git operation.",
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-FIX-HARNESS.md",
+    "sha256": "1c412b95822c0ef8396906c336793a35f5011b71f92910a17e455ea10777e01b"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema": "gobi.capability-oracle/v1",
+  "component": {
+    "id": "capability-oracle",
+    "capabilities": [
+      "view.node",
+      "binding.value",
+      "binding.checked",
+      "effect.request-reply",
+      "effect.cancel"
+    ]
+  },
+  "host": {
+    "knownCapabilities": ["effect.request-reply", "effect.cancel"],
+    "legacyDefault": ["effect.request-reply"],
+    "requiredForComponent": ["effect.request-reply", "effect.cancel"]
+  },
+  "renderer": {
+    "knownCapabilities": ["view.node", "binding.value", "binding.checked"],
+    "requiredForComponent": ["view.node", "binding.value", "binding.checked"]
+  },
+  "admission": {
+    "rejectBeforeInitOrRender": [
+      {"id": "legacy-host-lacks-cancel", "hostCapabilities": null},
+      {"id": "explicit-host-lacks-cancel", "hostCapabilities": ["effect.request-reply"]},
+      {"id": "explicit-host-lacks-request-reply", "hostCapabilities": ["effect.cancel"]},
+      {"id": "renderer-lacks-view-node", "rendererCapabilities": ["binding.value", "binding.checked"]},
+      {"id": "renderer-lacks-value-binding", "rendererCapabilities": ["view.node", "binding.checked"]},
+      {"id": "renderer-lacks-checked-binding", "rendererCapabilities": ["view.node", "binding.value"]},
+      {"id": "cancel-component-requires-explicit-renderer-profile", "rendererCapabilities": null}
+    ],
+    "strictHostDeclarations": [
+      {"id": "unknown-host-capability", "value": ["effect.request-reply", "effect.cancel", "view.node"]},
+      {"id": "host-capabilities-not-array", "value": "effect.cancel"},
+      {"id": "sparse-host-capabilities", "value": ["effect.request-reply", null]},
+      {"id": "duplicate-host-capability", "value": ["effect.cancel", "effect.cancel"]},
+      {"id": "accessor-host-capability", "value": "accessor-at-index-zero"},
+      {"id": "accessor-host-capabilities-property", "value": "getter-property"}
+    ],
+    "strictRendererDeclarations": [
+      {"id": "unknown-renderer-capability", "value": ["view.node", "binding.value", "binding.checked", "effect.cancel"]},
+      {"id": "renderer-capabilities-not-array", "value": "view.node"},
+      {"id": "sparse-renderer-capabilities", "value": ["view.node", null]},
+      {"id": "duplicate-renderer-capability", "value": ["view.node", "view.node"]},
+      {"id": "accessor-renderer-capability", "value": "accessor-at-index-zero"},
+      {"id": "accessor-renderer-capabilities-property", "value": "getter-property"}
+    ]
+  },
+  "swap": {
+    "pendingRequest": {
+      "dispatchId": "dispatch-0001",
+      "effectIndex": 0,
+      "effect": {
+        "kind": "fixture.request",
+        "name": "lookup",
+        "arg": "capability-oracle:pending-1",
+        "reply": "complete"
+      }
+    },
+    "pendingSnapshot": {
+      "state": {
+        "typeId": "capability-oracle.State",
+        "kind": "struct",
+        "fields": [
+          {"name": "Count", "value": {"typeId": "int64", "kind": "int", "int": "0"}},
+          {"name": "Pending", "value": {"typeId": "bool", "kind": "bool", "bool": true}},
+          {"name": "Reply", "value": {"typeId": "string", "kind": "string", "string": ""}}
+        ]
+      },
+      "view": {
+        "tree": {"kind": "element", "tag": "main", "key": "root", "text": "count=0;pending=true;reply=", "kids": []},
+        "bindings": []
+      },
+      "dom": {
+        "normalization": "outerHTML-v1",
+        "html": "<main>count=0;pending=true;reply=</main>",
+        "controls": []
+      }
+    },
+    "afterOldCallbackSnapshot": {
+      "state": {
+        "typeId": "capability-oracle.State",
+        "kind": "struct",
+        "fields": [
+          {"name": "Count", "value": {"typeId": "int64", "kind": "int", "int": "1"}},
+          {"name": "Pending", "value": {"typeId": "bool", "kind": "bool", "bool": true}},
+          {"name": "Reply", "value": {"typeId": "string", "kind": "string", "string": ""}}
+        ]
+      },
+      "view": {
+        "tree": {"kind": "element", "tag": "main", "key": "root", "text": "count=1;pending=true;reply=", "kids": []},
+        "bindings": []
+      },
+      "dom": {
+        "normalization": "outerHTML-v1",
+        "html": "<main>count=1;pending=true;reply=</main>",
+        "controls": []
+      }
+    },
+    "incompatibleRendererCapabilities": ["view.node", "binding.value"],
+    "preservedAfterRejectedSwap": [
+      "state",
+      "view",
+      "dom",
+      "pendingEffect",
+      "oldRendererLease",
+      "oldRendererCallbacks"
+    ],
+    "compatibleRendererCapabilities": ["view.node", "binding.value", "binding.checked"],
+    "compatibleSwapPreserves": ["state", "view", "dom", "pendingEffect"],
+    "expectedRendererNames": ["react", "dom"]
+  },
+  "mutationControls": [
+    "missing effect.cancel is rejected before Init and render",
+    "effect.cancel in viewCapabilities is unknown and cannot satisfy a host requirement",
+    "missing binding.checked rejects the candidate before old renderer unmount",
+    "a rejected swap leaves the old callback callable and the pending completion deliverable",
+    "a compatible renderer swap preserves the exact state, view, DOM and pending request"
+  ]
+}

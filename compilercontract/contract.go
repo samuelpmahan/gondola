@@ -112,8 +112,11 @@ const (
 	CapabilityBindingValue   Capability = "binding.value"
 	CapabilityBindingChecked Capability = "binding.checked"
 	CapabilityEffectRequest  Capability = "effect.request-reply"
-	CapabilitySafeInteger    Capability = "numeric.safe-integer"
-	CapabilityFloat64        Capability = "numeric.float64"
+	// CapabilityEffectCancel is derived when Update-reachable code constructs
+	// the compiler-recognized lifecycle cancellation descriptor.
+	CapabilityEffectCancel Capability = "effect.cancel"
+	CapabilitySafeInteger  Capability = "numeric.safe-integer"
+	CapabilityFloat64      Capability = "numeric.float64"
 )
 
 type BindingSource string

@@ -50,6 +50,14 @@ test("binds the actual callable exports selected by the AppIR role IDs", () => {
   assert.equal(bound.View, module.symbols["example/app.View"]);
 });
 
+test("accepts the explicit effect.cancel AppIR capability", () => {
+  const module = compiled();
+  module.appIR = structuredClone(appIR);
+  module.appIR.components[0].capabilities.push("effect.cancel");
+
+  assert.equal(bindCompiledComponent(module, "example/app.Counter").component.capabilities.at(-1), "effect.cancel");
+});
+
 test("checks generated role metadata against the module before binding", () => {
   const module = compiled();
   const generated = Object.freeze([Object.freeze({

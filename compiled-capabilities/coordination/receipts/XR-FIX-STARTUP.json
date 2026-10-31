@@ -1,0 +1,112 @@
+{
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "job_id": "XR-FIX-STARTUP",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Accepted N6's bounded startup repair: attempts-parent creation is recursive, attempt-directory creation remains exclusive, and a pinned 3/3 regression stage gates M0 and inherited execution.",
+  "findings": [],
+  "reviewedDelta": {
+    "base": "2324068",
+    "files": [
+      "compiled-capabilities/archive-helper.mjs",
+      "compiled-capabilities/archive-helper.test.mjs",
+      "compiled-capabilities/run.mjs"
+    ],
+    "onlyTheseFilesInDiff": true,
+    "helperAndTestInsideExplicitSourceFilesPinArray": true,
+    "attemptParentRecursiveAndChildExclusive": true,
+    "regressionStageBeforeM0AndInheritedLifecycle": true,
+    "failedStageWithholdsLaterStages": true,
+    "exactTapSummaryRequired": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "focusedTest": {
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+    "exitCode": 0,
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "log": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/archive-helper.test.log",
+    "logSha256": "4a9da707d3a0e03dc413d215b55bfb9dafbdade7cf6516b098b5c394f3896de7"
+  },
+  "runtime": {
+    "node": "v22.23.4",
+    "fullRunnerStarted": false
+  },
+  "preservedStartupFailure": {
+    "log": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log",
+    "logSha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+    "matchesAuthorReport": true,
+    "bundle": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/source.bundle",
+    "bundleSha256": "e4d49e29034a022c71d1a7f9f9c90707124a8d2491d0a6032404346618ffd6fa",
+    "bundleVerification": "passed; failed-startup ref 232406843678f46c569e1c54b34b268c84e7764e is present",
+    "bundleVerifyLog": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/startup-bundle-verify.log",
+    "bundleVerifyLogSha256": "b758de9d7e203ca70af7afe51da50266e53fef0dc84e71fc2ad297c2b5cf8b1a"
+  },
+  "reviewedSourceSha256": {
+    "compiled-capabilities/run.mjs": "56b1b20e06ad9693c715268f0d470f60e7cadc8f92a281706f27416236cb66c8",
+    "compiled-capabilities/archive-helper.mjs": "87cb9acd18fe7b9cb22a5c0d68019a4374b019c74717ce7e84b5729a849037eb",
+    "compiled-capabilities/archive-helper.test.mjs": "066811b13a96e6958bbaa2770d433ceee6a9b5a96bf37d9f0f46b70fae6a7f52"
+  },
+  "authorRecords": {
+    "report": "compiled-capabilities/coordination/reports/E-FIX-STARTUP.md",
+    "reportSha256": "71ba61d05f04c30b63d6385c42032cb40e654989d73c01037e4c9fc400cd03ef",
+    "receipt": "compiled-capabilities/coordination/receipts/E-FIX-STARTUP.json",
+    "receiptSha256": "c63b542c87b604f59de9b17999e949e5d8d3547ce2cafe132b851f43d3c52995"
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/archive-helper.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "result": "all three modules parse under Node v22.23.4",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/syntax.log",
+      "logSha256": "6a9495e9df8c86b1b5d9a4bdf3238c4bf8ec9b89eebc5b1d0cc5ed83044858ae"
+    },
+    {
+      "command": "read-only Python source audit of sourceFiles pins, exact TAP gates, stage order, fail-closed behavior, and attempt-directory helper call",
+      "exitCode": 0,
+      "result": "all five assertions passed",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/stage-order.log",
+      "logSha256": "bc480fc0efedc4078d8bf6f696789c7d01bf6783e41d01ecd524794980f44dec"
+    },
+    {
+      "command": "git diff --check 2324068 -- compiled-capabilities/run.mjs compiled-capabilities/archive-helper.mjs compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "result": "passed; no whitespace errors",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/diff-check.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git diff --name-only 2324068 -- compiled-capabilities/run.mjs compiled-capabilities/archive-helper.mjs compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "result": "exactly the three reviewed paths",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/diff-files.log",
+      "logSha256": "047ab4b059b047a41e476163b4c56eacc2cf3a1e7fd39cd4264ec03eb5f77805"
+    },
+    {
+      "command": "git bundle verify compiled-capabilities/coordination/root-checks/startup-failed-2324068/source.bundle",
+      "exitCode": 0,
+      "result": "bundle verified and failed-startup ref is present",
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP/logs/startup-bundle-verify.log",
+      "logSha256": "b758de9d7e203ca70af7afe51da50266e53fef0dc84e71fc2ad297c2b5cf8b1a"
+    }
+  ],
+  "reviewReport": {
+    "path": "compiled-capabilities/coordination/reviews/XR-FIX-STARTUP.md",
+    "sha256": "9e407a68e324c6f1c36eb9e9fb32ddcc15e29ff97d628b8ae863761280b57ffb"
+  },
+  "limitations": [
+    "The full capability runner and integration chain were not executed as part of this review.",
+    "No production source, original startup failure log or bundle, prior report or receipt, or Git state was modified."
+  ],
+  "publication": "No Git operation, commit, merge, or deployment."
+}

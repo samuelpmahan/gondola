@@ -1,0 +1,62 @@
+{
+  "job_id": "E-DEMO",
+  "worker": "N5",
+  "summary": "Added a runnable HTTP demo that mounts the compiled Go lifecycle app, displays its AppIR and host/renderer capability profiles, rejects an incompatible renderer without disturbing the live tree, recovers through a compatible swap, and completes pending Go work.",
+  "outcome": "mixed_change",
+  "versions": {
+    "node": "v22.23.4",
+    "chromium": "153.0.8010.0",
+    "react": "19.3.1",
+    "react_dom": "19.3.1"
+  },
+  "commands": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/demo/app.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/demo/build.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/demo/smoke.mjs",
+      "workdir": "repository root",
+      "result": "passed; all three JavaScript entry points parsed"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/demo/build.mjs --compiled compiled-capabilities/builds/feasibility/react/output --output /tmp/gondola-capabilities-demo-debug/site --backend react",
+      "workdir": "repository root",
+      "result": "passed; compiled lifecycle AppIR included view.node, effect.request-reply, effect.cancel; emitted 1,846,094-byte browser bundle with SHA-256 e4fcd7a170a4e72d121ae0a20609ac599f36d3e683f9acf7edf2863def4e35d9"
+    },
+    {
+      "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/demo/smoke.mjs --demo /tmp/gondola-capabilities-demo-debug/site --output /tmp/gondola-capabilities-demo-debug/smoke.json --screenshot /tmp/gondola-capabilities-demo-debug/demo.png --port 0",
+      "workdir": "repository root",
+      "result": "passed; eight checks on ephemeral port 35007; page, stylesheet and bundle returned HTTP 200; React and ReactDOM were 19.3.1; no browser, console, failed-request or WebAssembly errors"
+    }
+  ],
+  "first_attempt": {
+    "captured_log": false,
+    "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/demo/smoke.mjs --demo /tmp/gondola-capabilities-demo-debug/site --output /tmp/gondola-capabilities-demo-debug/smoke.json --screenshot /tmp/gondola-capabilities-demo-debug/demo.png --port 0",
+    "observed_result": "failed at clickGoAction: expected one Go control for parent counter add; selector matched 3 nested buttons (Parent, Child, Grandchild)",
+    "reason": "The initial smoke selector used a descendant combinator, so it also matched child and grandchild counters. The selector was narrowed to the direct Parent child button and the full smoke rerun passed. The first tool output was not saved as a separate file."
+  },
+  "source_hashes": {
+    "compiled-capabilities/demo/app.mjs": "f34d9deafdac14e6c7d24ff73a8926ca3035db1313e9ed8ea135a4ddae1b1092",
+    "compiled-capabilities/demo/build.mjs": "b6f5f49048418e20e59c6f09e9fea753610015fef8ceecb611d9da8c01912326",
+    "compiled-capabilities/demo/demo.css": "3c36b27dc9297f363e3a7e1dd770101c2433e830b0deca337b5801a8d58b26e0",
+    "compiled-capabilities/demo/index.html": "68ebf6373b4a666ab49fa2f618aad9fce96ccb8be9281b4c8e5692c4e2155b11",
+    "compiled-capabilities/demo/smoke.mjs": "a801bd23e4b209a082c01abebe8157282a3d2ae75f4a01e8de72f29ad6254cc8"
+  },
+  "evidence": {
+    "directory": "compiled-capabilities/demo/evidence/attempt-00/",
+    "build": {
+      "path": "compiled-capabilities/demo/evidence/attempt-00/demo-build.json",
+      "sha256": "bf322aafa41f21ffcd907e6317c1ed1a715fb33d8ea147abbd2588a9e01bc037"
+    },
+    "smoke": {
+      "path": "compiled-capabilities/demo/evidence/attempt-00/demo-smoke.json",
+      "sha256": "83d66910762d6cceffca8106af3aff4aab7cf9072be9adf125a9dd9828673655",
+      "schema": "gobi.compiled-capabilities-demo-smoke/v1",
+      "checks": 8,
+      "status": "passed"
+    },
+    "screenshot": {
+      "path": "compiled-capabilities/demo/evidence/attempt-00/demo.png",
+      "sha256": "8c88c495415c336a9d3a01e8a31d700e5b0b9316ac37e60394fda6deddba7b1a"
+    }
+  },
+  "integration": "pending: smoke was run against the fresh feasibility React output; the full capability milestone runner is still in progress",
+  "publication": "No commit, merge, or deploy was performed."
+}

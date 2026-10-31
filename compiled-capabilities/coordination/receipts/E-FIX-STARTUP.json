@@ -1,0 +1,104 @@
+{
+  "schema": "gobi.compiled-capabilities-author-repair/v1",
+  "job_id": "E-FIX-STARTUP",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Fixed clean-worktree startup by recursively creating the attempts parent before exclusive attempt-directory creation. Added absent-parent and duplicate-name regression tests; targeted checks pass. The full runner was not launched.",
+  "startupFailure": {
+    "attempt": "attempt-20261031T094540706Z",
+    "error": "ENOENT creating compiled-capabilities/builds/attempts/attempt-20261031T094540706Z because the attempts parent did not exist",
+    "originalLog": "/tmp/gondola-capabilities-full-2324068.log",
+    "preservedLog": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log",
+    "sha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+    "sourceOrCanonicalReceiptChangedByFailure": false
+  },
+  "implementation": {
+    "helper": "compiled-capabilities/archive-helper.mjs:createExclusiveAttemptDirectory",
+    "invokedFrom": "compiled-capabilities/run.mjs",
+    "order": [
+      "mkdir(dirname(attemptPath), {recursive:true})",
+      "mkdir(attemptPath) without recursive mode, preserving exclusive EEXIST collision protection"
+    ],
+    "sourcePinned": true,
+    "testSourcePinned": true
+  },
+  "tests": {
+    "absentParent": "creates missing builds/attempts parent and creates the unique attempt directory",
+    "duplicateAttempt": "rejects an existing attempt name with EEXIST and preserves its marker file",
+    "archiveHelperRegression": "immutable snapshot, archive member inventory, extraction hash round trip, and external manifest binding remain passing"
+  },
+  "changedSourceSha256": {
+    "compiled-capabilities/run.mjs": "56b1b20e06ad9693c715268f0d470f60e7cadc8f92a281706f27416236cb66c8",
+    "compiled-capabilities/archive-helper.mjs": "87cb9acd18fe7b9cb22a5c0d68019a4374b019c74717ce7e84b5729a849037eb",
+    "compiled-capabilities/archive-helper.test.mjs": "066811b13a96e6958bbaa2770d433ceee6a9b5a96bf37d9f0f46b70fae6a7f52"
+  },
+  "checks": [
+    {
+      "command": "mkdir -p compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs && set +e; /tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs > compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/red.log 2>&1; status=$?; cat compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/red.log; printf 'red_exit=%s\\n' \"$status\"; test \"$status\" -ne 0",
+      "workdir": "repository root",
+      "result": "expected red; test module failed because archive-helper.mjs did not yet export createExclusiveAttemptDirectory"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs > compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/green.log 2>&1; status=$?; cat compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/green.log; printf 'green_exit=%s\\n' \"$status\"; exit \"$status\"",
+      "workdir": "repository root",
+      "result": "passed; 3/3 tests, including absent parent, duplicate EEXIST collision, and archive snapshot round trip"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/archive-helper.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/archive-helper.test.mjs",
+      "workdir": "repository root",
+      "result": "passed; all three files parse under Node v22.23.4; only the experimental EnvHttpProxyAgent warning was emitted"
+    },
+    {
+      "command": "git diff --check -- compiled-capabilities/run.mjs compiled-capabilities/archive-helper.mjs compiled-capabilities/archive-helper.test.mjs",
+      "workdir": "repository root",
+      "result": "passed; no whitespace errors"
+    },
+    {
+      "command": "python -c 'from pathlib import Path; s=Path(\"compiled-capabilities/run.mjs\").read_text(); helper=s.index(\"await stage(\\\"archive-helper-startup-regressions\\\", runArchiveHelperTests)\"); inherited=s.index(\"await stage(\\\"inherited-static-and-interaction-lifecycle\\\", runInheritedLifecycle)\"); assert inherited>helper; assert \"if (!archiveHelperTests) throw new Error(\\\"archive helper startup regressions failed; inherited execution was withheld\\\")\" in s; assert \"tap.tests !== 3 || tap.pass !== 3 || tap.fail !== 0\" in s; print(\"startup test stage is ordered before inherited lifecycle and fails closed\")'",
+      "workdir": "repository root",
+      "result": "passed; the archive-helper test stage precedes the inherited chain, exact TAP counts are enforced, and failure withholds inherited execution"
+    }
+  ],
+  "testLogs": {
+    "red": {
+      "path": "compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/red.log",
+      "sha256": "44e7bc45b5dcd68c65788964243098467ff13e7a7b0aab89321efccfb8ed6d5b"
+    },
+    "green": {
+      "path": "compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/green-final.log",
+      "sha256": "1fcf7b5d20d378b7ad1cd3ac138fd46f880a4ab024cf3d0ccd657eaa19becbcf"
+    },
+    "syntax": {
+      "path": "compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/syntax-final.log",
+      "sha256": "4ebe3d36389147b01b2db34597d8677f0a07536833da0543fdfb81680e48d621"
+    },
+    "stageWiring": {
+      "path": "compiled-capabilities/coordination/reviews/E-FIX-STARTUP/logs/stage-wiring.log",
+      "sha256": "90facad63fdb36338eedc7d7a7f54a4b785f79c3612982f4741807f0972eb94d"
+    }
+  },
+  "preservedRecords": {
+    "E-FIX-BUILD.json": "886afeffe74362b9aee518f0ee740a9a04ac05de5e58f1faf74eed15cf6b237f",
+    "E-FIX-BUILD.md": "3de49fb8bd57511910254c5eced559dc295153c4459d46635759ce93ee3c09dc",
+    "XR-FIX-HARNESS.json": "96be80832a6f4cfdca35d929dc8ef9b1aec6770f08af6c971173387f95a89558",
+    "XR-FIX-HARNESS.md": "1c0b4f50d0858d56e20ec1a858e763a0654884e407f8cc85346a54ba70a1f07b",
+    "E-FIX-HARNESS.json": "b1c4630b4c45209d99baa7b996830f0443a255a99ae4bff4958654a49a95a727",
+    "E-FIX-HARNESS.md": "1c412b95822c0ef8396906c336793a35f5011b71f92910a17e455ea10777e01b",
+    "E-BUILD.json": "65aaece092033ee46ae74812b4b16a538bce5f79d1c0d3c86482f54f7a487d71",
+    "E-BUILD.md": "cb433943bbac3cf92c8ea5c8c8535a99e864c1b4a2829c47917d6554584fc914",
+    "XR-BUILD.json": "e125eb7b5ca4eece2e038c1c5e8cba37907470fb84434816010f0fa459c0daf7",
+    "XR-BUILD.md": "9b4bf73f8cfe19f5c89e2486d70ff5aff9cfe116061f129c26d2dcc4c6b1a0dc",
+    "XR-HARNESS.json": "083a1e519abf4f0eff4070e09db1b843836243a04fabd5b5e6ab82699475db38",
+    "XR-HARNESS.md": "45b2a4880ee7798f9c33e9a77a6354aa90e9e09fee46b09c8618950e58bcb0a5"
+  },
+  "limitations": [
+    "The full `bash run-compiled-capabilities.sh` chain was not launched by N6. Root will rerun it after independent review.",
+    "No M0 checksum, package lock, dependency, unrelated production path, original startup failure artifact, or prior accepted report/receipt was changed."
+  ],
+  "integration": "pending independent review and root full-run rerun",
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-FIX-STARTUP.md",
+    "sha256": "71ba61d05f04c30b63d6385c42032cb40e654989d73c01037e4c9fc400cd03ef"
+  },
+  "publication": "No Git operation, commit, merge, or deployment."
+}

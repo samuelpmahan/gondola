@@ -13,9 +13,13 @@ const SUPPORTED_CAPABILITIES = new Set([
   "binding.value",
   "binding.checked",
   "effect.request-reply",
+  "effect.cancel",
   "numeric.safe-integer",
   "numeric.float64",
 ]);
+const SUPPORTED_HOST_EFFECT_CAPABILITIES = new Set(["effect.request-reply", "effect.cancel"]);
+const SUPPORTED_VIEW_CAPABILITIES = new Set(["view.node", "binding.value", "binding.checked"]);
+const LEGACY_HOST_CAPABILITIES = Object.freeze(["effect.request-reply"]);
 
 export class RuntimeFailure extends Error {
   constructor(stage, message, cause = undefined) {
@@ -133,6 +137,74 @@ function canonicalJson(value) {
 function requireString(value, label) {
   if (typeof value !== "string") throw new TypeError(`${label} must be a string`);
   return value;
+}
+
+function readDataProperty(value, key, label) {
+  let descriptor;
+  try {
+    descriptor = Object.getOwnPropertyDescriptor(value, key);
+  } catch (cause) {
+    throw new TypeError(`${label} could not be inspected`, { cause });
+  }
+  if (!descriptor) return { found: false, value: undefined };
+  if (!Object.prototype.hasOwnProperty.call(descriptor, "value") ||
+      Object.prototype.hasOwnProperty.call(descriptor, "get") ||
+      Object.prototype.hasOwnProperty.call(descriptor, "set")) {
+    throw new TypeError(`${label} must be an own data property`);
+  }
+  return { found: true, value: descriptor.value };
+}
+
+function readCapabilityValues(value, supported, label) {
+  let length;
+  let keys;
+  try {
+    if (!Array.isArray(value)) throw new TypeError(`${label} must be an array`);
+    const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+    if (!lengthDescriptor || !Object.prototype.hasOwnProperty.call(lengthDescriptor, "value") ||
+        !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0) {
+      throw new TypeError(`${label} has an invalid length`);
+    }
+    length = lengthDescriptor.value;
+    keys = Reflect.ownKeys(value);
+  } catch (cause) {
+    if (cause instanceof TypeError && cause.message.startsWith(`${label} `)) throw cause;
+    throw new TypeError(`${label} could not be inspected`, { cause });
+  }
+
+  if (keys.length !== length + 1 || !keys.includes("length") ||
+      Array.from({ length }, (_, index) => String(index)).some((key) => !keys.includes(key))) {
+    throw new TypeError(`${label} must be dense and contain no extra properties`);
+  }
+
+  const values = [];
+  for (let index = 0; index < length; index += 1) {
+    let descriptor;
+    try {
+      descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+    } catch (cause) {
+      throw new TypeError(`${label}[${index}] could not be inspected`, { cause });
+    }
+    if (!descriptor || !Object.prototype.hasOwnProperty.call(descriptor, "value") ||
+        !descriptor.enumerable || Object.prototype.hasOwnProperty.call(descriptor, "get") ||
+        Object.prototype.hasOwnProperty.call(descriptor, "set")) {
+      throw new TypeError(`${label}[${index}] must be an own data property`);
+    }
+    const capability = descriptor.value;
+    if (typeof capability !== "string" || !supported.has(capability)) {
+      throw new TypeError(`${label} contains an unsupported capability`);
+    }
+    values.push(capability);
+  }
+  if (new Set(values).size !== values.length) {
+    throw new TypeError(`${label} must not contain duplicates`);
+  }
+  return Object.freeze(values);
+}
+
+function mountOption(options, key, defaultValue) {
+  const property = readDataProperty(options, key, `mount options.${key}`);
+  return property.found ? property.value : defaultValue;
 }
 
 function validateAction(action) {
@@ -332,10 +404,9 @@ function getComponent(compiled, componentId) {
     }
     symbols[role] = descriptor.value;
   }
-  if (!Array.isArray(component.capabilities)
-      || component.capabilities.some((capability) => typeof capability !== "string" || !SUPPORTED_CAPABILITIES.has(capability))) {
-    throw new TypeError("component.capabilities must be a supported capability array");
-  }
+  const capabilityProperty = readDataProperty(component, "capabilities", "component.capabilities");
+  if (!capabilityProperty.found) throw new TypeError("component.capabilities must be a supported capability array");
+  const capabilities = readCapabilityValues(capabilityProperty.value, SUPPORTED_CAPABILITIES, "component.capabilities");
   let effectResultTypeId = null;
   if (Array.isArray(appIR.symbols)) {
     const updateMetadata = appIR.symbols.find((candidate) => candidate?.id === component.update);
@@ -344,7 +415,32 @@ function getComponent(compiled, componentId) {
       effectResultTypeId = results[1];
     }
   }
-  return { component, symbols, appIR, effectResultTypeId };
+  return { component, capabilities, symbols, appIR, effectResultTypeId };
+}
+
+function requireHostCapabilities(componentCapabilities, hostCapabilities) {
+  const requirements = componentCapabilities.filter((capability) => SUPPORTED_HOST_EFFECT_CAPABILITIES.has(capability));
+  const missing = requirements.filter((capability) => !hostCapabilities.includes(capability));
+  if (missing.length !== 0) {
+    throw new TypeError(`hostCapabilities is missing required component effect capability ${missing.join(", ")}`);
+  }
+}
+
+function requireRendererCapabilities(renderer, componentCapabilities) {
+  const property = readDataProperty(renderer, "viewCapabilities", "renderer.viewCapabilities");
+  if (!property.found) {
+    if (componentCapabilities.includes("effect.cancel")) {
+      throw new TypeError("renderer must declare viewCapabilities for a component requiring effect.cancel");
+    }
+    return null;
+  }
+  const viewCapabilities = readCapabilityValues(property.value, SUPPORTED_VIEW_CAPABILITIES, "renderer.viewCapabilities");
+  const required = componentCapabilities.filter((capability) => SUPPORTED_VIEW_CAPABILITIES.has(capability));
+  const missing = required.filter((capability) => !viewCapabilities.includes(capability));
+  if (missing.length !== 0) {
+    throw new TypeError(`renderer.viewCapabilities is missing required component view capability ${missing.join(", ")}`);
+  }
+  return viewCapabilities;
 }
 
 function effectSliceMetadata(appIR, effectResultTypeId) {
@@ -375,25 +471,43 @@ function requireEncoder(encoder) {
   return encoder;
 }
 
-function requireRenderer(renderer) {
-  if (!isRecord(renderer)
-      || typeof renderer.update !== "function"
-      || typeof renderer.viewRecord !== "function"
-      || typeof renderer.domSnapshot !== "function"
-      || typeof renderer.unmount !== "function") {
+function rendererMethod(renderer, key) {
+  let owner = renderer;
+  while (owner !== null) {
+    const property = readDataProperty(owner, key, `renderer.${key}`);
+    if (property.found) return property.value;
+    try {
+      owner = Object.getPrototypeOf(owner);
+    } catch (cause) {
+      throw new TypeError(`renderer.${key} could not be inspected`, { cause });
+    }
+  }
+  return undefined;
+}
+
+function rendererCoreMethods(renderer) {
+  if (!isRecord(renderer)) {
     throw new TypeError("renderer must provide update, viewRecord, domSnapshot, and unmount");
   }
-  return renderer;
+  const methods = {
+    renderer,
+    update: rendererMethod(renderer, "update"),
+    viewRecord: rendererMethod(renderer, "viewRecord"),
+    domSnapshot: rendererMethod(renderer, "domSnapshot"),
+    unmount: rendererMethod(renderer, "unmount"),
+  };
+  if ([methods.update, methods.viewRecord, methods.domSnapshot, methods.unmount].some((method) => typeof method !== "function")) {
+    throw new TypeError("renderer must provide update, viewRecord, domSnapshot, and unmount");
+  }
+  return methods;
 }
 
 function rendererReplacementMethods(renderer) {
-  const checked = requireRenderer(renderer);
-  const update = checked.update;
-  const readView = checked.viewRecord;
-  const readDOM = checked.domSnapshot;
-  const unmount = checked.unmount;
-  const focusState = checked.focusState;
-  const restoreFocus = checked.restoreFocus;
+  const core = rendererCoreMethods(renderer);
+  const checked = core.renderer;
+  const { update, viewRecord: readView, domSnapshot: readDOM, unmount } = core;
+  const focusState = rendererMethod(checked, "focusState");
+  const restoreFocus = rendererMethod(checked, "restoreFocus");
   if ((typeof focusState === "function") !== (typeof restoreFocus === "function")) {
     throw new TypeError("renderer focus support must provide both focusState() and restoreFocus(state)");
   }
@@ -590,7 +704,7 @@ function validateEffectByPolicy(effect, effectPolicy) {
   }
 }
 
-function normalizeEffects(effects, dispatchId, capabilities, effectPolicy, encoder, appIR, effectResultTypeId) {
+function normalizeEffects(effects, dispatchId, capabilities, hostCapabilities, effectPolicy, encoder, appIR, effectResultTypeId) {
   if (effects === null || effects === undefined) return [];
   let effectValues;
   const hasDeclaredEffectSlice = typeof effectResultTypeId === "string"
@@ -620,6 +734,14 @@ function normalizeEffects(effects, dispatchId, capabilities, effectPolicy, encod
     }
   }
   return effectValues.map((effect, effectIndex) => {
+    if (effect.kind === "lifecycle.cancel") {
+      if (!capabilities.includes("effect.cancel")) {
+        throw new TypeError("component emitted lifecycle.cancel without effect.cancel capability");
+      }
+      if (!hostCapabilities.includes("effect.cancel")) {
+        throw new TypeError("host did not declare effect.cancel support");
+      }
+    }
     validateEffectByPolicy(effect, effectPolicy);
     return { dispatchId, effectIndex, effect };
   });
@@ -669,17 +791,22 @@ function completionValidationErrorMessage(error) {
  * Mounts actual emitted Go Init/Update/View symbols behind an imperative
  * synchronous renderer. This is a model host, not an application reducer.
  */
-export function mountCompiledApp({
-  module: compiled,
-  componentId,
-  appId = componentId,
-  encoder,
-  renderer,
-  effectHost = null,
-  effectPolicy = null,
-  onTick = null,
-  onFailure = null,
-}) {
+export function mountCompiledApp(options) {
+  if (!isRecord(options)) throw new TypeError("mount options must be an object");
+  const compiled = mountOption(options, "module", undefined);
+  const componentId = mountOption(options, "componentId", undefined);
+  const appId = mountOption(options, "appId", componentId);
+  const encoder = mountOption(options, "encoder", undefined);
+  const renderer = mountOption(options, "renderer", undefined);
+  const effectHost = mountOption(options, "effectHost", null);
+  const effectPolicy = mountOption(options, "effectPolicy", null);
+  const onTick = mountOption(options, "onTick", null);
+  const onFailure = mountOption(options, "onFailure", null);
+  const rawHostCapabilities = mountOption(options, "hostCapabilities", undefined);
+  const hostCapabilities = rawHostCapabilities === undefined
+    ? LEGACY_HOST_CAPABILITIES
+    : readCapabilityValues(rawHostCapabilities, SUPPORTED_HOST_EFFECT_CAPABILITIES, "hostCapabilities");
+
   requireString(componentId, "componentId");
   requireString(appId, "appId");
   if (onTick !== null && typeof onTick !== "function") throw new TypeError("onTick must be a function or null");
@@ -688,13 +815,16 @@ export function mountCompiledApp({
     throw new TypeError("effectPolicy must be a synchronous validator function or null");
   }
 
-  const { component, symbols, appIR, effectResultTypeId } = getComponent(compiled, componentId);
+  const { component, capabilities, symbols, appIR, effectResultTypeId } = getComponent(compiled, componentId);
+  requireHostCapabilities(capabilities, hostCapabilities);
   const stateEncoder = requireEncoder(encoder);
-  let viewRenderer = requireRenderer(renderer);
+  if (!isRecord(renderer)) throw new TypeError("renderer must provide update, viewRecord, domSnapshot, and unmount");
+  requireRendererCapabilities(renderer, capabilities);
+  rendererCoreMethods(renderer);
+  let viewRenderer = renderer;
   if (effectHost !== null && typeof effectHost.request !== "function") {
     throw new TypeError("effectHost must provide request(request, deliver) or be null");
   }
-  const capabilities = component.capabilities;
   let state;
   let initialized = false;
   let disposed = false;
@@ -704,6 +834,7 @@ export function mountCompiledApp({
   let admittingCompletion = false;
   let recordingDeferredAction = false;
   let replacingRenderer = false;
+  let admittingRendererCandidate = false;
   let replacementCompletionQueued = false;
   let rendererUnavailable = false;
   let updateSequence = 0n;
@@ -773,8 +904,8 @@ export function mountCompiledApp({
     }
     return {
       state: readState(),
-      view: disposed ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer),
-      dom: domSnapshot(viewRenderer),
+      view: disposed ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer, rendererMethod(viewRenderer, "viewRecord")),
+      dom: domSnapshot(viewRenderer, rendererMethod(viewRenderer, "domSnapshot")),
     };
   }
 
@@ -800,6 +931,9 @@ export function mountCompiledApp({
   }
 
   function cancelEffect(correlationInput) {
+    if (admittingRendererCandidate) {
+      return { accepted: false, cancelled: false, retryable: true, error: "effect cancellation rejected during renderer candidate admission" };
+    }
     let correlation;
     try {
       correlation = validateEffectCorrelation(correlationInput);
@@ -836,8 +970,8 @@ export function mountCompiledApp({
       state: readState(),
       requestedEffects: cloneJson(requestedEffects),
       completedEffects: cloneJson(completedEffects),
-      view: disposed || rendererUnavailable ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer),
-      dom: rendererUnavailable ? null : domSnapshot(viewRenderer),
+      view: disposed || rendererUnavailable ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer, rendererMethod(viewRenderer, "viewRecord")),
+      dom: rendererUnavailable ? null : domSnapshot(viewRenderer, rendererMethod(viewRenderer, "domSnapshot")),
     };
     ticks.push(tick);
     try { onTick?.(cloneJson(tick)); } catch (error) {
@@ -887,10 +1021,10 @@ export function mountCompiledApp({
   }
 
   function renderView(view) {
-    const result = viewRenderer.update(view, rendererCallbacks(rendererLease));
+    const result = rendererMethod(viewRenderer, "update").call(viewRenderer, view, rendererCallbacks(rendererLease));
     noThenable(result, "renderer.update(view)");
     lastRawView = view;
-    lastLogicalView = viewSnapshot(viewRenderer);
+    lastLogicalView = viewSnapshot(viewRenderer, rendererMethod(viewRenderer, "viewRecord"));
   }
 
   function init() {
@@ -949,6 +1083,7 @@ export function mountCompiledApp({
         rawEffects,
         dispatchId,
         capabilities,
+        hostCapabilities,
         effectPolicy,
         stateEncoder,
         appIR,
@@ -1090,6 +1225,9 @@ export function mountCompiledApp({
   }
 
   function dispatch(actionInput, messageInput) {
+    if (admittingRendererCandidate) {
+      return { accepted: false, dispatchId: null, error: "dispatch rejected during renderer candidate admission" };
+    }
     if (replacingRenderer) {
       return { accepted: false, dispatchId: null, error: "dispatch rejected during renderer replacement" };
     }
@@ -1129,6 +1267,9 @@ export function mountCompiledApp({
   }
 
   function recordStaleAction(actionInput, renderEpoch = null) {
+    if (admittingRendererCandidate) {
+      return { accepted: false, dispatchId: null, stale: true, error: "stale action rejected during renderer candidate admission" };
+    }
     if (replacingRenderer) {
       return { accepted: false, dispatchId: null, stale: true, error: "stale action rejected during renderer replacement" };
     }
@@ -1161,7 +1302,7 @@ export function mountCompiledApp({
     rendererLease.status = "unmounted";
     cancelHeldReplacementCompletions();
     try {
-      const result = viewRenderer.unmount();
+      const result = rendererMethod(viewRenderer, "unmount").call(viewRenderer);
       noThenable(result, "renderer.unmount()");
     } catch (error) {
       reportFailure("unmount", error);
@@ -1171,6 +1312,7 @@ export function mountCompiledApp({
   }
 
   function unmount() {
+    if (admittingRendererCandidate) return false;
     if (replacingRenderer) return false;
     if (busy) {
       if (admittingCompletion) return false;
@@ -1185,7 +1327,7 @@ export function mountCompiledApp({
   function replaceRenderer(nextRenderer) {
     const attempt = ++rendererReplacementAttempt;
     const fromGeneration = rendererLease.generation;
-    if (busy) {
+    if (busy || admittingRendererCandidate) {
       rendererReplacements.push({
         attempt,
         fromGeneration,
@@ -1212,10 +1354,37 @@ export function mountCompiledApp({
       throw new TypeError(disposed ? "runtime is unmounted" : halted ? "runtime is halted" : "runtime has not initialized");
     }
 
-    busy = true;
-    replacingRenderer = true;
     const oldRenderer = viewRenderer;
     const oldLease = rendererLease;
+    let nextMethods;
+    let oldMethods;
+    admittingRendererCandidate = true;
+    try {
+      if (!isRecord(nextRenderer)) throw new TypeError("renderer must provide update, viewRecord, domSnapshot, and unmount");
+      requireRendererCapabilities(nextRenderer, capabilities);
+      nextMethods = rendererReplacementMethods(nextRenderer);
+      if (nextMethods.renderer === oldRenderer) {
+        throw new TypeError("cannot replace a renderer with itself");
+      }
+      oldMethods = rendererReplacementMethods(oldRenderer);
+    } catch (error) {
+      rendererReplacements.push({
+        attempt,
+        fromGeneration,
+        toGeneration: null,
+        outcome: "rejected",
+        phase: "admission",
+        oldUnmounted: false,
+        focusCaptured: false,
+        focusRestored: false,
+      });
+      throw error;
+    } finally {
+      admittingRendererCandidate = false;
+    }
+
+    busy = true;
+    replacingRenderer = true;
     const oldLeaseStatus = oldLease.status;
     oldLease.status = "transitioning";
     let nextLease = null;
@@ -1229,11 +1398,6 @@ export function mountCompiledApp({
     let failureToThrow = null;
 
     try {
-      const nextMethods = rendererReplacementMethods(nextRenderer);
-      if (nextMethods.renderer === oldRenderer) {
-        throw new TypeError("cannot replace a renderer with itself");
-      }
-      const oldMethods = rendererReplacementMethods(oldRenderer);
       nextGeneration = nextRendererGeneration++;
       nextLease = { generation: nextGeneration, status: "preparing" };
 
@@ -1344,6 +1508,9 @@ export function mountCompiledApp({
   const runtime = {
     dispatch,
     complete(completion) {
+      if (admittingRendererCandidate) {
+        return { accepted: false, retryable: true, error: "completion rejected during renderer candidate admission" };
+      }
       if (admittingCompletion) {
         return { accepted: false, error: "reentrant completion rejected during completion admission" };
       }
@@ -1392,6 +1559,9 @@ export function mountCompiledApp({
     rendererDiagnostics,
     effectDiagnostics,
     cancelEffect,
+    isAdmittingRendererCandidate() {
+      return admittingRendererCandidate;
+    },
     unmount,
     failure() {
       return lastFailure === null ? null : cloneJson(lastFailure);

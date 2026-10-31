@@ -5,6 +5,7 @@ const SUPPORTED_CAPABILITIES = new Set([
   "binding.value",
   "binding.checked",
   "effect.request-reply",
+  "effect.cancel",
   "numeric.safe-integer",
   "numeric.float64",
 ]);
