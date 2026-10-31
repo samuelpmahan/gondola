@@ -22,6 +22,44 @@ func projectPackage(root string, source *loadedSourcePackage) (compilercontract.
 		Types:      []compilercontract.TypeInfo{},
 		Functions:  []compilercontract.TypedFunction{},
 	}
+	diagnostics := packageStateDiagnostics(root, source)
+	for _, file := range source.files {
+		for _, declaration := range file.Decls {
+			function, ok := declaration.(*ast.FuncDecl)
+			if !ok || function.Body == nil {
+				continue
+			}
+			if function.Recv == nil && function.Name.Name == "init" {
+				continue
+			}
+			object, _ := source.info.Defs[function.Name].(*types.Func)
+			if object == nil {
+				diagnostics = append(diagnostics, diagnostic("source.function-object", "could not resolve function declaration", nodeSpan(root, source.fset, function)))
+				continue
+			}
+			if function.Recv != nil && !supportedValueReceiver(object) {
+				// Unsupported receiver kinds remain excluded. Direct call sites and
+				// method values/expressions are represented as unsupported operations.
+				continue
+			}
+			typedFunction, err := projectFunction(root, source, function, collector)
+			if err != nil {
+				if function.Recv != nil {
+					// A direct call to a method whose typed representation is outside
+					// the profile fails as an unresolved call in ValidateOperations.
+					continue
+				}
+				diagnostics = append(diagnostics, diagnostic("source.signature-type", err.Error(), nodeSpan(root, source.fset, function)))
+				continue
+			}
+			result.Functions = append(result.Functions, typedFunction)
+		}
+	}
+	result.Types = collector.list()
+	return result, diagnostics
+}
+
+func packageStateDiagnostics(root string, source *loadedSourcePackage) []compilercontract.Diagnostic {
 	diagnostics := []compilercontract.Diagnostic{}
 	for _, file := range source.files {
 		for _, declaration := range file.Decls {
@@ -35,37 +73,66 @@ func projectPackage(root string, source *loadedSourcePackage) (compilercontract.
 			case *ast.FuncDecl:
 				if value.Recv == nil && value.Name.Name == "init" {
 					diagnostics = append(diagnostics, diagnostic("source.init-function", "package init functions are unsupported by the v1 component analyzer", nodeSpan(root, source.fset, value)))
-					continue
 				}
 			}
-			function, ok := declaration.(*ast.FuncDecl)
-			if !ok || function.Recv != nil || function.Body == nil {
-				continue
-			}
-			object, _ := source.info.Defs[function.Name].(*types.Func)
-			if object == nil {
-				diagnostics = append(diagnostics, diagnostic("source.function-object", "could not resolve function declaration", nodeSpan(root, source.fset, function)))
-				continue
-			}
-			signature, err := projectSignature(object.Type().(*types.Signature), collector)
-			if err != nil {
-				diagnostics = append(diagnostics, diagnostic("source.signature-type", err.Error(), nodeSpan(root, source.fset, function)))
-				continue
-			}
-			builder := operationBuilder{root: root, loaded: source, types: collector}
-			body := []compilercontract.Operation{builder.statement(function.Body)}
-			result.Functions = append(result.Functions, compilercontract.TypedFunction{
-				ID:          compilercontract.SymbolID(source.list.ImportPath + "." + object.Name()),
-				PackagePath: source.list.ImportPath,
-				Name:        object.Name(),
-				Signature:   signature,
-				Span:        nodeSpan(root, source.fset, function),
-				Body:        body,
-			})
 		}
 	}
-	result.Types = collector.list()
-	return result, diagnostics
+	return diagnostics
+}
+
+func projectFunction(root string, source *loadedSourcePackage, function *ast.FuncDecl, collector *typeCollector) (compilercontract.TypedFunction, error) {
+	object, _ := source.info.Defs[function.Name].(*types.Func)
+	if object == nil {
+		return compilercontract.TypedFunction{}, fmt.Errorf("could not resolve function declaration")
+	}
+	signature, err := projectSignature(object.Type().(*types.Signature), collector)
+	if err != nil {
+		return compilercontract.TypedFunction{}, err
+	}
+	if object.Type().(*types.Signature).Recv() != nil {
+		if !supportedValueReceiver(object) {
+			return compilercontract.TypedFunction{}, fmt.Errorf("unsupported method receiver")
+		}
+		receiver, err := collector.id(object.Type().(*types.Signature).Recv().Type())
+		if err != nil {
+			return compilercontract.TypedFunction{}, fmt.Errorf("receiver: %w", err)
+		}
+		signature.Params = append([]compilercontract.TypeID{receiver}, signature.Params...)
+	}
+	builder := operationBuilder{root: root, loaded: source, types: collector}
+	return compilercontract.TypedFunction{
+		ID:          objectSymbol(object),
+		PackagePath: source.list.ImportPath,
+		Name:        object.Name(),
+		Signature:   signature,
+		Span:        nodeSpan(root, source.fset, function),
+		Body:        []compilercontract.Operation{builder.statement(function.Body)},
+	}, nil
+}
+
+func supportedValueReceiver(function *types.Func) bool {
+	if function == nil || function.Pkg() == nil {
+		return false
+	}
+	signature, ok := function.Type().(*types.Signature)
+	if !ok || signature.Recv() == nil || (signature.TypeParams() != nil && signature.TypeParams().Len() != 0) {
+		return false
+	}
+	receiver := types.Unalias(signature.Recv().Type())
+	if _, pointer := receiver.(*types.Pointer); pointer {
+		return false
+	}
+	named, ok := receiver.(*types.Named)
+	if !ok || named.Obj() == nil || named.Obj().Pkg() == nil || named.Obj().Pkg().Path() != function.Pkg().Path() {
+		return false
+	}
+	if named.TypeParams() != nil && named.TypeParams().Len() != 0 {
+		return false
+	}
+	if named.TypeArgs() != nil && named.TypeArgs().Len() != 0 {
+		return false
+	}
+	return true
 }
 
 func projectSignature(signature *types.Signature, collector *typeCollector) (compilercontract.Signature, error) {
@@ -271,13 +338,20 @@ func (b operationBuilder) expression(node ast.Expr) compilercontract.Operation {
 		result.Kind, result.Operator = compilercontract.OpUnary, value.Op.String()
 		appendExpr(value.X)
 	case *ast.CallExpr:
-		result.Kind = compilercontract.OpCall
-		result.SymbolID = b.callTarget(value.Fun)
-		result.Children = append(result.Children, b.expression(value.Fun))
-		for _, argument := range value.Args {
-			result.Children = append(result.Children, b.expression(argument))
+		if !b.methodCall(value, &result) {
+			result.Kind = compilercontract.OpCall
+			result.SymbolID = b.callTarget(value.Fun)
+			result.Children = append(result.Children, b.expression(value.Fun))
+			for _, argument := range value.Args {
+				result.Children = append(result.Children, b.expression(argument))
+			}
 		}
 	case *ast.SelectorExpr:
+		if selection := b.loaded.info.Selections[value]; selection != nil && selection.Kind() != types.FieldVal {
+			result.Kind, result.Operator = compilercontract.OpUnsupported, unsupportedMethodSelectionReason(selection)
+			appendExpr(value.X)
+			break
+		}
 		result.Kind, result.Operator = compilercontract.OpSelector, value.Sel.Name
 		appendExpr(value.X)
 		if selection := b.loaded.info.Selections[value]; selection != nil {
@@ -320,6 +394,139 @@ func (b operationBuilder) expression(node ast.Expr) compilercontract.Operation {
 		result.Kind, result.Operator = compilercontract.OpUnsupported, fmt.Sprintf("%T", node)
 	}
 	return result
+}
+
+func (b operationBuilder) methodCall(call *ast.CallExpr, result *compilercontract.Operation) bool {
+	selector, ok := call.Fun.(*ast.SelectorExpr)
+	if !ok {
+		return false
+	}
+	selection := b.loaded.info.Selections[selector]
+	if selection == nil || selection.Kind() == types.FieldVal {
+		return false
+	}
+	function, _ := selection.Obj().(*types.Func)
+	if function == nil {
+		result.Kind, result.Operator = compilercontract.OpUnsupported, "unresolved method call"
+		result.Children = append(result.Children, b.expression(selector.X))
+		for _, argument := range call.Args {
+			result.Children = append(result.Children, b.expression(argument))
+		}
+		return true
+	}
+	target := objectSymbol(function)
+	if reason := supportedMethodSelectionReason(selection, function); reason != "" {
+		result.Kind, result.Operator = compilercontract.OpUnsupported, reason
+		result.Children = append(result.Children, b.expression(selector.X))
+		for _, argument := range call.Args {
+			result.Children = append(result.Children, b.expression(argument))
+		}
+		return true
+	}
+	if isTrustedGobiMethod(function) {
+		result.Kind, result.SymbolID = compilercontract.OpCall, target
+		result.Children = append(result.Children, b.methodSelectorCallee(selector, target))
+		for _, argument := range call.Args {
+			result.Children = append(result.Children, b.expression(argument))
+		}
+		return true
+	}
+	result.Kind, result.SymbolID = compilercontract.OpCall, target
+	result.Children = append(result.Children, b.expression(selector.X))
+	for _, argument := range call.Args {
+		result.Children = append(result.Children, b.expression(argument))
+	}
+	return true
+}
+
+func (b operationBuilder) methodSelectorCallee(selector *ast.SelectorExpr, target compilercontract.SymbolID) compilercontract.Operation {
+	result := compilercontract.Operation{
+		Kind: compilercontract.OpSelector, Span: nodeSpan(b.root, b.loaded.fset, selector),
+		Operator: selector.Sel.Name, SymbolID: target, Children: []compilercontract.Operation{b.expression(selector.X)},
+	}
+	if typed, ok := b.loaded.info.Types[selector]; ok && typed.Type != nil {
+		if typeID, err := b.types.id(typed.Type); err == nil {
+			result.TypeID = typeID
+		}
+	}
+	return result
+}
+
+func isTrustedGobiMethod(function *types.Func) bool {
+	if function == nil || function.Pkg() == nil || function.Pkg().Path() != "github.com/samuelpmahan/gondola/gobi" {
+		return false
+	}
+	signature, ok := function.Type().(*types.Signature)
+	if !ok || signature.Recv() == nil || (signature.TypeParams() != nil && signature.TypeParams().Len() != 0) {
+		return false
+	}
+	receiver, ok := types.Unalias(signature.Recv().Type()).(*types.Named)
+	if !ok || receiver.Obj() == nil || receiver.Obj().Name() != "Node" {
+		return false
+	}
+	if params := receiver.TypeParams(); params != nil && params.Len() != 0 {
+		return false
+	}
+	if args := receiver.TypeArgs(); args != nil && args.Len() != 0 {
+		return false
+	}
+	switch function.Name() {
+	case "Set", "Flag", "Css", "Keyed", "Handle":
+		return true
+	default:
+		return false
+	}
+}
+
+func supportedMethodSelectionReason(selection *types.Selection, function *types.Func) string {
+	if selection.Kind() == types.MethodExpr {
+		return "method expression"
+	}
+	if selection.Kind() != types.MethodVal {
+		return "unsupported method selection"
+	}
+	if len(selection.Index()) != 1 {
+		return "promoted method selection"
+	}
+	receiver := types.Unalias(selection.Recv())
+	if _, pointer := receiver.(*types.Pointer); pointer {
+		return "pointer method receiver"
+	}
+	if _, interfaceType := receiver.Underlying().(*types.Interface); interfaceType {
+		return "interface method dispatch"
+	}
+	if signature, ok := function.Type().(*types.Signature); ok && signature.Recv() != nil {
+		if _, pointer := types.Unalias(signature.Recv().Type()).(*types.Pointer); pointer {
+			return "pointer method receiver"
+		}
+	}
+	named, ok := receiver.(*types.Named)
+	if ok && ((named.TypeArgs() != nil && named.TypeArgs().Len() != 0) || (named.TypeParams() != nil && named.TypeParams().Len() != 0)) {
+		return "generic or non-concrete method receiver"
+	}
+	if selection.Indirect() {
+		return "implicit pointer method adaptation"
+	}
+	if !supportedValueReceiver(function) {
+		return "pointer or unsupported method receiver"
+	}
+	if !ok {
+		return "non-concrete method receiver"
+	}
+	return ""
+}
+
+func unsupportedMethodSelectionReason(selection *types.Selection) string {
+	if selection.Kind() == types.MethodExpr {
+		return "method expression"
+	}
+	if selection.Kind() == types.MethodVal {
+		if len(selection.Index()) != 1 {
+			return "promoted method value"
+		}
+		return "method value"
+	}
+	return "unsupported method selection"
 }
 
 func assignmentOperator(token string, lhsCount int) string {
@@ -377,9 +584,28 @@ func objectSymbol(object types.Object) compilercontract.SymbolID {
 		if function.Pkg().Path() == "github.com/samuelpmahan/gondola/gobi" {
 			return compilercontract.SymbolID(function.Pkg().Path() + "." + function.Name())
 		}
-		return compilercontract.SymbolID(function.Pkg().Path() + ".method." + function.Name())
+		return methodSymbolID(function)
 	}
 	return compilercontract.SymbolID(function.Pkg().Path() + "." + function.Name())
+}
+
+func methodSymbolID(function *types.Func) compilercontract.SymbolID {
+	if function == nil || function.Pkg() == nil {
+		return ""
+	}
+	signature, ok := function.Type().(*types.Signature)
+	if !ok || signature.Recv() == nil {
+		return compilercontract.SymbolID(function.Pkg().Path() + "." + function.Name())
+	}
+	receiver := types.Unalias(signature.Recv().Type())
+	if pointer, ok := receiver.(*types.Pointer); ok {
+		receiver = types.Unalias(pointer.Elem())
+	}
+	named, ok := receiver.(*types.Named)
+	if !ok || named.Obj() == nil || named.Obj().Pkg() == nil {
+		return compilercontract.SymbolID(function.Pkg().Path() + ".method." + function.Name())
+	}
+	return compilercontract.SymbolID(named.Obj().Pkg().Path() + "." + named.Obj().Name() + "." + function.Name())
 }
 
 func typeIDString(t types.Type) string {

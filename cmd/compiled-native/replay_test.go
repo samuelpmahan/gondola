@@ -3,30 +3,36 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"math"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
 
 	"github.com/samuelpmahan/gondola/compilercontract"
+	"github.com/samuelpmahan/gondola/counter"
+	"github.com/samuelpmahan/gondola/fixtures/compiled/methods"
+	"github.com/samuelpmahan/gondola/gobi"
 )
 
 func TestFixtureScriptsReplayActualGoFunctions(t *testing.T) {
 	cases := []struct {
 		file        string
+		scriptPath  string
 		packagePath string
 		stateType   compilercontract.TypeID
 		types       []compilercontract.TypeInfo
 		wantTicks   int
 	}{
-		{"counter.json", "github.com/samuelpmahan/gondola/counter", "counter.State", counterTypes(), 5},
-		{"form.json", "github.com/samuelpmahan/gondola/fixtures/compiled/form", "form.State", formTypes(), 10},
-		{"list.json", "github.com/samuelpmahan/gondola/fixtures/compiled/list", "list.State", listTypes(), 11},
-		{"effect.json", "github.com/samuelpmahan/gondola/fixtures/compiled/effect", "effect.State", effectTypes(), 5},
+		{file: "counter.json", scriptPath: "compiled-frontend/fixtures/counter.json", packagePath: "github.com/samuelpmahan/gondola/counter", stateType: "counter.State", types: counterTypes(), wantTicks: 5},
+		{file: "form.json", scriptPath: "compiled-frontend/fixtures/form.json", packagePath: "github.com/samuelpmahan/gondola/fixtures/compiled/form", stateType: "form.State", types: formTypes(), wantTicks: 10},
+		{file: "list.json", scriptPath: "compiled-frontend/fixtures/list.json", packagePath: "github.com/samuelpmahan/gondola/fixtures/compiled/list", stateType: "list.State", types: listTypes(), wantTicks: 11},
+		{file: "effect.json", scriptPath: "compiled-frontend/fixtures/effect.json", packagePath: "github.com/samuelpmahan/gondola/fixtures/compiled/effect", stateType: "effect.State", types: effectTypes(), wantTicks: 5},
+		{file: "methods.json", scriptPath: "compiled-methods/conformance/fixtures/methods.json", packagePath: "github.com/samuelpmahan/gondola/fixtures/compiled/methods", stateType: "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", types: methodsTypes(), wantTicks: 19},
 	}
 	for _, test := range cases {
 		t.Run(test.file, func(t *testing.T) {
-			script := readFixtureScript(t, test.file)
+			script := readFixtureScriptAt(t, test.scriptPath)
 			appIR := testAppIR(test.packagePath, test.stateType, test.types)
 			trace, err := replay(appIR, script)
 			if err != nil {
@@ -45,6 +51,116 @@ func TestFixtureScriptsReplayActualGoFunctions(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMethodCompositionUsesSavedValueAndReadOnlyPolicy(t *testing.T) {
+	const packagePath = "github.com/samuelpmahan/gondola/fixtures/compiled/methods"
+	script := readFixtureScriptAt(t, "compiled-methods/conformance/fixtures/methods.json")
+	trace, err := replay(testAppIR(packagePath, compilercontract.TypeID(packagePath+".State"), methodsTypes()), script)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(trace.Ticks) != 19 {
+		t.Fatalf("trace ticks = %d, want 19", len(trace.Ticks))
+	}
+
+	assertMethodState(t, trace.Ticks[0].State, 0, 0, false, 0)
+	assertMethodState(t, trace.Ticks[3].State, 0, 2, false, 2)
+	assertMethodState(t, trace.Ticks[4].State, 0, 3, false, 2)
+	assertMethodState(t, trace.Ticks[5].State, 2, 3, false, 2)
+	assertMethodState(t, trace.Ticks[9].State, 2, 1, true, 2)
+	assertMethodState(t, trace.Ticks[12].State, 3, 1, true, 2)
+	assertMethodState(t, trace.Ticks[13].State, 3, 1, true, 1)
+	assertMethodState(t, trace.Ticks[14].State, 1, 1, true, 1)
+	assertMethodState(t, trace.Ticks[16].State, 1, 2, false, 1)
+	assertMethodState(t, trace.Ticks[17].State, 0, 2, false, 1)
+	assertMethodState(t, trace.Ticks[18].State, 0, 2, false, 1)
+
+	for _, tickIndex := range []int{7, 10, 11, 18} {
+		tick := trace.Ticks[tickIndex]
+		if tick.Message != nil || tick.DispatchID != nil || len(tick.RequestedEffects) != 0 || len(tick.CompletedEffects) != 0 {
+			t.Fatalf("disabled action tick %d dispatched or emitted effects: %#v", tickIndex, tick)
+		}
+	}
+	if tick := trace.Ticks[9]; tick.Message == nil || tick.Message.Name != "toggleReadOnly" {
+		t.Fatalf("lock transition was not dispatched: %#v", tick)
+	}
+	if tick := trace.Ticks[12]; tick.Message == nil || tick.Message.Name != "parentAdd" {
+		t.Fatalf("parent Add was not available while child was read-only: %#v", tick)
+	}
+}
+
+func TestMethodValueReceiversDoNotMutateOriginalNestedState(t *testing.T) {
+	original := methods.State{
+		Parent: counter.State{Count: 1},
+		Child:  counter.State{Count: 2},
+	}
+
+	captured, effects := original.CaptureChild()
+	if len(effects) != 0 {
+		t.Fatalf("capture effects = %#v, want none", effects)
+	}
+	assertMethodsGoState(t, original, 1, 2, false, 0)
+	assertMethodsGoState(t, captured, 1, 2, false, 2)
+
+	edited, effects := captured.AddChild()
+	if len(effects) != 0 {
+		t.Fatalf("child Add effects = %#v, want none", effects)
+	}
+	assertMethodsGoState(t, original, 1, 2, false, 0)
+	assertMethodsGoState(t, captured, 1, 2, false, 2)
+	assertMethodsGoState(t, edited, 1, 3, false, 2)
+
+	published, effects := edited.PublishSaved()
+	if len(effects) != 0 {
+		t.Fatalf("publish effects = %#v, want none", effects)
+	}
+	assertMethodsGoState(t, original, 1, 2, false, 0)
+	assertMethodsGoState(t, captured, 1, 2, false, 2)
+	assertMethodsGoState(t, edited, 1, 3, false, 2)
+	assertMethodsGoState(t, published, 2, 3, false, 2)
+
+	updatedPublish, effects := methods.Update(edited, gobi.Message{Name: "publishSaved"})
+	if len(effects) != 0 {
+		t.Fatalf("Update publish effects = %#v, want none", effects)
+	}
+	assertMethodsGoState(t, edited, 1, 3, false, 2)
+	assertMethodsGoState(t, updatedPublish, 2, 3, false, 2)
+
+	secondPublishInput := methods.State{
+		Parent:     counter.State{Count: 3},
+		Child:      counter.State{Count: 1},
+		ReadOnly:   true,
+		SavedChild: 1,
+	}
+	secondPublish, effects := methods.Update(secondPublishInput, gobi.Message{Name: "publishSaved"})
+	if len(effects) != 0 {
+		t.Fatalf("second Update publish effects = %#v, want none", effects)
+	}
+	assertMethodsGoState(t, secondPublishInput, 3, 1, true, 1)
+	assertMethodsGoState(t, secondPublish, 1, 1, true, 1)
+
+	lockedInput := methods.State{
+		Parent:     counter.State{Count: 3},
+		Child:      counter.State{Count: 1},
+		ReadOnly:   true,
+		SavedChild: 1,
+	}
+	for _, name := range []string{"childAdd", "childReset"} {
+		lockedResult, effects := methods.Update(lockedInput, gobi.Message{Name: name})
+		if len(effects) != 0 {
+			t.Fatalf("locked %s effects = %#v, want none", name, effects)
+		}
+		assertMethodsGoState(t, lockedInput, 3, 1, true, 1)
+		assertMethodsGoState(t, lockedResult, 3, 1, true, 1)
+	}
+
+	updated, effects := methods.Update(original, gobi.Message{Name: "parentAdd"})
+	if len(effects) != 0 {
+		t.Fatalf("parent Add effects = %#v, want none", effects)
+	}
+	assertMethodsGoState(t, original, 1, 2, false, 0)
+	assertMethodsGoState(t, updated, 2, 2, false, 0)
 }
 
 func TestNativeLiteralOnArgDoesNotReadActionValue(t *testing.T) {
@@ -156,8 +272,12 @@ func TestEffectTraceCommitsBeforeOneReplyAndPreservesNegativeZero(t *testing.T) 
 }
 
 func readFixtureScript(t *testing.T, filename string) fixtureScript {
+	return readFixtureScriptAt(t, filepath.ToSlash(filepath.Join("compiled-frontend", "fixtures", filename)))
+}
+
+func readFixtureScriptAt(t *testing.T, repoRelativePath string) fixtureScript {
 	t.Helper()
-	path := filepath.Join("..", "..", "compiled-frontend", "fixtures", filename)
+	path := filepath.Join("..", "..", filepath.FromSlash(repoRelativePath))
 	data, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
@@ -216,6 +336,24 @@ func counterTypes() []compilercontract.TypeInfo {
 	}
 }
 
+func methodsTypes() []compilercontract.TypeInfo {
+	const counterState = compilercontract.TypeID("github.com/samuelpmahan/gondola/counter.State")
+	const methodsState = compilercontract.TypeID("github.com/samuelpmahan/gondola/fixtures/compiled/methods.State")
+	return []compilercontract.TypeInfo{
+		{ID: "float64", Kind: compilercontract.KindFloat64, JSRepresentation: compilercontract.JSNumber},
+		{ID: "bool", Kind: compilercontract.KindBool, JSRepresentation: compilercontract.JSDirect},
+		{ID: counterState, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass,
+			Fields: []compilercontract.TypeField{{Name: "Count", Type: "float64"}}},
+		{ID: methodsState, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass,
+			Fields: []compilercontract.TypeField{
+				{Name: "Parent", Type: counterState},
+				{Name: "Child", Type: counterState},
+				{Name: "ReadOnly", Type: "bool"},
+				{Name: "SavedChild", Type: "float64"},
+			}},
+	}
+}
+
 func formTypes() []compilercontract.TypeInfo {
 	return []compilercontract.TypeInfo{
 		{ID: "string", Kind: compilercontract.KindString, JSRepresentation: compilercontract.JSDirect},
@@ -258,4 +396,61 @@ func commonTypes() []compilercontract.TypeInfo {
 func formStateForTest() any {
 	adapter, _ := adapterFor("github.com/samuelpmahan/gondola/fixtures/compiled/form")
 	return adapter.init()
+}
+
+func assertMethodsGoState(t *testing.T, state methods.State, parent, child float64, readOnly bool, savedChild float64) {
+	t.Helper()
+	if state.Parent.Count != parent || state.Child.Count != child || state.ReadOnly != readOnly || state.SavedChild != savedChild {
+		t.Fatalf("methods state = %#v, want Parent=%v Child=%v ReadOnly=%v SavedChild=%v",
+			state, parent, child, readOnly, savedChild)
+	}
+}
+
+func assertMethodState(t *testing.T, state compilercontract.Value, parent, child float64, readOnly bool, savedChild float64) {
+	t.Helper()
+	parentState := methodStateField(t, state, "Parent")
+	childState := methodStateField(t, state, "Child")
+	if got := methodFloatField(t, parentState, "Count"); got != parent {
+		t.Fatalf("Parent.Count = %v, want %v", got, parent)
+	}
+	if got := methodFloatField(t, childState, "Count"); got != child {
+		t.Fatalf("Child.Count = %v, want %v", got, child)
+	}
+	readOnlyValue := methodStateField(t, state, "ReadOnly")
+	if readOnlyValue.Bool == nil || *readOnlyValue.Bool != readOnly {
+		t.Fatalf("ReadOnly = %#v, want %v", readOnlyValue, readOnly)
+	}
+	if got := methodFloatField(t, state, "SavedChild"); got != savedChild {
+		t.Fatalf("SavedChild = %v, want %v", got, savedChild)
+	}
+}
+
+func methodStateField(t *testing.T, state compilercontract.Value, name string) compilercontract.Value {
+	t.Helper()
+	if state.Kind != compilercontract.KindStruct || state.Fields == nil {
+		t.Fatalf("state %q is not an encoded struct: %#v", name, state)
+	}
+	for _, field := range *state.Fields {
+		if field.Name == name {
+			return field.Value
+		}
+	}
+	t.Fatalf("state has no field %q: %#v", name, state)
+	return compilercontract.Value{}
+}
+
+func methodFloatField(t *testing.T, state compilercontract.Value, name string) float64 {
+	t.Helper()
+	value := state
+	if state.Kind == compilercontract.KindStruct || name != "" {
+		value = methodStateField(t, state, name)
+	}
+	if value.Kind != compilercontract.KindFloat64 || value.Float64Bits == nil {
+		t.Fatalf("field %q is not encoded float64: %#v", name, value)
+	}
+	bits, err := strconv.ParseUint(*value.Float64Bits, 16, 64)
+	if err != nil {
+		t.Fatalf("parse field %q float bits %q: %v", name, *value.Float64Bits, err)
+	}
+	return math.Float64frombits(bits)
 }

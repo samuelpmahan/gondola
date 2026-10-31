@@ -180,7 +180,172 @@ func LoadSources(sourceRoot string, entryPackages []string) (compilercontract.Ty
 		program.Packages = append(program.Packages, typed)
 		diagnostics = append(diagnostics, packageDiagnostics...)
 	}
+	if len(diagnostics) == 0 {
+		dependencies, dependencyDiagnostics := projectReachableLocalDependencies(root, entryPackages, program.Packages, loaded)
+		program.Packages = append(program.Packages, dependencies...)
+		diagnostics = append(diagnostics, dependencyDiagnostics...)
+	}
 	return program, sortDiagnostics(diagnostics)
+}
+
+type sourceFunctionDecl struct {
+	packageSource *loadedSourcePackage
+	declaration   *ast.FuncDecl
+	function      *types.Func
+}
+
+func projectReachableLocalDependencies(root string, entries []string, entryPackages []compilercontract.TypedPackage, loaded map[string]*loadedSourcePackage) ([]compilercontract.TypedPackage, []compilercontract.Diagnostic) {
+	index := make(map[compilercontract.SymbolID]sourceFunctionDecl)
+	paths := make([]string, 0, len(loaded))
+	for path := range loaded {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	for _, path := range paths {
+		source := loaded[path]
+		for _, file := range source.files {
+			for _, declaration := range file.Decls {
+				function, ok := declaration.(*ast.FuncDecl)
+				if !ok || function.Body == nil || function.Recv == nil && function.Name.Name == "init" {
+					continue
+				}
+				object, _ := source.info.Defs[function.Name].(*types.Func)
+				if object == nil || object.Type().(*types.Signature).Recv() != nil && !supportedValueReceiver(object) {
+					continue
+				}
+				index[objectSymbol(object)] = sourceFunctionDecl{packageSource: source, declaration: function, function: object}
+			}
+		}
+	}
+
+	projected := make(map[compilercontract.SymbolID]compilercontract.TypedFunction)
+	for _, pkg := range entryPackages {
+		for _, function := range pkg.Functions {
+			projected[function.ID] = function
+		}
+	}
+	dependencyPackages := make(map[string]*compilercontract.TypedPackage)
+	checkedPackageState := make(map[string]bool)
+	visited := make(map[compilercontract.SymbolID]bool)
+	queue := make([]compilercontract.SymbolID, 0)
+	entryCount := len(entryPackages)
+	for _, entry := range entries {
+		for _, pkg := range entryPackages[:entryCount] {
+			if pkg.ImportPath != entry {
+				continue
+			}
+			for _, name := range []string{"Init", "Update", "View"} {
+				id := compilercontract.SymbolID(pkg.ImportPath + "." + name)
+				if projected[id].ID != "" {
+					queue = append(queue, id)
+				}
+			}
+		}
+	}
+
+	var diagnostics []compilercontract.Diagnostic
+	for len(queue) > 0 {
+		id := queue[0]
+		queue = queue[1:]
+		if visited[id] {
+			continue
+		}
+		visited[id] = true
+		function, exists := projected[id]
+		if !exists {
+			if supportedCall(id, sourceTypeIndex(entryPackages)) {
+				continue
+			}
+			declaration, found := index[id]
+			if !found {
+				// Keep the unresolved edge in the projected call. ValidateOperations
+				// will reject it if it is reachable from a component role.
+				continue
+			}
+			packagePath := declaration.packageSource.list.ImportPath
+			if !checkedPackageState[packagePath] {
+				checkedPackageState[packagePath] = true
+				if entryPackagesContain(entryPackages[:entryCount], packagePath) {
+					// Entry packages were already checked by projectPackage.
+				} else {
+					stateDiagnostics := packageStateDiagnostics(root, declaration.packageSource)
+					if len(stateDiagnostics) != 0 {
+						diagnostics = append(diagnostics, stateDiagnostics...)
+						continue
+					}
+				}
+			}
+			collector := newTypeCollector()
+			function, err := projectFunction(root, declaration.packageSource, declaration.declaration, collector)
+			if err != nil {
+				// A source-local dependency call without a safe typed body remains
+				// unresolved and is rejected by ValidateOperations if reachable.
+				continue
+			}
+			projected[id] = function
+			dependency := dependencyPackages[packagePath]
+			if dependency == nil {
+				dependency = &compilercontract.TypedPackage{
+					ImportPath: packagePath,
+					Files:      []compilercontract.SourceFile{},
+					Types:      []compilercontract.TypeInfo{},
+					Functions:  []compilercontract.TypedFunction{},
+				}
+				dependencyPackages[packagePath] = dependency
+			}
+			dependency.Functions = append(dependency.Functions, function)
+			dependency.Types = mergeTypeInfo(dependency.Types, collector.list())
+		}
+		walkOperations(function.Body, func(operation compilercontract.Operation) {
+			if operation.Kind == compilercontract.OpCall && operation.SymbolID != "" && !visited[operation.SymbolID] {
+				queue = append(queue, operation.SymbolID)
+			}
+		})
+	}
+
+	result := make([]compilercontract.TypedPackage, 0, len(dependencyPackages))
+	for _, path := range paths {
+		if dependency := dependencyPackages[path]; dependency != nil {
+			sort.SliceStable(dependency.Types, func(i, j int) bool { return dependency.Types[i].ID < dependency.Types[j].ID })
+			sort.SliceStable(dependency.Functions, func(i, j int) bool { return dependency.Functions[i].ID < dependency.Functions[j].ID })
+			result = append(result, *dependency)
+		}
+	}
+	return result, diagnostics
+}
+
+func sourceTypeIndex(packages []compilercontract.TypedPackage) map[compilercontract.TypeID]compilercontract.TypeInfo {
+	result := make(map[compilercontract.TypeID]compilercontract.TypeInfo)
+	for _, pkg := range packages {
+		for _, info := range pkg.Types {
+			result[info.ID] = info
+		}
+	}
+	return result
+}
+
+func mergeTypeInfo(current, additions []compilercontract.TypeInfo) []compilercontract.TypeInfo {
+	seen := make(map[compilercontract.TypeID]bool, len(current)+len(additions))
+	result := append([]compilercontract.TypeInfo{}, current...)
+	for _, info := range current {
+		seen[info.ID] = true
+	}
+	for _, info := range additions {
+		if !seen[info.ID] {
+			seen[info.ID] = true
+			result = append(result, info)
+		}
+	}
+	return result
+}
+
+func entryPackagesContain(packages []compilercontract.TypedPackage, importPath string) bool {
+	for _, pkg := range packages {
+		if pkg.ImportPath == importPath {
+			return true
+		}
+	}
+	return false
 }
 
 func decodePackageList(data []byte) ([]listedPackage, error) {

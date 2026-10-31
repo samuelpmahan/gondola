@@ -1,0 +1,132 @@
+{
+  "schema": "gobi.compiled-methods-method-contract/v1",
+  "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/methods",
+  "stateType": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+  "messageType": "github.com/samuelpmahan/gondola/gobi.Message",
+  "effectSliceType": "[]github.com/samuelpmahan/gondola/gobi.Effect",
+  "counterStateType": "github.com/samuelpmahan/gondola/counter.State",
+  "counterInitId": "github.com/samuelpmahan/gondola/counter.Init",
+  "counterUpdateId": "github.com/samuelpmahan/gondola/counter.Update",
+  "gobiNodeType": "github.com/samuelpmahan/gondola/gobi.Node",
+  "roles": {
+    "init": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Init",
+    "update": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Update",
+    "view": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.View"
+  },
+  "symbols": [
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Init",
+      "params": [],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "calls": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.Initialize"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.Initialize",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "calls": ["github.com/samuelpmahan/gondola/counter.Init"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Update",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "github.com/samuelpmahan/gondola/gobi.Message"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.Reduce"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.Reduce",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "github.com/samuelpmahan/gondola/gobi.Message"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": [
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.AddParent",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ResetParent",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.AddChild",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ResetChild",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ToggleReadOnly",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.CaptureChild",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.PublishSaved"
+      ]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.AddParent",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": ["github.com/samuelpmahan/gondola/counter.Update"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ResetParent",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": ["github.com/samuelpmahan/gondola/counter.Update"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.AddChild",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": ["github.com/samuelpmahan/gondola/counter.Update"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ResetChild",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": ["github.com/samuelpmahan/gondola/counter.Update"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ToggleReadOnly",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": []
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.CaptureChild",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": []
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.PublishSaved",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": []
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.View",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/gobi.Node"],
+      "calls": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ComposeView"]
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State.ComposeView",
+      "params": ["github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"],
+      "results": ["github.com/samuelpmahan/gondola/gobi.Node"],
+      "calls": []
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/counter.Init",
+      "params": [],
+      "results": ["github.com/samuelpmahan/gondola/counter.State"],
+      "calls": []
+    },
+    {
+      "id": "github.com/samuelpmahan/gondola/counter.Update",
+      "params": ["github.com/samuelpmahan/gondola/counter.State", "github.com/samuelpmahan/gondola/gobi.Message"],
+      "results": ["github.com/samuelpmahan/gondola/counter.State", "[]github.com/samuelpmahan/gondola/gobi.Effect"],
+      "calls": []
+    }
+  ],
+  "stateFields": {
+    "Parent": "github.com/samuelpmahan/gondola/counter.State",
+    "Child": "github.com/samuelpmahan/gondola/counter.State",
+    "ReadOnly": "bool",
+    "SavedChild": "float64"
+  },
+  "expectedMessageNames": [
+    "parentAdd",
+    "parentReset",
+    "childAdd",
+    "childReset",
+    "toggleReadOnly",
+    "captureChild",
+    "publishSaved"
+  ],
+  "suppressedActionIndexes": [6, 9, 10, 17]
+}

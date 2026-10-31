@@ -1,0 +1,113 @@
+{
+  "schema": "gobi.xr-r-harness-audit/v1",
+  "decision": "accepted",
+  "worker": "N3",
+  "author_job": "R-HARNESS",
+  "author_worker": "N2",
+  "checks": {
+    "run_and_checker_matched": true,
+    "source_pin_snapshots_equal": true,
+    "output_pin_snapshots_equal": true,
+    "all_188_source_pins_match": true,
+    "all_149_build_native_pins_match": true,
+    "all_7_run_evidence_pins_match": true,
+    "all_11_prior_artifacts_match": true,
+    "actual_first_message_is_lowercase_child_add": true,
+    "native_and_direct_raw_trace_hashes_match": true,
+    "checker_mutates_only_lowercase_message_value": true,
+    "message_control_rejects_value_not_shape": true,
+    "all_four_mutation_vectors_rejected": true,
+    "all_browser_profiles_match_native_core": true,
+    "browser_snapshot_and_swap_counts_match": true,
+    "native_trace_counts_match": true,
+    "symbol_counts_match_corrected_report": true,
+    "author_report_hash_matches_receipt": true,
+    "changed_harness_source_hashes_match_receipt": true,
+    "recorded_node_unit_log_passes_10": true
+  },
+  "failed_checks": [],
+  "mutation": {
+    "expected_message": {
+      "name": "childAdd",
+      "arg": ""
+    },
+    "mutated_message": {
+      "name": "parentAdd",
+      "arg": ""
+    },
+    "rejection_reason": "$.mutation.message.ticks[1].message.name: value differs; expected \"childAdd\", got \"parentAdd\"",
+    "field_shape_preserved": true,
+    "other_controls": [
+      "wrong-method-state",
+      "wrong-callee-provenance",
+      "wrong-message-value",
+      "wrong-dom"
+    ]
+  },
+  "matrix": {
+    "status": "matched",
+    "ticks": 19,
+    "actions": 18,
+    "active_dispatches": 14,
+    "suppressed_ticks": [
+      7,
+      10,
+      11,
+      18
+    ],
+    "profiles": {
+      "react": {
+        "trace_ticks": 19,
+        "oracle_snapshots": 19,
+        "physical_snapshots": 19,
+        "swaps": 0,
+        "trace_matches_native": true
+      },
+      "dom": {
+        "trace_ticks": 19,
+        "oracle_snapshots": 19,
+        "physical_snapshots": 19,
+        "swaps": 0,
+        "trace_matches_native": true
+      },
+      "swap": {
+        "trace_ticks": 19,
+        "oracle_snapshots": 19,
+        "physical_snapshots": 19,
+        "swaps": 18,
+        "trace_matches_native": true
+      }
+    },
+    "native_sha256": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+    "direct_sha256": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+    "browser_record_sha256": "e46650f8b06c47c352661ea8b49c0d49d8846fb6d915bda264cadbdb5271606b",
+    "check_record_sha256": "72f29deea300776c2cf6d63f8857de010ab2e2b182ce46f43ecca30dfbc2eed3"
+  },
+  "pins": {
+    "source_count": 188,
+    "build_native_count": 149,
+    "run_evidence_count": 7,
+    "preserved_prior_count": 11,
+    "preserved_before_sha256": "6f6c8e50927a53c7ea2353a14bf6fed3b3fc9f739054f3469fc85811bf0d9ad1",
+    "source_hashes_recomputed": true,
+    "build_hashes_recomputed": true,
+    "evidence_hashes_recomputed": true,
+    "prior_hashes_recomputed": true
+  },
+  "symbol_counts": {
+    "receiver_methods": 10,
+    "methods_package_symbols_including_roles": 13,
+    "counter_dependency_functions": 2,
+    "total_symbols": 15
+  },
+  "versions": {
+    "node": "v22.23.4",
+    "go": "go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0 at /tmp/chromium"
+  },
+  "limits": [
+    "Read-only review; no source tests, builds, or runner executions performed by N3.",
+    "Local Chromium evidence, not managed CI.",
+    "Acceptance covers the R-HARNESS mutation-control repair and its bounded fixed-fixture matrix; no broader runtime or composition claims."
+  ]
+}

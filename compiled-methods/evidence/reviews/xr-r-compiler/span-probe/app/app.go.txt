@@ -1,0 +1,15 @@
+package app
+
+import "github.com/samuelpmahan/gondola/gobi"
+
+type State struct{ Count float64 }
+type embeddedNode struct{ gobi.Node }
+
+func Init() State { return State{} }
+func Update(state State, _ gobi.Message) (State, []gobi.Effect) {
+	_ = gobi.Node.Set(gobi.El("div"), "class", "expression")
+	wrapper := embeddedNode{gobi.El("div")}
+	_ = wrapper.Set("class", "promoted")
+	return state, nil
+}
+func View(State) gobi.Node { return gobi.Txt("probe") }

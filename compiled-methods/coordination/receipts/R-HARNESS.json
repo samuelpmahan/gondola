@@ -1,0 +1,110 @@
+{
+  "job_id": "R-HARNESS",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Repaired the wrong-message mutation control to preserve the lowercase {name,arg} trace shape while changing only message.name, and added an assertion for the semantic mismatch reason. The Node 22 tests and complete methods conformance matrix passed against the immutable compiler-gate outputs and existing native binary.",
+  "source_scope": [
+    "compiled-methods/conformance/check.mjs",
+    "compiled-methods/conformance/check.test.mjs",
+    "compiled-methods/evidence/repairs/r-harness/**",
+    "compiled-methods/coordination/reports/R-HARNESS.md",
+    "compiled-methods/coordination/receipts/R-HARNESS.json"
+  ],
+  "repair": {
+    "mutation_control": "wrong-message-value",
+    "message_expected": { "name": "childAdd", "arg": "" },
+    "message_mutated": { "name": "parentAdd", "arg": "" },
+    "asserted_reason": "$.mutation.message.ticks[1].message.name: value differs; expected \"childAdd\", got \"parentAdd\"",
+    "asserts_not_malformed_shape": true,
+    "symbol_count_clarification": {
+      "receiver_methods": 10,
+      "methods_package_symbols_including_roles": 13,
+      "counter_dependency_functions": 2,
+      "total_appir_symbols": 15
+    }
+  },
+  "verification": {
+    "toolchains": {
+      "node": "v22.23.4",
+      "go": "go1.24.0 linux/amd64",
+      "chromium": "153.0.8010.0 at /tmp/chromium"
+    },
+    "commands": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/conformance/check.test.mjs",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "syntax checks passed"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-methods/conformance/check.test.mjs compiled-methods/browser/dom-oracle.test.mjs",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "10/10 tests passed; output compiled-methods/evidence/repairs/r-harness/node22-units.log"
+      },
+      {
+        "command": "GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node compiled-methods/conformance/run.mjs --app-ir compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/app-ir.json --compiled compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/gobi-compiled.mjs --helpers compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/encoder.mjs --native-bin compiled-methods/artifacts/harness-gate/compiled-native --fixture compiled-methods/conformance/fixtures/methods.json --output compiled-methods/evidence/repairs/r-harness/methods --browser-adapter compiled-methods/browser/runner.mjs --schedule compiled-methods/conformance/swap-schedule.json --dom-app-ir compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/app-ir.json --dom-compiled compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/gobi-compiled.mjs --dom-helpers compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/encoder.mjs --chromium /tmp/chromium",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "status matched; detailed logs compiled-methods/evidence/repairs/r-harness/full-matrix.stdout.log and full-matrix.stderr.log"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-methods/evidence/repairs/r-harness/audit-pins.mjs",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "pin audit verified; compiled-methods/evidence/repairs/r-harness/pin-audit.json"
+      }
+    ],
+    "matrix_counts": {
+      "status": "matched",
+      "ticks": 19,
+      "actions": 18,
+      "active_dispatches": 14,
+      "disabled_suppressed_actions": 4,
+      "renderer_swaps": 18,
+      "mutation_controls_detected": 4
+    },
+    "trace_sha256": {
+      "native": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+      "direct": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+      "browser_profiles": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98"
+    },
+    "pin_audit": {
+      "status": "verified",
+      "source_pin_count": 188,
+      "compiler_and_native_pin_count": 149,
+      "run_evidence_pin_count": 7,
+      "preserved_prior_artifact_count": 11,
+      "preserved_prior_artifact_hash_list_sha256": "6f6c8e50927a53c7ea2353a14bf6fed3b3fc9f739054f3469fc85811bf0d9ad1",
+      "source_stable_through_check": true,
+      "outputs_stable_through_check": true,
+      "audit_sha256": "054e07e97c765433b0ef9ca12f143c594a03ee080a4d22264425a89bf82f88f3"
+    },
+    "source_sha256": {
+      "compiled-methods/conformance/check.mjs": "30ec284522120c8ae19fb45b2c4565c1ed0c7fcf2d8b86978568403d0e549e66",
+      "compiled-methods/conformance/check.test.mjs": "0a819e08fb05c25dab3799f9915c70babdcf8dc5643bad74ecc01a8494feaeef"
+    },
+    "evidence_sha256": {
+      "compiled-methods/evidence/repairs/r-harness/methods.run.json": "40df6d806ddcc3aab6ec19dcdaf8ad9f7cfc689aed67defd215223da982272b6",
+      "compiled-methods/evidence/repairs/r-harness/methods.check.json": "72f29deea300776c2cf6d63f8857de010ab2e2b182ce46f43ecca30dfbc2eed3",
+      "compiled-methods/evidence/repairs/r-harness/methods.browser.json": "e46650f8b06c47c352661ea8b49c0d49d8846fb6d915bda264cadbdb5271606b",
+      "compiled-methods/evidence/repairs/r-harness/methods.native.json": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+      "compiled-methods/evidence/repairs/r-harness/methods.direct.json": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+      "compiled-methods/evidence/repairs/r-harness/methods.manifest.json": "3595955d88008abfe6f87b5906c5e93a7f0f4e7a67898c5b244ec9595630feb8",
+      "compiled-methods/evidence/repairs/r-harness/methods.value-semantics.json": "fa1dbb98aad1f133edc25c1d8099ff3fee1475a09b3e44a6a25af8230a301169",
+      "compiled-methods/evidence/repairs/r-harness/methods.read-only-guards.json": "17ac9c1d0c29d8467ad7243c7e2fd984de8ccd850a4d4efe195f209316d9a0b4",
+      "compiled-methods/evidence/repairs/r-harness/node22-units.log": "416231ced24388afb245efa55a72b2b6d4d6b322741a4bdcf30d4c496a71de12",
+      "compiled-methods/evidence/repairs/r-harness/full-matrix.stdout.log": "57232e73ebaed54c530fae513db90cad49cbd652176a7a5aee328589168019d0",
+      "compiled-methods/evidence/repairs/r-harness/full-matrix.stderr.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "compiled-methods/evidence/repairs/r-harness/pin-audit.json": "054e07e97c765433b0ef9ca12f143c594a03ee080a4d22264425a89bf82f88f3"
+    },
+    "preservation": "E-HARNESS, XR--HARNESS, and the original attempt-04 run/check/browser/native/direct/audit evidence remained byte-identical to the hashes in compiled-methods/evidence/repairs/r-harness/preserved-before.sha256; the pin audit recomputed all 11 hashes."
+  },
+  "report_sha256": "f4855410c14e39b2cc8014e7c865d35e66f4c24a16ea631bb5e9059436a0e904",
+  "reported_stage": "wrong_message_semantic_control_repaired_and_methods_matrix_matched_locally_ci_pending",
+  "limits": [
+    "Browser evidence is from local Chromium at /tmp/chromium, not managed CI.",
+    "The full browser matrix covers only the frozen value-method fixture; it does not exercise an effect workflow, focusable inputs, generalized composition, Manager semantics, session ownership, or cancellation.",
+    "The React-built GoScript module was exercised through both renderers; the DOM build remains separately pinned."
+  ]
+}

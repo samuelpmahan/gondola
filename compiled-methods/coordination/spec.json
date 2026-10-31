@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "E-FIXTURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/methods/**,compilercontract/native.go registration and cmd/compiled-native fixture dispatch only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: FIXTURE"
+    },
+    {
+      "id": "E-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-methods/browser/**; newapp independent DOM oracle expectations only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: BROWSER"
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-methods/conformance/**,native/direct replay integration and fixedfixtures only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: HARNESS"
+    },
+    {
+      "id": "E-COMPILER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-frontend/analyze/** only; source projection/static call graph/value-receiver methods with no schema weakening",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: COMPILER"
+    },
+    {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-methods/demo/**,run-compiled-methods.sh,compiled-methods/run.mjs,.github/workflows/compiled-methods.yml only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: DEMO"
+    },
+    {
+      "id": "E-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-methods/CONTRACT.md PLAN.md,compilercontract shared schema ONLY if necessary after coordination, compiled-methods/evidence/**",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: CONTRACT"
+    }
+  ]
+}

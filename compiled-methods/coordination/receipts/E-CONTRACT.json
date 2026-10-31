@@ -1,0 +1,90 @@
+{
+  "job_id": "E-CONTRACT",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Authored a bounded normative profile for static concrete value-receiver methods, including role ABI compatibility, receiver-qualified symbols and signatures, call-child ordering, reachable local method validation, numeric guards, rejection cases, and fixture-specific value semantics. Inspected N4's successful React/DOM compiler outputs and ran the generated React AppIR through the native Go replay CLI. Browser and emitted-module runtime behavior are not claimed.",
+  "source_scope": [
+    "compiled-methods/CONTRACT.md",
+    "compiled-methods/evidence/contract/analyzer-methods-tests.log",
+    "compiled-methods/evidence/contract/compiler-gate-summary.txt",
+    "compiled-methods/evidence/contract/commands.txt",
+    "compiled-methods/evidence/contract/toolchains.txt",
+    "compiled-methods/evidence/contract/compiled-native",
+    "compiled-methods/evidence/contract/native-trace.json",
+    "compiled-methods/evidence/contract/native-trace-summary.txt",
+    "compiled-methods/evidence/contract/source-pins.sha256",
+    "compiled-methods/coordination/reports/E-CONTRACT.md",
+    "compiled-methods/coordination/receipts/E-CONTRACT.json"
+  ],
+  "evidence": {
+    "report_sha256": "32257ff1db08f5d062ae12ece56c53d1cd06377f78618bbf9225c4cb68bc70ce",
+    "contract_sha256": "d55d080589f54da08571d723cd4faac2cdc77613450b66e1361a3f9f93be62c0",
+    "source_pins_sha256": "8ecedfaa8f8a16e840e7d983fd319c9e3ed475b1579dd85252bdf74c5180a7d9",
+    "toolchains": {
+      "analyzer": "go1.27.3 linux/amd64",
+      "native": "go1.24.0 linux/amd64",
+      "compiler_bundle_node": "v22.23.4"
+    },
+    "tests": [
+      {
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test -count=1 -v ./analyze -run 'TestLoadAndAnalyzeStaticallyLowersValueReceiverMethods|TestReachableValueReceiverMethodBodyUsesNumericGuards|TestReachableValueReceiverMethodInLocalDependencyUsesNumericGuards|TestReachableLocalDependencyFunctionsJoinMethodCallGraph|TestUnsupportedMethodDispatchFormsFailClosed'",
+        "working_directory": "compiled-frontend",
+        "exit_code": 0,
+        "result": "passed all five focused method tests",
+        "evidence_path": "compiled-methods/evidence/contract/analyzer-methods-tests.log",
+        "evidence_sha256": "81de4f52d988c69df940050d8b032b54b461722527a9bc56618b98d7070bf8ce"
+      }
+    ],
+    "compiler_gate_observed": {
+      "source": "N4 retained request/result artifacts; this lane inspected them and did not rerun the compiler CLI",
+      "request_schema": "gobi.build-request/v1",
+      "result_schema": "gobi.build-result/v1",
+      "react": {
+        "ok": true,
+        "apps": 1,
+        "output_files": 67,
+        "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+        "gobi_compiled_sha256": "9260f395881015f56233165936fb5176f181d47a8e1ee5193fdd7e061fbca9ac"
+      },
+      "dom": {
+        "ok": true,
+        "apps": 1,
+        "output_files": 67,
+        "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+        "gobi_compiled_sha256": "47b70259d75162989826d6444ca25bea9a8ec603fbc0b81c73912a5191fbde3b"
+      },
+      "commands": [
+        "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build < ../compiled-methods/artifacts/compiler-gate/react/request.json > ../compiled-methods/artifacts/compiler-gate/react/result.json",
+        "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build < ../compiled-methods/artifacts/compiler-gate/dom/request.json > ../compiled-methods/artifacts/compiler-gate/dom/result.json"
+      ],
+      "summary_path": "compiled-methods/evidence/contract/compiler-gate-summary.txt"
+    },
+    "native_replay": {
+      "build_command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go build -o compiled-methods/evidence/contract/compiled-native ./cmd/compiled-native",
+      "binary_sha256": "382b6151683c9816847f72e46a71740f579e97ee791c43fb933002bc6dd1211b",
+      "replay_command": "compiled-methods/evidence/contract/compiled-native --app-ir compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/app-ir.json --script compiled-methods/conformance/fixtures/methods.json > compiled-methods/evidence/contract/native-trace.json",
+      "replay_exit_code": 0,
+      "trace_sha256": "2e9e620a788fbc6e1973e62b2d9775fdf1c03f8ab72a28f5c61aea8f16dfc4f2",
+      "ticks": 19,
+      "actions": 18,
+      "dispatches": 14,
+      "suppressed_action_indexes": [6, 9, 10, 17],
+      "suppressed_trace_tick_indexes": [7, 10, 11, 18],
+      "summary_path": "compiled-methods/evidence/contract/native-trace-summary.txt"
+    },
+    "fixture_value_tests": {
+      "report_path": "compiled-methods/coordination/reports/E-FIXTURE.md",
+      "report_sha256": "829b272a052d7dc48e097badc28a1ae5497941717290a5967456ac85b737f7db",
+      "test_log_path": "compiled-methods/evidence/fixture/go-test.log",
+      "test_log_sha256": "7073c0f84e779df0f231caa99f775cbf716ceb3b5ee3b23d0d33f48e8ae78be7"
+    },
+    "limits": [
+      "The analyzer tests establish lowering and validator behavior; this packet did not use a side-effect probe to execute receiver/argument order.",
+      "The emitted GoScript module was generated and inspected but not executed; direct public-role isolation and ReadOnly guard execution on emitted JS remain with N3.",
+      "No browser, renderer, focus, event, or swap behavior is claimed by this contract lane.",
+      "The fixture isolation proof covers scalar fields and nested scalar structs only; value receivers do not imply deep copying of slices or arbitrary reference-bearing data.",
+      "The contract is proposed and requires independent review; it does not self-accept the fixture or N4 implementation."
+    ]
+  },
+  "reported_stage": "value_receiver_contract_authored_analyzer_and_compiler_artifacts_inspected_native_replay_validated_browser_and_emitted_module_execution_pending"
+}

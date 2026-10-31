@@ -1,0 +1,187 @@
+{
+  "author_receipt_sha256": "981861f70c7f5ed7c8c222a526d23d5e1d905d14aca0b7030b3d01232d458ff1",
+  "author_report_check": {
+    "actual_sha256": "829b272a052d7dc48e097badc28a1ae5497941717290a5967456ac85b737f7db",
+    "expected_sha256": "829b272a052d7dc48e097badc28a1ae5497941717290a5967456ac85b737f7db",
+    "match": true,
+    "path": "compiled-methods/coordination/reports/E-FIXTURE.md"
+  },
+  "author_report_sha256": "829b272a052d7dc48e097badc28a1ae5497941717290a5967456ac85b737f7db",
+  "author_test_log_check": {
+    "actual_sha256": "7073c0f84e779df0f231caa99f775cbf716ceb3b5ee3b23d0d33f48e8ae78be7",
+    "expected_sha256": "7073c0f84e779df0f231caa99f775cbf716ceb3b5ee3b23d0d33f48e8ae78be7",
+    "match": true,
+    "path": "compiled-methods/evidence/fixture/go-test.log"
+  },
+  "diff_check": {
+    "command": "git diff --check -- cmd/compiled-native/replay.go cmd/compiled-native/replay_test.go fixtures/compiled/methods/app.go fixtures/compiled/methods/view.go",
+    "exit_code": 0,
+    "result": "passed"
+  },
+  "independent_test": {
+    "command": "PATH=/tmp/gondola-go/bin:/usr/bin:/bin GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go test -count=1 -v ./cmd/compiled-native ./fixtures/compiled/methods",
+    "evidence_path": "compiled-methods/evidence/reviews/xr-fixture/go-test.log",
+    "evidence_sha256": "a69146e6eac04c894717f055df43d3cff9cef567f61454c8e400f9913444fb85",
+    "exit_code": 0,
+    "result": "passed",
+    "working_directory": "repository root"
+  },
+  "job_id": "XR--FIXTURE",
+  "method_contract": {
+    "action_methods": [
+      {
+        "name": "AddParent",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      },
+      {
+        "name": "ResetParent",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      },
+      {
+        "name": "AddChild",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      },
+      {
+        "name": "ResetChild",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      },
+      {
+        "name": "ToggleReadOnly",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      },
+      {
+        "name": "CaptureChild",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      },
+      {
+        "name": "PublishSaved",
+        "params": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State"
+        ],
+        "results": [
+          "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+          "[]github.com/samuelpmahan/gondola/gobi.Effect"
+        ]
+      }
+    ],
+    "calls_counter_update_for_add_reset": true,
+    "role_symbols": {
+      "init": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Init",
+      "update": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Update",
+      "view": "github.com/samuelpmahan/gondola/fixtures/compiled/methods.View"
+    },
+    "sha256": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31"
+  },
+  "reviewer": "N4",
+  "schema": "compiled-methods.xr-fixture-audit/v1",
+  "script": {
+    "action_count": 18,
+    "all_actions_are_empty_value_clicks": true,
+    "effects_present": false,
+    "expectation_count": 18,
+    "host_steps": 0,
+    "message_names": [
+      "parentAdd",
+      "parentReset",
+      "childAdd",
+      "childReset",
+      "toggleReadOnly",
+      "captureChild",
+      "publishSaved"
+    ],
+    "suppressed_action_indexes": [
+      6,
+      9,
+      10,
+      17
+    ],
+    "trace_tick_count": 19
+  },
+  "source_pin_checks": [
+    {
+      "actual_sha256": "010ed4f5d0a0a0f9956dffc46f5dd8a8bf4ed5b0e551bfcd863ee9419604d0c9",
+      "expected_sha256": "010ed4f5d0a0a0f9956dffc46f5dd8a8bf4ed5b0e551bfcd863ee9419604d0c9",
+      "match": true,
+      "path": "cmd/compiled-native/replay.go"
+    },
+    {
+      "actual_sha256": "c1e6f6acca8db6fd8a5a2cfc426a155e0e8f62b36aa6cc1aa619c7802d0e9213",
+      "expected_sha256": "c1e6f6acca8db6fd8a5a2cfc426a155e0e8f62b36aa6cc1aa619c7802d0e9213",
+      "match": true,
+      "path": "cmd/compiled-native/replay_test.go"
+    },
+    {
+      "actual_sha256": "456eecae2077e269da2b17327d39a40f60dbab5b82d82e9b2825f4f69baf3c47",
+      "expected_sha256": "456eecae2077e269da2b17327d39a40f60dbab5b82d82e9b2825f4f69baf3c47",
+      "match": true,
+      "path": "fixtures/compiled/methods/app.go"
+    },
+    {
+      "actual_sha256": "b534c2f522ee71afbe21188d6b90262551f7cbdad8c1820462055f47ebb8a8d3",
+      "expected_sha256": "b534c2f522ee71afbe21188d6b90262551f7cbdad8c1820462055f47ebb8a8d3",
+      "match": true,
+      "path": "fixtures/compiled/methods/view.go"
+    },
+    {
+      "actual_sha256": "49c4970e0191e60772aa0cc9d57d3e2b64b5df4a1b7453e7c83feb4b3a02bd41",
+      "expected_sha256": "49c4970e0191e60772aa0cc9d57d3e2b64b5df4a1b7453e7c83feb4b3a02bd41",
+      "match": true,
+      "path": "compiled-methods/FIXTURE.md"
+    },
+    {
+      "actual_sha256": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7",
+      "expected_sha256": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7",
+      "match": true,
+      "path": "compiled-methods/conformance/fixtures/methods.json"
+    },
+    {
+      "actual_sha256": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31",
+      "expected_sha256": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31",
+      "match": true,
+      "path": "compiled-methods/conformance/method-contract.json"
+    }
+  ],
+  "source_review": {
+    "method_value_isolation_tests": "native tests assert original and intermediate states remain unchanged across CaptureChild, AddChild, PublishSaved and Update calls",
+    "nested_values": "Parent and Child are counter.State fields stored directly by value; ReadOnly is bool and SavedChild is float64",
+    "package_role_functions": "Init, Update, View remain package-level functions and delegate to value-receiver methods as reported",
+    "update_forwarding": "Add/Reset forward state and effects from counter.Update; non-counter helpers return state with nil effects",
+    "view": "child Add/Reset flags depend on ReadOnly; child Reset also disables at zero; parent Reset disables at zero only; Capture/Publish remain enabled"
+  }
+}

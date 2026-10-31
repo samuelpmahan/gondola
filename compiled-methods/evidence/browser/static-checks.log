@@ -1,0 +1,14 @@
+E-BROWSER pre-browser checks
+Date: 2026-10-31 UTC
+Node: v24.22.1 (historical extra only; acceptance checks rerun on Node 22)
+
+Command: node --check compiled-methods/browser/runner.mjs && node --check compiled-methods/browser/browser-entry.mjs && node --check compiled-methods/browser/dom-oracle.mjs && node --check compiled-methods/browser/dom-oracle.test.mjs
+Result: exit 0
+
+Command: node --input-type=module -e "import('./compiled-methods/browser/runner.mjs').then((m) => { if (typeof m.runMethodsBrowserConformance !== 'function') process.exit(1); process.stdout.write('runner export ok\\n'); })"
+Result: exit 0, runner export ok
+
+Command: node --test compiled-methods/browser/dom-oracle.test.mjs
+Result: exit 0, 6 passed, 0 failed. Full output: compiled-methods/evidence/browser/dom-oracle.test.log
+
+Limit: real Chromium execution is pending the N4 compiled fixture gate and N3 orchestration.

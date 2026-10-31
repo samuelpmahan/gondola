@@ -1,0 +1,15 @@
+E-BROWSER pre-browser checks
+Date: 2026-10-31 UTC
+Node: v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node
+
+Command: /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/runner.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/browser-entry.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/dom-oracle.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/dom-oracle.test.mjs
+Result: exit 0
+
+Command: /tmp/gondola-node22/node_modules/node/bin/node --input-type=module -e "import('./compiled-methods/browser/runner.mjs').then((m) => { if (typeof m.runMethodsBrowserConformance !== 'function') process.exit(1); process.stdout.write('runner export ok\\n'); })"
+Result: exit 0, runner export ok
+
+Command: /tmp/gondola-node22/node_modules/node/bin/node --test compiled-methods/browser/dom-oracle.test.mjs
+Result: exit 0, 6 passed, 0 failed. Full output: compiled-methods/evidence/browser/dom-oracle.node22.test.log
+
+Warnings: Node printed its environment's `UNDICI-EHPA` experimental proxy-agent notice during syntax checks and import; command exits were zero.
+Limit: real Chromium execution is pending N3's integration run using the N4 compiled fixture gate.

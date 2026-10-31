@@ -1,0 +1,150 @@
+{
+  "job_id": "E-HARNESS",
+  "worker": "N3",
+  "outcome": "confirmed_reuse",
+  "summary": "One emitted React GoScript module matched the native Go trace through direct role calls, the React renderer, the DOM renderer, and 18 alternating renderer swaps for the frozen value-method fixture. The AppIR and encoder are identical across the React and DOM builds; their raw compiled module hashes differ and are pinned separately.",
+  "source_scope": [
+    "compiled-methods/conformance/**",
+    "compiled-methods/evidence/harness/**",
+    "compiled-methods/artifacts/harness-gate/compiled-native",
+    "compiled-methods/coordination/reports/E-HARNESS.md",
+    "compiled-methods/coordination/receipts/E-HARNESS.json"
+  ],
+  "evidence": {
+    "toolchains": {
+      "node": "v22.23.4",
+      "go": "go1.24.0 linux/amd64",
+      "chromium": "153.0.8010.0 at /tmp/chromium"
+    },
+    "primary_attempt": "compiled-methods/evidence/harness/attempt-04-final/",
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go build -o compiled-methods/artifacts/harness-gate/compiled-native ./cmd/compiled-native",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed"
+      },
+      {
+        "command": "GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node compiled-methods/conformance/run.mjs --app-ir compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/app-ir.json --compiled compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/gobi-compiled.mjs --helpers compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/encoder.mjs --native-bin compiled-methods/artifacts/harness-gate/compiled-native --fixture compiled-methods/conformance/fixtures/methods.json --output compiled-methods/evidence/harness/attempt-04-final/methods --browser-adapter compiled-methods/browser/runner.mjs --schedule compiled-methods/conformance/swap-schedule.json --dom-app-ir compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/app-ir.json --dom-compiled compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/gobi-compiled.mjs --dom-helpers compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/encoder.mjs --chromium /tmp/chromium",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "matched"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/conformance/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/conformance/value-semantics.mjs && /tmp/gondola-node22/node_modules/node/bin/node --test compiled-methods/conformance/check.test.mjs compiled-methods/browser/dom-oracle.test.mjs",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed 10/10 tests"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-methods/evidence/harness/attempt-04-final/audit.mjs",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "verified raw trace, DOM, lifetime, and SHA-256 pin records"
+      }
+    ],
+    "counts": {
+      "logical_ticks": 19,
+      "fixture_actions": 18,
+      "active_dispatches": 14,
+      "disabled_suppressed_actions": 4,
+      "browser_profiles": ["react", "dom", "swap"],
+      "oracle_and_physical_snapshots_per_profile": 19,
+      "renderer_swaps": 18,
+      "retired_callback_fences": 18,
+      "direct_original_state_checks": 14,
+      "publish_saved_witnesses": 2,
+      "read_only_direct_guard_probes": 2,
+      "mutation_controls_detected": 4,
+      "page_errors": 0,
+      "wasm_api_attempts": 0,
+      "wasm_requests": 0
+    },
+    "value_semantics": {
+      "all_original_states_unchanged": true,
+      "publish_saved": [
+        {
+          "action_index": 4,
+          "original_parent_count_before_bits": "0000000000000000",
+          "original_parent_count_after_bits": "0000000000000000",
+          "returned_parent_count_bits": "4000000000000000"
+        },
+        {
+          "action_index": 13,
+          "original_parent_count_before_bits": "4008000000000000",
+          "original_parent_count_after_bits": "4008000000000000",
+          "returned_parent_count_bits": "3ff0000000000000"
+        }
+      ],
+      "locked_role_probes": [
+        {"message": "childAdd", "original_unchanged": true, "returned_state_unchanged": true, "effects": 0},
+        {"message": "childReset", "original_unchanged": true, "returned_state_unchanged": true, "effects": 0}
+      ]
+    },
+    "trace_sha256": {
+      "native_raw": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+      "direct_raw": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+      "browser_react": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98",
+      "browser_dom": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98",
+      "browser_swap": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98"
+    },
+    "build_sha256": {
+      "react_manifest": "0a76ea62736f98efcee3cdca8c1492701e19ff121dd0569cbb73db265642b683",
+      "dom_manifest": "6b0d8dd3b02685908080b1871e423d1651f5ff587ee8b5bb0324b2c633dec90e",
+      "app_ir_react_and_dom": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+      "encoder_react_and_dom": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4",
+      "react_module": "9260f395881015f56233165936fb5176f181d47a8e1ee5193fdd7e061fbca9ac",
+      "dom_module": "47b70259d75162989826d6444ca25bea9a8ec603fbc0b81c73912a5191fbde3b",
+      "native_binary": "382b6151683c9816847f72e46a71740f579e97ee791c43fb933002bc6dd1211b"
+    },
+    "pin_audit": {
+      "source_pin_count_before_after_final": 188,
+      "build_and_native_input_pin_count": 149,
+      "raw_evidence_pin_count": 7,
+      "all_pin_hashes_and_byte_counts_recomputed": true,
+      "source_stable": true,
+      "outputs_stable_through_checker": true
+    },
+    "source_sha256": {
+      "compiled-methods/conformance/fixtures/methods.json": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7",
+      "compiled-methods/conformance/method-contract.json": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31",
+      "compiled-methods/conformance/swap-schedule.json": "3c39fbe36070ffaa24825bd2e80c20cf648e3533f504e4597f291bc276fdc41c",
+      "compiled-methods/conformance/run.mjs": "2d6259d8f907a80f6c1aab3725225b512aaabb040801f0a389bd750321b1dcd2",
+      "compiled-methods/conformance/check.mjs": "d4ed6440b9b769118a4b082a54feb4a6f98f2aba9a9dc8ac99e5b64e53f496f9",
+      "compiled-methods/conformance/check.test.mjs": "b2001bd38155778e9dbad7dce380c93759161bf4540584e258b29da5395fb63b",
+      "compiled-methods/conformance/value-semantics.mjs": "d87e9a82d6e9b2d002d11c39cf164e5fcdf54a5e18805bf12669fffe7a31887c",
+      "compiled-methods/browser/dom-oracle.mjs": "0c4c1cb3792c34f36a2d7668b64f436f9ef01ff24e8fc4ff43d4e58d3f9b0b48",
+      "compiled-methods/browser/runner.mjs": "29eba63b3acbf624a79c60d034c73fca95736525bf8a4ebe64c37addbd19b55e",
+      "compiled-frontend/frontend/runtime/runtime.mjs": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+      "compiled-frontend/frontend/react/renderer.mjs": "35581215d912c0b19a63de9f122b75fef774c717100590d272cf9e7731943f6a",
+      "compiled-frontend/frontend/dom/renderer.mjs": "8037c0b9d3430310aa9492ab9d1041207e33276f8a6dce219b84b2af17efa166"
+    },
+    "artifacts": [
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.run.json", "sha256": "bcd101e4aa015bea9f0551b82e3a5c1f17cf7998ee932bcaad0ac0d391e80e11"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.check.json", "sha256": "611b2bb056b28e980b235011f182e099353afd6ed43fea768b9a12ef063ea8a7"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.browser.json", "sha256": "e46650f8b06c47c352661ea8b49c0d49d8846fb6d915bda264cadbdb5271606b"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.native.json", "sha256": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.direct.json", "sha256": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.value-semantics.json", "sha256": "fa1dbb98aad1f133edc25c1d8099ff3fee1475a09b3e44a6a25af8230a301169"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.read-only-guards.json", "sha256": "17ac9c1d0c29d8467ad7243c7e2fd984de8ccd850a4d4efe195f209316d9a0b4"},
+      {"path": "compiled-methods/evidence/harness/attempt-04-final/methods.independent-audit-replay.json", "sha256": "f7140c526ea172ddd87d7ce480c21b1a7d8293eb35183fd491f6ba69963aa305"}
+    ],
+    "attempt_history": [
+      {"attempt": "00-direct-probe", "result": "passed", "note": "Partial direct value and ReadOnly probes against immutable React build."},
+      {"attempt": "01-full-matrix", "result": "rejected", "failure": "Checker expected uppercase Go Message fields in lowercase gobi.trace/v1 browser ticks; raw outputs retained.", "run_sha256": "2293361f9553b4f294a14b7aaf755b537650ad2642f1132373f75de3ee7ce0df", "failure_sha256": "b2a186471c29a04e2e7232a7d547a92df9b2a4e9806570ec5d069f9bd587e4cc"},
+      {"attempt": "02-full-matrix", "result": "matched", "note": "Historical pass before full build-tree pinning and final target-value checker."},
+      {"attempt": "03-full-matrix", "result": "matched", "note": "Historical pass before final target-value checker."},
+      {"attempt": "04-final", "result": "matched", "note": "Primary result with final checker and independent raw-artifact audit."}
+    ],
+    "limits": [
+      "One deterministic 18-action fixture; no randomized seed or replay sequence.",
+      "No effect requests or effect-completion workflow is exercised.",
+      "The fixture has no focusable input, so these runs do not test focus or selection preservation.",
+      "No Manager, session ownership, cancellation, or production composition claim is made.",
+      "The browser matrix uses the React-built module through both renderer implementations. The distinct DOM-built module is separately pinned but is not the module exercised by the three renderer profiles.",
+      "The browser run used a local /tmp/chromium executable; managed-CI execution is a separate gate."
+    ]
+  },
+  "report_sha256": "6d46c1093e483d7a3bcfc699d87cb277ecf967f88a6a5068dcee8c76f81533fa",
+  "reported_stage": "native_direct_react_dom_swap_value_method_matrix_matched_locally_ci_pending"
+}

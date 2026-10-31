@@ -1,0 +1,94 @@
+{
+  "decision": "accepted",
+  "evidence": {
+    "audit_path": "compiled-methods/evidence/reviews/xr-fixture/audit.json",
+    "audit_sha256": "1ecfe0a70fb56684490c343b06592c1257a371b68622a5a0a278d1358f94b588",
+    "author_job": "E-FIXTURE",
+    "author_receipt_sha256": "981861f70c7f5ed7c8c222a526d23d5e1d905d14aca0b7030b3d01232d458ff1",
+    "author_report_pin_match": true,
+    "author_report_sha256": "829b272a052d7dc48e097badc28a1ae5497941717290a5967456ac85b737f7db",
+    "author_test_log_pin_match": true,
+    "author_worker": "N1",
+    "fixture_summary": {
+      "action_count": 18,
+      "helper_results": [
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.State",
+        "[]github.com/samuelpmahan/gondola/gobi.Effect"
+      ],
+      "method_helpers": 7,
+      "suppressed_action_indexes": [
+        6,
+        9,
+        10,
+        17
+      ],
+      "trace_tick_count": 19
+    },
+    "independent_test": {
+      "command": "PATH=/tmp/gondola-go/bin:/usr/bin:/bin GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go test -count=1 -v ./cmd/compiled-native ./fixtures/compiled/methods",
+      "evidence_path": "compiled-methods/evidence/reviews/xr-fixture/go-test.log",
+      "evidence_sha256": "a69146e6eac04c894717f055df43d3cff9cef567f61454c8e400f9913444fb85",
+      "exit_code": 0,
+      "result": "passed",
+      "working_directory": "repository root"
+    },
+    "limits": [
+      "Review is limited to the native fixture and direct Go value semantics; it does not accept Manager/session/cancellation/general composition behavior.",
+      "GoScript/AppIR and browser execution are outside E-FIXTURE review evidence."
+    ],
+    "review_report_sha256": "1f5644e9f275e37f21407ea26279bce22777843834aaba4052b9a4498a2ce02a",
+    "source_pin_checks": [
+      {
+        "actual_sha256": "010ed4f5d0a0a0f9956dffc46f5dd8a8bf4ed5b0e551bfcd863ee9419604d0c9",
+        "expected_sha256": "010ed4f5d0a0a0f9956dffc46f5dd8a8bf4ed5b0e551bfcd863ee9419604d0c9",
+        "match": true,
+        "path": "cmd/compiled-native/replay.go"
+      },
+      {
+        "actual_sha256": "c1e6f6acca8db6fd8a5a2cfc426a155e0e8f62b36aa6cc1aa619c7802d0e9213",
+        "expected_sha256": "c1e6f6acca8db6fd8a5a2cfc426a155e0e8f62b36aa6cc1aa619c7802d0e9213",
+        "match": true,
+        "path": "cmd/compiled-native/replay_test.go"
+      },
+      {
+        "actual_sha256": "456eecae2077e269da2b17327d39a40f60dbab5b82d82e9b2825f4f69baf3c47",
+        "expected_sha256": "456eecae2077e269da2b17327d39a40f60dbab5b82d82e9b2825f4f69baf3c47",
+        "match": true,
+        "path": "fixtures/compiled/methods/app.go"
+      },
+      {
+        "actual_sha256": "b534c2f522ee71afbe21188d6b90262551f7cbdad8c1820462055f47ebb8a8d3",
+        "expected_sha256": "b534c2f522ee71afbe21188d6b90262551f7cbdad8c1820462055f47ebb8a8d3",
+        "match": true,
+        "path": "fixtures/compiled/methods/view.go"
+      },
+      {
+        "actual_sha256": "49c4970e0191e60772aa0cc9d57d3e2b64b5df4a1b7453e7c83feb4b3a02bd41",
+        "expected_sha256": "49c4970e0191e60772aa0cc9d57d3e2b64b5df4a1b7453e7c83feb4b3a02bd41",
+        "match": true,
+        "path": "compiled-methods/FIXTURE.md"
+      },
+      {
+        "actual_sha256": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7",
+        "expected_sha256": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7",
+        "match": true,
+        "path": "compiled-methods/conformance/fixtures/methods.json"
+      },
+      {
+        "actual_sha256": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31",
+        "expected_sha256": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31",
+        "match": true,
+        "path": "compiled-methods/conformance/method-contract.json"
+      }
+    ],
+    "source_pins_match": true
+  },
+  "job_id": "XR--FIXTURE",
+  "source_scope": [
+    "compiled-methods/evidence/reviews/xr-fixture/**",
+    "compiled-methods/coordination/reports/XR--FIXTURE.md",
+    "compiled-methods/coordination/receipts/XR--FIXTURE.json"
+  ],
+  "summary": "Independent review accepted the bounded nested value-composition fixture. Source/report/log pins match; the 18-action replay, four suppressed intents, tuple-result method contract, and native value-isolation checks are accurate.",
+  "worker": "N4"
+}

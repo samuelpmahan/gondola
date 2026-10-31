@@ -1,0 +1,39 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/samuelpmahan/gondola/compiled-frontend/analyze"
+	"github.com/samuelpmahan/gondola/compilercontract"
+)
+
+type row struct {
+	Code string `json:"code"`
+	Message string `json:"message"`
+	File string `json:"file"`
+	StartByte int `json:"startByte"`
+	EndByte int `json:"endByte"`
+	Excerpt string `json:"excerpt"`
+}
+func main() {
+	root := os.Args[1]
+	entry := os.Args[2]
+	program, loadDiags := analyze.LoadSources(root, []string{entry})
+	if len(loadDiags) != 0 { panic(fmt.Sprintf("LoadSources: %+v", loadDiags)) }
+	result := analyze.Analyze(program, compilercontract.AnalyzeOptions{EntryPackages: []string{entry}})
+	appPath := filepath.Join(root, "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/app/app.go")
+	source, err := os.ReadFile(appPath); if err != nil { panic(err) }
+	rows := make([]row, 0, len(result.Diagnostics))
+	for _, d := range result.Diagnostics {
+		excerpt := ""
+		if d.Span.StartByte >= 0 && d.Span.EndByte >= d.Span.StartByte && d.Span.EndByte <= len(source) {
+			excerpt = string(source[d.Span.StartByte:d.Span.EndByte])
+		}
+		rows = append(rows, row{Code:d.Code, Message:d.Message, File:d.Span.File, StartByte:d.Span.StartByte, EndByte:d.Span.EndByte, Excerpt:excerpt})
+	}
+	out, err := json.MarshalIndent(rows, "", "  "); if err != nil { panic(err) }
+	fmt.Println(string(out))
+}

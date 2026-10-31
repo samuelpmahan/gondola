@@ -1,0 +1,5 @@
+# Methods-only attempt 01 — evidence path mismatch
+
+This attempt used the explicit `--methods-only` route. Syntax checks, Node 22 method tests, Go fixture/native tests, both GoScript CLI builds, native replay, direct emitted-module replay, value receiver/read-only probes, and React/DOM/swap browser profiles completed. The driver rejected during its final source/output pin stages because it resolved `../request.json` and `../result.json` beside each build manifest. The N5 runner had placed these as `react-request.json`/`dom-request.json` at the attempt root while build manifests were at `builds/react` and `builds/dom`.
+
+The build request/result hashes, native/direct/browser traces, driver run/failure manifests, receipts, and command logs are preserved here. Raw compiler outputs remain under the ignored original attempt path and are individually pinned in the receipt. The N5 layout fix moves each manifest to `builds/{backend}/output/` and places its request/result beside that subtree. No pass is claimed for this attempt.

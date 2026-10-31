@@ -16,6 +16,7 @@ import (
 	"github.com/samuelpmahan/gondola/fixtures/compiled/effect"
 	"github.com/samuelpmahan/gondola/fixtures/compiled/form"
 	"github.com/samuelpmahan/gondola/fixtures/compiled/list"
+	"github.com/samuelpmahan/gondola/fixtures/compiled/methods"
 	"github.com/samuelpmahan/gondola/gobi"
 )
 
@@ -428,6 +429,22 @@ func adapterFor(packagePath string) (appAdapter, bool) {
 			},
 			decodeState: func(raw json.RawMessage) (any, error) {
 				var state counter.State
+				err := decodeExact(raw, &state)
+				return state, err
+			},
+		}, true
+	case "github.com/samuelpmahan/gondola/fixtures/compiled/methods":
+		return appAdapter{
+			packagePath: packagePath,
+			init:        func() any { return methods.Init() },
+			update: func(state any, message gobi.Message) (any, []gobi.Effect) {
+				return methods.Update(state.(methods.State), message)
+			},
+			view: func(state any) compilercontract.View {
+				return compilercontract.NewView(methods.View(state.(methods.State)))
+			},
+			decodeState: func(raw json.RawMessage) (any, error) {
+				var state methods.State
 				err := decodeExact(raw, &state)
 				return state, err
 			},
