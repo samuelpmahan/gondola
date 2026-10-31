@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"sort"
 	"strings"
 	"testing"
 
@@ -38,16 +39,239 @@ func TestCompiledModuleSourceExportsOnlyValidatedFacadeAndCopiesUpdateState(t *t
 	for _, want := range []string{
 		facadeImport,
 		`Object.defineProperty(symbols, "example/fixture.Init", { value: emitted.GobiCompiledInit, enumerable: true })`,
-		`Object.defineProperty(symbols, "example/fixture.Update", { value: emitted.GobiCompiledUpdate, enumerable: true })`,
-		`Object.defineProperty(symbols, "example/fixture.View", { value: emitted.GobiCompiledView, enumerable: true })`,
+		`Object.defineProperty(symbols, "example/fixture.Update", { value: (state, message) => emitted.GobiCompiledUpdate(state, __gobiEncodeGoMessage(message)), enumerable: true })`,
+		`Object.defineProperty(symbols, "example/fixture.View", { value: (state) => __gobiDecodeGoView(emitted.GobiCompiledView(state)), enumerable: true })`,
+		`import { Message as __gobiMessage } from "@goscript/github.com/samuelpmahan/gondola/gobi/index.js";`,
+		`new __gobiMessage(`,
 		`export const gobiCompiled = Object.freeze({ schema: "gobi.compiled-module/v1", appIR, symbols: Object.freeze(symbols) });`,
 	} {
 		if !strings.Contains(text, want) {
 			t.Errorf("compiled facade missing %q", want)
 		}
 	}
-	if strings.Contains(text, "state.clone()") || strings.Contains(text, "(state, message) =>") {
+	if strings.Contains(text, "state.clone()") {
 		t.Fatal("compiled facade applies Go value semantics in handwritten JavaScript")
+	}
+}
+
+func TestCompiledModuleSourceExportsPairSpecificPlainRecordBridgeAdapters(t *testing.T) {
+	for _, side := range []string{"parent", "child"} {
+		t.Run(side, func(t *testing.T) {
+			app := bridgeSourceProbeApp(side)
+			source, err := compiledModuleSource(app)
+			if err != nil {
+				t.Fatal(err)
+			}
+			text := string(source)
+			if !strings.Contains(text, `export const gobiCompiled = Object.freeze({ schema: "gobi.compiled-module/v1", appIR, symbols: Object.freeze(symbols) });`) {
+				t.Fatal("bridge module changed the legacy gobiCompiled v1 object")
+			}
+			if !strings.Contains(text, "export const gobiModuleBridges = Object.freeze({") {
+				t.Fatal("module lacks a separate gobiModuleBridges export")
+			}
+			for _, key := range []string{"input:", "publication:", "output:", "receive:"} {
+				want := (side == "parent" && (key == "output:" || key == "receive:")) || (side == "child" && (key == "input:" || key == "publication:"))
+				if strings.Contains(text, key) != want {
+					t.Errorf("%s bridge key presence = %v, want %v for %q", side, strings.Contains(text, key), want, key)
+				}
+			}
+			if side == "parent" {
+				for _, want := range []string{"value.Step", "value.Locked", "value.Revision", "publication.Count", "publication.Revision"} {
+					if !strings.Contains(text, want) {
+						t.Errorf("parent bridge adapter omits local record projection %q", want)
+					}
+				}
+			} else {
+				for _, want := range []string{"input.Step", "input.Locked", "input.Revision", "value.Count", "value.Revision"} {
+					if !strings.Contains(text, want) {
+						t.Errorf("child bridge adapter omits local record conversion %q", want)
+					}
+				}
+			}
+		})
+	}
+}
+
+func bridgeSourceProbeApp(side string) compilercontract.AppIR {
+	const packagePath = "example.test/module"
+	const wirePackage = "github.com/samuelpmahan/gondola/fixtures/compiled/modulewire"
+	state := compilercontract.TypeID(packagePath + ".State")
+	input := compilercontract.TypeID(wirePackage + ".Input")
+	publication := compilercontract.TypeID(wirePackage + ".Publication")
+	app := compilercontract.AppIR{
+		Schema: compilercontract.AppIRSchema, PackagePath: packagePath,
+		Components: []compilercontract.Component{{ID: packagePath, PackagePath: packagePath, StateType: state, MessageType: "example.test/module.Message", Init: compilercontract.SymbolID(packagePath + ".Init"), Update: compilercontract.SymbolID(packagePath + ".Update"), View: compilercontract.SymbolID(packagePath + ".View")}},
+		Types: []compilercontract.TypeInfo{
+			{ID: input, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Step", Type: "int"}, {Name: "Locked", Type: "bool"}, {Name: "Revision", Type: "int"}}},
+			{ID: publication, Kind: compilercontract.KindStruct, JSRepresentation: compilercontract.JSClass, Fields: []compilercontract.TypeField{{Name: "Count", Type: "float64"}, {Name: "Revision", Type: "int"}}},
+		},
+	}
+	app.Symbols = []compilercontract.Symbol{
+		{ID: app.Components[0].Init, PackagePath: packagePath, Name: "Init", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{}, Results: []compilercontract.TypeID{state}}},
+		{ID: app.Components[0].Update, PackagePath: packagePath, Name: "Update", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{state, "example.test/module.Message"}, Results: []compilercontract.TypeID{state, "[]github.com/samuelpmahan/gondola/gobi.Effect"}}},
+		{ID: app.Components[0].View, PackagePath: packagePath, Name: "View", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{state}, Results: []compilercontract.TypeID{"github.com/samuelpmahan/gondola/gobi.Node"}}},
+	}
+	if side == "parent" {
+		app.Symbols = append(app.Symbols,
+			compilercontract.Symbol{ID: compilercontract.SymbolID(packagePath + ".Output"), PackagePath: packagePath, Name: "Output", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{state}, Results: []compilercontract.TypeID{input}}},
+			compilercontract.Symbol{ID: compilercontract.SymbolID(packagePath + ".Receive"), PackagePath: packagePath, Name: "Receive", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{state, publication}, Results: []compilercontract.TypeID{state}}},
+		)
+	} else {
+		app.Symbols = append(app.Symbols,
+			compilercontract.Symbol{ID: compilercontract.SymbolID(packagePath + ".Input"), PackagePath: packagePath, Name: "Input", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{state, input}, Results: []compilercontract.TypeID{state}}},
+			compilercontract.Symbol{ID: compilercontract.SymbolID(packagePath + ".Publication"), PackagePath: packagePath, Name: "Publication", Signature: compilercontract.Signature{Params: []compilercontract.TypeID{state}, Results: []compilercontract.TypeID{publication}}},
+		)
+	}
+	return app
+}
+
+func TestBuildEmitsSeparateTypedModuleBridgeABIForParentAndChild(t *testing.T) {
+	root := repositoryRoot(t)
+	cases := []struct {
+		packagePath string
+		wantRoles   []string
+		wantBridge  []string
+	}{
+		{
+			packagePath: "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+			wantRoles:   []string{"Init", "Output", "Receive", "Update", "View"},
+			wantBridge:  []string{"output", "receive"},
+		},
+		{
+			packagePath: "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+			wantRoles:   []string{"Init", "Input", "Publication", "Update", "View"},
+			wantBridge:  []string{"input", "publication"},
+		},
+	}
+	for _, backend := range []string{"react", "dom"} {
+		t.Run(backend, func(t *testing.T) {
+			for _, tc := range cases {
+				t.Run(filepath.Base(tc.packagePath), func(t *testing.T) {
+					output := filepath.Join(t.TempDir(), "build")
+					result := Build(compilercontract.BuildRequest{
+						Schema: compilercontract.BuildRequestSchema, SourceRoot: root,
+						EntryPackages: []string{tc.packagePath}, Backend: backend, OutputDir: output,
+					})
+					if !result.OK {
+						t.Fatalf("Build failed: diagnostics=%#v", result.Diagnostics)
+					}
+					var manifest struct {
+						Apps []struct {
+							PackagePath string `json:"packagePath"`
+							Module      string `json:"module"`
+							Encoder     string `json:"encoder"`
+							AppIR       string `json:"appIR"`
+							Components  string `json:"components"`
+							ModuleABI   string `json:"moduleABI"`
+						} `json:"apps"`
+					}
+					manifestBytes, err := os.ReadFile(filepath.Join(output, "buildmanifest.json"))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err := json.Unmarshal(manifestBytes, &manifest); err != nil {
+						t.Fatal(err)
+					}
+					if len(manifest.Apps) != 1 || manifest.Apps[0].PackagePath != tc.packagePath || manifest.Apps[0].ModuleABI == "" {
+						t.Fatalf("module app manifest missing package or moduleABI path: %#v", manifest.Apps)
+					}
+					app := manifest.Apps[0]
+					var descriptor struct {
+						Schema         string `json:"schema"`
+						ComponentID    string `json:"componentID"`
+						PackagePath    string `json:"packagePath"`
+						ArtifactSHA256 string `json:"artifactSHA256"`
+						Roles          []struct {
+							Name string `json:"name"`
+						} `json:"roles"`
+						Artifacts []struct {
+							Path   string `json:"path"`
+							Bytes  int64  `json:"bytes"`
+							SHA256 string `json:"sha256"`
+						} `json:"artifacts"`
+						ABISHA256 string `json:"abiSHA256"`
+					}
+					descriptorBytes, err := os.ReadFile(filepath.Join(output, filepath.FromSlash(app.ModuleABI)))
+					if err != nil {
+						t.Fatalf("module ABI descriptor %q is unavailable: %v", app.ModuleABI, err)
+					}
+					if err := json.Unmarshal(descriptorBytes, &descriptor); err != nil {
+						t.Fatal(err)
+					}
+					if descriptor.Schema != "gobi.module-abi/v1" || descriptor.ComponentID != tc.packagePath || descriptor.PackagePath != tc.packagePath {
+						t.Fatalf("unexpected module ABI identity: %#v", descriptor)
+					}
+					if len(descriptor.ArtifactSHA256) != 64 || len(descriptor.ABISHA256) != 64 {
+						t.Fatalf("module ABI digests are missing: %#v", descriptor)
+					}
+					gotRoles := make([]string, len(descriptor.Roles))
+					for index, role := range descriptor.Roles {
+						gotRoles[index] = role.Name
+					}
+					sort.Strings(gotRoles)
+					sort.Strings(tc.wantRoles)
+					if !reflect.DeepEqual(gotRoles, tc.wantRoles) {
+						t.Fatalf("descriptor roles = %#v, want %#v", gotRoles, tc.wantRoles)
+					}
+					wantArtifacts := map[string]bool{app.AppIR: false, app.Module: false, app.Encoder: false, app.Components: false}
+					for _, artifact := range descriptor.Artifacts {
+						contents, err := os.ReadFile(filepath.Join(output, filepath.FromSlash(artifact.Path)))
+						if err != nil {
+							t.Fatalf("descriptor artifact %q is missing: %v", artifact.Path, err)
+						}
+						if artifact.Bytes != int64(len(contents)) || artifact.SHA256 != fmt.Sprintf("%x", sha256.Sum256(contents)) {
+							t.Fatalf("descriptor artifact does not bind actual bytes: %#v", artifact)
+						}
+						if _, ok := wantArtifacts[artifact.Path]; !ok {
+							t.Errorf("descriptor binds unexpected artifact %q", artifact.Path)
+						} else {
+							wantArtifacts[artifact.Path] = true
+						}
+					}
+					for path, found := range wantArtifacts {
+						if !found {
+							t.Errorf("descriptor omits generated artifact %q", path)
+						}
+					}
+					moduleSource, err := os.ReadFile(filepath.Join(output, filepath.FromSlash(app.Module)))
+					if err != nil {
+						t.Fatal(err)
+					}
+					moduleText := string(moduleSource)
+					if !strings.Contains(moduleText, "gobiCompiled") {
+						t.Fatal("compiled module omits the legacy gobiCompiled v1 facade")
+					}
+					if !strings.Contains(moduleText, "gobiModuleBridges") {
+						t.Fatal("module output does not export the separate gobiModuleBridges object")
+					}
+					for _, role := range tc.wantBridge {
+						if !strings.Contains(moduleText, role+":") {
+							t.Errorf("module bridge export omits %q", role)
+						}
+					}
+					appIRBytes, err := os.ReadFile(filepath.Join(output, filepath.FromSlash(app.AppIR)))
+					if err != nil {
+						t.Fatal(err)
+					}
+					var appIR compilercontract.AppIR
+					if err := json.Unmarshal(appIRBytes, &appIR); err != nil {
+						t.Fatal(err)
+					}
+					for _, name := range tc.wantRoles {
+						found := false
+						for _, symbol := range appIR.Symbols {
+							if symbol.PackagePath == tc.packagePath && symbol.Name == name {
+								found = true
+								break
+							}
+						}
+						if !found {
+							t.Errorf("AppIR omits role %q", name)
+						}
+					}
+				})
+			}
+		})
 	}
 }
 
@@ -101,6 +325,7 @@ func TestBuildPublishesInspectableGoScriptTypeScript(t *testing.T) {
 			Module           string `json:"module"`
 			Encoder          string `json:"encoder"`
 			ForwarderPackage string `json:"forwarderPackage"`
+			ModuleABI        string `json:"moduleABI"`
 			RoleBindings     []struct {
 				Role            string `json:"role"`
 				AppIRSymbol     string `json:"appIRSymbol"`
@@ -119,6 +344,9 @@ func TestBuildPublishesInspectableGoScriptTypeScript(t *testing.T) {
 	}
 	if len(manifest.Apps) != 1 || manifest.Apps[0].PackagePath != request.EntryPackages[0] || manifest.Apps[0].Backend != request.Backend || manifest.Apps[0].ForwarderPackage != forwarderPackagePath(result.Apps[0]) {
 		t.Fatalf("build manifest does not identify the generated forwarding package: %#v", manifest.Apps)
+	}
+	if manifest.Apps[0].ModuleABI != "" {
+		t.Fatalf("legacy counter build unexpectedly declares module ABI path %q", manifest.Apps[0].ModuleABI)
 	}
 	wantBindings := []struct {
 		role, symbol, export string

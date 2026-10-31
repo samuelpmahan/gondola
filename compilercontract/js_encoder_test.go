@@ -136,6 +136,64 @@ console.log(JSON.stringify({ ok: true, factoryCalls }));
 	}
 }
 
+func TestGenerateGoScriptValueEncoderDecodesStrictUtf8WithoutChangingDefault(t *testing.T) {
+	types := []TypeInfo{
+		{ID: "string", Kind: KindString, JSRepresentation: JSDirect},
+		{ID: "fixture.Row", Kind: KindStruct, JSRepresentation: JSClass, Fields: []TypeField{{Name: "Label", Type: "string"}}},
+		{ID: "[]fixture.Row", Kind: KindSlice, ElemType: "fixture.Row", JSRepresentation: JSSliceWrapper},
+		{ID: "fixture.State", Kind: KindStruct, JSRepresentation: JSClass, Fields: []TypeField{{Name: "Text", Type: "string"}, {Name: "Rows", Type: "[]fixture.Row"}}},
+	}
+	legacy, err := GenerateValueEncoder(types)
+	if err != nil {
+		t.Fatal(err)
+	}
+	goScript, err := GenerateGoScriptValueEncoder(types)
+	if err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	for name, source := range map[string]string{"legacy.mjs": legacy, "goscript.mjs": goScript} {
+		if err := os.WriteFile(filepath.Join(dir, name), []byte(source), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	constScript := `import assert from "node:assert/strict";
+import { gobiEncodeState as encodeLegacy } from "./legacy.mjs";
+import { gobiEncodeState as encodeGoScript } from "./goscript.mjs";
+
+const toGoBytes = (text) => String.fromCharCode(...new TextEncoder().encode(text));
+const text = "café 東京 🙂 −";
+const row = { Label: toGoBytes(text), __goStructValue: true };
+const slice = { backing: [row], offset: 0, length: 1, capacity: 1, target: undefined };
+const state = { Text: toGoBytes(text), Rows: slice, __goStructValue: true };
+const value = (record, name) => record.fields.find((field) => field.name === name).value;
+
+assert.equal(value(encodeLegacy(state, "fixture.State"), "Text").string, toGoBytes(text),
+  "default encoder keeps its historical GoScript byte-string behavior");
+const encoded = encodeGoScript(state, "fixture.State");
+assert.equal(value(encoded, "Text").string, text);
+assert.equal(value(value(encoded, "Rows").items[0], "Label").string, text);
+
+const invalidState = { ...state, Text: String.fromCharCode(0xc3, 0x28) };
+assert.throws(() => encodeGoScript(invalidState, "fixture.State"), /invalid UTF-8/);
+const nonByteState = { ...state, Text: "Ā" };
+assert.throws(() => encodeGoScript(nonByteState, "fixture.State"), /GoScript byte string/);
+console.log("strict GoScript encoder passed");
+`
+	if err := os.WriteFile(filepath.Join(dir, "check.mjs"), []byte(constScript), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	command := exec.Command(spareCapacityNode(t), filepath.Join(dir, "check.mjs"))
+	command.Dir = dir
+	output, err := command.CombinedOutput()
+	if err != nil {
+		t.Fatalf("generated strict GoScript encoder failed: %v\n%s", err, output)
+	}
+	if !strings.HasSuffix(string(output), "strict GoScript encoder passed\n") {
+		t.Fatalf("unexpected strict GoScript encoder output %q", output)
+	}
+}
+
 func spareCapacityNode(t *testing.T) string {
 	t.Helper()
 	if node := os.Getenv("GONDOLA_NODE_BIN"); node != "" {

@@ -10,6 +10,17 @@ import (
 // tagged union. The descriptors are embedded from AppIR type metadata; the
 // runtime checks use only the shapes established by the pinned GoScript ABI.
 func GenerateValueEncoder(types []TypeInfo) (string, error) {
+	return generateValueEncoder(types, false)
+}
+
+// GenerateGoScriptValueEncoder returns a standalone ES module whose string
+// values are decoded from GoScript's one-code-unit-per-UTF-8-byte form.
+// GenerateValueEncoder retains its historical JavaScript-string behavior.
+func GenerateGoScriptValueEncoder(types []TypeInfo) (string, error) {
+	return generateValueEncoder(types, true)
+}
+
+func generateValueEncoder(types []TypeInfo, goScriptStrings bool) (string, error) {
 	if _, err := indexTypes(types); err != nil {
 		return "", err
 	}
@@ -24,6 +35,27 @@ func GenerateValueEncoder(types []TypeInfo) (string, error) {
 	descriptors, err := json.Marshal(types)
 	if err != nil {
 		return "", err
+	}
+	goScriptStringDecoder := ""
+	stringCase := "base.string = value; return base;"
+	if goScriptStrings {
+		goScriptStringDecoder = `const GO_STRING_DECODER = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
+function decodeGoScriptString(value, label) {
+  if (typeof value !== "string") fail(label + " must be a string");
+  const bytes = new Uint8Array(value.length);
+  for (let i = 0; i < value.length; i += 1) {
+    const code = value.charCodeAt(i);
+    if (code > 0xff) fail(label + " is not a GoScript byte string");
+    bytes[i] = code;
+  }
+  try {
+    return GO_STRING_DECODER.decode(bytes);
+  } catch {
+    fail(label + " contains invalid UTF-8");
+  }
+}
+`
+		stringCase = `base.string = decodeGoScriptString(value, "type " + id); return base;`
 	}
 	return `// Generated from compilercontract.TypeInfo. Do not edit.
 const TYPES = ` + string(descriptors) + `;
@@ -202,7 +234,7 @@ function wellFormedString(value) {
   }
   return true;
 }
-function encode(value, id, depth) {
+` + goScriptStringDecoder + `function encode(value, id, depth) {
   if (depth > MAX_DEPTH) fail("value nesting exceeds " + MAX_DEPTH);
   const type = TYPE.get(id);
   if (!type) fail("unknown typeId " + id);
@@ -213,7 +245,7 @@ function encode(value, id, depth) {
       base.bool = value; return base;
     case "string":
       if (typeof value !== "string" || !wellFormedString(value)) fail("type " + id + " requires a well-formed string");
-      base.string = value; return base;
+      ` + stringCase + `
     case "int": case "uint":
       base.integer = type.jsRepresentation === "bigint" ? bigintToInteger(value, type) : numberToInteger(value, type);
       return base;
