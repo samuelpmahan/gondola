@@ -1,0 +1,65 @@
+{
+  "job_id": "E-INTEGRATION",
+  "worker": "N4",
+  "summary": "Added Go integration tests for extraction, certificate verification, the original archive's missing source-pin rejection, a byte-preserving source-complete supplement, and structural plus fully rehashed semantic mutations.",
+  "outcome": "mixed_change",
+  "sourceCommit": "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+  "toolchain": {
+    "go": "go version go1.24.0 linux/amd64",
+    "environment": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false"
+  },
+  "test": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -run '^TestIntegration' -count=1",
+    "exitCode": 0,
+    "result": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.725s",
+    "rawlogDirectory": "portable-coordination/rawlogs/E-INTEGRATION/attempt-006-registry-assertions"
+  },
+  "changes": [
+    {
+      "path": "qualificationarchive/integration_test.go",
+      "bytes": 19847,
+      "sha256": "f2eac6b861450342f85dc8ffef0f099ca8d3fa46c6005c685298be88fb4b7541"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime.tar.gz",
+      "bytes": 2443344,
+      "sha256": "61bb3df8c16323be5ef856edf834ac73ac69fde462224dd1ac8b35ef93ed97ca"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime.manifest.json",
+      "bytes": 75340,
+      "sha256": "8adc8f345a5b66a6ea1fbb92fe9bd510d1682f4c37d4c76e8a0660e06ce30cb1"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.tar.gz",
+      "bytes": 2438806,
+      "sha256": "5d895c53ef9fbbeeb6a88cbb71fee4b352f9ebc689605d431efca61b8fa78cc1"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.manifest.json",
+      "bytes": 77056,
+      "sha256": "7645cb803edb5cbb053b43a5a02c04f124e3b60553f7057a6a92777f3d211dcd"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.augmentation.json",
+      "bytes": 3264,
+      "sha256": "343ef3164ebad3f53d32fb05dad2c276ed0ff5cc3bc166aa1af5d37a4704b31c"
+    }
+  ],
+  "report": {
+    "path": "portable-coordination/reports/E-INTEGRATION.md",
+    "bytes": 5758,
+    "sha256": "d88ed654db23c957a24eb03a59653ea4fb9ad3dc12a0bf6a3ecd29b4e433cd8b"
+  },
+  "rawlogIndex": {
+    "path": "portable-coordination/rawlogs/E-INTEGRATION/index.json",
+    "bytes": 4374,
+    "sha256": "e241bb93d9631c580c9174ffde334ef21065ad46c793eeb14bca1c8b6fe4298d"
+  },
+  "limitations": [
+    "The original 397-member archive is preserved and intentionally fails strict Verify because it omits eight pinned source files.",
+    "The 405-member test bundle is a source supplement to captured evidence, not a fresh browser execution.",
+    "N4 ran only the focused TestIntegration prefix; this receipt does not claim a full package or repository test run.",
+    "This Go-only verification does not establish archive producer authenticity or fresh browser behavior."
+  ]
+}

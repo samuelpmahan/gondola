@@ -1,0 +1,59 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ATOMIC",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Changed the archive helper to stage tar output beside the final path and publish the verified result atomically without clobbering. Added regression coverage for final-path visibility during writing, tar failure cleanup, existing-final preservation, and round-trip success.",
+  "changes": [
+    {
+      "path": "compiled-capabilities/archive-helper.mjs",
+      "bytes": 3691,
+      "sha256": "df6c99a645d9164461889b8f0585fc79d3c486fc399a84ff7016e8648d2e7e5f"
+    },
+    {
+      "path": "compiled-capabilities/archive-helper.test.mjs",
+      "bytes": 17475,
+      "sha256": "1697da7cbbe9927d75a6907feaba9dc0e4212e8f3e714dca2131715ad23466db"
+    }
+  ],
+  "environment": {
+    "node": "v22.23.4",
+    "tar": "GNU tar 1.35",
+    "platform": "Linux"
+  },
+  "tests": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='real tar archives only|tar failure leaves|publishing refuses' compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "result": "3 tests passed",
+      "rawlogDirectory": "portable-coordination/rawlogs/E-ATOMIC/attempt-002-focused"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "result": "7 tests passed; 0 failures, skips, cancellations, or todos; TAP duration 816.272 ms",
+      "rawlogDirectory": "portable-coordination/rawlogs/E-ATOMIC/attempt-003-full-helper-tests"
+    }
+  ],
+  "testFirstEvidence": {
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='real tar archives only|tar failure leaves|publishing refuses' compiled-capabilities/archive-helper.test.mjs",
+    "exitCode": 1,
+    "result": "3 targeted tests failed against the old direct-to-final helper behavior",
+    "rawlogDirectory": "portable-coordination/rawlogs/E-ATOMIC/attempt-001-red"
+  },
+  "report": {
+    "path": "portable-coordination/reports/E-ATOMIC.md",
+    "bytes": 2842,
+    "sha256": "80efa71073ec73998f3199c813e00646d56a6a99ea9563e76651e354b4f3e397"
+  },
+  "rawlogIndex": {
+    "path": "portable-coordination/rawlogs/E-ATOMIC/index.json",
+    "bytes": 3901,
+    "sha256": "c521d573b588879690c8c5b89653028db8a1a4eaa9c367e03b2c2422469939fd"
+  },
+  "limitations": [
+    "The root-owned fresh full producer profile remains a separate gate and was not run by N4.",
+    "The atomic hard-link publication path was exercised on Linux only.",
+    "This change does not establish the cause of previously truncated archive files."
+  ]
+}

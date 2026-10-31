@@ -1,0 +1,46 @@
+{
+  "schema": "gobi.go-only-isolated-consumer/v1",
+  "verifierSourceCommit": "f7874237b1ceb5dab195a40b12f8df8a3dcc45a0",
+  "binarySHA256": "a9d5590d507d6db19a9ee8058dcf344d546a8f62c4e45e69d50c59610f722411",
+  "build": "CGO_ENABLED=0 GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go build -trimpath -o /tmp/portable-verify-final ./cmd/verify-qualification",
+  "inputs": [
+    {
+      "label": "local-complete",
+      "command": [
+        "/tmp/portable-verify-final",
+        "--archive",
+        "/tmp/qualification-complete/local/runtime.tar.gz",
+        "--manifest",
+        "/tmp/qualification-complete/local/runtime.manifest.json",
+        "--source-commit",
+        "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2"
+      ],
+      "environment": {
+        "PATH": "/nonexistent"
+      },
+      "exitCode": 0,
+      "members": 405,
+      "caseCount": 13,
+      "stdoutSHA256": "0aae5ce79da5211dbf836425b4f8f1ee9d40533e07235133dd5c467c33e15979"
+    },
+    {
+      "label": "hosted-complete",
+      "command": [
+        "/tmp/portable-verify-final",
+        "--archive",
+        "/tmp/qualification-complete/hosted/runtime.tar.gz",
+        "--manifest",
+        "/tmp/qualification-complete/hosted/runtime.manifest.json",
+        "--source-commit",
+        "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2"
+      ],
+      "environment": {
+        "PATH": "/nonexistent"
+      },
+      "exitCode": 0,
+      "members": 405,
+      "caseCount": 13,
+      "stdoutSHA256": "9f87ff2f4b8a23ff5253c16e7110fddc52b0448e4c9aa57613903c45e0290f14"
+    }
+  ]
+}

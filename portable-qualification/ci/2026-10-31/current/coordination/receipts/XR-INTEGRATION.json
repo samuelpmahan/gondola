@@ -1,0 +1,49 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-INTEGRATION",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "Independent integration review found the archived fixtures and semantic verifier tests sound, with one metadata-only discrepancy: the report/receipt carry attempt 005's 4.725s result as the final attempt 006 result, while attempt 006 captured 4.540s. Preserve N4's original packet and correct through explicit supersession.",
+  "finding": {
+    "kind": "metadata",
+    "field": "test.result",
+    "recorded": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.725s",
+    "attempt005": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.725s",
+    "attempt006": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.540s",
+    "impact": "Does not change the captured command, exit code, tests, fixtures, or semantic result."
+  },
+  "evidence": [
+    {
+      "path": "portable-coordination/reports/E-INTEGRATION.md",
+      "sha256": "d88ed654db23c957a24eb03a59653ea4fb9ad3dc12a0bf6a3ecd29b4e433cd8b"
+    },
+    {
+      "path": "portable-coordination/receipts/E-INTEGRATION.json",
+      "sha256": "f6f63839da664843c5881a29443c3cfa79cdaf1c553c73d6c1b7e89ce028ccb8"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-INTEGRATION/index.json",
+      "sha256": "e241bb93d9631c580c9174ffde334ef21065ad46c793eeb14bca1c8b6fe4298d"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime.tar.gz",
+      "sha256": "61bb3df8c16323be5ef856edf834ac73ac69fde462224dd1ac8b35ef93ed97ca"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.tar.gz",
+      "sha256": "5d895c53ef9fbbeeb6a88cbb71fee4b352f9ebc689605d431efca61b8fa78cc1"
+    },
+    {
+      "path": "qualificationarchive/integration_test.go",
+      "sha256": "f2eac6b861450342f85dc8ffef0f099ca8d3fa46c6005c685298be88fb4b7541"
+    }
+  ],
+  "independentTest": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -run '^TestIntegrationRejectsWellRehashedSemanticCertificateAndSourceMutations$' -count=1 -v",
+    "goVersion": "go1.24.0 linux/amd64",
+    "exitCode": 0,
+    "result": "semantic raw capture, certificate disagreement, and source pin disagreement subtests passed",
+    "rawlogDirectory": "portable-coordination/rawlogs/XR-INTEGRATION"
+  },
+  "report": "portable-coordination/reports/XR-INTEGRATION.md"
+}

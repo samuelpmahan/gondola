@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-ARCHIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "qualificationarchive/archive.go and archive_test.go: bounded safe archive/manifest extraction API",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet."
+    },
+    {
+      "id": "E-CERTIFICATE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "qualificationarchive/verify.go and verify_test.go: recompute existing Go certificate and compare archived claims",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet."
+    },
+    {
+      "id": "E-CLI",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "cmd/verify-qualification/**: native Go CLI, explicit expected source and output; no writes on failure",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet."
+    },
+    {
+      "id": "E-INTEGRATION",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "qualificationarchive/integration_test.go and portable-qualification/testdata/**: actual published bundle plus mutation integration tests",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet."
+    },
+    {
+      "id": "E-POLICY",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "qualificationarchive/policy_test.go and portable-qualification/THREATS.md: independent adversarial admission tests and finite guarantee review",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet."
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "portable-qualification/README.md,run-portable-qualification.sh,.github/workflows/gobi-portable-qualification.yml: executable demonstration and focused CI",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet."
+    }
+  ]
+}

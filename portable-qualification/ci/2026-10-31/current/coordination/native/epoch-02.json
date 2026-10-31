@@ -1,0 +1,88 @@
+{
+  "epoch": 2,
+  "at": "2026-10-31T19:27:20.037127+00:00",
+  "ready_jobs": [
+    "XR-CLI",
+    "XR-POLICY"
+  ],
+  "pinned_workers": [
+    "N1",
+    "N2",
+    "N4",
+    "N6"
+  ],
+  "assignments": {
+    "N4": "XR-ARCHIVE",
+    "N5": "XR-CLI",
+    "N6": "E-DELIVERY",
+    "N2": "E-CERTIFICATE",
+    "N3": "XR-POLICY",
+    "N1": "XR-INTEGRATION"
+  },
+  "dispatch": {
+    "N5": "XR-CLI",
+    "N3": "XR-POLICY"
+  },
+  "native_seconds": 0.003653450999991037,
+  "native_constraints": {
+    "solved": true,
+    "brokenVal": 0,
+    "brokenCount": 0,
+    "constraints": [
+      {
+        "name": "independent_review",
+        "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+        "value": 0
+      },
+      {
+        "name": "pin_in_flight",
+        "desc": "avoidMovingSpec: Avoid moving 4 objects",
+        "value": 0
+      },
+      {
+        "name": "ready_packet_capacity",
+        "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+        "value": 0
+      }
+    ]
+  },
+  "independent_capacity_check": true,
+  "independent_eligibility_check": true,
+  "exact_score": 400,
+  "native_score": 400,
+  "caps": {
+    "E-ARCHIVE": 0,
+    "E-CERTIFICATE": 1,
+    "E-CLI": 0,
+    "E-INTEGRATION": 0,
+    "E-POLICY": 0,
+    "E-DELIVERY": 1,
+    "XR-ARCHIVE": 1,
+    "XR-CERTIFICATE": 0,
+    "XR-CLI": 1,
+    "XR-INTEGRATION": 1,
+    "XR-POLICY": 1,
+    "XR-DELIVERY": 0,
+    "BENCH": 6
+  },
+  "eligible": {
+    "XR-CLI": [
+      "N5"
+    ],
+    "XR-POLICY": [
+      "N3"
+    ]
+  },
+  "weights": {
+    "XR-CLI": 200,
+    "XR-POLICY": 200
+  },
+  "agent_by_worker": {
+    "N1": "/root/children_go",
+    "N2": "/root/children_compiler",
+    "N3": null,
+    "N4": "/root/children_harness",
+    "N5": null,
+    "N6": "/root/children_delivery"
+  }
+}

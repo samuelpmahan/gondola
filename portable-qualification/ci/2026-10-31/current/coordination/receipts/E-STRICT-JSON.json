@@ -1,0 +1,508 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-STRICT-JSON",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "sourceCommit": "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+  "summary": "Closed duplicate-key, unknown-field, and case-insensitive Go-field alias gaps in raw qualification/evidence JSON and the archived snapshot; the five previously accepted rehashed variants now reject while local and hosted 405-member actual inputs still certify 13/13.",
+  "scope": {
+    "ownedFiles": [
+      "backendqualification/certify.go",
+      "backendqualification/qualification_test.go",
+      "qualificationarchive/verify.go",
+      "qualificationarchive/verify_test.go"
+    ],
+    "reviewedBuildInputs": [
+      "qualificationarchive/archive.go",
+      "backendqualification/registry.go",
+      "cmd/verify-qualification/main.go",
+      "go.mod"
+    ],
+    "gitCommandsUsed": false,
+    "fullRepositoryTestRun": false,
+    "browserExecutionByReviewer": false,
+    "priorPacketsChanged": false
+  },
+  "sourcePins": [
+    {
+      "path": "backendqualification/certify.go",
+      "bytes": 37302,
+      "sha256": "beab2aa11d4b77bdbf06a99d61834eb2e2790cefd283009c9261dbe9d88aa512"
+    },
+    {
+      "path": "backendqualification/qualification_test.go",
+      "bytes": 24296,
+      "sha256": "9b7862ac8eb4a73365d604ceb3654708125bacaf0b566b641fbe7ad24aed6f60"
+    },
+    {
+      "path": "qualificationarchive/verify.go",
+      "bytes": 34926,
+      "sha256": "cffa5f0e1166e95f39a864ddb17ae8d8f57d1c6a7234ade6e7d48e2050c3e67a"
+    },
+    {
+      "path": "qualificationarchive/verify_test.go",
+      "bytes": 7360,
+      "sha256": "5c1cf6363d33628ce488b553d63813cd1ad0f1067c2e6c2aeddae35f701b3638"
+    }
+  ],
+  "reviewedBuildInputPins": [
+    {
+      "path": "qualificationarchive/archive.go",
+      "bytes": 19376,
+      "sha256": "87e2db7726efb9ebf9262983b4dcc9674c7a7860fcd7b62918df04f7f3e2ea03"
+    },
+    {
+      "path": "backendqualification/registry.go",
+      "bytes": 4185,
+      "sha256": "e9f1394ff38c26b303d8bd498a84a6a87a7a9514a7cd5878c09a89cd82da61a2"
+    },
+    {
+      "path": "cmd/verify-qualification/main.go",
+      "bytes": 4687,
+      "sha256": "2546634c91224c940f13c901b75dfea07fc9a741ee72ab57d924c9e10f7894af"
+    },
+    {
+      "path": "go.mod",
+      "bytes": 48,
+      "sha256": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa"
+    }
+  ],
+  "cliBuild": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go build -o /tmp/verify-qualification-strict-json ./cmd/verify-qualification",
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "exitCode": 0,
+    "binary": {
+      "path": "/tmp/verify-qualification-strict-json",
+      "bytes": 4494449,
+      "sha256": "2f8c7713266ad4dccdf9914ddfc5c725f34ce55529dfe1d56d445fe34f5a387d"
+    }
+  },
+  "tests": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./backendqualification ./qualificationarchive -count=1",
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "environment": {
+      "GOTOOLCHAIN": "local",
+      "GOFLAGS": "-buildvcs=false"
+    },
+    "exitCode": 0,
+    "result": "ok  \tgithub.com/samuelpmahan/gondola/backendqualification\t0.157s\nok  \tgithub.com/samuelpmahan/gondola/qualificationarchive\t5.639s",
+    "rawLogDirectory": "portable-coordination/rawlogs/E-STRICT-JSON"
+  },
+  "priorFinding": {
+    "reviewReceipt": {
+      "path": "portable-coordination/receipts/XR-CERTIFICATE.json",
+      "bytes": 3044,
+      "sha256": "ce807a88ce647a58706810927961d449342fbd399179fc20d060e53f3ccfa83e"
+    },
+    "rawResults": {
+      "path": "portable-coordination/rawlogs/XR-CERTIFICATE/raw-json-boundary-results.json",
+      "bytes": 3033,
+      "sha256": "0b4c8bb77ea9cf3641ebda41592c3bde722da01646f24bc24363ccddbb1da038"
+    },
+    "preChangeAcceptedCases": [
+      "duplicate raw sourceCommit with identical values",
+      "conflicting duplicate raw sourceCommit with invalid value then expected commit",
+      "conflicting duplicate execution snapshot attempt with invalid value then expected attempt",
+      "unknown execution snapshot field",
+      "unknown case evidence field with rehashed evidence/certificate/archive"
+    ],
+    "postChangeCliResults": "portable-coordination/rawlogs/E-STRICT-JSON/actual-cli-results.json",
+    "postChangeRejections": 5,
+    "negativeControlRawRunUnknownFieldStillRejected": true
+  },
+  "actualCliResults": {
+    "path": "portable-coordination/rawlogs/E-STRICT-JSON/actual-cli-results.json",
+    "variants": [
+      {
+        "name": "duplicate-raw-source-commit",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/xr-certificate-json-boundaries/duplicate-raw-source-commit.tar.gz --manifest /tmp/xr-certificate-json-boundaries/duplicate-raw-source-commit.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 130,
+        "archiveBytes": 2299178,
+        "archiveSHA256": "df752db3a1b20de4d18fa134d210ed764a7dea67316a3741110a988a20f01986",
+        "manifestBytes": 63236,
+        "manifestSHA256": "00861c9ebe52f180dfdeeb7724bac259dba71f3d59b38c6c438bb1be8651f4be",
+        "expected": "nonzero-rejection",
+        "rejection": "verify qualification archive: recompute Go qualification certificate: decode run report: duplicate JSON object key \"sourceCommit\""
+      },
+      {
+        "name": "conflicting-duplicate-raw-source-commit",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/xr-certificate-json-boundaries/conflicting-duplicate-raw-source-commit.tar.gz --manifest /tmp/xr-certificate-json-boundaries/conflicting-duplicate-raw-source-commit.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 130,
+        "archiveBytes": 2299189,
+        "archiveSHA256": "8b23c81574848ae6a9b1155d1e62d5c004fd3b591a8e1b9f2bd4172b292f4fcd",
+        "manifestBytes": 63236,
+        "manifestSHA256": "42a174076d209c81ee0df42e67a5fe2b9252925272bc30a0b55ad29f9f4944b4",
+        "expected": "nonzero-rejection",
+        "rejection": "verify qualification archive: recompute Go qualification certificate: decode run report: duplicate JSON object key \"sourceCommit\""
+      },
+      {
+        "name": "conflicting-duplicate-snapshot-attempt",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/xr-certificate-json-boundaries/conflicting-duplicate-snapshot-attempt.tar.gz --manifest /tmp/xr-certificate-json-boundaries/conflicting-duplicate-snapshot-attempt.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 139,
+        "archiveBytes": 2300472,
+        "archiveSHA256": "c2da5120f122e73bd7ec70ab6003341b6597287d9687f39f8fbd16e783dd56f6",
+        "manifestBytes": 63236,
+        "manifestSHA256": "2b32eb55996636512f7215830944b07e8a6834d213e653346d661271c649c2f2",
+        "expected": "nonzero-rejection",
+        "rejection": "verify qualification archive: verify archive provenance bindings: read pre-archive execution snapshot: duplicate JSON object key \"attempt\""
+      },
+      {
+        "name": "unknown-snapshot-field",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/xr-certificate-json-boundaries/unknown-snapshot-field.tar.gz --manifest /tmp/xr-certificate-json-boundaries/unknown-snapshot-field.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 146,
+        "archiveBytes": 2299143,
+        "archiveSHA256": "367d588a43f1d811e8322f738d5e22a0ce12c7dbcd819cdd1dab5ba2a940a132",
+        "manifestBytes": 63236,
+        "manifestSHA256": "8d794e4a75b8d16bb61b201046ef9a6b865830d78b4359cee2982209a503ef69",
+        "expected": "nonzero-rejection",
+        "rejection": "verify qualification archive: verify archive provenance bindings: read pre-archive execution snapshot: json: unknown field \"reviewerUnknownField\""
+      },
+      {
+        "name": "unknown-evidence-field",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/xr-certificate-json-boundaries/unknown-evidence-field.tar.gz --manifest /tmp/xr-certificate-json-boundaries/unknown-evidence-field.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 155,
+        "archiveBytes": 2207501,
+        "archiveSHA256": "e37a70a27342ccdda03c5dd845ce8757b4c80719fd3e6a1056a2dbca13915851",
+        "manifestBytes": 63235,
+        "manifestSHA256": "740c94b7088eaa1c0a6add4fc763c7053bfedb5391179f0d2c4be1f6d84862f5",
+        "expected": "nonzero-rejection",
+        "rejection": "verify qualification archive: recompute Go qualification certificate: case healthy-react: decode evidence file: json: unknown field \"reviewerUnknownField\""
+      },
+      {
+        "name": "unknown-raw-run-field",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/xr-certificate-json-boundaries/unknown-raw-run-field.tar.gz --manifest /tmp/xr-certificate-json-boundaries/unknown-raw-run-field.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 132,
+        "archiveBytes": 2299514,
+        "archiveSHA256": "26a302e84d275a7d8dd43666ae8f315d5624b8eb73c839720baf4f010264da9d",
+        "manifestBytes": 63236,
+        "manifestSHA256": "2798a2e88506f4c47789a4480b390f5c6e4405ad0da321735bfefb86fb5695c9",
+        "expected": "nonzero-rejection",
+        "rejection": "verify qualification archive: recompute Go qualification certificate: decode run report: json: unknown field \"reviewerUnknownField\""
+      },
+      {
+        "name": "positive-local-complete405",
+        "command": "/tmp/verify-qualification-strict-json --archive /workspace/scratch/39a56936f173/gondola/portable-qualification/testdata/runtime-complete.tar.gz --manifest /workspace/scratch/39a56936f173/gondola/portable-qualification/testdata/runtime-complete.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 0,
+        "stdoutBytes": 11265,
+        "stderrBytes": 0,
+        "archiveBytes": 2438806,
+        "archiveSHA256": "5d895c53ef9fbbeeb6a88cbb71fee4b352f9ebc689605d431efca61b8fa78cc1",
+        "manifestBytes": 77056,
+        "manifestSHA256": "7645cb803edb5cbb053b43a5a02c04f124e3b60553f7057a6a92777f3d211dcd",
+        "expected": "qualified-13-case-positive",
+        "qualified": true,
+        "members": 405,
+        "caseCount": 13,
+        "passedCases": 13
+      },
+      {
+        "name": "positive-hosted-complete405",
+        "command": "/tmp/verify-qualification-strict-json --archive /tmp/qualification-complete/hosted/runtime.tar.gz --manifest /tmp/qualification-complete/hosted/runtime.manifest.json --source-commit 77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+        "exitCode": 0,
+        "stdoutBytes": 11265,
+        "stderrBytes": 0,
+        "archiveBytes": 2438316,
+        "archiveSHA256": "4de82e97d19e35a4c1b7e15bb34106a2d5bfcea393dd91d2c116b3c16810bfdd",
+        "manifestBytes": 77053,
+        "manifestSHA256": "5d8c3d784ccd09ac08ae685145215fc0680a56b19886c6cb03d0465f4b26e9f8",
+        "expected": "qualified-13-case-positive",
+        "qualified": true,
+        "members": 405,
+        "caseCount": 13,
+        "passedCases": 13
+      }
+    ]
+  },
+  "nativeReceiptValidation": {
+    "command": "/tmp/rebalancer-env/bin/python portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.py",
+    "pythonVersion": "Python 3.12.14",
+    "exitCode": 0,
+    "stateMutation": false,
+    "validatorPath": "portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.py"
+  },
+  "limitations": [
+    "Only backendqualification and qualificationarchive package tests were run; no full repository test run is claimed.",
+    "Both positive inputs are source-complete historical archives; this verifier run did not execute a browser.",
+    "The verifier checks archived evidence consistency and provenance pins, not archive-producer authenticity.",
+    "The original 397-member archive remains intentionally rejected because eight pinned source files are missing from that historical bundle."
+  ],
+  "rawLogs": [
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/actual-cli-results.json",
+      "bytes": 6943,
+      "sha256": "1299a39690324a21f7d07c4e954277426af11d15f1e97a870317e384ab80e9a1"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/cli-build.command.txt",
+      "bytes": 142,
+      "sha256": "e826155dffd28cdad5d382d239b08d83a4d8e9d9ec07bf06e79bdff28323842f"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/cli-build.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/cli-build.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/cli-build.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-raw-source-commit.command.txt",
+      "bytes": 289,
+      "sha256": "8d034d43c6d4cfe6c6abe51dd195585993cc77d8db3226633467d06f0b0841d9"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-raw-source-commit.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-raw-source-commit.stderr.log",
+      "bytes": 130,
+      "sha256": "22f55fc35c76cf1820383048ea185b96b5982c6e62cf7e5959a3040ad283f727"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-raw-source-commit.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-snapshot-attempt.command.txt",
+      "bytes": 287,
+      "sha256": "88a2baf9ff7feacd9760e7370a4a6862168a6127a883b9e07dc15003084da882"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-snapshot-attempt.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-snapshot-attempt.stderr.log",
+      "bytes": 139,
+      "sha256": "3f268003646d34b3f826f8c0925c24421e0152dd15516410f770ff1f746b4b5c"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/conflicting-duplicate-snapshot-attempt.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/duplicate-raw-source-commit.command.txt",
+      "bytes": 265,
+      "sha256": "3da6fa270d730162a7daaf7a6b52c68f611d3253cab688007cf77f78bafb51c8"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/duplicate-raw-source-commit.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/duplicate-raw-source-commit.stderr.log",
+      "bytes": 130,
+      "sha256": "22f55fc35c76cf1820383048ea185b96b5982c6e62cf7e5959a3040ad283f727"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/duplicate-raw-source-commit.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/go-version.txt",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/package-tests.command.txt",
+      "bytes": 128,
+      "sha256": "cc8dbff4c782bb71bc56c8508abe31121141bff22bebea250f3b78abe619ea20"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/package-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/package-tests.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/package-tests.stdout.log",
+      "bytes": 130,
+      "sha256": "34d82fd4ae74faae2858950c31417ee77d8dd23278ff8875f2a1bf72e0fb5fcb"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-hosted-complete405.command.txt",
+      "bytes": 223,
+      "sha256": "c46ca264feac44ab47c4ade81496e790b2a7c46aa6aa79e70a67b7f68079fbb2"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-hosted-complete405.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-hosted-complete405.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-hosted-complete405.stdout.log",
+      "bytes": 11265,
+      "sha256": "9f87ff2f4b8a23ff5253c16e7110fddc52b0448e4c9aa57613903c45e0290f14"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-local-complete405.command.txt",
+      "bytes": 315,
+      "sha256": "4eb65df264cbfb856875cd5f65943967df98beb1f96cc559edff0d9fd7750ab5"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-local-complete405.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-local-complete405.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/positive-local-complete405.stdout.log",
+      "bytes": 11265,
+      "sha256": "0aae5ce79da5211dbf836425b4f8f1ee9d40533e07235133dd5c467c33e15979"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/reviewed-prepatch-evidence-pins.json",
+      "bytes": 720,
+      "sha256": "7523848996dee8760e4833925f775abf6c74f7dcfbdc40285a3faa04868dc5f7"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/source-pins.json",
+      "bytes": 1661,
+      "sha256": "95e0323e482d41dcfd48d1d420060939ebf7e522faa01d19d579bc9001537e35"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-evidence-field.command.txt",
+      "bytes": 255,
+      "sha256": "f4737305e4a76868d959fc257e5125429340bec45d56b7c6ef5fa03e1a5e3b1f"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-evidence-field.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-evidence-field.stderr.log",
+      "bytes": 155,
+      "sha256": "3b0c8dbba53dde1d385a678317899161d0eb364cbcffc0251ba23e8fc22defed"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-evidence-field.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-raw-run-field.command.txt",
+      "bytes": 253,
+      "sha256": "aa82854ec3bf8dca7e2343d256b06293fd944a20077723f6d3e548e8855049e2"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-raw-run-field.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-raw-run-field.stderr.log",
+      "bytes": 132,
+      "sha256": "831504448c339dadcbba752598e2d9462d0a41fae63ab3ef64b61fc0fd15a614"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-raw-run-field.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-snapshot-field.command.txt",
+      "bytes": 255,
+      "sha256": "a4baaae40441fc933092e34586a34767169e896835d45dca780b0f0542ec7af1"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-snapshot-field.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-snapshot-field.stderr.log",
+      "bytes": 146,
+      "sha256": "919d446686496a825d212ff23665c114cc8e57e684b009bf1e3ec13ba794fbbd"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/unknown-snapshot-field.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.command.json",
+      "bytes": 338,
+      "sha256": "4832ab4ebeddc9466619ae4f2972c43d5b6164a01c0fb4c167b056c44280ca74"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.py",
+      "bytes": 2061,
+      "sha256": "1ad0ff86de8a70a85ac8ce86f7570e1f5bb5a968f01904d3300c14a3434e3ac9"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/validate-packet.stdout.log",
+      "bytes": 98,
+      "sha256": "c97dd0a071d255b88760f88fc83bab2701f759b435e23e3efa762ba27480a8d7"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/validator-python-version.txt",
+      "bytes": 15,
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8"
+    },
+    {
+      "path": "portable-coordination/rawlogs/E-STRICT-JSON/index.json",
+      "bytes": 8413,
+      "sha256": "daaf193ff35258876275a011f59e82dc1c46d0081f2fd76df7f740042db5aef5"
+    }
+  ],
+  "rawLogIndex": {
+    "path": "portable-coordination/rawlogs/E-STRICT-JSON/index.json",
+    "bytes": 8413,
+    "sha256": "daaf193ff35258876275a011f59e82dc1c46d0081f2fd76df7f740042db5aef5"
+  },
+  "report": {
+    "path": "portable-coordination/reports/E-STRICT-JSON.md",
+    "bytes": 3219,
+    "sha256": "b83c82b5a37b2b39d7b2dca5a388a7f9be769c54e7f326eb4c87d8cc9877cb63"
+  }
+}

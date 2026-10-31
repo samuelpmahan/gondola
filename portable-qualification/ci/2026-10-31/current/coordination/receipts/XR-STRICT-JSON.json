@@ -1,0 +1,81 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-STRICT-JSON",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "The strict-JSON repair closes all five previously accepting rehashed variants; the local and hosted 405-member archives each verify with 13/13 cases, and focused canonical-field, duplicate-key, and opaque-JSON tests pass. Existing Go registry/certificate types remain authoritative.",
+  "authorPacket": {
+    "report": {
+      "path": "portable-coordination/reports/E-STRICT-JSON.md",
+      "sha256": "b83c82b5a37b2b39d7b2dca5a388a7f9be769c54e7f326eb4c87d8cc9877cb63"
+    },
+    "receipt": {
+      "path": "portable-coordination/receipts/E-STRICT-JSON.json",
+      "sha256": "2498b4bf13c844484a407ffc73f83861c93665b4e309859a59773b09bb28d64c"
+    }
+  },
+  "reviewedSourcePins": [
+    {
+      "path": "backendqualification/certify.go",
+      "bytes": 37302,
+      "sha256": "beab2aa11d4b77bdbf06a99d61834eb2e2790cefd283009c9261dbe9d88aa512"
+    },
+    {
+      "path": "backendqualification/qualification_test.go",
+      "bytes": 24296,
+      "sha256": "9b7862ac8eb4a73365d604ceb3654708125bacaf0b566b641fbe7ad24aed6f60"
+    },
+    {
+      "path": "qualificationarchive/verify.go",
+      "bytes": 34926,
+      "sha256": "cffa5f0e1166e95f39a864ddb17ae8d8f57d1c6a7234ade6e7d48e2050c3e67a"
+    },
+    {
+      "path": "qualificationarchive/verify_test.go",
+      "bytes": 7360,
+      "sha256": "5c1cf6363d33628ce488b553d63813cd1ad0f1067c2e6c2aeddae35f701b3638"
+    }
+  ],
+  "independentChecks": {
+    "goVersion": "go1.24.0 linux/amd64",
+    "builtVerifier": {
+      "path": "/tmp/xr-strict-json-verify",
+      "bytes": 4494449,
+      "sha256": "2f8c7713266ad4dccdf9914ddfc5c725f34ce55529dfe1d56d445fe34f5a387d"
+    },
+    "previouslyAcceptedMutants": {
+      "count": 5,
+      "allNonzero": true,
+      "allStdoutEmpty": true,
+      "rawResults": "portable-coordination/rawlogs/XR-STRICT-JSON/independent-results.json"
+    },
+    "positiveLocal405": {
+      "archiveSHA256": "5d895c53ef9fbbeeb6a88cbb71fee4b352f9ebc689605d431efca61b8fa78cc1",
+      "manifestSHA256": "7645cb803edb5cbb053b43a5a02c04f124e3b60553f7057a6a92777f3d211dcd",
+      "qualified": true,
+      "members": 405,
+      "passedCases": 13
+    },
+    "positiveHosted405": {
+      "archiveSHA256": "4de82e97d19e35a4c1b7e15bb34106a2d5bfcea393dd91d2c116b3c16810bfdd",
+      "manifestSHA256": "5d8c3d784ccd09ac08ae685145215fc0680a56b19886c6cb03d0465f4b26e9f8",
+      "qualified": true,
+      "members": 405,
+      "passedCases": 13
+    },
+    "focusedCanonicalOpaqueJSONTests": {
+      "exitCode": 0,
+      "rawLogDirectory": "portable-coordination/rawlogs/XR-STRICT-JSON"
+    }
+  },
+  "rawLogIndex": {
+    "path": "portable-coordination/rawlogs/XR-STRICT-JSON/index.json",
+    "bytes": 6806,
+    "sha256": "dd0d1d3636f9169b0e3bbc70d6e1850da66481968a35c6d0de978c9063ac8c2f"
+  },
+  "limitations": [
+    "No full repository test run or browser execution was performed by this reviewer.",
+    "Verification establishes captured-data/provenance consistency, not archive producer authenticity."
+  ],
+  "report": "portable-coordination/reports/XR-STRICT-JSON.md"
+}

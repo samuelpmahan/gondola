@@ -1,0 +1,32 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ARCHIVE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Implemented bounded strict archive extraction with owned tests. The final Go 1.24 qualificationarchive package suite passed, including the captured actual-bundle integration and adversarial policy tests. Original 397-member extraction and completed 405-member verification evidence are distinguished; no fresh browser run is claimed.",
+  "sourcePins": [
+    {
+      "path": "qualificationarchive/archive.go",
+      "bytes": 19376,
+      "sha256": "87e2db7726efb9ebf9262983b4dcc9674c7a7860fcd7b62918df04f7f3e2ea03"
+    },
+    {
+      "path": "qualificationarchive/archive_test.go",
+      "bytes": 10514,
+      "sha256": "e92a6e73c9489b037bcc1d3f517190700dbf27c382db44aa61142c4bc4980aa4"
+    }
+  ],
+  "test": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -count=1",
+    "goVersion": "go1.24.0 linux/amd64",
+    "exitCode": 0,
+    "output": "ok github.com/samuelpmahan/gondola/qualificationarchive 5.504s",
+    "rawLogDirectory": "portable-coordination/rawlogs/E-ARCHIVE"
+  },
+  "report": "portable-coordination/reports/E-ARCHIVE.md",
+  "limitations": [
+    "Extraction validates archive/manifest byte consistency and expected source commit; it does not authenticate the producer.",
+    "This packet does not claim fresh browser execution or independently establish the truth of archived observations.",
+    "The final package suite snapshot includes tests and verifier files owned by N2, N4, and N5."
+  ]
+}

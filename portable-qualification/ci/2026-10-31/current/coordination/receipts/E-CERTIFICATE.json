@@ -1,0 +1,396 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CERTIFICATE",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "sourceCommit": "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+  "summary": "Implemented the Go archive verifier that re-runs CertifyFile, semantically compares the archived certificate, and binds manifest, source snapshots, build inputs, raw report, and demo provenance. Go 1.24 package tests pass on the complete 405-member archive; the original 397-member archive remains an expected fail-closed control.",
+  "scope": {
+    "ownedFiles": [
+      "qualificationarchive/verify.go",
+      "qualificationarchive/verify_test.go"
+    ],
+    "reviewedPaths": [
+      "qualificationarchive/archive.go",
+      "qualificationarchive/archive_test.go",
+      "qualificationarchive/integration_test.go",
+      "qualificationarchive/policy_test.go",
+      "backendqualification/certify.go",
+      "backendqualification/registry.go",
+      "portable-qualification/testdata/runtime.tar.gz",
+      "portable-qualification/testdata/runtime.manifest.json",
+      "portable-qualification/testdata/runtime-complete.tar.gz",
+      "portable-qualification/testdata/runtime-complete.manifest.json",
+      "portable-qualification/testdata/runtime-complete.augmentation.json"
+    ],
+    "gitCommandsUsed": false,
+    "browserExecutionByReviewer": false,
+    "fullRepositoryTestRun": false
+  },
+  "sourcePins": [
+    {
+      "path": "qualificationarchive/verify.go",
+      "bytes": 30239,
+      "sha256": "1999b7b0d693e6e8fc4019b71f727e646a73469d67ed2de805b680426b97a79c"
+    },
+    {
+      "path": "qualificationarchive/verify_test.go",
+      "bytes": 5755,
+      "sha256": "e0362eba245cdbea0ec7fcdcfee4c0b94e80c80925d1279b804cb8ee5533d169"
+    },
+    {
+      "path": "qualificationarchive/archive.go",
+      "bytes": 19376,
+      "sha256": "87e2db7726efb9ebf9262983b4dcc9674c7a7860fcd7b62918df04f7f3e2ea03"
+    },
+    {
+      "path": "qualificationarchive/archive_test.go",
+      "bytes": 10514,
+      "sha256": "e92a6e73c9489b037bcc1d3f517190700dbf27c382db44aa61142c4bc4980aa4"
+    },
+    {
+      "path": "qualificationarchive/integration_test.go",
+      "bytes": 19847,
+      "sha256": "f2eac6b861450342f85dc8ffef0f099ca8d3fa46c6005c685298be88fb4b7541"
+    },
+    {
+      "path": "qualificationarchive/policy_test.go",
+      "bytes": 16731,
+      "sha256": "33c3dd4a2b348f08186357808a1695c27207d7f75b39ac5c947a0e8d255db941"
+    },
+    {
+      "path": "backendqualification/certify.go",
+      "bytes": 32434,
+      "sha256": "9f4c1223421780eff104bebcba498a9986a5a4685a7639a236664c8aa5c44cc7"
+    },
+    {
+      "path": "backendqualification/registry.go",
+      "bytes": 4185,
+      "sha256": "e9f1394ff38c26b303d8bd498a84a6a87a7a9514a7cd5878c09a89cd82da61a2"
+    },
+    {
+      "path": "go.mod",
+      "bytes": 48,
+      "sha256": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime.tar.gz",
+      "bytes": 2443344,
+      "sha256": "61bb3df8c16323be5ef856edf834ac73ac69fde462224dd1ac8b35ef93ed97ca"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime.manifest.json",
+      "bytes": 75340,
+      "sha256": "8adc8f345a5b66a6ea1fbb92fe9bd510d1682f4c37d4c76e8a0660e06ce30cb1"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.tar.gz",
+      "bytes": 2438806,
+      "sha256": "5d895c53ef9fbbeeb6a88cbb71fee4b352f9ebc689605d431efca61b8fa78cc1"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.manifest.json",
+      "bytes": 77056,
+      "sha256": "7645cb803edb5cbb053b43a5a02c04f124e3b60553f7057a6a92777f3d211dcd"
+    },
+    {
+      "path": "portable-qualification/testdata/runtime-complete.augmentation.json",
+      "bytes": 3264,
+      "sha256": "343ef3164ebad3f53d32fb05dad2c276ed0ff5cc3bc166aa1af5d37a4704b31c"
+    }
+  ],
+  "verification": {
+    "api": "qualificationarchive.Verify(archivePath, manifestPath, expectedCommit string) (Receipt, error)",
+    "receiptSchema": "gobi.portable-qualification-verification/v1",
+    "receiptCaseShape": "[]backendqualification.CertificateResult in Go registry order",
+    "recomputedFrom": "backendqualification.CertifyFile on extracted qualification/qualification.raw.json",
+    "checks": {
+      "manifestBytesStableAcrossExtractAndVerify": true,
+      "manifestAttemptMatchesPreArchiveSnapshot": true,
+      "sourceCommitCrossBindings": [
+        "manifest",
+        "preArchiveSnapshot",
+        "raw report recomputed certificate",
+        "archived certificate",
+        "demo build"
+      ],
+      "archivedCertificateSemanticallyEqualsRecomputed": true,
+      "certificateUnknownAndDuplicateFieldsRejected": true,
+      "probeExceptionJSONUnknownFieldsPreservedAndDuplicateKeysRejected": true,
+      "sourceBeforeEqualsSourceAfterAndPreArchiveCopies": true,
+      "sourceSnapshotFilesRehashedAgainstArchive": 177,
+      "buildProvenancePinsRehashedAndMatchedToSnapshot": 87,
+      "qualificationBuildAndDemoReferencesCheckedAgainstArchivedPathsBytesHashes": true,
+      "fixedArchiveMemberCountAssumption": false
+    },
+    "actualArchiveResult": {
+      "members": 405,
+      "sourceMembers": 177,
+      "certificateCases": 13,
+      "allCasesPassed": true,
+      "sourceCommit": "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2"
+    },
+    "originalArchiveControl": {
+      "members": 397,
+      "accepted": false,
+      "reason": "eight source pins present in source-before/source-after have no archived source members"
+    },
+    "augmentationCheck": {
+      "originalMemberChanges": 0,
+      "addedMembers": 8,
+      "all177SourcePinsMatchedArchiveBytes": true,
+      "preArchiveSnapshotBytesUnchanged": true,
+      "result": {
+        "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-CERTIFICATE/augmentation-integrity.json",
+        "bytes": 1307,
+        "sha256": "468097bc8c1302e8389ff618d7951e172402860a5ecd1661d0cefc39c398cfe6"
+      }
+    }
+  },
+  "tests": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "environment": {
+      "GOTOOLCHAIN": "local",
+      "GOFLAGS": "-buildvcs=false"
+    },
+    "focused": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -run \"TestCertificateEqual|TestStrictCertificateJSON|TestVerifyReferences|TestSourcePinComparison\" -count=1",
+      "exitCode": 0,
+      "output": "ok github.com/samuelpmahan/gondola/qualificationarchive 0.008s",
+      "rawLogDirectory": "portable-coordination/rawlogs/E-CERTIFICATE"
+    },
+    "package": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -count=1",
+      "exitCode": 0,
+      "output": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.860s",
+      "rawLogDirectory": "portable-coordination/rawlogs/E-CERTIFICATE"
+    },
+    "streamingOriginalToCompleteComparison": {
+      "command": "python3 /workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-CERTIFICATE/verify-augmentation.py",
+      "pythonVersion": "Python 3.12.14",
+      "exitCode": 0,
+      "result": "portable-coordination/rawlogs/E-CERTIFICATE/augmentation-integrity.json"
+    }
+  },
+  "archiveInputs": {
+    "original": {
+      "archive": {
+        "path": "portable-qualification/testdata/runtime.tar.gz",
+        "bytes": 2443344,
+        "sha256": "61bb3df8c16323be5ef856edf834ac73ac69fde462224dd1ac8b35ef93ed97ca"
+      },
+      "manifest": {
+        "path": "portable-qualification/testdata/runtime.manifest.json",
+        "bytes": 75340,
+        "sha256": "8adc8f345a5b66a6ea1fbb92fe9bd510d1682f4c37d4c76e8a0660e06ce30cb1"
+      },
+      "members": 397
+    },
+    "sourceCompleteSupplement": {
+      "archive": {
+        "path": "portable-qualification/testdata/runtime-complete.tar.gz",
+        "bytes": 2438806,
+        "sha256": "5d895c53ef9fbbeeb6a88cbb71fee4b352f9ebc689605d431efca61b8fa78cc1"
+      },
+      "manifest": {
+        "path": "portable-qualification/testdata/runtime-complete.manifest.json",
+        "bytes": 77056,
+        "sha256": "7645cb803edb5cbb053b43a5a02c04f124e3b60553f7057a6a92777f3d211dcd"
+      },
+      "augmentation": {
+        "path": "portable-qualification/testdata/runtime-complete.augmentation.json",
+        "bytes": 3264,
+        "sha256": "343ef3164ebad3f53d32fb05dad2c276ed0ff5cc3bc166aa1af5d37a4704b31c"
+      },
+      "members": 405,
+      "addedSourceMembers": 8,
+      "freshBrowserExecution": false
+    },
+    "rootAugmentationRecord": {
+      "path": "/tmp/qualification-complete/local/augmentation.json",
+      "bytes": 3264,
+      "sha256": "343ef3164ebad3f53d32fb05dad2c276ed0ff5cc3bc166aa1af5d37a4704b31c"
+    }
+  },
+  "crossWorkerEvidence": {
+    "N4IntegrationReceipt": {
+      "path": "portable-coordination/receipts/E-INTEGRATION.json",
+      "bytes": 2907,
+      "sha256": "f6f63839da664843c5881a29443c3cfa79cdaf1c553c73d6c1b7e89ce028ccb8"
+    },
+    "N4IntegrationFinalReport": {
+      "path": "portable-coordination/reports/E-INTEGRATION.md",
+      "bytes": 5758,
+      "sha256": "d88ed654db23c957a24eb03a59653ea4fb9ad3dc12a0bf6a3ecd29b4e433cd8b"
+    },
+    "N4PreservedSourceGapAttempt": {
+      "path": "portable-coordination/rawlogs/E-INTEGRATION/attempt-004-omitted-source-pins/combined.log",
+      "bytes": 561,
+      "sha256": "3d01b883b270253da6c78022201a19b40e553a314ac7722bf322d142f5117d01"
+    },
+    "N3CLIReceipt": {
+      "path": "portable-coordination/receipts/E-CLI.json",
+      "bytes": 17004,
+      "sha256": "5110fb4a912ff601ee0138b073e68adfdc5894eebd672dc91a75ceb2be255adf"
+    },
+    "N3ActualPositiveReceipt": {
+      "path": "portable-coordination/rawlogs/E-CLI/complete-stdout-no-output.json",
+      "bytes": 11265,
+      "sha256": "0aae5ce79da5211dbf836425b4f8f1ee9d40533e07235133dd5c467c33e15979"
+    },
+    "N3Original397Failure": {
+      "path": "portable-coordination/rawlogs/E-CLI/actual-cli-397.stderr.log",
+      "bytes": 407,
+      "sha256": "688f249eff11c07046aea921c4bb6a911e96936a08cdb2e964bb4294008a7931"
+    }
+  },
+  "report": {
+    "path": "portable-coordination/reports/E-CERTIFICATE.md",
+    "bytes": 6015,
+    "sha256": "b3aea4325b220fa58127d5c97cbd3dfca75333f0c847a91add1e4b0f1a1a8b68"
+  },
+  "rawLogs": [
+    {
+      "path": "rawlogs/E-CERTIFICATE/augmentation-integrity.json",
+      "bytes": 1307,
+      "sha256": "468097bc8c1302e8389ff618d7951e172402860a5ecd1661d0cefc39c398cfe6"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/command-01.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/command-01.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/command-01.stdout.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/command-02.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/command-02.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/command-02.stdout.log",
+      "bytes": 65,
+      "sha256": "38edf953042c59834736a1c9a5b8636f55a50dfe4bdba53aa849a0f615040985"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/commands.json",
+      "bytes": 450,
+      "sha256": "61737a2f7f24ca6e9e5c6591df7536d48d8f6be311044ae7313e1346e08a2971"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/package-test.command.json",
+      "bytes": 250,
+      "sha256": "16ddf81b9538914f3cc8f4e4baa3611d4ad6a3a86cb890304aea3d5d497030ed"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/package-test.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/package-test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/package-test.stdout.log",
+      "bytes": 65,
+      "sha256": "ff2bfc4c41136f06c1a95abf7b13001a2d4adc88369492ed3d7631dad4f53dde"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/python-version.txt",
+      "bytes": 15,
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/run-focused-tests.py",
+      "bytes": 1471,
+      "sha256": "deba6e768258e01505c72351becd9b5eec5c4fcd63dfafbe6a4da0e76c871de7"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/run-package-tests.py",
+      "bytes": 1182,
+      "sha256": "1e425c604cc28c9ecbadfffc94e41e9cf3d7d3a0f86eac9c454fd843bcd5546c"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/validate-packet.command.json",
+      "bytes": 338,
+      "sha256": "37cf5fdccdccfb3e3eb0453c9cb4a080546e2668ad379654195abcdbd28ddd9e"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/validate-packet.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/validate-packet.py",
+      "bytes": 2133,
+      "sha256": "fbfadee5459f9269f4a7ca753dd81aa03aa68bdf0d7b180145d3e0322b370420"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/validate-packet.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/validate-packet.stdout.log",
+      "bytes": 162,
+      "sha256": "c871933bd960fef962b531f8f26a3538c4161b431959b01fcd2a350be6795350"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/validator-python-version.txt",
+      "bytes": 15,
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/verify-augmentation.command.txt",
+      "bytes": 107,
+      "sha256": "e404b1156537fafdc9c3e9e906f11f70dc644392773a05d7cef0e367c98b43b3"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/verify-augmentation.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "rawlogs/E-CERTIFICATE/verify-augmentation.py",
+      "bytes": 4134,
+      "sha256": "79a1bea9342debeafd89fcb5c14cc34645a1fd9148294351f346c9485f16ec57"
+    }
+  ],
+  "limitations": [
+    "The verifier establishes byte and metadata consistency against the supplied archive and expected commit; it does not authenticate the archive producer.",
+    "No browser execution is performed by Verify or this N2 test run; the 405-member archive is a source-complete supplement to the historical capture, not fresh qualification evidence.",
+    "The original 397-member archive is intentionally preserved and rejected because eight pinned source copies are absent; Verify continues to require all source snapshot pins.",
+    "The full package test includes N1, N4, and N5 tests. It is not a full repository test run or hosted-CI result."
+  ],
+  "nativeReceiptValidation": {
+    "validator": "/workspace/scratch/39a56936f173/rebalancer-probe.py::validate_receipt",
+    "python": "/tmp/rebalancer-env/bin/python (Python 3.12.14)",
+    "job": {
+      "id": "E-CERTIFICATE",
+      "kind": "extract"
+    },
+    "worker": "N2",
+    "exitCode": 0,
+    "stateMutation": false,
+    "validationScript": {
+      "path": "portable-coordination/rawlogs/E-CERTIFICATE/validate-packet.py",
+      "bytes": 2133,
+      "sha256": "fbfadee5459f9269f4a7ca753dd81aa03aa68bdf0d7b180145d3e0322b370420"
+    }
+  }
+}

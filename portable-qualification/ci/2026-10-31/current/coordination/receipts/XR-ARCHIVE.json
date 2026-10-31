@@ -1,0 +1,81 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-ARCHIVE",
+  "worker": "N4",
+  "decision": "accepted",
+  "outcome": "accepted",
+  "summary": "Independently reviewed sealed E-ARCHIVE implementation, source pins, integration coverage, and package-test evidence. The requested Linux archive extraction and cleanup properties are supported; the original 397-member Verify failure is correctly distinguished from structural extraction and the source-complete 405-member fixture.",
+  "reviewed": {
+    "job_id": "E-ARCHIVE",
+    "report": {
+      "path": "portable-coordination/reports/E-ARCHIVE.md",
+      "sha256": "a275e81fe08efd64fe92faa082b1cf4353e55e80a7f08e15a9b71b27510abbc2"
+    },
+    "receipt": {
+      "path": "portable-coordination/receipts/E-ARCHIVE.json",
+      "sha256": "d556ed2e4b8d1d60f00a591d1b071a8105c72b708b60cfd66b8256cee85c8b8d"
+    },
+    "sourcePins": [
+      {
+        "path": "qualificationarchive/archive.go",
+        "sha256": "87e2db7726efb9ebf9262983b4dcc9674c7a7860fcd7b62918df04f7f3e2ea03"
+      },
+      {
+        "path": "qualificationarchive/archive_test.go",
+        "sha256": "e92a6e73c9489b037bcc1d3f517190700dbf27c382db44aa61142c4bc4980aa4"
+      },
+      {
+        "path": "qualificationarchive/integration_test.go",
+        "sha256": "f2eac6b861450342f85dc8ffef0f099ca8d3fa46c6005c685298be88fb4b7541"
+      },
+      {
+        "path": "qualificationarchive/policy_test.go",
+        "sha256": "33c3dd4a2b348f08186357808a1695c27207d7f75b39ac5c947a0e8d255db941"
+      },
+      {
+        "path": "qualificationarchive/verify.go",
+        "sha256": "1999b7b0d693e6e8fc4019b71f727e646a73469d67ed2de805b680426b97a79c"
+      },
+      {
+        "path": "qualificationarchive/verify_test.go",
+        "sha256": "e0362eba245cdbea0ec7fcdcfee4c0b94e80c80925d1279b804cb8ee5533d169"
+      }
+    ],
+    "test": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -count=1",
+      "goVersion": "go1.24.0 linux/amd64",
+      "exitCode": 0,
+      "output": "ok github.com/samuelpmahan/gondola/qualificationarchive 5.504s",
+      "stdoutSHA256": "6c7eff1efeac809b96f248874da0af27b3cb78f413fc11904f39e11548f8e0d6"
+    }
+  },
+  "review": {
+    "sourceHashesMatched": true,
+    "requestedProperties": [
+      "bounded regular archive and manifest inputs",
+      "strict duplicate-free manifest and exact sorted inventory",
+      "canonical expected source commit matching",
+      "safe paths and regular tar entries only",
+      "duplicate, extra, missing, and digest-mismatched members rejected",
+      "gzip trailing and concatenated data rejected",
+      "failed extraction cleanup and private-root-only Close behavior"
+    ],
+    "windowsFilesystemValidated": false,
+    "independentTestsRun": false
+  },
+  "report": {
+    "path": "portable-coordination/reports/XR-ARCHIVE.md",
+    "bytes": 3823,
+    "sha256": "542b1df1c8d5d8a9cd1acad2fb973a5946ca8fff0768402c96f353325fe53105"
+  },
+  "rawlogIndex": {
+    "path": "portable-coordination/rawlogs/XR-ARCHIVE/index.json",
+    "bytes": 1350,
+    "sha256": "40859c226476ffbc33459cbe17d6b68cd977fa8d14e89178f9860adeba382c0b"
+  },
+  "limitations": [
+    "Review evidence is Go 1.24.0 on Linux/amd64; Windows filesystem behavior and DOS reserved device names were not exercised.",
+    "Extraction proves bounded consistency with the manifest and expected source commit, not publisher authenticity or browser observation truth.",
+    "The original 397-member archive is structurally extractable but fails Verify because eight pinned source files are absent; the separate 405-member fixture includes them."
+  ]
+}

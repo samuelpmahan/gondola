@@ -1,0 +1,2139 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "E-ARCHIVE": {
+      "id": "E-ARCHIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "qualificationarchive/archive.go and archive_test.go: bounded safe archive/manifest extraction API",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T19:14:43.980775+00:00",
+      "finished_at": "2026-10-31T19:26:13.610806+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-ARCHIVE.json"
+    },
+    "E-CERTIFICATE": {
+      "id": "E-CERTIFICATE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "qualificationarchive/verify.go and verify_test.go: recompute existing Go certificate and compare archived claims",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T19:14:44.074256+00:00",
+      "finished_at": "2026-10-31T19:29:07.405863+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-CERTIFICATE.json"
+    },
+    "E-CLI": {
+      "id": "E-CLI",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "cmd/verify-qualification/**: native Go CLI, explicit expected source and output; no writes on failure",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet.",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T19:14:44.168285+00:00",
+      "finished_at": "2026-10-31T19:26:37.186207+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-CLI.json"
+    },
+    "E-INTEGRATION": {
+      "id": "E-INTEGRATION",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "qualificationarchive/integration_test.go and portable-qualification/testdata/**: actual published bundle plus mutation integration tests",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T19:14:44.266198+00:00",
+      "finished_at": "2026-10-31T19:26:13.708646+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-INTEGRATION.json"
+    },
+    "E-POLICY": {
+      "id": "E-POLICY",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "qualificationarchive/policy_test.go and portable-qualification/THREATS.md: independent adversarial admission tests and finite guarantee review",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T19:14:44.358537+00:00",
+      "finished_at": "2026-10-31T19:27:19.932988+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-POLICY.json"
+    },
+    "E-DELIVERY": {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "portable-qualification/README.md,run-portable-qualification.sh,.github/workflows/gobi-portable-qualification.yml: executable demonstration and focused CI; backend-qualification/run.mjs archive inventory seam and new archive-source-inventory.mjs/.test.mjs",
+      "summary": "Read CONTRACT.md; implement only owned files, no Git/state mutations; report tests and hashes in own reports/receipts packet.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T19:14:44.462512+00:00",
+      "finished_at": "2026-10-31T19:32:32.702631+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-DELIVERY.json"
+    },
+    "XR-ARCHIVE": {
+      "id": "XR-ARCHIVE",
+      "kind": "review",
+      "depends_on": "E-ARCHIVE",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T19:26:16.440418+00:00",
+      "finished_at": "2026-10-31T19:29:30.913183+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-ARCHIVE.json"
+    },
+    "XR-CERTIFICATE": {
+      "id": "XR-CERTIFICATE",
+      "kind": "review",
+      "depends_on": "E-CERTIFICATE",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T19:29:10.969634+00:00",
+      "finished_at": "2026-10-31T19:35:47.069603+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-CERTIFICATE.json"
+    },
+    "XR-CLI": {
+      "id": "XR-CLI",
+      "kind": "review",
+      "depends_on": "E-CLI",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T19:27:23.669951+00:00",
+      "finished_at": "2026-10-31T19:30:50.001864+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-CLI.json"
+    },
+    "XR-INTEGRATION": {
+      "id": "XR-INTEGRATION",
+      "kind": "review",
+      "depends_on": "E-INTEGRATION",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T19:26:17.034615+00:00",
+      "finished_at": "2026-10-31T19:29:07.283097+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-INTEGRATION.json"
+    },
+    "XR-POLICY": {
+      "id": "XR-POLICY",
+      "kind": "review",
+      "depends_on": "E-POLICY",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T19:27:24.260124+00:00",
+      "finished_at": "2026-10-31T19:30:50.094392+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-POLICY.json"
+    },
+    "XR-DELIVERY": {
+      "id": "XR-DELIVERY",
+      "kind": "review",
+      "depends_on": "E-DELIVERY",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T19:32:37.927038+00:00",
+      "finished_at": "2026-10-31T19:36:34.530288+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-DELIVERY.json"
+    },
+    "E-TIMING": {
+      "id": "E-TIMING",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "own new timing addendum report/receipt/rawlogs ONLY; original E-INTEGRATION immutable",
+      "summary": "Correct elapsed claim additively: final attempt0064.540s, prior0054.725s; bothsuccessful, no source changes/reexecution",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T19:29:33.393160+00:00",
+      "finished_at": "2026-10-31T19:31:45.247431+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-TIMING.json"
+    },
+    "XR-TIMING": {
+      "id": "XR-TIMING",
+      "kind": "review",
+      "depends_on": "E-TIMING",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T19:31:47.999345+00:00",
+      "finished_at": "2026-10-31T19:35:47.157267+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-TIMING.json"
+    },
+    "E-STRICT-JSON": {
+      "id": "E-STRICT-JSON",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "qualificationarchive/verify.go,verify_test.go; backendqualification/certify.go,qualification_test.go ONLY; own new repair packet",
+      "summary": "Reject duplicate JSON keys and unknown closed-envelope fields using existing Go types; retain opaque diagnostic/state fields deliberately. Four rehashed actual CLI witnesses must reject, both complete real bundles pass. Preserve original source/cert packets. Canonical Go struct-tag key casing also enforced.",
+      "repair_of": "XR-CERTIFICATE",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T19:35:49.780537+00:00",
+      "finished_at": "2026-10-31T19:46:28.536615+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-STRICT-JSON.json"
+    },
+    "XR-STRICT-JSON": {
+      "id": "XR-STRICT-JSON",
+      "kind": "review",
+      "allow_workers": [
+        "N1"
+      ],
+      "depends_on": "E-STRICT-JSON",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T19:46:28.775686+00:00",
+      "finished_at": "2026-10-31T19:49:14.475784+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-STRICT-JSON.json"
+    },
+    "E-CUSTODY": {
+      "id": "E-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "own custody report/receipt/rawlogs only, no source/archive mutations",
+      "summary": "Independently audit root member-exact reconstruction after post-exit truncation: original compressed bytes not recovered, every409member matches original manifest,181Gitpins, Go/Node/Python verification, split hashes. Preserve all failures/bounds.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T19:55:03.653772+00:00",
+      "finished_at": "2026-10-31T20:02:31.209907+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-CUSTODY.json"
+    },
+    "XR-CUSTODY": {
+      "id": "XR-CUSTODY",
+      "kind": "review",
+      "depends_on": "E-CUSTODY",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T20:02:33.975072+00:00",
+      "finished_at": "2026-10-31T20:07:54.161350+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-CUSTODY.json"
+    },
+    "E-WORKFLOW": {
+      "id": "E-WORKFLOW",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": ".github/workflows/gobi-portable-qualification.yml ONLY and own new report/receipt/rawlogs",
+      "summary": "Repair actual GitHub workflow parse failure41235795977: runner.temp is unavailable in job-level env; put output-directory env at step-level where runner context exists; validate with actionlint and retain failed source. No application/library changes.",
+      "repair_of": "E-DELIVERY",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T19:57:06.987879+00:00",
+      "finished_at": "2026-10-31T20:01:15.048039+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-WORKFLOW.json"
+    },
+    "XR-WORKFLOW": {
+      "id": "XR-WORKFLOW",
+      "kind": "review",
+      "allow_workers": [
+        "N5"
+      ],
+      "depends_on": "E-WORKFLOW",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T20:01:15.263084+00:00",
+      "finished_at": "2026-10-31T20:04:11.287185+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-WORKFLOW.json"
+    },
+    "E-ATOMIC": {
+      "id": "E-ATOMIC",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/archive-helper.mjs and archive-helper.test.mjs ONLY, own new packet",
+      "summary": "Harden shared producer publication after observed post-exit archive truncations (cause unknown): generate tar at unique same-directory staging path, publish complete final name atomically without clobber, cleanup stage on failure. Tests observe final absent while tar executing, failure no final, existing final preserved, ordinary roundtrip passes. Do not claim external corruption cause fixed.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T19:59:37.057199+00:00",
+      "finished_at": "2026-10-31T20:04:11.189994+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/E-ATOMIC.json"
+    },
+    "XR-ATOMIC": {
+      "id": "XR-ATOMIC",
+      "kind": "review",
+      "depends_on": "E-ATOMIC",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T20:04:22.660672+00:00",
+      "finished_at": "2026-10-31T20:07:54.258594+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/portable-coordination/receipts/XR-ATOMIC.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-31T19:14:22.736100+00:00",
+      "ready_jobs": [
+        "E-ARCHIVE",
+        "E-CERTIFICATE",
+        "E-CLI",
+        "E-INTEGRATION",
+        "E-POLICY",
+        "E-DELIVERY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "E-CLI",
+        "N2": "E-CERTIFICATE",
+        "N5": "E-POLICY",
+        "N4": "E-INTEGRATION",
+        "N1": "E-ARCHIVE",
+        "N6": "E-DELIVERY"
+      },
+      "dispatch": {
+        "N3": "E-CLI",
+        "N2": "E-CERTIFICATE",
+        "N5": "E-POLICY",
+        "N4": "E-INTEGRATION",
+        "N1": "E-ARCHIVE",
+        "N6": "E-DELIVERY"
+      },
+      "native_seconds": 0.005076885000107723,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-ARCHIVE": 1,
+        "E-CERTIFICATE": 1,
+        "E-CLI": 1,
+        "E-INTEGRATION": 1,
+        "E-POLICY": 1,
+        "E-DELIVERY": 1,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-ARCHIVE": [
+          "N1"
+        ],
+        "E-CERTIFICATE": [
+          "N2"
+        ],
+        "E-CLI": [
+          "N3"
+        ],
+        "E-INTEGRATION": [
+          "N4"
+        ],
+        "E-POLICY": [
+          "N5"
+        ],
+        "E-DELIVERY": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-ARCHIVE": 100,
+        "E-CERTIFICATE": 100,
+        "E-CLI": 100,
+        "E-INTEGRATION": 100,
+        "E-POLICY": 100,
+        "E-DELIVERY": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:14:43.980775+00:00",
+      "worker": "N1",
+      "job": "E-ARCHIVE",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:14:44.074256+00:00",
+      "worker": "N2",
+      "job": "E-CERTIFICATE",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:14:44.168285+00:00",
+      "worker": "N3",
+      "job": "E-CLI",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:14:44.266198+00:00",
+      "worker": "N4",
+      "job": "E-INTEGRATION",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:14:44.358537+00:00",
+      "worker": "N5",
+      "job": "E-POLICY",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:14:44.462512+00:00",
+      "worker": "N6",
+      "job": "E-DELIVERY",
+      "agent": "/root/children_delivery"
+    },
+    {
+      "type": "scope-extension-from-executed-witness",
+      "job": "E-DELIVERY",
+      "reason": "historical 397-member archive omits eight explicitly pinned source support inputs; source copy complete but generic inventory walker excludes review-evidence",
+      "remedy": "union archive file inventory with every explicit source pin; retain old397 as rejection and separately supplement405 bundles"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:26:13.610806+00:00",
+      "worker": "N1",
+      "job": "E-ARCHIVE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:26:13.708646+00:00",
+      "worker": "N4",
+      "job": "E-INTEGRATION"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-31T19:26:13.819697+00:00",
+      "ready_jobs": [
+        "XR-ARCHIVE",
+        "XR-INTEGRATION"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "XR-ARCHIVE",
+        "N6": "E-DELIVERY",
+        "N5": "E-POLICY",
+        "N2": "E-CERTIFICATE",
+        "N1": "XR-INTEGRATION",
+        "N3": "E-CLI"
+      },
+      "dispatch": {
+        "N4": "XR-ARCHIVE",
+        "N1": "XR-INTEGRATION"
+      },
+      "native_seconds": 0.00466440899981535,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 1,
+        "E-CLI": 1,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 1,
+        "E-DELIVERY": 1,
+        "XR-ARCHIVE": 1,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 1,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ARCHIVE": [
+          "N4"
+        ],
+        "XR-INTEGRATION": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-ARCHIVE": 200,
+        "XR-INTEGRATION": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/children_compiler",
+        "N3": "/root/children_host",
+        "N4": null,
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:26:16.440418+00:00",
+      "worker": "N4",
+      "job": "XR-ARCHIVE",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:26:17.034615+00:00",
+      "worker": "N1",
+      "job": "XR-INTEGRATION",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:26:37.186207+00:00",
+      "worker": "N3",
+      "job": "E-CLI"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:27:19.932988+00:00",
+      "worker": "N5",
+      "job": "E-POLICY"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-31T19:27:20.037127+00:00",
+      "ready_jobs": [
+        "XR-CLI",
+        "XR-POLICY"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "XR-ARCHIVE",
+        "N5": "XR-CLI",
+        "N6": "E-DELIVERY",
+        "N2": "E-CERTIFICATE",
+        "N3": "XR-POLICY",
+        "N1": "XR-INTEGRATION"
+      },
+      "dispatch": {
+        "N5": "XR-CLI",
+        "N3": "XR-POLICY"
+      },
+      "native_seconds": 0.003653450999991037,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 1,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 1,
+        "XR-ARCHIVE": 1,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 1,
+        "XR-INTEGRATION": 1,
+        "XR-POLICY": 1,
+        "XR-DELIVERY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-CLI": [
+          "N5"
+        ],
+        "XR-POLICY": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-CLI": 200,
+        "XR-POLICY": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": "/root/children_compiler",
+        "N3": null,
+        "N4": "/root/children_harness",
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:27:23.669951+00:00",
+      "worker": "N5",
+      "job": "XR-CLI",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:27:24.260124+00:00",
+      "worker": "N3",
+      "job": "XR-POLICY",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:29:07.283097+00:00",
+      "worker": "N1",
+      "job": "XR-INTEGRATION"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:29:07.405863+00:00",
+      "worker": "N2",
+      "job": "E-CERTIFICATE"
+    },
+    {
+      "type": "metadata-amendment-gate",
+      "originalReview": "XR-INTEGRATION",
+      "repair": "E-TIMING",
+      "sourceChangeRequired": false
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-31T19:29:07.533860+00:00",
+      "ready_jobs": [
+        "XR-CERTIFICATE",
+        "E-TIMING"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "XR-CLI",
+        "N2": "BENCH",
+        "N1": "XR-CERTIFICATE",
+        "N4": "XR-ARCHIVE",
+        "N3": "XR-POLICY",
+        "N6": "E-DELIVERY"
+      },
+      "dispatch": {
+        "N1": "XR-CERTIFICATE"
+      },
+      "native_seconds": 0.003926237000086985,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 1,
+        "XR-ARCHIVE": 1,
+        "XR-CERTIFICATE": 1,
+        "XR-CLI": 1,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 1,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 1,
+        "XR-TIMING": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-CERTIFICATE": [
+          "N1"
+        ],
+        "E-TIMING": []
+      },
+      "weights": {
+        "XR-CERTIFICATE": 200,
+        "E-TIMING": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": "/root/children_harness",
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:29:10.969634+00:00",
+      "worker": "N1",
+      "job": "XR-CERTIFICATE",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:29:30.913183+00:00",
+      "worker": "N4",
+      "job": "XR-ARCHIVE"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-31T19:29:31.024878+00:00",
+      "ready_jobs": [
+        "E-TIMING"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "XR-CLI",
+        "N2": "BENCH",
+        "N4": "E-TIMING",
+        "N1": "XR-CERTIFICATE",
+        "N3": "XR-POLICY",
+        "N6": "E-DELIVERY"
+      },
+      "dispatch": {
+        "N4": "E-TIMING"
+      },
+      "native_seconds": 0.0035388799997235765,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 1,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 1,
+        "XR-CLI": 1,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 1,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 1,
+        "XR-TIMING": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-TIMING": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "E-TIMING": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": null,
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:29:33.393160+00:00",
+      "worker": "N4",
+      "job": "E-TIMING",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:30:50.001864+00:00",
+      "worker": "N5",
+      "job": "XR-CLI"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:30:50.094392+00:00",
+      "worker": "N3",
+      "job": "XR-POLICY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:31:45.247431+00:00",
+      "worker": "N4",
+      "job": "E-TIMING"
+    },
+    {
+      "type": "solve",
+      "epoch": 5,
+      "at": "2026-10-31T19:31:45.359485+00:00",
+      "ready_jobs": [
+        "XR-TIMING"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "BENCH",
+        "N5": "BENCH",
+        "N4": "BENCH",
+        "N2": "XR-TIMING",
+        "N6": "E-DELIVERY",
+        "N1": "XR-CERTIFICATE"
+      },
+      "dispatch": {
+        "N2": "XR-TIMING"
+      },
+      "native_seconds": 0.004189143000076001,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 1,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 1,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-TIMING": [
+          "N2",
+          "N3",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-TIMING": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:31:47.999345+00:00",
+      "worker": "N2",
+      "job": "XR-TIMING",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:32:32.702631+00:00",
+      "worker": "N6",
+      "job": "E-DELIVERY"
+    },
+    {
+      "type": "solve",
+      "epoch": 6,
+      "at": "2026-10-31T19:32:32.821361+00:00",
+      "ready_jobs": [
+        "XR-DELIVERY"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2"
+      ],
+      "assignments": {
+        "N4": "BENCH",
+        "N6": "BENCH",
+        "N3": "BENCH",
+        "N2": "XR-TIMING",
+        "N5": "XR-DELIVERY",
+        "N1": "XR-CERTIFICATE"
+      },
+      "dispatch": {
+        "N5": "XR-DELIVERY"
+      },
+      "native_seconds": 0.003937458000109473,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 1,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 1,
+        "E-TIMING": 0,
+        "XR-TIMING": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-DELIVERY": [
+          "N3",
+          "N4",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-DELIVERY": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": "/root/children_compiler",
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:32:37.927038+00:00",
+      "worker": "N5",
+      "job": "XR-DELIVERY",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:35:47.069603+00:00",
+      "worker": "N1",
+      "job": "XR-CERTIFICATE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:35:47.157267+00:00",
+      "worker": "N2",
+      "job": "XR-TIMING"
+    },
+    {
+      "type": "actual-qualified-json-counterexample-repair-gate",
+      "review": "XR-CERTIFICATE",
+      "repair": "E-STRICT-JSON",
+      "candidateRejected": "f320919a392b6a5b1a7af5357e35547189cbcb75",
+      "witnesses": [
+        "duplicate raw sourceCommit",
+        "duplicate snapshot attempt",
+        "unknown snapshot field",
+        "unknown evidence field"
+      ],
+      "sourceOwner": "N2"
+    },
+    {
+      "type": "solve",
+      "epoch": 7,
+      "at": "2026-10-31T19:35:47.253923+00:00",
+      "ready_jobs": [
+        "E-STRICT-JSON"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "XR-DELIVERY",
+        "N2": "E-STRICT-JSON"
+      },
+      "dispatch": {
+        "N2": "E-STRICT-JSON"
+      },
+      "native_seconds": 0.0032691639999029576,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 1,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 1,
+        "XR-STRICT-JSON": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-STRICT-JSON": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "E-STRICT-JSON": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/children_oracle",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:35:49.780537+00:00",
+      "worker": "N2",
+      "job": "E-STRICT-JSON",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:36:34.530288+00:00",
+      "worker": "N5",
+      "job": "XR-DELIVERY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:46:28.536615+00:00",
+      "worker": "N2",
+      "job": "E-STRICT-JSON"
+    },
+    {
+      "type": "solve",
+      "epoch": 8,
+      "at": "2026-10-31T19:46:28.650635+00:00",
+      "ready_jobs": [
+        "XR-STRICT-JSON"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH",
+        "N1": "XR-STRICT-JSON"
+      },
+      "dispatch": {
+        "N1": "XR-STRICT-JSON"
+      },
+      "native_seconds": 0.009109705999435391,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-STRICT-JSON": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-STRICT-JSON": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:46:28.775686+00:00",
+      "worker": "N1",
+      "job": "XR-STRICT-JSON",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T19:49:14.475784+00:00",
+      "worker": "N1",
+      "job": "XR-STRICT-JSON"
+    },
+    {
+      "type": "solve",
+      "epoch": 9,
+      "at": "2026-10-31T19:49:14.574920+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [],
+      "assignments": {
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH"
+      },
+      "dispatch": {},
+      "native_seconds": 0.0031260389996532467,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "post-exit-integrity-recovery-gate",
+      "originalExpectedSHA256": "4bc54d8464753d6e39040f977eb42889cfaa958dc27fe440c3a83bef478f999f",
+      "observedDamagedBytes": 2097152,
+      "cause": "unknown",
+      "memberExactReconstructionSHA256": "8f018dd5c3be64ac41e6a2e40d294df2260a26b87e3cfbbcb15757acff8d5968",
+      "sourceChanged": false
+    },
+    {
+      "type": "solve",
+      "epoch": 10,
+      "at": "2026-10-31T19:55:03.564813+00:00",
+      "ready_jobs": [
+        "E-CUSTODY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH",
+        "N6": "E-CUSTODY"
+      },
+      "dispatch": {
+        "N6": "E-CUSTODY"
+      },
+      "native_seconds": 0.00499730699993961,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 1,
+        "XR-CUSTODY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-CUSTODY": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-CUSTODY": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:55:03.653772+00:00",
+      "worker": "N6",
+      "job": "E-CUSTODY",
+      "agent": "/root/children_delivery"
+    },
+    {
+      "type": "actual-hosted-workflow-failure-gate",
+      "runId": 41235795977,
+      "sourceCommit": "f7874237b1ceb5dab195a40b12f8df8a3dcc45a0",
+      "symptom": "workflow file name displayed, initialization failure before jobs",
+      "inferredConcreteCause": "job env references runner.temp context unavailable before runner assignment",
+      "repair": "E-WORKFLOW"
+    },
+    {
+      "type": "solve",
+      "epoch": 11,
+      "at": "2026-10-31T19:57:06.827525+00:00",
+      "ready_jobs": [
+        "E-WORKFLOW"
+      ],
+      "pinned_workers": [
+        "N6"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N5": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N6": "E-CUSTODY",
+        "N3": "E-WORKFLOW"
+      },
+      "dispatch": {
+        "N3": "E-WORKFLOW"
+      },
+      "native_seconds": 0.012025273000290326,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 1,
+        "XR-CUSTODY": 0,
+        "E-WORKFLOW": 1,
+        "XR-WORKFLOW": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-WORKFLOW": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "E-WORKFLOW": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:57:06.987879+00:00",
+      "worker": "N3",
+      "job": "E-WORKFLOW",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "archive-publication-hardening",
+      "observation": "two completed producer archives later truncated; origin unknown",
+      "invariant": "final archive name must not expose a partial in-progress tar stream",
+      "sourceOwner": "N4",
+      "scope": "shared archive helper only, no Go application/renderer changes"
+    },
+    {
+      "type": "solve",
+      "epoch": 12,
+      "at": "2026-10-31T19:59:36.965623+00:00",
+      "ready_jobs": [
+        "E-ATOMIC"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N5": "BENCH",
+        "N6": "E-CUSTODY",
+        "N4": "E-ATOMIC",
+        "N3": "E-WORKFLOW"
+      },
+      "dispatch": {
+        "N4": "E-ATOMIC"
+      },
+      "native_seconds": 0.005032596000091871,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 1,
+        "XR-CUSTODY": 0,
+        "E-WORKFLOW": 1,
+        "XR-WORKFLOW": 0,
+        "E-ATOMIC": 1,
+        "XR-ATOMIC": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-ATOMIC": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "E-ATOMIC": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T19:59:37.057199+00:00",
+      "worker": "N4",
+      "job": "E-ATOMIC",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T20:01:15.048039+00:00",
+      "worker": "N3",
+      "job": "E-WORKFLOW"
+    },
+    {
+      "type": "solve",
+      "epoch": 13,
+      "at": "2026-10-31T20:01:15.167441+00:00",
+      "ready_jobs": [
+        "XR-WORKFLOW"
+      ],
+      "pinned_workers": [
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N3": "BENCH",
+        "N6": "E-CUSTODY",
+        "N4": "E-ATOMIC",
+        "N5": "XR-WORKFLOW"
+      },
+      "dispatch": {
+        "N5": "XR-WORKFLOW"
+      },
+      "native_seconds": 0.008932417999858444,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 1,
+        "XR-CUSTODY": 0,
+        "E-WORKFLOW": 0,
+        "XR-WORKFLOW": 1,
+        "E-ATOMIC": 1,
+        "XR-ATOMIC": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-WORKFLOW": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-WORKFLOW": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": "/root/children_harness",
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T20:01:15.263084+00:00",
+      "worker": "N5",
+      "job": "XR-WORKFLOW",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "review-eligibility-refinement",
+      "jobs": [
+        "XR-CUSTODY",
+        "XR-ATOMIC"
+      ],
+      "reason": "avoid idle independent reviewers waiting for an unnecessary named reviewer; native author exclusion remains enforced"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T20:02:31.209907+00:00",
+      "worker": "N6",
+      "job": "E-CUSTODY"
+    },
+    {
+      "type": "solve",
+      "epoch": 14,
+      "at": "2026-10-31T20:02:31.308842+00:00",
+      "ready_jobs": [
+        "XR-CUSTODY"
+      ],
+      "pinned_workers": [
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N6": "BENCH",
+        "N4": "E-ATOMIC",
+        "N5": "XR-WORKFLOW",
+        "N3": "XR-CUSTODY"
+      },
+      "dispatch": {
+        "N3": "XR-CUSTODY"
+      },
+      "native_seconds": 0.003829233999567805,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 0,
+        "XR-CUSTODY": 1,
+        "E-WORKFLOW": 0,
+        "XR-WORKFLOW": 1,
+        "E-ATOMIC": 1,
+        "XR-ATOMIC": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-CUSTODY": [
+          "N1",
+          "N2",
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-CUSTODY": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": "/root/children_harness",
+        "N5": "/root/children_oracle",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T20:02:33.975072+00:00",
+      "worker": "N3",
+      "job": "XR-CUSTODY",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T20:04:11.189994+00:00",
+      "worker": "N4",
+      "job": "E-ATOMIC"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T20:04:11.287185+00:00",
+      "worker": "N5",
+      "job": "XR-WORKFLOW"
+    },
+    {
+      "type": "solve",
+      "epoch": 15,
+      "at": "2026-10-31T20:04:11.394094+00:00",
+      "ready_jobs": [
+        "XR-ATOMIC"
+      ],
+      "pinned_workers": [
+        "N3"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N4": "BENCH",
+        "N6": "BENCH",
+        "N2": "BENCH",
+        "N5": "XR-ATOMIC",
+        "N3": "XR-CUSTODY"
+      },
+      "dispatch": {
+        "N5": "XR-ATOMIC"
+      },
+      "native_seconds": 0.006335918999866408,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 0,
+        "XR-CUSTODY": 1,
+        "E-WORKFLOW": 0,
+        "XR-WORKFLOW": 0,
+        "E-ATOMIC": 0,
+        "XR-ATOMIC": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ATOMIC": [
+          "N1",
+          "N2",
+          "N5",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-ATOMIC": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T20:04:22.660672+00:00",
+      "worker": "N5",
+      "job": "XR-ATOMIC",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T20:07:54.161350+00:00",
+      "worker": "N3",
+      "job": "XR-CUSTODY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T20:07:54.258594+00:00",
+      "worker": "N5",
+      "job": "XR-ATOMIC"
+    },
+    {
+      "type": "solve",
+      "epoch": 16,
+      "at": "2026-10-31T20:07:54.370899+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH"
+      },
+      "dispatch": {},
+      "native_seconds": 0.0036422319999473984,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-ARCHIVE": 0,
+        "E-CERTIFICATE": 0,
+        "E-CLI": 0,
+        "E-INTEGRATION": 0,
+        "E-POLICY": 0,
+        "E-DELIVERY": 0,
+        "XR-ARCHIVE": 0,
+        "XR-CERTIFICATE": 0,
+        "XR-CLI": 0,
+        "XR-INTEGRATION": 0,
+        "XR-POLICY": 0,
+        "XR-DELIVERY": 0,
+        "E-TIMING": 0,
+        "XR-TIMING": 0,
+        "E-STRICT-JSON": 0,
+        "XR-STRICT-JSON": 0,
+        "E-CUSTODY": 0,
+        "XR-CUSTODY": 0,
+        "E-WORKFLOW": 0,
+        "XR-WORKFLOW": 0,
+        "E-ATOMIC": 0,
+        "XR-ATOMIC": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    }
+  ],
+  "epoch": 17,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

@@ -1,0 +1,405 @@
+{
+  "schema": "gobi.portable-qualification-verification/v1",
+  "sourceCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+  "qualified": true,
+  "archiveSHA256": "b1d9d5bc30bcce395fae361845ee02b1896b595a567a4c2923d6f898a60c8556",
+  "manifestSHA256": "9ce8013a9afbf1b97c526e504961f6525ded134455de7f24e8a28acc89457a3d",
+  "members": 409,
+  "cases": [
+    {
+      "id": "healthy-react",
+      "backend": "react",
+      "fault": "none",
+      "expectedChannels": [],
+      "allowedChannels": [],
+      "channelRule": "exact",
+      "observedChannels": [],
+      "activated": false,
+      "activationCount": 0,
+      "activationEventIndex": null,
+      "activationTargetPath": null,
+      "probeException": null,
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 50,
+      "traceTicks": 46,
+      "evidencePath": "cases/healthy-react.json",
+      "evidenceSHA256": "897fde853bd4ac36eeb11f28ad9d9d99ce7a063c6bd31b7bff9376aadd9db5a3",
+      "passed": true
+    },
+    {
+      "id": "healthy-dom",
+      "backend": "dom",
+      "fault": "none",
+      "expectedChannels": [],
+      "allowedChannels": [],
+      "channelRule": "exact",
+      "observedChannels": [],
+      "activated": false,
+      "activationCount": 0,
+      "activationEventIndex": null,
+      "activationTargetPath": null,
+      "probeException": null,
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 50,
+      "traceTicks": 46,
+      "evidencePath": "cases/healthy-dom.json",
+      "evidenceSHA256": "3c4afe559330ae3778a4b78ccbe15c84ae559c8774fb952d0ee0a48f7298a82e",
+      "passed": true
+    },
+    {
+      "id": "healthy-swap",
+      "backend": "swap",
+      "fault": "none",
+      "expectedChannels": [],
+      "allowedChannels": [],
+      "channelRule": "exact",
+      "observedChannels": [],
+      "activated": false,
+      "activationCount": 0,
+      "activationEventIndex": null,
+      "activationTargetPath": null,
+      "probeException": null,
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 50,
+      "traceTicks": 46,
+      "evidencePath": "cases/healthy-swap.json",
+      "evidenceSHA256": "44d8c58b1c325ffc943bc7b3d0c30e2ee3eff1ae6b78cc1309614d9b25bfd5eb",
+      "passed": true
+    },
+    {
+      "id": "fault-react-text-corruption",
+      "backend": "react",
+      "fault": "text-corruption",
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": null,
+      "activationTargetPath": "0/0/0",
+      "probeException": {
+        "name": "Error",
+        "message": "react init physical DOM literal: values differ"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 0,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-react-text-corruption.json",
+      "evidenceSHA256": "baf18234303877b5928dd32b8068a813f2d4f52bcd426155d53086e70f095c68",
+      "passed": true
+    },
+    {
+      "id": "fault-react-key-order",
+      "backend": "react",
+      "fault": "key-order",
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": null,
+      "activationTargetPath": "1",
+      "probeException": {
+        "name": "Error",
+        "message": "react init physical DOM literal: values differ"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 0,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-react-key-order.json",
+      "evidenceSHA256": "2a80d9eada4ee0b77f0fec95e26951bbdfee34b89e49ac298b1373e6ce9a9f73",
+      "passed": true
+    },
+    {
+      "id": "fault-react-enabled-control",
+      "backend": "react",
+      "fault": "enabled-control",
+      "expectedChannels": [
+        "disabled"
+      ],
+      "allowedChannels": [
+        "disabled",
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom",
+        "disabled"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": null,
+      "activationTargetPath": "0/1",
+      "probeException": {
+        "name": "Error",
+        "message": "react init physical DOM literal: values differ"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 0,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-react-enabled-control.json",
+      "evidenceSHA256": "14f03c50e7971952c28ab6db2238749ec1381bfda72ac9d694a1327bfc674432",
+      "passed": true
+    },
+    {
+      "id": "fault-react-drop-click",
+      "backend": "react",
+      "fault": "drop-click",
+      "expectedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "any",
+      "observedChannels": [
+        "dom",
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": 0,
+      "activationTargetPath": "1/0/1",
+      "probeException": {
+        "name": "Error",
+        "message": "event 0 physical click did not produce one Go tick"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 1,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-react-drop-click.json",
+      "evidenceSHA256": "ecdc99917bd5f5d4ff66cbb0b59a0ba2e6da01250acb540c6309588ad87be61c",
+      "passed": true
+    },
+    {
+      "id": "fault-react-duplicate-click",
+      "backend": "react",
+      "fault": "duplicate-click",
+      "expectedChannels": [
+        "dispatch-count"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom",
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": 0,
+      "activationTargetPath": "1/0/1",
+      "probeException": {
+        "name": "Error",
+        "message": "event 0 physical click did not produce one Go tick"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 1,
+      "traceTicks": 3,
+      "evidencePath": "cases/fault-react-duplicate-click.json",
+      "evidenceSHA256": "09ee34e0b7b30da43bb0d2549809b9066f23df75c7addcdf6106108976baa2dc",
+      "passed": true
+    },
+    {
+      "id": "fault-dom-text-corruption",
+      "backend": "dom",
+      "fault": "text-corruption",
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": null,
+      "activationTargetPath": "0/0/0",
+      "probeException": {
+        "name": "Error",
+        "message": "dom init physical DOM literal: values differ"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 0,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-dom-text-corruption.json",
+      "evidenceSHA256": "34566758a2d09977562a85b0b909d0081bfc2d305493faf683d62d8b88539f41",
+      "passed": true
+    },
+    {
+      "id": "fault-dom-key-order",
+      "backend": "dom",
+      "fault": "key-order",
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": null,
+      "activationTargetPath": "1",
+      "probeException": {
+        "name": "Error",
+        "message": "dom init physical DOM literal: values differ"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 0,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-dom-key-order.json",
+      "evidenceSHA256": "26953c494a773d5ce645c9d32c4c0bb79824cab67c6abd564d520d3b7fef07af",
+      "passed": true
+    },
+    {
+      "id": "fault-dom-enabled-control",
+      "backend": "dom",
+      "fault": "enabled-control",
+      "expectedChannels": [
+        "disabled"
+      ],
+      "allowedChannels": [
+        "disabled",
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom",
+        "disabled"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": null,
+      "activationTargetPath": "0/1",
+      "probeException": {
+        "name": "Error",
+        "message": "dom init physical DOM literal: values differ"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 0,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-dom-enabled-control.json",
+      "evidenceSHA256": "616e34408639c303819b587174be114b739c7c9bea90f4b174a78085d1a0bf6a",
+      "passed": true
+    },
+    {
+      "id": "fault-dom-drop-click",
+      "backend": "dom",
+      "fault": "drop-click",
+      "expectedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "any",
+      "observedChannels": [
+        "dom",
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": 0,
+      "activationTargetPath": "1/0/1",
+      "probeException": {
+        "name": "Error",
+        "message": "event 0 physical click did not produce one Go tick"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 1,
+      "traceTicks": 1,
+      "evidencePath": "cases/fault-dom-drop-click.json",
+      "evidenceSHA256": "0ed223be0bf4471ead0b624454b1d8e3aece9b2b067af4db5f952e613f783a0c",
+      "passed": true
+    },
+    {
+      "id": "fault-dom-duplicate-click",
+      "backend": "dom",
+      "fault": "duplicate-click",
+      "expectedChannels": [
+        "dispatch-count"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "all",
+      "observedChannels": [
+        "dom",
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "activated": true,
+      "activationCount": 1,
+      "activationEventIndex": 0,
+      "activationTargetPath": "1/0/1",
+      "probeException": {
+        "name": "Error",
+        "message": "event 0 physical click did not produce one Go tick"
+      },
+      "infrastructureErrors": [],
+      "pageErrors": [],
+      "eventsObserved": 1,
+      "traceTicks": 3,
+      "evidencePath": "cases/fault-dom-duplicate-click.json",
+      "evidenceSHA256": "5b0f98feb9c157da7e135ec86fb386793908cf5d9c15e9fd2d97406c7a49969f",
+      "passed": true
+    }
+  ]
+}

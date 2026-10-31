@@ -1,0 +1,145 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-WORKFLOW",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Moved GOBI_PORTABLE_OUTPUT_DIR into the Go verification step after actionlint reproduced the hosted workflow initialization error; the repaired workflow passes actionlint v1.7.12 and structural YAML checks.",
+  "scope": {
+    "owned_paths": [
+      ".github/workflows/gobi-portable-qualification.yml",
+      "portable-coordination/reports/E-WORKFLOW.md",
+      "portable-coordination/receipts/E-WORKFLOW.json",
+      "portable-coordination/rawlogs/E-WORKFLOW/**"
+    ],
+    "only_workflow_source_changed": true
+  },
+  "failedRun": {
+    "runId": 41235795977,
+    "sourceCommit": "f7874237b1ceb5dab195a40b12f8df8a3dcc45a0",
+    "reportedStatus": "workflow initialization failed before a job was created",
+    "reportedCause": "runner.temp unavailable in jobs-level env",
+    "metadataProvenance": "task assignment; original GitHub API payload/log not supplied"
+  },
+  "source": {
+    "workflowBefore": {
+      "bytes": 2843,
+      "sha256": "7d75b9481957099f53e33fc52fa9158fee10f3128a84483216376b6b1452d5e9",
+      "evidence": "matches sealed E-DELIVERY receipt source pin"
+    },
+    "workflowAfter": {
+      "path": "/workspace/scratch/39a56936f173/gondola/.github/workflows/gobi-portable-qualification.yml",
+      "bytes": 2860,
+      "sha256": "c34209d93ce6a157f4d7a711046f84841ded0f69c30498185bac30914bdaf596"
+    },
+    "diff": "only GOBI_PORTABLE_OUTPUT_DIR moved from job env to verification step env"
+  },
+  "toolchain": {
+    "actionlint": "v1.7.12",
+    "actionlintBuiltWith": "go1.27.3 compiler for linux/amd64",
+    "installerGo": "go1.24.0 linux/amd64",
+    "python": "3.12.14",
+    "PyYAML": "6.0.3"
+  },
+  "checks": {
+    "actionlintBefore": {
+      "exitCode": 1,
+      "diagnostic": "context runner is not allowed in jobs-level env"
+    },
+    "actionlintAfter": {
+      "exitCode": 0,
+      "diagnostics": 0
+    },
+    "yamlParse": {
+      "exitCode": 0,
+      "assertions": [
+        "both jobs retained",
+        "output directory only on verification step",
+        "artifact upload path unchanged"
+      ]
+    },
+    "hostedWorkflowRerun": false,
+    "nativeReceiptValidator": "passed read-only against active E-WORKFLOW/N3 packet"
+  },
+  "report": {
+    "path": "portable-coordination/reports/E-WORKFLOW.md",
+    "bytes": 2771,
+    "sha256": "b74b24667ba1ae453a4b45f804fcaa5aa4a3351684cce4855b39a6bbe245f4ca"
+  },
+  "rawLogs": [
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/actionlint.after.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/actionlint.after.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/actionlint.before.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/actionlint.before.log",
+      "bytes": 508,
+      "sha256": "fb3c4bfd239e63ec46c8e8cc5209a10f176b381bfdab81bd30e5a6935f6ca75e"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/commands.txt",
+      "bytes": 875,
+      "sha256": "1644d052870a9598be3f8cf5effbf737181700cc64a2c33e395d058249e2f782"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/failed-run-41235795977.json",
+      "bytes": 821,
+      "sha256": "c2926997e67f0a4730e2aa5f6c20777f4e2f2c9123dc76818b1b4a83497cb6e9"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/native-receipt-validation.command.txt",
+      "bytes": 530,
+      "sha256": "b293c15fcba223d9eadfa452c5b8495d53caa08e205cb3ace9e0f455e262770c"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/native-receipt-validation.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/native-receipt-validation.log",
+      "bytes": 39,
+      "sha256": "00b67dc18f3bedac1c6710dba0e199379bdda35d03e4003a87fdea3e9283d354"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/toolchain.txt",
+      "bytes": 340,
+      "sha256": "9979f4647717b08beb6b935f356e57d674ba4e620dd56d70827190c12e2cd7d2"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/versions.log",
+      "bytes": 147,
+      "sha256": "24b1ce32d057fd25b47d65e7d8e840d8e1c85de852e149ef37b3ae9f3ee1345e"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/workflow-source-pins.txt",
+      "bytes": 306,
+      "sha256": "da3b2253d7dd7bb994764e99fb41a6da37824d87aa232e4082060c4e954b39ea"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/workflow-yaml-parse.log",
+      "bytes": 114,
+      "sha256": "6f04fd5042e507a9b8a9a89ac35668283bca685ad7921bf7c735d6de91973e37"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/workflow.before.yml",
+      "bytes": 2843,
+      "sha256": "7d75b9481957099f53e33fc52fa9158fee10f3128a84483216376b6b1452d5e9"
+    },
+    {
+      "path": "/workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-WORKFLOW/workflow.diff",
+      "bytes": 782,
+      "sha256": "9ff21209e085d38f69b6f468be046a9c3a22ac4deed5d60b47d73fc31f6e5502"
+    }
+  ]
+}

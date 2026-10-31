@@ -1,0 +1,57 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-CERTIFICATE",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "N2's strict archived-certificate comparison and source-byte closure checks pass review, but fully rehashed archives with conflicting duplicate raw/provenance fields and unknown snapshot/evidence fields are accepted as qualified. Four distinct boundary mutations were confirmed through the actual CLI; a same-value raw duplicate also passed, while a top-level unknown raw-run field was correctly rejected.",
+  "finding": {
+    "kind": "strict_json_boundary",
+    "confirmedAcceptedCases": [
+      "conflicting duplicate qualification.raw.json sourceCommit (invalid value followed by expected commit)",
+      "conflicting duplicate execution-before-archive.json attempt (invalid value followed by expected attempt)",
+      "unknown field in execution-before-archive.json",
+      "unknown field in case evidence JSON with evidence/raw/certificate/provenance hashes refreshed"
+    ],
+    "additionalAcceptedCase": "same-value duplicate qualification.raw.json sourceCommit",
+    "negativeControl": "unknown top-level raw-run field rejected by CertifyFile",
+    "eachAcceptedResult": {
+      "qualified": true,
+      "members": 405,
+      "caseCount": 13,
+      "allCasesPassed": true
+    },
+    "impact": "Conflicting duplicate values are resolved by last-value decoding rather than rejected; snapshot/evidence unknown fields are ignored by permissive decoding."
+  },
+  "reviewedPins": {
+    "authorReport": {
+      "path": "portable-coordination/reports/E-CERTIFICATE.md",
+      "sha256": "b3aea4325b220fa58127d5c97cbd3dfca75333f0c847a91add1e4b0f1a1a8b68"
+    },
+    "authorReceipt": {
+      "path": "portable-coordination/receipts/E-CERTIFICATE.json",
+      "sha256": "aab32b091241235ebe5b7feccc5c9dc5ad2c7482f994eecddb47b3e46ac286c9"
+    },
+    "verifySource": {
+      "path": "qualificationarchive/verify.go",
+      "sha256": "1999b7b0d693e6e8fc4019b71f727e646a73469d67ed2de805b680426b97a79c"
+    },
+    "verifyTests": {
+      "path": "qualificationarchive/verify_test.go",
+      "sha256": "e0362eba245cdbea0ec7fcdcfee4c0b94e80c80925d1279b804cb8ee5533d169"
+    },
+    "rawJsonResults": "portable-coordination/rawlogs/XR-CERTIFICATE/raw-json-boundary-results.json",
+    "sourceClosureResult": "portable-coordination/rawlogs/XR-CERTIFICATE/source-pin-closure.stdout.log"
+  },
+  "independentUnitTest": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -run 'TestCertificateEqual|TestStrictCertificateJSON|TestVerifyReferences|TestSourcePinComparison' -count=1 -v",
+    "goVersion": "go1.24.0 linux/amd64",
+    "exitCode": 0,
+    "rawlogDirectory": "portable-coordination/rawlogs/XR-CERTIFICATE"
+  },
+  "rawLogIndex": {
+    "path": "portable-coordination/rawlogs/XR-CERTIFICATE/index.json",
+    "bytes": 5685,
+    "sha256": "37486644970d74cf72b2fdc62ad3c484e6d5de120c03112be96319ca648480e7"
+  },
+  "report": "portable-coordination/reports/XR-CERTIFICATE.md"
+}

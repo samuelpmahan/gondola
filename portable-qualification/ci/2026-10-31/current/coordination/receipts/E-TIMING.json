@@ -1,0 +1,77 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-TIMING",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Issued an additive metadata correction: the final attempt-006 focused TestIntegration run took 4.540s, while attempt 005 took 4.725s. Both stored executions exited 0. The original E-INTEGRATION report, receipt, rawlogs, source, and fixtures remain unchanged.",
+  "sourceCommit": "77f7ce36439f1ae457a397269ea5a8c6d2db1cb2",
+  "authority": {
+    "report": {
+      "path": "portable-coordination/reports/XR-INTEGRATION.md",
+      "sha256": "2555d5cc569f83a35444066717b3caa83718319f760490df17497783dec6561a"
+    },
+    "receipt": {
+      "path": "portable-coordination/receipts/XR-INTEGRATION.json",
+      "sha256": "5fd0d5adc30331ac3e4a36bc99500efb032aa52a400558d2a43825c05739d741"
+    }
+  },
+  "originalEIntegrationPacket": {
+    "report": {
+      "path": "portable-coordination/reports/E-INTEGRATION.md",
+      "bytes": 5758,
+      "sha256": "d88ed654db23c957a24eb03a59653ea4fb9ad3dc12a0bf6a3ecd29b4e433cd8b"
+    },
+    "receipt": {
+      "path": "portable-coordination/receipts/E-INTEGRATION.json",
+      "bytes": 2907,
+      "sha256": "f6f63839da664843c5881a29443c3cfa79cdaf1c553c73d6c1b7e89ce028ccb8"
+    },
+    "rawlogIndex": {
+      "path": "portable-coordination/rawlogs/E-INTEGRATION/index.json",
+      "bytes": 4374,
+      "sha256": "e241bb93d9631c580c9174ffde334ef21065ad46c793eeb14bca1c8b6fe4298d"
+    }
+  },
+  "attempts": [
+    {
+      "attempt": "005-complete-bundle",
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -run '^TestIntegration' -count=1",
+      "stdout": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.725s",
+      "exitCode": 0,
+      "rawlogDirectory": "portable-coordination/rawlogs/E-TIMING/attempt-005-complete-bundle",
+      "stdoutSHA256": "5c876189cae830b044a0517d7a3271588555cec1890435cc63b1884b3d508fbc",
+      "commandSHA256": "193d2a31901cb692c91463a60dae619f60ec71a824302d7b064a09c19d077487",
+      "exitCodeFileSHA256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "attempt": "006-registry-assertions",
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test ./qualificationarchive -run '^TestIntegration' -count=1",
+      "stdout": "ok github.com/samuelpmahan/gondola/qualificationarchive 4.540s",
+      "exitCode": 0,
+      "rawlogDirectory": "portable-coordination/rawlogs/E-TIMING/attempt-006-registry-assertions",
+      "stdoutSHA256": "8ac4f751073243b4ecb789a3233c8eee22ad19aebdb4ee7d85806c8ddfb87164",
+      "commandSHA256": "3e3196d93fe232c6c8547c7553f7fd1fc0beb1249c7159cc869b45525b928c07",
+      "exitCodeFileSHA256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "custodyCheck": {
+    "command": "python3 /workspace/scratch/39a56936f173/portable-coordination/rawlogs/E-TIMING/custody-check.py",
+    "exitCode": 0,
+    "stdoutSHA256": "da05899934a79e3d3f834a0fef63ccb391a1ce902be235dac4ee54d6a05f96b8"
+  },
+  "report": {
+    "path": "portable-coordination/reports/E-TIMING.md",
+    "bytes": 2055,
+    "sha256": "2d75a2064d16195ad35473d0b24faae268506d2c73124423388bcda96fc2fddb"
+  },
+  "rawlogIndex": {
+    "path": "portable-coordination/rawlogs/E-TIMING/index.json",
+    "bytes": 2597,
+    "sha256": "bd4b736bc3e922948fef8ac0a434b75936fc7b35eead7b8c01c605a82ae6e873"
+  },
+  "limitations": [
+    "This addendum corrects elapsed-time metadata only; it is not a new test execution or a new behavior claim.",
+    "The original E-INTEGRATION packet remains unchanged and should be read together with this correction.",
+    "No source or fixture files were modified."
+  ]
+}
