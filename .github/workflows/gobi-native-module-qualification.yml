@@ -1,0 +1,134 @@
+name: Gobi native compiled-module qualification
+
+on:
+  push:
+    paths:
+      - 'module-qualification/**'
+      - 'modulequalification/**'
+      - 'cmd/module-qualify/**'
+      - 'cmd/compiled-modules-native/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'moduleabi/**'
+      - 'compiled-modules/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-frontend/analyze/**'
+      - 'compiled-frontend/build/**'
+      - 'compiled-frontend/cmd/gobi-build/**'
+      - 'compiled-frontend/emit/**'
+      - 'compiled-frontend/frontend/runtime/**'
+      - 'compiled-frontend/frontend/shared/**'
+      - 'compiled-frontend/frontend/react/**'
+      - 'compiled-frontend/frontend/dom/**'
+      - 'compiled-frontend/conformance/**'
+      - 'compiled-frontend/go.mod'
+      - 'compiled-frontend/go.sum'
+      - 'compiled-frontend/package.json'
+      - 'compiled-frontend/package-lock.json'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/**'
+      - 'run.sh'
+      - 'EXPECTED.json'
+      - 'run-interaction.sh'
+      - 'run-compiled-modules.sh'
+      - 'run-module-qualification.sh'
+      - '.github/workflows/gobi-native-module-qualification.yml'
+  pull_request:
+    paths:
+      - 'module-qualification/**'
+      - 'modulequalification/**'
+      - 'cmd/module-qualify/**'
+      - 'cmd/compiled-modules-native/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'moduleabi/**'
+      - 'compiled-modules/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-frontend/analyze/**'
+      - 'compiled-frontend/build/**'
+      - 'compiled-frontend/cmd/gobi-build/**'
+      - 'compiled-frontend/emit/**'
+      - 'compiled-frontend/frontend/runtime/**'
+      - 'compiled-frontend/frontend/shared/**'
+      - 'compiled-frontend/frontend/react/**'
+      - 'compiled-frontend/frontend/dom/**'
+      - 'compiled-frontend/conformance/**'
+      - 'compiled-frontend/go.mod'
+      - 'compiled-frontend/go.sum'
+      - 'compiled-frontend/package.json'
+      - 'compiled-frontend/package-lock.json'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/**'
+      - 'run.sh'
+      - 'EXPECTED.json'
+      - 'run-interaction.sh'
+      - 'run-compiled-modules.sh'
+      - 'run-module-qualification.sh'
+      - '.github/workflows/gobi-native-module-qualification.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  native-module-qualification:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      GOTOOLCHAIN: local
+      GOFLAGS: -buildvcs=false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run native module qualification
+        env:
+          GONDOLA_SKIP_NPM_CI: '1'
+          GONDOLA_SKIP_BROWSER_INSTALL: '1'
+        run: bash run-module-qualification.sh --source-commit "$SOURCE_COMMIT"
+
+      - name: Preserve qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-native-module-qualification
+          path: module-qualification/output/attempts/**
+          if-no-files-found: warn
