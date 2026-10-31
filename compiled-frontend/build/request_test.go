@@ -17,6 +17,16 @@ func TestDecodeRequestAcceptsExactV1Request(t *testing.T) {
 	}
 }
 
+func TestDecodeRequestAcceptsDOMBackend(t *testing.T) {
+	got, err := DecodeRequest([]byte(`{"schema":"gobi.build-request/v1","sourceRoot":"/src","entryPackages":["./counter"],"backend":"dom","outputDir":"/out"}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Backend != "dom" {
+		t.Fatalf("decoded backend = %q, want dom", got.Backend)
+	}
+}
+
 func TestDecodeRequestRejectsUnknownFieldsAndTrailingValues(t *testing.T) {
 	valid := `{"schema":"gobi.build-request/v1","sourceRoot":"/src","entryPackages":["./counter"],"backend":"react","outputDir":"/out"}`
 	for name, data := range map[string]string{

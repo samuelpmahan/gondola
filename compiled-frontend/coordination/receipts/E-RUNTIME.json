@@ -1,0 +1,40 @@
+{
+  "job_id": "E-RUNTIME",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Added synchronous state-preserving renderer replacement, instance-based callback fencing, out-of-band swap diagnostics, optional focus snapshot/restore, and post-return held completion delivery. Focused runtime suite passes 23/23; full integration and browser conformance remain with the harness lane.",
+  "evidence": {
+    "focused_test": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test frontend/runtime/runtime.test.mjs",
+      "working_directory": "gondola-backends/compiled-frontend",
+      "toolchain": "Node v22.23.4",
+      "passed": 23,
+      "failed": 0,
+      "exit_code": 0,
+      "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+    },
+    "resolved_test_probe_issue": {
+      "initial_result": "22 passed, 1 failed",
+      "cause": "The fake replacement renderer repeated injected dispatch calls on the later legitimate effect-completion update, which correctly recorded suppressed actions outside the replacement window.",
+      "resolution": "Scoped the test injection to the first replacement update; the rerun passed 23/23."
+    },
+    "coverage": [
+      "Successful replacement preserves encoded state, trace ticks, dispatch sequence, and pending effect correlation without Init/Update/View.",
+      "Retired callbacks from initial and later renderer-local epochs are fenced into separate diagnostics without Gobi trace mutation.",
+      "Optional focus snapshot/restore transfers the keyed identity and selection state; callbacks invoked during restore are fenced.",
+      "Invalid, same-instance, reentrant, and declared-async renderer admissions are rejected before old-renderer teardown.",
+      "A thenable commit after old teardown fails closed and reports unavailable physical renderer state without claiming rollback.",
+      "A valid effect completion injected during replacement remains pending at return, rejects duplicates, and commits once after the microtask.",
+      "Held effect completion is canceled if runtime unmount or replacement failure occurs before its drain."
+    ],
+    "sha256": {
+      "frontend/runtime/runtime.mjs": "a35338302fc391499575fe7d3c7c59c41a3eeaddce23a3039f0a13d84ac94ae2",
+      "frontend/runtime/runtime.test.mjs": "f2fb585601675f60a2994b91b4c8feb4dd77507668bef27ff6e37200ad4c381d"
+    }
+  },
+  "limits": [
+    "Focused tests use stub compiled symbols and renderer APIs; actual React-to-DOM swaps and browser focus/selection behavior are not covered here.",
+    "No full Go/compiled-frontend regression or Chromium integration run was performed in this runtime lane.",
+    "A regular function returning a thenable is detectable only after invocation; if encountered after old teardown, the runtime halts and exposes failure without rollback."
+  ]
+}

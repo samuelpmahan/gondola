@@ -1,0 +1,76 @@
+{
+  "job_id": "XR-R-OBSERVATION",
+  "worker": "N2",
+  "target_job": "R-RUNTIME current observation/unmount repair",
+  "decision": "accepted",
+  "summary": "Current runtime source checks required observation method returns, sinks rejected native Promise returns, reports expected replacement phases, and fails a rejected final unmount without returning success. Independent runtime tests pass 27/27; focused phase probe confirms no unhandled rejections across the reviewed Promise-return cases.",
+  "source_scope": [
+    "compiled-backends/coordination/reports/XR-R-OBSERVATION.md",
+    "compiled-backends/coordination/receipts/XR-R-OBSERVATION.json",
+    "compiled-backends/evidence/reviews/xr-r-observation/**"
+  ],
+  "reviewed_sha256": {
+    "compiled-frontend/frontend/runtime/runtime.mjs": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+    "compiled-frontend/frontend/runtime/runtime.test.mjs": "39790809f3392bb47b3f48d17bfdc40b6fe8628961513f0b1ddf3e69a014e907"
+  },
+  "evidence": {
+    "report_sha256": "029c6f5b36bd4ef19836c3b60253e3a49ed9688af995c1fb6f5aea04993e0a9b",
+    "toolchain": "Node v22.23.4",
+    "runtime_tests": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "result": "passed",
+      "passed": 27,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-r-observation/runtime-node22.log",
+      "log_sha256": "84dd1efb52aa257919276bfe74a858036b03e96c9a432f6219e72880796dd41b"
+    },
+    "syntax_checks": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --check compiled-frontend/frontend/runtime/runtime.mjs",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/reviews/xr-r-observation/runtime-syntax.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --check compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/reviews/xr-r-observation/test-syntax.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "operation_phase_probe": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node compiled-backends/evidence/reviews/xr-r-observation/operation-phase-probe.mjs",
+      "source": "compiled-backends/evidence/reviews/xr-r-observation/operation-phase-probe.mjs",
+      "source_sha256": "176d47bb158e6e876a726cf3402df7cc2cac44d55c39c5b27f8841c99b9bcc1e",
+      "log": "compiled-backends/evidence/reviews/xr-r-observation/operation-phase-probe.log",
+      "log_sha256": "6b377857990840800d9bf6d6d4f2448dff719a13a3bce06aabf78b2eee88c4c5",
+      "result": {
+        "replacement_phases": {
+          "update": "new-commit",
+          "viewRecord": "new-snapshot",
+          "domSnapshot": "new-snapshot",
+          "old_unmount": "old-unmount",
+          "restoreFocus": "focus-restore",
+          "focusState": "focus-capture (rejected before teardown)"
+        },
+        "final_unmount": "returned false with failure stage unmount",
+        "unhandled_rejections": []
+      }
+    },
+    "review_inventory": [
+      "rendererReplacementMethods preflights all required and present focus methods for direct async function/generator prototypes before teardown",
+      "viewSnapshot and domSnapshot perform the call-time thenable check before exact result-shape validation",
+      "captured native Promise.prototype.then attaches a rejection handler without reading an own then getter on a rejected native Promise",
+      "post-teardown operation failures mark the replacement failed and renderer unavailable; the phase reflects the operation being invoked",
+      "performUnmount reports a returned Promise as an unmount failure and returns false without claiming the renderer root is empty"
+    ],
+    "limits": [
+      "No hostile Proxy, accessor, or custom Promise species security guarantee is claimed.",
+      "The direct async preflight regression exercises async update; other operation methods are covered by the shared preflight loop and source inspection.",
+      "No N3 four-app/five-fixture browser matrix was run by this review.",
+      "Node emitted a non-failing experimental UNDICI-EHPA EnvHttpProxyAgent warning.",
+      "No production sources, tests, or Git state were changed during this review."
+    ]
+  }
+}

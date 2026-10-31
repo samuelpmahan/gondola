@@ -1,0 +1,123 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR--DEMO",
+  "worker": "N6",
+  "decision": "accepted",
+  "summary": "N5's backends-only build, five-fixture conformance, and HTTP demo evidence is internally consistent with current source/output pins. Both retained failed-attempt archives verify completely; attempt 01 is accurately recorded as unavailable. Full fresh CI after publication remains pending.",
+  "source_scope": [
+    "compiled-backends/coordination/reports/E-DEMO.md",
+    "compiled-backends/coordination/receipts/E-DEMO.json",
+    "compiled-backends/artifacts/compiled/react/**",
+    "compiled-backends/artifacts/compiled/dom/**",
+    "compiled-backends/artifacts/conformance/{counter,form,list,effect,list-growth}.json.*",
+    "compiled-backends/artifacts/demo-smoke.json",
+    "compiled-backends/artifacts/demo.png",
+    "compiled-backends/artifacts/failed-attempts/demo-attempt-02/**",
+    "compiled-backends/artifacts/failed-attempts/demo-attempt-03/**"
+  ],
+  "findings": [],
+  "execution": {
+    "audit": {
+      "command": "python3 compiled-backends/evidence/reviews/xr-demo/audit_n5.py",
+      "result": "passed",
+      "script": "compiled-backends/evidence/reviews/xr-demo/audit_n5.py",
+      "script_sha256": "0cc3cd1e800531aad3588881a2a612a170e5e647d3768d19ee915f22aac053c4",
+      "output": "compiled-backends/evidence/reviews/xr-demo/audit.json",
+      "output_sha256": "037d27025d2338f1f406b2a05656d5c24c68e64f8ae879997c3b3d61892c82e1",
+      "log": "compiled-backends/evidence/reviews/xr-demo/audit-command.log",
+      "log_sha256": "037d27025d2338f1f406b2a05656d5c24c68e64f8ae879997c3b3d61892c82e1",
+      "receipt_sha256": "afbbcbad47da8547f88f0eb2bd176af3a1912f0ca83cf7f30055c7983be16166",
+      "report_sha256": "2afd8724b520d8f67a554f92d10819ff32392631681a6769f7ffcf258fe846a7"
+    },
+    "sourcePins": {
+      "count": 126,
+      "beforeAfterEqual": true,
+      "allCurrentBytesVerified": true
+    },
+    "backendBuilds": {
+      "react": {
+        "apps": 4,
+        "files": 209,
+        "backendTags": [
+          "react"
+        ]
+      },
+      "dom": {
+        "apps": 4,
+        "files": 209,
+        "backendTags": [
+          "dom"
+        ]
+      },
+      "samePaths": true,
+      "differentPaths": [
+        "buildmanifest.json",
+        "apps/counter-b05e9eb0e4e6/gobi-compiled.mjs",
+        "apps/effect-ff8449e8f5b2/gobi-compiled.mjs",
+        "apps/form-a3fe6b48b000/gobi-compiled.mjs",
+        "apps/list-f8359aa2866d/gobi-compiled.mjs"
+      ],
+      "identicalCompanionFiles": 204,
+      "rawBundleHashesDiffer": true
+    },
+    "conformance": {
+      "status": "matched",
+      "fixtures": [
+        "counter",
+        "form",
+        "list",
+        "effect",
+        "list-growth"
+      ],
+      "nativeDirectTraceObjectsEqual": true,
+      "checkerProfiles": [
+        "react",
+        "dom",
+        "alternatingSwap"
+      ],
+      "totals": {
+        "ticks": 43,
+        "swaps": 37,
+        "focusSwaps": 9,
+        "mutationControls": 45
+      },
+      "browserPageErrors": 0,
+      "wasmRequestsOrApiAttempts": 0
+    },
+    "demoSmoke": {
+      "status": "passed as recorded",
+      "checks": 5,
+      "errors": 0,
+      "wasmRequests": 0,
+      "outputPinsStable": true
+    },
+    "retryArchives": {
+      "attempt02": {
+        "manifestEntries": 519,
+        "verified": 519,
+        "missingOrBad": 0,
+        "unexpected": 0
+      },
+      "attempt03": {
+        "manifestEntries": 513,
+        "verified": 513,
+        "missingOrBad": 0,
+        "unexpected": 0
+      },
+      "attempt01": "unavailable as recorded; not reconstructed or claimed retained"
+    },
+    "separateGates": {
+      "inheritedRetry52594": "lead-reported exit 0; separate from N5",
+      "compiledFrontendPartial54490": "lead-reported exit 0; separate from N5",
+      "fullFreshCiAfterPublication": "pending"
+    }
+  },
+  "limits": [
+    "N5 selected --backends-only and did not run the inherited full frontend regression chain.",
+    "The independent audit checked preserved capture/pin integrity; it did not rerun the compiler, browser matrix, or HTTP smoke.",
+    "The two inherited gates are recorded as separate lead-reported results and are not attributed to N5.",
+    "Full fresh CI after publication remains pending.",
+    "No production, runner, demo, conformance, dependency, or Git files were modified."
+  ],
+  "report_sha256": "c8d5278c2c922cfb8b16c9249d341cc59be66f549b0f9c9d84107bc57f30b3f6"
+}

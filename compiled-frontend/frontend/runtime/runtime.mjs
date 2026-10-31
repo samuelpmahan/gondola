@@ -3,6 +3,10 @@ const COMPILED_SCHEMA = "gobi.compiled-module/v1";
 const APP_SCHEMA = "gobi.app-ir/v1";
 const HOST_SCRIPT_SCHEMA = "gobi.host-script/v1";
 const GO_STRUCT_MARKER = "__goStructValue";
+const ASYNC_FUNCTION_PROTOTYPE = Object.getPrototypeOf(async function () {});
+const ASYNC_GENERATOR_FUNCTION_PROTOTYPE = Object.getPrototypeOf(async function* () {});
+const NATIVE_PROMISE_PROTOTYPE = Promise.prototype;
+const NATIVE_PROMISE_THEN = Promise.prototype.then;
 const SUPPORTED_EFFECT_KINDS = new Set(["fixture.request"]);
 const SUPPORTED_CAPABILITIES = new Set([
   "view.node",
@@ -353,6 +357,28 @@ function requireRenderer(renderer) {
   return renderer;
 }
 
+function rendererReplacementMethods(renderer) {
+  const checked = requireRenderer(renderer);
+  const update = checked.update;
+  const readView = checked.viewRecord;
+  const readDOM = checked.domSnapshot;
+  const unmount = checked.unmount;
+  const focusState = checked.focusState;
+  const restoreFocus = checked.restoreFocus;
+  if ((typeof focusState === "function") !== (typeof restoreFocus === "function")) {
+    throw new TypeError("renderer focus support must provide both focusState() and restoreFocus(state)");
+  }
+  const methods = [update, readView, readDOM, unmount];
+  if (typeof focusState === "function") methods.push(focusState, restoreFocus);
+  for (const method of methods) {
+    const methodPrototype = Object.getPrototypeOf(method);
+    if (methodPrototype === ASYNC_FUNCTION_PROTOTYPE || methodPrototype === ASYNC_GENERATOR_FUNCTION_PROTOTYPE) {
+      throw new TypeError("renderer replacement methods must complete synchronously");
+    }
+  }
+  return { renderer: checked, update, viewRecord: readView, domSnapshot: readDOM, unmount, focusState, restoreFocus };
+}
+
 function valueSnapshot(encoder, state, stateType) {
   const value = encoder.gobiEncodeState(state, stateType);
   if (!isRecord(value) || value.typeId !== stateType || typeof value.kind !== "string") {
@@ -361,8 +387,9 @@ function valueSnapshot(encoder, state, stateType) {
   return cloneJson(value);
 }
 
-function viewSnapshot(renderer) {
-  const view = renderer.viewRecord();
+function viewSnapshot(renderer, readView = renderer.viewRecord) {
+  const view = readView.call(renderer);
+  noThenable(view, "renderer.viewRecord()");
   exactKeys(view, ["tree", "bindings"], "ViewRecord");
   if (!isRecord(view.tree) || !Array.isArray(view.bindings)) {
     throw new TypeError("renderer.viewRecord() must return {tree,bindings[]} ");
@@ -370,8 +397,9 @@ function viewSnapshot(renderer) {
   return cloneJson(view);
 }
 
-function domSnapshot(renderer) {
-  const dom = renderer.domSnapshot();
+function domSnapshot(renderer, readDOM = renderer.domSnapshot) {
+  const dom = readDOM.call(renderer);
+  noThenable(dom, "renderer.domSnapshot()");
   exactKeys(dom, ["normalization", "html", "controls"], "DOMSnapshot");
   if (dom.normalization !== "outerHTML-v1" || typeof dom.html !== "string" || !Array.isArray(dom.controls)) {
     throw new TypeError("renderer.domSnapshot() must return {normalization:'outerHTML-v1',html,controls[]}");
@@ -387,10 +415,56 @@ function domSnapshot(renderer) {
   return { normalization: dom.normalization, html: dom.html, controls };
 }
 
+function focusStateSnapshot(value) {
+  if (value === null) return null;
+  if (!isRecord(value)) {
+    throw new TypeError("renderer.focusState() must return null or a valid focus record");
+  }
+  let focus;
+  try {
+    focus = ownDataRecord(
+      value,
+      ["identity", "selectionStart", "selectionEnd", "selectionDirection"],
+      "renderer focus record",
+    );
+  } catch (error) {
+    throw new TypeError(`renderer.focusState() must return null or a valid focus record: ${error.message}`);
+  }
+  if (typeof focus.identity !== "string"
+      || !Number.isSafeInteger(focus.selectionStart) || focus.selectionStart < 0
+      || !Number.isSafeInteger(focus.selectionEnd) || focus.selectionEnd < focus.selectionStart
+      || typeof focus.selectionDirection !== "string") {
+    throw new TypeError("renderer.focusState() must return null or a valid focus record");
+  }
+  return {
+    identity: focus.identity,
+    selectionStart: focus.selectionStart,
+    selectionEnd: focus.selectionEnd,
+    selectionDirection: focus.selectionDirection,
+  };
+}
+
+function observeNativePromiseRejection(value) {
+  if (value === null || typeof value !== "object") return false;
+  try {
+    // The intrinsic brand check does not read or invoke a thenable's `then` method.
+    // For a Promise, the rejection handler fulfills this sink; the original Promise remains rejected.
+    NATIVE_PROMISE_THEN.call(value, undefined, () => undefined);
+    return true;
+  } catch {
+    // Non-Promises (including thenables) fail the intrinsic brand check.
+    return false;
+  }
+}
+
 function noThenable(value, label) {
-  if (value !== null && (typeof value === "object" || typeof value === "function")
-      && typeof value.then === "function") {
-    throw new TypeError(`${label} must complete synchronously`);
+  if (value !== null && (typeof value === "object" || typeof value === "function")) {
+    if (observeNativePromiseRejection(value)) {
+      throw new TypeError(`${label} must complete synchronously`);
+    }
+    if (typeof value.then === "function") {
+      throw new TypeError(`${label} must complete synchronously`);
+    }
   }
 }
 
@@ -483,7 +557,7 @@ export function mountCompiledApp({
 
   const { component, symbols } = getComponent(compiled, componentId);
   const stateEncoder = requireEncoder(encoder);
-  const viewRenderer = requireRenderer(renderer);
+  let viewRenderer = requireRenderer(renderer);
   if (effectHost !== null && typeof effectHost.request !== "function") {
     throw new TypeError("effectHost must provide request(request, deliver) or be null");
   }
@@ -496,10 +570,20 @@ export function mountCompiledApp({
   let draining = false;
   let admittingCompletion = false;
   let recordingDeferredAction = false;
+  let replacingRenderer = false;
+  let replacementCompletionQueued = false;
+  let rendererUnavailable = false;
   let updateSequence = 0n;
   const ticks = [];
   const pendingEffects = new Map();
   const deferred = [];
+  let rendererGeneration = 1;
+  let nextRendererGeneration = 2;
+  let rendererReplacementAttempt = 0;
+  const rendererReplacements = [];
+  const fencedRendererCallbacks = [];
+  let rendererLease = { generation: rendererGeneration, status: "active" };
+  let lastRawView = null;
   let lastLogicalView = null;
   let lastFailure = null;
 
@@ -513,6 +597,7 @@ export function mountCompiledApp({
     };
     lastFailure = failure;
     halted = true;
+    cancelHeldReplacementCompletions();
     try { onFailure?.(cloneJson(failure)); } catch { /* observers cannot mask the primary failure */ }
     return failure;
   }
@@ -526,6 +611,47 @@ export function mountCompiledApp({
     return valueSnapshot(stateEncoder, state, component.stateType);
   }
 
+  function cancelHeldReplacementCompletions() {
+    for (let index = deferred.length - 1; index >= 0; index -= 1) {
+      const item = deferred[index];
+      if (item.kind !== "completion" || item.heldByReplacement !== true) continue;
+      const pending = pendingEffects.get(keyFor(item.completion));
+      if (pending && !pending.completed) pending.queued = false;
+      deferred.splice(index, 1);
+    }
+    replacementCompletionQueued = false;
+  }
+
+  function scheduleReplacementCompletionDrain() {
+    queueMicrotask(() => {
+      if (disposed || halted) {
+        cancelHeldReplacementCompletions();
+        return;
+      }
+      if (!busy) drainDeferred(true);
+    });
+  }
+
+  function runtimeSnapshot() {
+    if (!initialized) throw new RuntimeFailure("snapshot", "runtime has not initialized");
+    if (rendererUnavailable) {
+      throw new RuntimeFailure("snapshot", "renderer state is unavailable after a failed replacement");
+    }
+    return {
+      state: readState(),
+      view: disposed ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer),
+      dom: domSnapshot(viewRenderer),
+    };
+  }
+
+  function rendererDiagnostics() {
+    return cloneJson({
+      currentGeneration: rendererLease.status === "active" ? rendererGeneration : null,
+      replacements: rendererReplacements,
+      fencedCallbacks: fencedRendererCallbacks,
+    });
+  }
+
   function recordTick({ action, message, dispatchId, requestedEffects = [], completedEffects = [] }) {
     const tick = {
       index: ticks.length,
@@ -535,8 +661,8 @@ export function mountCompiledApp({
       state: readState(),
       requestedEffects: cloneJson(requestedEffects),
       completedEffects: cloneJson(completedEffects),
-      view: disposed ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer),
-      dom: domSnapshot(viewRenderer),
+      view: disposed || rendererUnavailable ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer),
+      dom: rendererUnavailable ? null : domSnapshot(viewRenderer),
     };
     ticks.push(tick);
     try { onTick?.(cloneJson(tick)); } catch (error) {
@@ -545,20 +671,50 @@ export function mountCompiledApp({
     return tick;
   }
 
-  function rendererCallbacks() {
+  function rendererCallbacks(lease) {
+    function fencedCallback(kind, renderEpoch = null) {
+      if (lease.status === "retired" || lease.status === "failed") {
+        fencedRendererCallbacks.push({
+          generation: lease.generation,
+          kind,
+          renderEpoch: Number.isSafeInteger(renderEpoch) ? renderEpoch : null,
+        });
+        return {
+          accepted: false,
+          dispatchId: null,
+          stale: true,
+          error: "renderer callback fenced after replacement",
+        };
+      }
+      if (lease.status !== "active" && lease.status !== "unmounted") {
+        return {
+          accepted: false,
+          dispatchId: null,
+          stale: true,
+          error: "renderer callback fenced during replacement",
+        };
+      }
+      return null;
+    }
     return {
       dispatch(action, message) {
+        const fenced = fencedCallback("dispatch");
+        if (fenced !== null) return fenced;
+        if (lease.status === "unmounted") return runtime.recordStaleAction(action);
         return runtime.dispatch(action, message);
       },
       onStaleAction(action, renderEpoch) {
+        const fenced = fencedCallback("stale", renderEpoch);
+        if (fenced !== null) return fenced;
         return runtime.recordStaleAction(action, renderEpoch);
       },
     };
   }
 
   function renderView(view) {
-    const result = viewRenderer.update(view, rendererCallbacks());
+    const result = viewRenderer.update(view, rendererCallbacks(rendererLease));
     noThenable(result, "renderer.update(view)");
+    lastRawView = view;
     lastLogicalView = viewSnapshot(viewRenderer);
   }
 
@@ -702,11 +858,14 @@ export function mountCompiledApp({
     deferred.push(item);
   }
 
-  function drainDeferred() {
+  function drainDeferred(includeHeldReplacementCompletions = false) {
     if (busy || draining) return;
     draining = true;
     try {
       while (deferred.length > 0 && !busy) {
+        if (deferred[0].kind === "completion"
+            && deferred[0].heldByReplacement === true
+            && !includeHeldReplacementCompletions) break;
         const item = deferred.shift();
         if (item.kind === "completion") {
           runBusy(() => processCheckedCompletion(item.completion, true));
@@ -729,7 +888,7 @@ export function mountCompiledApp({
     if (pending.request.effect.reply !== completion.message.name) {
       return { error: "effect completion message does not match the declared reply" };
     }
-    if (disposed || halted) return { error: "runtime is disposed or halted" };
+      if (disposed || halted) return { error: "runtime is disposed or halted" };
     return { key, pending };
   }
 
@@ -748,6 +907,9 @@ export function mountCompiledApp({
   }
 
   function dispatch(actionInput, messageInput) {
+    if (replacingRenderer) {
+      return { accepted: false, dispatchId: null, error: "dispatch rejected during renderer replacement" };
+    }
     if (busy) {
       if (admittingCompletion) {
         return { accepted: false, dispatchId: null, error: "reentrant dispatch rejected during completion admission" };
@@ -784,6 +946,9 @@ export function mountCompiledApp({
   }
 
   function recordStaleAction(actionInput, renderEpoch = null) {
+    if (replacingRenderer) {
+      return { accepted: false, dispatchId: null, stale: true, error: "stale action rejected during renderer replacement" };
+    }
     if (busy) {
       if (admittingCompletion) {
         return { accepted: false, dispatchId: null, stale: true, error: "reentrant stale action rejected during completion admission" };
@@ -810,8 +975,11 @@ export function mountCompiledApp({
   function performUnmount() {
     if (disposed) return false;
     disposed = true;
+    rendererLease.status = "unmounted";
+    cancelHeldReplacementCompletions();
     try {
-      viewRenderer.unmount();
+      const result = viewRenderer.unmount();
+      noThenable(result, "renderer.unmount()");
     } catch (error) {
       reportFailure("unmount", error);
       return false;
@@ -820,6 +988,7 @@ export function mountCompiledApp({
   }
 
   function unmount() {
+    if (replacingRenderer) return false;
     if (busy) {
       if (admittingCompletion) return false;
       appendDeferred({ kind: "unmount" });
@@ -828,6 +997,165 @@ export function mountCompiledApp({
     const result = runBusy(() => performUnmount());
     drainDeferred();
     return result;
+  }
+
+  function replaceRenderer(nextRenderer) {
+    const attempt = ++rendererReplacementAttempt;
+    const fromGeneration = rendererLease.generation;
+    if (busy) {
+      rendererReplacements.push({
+        attempt,
+        fromGeneration,
+        toGeneration: null,
+        outcome: "rejected",
+        phase: "reentrant",
+        oldUnmounted: false,
+        focusCaptured: false,
+        focusRestored: false,
+      });
+      throw new TypeError("reentrant renderer replacement rejected");
+    }
+    if (disposed || halted || !initialized) {
+      rendererReplacements.push({
+        attempt,
+        fromGeneration,
+        toGeneration: null,
+        outcome: "rejected",
+        phase: "runtime-state",
+        oldUnmounted: false,
+        focusCaptured: false,
+        focusRestored: false,
+      });
+      throw new TypeError(disposed ? "runtime is unmounted" : halted ? "runtime is halted" : "runtime has not initialized");
+    }
+
+    busy = true;
+    replacingRenderer = true;
+    const oldRenderer = viewRenderer;
+    const oldLease = rendererLease;
+    const oldLeaseStatus = oldLease.status;
+    oldLease.status = "transitioning";
+    let nextLease = null;
+    let nextGeneration = null;
+    let phase = "admission";
+    let oldUnmountAttempted = false;
+    let oldUnmounted = false;
+    let focusCaptured = false;
+    let focusRestored = false;
+    let resultSnapshot = null;
+    let failureToThrow = null;
+
+    try {
+      const nextMethods = rendererReplacementMethods(nextRenderer);
+      if (nextMethods.renderer === oldRenderer) {
+        throw new TypeError("cannot replace a renderer with itself");
+      }
+      const oldMethods = rendererReplacementMethods(oldRenderer);
+      nextGeneration = nextRendererGeneration++;
+      nextLease = { generation: nextGeneration, status: "preparing" };
+
+      let focus = null;
+      const focusSupported = typeof oldMethods.focusState === "function"
+        && typeof nextMethods.restoreFocus === "function";
+      if (focusSupported) {
+        phase = "focus-capture";
+        const capturedFocus = oldMethods.focusState.call(oldRenderer);
+        noThenable(capturedFocus, "renderer.focusState()");
+        focus = focusStateSnapshot(capturedFocus);
+        focusCaptured = focus !== null;
+      }
+
+      phase = "old-unmount";
+      oldUnmountAttempted = true;
+      const oldUnmountResult = oldMethods.unmount.call(oldMethods.renderer);
+      noThenable(oldUnmountResult, "renderer.unmount()");
+      oldUnmounted = true;
+      oldLease.status = "retired";
+      rendererUnavailable = true;
+
+      phase = "new-commit";
+      const updateResult = nextMethods.update.call(nextMethods.renderer, lastRawView, rendererCallbacks(nextLease));
+      noThenable(updateResult, "renderer.update(view)");
+      if (focusSupported && focusCaptured) {
+        phase = "focus-restore";
+        const restoreResult = nextMethods.restoreFocus.call(nextMethods.renderer, focus);
+        noThenable(restoreResult, "renderer.restoreFocus(state)");
+        if (restoreResult === false) {
+          throw new TypeError("new renderer could not restore the captured focus state");
+        }
+        if (restoreResult !== true) {
+          throw new TypeError("renderer.restoreFocus(state) must return a boolean");
+        }
+        focusRestored = true;
+      }
+
+      phase = "new-snapshot";
+      const nextView = viewSnapshot(nextMethods.renderer, nextMethods.viewRecord);
+      const nextDOM = domSnapshot(nextMethods.renderer, nextMethods.domSnapshot);
+      const nextState = readState();
+      resultSnapshot = { state: nextState, view: nextView, dom: nextDOM };
+
+      nextLease.status = "active";
+      viewRenderer = nextMethods.renderer;
+      rendererLease = nextLease;
+      rendererGeneration = nextGeneration;
+      lastLogicalView = nextView;
+      rendererUnavailable = false;
+      rendererReplacements.push({
+        attempt,
+        fromGeneration,
+        toGeneration: nextGeneration,
+        outcome: "committed",
+        phase: "complete",
+        oldUnmounted: true,
+        focusCaptured,
+        focusRestored,
+      });
+    } catch (error) {
+      if (!oldUnmountAttempted) {
+        oldLease.status = oldLeaseStatus;
+        cancelHeldReplacementCompletions();
+        rendererReplacements.push({
+          attempt,
+          fromGeneration,
+          toGeneration: nextGeneration,
+          outcome: "rejected",
+          phase,
+          oldUnmounted: false,
+          focusCaptured,
+          focusRestored: false,
+        });
+        failureToThrow = error;
+      } else {
+        oldLease.status = oldUnmounted ? "retired" : "failed";
+        if (nextLease) nextLease.status = "failed";
+        rendererUnavailable = true;
+        const failure = reportFailure("renderer-replacement", error);
+        rendererReplacements.push({
+          attempt,
+          fromGeneration,
+          toGeneration: nextGeneration,
+          outcome: "failed",
+          phase,
+          oldUnmounted,
+          focusCaptured,
+          focusRestored,
+        });
+        failureToThrow = new RuntimeFailure("renderer-replacement", failure.message, error);
+      }
+    } finally {
+      replacingRenderer = false;
+      busy = false;
+      if (replacementCompletionQueued) {
+        replacementCompletionQueued = false;
+        scheduleReplacementCompletionDrain();
+      } else {
+        drainDeferred();
+      }
+    }
+
+    if (failureToThrow !== null) throw failureToThrow;
+    return resultSnapshot;
   }
 
   const runtime = {
@@ -859,7 +1187,12 @@ export function mountCompiledApp({
         }
         const { pending } = status;
         pending.queued = true;
-        appendDeferred({ kind: "completion", completion: checked });
+        if (replacingRenderer) replacementCompletionQueued = true;
+        appendDeferred({
+          kind: "completion",
+          completion: checked,
+          heldByReplacement: replacingRenderer,
+        });
         return { accepted: true, queued: true, dispatchId: null };
       }
       const result = processCheckedCompletion(checked);
@@ -871,14 +1204,9 @@ export function mountCompiledApp({
     trace() {
       return cloneJson(trace);
     },
-    snapshot() {
-      if (!initialized) throw new RuntimeFailure("snapshot", "runtime has not initialized");
-      return {
-        state: readState(),
-        view: disposed ? cloneJson(lastLogicalView) : viewSnapshot(viewRenderer),
-        dom: domSnapshot(viewRenderer),
-      };
-    },
+    snapshot: runtimeSnapshot,
+    replaceRenderer,
+    rendererDiagnostics,
     unmount,
     failure() {
       return lastFailure === null ? null : cloneJson(lastFailure);

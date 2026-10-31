@@ -1,0 +1,69 @@
+{
+  "job_id": "E-DOM",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Added a synchronous native DOM renderer with keyed reconciliation, controlled bindings, focus and selection preservation, callback fencing, outerHTML-v1 snapshots, and physical unmount. Extracted descriptor-based view validation for shared use by React and DOM. Focused Chromium and React regressions pass; the integrated four-app/five-fixture matrix remains pending N3.",
+  "source_scope": [
+    "compiled-frontend/frontend/dom/renderer.mjs",
+    "compiled-frontend/frontend/dom/renderer.test.mjs",
+    "compiled-frontend/frontend/dom/e-dom-dom.test.log",
+    "compiled-frontend/frontend/dom/e-dom-react.test.log",
+    "compiled-frontend/frontend/shared/view.mjs",
+    "compiled-frontend/frontend/react/renderer.mjs",
+    "compiled-backends/coordination/reports/E-DOM.md",
+    "compiled-backends/coordination/receipts/E-DOM.json"
+  ],
+  "evidence": {
+    "report_sha256": "8b536abbb8e742bb7a8968558d94391e6c633df3ae1f5b35979709290efc318d",
+    "preserved_red": {
+      "command": "node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+      "result": "exit 1 before implementation because frontend/dom/renderer.mjs did not exist (ERR_MODULE_NOT_FOUND)",
+      "toolchain": "Node v24.22.1"
+    },
+    "tests": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+        "toolchain": "Node v22.23.4; Chromium 153.0.8010.0 at /tmp/chromium",
+        "passed": 3,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-frontend/frontend/dom/e-dom-dom.test.log",
+        "log_sha256": "eabd90e814ac4432f082ce9f451b2f280fb3ae11c04eb56936755950ea2a3769"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.test.mjs compiled-frontend/frontend/react/bindings.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 25,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-frontend/frontend/dom/e-dom-react.test.log",
+        "log_sha256": "509eb40226b009f448500451e4202ad1cdd710aeb4faf26fb60f3bfcd99e956c"
+      }
+    ],
+    "static_checks": {
+      "command": "node --check compiled-frontend/frontend/shared/view.mjs && node --check compiled-frontend/frontend/dom/renderer.mjs && node --check compiled-frontend/frontend/react/renderer.mjs && git diff --check -- compiled-frontend/frontend/shared/view.mjs compiled-frontend/frontend/dom/renderer.mjs compiled-frontend/frontend/dom/renderer.test.mjs compiled-frontend/frontend/react/renderer.mjs",
+      "toolchain": "Node v22.23.4",
+      "result": "passed"
+    },
+    "changes": [
+      "The DOM renderer builds real browser nodes without importing React or ReactDOM and performs synchronous keyed reconciliation.",
+      "View validation snapshots descriptors and admits the observed GoScript struct and GoSlice ABI without invoking getters or spare-capacity factories.",
+      "React and DOM share the same validation and view-record helpers; the React regression suite remains green.",
+      "Focus snapshots and restoration use the existing React logical identity record, with selection direction preserved.",
+      "DOM snapshots return the mounted root outerHTML and ordered live controls; unmount removes all container children and event listeners."
+    ],
+    "sha256": {
+      "compiled-frontend/frontend/dom/renderer.mjs": "86fed3d2bd883a1de533731148c6b5238ac220343ccf9db6b4cc5340a0a7a38e",
+      "compiled-frontend/frontend/dom/renderer.test.mjs": "7c7d472e2994869a1798bad82c7b466ba653734e35abdaaad9d0295e5347ca29",
+      "compiled-frontend/frontend/shared/view.mjs": "ef2aaa7daf021b3e46dd5cec159951ec1e84d4ea3d7f3888ec6b8c27d7a959e0",
+      "compiled-frontend/frontend/react/renderer.mjs": "2bb7c59b3d160c09ec9fea61d382df7c4e07ed97ba22c6c790f9682fa00a26c6",
+      "compiled-frontend/frontend/dom/e-dom-dom.test.log": "eabd90e814ac4432f082ce9f451b2f280fb3ae11c04eb56936755950ea2a3769",
+      "compiled-frontend/frontend/dom/e-dom-react.test.log": "509eb40226b009f448500451e4202ad1cdd710aeb4faf26fb60f3bfcd99e956c"
+    },
+    "limits": [
+      "N2 did not execute the integrated four-app/five-fixture native/direct-JS/DOM oracle; N3 owns that matrix, which remains pending.",
+      "Node 22 emits a non-failing UNDICI-EHPA experimental EnvHttpProxyAgent warning from the Playwright/undici environment."
+    ]
+  },
+  "reported_stage": "renderer_implemented_pending_integrated_four_app_five_fixture_matrix"
+}

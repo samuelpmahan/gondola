@@ -1,0 +1,89 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR--HARNESS",
+  "worker": "N6",
+  "decision": "accepted",
+  "summary": "Attempt-10's preserved five-fixture harness captures and checker semantics pass independent review. The 43-tick, 37-swap, 9-focus-swap, 45-mutation-control matrix is matched with stable pins and exact native/direct trace equality. The stale-action evidence distinguishes a retired React callback fenced out of band from a separate active DOM missing-target driver attempt; it does not claim invocation of a retained DOM listener.",
+  "source_scope": [
+    "compiled-backends/conformance/browser.mjs",
+    "compiled-backends/conformance/check.mjs",
+    "compiled-backends/conformance/run.mjs",
+    "compiled-backends/conformance/swap-schedules.json",
+    "compiled-backends/conformance/check.test.mjs",
+    "compiled-frontend/frontend/runtime/runtime.mjs",
+    "compiled-frontend/frontend/react/renderer.mjs",
+    "compiled-frontend/frontend/dom/renderer.mjs",
+    "compiled-frontend/frontend/shared/view.mjs",
+    "compiled-backends/artifacts/conformance-captures/attempt-10/**",
+    "compiled-backends/coordination/reports/E-HARNESS.md",
+    "compiled-backends/coordination/receipts/E-HARNESS.json"
+  ],
+  "reviewed_sha256": {
+    "compiled-backends/conformance/browser.mjs": "9c0f4e41c918c1104b10fb29a0a218bd2b723280bcf6573a5350952041a5179e",
+    "compiled-backends/conformance/check.mjs": "8445bb81fa6fc3822f58ca7d090d48eaa91596e99585d14c88180c30f9c201a3",
+    "compiled-backends/conformance/run.mjs": "bb4d5036f95695600a07c55b01852c784e98ad0fd7357e08fe22a33fa3bfe73b",
+    "compiled-backends/conformance/swap-schedules.json": "f0bf47cf0ac5c17f876a316508729e6d29082feecf08df9813538c5a49b24053",
+    "compiled-backends/conformance/check.test.mjs": "5cbab8a25128b39ebb78fc1b942f9f931faad67671b6793e59f8020f2a781b66",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+    "compiled-frontend/frontend/react/renderer.mjs": "35581215d912c0b19a63de9f122b75fef774c717100590d272cf9e7731943f6a",
+    "compiled-frontend/frontend/dom/renderer.mjs": "8037c0b9d3430310aa9492ab9d1041207e33276f8a6dce219b84b2af17efa166",
+    "compiled-frontend/frontend/shared/view.mjs": "ef2aaa7daf021b3e46dd5cec159951ec1e84d4ea3d7f3888ec6b8c27d7a959e"
+  },
+  "findings": [],
+  "execution": {
+    "checkerTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/conformance/browser.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-backends/conformance/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --test compiled-backends/conformance/check.test.mjs",
+      "toolchain": "Node v22.23.4",
+      "syntaxChecks": "passed",
+      "passed": 5,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-harness/check-tests.log",
+      "log_sha256": "952ec44ca4dbef3136663a0a1e8cf60814619a21efc08460fc702d1e3bff9c19"
+    },
+    "attempt10ArtifactAudit": {
+      "command": "python3 compiled-backends/evidence/reviews/xr-harness/audit_attempt10.py",
+      "result": "passed",
+      "fixture_count": 5,
+      "before_after_pin_pairs": 170,
+      "pin_entries_verified": 340,
+      "build_outputs_verified": 20,
+      "browser_bundles_verified": 5,
+      "native_direct_trace_objects_equal": true,
+      "all_run_and_checker_records_matched": true,
+      "totals": {
+        "ticks": 43,
+        "swaps": 37,
+        "focus_swaps": 9,
+        "mutation_controls": 45
+      },
+      "output": "compiled-backends/evidence/reviews/xr-harness/attempt10-audit.json",
+      "output_sha256": "36b57ff8763e8d00af7561afbae2f0f04d5c5b266bc44931a814a5b411277682",
+      "script": "compiled-backends/evidence/reviews/xr-harness/audit_attempt10.py",
+      "script_sha256": "71825969b9145aa21a8e45d582894f5bf719fef7c9a406938f91699955b51fe8",
+      "log": "compiled-backends/evidence/reviews/xr-harness/audit-command.log",
+      "log_sha256": "0700b8e654bf8287596b862dee92aae7efa4093c450607430dd82d0958a78536"
+    },
+    "attempt10Matrix": {
+      "evidence_reviewed": "compiled-backends/artifacts/conformance-captures/attempt-10",
+      "execution": "preserved N3 capture; matrix not rerun during independent review",
+      "fixtures": ["counter", "form", "list", "effect", "list-growth"],
+      "toolchain_recorded_by_N3": {
+        "node": "v22.23.4",
+        "playwright": "1.64.1",
+        "chromium": "153.0.8010.0",
+        "native_go": "go1.24.0",
+        "frontend_build_go": "go1.27.3"
+      },
+      "current_source_pin_values_verified": true
+    },
+    "historicalCaptureFingerprints": "compiled-backends/evidence/reviews/xr-harness/attempt10-audit.json"
+  },
+  "limits": [
+    "The five-fixture Chromium matrix was reviewed from N3's preserved captures and was not rerun by N6.",
+    "Attempts 06, 07, and 08 remain historical diagnostics; their outcomes are not attributed to attempt-10 source pins.",
+    "The lifetime probe invokes active renderer onStaleAction for a missing target; it does not demonstrate a retained DOM listener invocation.",
+    "No production, harness, N3-owned output, dependency, or Git files were modified."
+  ],
+  "report_sha256": "161f4c0886f3d868fb709afe9cd47e6b80a5e5ec7b32fbcd3ba26131b0ed6243"
+}

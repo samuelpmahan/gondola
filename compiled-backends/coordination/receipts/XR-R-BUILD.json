@@ -1,0 +1,61 @@
+{
+  "job_id": "XR-R-BUILD",
+  "worker": "N2",
+  "target_job": "R-BUILD",
+  "decision": "accepted",
+  "summary": "Independent review confirms the zero-valued GobiBackend adapter now takes the legacy React AppIR validation path and returns no files without panicking. Nil-receiver handling and the captured identity guard remain ahead of the fallback. Fresh Go 1.27.3 emitter/build tests, Go 1.24.0 compilercontract tests, and the preserved reproduction pass.",
+  "source_scope": [
+    "compiled-backends/coordination/reports/XR-R-BUILD.md",
+    "compiled-backends/coordination/receipts/XR-R-BUILD.json",
+    "compiled-backends/evidence/reviews/xr-r-build/**"
+  ],
+  "reviewed_sha256": {
+    "compiled-frontend/emit/backend.go": "b2486fff69d106a4801e5a5400c961b3b6ab55ff9be440dcbdec5a9631f3d3ed",
+    "compiled-frontend/emit/backend_test.go": "dc5c6a1ce143a1d79908eba2805879ff14d7f80d8d27e4ce650fccedf7e4c015",
+    "compiled-backends/evidence/reviews/xr-build/zero_backend_repro.go.txt": "f5cd990adeb80587d8decbfd9fdf13e6f7e779cbb11499f6f99502668f083196",
+    "compiled-backends/coordination/reports/R-BUILD.md": "fe16d107d931b7783cc8d8189513f507f1221378bc24bae0a3a1b101b19032d3",
+    "compiled-backends/coordination/receipts/R-BUILD.json": "3b83a0fb543378bb2db4e99c2281995c372a4d022f54305aba179802b096216b"
+  },
+  "evidence": {
+    "report_sha256": "fe773698b70bcb2ff1c1ec66d9fc990cccdb72c9f5e224e4f12e8fbfd52543f5",
+    "toolchains": {
+      "nested_module": "go1.27.3 linux/amd64",
+      "root_module": "go1.24.0 linux/amd64"
+    },
+    "tests": [
+      {
+        "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test -count=1 ./emit ./build",
+        "working_directory": "compiled-frontend",
+        "result": "passed",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/reviews/xr-r-build/go1.27.3-emit-build.log",
+        "log_sha256": "8d6e5822f7b79de38ec9d2d60e2598f490fd82b99ce40c10bd8cd967d082d6f5"
+      },
+      {
+        "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go test -count=1 ./compilercontract",
+        "working_directory": "repository root",
+        "result": "passed",
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/reviews/xr-r-build/go1.24.0-compilercontract.log",
+        "log_sha256": "10d168a6e7b0021bb267a4af76e0a663ad4fa02725f0b63efae617baf0e0f935"
+      }
+    ],
+    "preserved_reproduction": {
+      "source": "compiled-backends/evidence/reviews/xr-build/zero_backend_repro.go.txt",
+      "source_sha256": "f5cd990adeb80587d8decbfd9fdf13e6f7e779cbb11499f6f99502668f083196",
+      "temporary_copy": "/tmp/xr-r-build-repro/main.go",
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run /tmp/xr-r-build-repro/main.go",
+      "working_directory": "compiled-frontend",
+      "result": "zero GobiBackend emitted 0 files and returned invalid AppIR for React emission: schema must be \"gobi.app-ir/v1\"; direct legacy fallback returned the same error and 0 files",
+      "exit_code": 0,
+      "log": "compiled-backends/evidence/reviews/xr-r-build/zero-backend-repro.log",
+      "log_sha256": "c2f3d092d410fc7564c5c7e13f071c481ceeafa7adfbe9cc0fd7c48f782da17a"
+    },
+    "review_findings": [],
+    "limits": [
+      "No four-app CLI rebuild was run because this repair changes only the absent-emitter fallback; AppIR emitters and code generation are unchanged. The focused build package tests passed.",
+      "The separate N3 browser matrix is not covered by this build-lane review.",
+      "One initial temporary-copy command used a root-relative fixture path from the nested module and failed; retrying with the correct ../ path succeeded without repository changes."
+    ]
+  }
+}

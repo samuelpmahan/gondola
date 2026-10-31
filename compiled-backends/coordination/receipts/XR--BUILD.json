@@ -1,0 +1,53 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR--BUILD",
+  "worker": "N6",
+  "decision": "amend",
+  "summary": "Build request/emitter selection, manifest backend tags, exact companion output comparison, four-app CLI artifacts, unsupported-backend rejection, and legacy identity checks passed review. Found one concrete regression: exported zero-valued GobiBackend.Emit panics because the newly added emitter interface is nil; the base implementation returned an AppIR validation error. R-BUILD should add a nil-emitter guard and regression test.",
+  "findings": [
+    {
+      "id": "XR-BUILD-01",
+      "severity": "medium",
+      "path": "compiled-frontend/emit/backend.go",
+      "line": 162,
+      "summary": "GobiBackend.Emit panics when called on a non-nil zero-valued exported adapter because emitter is nil.",
+      "reproduction": "var backend gobi.Backend = &emit.GobiBackend{}; backend.Emit(gobi.App{})",
+      "baseline_commit": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+      "baseline_file_sha256": "c602d9d196f61c1717b1ca72e36e50f22dbd0a55c24d0c7cd5d9b585d30dfb9c",
+      "recommended_gate": "Reject nil/unconfigured emitter with an error and add a zero-value regression test."
+    }
+  ],
+  "evidence": [
+    "compiled-backends/evidence/reviews/xr-build/zero_backend_repro.go",
+    "compiled-backends/evidence/reviews/xr-build/build-audit.json"
+  ],
+  "execution": {
+    "goTests": {
+      "toolchain": "go1.27.3 linux/amd64",
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test -count=1 ./emit ./build",
+      "result": "passed"
+    },
+    "fourAppTrees": {
+      "directory": "/tmp/gobi-e-build-cli-smnn3g0r",
+      "reactFiles": 209,
+      "domFiles": 209,
+      "appsPerBuild": 4,
+      "identicalCompanionFiles": 204,
+      "sameModulePaths": true,
+      "sameRoleBindings": true,
+      "rawBundlesDiffer": true
+    },
+    "unsupportedBackendCli": {
+      "backend": "svelte",
+      "exitCode": 1,
+      "ok": false,
+      "apps": 0,
+      "outputs": 0,
+      "priorMarkerUnchanged": true
+    }
+  },
+  "limits": [
+    "No production or contract files were changed during review.",
+    "The four-app browser swap matrix remains outside this Go build-lane review."
+  ]
+}

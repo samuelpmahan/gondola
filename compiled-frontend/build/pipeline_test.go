@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -96,6 +97,9 @@ func TestBuildPublishesInspectableGoScriptTypeScript(t *testing.T) {
 		EmittedTypeScript []string `json:"emittedTypeScript"`
 		Apps              []struct {
 			PackagePath      string `json:"packagePath"`
+			Backend          string `json:"backend"`
+			Module           string `json:"module"`
+			Encoder          string `json:"encoder"`
 			ForwarderPackage string `json:"forwarderPackage"`
 			RoleBindings     []struct {
 				Role            string `json:"role"`
@@ -113,7 +117,7 @@ func TestBuildPublishesInspectableGoScriptTypeScript(t *testing.T) {
 	if manifest.ForwarderModule != forwarderModulePath || manifest.ForwarderGoMod != "forwarders/go.mod" {
 		t.Fatalf("build manifest has incomplete forwarding module metadata: %#v", manifest)
 	}
-	if len(manifest.Apps) != 1 || manifest.Apps[0].PackagePath != request.EntryPackages[0] || manifest.Apps[0].ForwarderPackage != forwarderPackagePath(result.Apps[0]) {
+	if len(manifest.Apps) != 1 || manifest.Apps[0].PackagePath != request.EntryPackages[0] || manifest.Apps[0].Backend != request.Backend || manifest.Apps[0].ForwarderPackage != forwarderPackagePath(result.Apps[0]) {
 		t.Fatalf("build manifest does not identify the generated forwarding package: %#v", manifest.Apps)
 	}
 	wantBindings := []struct {
@@ -186,6 +190,75 @@ func TestBuildPublishesInspectableGoScriptTypeScript(t *testing.T) {
 	if !foundCounter {
 		t.Fatalf("manifest emitted source list lacks the counter's actual Goscript output: %#v", manifest.EmittedTypeScript)
 	}
+	domRequest := request
+	domRequest.Backend = "dom"
+	domRequest.OutputDir = filepath.Join(t.TempDir(), "compiled-dom")
+	domResult := Build(domRequest)
+	if !domResult.OK {
+		t.Fatalf("DOM Build failed: diagnostics=%#v", domResult.Diagnostics)
+	}
+	domManifestBytes, err := os.ReadFile(filepath.Join(domRequest.OutputDir, "buildmanifest.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var domManifest struct {
+		Apps []struct {
+			Backend      string `json:"backend"`
+			Module       string `json:"module"`
+			Encoder      string `json:"encoder"`
+			RoleBindings []struct {
+				Role            string `json:"role"`
+				AppIRSymbol     string `json:"appIRSymbol"`
+				ForwarderExport string `json:"forwarderExport"`
+			} `json:"roleBindings"`
+		} `json:"apps"`
+	}
+	if err := json.Unmarshal(domManifestBytes, &domManifest); err != nil {
+		t.Fatal(err)
+	}
+	if len(domManifest.Apps) != 1 || domManifest.Apps[0].Backend != "dom" {
+		t.Fatalf("build manifest backend metadata = %#v, want dom", domManifest.Apps)
+	}
+	if domManifest.Apps[0].Module != manifest.Apps[0].Module || domManifest.Apps[0].Encoder != manifest.Apps[0].Encoder ||
+		!reflect.DeepEqual(domManifest.Apps[0].RoleBindings, manifest.Apps[0].RoleBindings) {
+		t.Fatalf("module/encoder paths or role bindings changed with backend selection: React=%#v DOM=%#v", manifest.Apps[0], domManifest.Apps[0])
+	}
+	if !reflect.DeepEqual(result.Apps, domResult.Apps) {
+		t.Fatal("AppIR changed with backend selection")
+	}
+	reactArtifacts := withoutBuildManifest(result.Outputs)
+	domArtifacts := withoutBuildManifest(domResult.Outputs)
+	if len(reactArtifacts) != len(domArtifacts) {
+		t.Fatalf("backend-neutral output counts differ: React=%d DOM=%d", len(reactArtifacts), len(domArtifacts))
+	}
+	for index := range reactArtifacts {
+		reactArtifact, domArtifact := reactArtifacts[index], domArtifacts[index]
+		if reactArtifact.Path != domArtifact.Path {
+			t.Fatalf("backend-neutral output path %d differs: React=%q DOM=%q", index, reactArtifact.Path, domArtifact.Path)
+		}
+		if strings.HasSuffix(reactArtifact.Path, "/gobi-compiled.mjs") {
+			// esbuild's source labels contain independent temporary roots, so raw
+			// bundle hashes are build-specific. The harness verifies one imported
+			// module instance can mount through both renderers.
+			if reactArtifact.Bytes == 0 || domArtifact.Bytes == 0 {
+				t.Fatalf("compiled app module %q is empty", reactArtifact.Path)
+			}
+			continue
+		}
+		if reactArtifact != domArtifact {
+			t.Fatalf("backend-neutral output %q differs: React=%#v DOM=%#v", reactArtifact.Path, reactArtifact, domArtifact)
+		}
+	}
+}
+
+func withoutBuildManifest(outputs []compilercontract.OutputFile) []compilercontract.OutputFile {
+	result := make([]compilercontract.OutputFile, 0, len(outputs))
+	for _, output := range outputs {
+		if output.Path != "buildmanifest.json" {
+			result = append(result, output)
+		}
+	}
+	return result
 }
 
 func TestFailedBuildPreservesPublishedTreeAndNeverReportsSuccess(t *testing.T) {
@@ -226,6 +299,39 @@ func TestFailedBuildPreservesPublishedTreeAndNeverReportsSuccess(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(output, "partial.mjs")); !os.IsNotExist(err) {
 		t.Fatalf("partial output leaked into published tree: %v", err)
+	}
+}
+
+func TestUnsupportedBackendLeavesExistingOutputUntouched(t *testing.T) {
+	root := repositoryRoot(t)
+	output := filepath.Join(t.TempDir(), "compiled")
+	if err := os.MkdirAll(output, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	marker := filepath.Join(output, "previous-good.txt")
+	if err := os.WriteFile(marker, []byte("previous build"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	result := Build(compilercontract.BuildRequest{
+		Schema:        compilercontract.BuildRequestSchema,
+		SourceRoot:    root,
+		EntryPackages: []string{"github.com/samuelpmahan/gondola/counter"},
+		Backend:       "svelte",
+		OutputDir:     output,
+	})
+	if result.OK || len(result.Apps) != 0 || len(result.Outputs) != 0 || len(result.Diagnostics) == 0 {
+		t.Fatalf("unsupported backend result = %#v; want failure without app or output provenance", result)
+	}
+	got, err := os.ReadFile(marker)
+	if err != nil {
+		t.Fatalf("previous output tree was removed: %v", err)
+	}
+	if string(got) != "previous build" {
+		t.Fatalf("previous output marker changed to %q", got)
+	}
+	entries, err := os.ReadDir(output)
+	if err != nil || len(entries) != 1 || entries[0].Name() != filepath.Base(marker) {
+		t.Fatalf("unsupported backend leaked staged output: entries=%#v err=%v", entries, err)
 	}
 }
 

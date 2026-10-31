@@ -24,6 +24,9 @@ import (
 )
 
 type manifestApp struct {
+	// Backend is additive build metadata consumers may ignore when choosing a
+	// renderer from their own build invocation.
+	Backend          string                `json:"backend"`
 	ComponentID      string                `json:"componentId"`
 	PackagePath      string                `json:"packagePath"`
 	AppIR            string                `json:"appIR"`
@@ -187,6 +190,10 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 	if err != nil {
 		return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, err
 	}
+	backend, err := emit.NewBackendFor(request.Backend)
+	if err != nil {
+		return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("select %q AppIR emitter: %w", request.Backend, err)
+	}
 
 	manifest := buildManifest{
 		Schema:            "gobi.build-manifest/v1",
@@ -196,8 +203,7 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 		EmittedTypeScript: emittedTypeScript,
 		Apps:              make([]manifestApp, 0, len(analysis.Apps)),
 	}
-	backend := emit.NewBackend()
-	var sharedReactMap []byte
+	var sharedNodeMap []byte
 	for appIndex, app := range analysis.Apps {
 		forwarder := forwarders[appIndex]
 		component := app.Components[0]
@@ -212,10 +218,10 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 		}
 		for _, file := range files {
 			if file.Path == emit.ReactMapFile {
-				if sharedReactMap == nil {
-					sharedReactMap = append([]byte{}, file.Bytes...)
-				} else if string(sharedReactMap) != string(file.Bytes) {
-					return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, errors.New("React mapping changed between app emissions")
+				if sharedNodeMap == nil {
+					sharedNodeMap = append([]byte{}, file.Bytes...)
+				} else if string(sharedNodeMap) != string(file.Bytes) {
+					return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, errors.New("Gobi node mapping changed between app emissions")
 				}
 				continue
 			}
@@ -259,6 +265,7 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 			return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("remove temporary entry for %q: %w", app.PackagePath, err)
 		}
 		manifest.Apps = append(manifest.Apps, manifestApp{
+			Backend:          backend.Name(),
 			ComponentID:      component.ID,
 			PackagePath:      app.PackagePath,
 			AppIR:            filepath.ToSlash(filepath.Join("apps", appDirName, "app-ir.json")),
@@ -273,10 +280,10 @@ func produce(request compilercontract.BuildRequest, stage string) ([]compilercon
 			},
 		})
 	}
-	if len(sharedReactMap) == 0 {
-		return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, errors.New("React emitter returned no shared mapping file")
+	if len(sharedNodeMap) == 0 {
+		return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, fmt.Errorf("%s emitter returned no shared node mapping file", backend.Name())
 	}
-	if err := writeOutputFile(stage, emit.ReactMapFile, sharedReactMap); err != nil {
+	if err := writeOutputFile(stage, emit.ReactMapFile, sharedNodeMap); err != nil {
 		return analysis.Apps, []compilercontract.OutputFile{}, diagnostics, err
 	}
 	manifestBytes, err := json.MarshalIndent(manifest, "", "  ")

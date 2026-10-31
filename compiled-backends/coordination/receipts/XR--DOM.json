@@ -1,0 +1,82 @@
+{
+  "job_id": "XR--DOM",
+  "worker": "N1",
+  "outcome": "amend",
+  "summary": "Independent source review suites passed, but N3's attempt-06/form integration capture rejects React-to-DOM replacement on exact outerHTML attribute-order mismatch; decision remains amend.",
+  "target_job": "E-DOM",
+  "decision": "amend",
+  "report_sha256": "65f9166c93083068eb67a8e36fab5524a25c0fdb9159731eda2f17edbad80d28",
+  "evidence": {
+    "review_report": "compiled-backends/coordination/reports/XR--DOM.md",
+    "review_notes": "compiled-backends/evidence/reviews/xr-dom/audit.md",
+    "review_notes_sha256": "8bdc74bddc5da337a03f4e72b357b067426244804996b9c10a001b8d87598f5d",
+    "focused_tests": [
+      {
+        "command": "CHROMIUM_PATH=/tmp/chromium PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+        "toolchain": "Node v22.23.4; Chromium 153.0.8010.0",
+        "passed": 3,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/reviews/xr-dom/dom-node22.log",
+        "log_sha256": "5fc81953b65b063b186fdcdc3f5114c6ed5a6b4290e7d860b7bc83a6ee1f759e"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/react/renderer.test.mjs compiled-frontend/frontend/react/bindings.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 25,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/evidence/reviews/xr-dom/react-node22.log",
+        "log_sha256": "6280ab31b640e35429afd4fde54c1f6305aee9d61e057e11487711aa391b5afe"
+      }
+    ],
+    "syntax_checks": {
+      "modules": [
+        "compiled-frontend/frontend/shared/view.mjs",
+        "compiled-frontend/frontend/dom/renderer.mjs",
+        "compiled-frontend/frontend/react/renderer.mjs"
+      ],
+      "result": "all exited 0",
+      "logs": [
+        "compiled-backends/evidence/reviews/xr-dom/static-node22.log",
+        "compiled-backends/evidence/reviews/xr-dom/dom-syntax.log",
+        "compiled-backends/evidence/reviews/xr-dom/react-syntax.log"
+      ]
+    },
+    "source_sha256": {
+      "compiled-frontend/frontend/shared/view.mjs": "ef2aaa7daf021b3e46dd5cec159951ec1e84d4ea3d7f3888ec6b8c27d7a959e0",
+      "compiled-frontend/frontend/dom/renderer.mjs": "86fed3d2bd883a1de533731148c6b5238ac220343ccf9db6b4cc5340a0a7a38e",
+      "compiled-frontend/frontend/dom/renderer.test.mjs": "7c7d472e2994869a1798bad82c7b466ba653734e35abdaaad9d0295e5347ca29",
+      "compiled-frontend/frontend/react/renderer.mjs": "2bb7c59b3d160c09ec9fea61d382df7c4e07ed97ba22c6c790f9682fa00a26c6",
+      "compiled-backends/coordination/reports/E-DOM.md": "8b536abbb8e742bb7a8968558d94391e6c633df3ae1f5b35979709290efc318d"
+    },
+    "coverage_reviewed": [
+      "Keyed DOM reorder preserves the same focused node and backward selection within one renderer.",
+      "DOM snapshots capture outerHTML-v1 and ordered live controls; event tests preserve literal messages and use live value/checked properties.",
+      "The DOM detached-node callback is fenced by its render epoch; React tests cover corresponding stale epoch behavior.",
+      "Shared GoScript struct/slice validation uses descriptor snapshots and checks the observed target and spare-capacity metadata shapes."
+    ]
+  },
+  "limits": [
+    "The focused GoScript wrapper helpers construct marker/slice-shaped values; they do not import actual emitted app classes or a generated module.",
+    "N2-focused tests do not establish runtime-owned cross-backend focus restoration, physical new-node identity across swap, or retired live DOM callback fencing.",
+    "N3's integrated four-app/five-fixture matrix was pending at review time; this review does not accept universal backend-replacement coverage."
+  ],
+  "integration_findings": [
+    {
+      "fixture": "form",
+      "capture": "compiled-backends/artifacts/conformance-captures/attempt-06/form.browser.failed.json",
+      "capture_sha256": "4ea4e6eb7d3ddf79b4ae9e6e033d941ed0a6558b7c7003537c6534f59c9bcc09",
+      "run_record": "compiled-backends/artifacts/conformance-captures/attempt-06/form.run.json",
+      "run_record_sha256": "6c5ee930c7308745e6e43a602cde8bc3cc98d084166902c502e995753330a13c",
+      "failure_envelope": "compiled-backends/artifacts/conformance-captures/attempt-06/form.failed.json",
+      "failure_envelope_sha256": "2714d2f9826600c6bb8a3f31e5f924a00e2fa125b1d1c4edea0f5480bd75f041",
+      "failure": "new renderer DOM differs from the independent DOM oracle after swap",
+      "case": "First React-to-DOM swap after input into keyed form-draft",
+      "expected_html_fragment": "<input aria-label=\"Draft\" type=\"text\" value=\"typed draft\">",
+      "actual_html_fragment": "<input type=\"text\" value=\"typed draft\" aria-label=\"Draft\">",
+      "native_and_direct_trace_sha256": "fea373984870d8613d2c6bd961594b77c7f37d18de01e0ce01b8fb8f25d2f18e",
+      "notes": "Semantically equivalent attributes, but exact outerHTML-v1 mismatch. Source review unchanged; no renderer edit by reviewer."
+    }
+  ]
+}

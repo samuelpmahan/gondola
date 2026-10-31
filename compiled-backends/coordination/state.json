@@ -1,0 +1,2211 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "E-RUNTIME": {
+      "id": "E-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-frontend/frontend/runtime/runtime.mjs and runtime tests only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: RUNTIME",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T00:14:32.633901+00:00",
+      "finished_at": "2026-10-31T00:23:18.370070+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-RUNTIME.json"
+    },
+    "E-DOM": {
+      "id": "E-DOM",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-frontend/frontend/dom/**; React renderer and new shared frontend validation helper only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: DOM",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T00:14:32.634673+00:00",
+      "finished_at": "2026-10-31T00:23:18.460971+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-DOM.json"
+    },
+    "E-HARNESS": {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-backends/conformance/** only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: HARNESS",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T00:14:32.635276+00:00",
+      "finished_at": "2026-10-31T00:52:53.471128+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-HARNESS.json"
+    },
+    "E-BUILD": {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-frontend/build/** emit/** compilercontract build-backend validation only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: BUILD",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T00:14:32.635653+00:00",
+      "finished_at": "2026-10-31T00:25:13.310888+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-BUILD.json"
+    },
+    "E-DEMO": {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-backends/demo/** run.mjs run-compiled-backends.sh .github/workflows/compiled-backends.yml only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: DEMO",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T00:14:32.636109+00:00",
+      "finished_at": "2026-10-31T00:58:05.644999+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-DEMO.json"
+    },
+    "E-CONTRACT": {
+      "id": "E-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-backends/CONTRACT.md PLAN.md evidence/** semantic audit tests only",
+      "summary": "Compiled DOM plus state-preserving swap milestone: CONTRACT",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T00:14:32.636460+00:00",
+      "finished_at": "2026-10-31T00:25:13.408395+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-CONTRACT.json"
+    },
+    "XR--RUNTIME": {
+      "id": "XR--RUNTIME",
+      "kind": "review",
+      "depends_on": "E-RUNTIME",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T00:23:26.839406+00:00",
+      "finished_at": "2026-10-31T00:27:12.711634+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--RUNTIME.json"
+    },
+    "XR--DOM": {
+      "id": "XR--DOM",
+      "kind": "review",
+      "depends_on": "E-DOM",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T00:23:26.739524+00:00",
+      "finished_at": "2026-10-31T00:29:31.538473+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--DOM.json"
+    },
+    "XR--HARNESS": {
+      "id": "XR--HARNESS",
+      "kind": "review",
+      "depends_on": "E-HARNESS",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T00:52:56.963441+00:00",
+      "finished_at": "2026-10-31T00:58:05.541815+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--HARNESS.json"
+    },
+    "XR--BUILD": {
+      "id": "XR--BUILD",
+      "kind": "review",
+      "depends_on": "E-BUILD",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T00:25:21.471315+00:00",
+      "finished_at": "2026-10-31T00:28:29.091074+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--BUILD.json"
+    },
+    "XR--DEMO": {
+      "id": "XR--DEMO",
+      "kind": "review",
+      "depends_on": "E-DEMO",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T00:58:08.950181+00:00",
+      "finished_at": "2026-10-31T01:02:52.089737+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--DEMO.json"
+    },
+    "XR--CONTRACT": {
+      "id": "XR--CONTRACT",
+      "kind": "review",
+      "depends_on": "E-CONTRACT",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T00:25:21.349891+00:00",
+      "finished_at": "2026-10-31T00:30:21.013216+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--CONTRACT.json"
+    },
+    "R-RUNTIME": {
+      "id": "R-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "repair_of": "E-RUNTIME",
+      "owner": "runtime production/test ownedpaths andnamedrepairreport/receipt/evidence",
+      "summary": "Repair falsefocus-success onundefined and rejectedPromise unhandled; preservefailclosedstate and oldtests",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T00:29:36.032060+00:00",
+      "finished_at": "2026-10-31T00:35:28.915862+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/R-RUNTIME.json"
+    },
+    "R-BUILD": {
+      "id": "R-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "repair_of": "E-BUILD",
+      "owner": "Go build/emitter ownedpaths andnamedrepairreport/receipt/evidence",
+      "summary": "Zero-valuedexportedGobiBackend.Emit mustreturnerror notpanic; regressionsandactualbackendidentity",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T00:30:21.238376+00:00",
+      "finished_at": "2026-10-31T00:34:03.908012+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/R-BUILD.json"
+    },
+    "XR-R-RUNTIME": {
+      "id": "XR-R-RUNTIME",
+      "kind": "review",
+      "depends_on": "R-RUNTIME",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T00:37:20.510466+00:00",
+      "finished_at": "2026-10-31T00:40:16.343967+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR-R-RUNTIME.json"
+    },
+    "XR-R-BUILD": {
+      "id": "XR-R-BUILD",
+      "kind": "review",
+      "depends_on": "R-BUILD",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T00:34:04.380204+00:00",
+      "finished_at": "2026-10-31T00:37:16.552120+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR-R-BUILD.json"
+    },
+    "R-DOM": {
+      "id": "R-DOM",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "E-DOM",
+      "owner": "DOMrenderer/tests andnamedrepairreportreceipt evidence only",
+      "summary": "Realcompiledform DOMattributeinsertionorder violates establishedouterHTML-v1 oracle; fixrenderer notoracle, addpostinteractioncontrols test",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T00:29:36.143586+00:00",
+      "finished_at": "2026-10-31T00:34:03.787560+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/R-DOM.json"
+    },
+    "R-CONTRACT": {
+      "id": "R-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "repair_of": "E-CONTRACT",
+      "owner": "CONTRACT/PLAN andsemanticprobes plusnamedrepairreportreceipt only",
+      "summary": "Correct pre-teardownfocuscapture rejectionvscommitfailclosed andstrictrestoreboolean semantics; alignactualfixes",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T00:30:21.336736+00:00",
+      "finished_at": "2026-10-31T00:37:16.807332+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/R-CONTRACT.json"
+    },
+    "XR-R-DOM": {
+      "id": "XR-R-DOM",
+      "kind": "review",
+      "depends_on": "R-DOM",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T00:34:04.235807+00:00",
+      "finished_at": "2026-10-31T00:37:16.675175+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR-R-DOM.json"
+    },
+    "XR-R-CONTRACT": {
+      "id": "XR-R-CONTRACT",
+      "kind": "review",
+      "depends_on": "R-CONTRACT",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T00:37:20.599341+00:00",
+      "finished_at": "2026-10-31T00:44:26.385679+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR-R-CONTRACT.json"
+    },
+    "R-REACT-CHECKED": {
+      "id": "R-REACT-CHECKED",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "E-DOM",
+      "owner": "Reactrendererandfocusedtest plusnamedrepairreportreceipt evidence only",
+      "summary": "NewReactmountatchecked=true addsserializedchecked; preserveestablishedcontrolled-live-propertyDOMcontract viaactualrenderer repair, notweakeningoracle",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T00:37:20.414867+00:00",
+      "finished_at": "2026-10-31T00:43:23.516436+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/R-REACT-CHECKED.json"
+    },
+    "XR-R-REACT-CHECKED": {
+      "id": "XR-R-REACT-CHECKED",
+      "kind": "review",
+      "depends_on": "R-REACT-CHECKED",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T00:43:23.830980+00:00",
+      "finished_at": "2026-10-31T00:48:18.565315+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR-R-REACT-CHECKED.json"
+    },
+    "E-INDEPENDENCE": {
+      "id": "E-INDEPENDENCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-backends/evidence/independence/** andnamedreportreceipt only; no productionedits",
+      "summary": "ProveDOM-onlyactualcompiledcounterbootwith noReact/ReactDOM dependency viaesbuildmetafile+realbrowser, sameGoexports noWASM",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T00:40:16.659449+00:00",
+      "finished_at": "2026-10-31T00:51:01.649327+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/E-INDEPENDENCE.json"
+    },
+    "XR--INDEPENDENCE": {
+      "id": "XR--INDEPENDENCE",
+      "kind": "review",
+      "depends_on": "E-INDEPENDENCE",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T00:51:05.990080+00:00",
+      "finished_at": "2026-10-31T00:54:08.597473+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR--INDEPENDENCE.json"
+    },
+    "R-OBSERVATION": {
+      "id": "R-OBSERVATION",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "repair_of": "R-CONTRACT",
+      "owner": "runtimeobservationalreturnchecks/tests andnamedrepairreceipt/evidence only",
+      "summary": "Fulfillrequiredsynchronousrendereroperationcontract forviewRecord/domSnapshot/finalunmount rejectionreturns; brandedPromise rejection sink no unhandled, honestphasefailure",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T00:44:26.569205+00:00",
+      "finished_at": "2026-10-31T00:48:18.445957+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/R-OBSERVATION.json"
+    },
+    "XR-R-OBSERVATION": {
+      "id": "XR-R-OBSERVATION",
+      "kind": "review",
+      "depends_on": "R-OBSERVATION",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T00:48:23.285638+00:00",
+      "finished_at": "2026-10-31T00:52:53.373117+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-backends/compiled-backends/coordination/receipts/XR-R-OBSERVATION.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-31T00:13:22.544199+00:00",
+      "ready_jobs": [
+        "E-RUNTIME",
+        "E-DOM",
+        "E-HARNESS",
+        "E-BUILD",
+        "E-DEMO",
+        "E-CONTRACT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "E-HARNESS",
+        "N5": "E-DEMO",
+        "N4": "E-BUILD",
+        "N1": "E-RUNTIME",
+        "N6": "E-CONTRACT",
+        "N2": "E-DOM"
+      },
+      "dispatch": {
+        "N3": "E-HARNESS",
+        "N5": "E-DEMO",
+        "N4": "E-BUILD",
+        "N1": "E-RUNTIME",
+        "N6": "E-CONTRACT",
+        "N2": "E-DOM"
+      },
+      "native_seconds": 0.006546999000420328,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-RUNTIME": 1,
+        "E-DOM": 1,
+        "E-HARNESS": 1,
+        "E-BUILD": 1,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-RUNTIME": [
+          "N1"
+        ],
+        "E-DOM": [
+          "N2"
+        ],
+        "E-HARNESS": [
+          "N3"
+        ],
+        "E-BUILD": [
+          "N4"
+        ],
+        "E-DEMO": [
+          "N5"
+        ],
+        "E-CONTRACT": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-RUNTIME": 100,
+        "E-DOM": 100,
+        "E-HARNESS": 100,
+        "E-BUILD": 100,
+        "E-DEMO": 100,
+        "E-CONTRACT": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:14:32.633901+00:00",
+      "worker": "N1",
+      "job": "E-RUNTIME",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:14:32.634673+00:00",
+      "worker": "N2",
+      "job": "E-DOM",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:14:32.635276+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:14:32.635653+00:00",
+      "worker": "N4",
+      "job": "E-BUILD",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:14:32.636109+00:00",
+      "worker": "N5",
+      "job": "E-DEMO",
+      "agent": "/root/backend_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:14:32.636460+00:00",
+      "worker": "N6",
+      "job": "E-CONTRACT",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:23:18.370070+00:00",
+      "worker": "N1",
+      "job": "E-RUNTIME"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:23:18.460971+00:00",
+      "worker": "N2",
+      "job": "E-DOM"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-31T00:23:18.562710+00:00",
+      "ready_jobs": [
+        "XR--RUNTIME",
+        "XR--DOM"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "XR--DOM",
+        "N3": "E-HARNESS",
+        "N6": "E-CONTRACT",
+        "N2": "XR--RUNTIME",
+        "N5": "E-DEMO",
+        "N4": "E-BUILD"
+      },
+      "dispatch": {
+        "N1": "XR--DOM",
+        "N2": "XR--RUNTIME"
+      },
+      "native_seconds": 0.0038107440013845917,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 1,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--RUNTIME": 1,
+        "XR--DOM": 1,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR--RUNTIME": [
+          "N2"
+        ],
+        "XR--DOM": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR--RUNTIME": 200,
+        "XR--DOM": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo",
+        "N6": "/root/backend_contract"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:23:26.739524+00:00",
+      "worker": "N1",
+      "job": "XR--DOM",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:23:26.839406+00:00",
+      "worker": "N2",
+      "job": "XR--RUNTIME",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:25:13.310888+00:00",
+      "worker": "N4",
+      "job": "E-BUILD"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:25:13.408395+00:00",
+      "worker": "N6",
+      "job": "E-CONTRACT"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-31T00:25:13.504460+00:00",
+      "ready_jobs": [
+        "XR--BUILD",
+        "XR--CONTRACT"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "XR--DOM",
+        "N3": "E-HARNESS",
+        "N2": "XR--RUNTIME",
+        "N4": "XR--CONTRACT",
+        "N5": "E-DEMO",
+        "N6": "XR--BUILD"
+      },
+      "dispatch": {
+        "N4": "XR--CONTRACT",
+        "N6": "XR--BUILD"
+      },
+      "native_seconds": 0.004164876998402178,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 1,
+        "XR--DOM": 1,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 1,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR--BUILD": [
+          "N6"
+        ],
+        "XR--CONTRACT": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR--BUILD": 200,
+        "XR--CONTRACT": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:25:21.349891+00:00",
+      "worker": "N4",
+      "job": "XR--CONTRACT",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:25:21.471315+00:00",
+      "worker": "N6",
+      "job": "XR--BUILD",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:27:12.711634+00:00",
+      "worker": "N2",
+      "job": "XR--RUNTIME"
+    },
+    {
+      "type": "extend",
+      "at": "2026-10-31T00:27:12.920960+00:00",
+      "spec": "repair-spec.json",
+      "jobs": [
+        "R-RUNTIME",
+        "R-BUILD",
+        "XR-R-RUNTIME",
+        "XR-R-BUILD"
+      ],
+      "gate": "Authorsfinishcurrentcrossreviews before repair; reviewerspreserveamendandreprobeforemutation; integratedsourcefreezeafterfixes"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:28:29.091074+00:00",
+      "worker": "N6",
+      "job": "XR--BUILD"
+    },
+    {
+      "type": "extend",
+      "at": "2026-10-31T00:28:29.200167+00:00",
+      "spec": "integration-repair-spec.json",
+      "jobs": [
+        "R-DOM",
+        "R-CONTRACT",
+        "XR-R-DOM",
+        "XR-R-CONTRACT"
+      ],
+      "gate": "Preserveamend/capturesbeforeauthorrepairs; sourcefreezeandmatrixpostfix"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:29:31.538473+00:00",
+      "worker": "N1",
+      "job": "XR--DOM"
+    },
+    {
+      "type": "dependency-hold",
+      "job": "R-CONTRACT",
+      "reason": "HoldauthoruntilXR--CONTRACTreviewfinalpreservesoriginal; thenrestoreN6eligibility",
+      "scopeAddition": "RenameGo-reviewrepro.go to.go.txt byte-identical, preservebeforehash andoldfailedrootGo-discoverylog; no rootdeps mutation"
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-31T00:29:31.685798+00:00",
+      "ready_jobs": [
+        "R-RUNTIME",
+        "R-BUILD",
+        "R-DOM",
+        "R-CONTRACT"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N6": "BENCH",
+        "N2": "R-DOM",
+        "N4": "XR--CONTRACT",
+        "N3": "E-HARNESS",
+        "N5": "E-DEMO",
+        "N1": "R-RUNTIME"
+      },
+      "dispatch": {
+        "N2": "R-DOM",
+        "N1": "R-RUNTIME"
+      },
+      "native_seconds": 0.006424465995223727,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 1,
+        "R-RUNTIME": 1,
+        "R-BUILD": 1,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 1,
+        "R-CONTRACT": 1,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "R-RUNTIME": [
+          "N1"
+        ],
+        "R-BUILD": [],
+        "R-DOM": [
+          "N2"
+        ],
+        "R-CONTRACT": []
+      },
+      "weights": {
+        "R-RUNTIME": 300,
+        "R-BUILD": 300,
+        "R-DOM": 300,
+        "R-CONTRACT": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:29:36.032060+00:00",
+      "worker": "N1",
+      "job": "R-RUNTIME",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:29:36.143586+00:00",
+      "worker": "N2",
+      "job": "R-DOM",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:30:21.013216+00:00",
+      "worker": "N4",
+      "job": "XR--CONTRACT"
+    },
+    {
+      "type": "dependency-release",
+      "job": "R-CONTRACT",
+      "reason": "XR--CONTRACT finalizedandoriginalhashespreserved; permitN6doc/probe-isolationrepair"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-31T00:30:21.143064+00:00",
+      "ready_jobs": [
+        "R-BUILD",
+        "R-CONTRACT"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "R-RUNTIME",
+        "N2": "R-DOM",
+        "N3": "E-HARNESS",
+        "N6": "R-CONTRACT",
+        "N4": "R-BUILD",
+        "N5": "E-DEMO"
+      },
+      "dispatch": {
+        "N6": "R-CONTRACT",
+        "N4": "R-BUILD"
+      },
+      "native_seconds": 0.0046770629996899515,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 1,
+        "R-BUILD": 1,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 1,
+        "R-CONTRACT": 1,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "R-BUILD": [
+          "N4"
+        ],
+        "R-CONTRACT": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "R-BUILD": 300,
+        "R-CONTRACT": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:30:21.238376+00:00",
+      "worker": "N4",
+      "job": "R-BUILD",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:30:21.336736+00:00",
+      "worker": "N6",
+      "job": "R-CONTRACT",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:34:03.787560+00:00",
+      "worker": "N2",
+      "job": "R-DOM"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:34:03.908012+00:00",
+      "worker": "N4",
+      "job": "R-BUILD"
+    },
+    {
+      "type": "solve",
+      "epoch": 5,
+      "at": "2026-10-31T00:34:04.083190+00:00",
+      "ready_jobs": [
+        "XR-R-BUILD",
+        "XR-R-DOM"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "R-RUNTIME",
+        "N3": "E-HARNESS",
+        "N4": "XR-R-DOM",
+        "N6": "R-CONTRACT",
+        "N5": "E-DEMO",
+        "N2": "XR-R-BUILD"
+      },
+      "dispatch": {
+        "N4": "XR-R-DOM",
+        "N2": "XR-R-BUILD"
+      },
+      "native_seconds": 0.018307001002540346,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 1,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 1,
+        "R-DOM": 0,
+        "R-CONTRACT": 1,
+        "XR-R-DOM": 1,
+        "XR-R-CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-R-BUILD": [
+          "N2"
+        ],
+        "XR-R-DOM": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-R-BUILD": 200,
+        "XR-R-DOM": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": "/root/backend_contract"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:34:04.235807+00:00",
+      "worker": "N4",
+      "job": "XR-R-DOM",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:34:04.380204+00:00",
+      "worker": "N2",
+      "job": "XR-R-BUILD",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:35:28.915862+00:00",
+      "worker": "N1",
+      "job": "R-RUNTIME"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:37:16.552120+00:00",
+      "worker": "N2",
+      "job": "XR-R-BUILD"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:37:16.675175+00:00",
+      "worker": "N4",
+      "job": "XR-R-DOM"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:37:16.807332+00:00",
+      "worker": "N6",
+      "job": "R-CONTRACT"
+    },
+    {
+      "type": "extend",
+      "at": "2026-10-31T00:37:16.905592+00:00",
+      "spec": "react-remount-repair-spec.json",
+      "jobs": [
+        "R-REACT-CHECKED",
+        "XR-R-REACT-CHECKED"
+      ],
+      "reason": "Attempt07showsnewReactmountdefaultcheckedHTML differsGo oracle; originalrawcapturespreserved; separateN3optional-witnesscheckerfix remainsE-HARNESS active"
+    },
+    {
+      "type": "solve",
+      "epoch": 6,
+      "at": "2026-10-31T00:37:17.015339+00:00",
+      "ready_jobs": [
+        "XR-R-RUNTIME",
+        "XR-R-CONTRACT",
+        "R-REACT-CHECKED"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N4": "BENCH",
+        "N2": "R-REACT-CHECKED",
+        "N3": "E-HARNESS",
+        "N6": "XR-R-RUNTIME",
+        "N5": "E-DEMO",
+        "N1": "XR-R-CONTRACT"
+      },
+      "dispatch": {
+        "N2": "R-REACT-CHECKED",
+        "N6": "XR-R-RUNTIME",
+        "N1": "XR-R-CONTRACT"
+      },
+      "native_seconds": 0.0045813629985786974,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 700,
+      "native_score": 700,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 1,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 1,
+        "R-REACT-CHECKED": 1,
+        "XR-R-REACT-CHECKED": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-R-RUNTIME": [
+          "N2",
+          "N4",
+          "N6"
+        ],
+        "XR-R-CONTRACT": [
+          "N1",
+          "N2",
+          "N4"
+        ],
+        "R-REACT-CHECKED": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-R-RUNTIME": 200,
+        "XR-R-CONTRACT": 200,
+        "R-REACT-CHECKED": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:37:20.414867+00:00",
+      "worker": "N2",
+      "job": "R-REACT-CHECKED",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:37:20.510466+00:00",
+      "worker": "N6",
+      "job": "XR-R-RUNTIME",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:37:20.599341+00:00",
+      "worker": "N1",
+      "job": "XR-R-CONTRACT",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:40:16.343967+00:00",
+      "worker": "N6",
+      "job": "XR-R-RUNTIME"
+    },
+    {
+      "type": "extend",
+      "at": "2026-10-31T00:40:16.434483+00:00",
+      "spec": "independence-spec.json",
+      "jobs": [
+        "E-INDEPENDENCE",
+        "XR--INDEPENDENCE"
+      ],
+      "reason": "CombinedswapdriverimportsReact; closeindependenceclaimwithstandaloneDOM-onlybundle+browser usingexistingcompiledmodule, no newproductfeature"
+    },
+    {
+      "type": "solve",
+      "epoch": 7,
+      "at": "2026-10-31T00:40:16.544017+00:00",
+      "ready_jobs": [
+        "E-INDEPENDENCE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N3": "E-HARNESS",
+        "N1": "XR-R-CONTRACT",
+        "N6": "E-INDEPENDENCE",
+        "N5": "E-DEMO",
+        "N4": "BENCH",
+        "N2": "R-REACT-CHECKED"
+      },
+      "dispatch": {
+        "N6": "E-INDEPENDENCE"
+      },
+      "native_seconds": 0.00483705299848225,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 1,
+        "R-REACT-CHECKED": 1,
+        "XR-R-REACT-CHECKED": 0,
+        "E-INDEPENDENCE": 1,
+        "XR--INDEPENDENCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-INDEPENDENCE": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-INDEPENDENCE": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:40:16.659449+00:00",
+      "worker": "N6",
+      "job": "E-INDEPENDENCE",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:43:23.516436+00:00",
+      "worker": "N2",
+      "job": "R-REACT-CHECKED"
+    },
+    {
+      "type": "extend",
+      "at": "2026-10-31T00:43:23.622801+00:00",
+      "spec": "observation-repair-spec.json",
+      "jobs": [
+        "R-OBSERVATION",
+        "XR-R-OBSERVATION"
+      ],
+      "reason": "XR-R-CONTRACT rejected-Promise observation probes; authorN1mustfinishreviewbeforeediting; nooracleweakening"
+    },
+    {
+      "type": "solve",
+      "epoch": 8,
+      "at": "2026-10-31T00:43:23.726390+00:00",
+      "ready_jobs": [
+        "XR-R-REACT-CHECKED",
+        "R-OBSERVATION"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "XR-R-REACT-CHECKED",
+        "N3": "E-HARNESS",
+        "N2": "BENCH",
+        "N5": "E-DEMO",
+        "N1": "XR-R-CONTRACT",
+        "N6": "E-INDEPENDENCE"
+      },
+      "dispatch": {
+        "N4": "XR-R-REACT-CHECKED"
+      },
+      "native_seconds": 0.0037361310023698024,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 1,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 1,
+        "E-INDEPENDENCE": 1,
+        "XR--INDEPENDENCE": 0,
+        "R-OBSERVATION": 1,
+        "XR-R-OBSERVATION": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-R-REACT-CHECKED": [
+          "N4"
+        ],
+        "R-OBSERVATION": []
+      },
+      "weights": {
+        "XR-R-REACT-CHECKED": 200,
+        "R-OBSERVATION": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": "/root/backend_contract"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:43:23.830980+00:00",
+      "worker": "N4",
+      "job": "XR-R-REACT-CHECKED",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:44:26.385679+00:00",
+      "worker": "N1",
+      "job": "XR-R-CONTRACT"
+    },
+    {
+      "type": "solve",
+      "epoch": 9,
+      "at": "2026-10-31T00:44:26.481365+00:00",
+      "ready_jobs": [
+        "R-OBSERVATION"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "R-OBSERVATION",
+        "N4": "XR-R-REACT-CHECKED",
+        "N3": "E-HARNESS",
+        "N2": "BENCH",
+        "N5": "E-DEMO",
+        "N6": "E-INDEPENDENCE"
+      },
+      "dispatch": {
+        "N1": "R-OBSERVATION"
+      },
+      "native_seconds": 0.004030934993352275,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 1,
+        "E-INDEPENDENCE": 1,
+        "XR--INDEPENDENCE": 0,
+        "R-OBSERVATION": 1,
+        "XR-R-OBSERVATION": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "R-OBSERVATION": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "R-OBSERVATION": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo",
+        "N6": "/root/backend_contract"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:44:26.569205+00:00",
+      "worker": "N1",
+      "job": "R-OBSERVATION",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:48:18.445957+00:00",
+      "worker": "N1",
+      "job": "R-OBSERVATION"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:48:18.565315+00:00",
+      "worker": "N4",
+      "job": "XR-R-REACT-CHECKED"
+    },
+    {
+      "type": "solve",
+      "epoch": 10,
+      "at": "2026-10-31T00:48:18.769660+00:00",
+      "ready_jobs": [
+        "XR-R-OBSERVATION"
+      ],
+      "pinned_workers": [
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N2": "XR-R-OBSERVATION",
+        "N1": "BENCH",
+        "N4": "BENCH",
+        "N3": "E-HARNESS",
+        "N5": "E-DEMO",
+        "N6": "E-INDEPENDENCE"
+      },
+      "dispatch": {
+        "N2": "XR-R-OBSERVATION"
+      },
+      "native_seconds": 0.00470451099681668,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 0,
+        "E-INDEPENDENCE": 1,
+        "XR--INDEPENDENCE": 0,
+        "R-OBSERVATION": 0,
+        "XR-R-OBSERVATION": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-R-OBSERVATION": [
+          "N2",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-R-OBSERVATION": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": "/root/backend_contract"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:48:23.285638+00:00",
+      "worker": "N2",
+      "job": "XR-R-OBSERVATION",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:51:01.649327+00:00",
+      "worker": "N6",
+      "job": "E-INDEPENDENCE"
+    },
+    {
+      "type": "solve",
+      "epoch": 11,
+      "at": "2026-10-31T00:51:01.749575+00:00",
+      "ready_jobs": [
+        "XR--INDEPENDENCE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N2": "XR-R-OBSERVATION",
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "XR--INDEPENDENCE",
+        "N3": "E-HARNESS",
+        "N5": "E-DEMO"
+      },
+      "dispatch": {
+        "N4": "XR--INDEPENDENCE"
+      },
+      "native_seconds": 0.004151432003709488,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 1,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 0,
+        "E-INDEPENDENCE": 0,
+        "XR--INDEPENDENCE": 1,
+        "R-OBSERVATION": 0,
+        "XR-R-OBSERVATION": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR--INDEPENDENCE": [
+          "N1",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR--INDEPENDENCE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:51:05.990080+00:00",
+      "worker": "N4",
+      "job": "XR--INDEPENDENCE",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:52:53.373117+00:00",
+      "worker": "N2",
+      "job": "XR-R-OBSERVATION"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:52:53.471128+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS"
+    },
+    {
+      "type": "solve",
+      "epoch": 12,
+      "at": "2026-10-31T00:52:53.734042+00:00",
+      "ready_jobs": [
+        "XR--HARNESS"
+      ],
+      "pinned_workers": [
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N3": "BENCH",
+        "N5": "E-DEMO",
+        "N4": "XR--INDEPENDENCE",
+        "N6": "XR--HARNESS"
+      },
+      "dispatch": {
+        "N6": "XR--HARNESS"
+      },
+      "native_seconds": 0.11743267100246157,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 0,
+        "E-BUILD": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 1,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 0,
+        "E-INDEPENDENCE": 0,
+        "XR--INDEPENDENCE": 1,
+        "R-OBSERVATION": 0,
+        "XR-R-OBSERVATION": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR--HARNESS": [
+          "N1",
+          "N2",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR--HARNESS": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:52:56.963441+00:00",
+      "worker": "N6",
+      "job": "XR--HARNESS",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:54:08.597473+00:00",
+      "worker": "N4",
+      "job": "XR--INDEPENDENCE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:58:05.541815+00:00",
+      "worker": "N6",
+      "job": "XR--HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T00:58:05.644999+00:00",
+      "worker": "N5",
+      "job": "E-DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 13,
+      "at": "2026-10-31T00:58:05.755066+00:00",
+      "ready_jobs": [
+        "XR--DEMO"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "XR--DEMO"
+      },
+      "dispatch": {
+        "N3": "XR--DEMO"
+      },
+      "native_seconds": 0.005846222004038282,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 0,
+        "E-BUILD": 0,
+        "E-DEMO": 0,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 1,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 0,
+        "E-INDEPENDENCE": 0,
+        "XR--INDEPENDENCE": 0,
+        "R-OBSERVATION": 0,
+        "XR-R-OBSERVATION": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR--DEMO": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR--DEMO": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T00:58:08.950181+00:00",
+      "worker": "N3",
+      "job": "XR--DEMO",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T01:02:52.089737+00:00",
+      "worker": "N3",
+      "job": "XR--DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 14,
+      "at": "2026-10-31T01:02:52.499864+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH"
+      },
+      "dispatch": {},
+      "native_seconds": 0.004168002000369597,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-RUNTIME": 0,
+        "E-DOM": 0,
+        "E-HARNESS": 0,
+        "E-BUILD": 0,
+        "E-DEMO": 0,
+        "E-CONTRACT": 0,
+        "XR--RUNTIME": 0,
+        "XR--DOM": 0,
+        "XR--HARNESS": 0,
+        "XR--BUILD": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-RUNTIME": 0,
+        "R-BUILD": 0,
+        "XR-R-RUNTIME": 0,
+        "XR-R-BUILD": 0,
+        "R-DOM": 0,
+        "R-CONTRACT": 0,
+        "XR-R-DOM": 0,
+        "XR-R-CONTRACT": 0,
+        "R-REACT-CHECKED": 0,
+        "XR-R-REACT-CHECKED": 0,
+        "E-INDEPENDENCE": 0,
+        "XR--INDEPENDENCE": 0,
+        "R-OBSERVATION": 0,
+        "XR-R-OBSERVATION": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    }
+  ],
+  "epoch": 15,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "job_id": "XR--INDEPENDENCE",
+  "reviewer": "N4",
+  "decision": "accepted",
+  "acceptance_scope": "One actual compiled counter module from the React-profile build manifest booted and executed through a DOM-only bundle in Chromium.",
+  "evidence_hashes": {
+    "compiled-backends/coordination/reports/E-INDEPENDENCE.md": "3949c8fbe5f088ec94d78d2d559df87eed20e5771843a9a9b6c3bbfc24ca0885",
+    "compiled-backends/coordination/receipts/E-INDEPENDENCE.json": "075478650606c5efbfbc300748d8aebc56891418aed249939baa7c8c556585cd",
+    "compiled-backends/coordination/history/E-INDEPENDENCE-invalid-outcome.json": "99dba87cd6444994fc5667ab93ac03f8c0c8f8f2b35dad304aa23ef3d6b2b12d",
+    "compiled-backends/evidence/independence/prove-dom-only-counter.mjs": "52ba5369ea70d04d7621f53f357d3bb14c01eb0bce2e408fa9c6ac2390982eb6",
+    "compiled-backends/evidence/independence/dom-only-counter-run.json": "afbd6bb7ec6165f0dafd3edc3817da6bdda82538edb85ffc170f386b15f68994",
+    "compiled-backends/evidence/independence/dom-only-counter-metafile.json": "4103c86d36151df7ac180e95eff996301c6ae379fb312dcc8c59ca693118a7c3",
+    "compiled-backends/evidence/independence/dom-only-counter-node22.log": "559142cd4c6002f527f617c248e3aa0adafa62c30112fe9df7d2f11eb7c40c25",
+    "compiled-backends/evidence/independence/syntax-node22.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-backends/artifacts/independence/dom-only-counter/dom-counter.bundle.mjs": "05087b5f03e4f5e25f21d141fd2d6291160012625148c5f725bce2dae8bcbf42",
+    "compiled-backends/artifacts/independence/dom-only-counter/metafile.json": "4103c86d36151df7ac180e95eff996301c6ae379fb312dcc8c59ca693118a7c3"
+  },
+  "manifest_selection": {
+    "manifest_path": "/tmp/gobi-e-build-frozen/react/buildmanifest.json",
+    "manifest_backend": "react",
+    "package_path": "github.com/samuelpmahan/gondola/counter",
+    "app_ir_sha256": "704e1d767e0abde21a33c300c7cc130a4e318688468a630fd8b394842cb6758b",
+    "compiled_module_sha256": "af3f866ab08297a09424af2924eb8faca439a5f70d30847c237420f703cb49f1",
+    "encoder_sha256": "383bd7611e2175441e655f98aca6446523b30eec1fcfc5a7bc57048edc30d3f9",
+    "roles": {
+      "init": "github.com/samuelpmahan/gondola/counter.Init -> GobiCompiledInit",
+      "update": "github.com/samuelpmahan/gondola/counter.Update -> GobiCompiledUpdate",
+      "view": "github.com/samuelpmahan/gondola/counter.View -> GobiCompiledView"
+    }
+  },
+  "bundle_graph": {
+    "input_count": 7,
+    "inputs": [
+      "frozen React-profile gobi-compiled.mjs",
+      "frozen matching encoder.mjs",
+      "compiled-frontend/frontend/shared/view.mjs",
+      "compiled-frontend/frontend/react/react-map.gen.mjs (static mapping data)",
+      "compiled-frontend/frontend/dom/renderer.mjs",
+      "compiled-frontend/frontend/runtime/runtime.mjs",
+      "DOM-only proof entry"
+    ],
+    "react_node_package_inputs": [],
+    "react_renderer_or_bindings_inputs": [],
+    "react_external_imports": [],
+    "output_imports": [],
+    "react_globals_present": false,
+    "react_dom_globals_present": false,
+    "bundle_bytes": 587964
+  },
+  "browser_observations": {
+    "toolchain": "Node v22.23.4; Chromium 153.0.8010.0",
+    "steps": [
+      { "label": "init", "count": 0, "reset_disabled": true, "tick_count": 1 },
+      { "label": "add-1", "count": 1, "reset_disabled": false, "tick_count": 2 },
+      { "label": "add-2", "count": 2, "reset_disabled": false, "tick_count": 3 },
+      { "label": "reset", "count": 0, "reset_disabled": true, "tick_count": 4 }
+    ],
+    "messages": ["add", "add", "reset"],
+    "wasm_api_calls": [],
+    "fetch_calls": [],
+    "xhr_calls": [],
+    "wasm_resource_requests": [],
+    "page_errors": [],
+    "unhandled_rejections": [],
+    "network_requests": ["local proof index.html", "single DOM counter bundle"]
+  },
+  "pin_stability": {
+    "stable_across_run": true,
+    "files_before_equals_files_after": true,
+    "runtime_sha256": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+    "runtime_current_sha256": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+    "source_pin_set": [
+      "manifest",
+      "appIR",
+      "compiled module",
+      "encoder",
+      "DOM renderer",
+      "runtime",
+      "shared View validation",
+      "static React map data",
+      "proof script"
+    ]
+  },
+  "receipt_history": {
+    "historical_receipt_outcome": "passed",
+    "historical_receipt_sha256": "99dba87cd6444994fc5667ab93ac03f8c0c8f8f2b35dad304aa23ef3d6b2b12d",
+    "historical_enum_validation": "rejected",
+    "current_receipt_outcome": "confirmed_reuse",
+    "current_receipt_sha256": "075478650606c5efbfbc300748d8aebc56891418aed249939baa7c8c556585cd",
+    "run_record_decision": "passed",
+    "interpretation": "The invalid historical worker-receipt enum is retained; the current receipt is corrected. The run JSON decision belongs to its independence-run record, and the underlying proof files/results were unchanged by the receipt correction."
+  },
+  "limits": [
+    "This is one counter app boot and Add/Add/Reset run, not a same-session React-to-DOM swap.",
+    "The absence checks cover observed WebAssembly APIs, Fetch, XHR, WASM resources, page errors, unhandled rejections, and the recorded browser requests in this run; they are not a general browser security proof.",
+    "The original receipt enum history is not pristine even though the current receipt is valid and evidence is unchanged."
+  ],
+  "review_method": "Inspected E-INDEPENDENCE report and both receipts, parsed the raw run JSON, enumerated raw metafile inputs/outputs, read the proof entry and logs, checked before/after pins, and compared the live runtime source hash. No browser rerun was performed."
+}

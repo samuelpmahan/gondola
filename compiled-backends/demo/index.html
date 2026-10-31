@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gobi · DOM and React backends</title>
+  <style>
+    :root{color-scheme:light;--ink:#17242a;--muted:#52615d;--line:#cbd6d1;--accent:#075f49;--surface:#fff;--page:#f3f7f5}
+    *{box-sizing:border-box}
+    body{font:16px/1.5 system-ui,sans-serif;max-width:1180px;margin:2.5rem auto;padding:0 1rem;color:var(--ink);background:var(--page)}
+    h1{line-height:1.15;margin-bottom:.45rem}h2{margin:.2rem 0 .8rem;text-transform:capitalize}
+    .intro{max-width:75ch;color:var(--muted)}
+    main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:1rem;margin:1.5rem 0}
+    article{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.1rem;box-shadow:0 2px 8px #173a2c0a}
+    button,input{font:inherit;margin:.2rem;padding:.42rem .6rem}button{cursor:pointer;border:1px solid #94a69d;border-radius:7px;background:#fff;color:var(--ink)}button[aria-pressed="true"]{border-color:var(--accent);background:#e5f2ed;color:var(--accent);font-weight:650}button:disabled{cursor:default;opacity:.58}
+    input{max-width:100%;border:1px solid #9aa9a2;border-radius:5px}
+    .renderer-selector{display:flex;gap:.3rem}.backend-status{display:block;font-size:.85rem;color:var(--muted);margin:.25rem 0 .65rem}
+    [data-app]{min-height:3.5rem}.trace-panel{font:11px/1.45 ui-monospace,monospace;white-space:pre-wrap;overflow:auto;max-height:19rem;background:#eef3f0;padding:.65rem;border-radius:6px}
+    summary{cursor:pointer;color:var(--accent)}.effect-host{border-top:1px solid var(--line);margin-top:.8rem;padding-top:.5rem}.fine-print{font-size:.9rem;color:var(--muted)}
+    a{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <h1>One compiled Go app, two renderers</h1>
+  <p class="intro">Each card runs the same emitted GoScript module and runtime. Switch its renderer between DOM and React; Go state, ordered trace, supported input focus and selection, and pending manual effect requests stay with the app session.</p>
+  <p id="status" role="status">Loading compiled Go components…</p>
+  <main id="apps"></main>
+  <p class="fine-print">The effect card uses an in-memory manual host. “Complete next request” returns the captured argument and sends no network request. The demo runs compiled Go JavaScript with WebAssembly disabled; the HTTP server only serves these static files. A failed renderer replacement is reported without a visual rollback guarantee.</p>
+  <script type="module" src="./demo.bundle.mjs"></script>
+</body>
+</html>

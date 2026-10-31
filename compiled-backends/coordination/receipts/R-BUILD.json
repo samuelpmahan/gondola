@@ -1,0 +1,81 @@
+{
+  "schema": "gobi.worker-repair-receipt/v1",
+  "job_id": "R-BUILD",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Guarded GobiBackend.Emit against a nil emitter while preserving the zero-value adapter's legacy React AppIR validation error. Added regression coverage for nil receiver and zero-valued adapter; focused Go 1.27.3 build/emitter tests and Go 1.24.0 compilercontract tests pass.",
+  "report": {
+    "path": "compiled-backends/coordination/reports/R-BUILD.md",
+    "sha256": "fe16d107d931b7783cc8d8189513f507f1221378bc24bae0a3a1b101b19032d3"
+  },
+  "source_scope": [
+    "compiled-frontend/emit/backend.go",
+    "compiled-frontend/emit/backend_test.go",
+    "compiled-backends/coordination/reports/R-BUILD.md",
+    "compiled-backends/coordination/receipts/R-BUILD.json",
+    "compiled-backends/coordination/evidence/repairs/build/**"
+  ],
+  "source_sha256": {
+    "compiled-frontend/emit/backend.go": "b2486fff69d106a4801e5a5400c961b3b6ab55ff9be440dcbdec5a9631f3d3ed",
+    "compiled-frontend/emit/backend_test.go": "dc5c6a1ce143a1d79908eba2805879ff14d7f80d8d27e4ce650fccedf7e4c015"
+  },
+  "before_hashes": {
+    "baseline_commit": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "baseline_backend_go_sha256": "c602d9d196f61c1717b1ca72e36e50f22dbd0a55c24d0c7cd5d9b585d30dfb9c",
+    "pre_repair_backend_go_sha256": "41c16e8fe42a4f9336f7860fc147bba283c068df3ac3fe2ece4f760103920468",
+    "pre_repair_backend_test_sha256": "63c37185e1b7b02048d4f027acae21c9737828384e0f8a5e3fe27e0bff710bda",
+    "xr_repro_sha256": "f5cd990adeb80587d8decbfd9fdf13e6f7e779cbb11499f6f99502668f083196",
+    "xr_audit_sha256": "6f34de936802975cb28fd40e89a2f7d9986949c771e1188dd3d36783d518a04e"
+  },
+  "implementation": {
+    "nil_receiver": "Unchanged: returns nil files and the existing nil configured Gobi backend error.",
+    "legacy_identity_check": "Unchanged and still runs before the emitter fallback.",
+    "nil_emitter": "Delegates to Backend{}.Emit(backend.appIR), preserving the legacy zero-value React AppIR validation error and no-files result.",
+    "configured_emitter": "Unchanged: delegates to the configured React or DOM AppIREmitter."
+  },
+  "verification": [
+    {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test -count=1 ./emit ./build",
+      "working_directory": "compiled-frontend",
+      "toolchain": "go1.27.3 linux/amd64",
+      "exit_code": 0,
+      "result": "emit and build packages passed",
+      "log": "compiled-backends/coordination/evidence/repairs/build/go1.27.3-emit-build.log",
+      "log_sha256": "e8f6f16f98622833e4d2c79cfc1786e17e716a7e9af5de6617dd2bf5137d3066"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go test -count=1 ./compilercontract",
+      "working_directory": "repository root",
+      "toolchain": "go1.24.0 linux/amd64",
+      "exit_code": 0,
+      "result": "compilercontract package passed",
+      "log": "compiled-backends/coordination/evidence/repairs/build/go1.24.0-compilercontract.log",
+      "log_sha256": "d8c0fc599f2848ae7bfbdfa0555f20fb6bfc9212217beeef86437a5712dbf090"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run /tmp/gobi-zero-backend-repro.go",
+      "setup": "Copied the preserved XR fixture compiled-backends/evidence/reviews/xr-build/zero_backend_repro.go.txt to /tmp/gobi-zero-backend-repro.go.",
+      "working_directory": "compiled-frontend",
+      "toolchain": "go1.27.3 linux/amd64",
+      "exit_code": 0,
+      "result": "No panic; zero files and the same invalid AppIR React-emission error as the legacy fallback.",
+      "log": "compiled-backends/coordination/evidence/repairs/build/zero-backend-repro-after.log",
+      "log_sha256": "175e72f3ea9f54a7c0665ac479bd736d94fa6225fc49f51c410645a9fb3dc3f2"
+    }
+  ],
+  "failure_history": [
+    {
+      "source": "compiled-backends/coordination/receipts/XR--BUILD.json",
+      "pre_repair_result": "The preserved zero-value reproduction panicked with a nil-pointer dereference; the same audit recorded the legacy React fallback's AppIR validation error.",
+      "final_verification_failures": 0
+    }
+  ],
+  "four_app_cli_rebuild": {
+    "performed": false,
+    "reason": "The repair changes only the zero-value adapter fallback; the AppIR emitters and build code generation are unchanged. The Go emit and build packages were rerun."
+  },
+  "limits": [
+    "No new four-app CLI build was executed for this guard-only repair.",
+    "The original XR--BUILD report, receipt, reproduction fixture, and audit were left unchanged."
+  ]
+}

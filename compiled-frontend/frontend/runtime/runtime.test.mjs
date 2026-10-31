@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   createDeterministicEffectHost,
   mountCompiledApp,
+  RuntimeFailure,
 } from "./runtime.mjs";
 
 const APP_ID = "counter-app";
@@ -656,6 +657,471 @@ test("stale and post-unmount callbacks are fenced and recorded without Update", 
   assert.deepEqual(trace.ticks[3].view, traceBeforeLate.ticks.at(-1).view);
   assert.equal(trace.ticks[3].dom.html, "");
   assert.equal(runtime.failure(), null);
+});
+
+test("renderer replacement commits the cached Go view without an application tick or Update", () => {
+  const hostEvents = [];
+  let deliver;
+  const effectHost = {
+    request(request, callback) {
+      hostEvents.push({ kind: "request", request });
+      deliver = callback;
+    },
+  };
+  const { app, renderer: oldRenderer, runtime } = setup({ effectHost });
+  assert.equal(runtime.dispatch(makeAction("1"), makeMessage("load", "q")).dispatchId, "dispatch-0001");
+  const traceBeforeSwap = runtime.trace();
+  const callsBeforeSwap = app.calls();
+  const nextRenderer = makeRenderer();
+
+  const swapped = runtime.replaceRenderer(nextRenderer);
+
+  assert.equal(oldRenderer.unmounted, true);
+  assert.equal(nextRenderer.currentView.Text, "count=0;pending=true");
+  assert.deepEqual(swapped.state, traceBeforeSwap.ticks.at(-1).state);
+  assert.deepEqual(swapped.view, nextRenderer.viewRecord());
+  assert.deepEqual(swapped.dom, nextRenderer.domSnapshot());
+  assert.deepEqual(runtime.trace(), traceBeforeSwap);
+  assert.deepEqual(app.calls(), callsBeforeSwap);
+  assert.equal(runtime.rendererDiagnostics().currentGeneration, 2);
+  assert.deepEqual(runtime.rendererDiagnostics().replacements, [{
+    attempt: 1,
+    fromGeneration: 1,
+    toGeneration: 2,
+    outcome: "committed",
+    phase: "complete",
+    oldUnmounted: true,
+    focusCaptured: false,
+    focusRestored: false,
+  }]);
+
+  const reply = {
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: { name: "complete", arg: "after-swap" },
+  };
+  assert.equal(deliver(reply).accepted, true);
+  assert.equal(deliver(reply).accepted, false);
+  const afterReply = runtime.trace();
+  assert.equal(afterReply.ticks.at(-1).dispatchId, "dispatch-0002");
+  assert.deepEqual(afterReply.ticks.at(-1).completedEffects, [{
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: reply.message,
+  }]);
+  assert.equal(stateField(afterReply.ticks.at(-1), "Pending").bool, false);
+  assert.equal(hostEvents.length, 1);
+  assert.equal(app.calls().initCalls, 1);
+  assert.equal(app.calls().updateCalls, 2);
+});
+
+test("retired renderer callbacks are fenced out of the application trace by renderer identity", () => {
+  const { app, renderer: oldRenderer, runtime } = setup();
+  const callbacksFromInitialView = oldRenderer.callbacks;
+  runtime.dispatch(makeAction("2/0", "click", "advance"), makeMessage("add"));
+  const callbacksFromLaterView = oldRenderer.callbacks;
+  const traceBeforeSwap = runtime.trace();
+  const nextRenderer = makeRenderer();
+
+  runtime.replaceRenderer(nextRenderer);
+  assert.deepEqual(runtime.trace(), traceBeforeSwap);
+
+  const staleDispatch = callbacksFromInitialView.dispatch(
+    makeAction("2/0", "click", "retired-dispatch"),
+    makeMessage("add"),
+  );
+  const staleNotification = callbacksFromLaterView.onStaleAction(
+    makeAction("2/0", "click", "retired-stale"),
+    99,
+  );
+
+  assert.equal(staleDispatch.accepted, false);
+  assert.equal(staleNotification.accepted, false);
+  assert.equal(staleDispatch.stale, true);
+  assert.equal(runtime.rendererDiagnostics().fencedCallbacks.length, 2);
+  assert.deepEqual(runtime.rendererDiagnostics().fencedCallbacks.map(({ kind }) => kind), ["dispatch", "stale"]);
+  assert.deepEqual(runtime.trace(), traceBeforeSwap);
+  assert.equal(app.calls().updateCalls, 1);
+
+  const newDispatch = nextRenderer.callbacks.dispatch(
+    makeAction("2/0", "click", "current"),
+    makeMessage("add"),
+  );
+  assert.equal(newDispatch.accepted, true);
+  assert.equal(newDispatch.dispatchId, "dispatch-0002");
+  assert.equal(app.calls().updateCalls, 2);
+});
+
+test("replacement focus hooks preserve the keyed focus snapshot without changing the trace", () => {
+  const { renderer: oldRenderer, runtime } = setup();
+  const focus = {
+    identity: JSON.stringify(["keyed-input"]),
+    selectionStart: 2,
+    selectionEnd: 4,
+    selectionDirection: "backward",
+  };
+  let nextFocus = null;
+  let dispatchDuringRestore;
+  let directDispatchDuringRestore;
+  oldRenderer.focusState = () => focus;
+  oldRenderer.restoreFocus = () => false;
+  const traceBeforeSwap = runtime.trace();
+  const nextRenderer = makeRenderer();
+  nextRenderer.focusState = () => null;
+  nextRenderer.restoreFocus = (state) => {
+    nextFocus = state;
+    dispatchDuringRestore = nextRenderer.callbacks.dispatch(makeAction("nested"), makeMessage("add"));
+    directDispatchDuringRestore = runtime.dispatch(makeAction("direct"), makeMessage("add"));
+    return true;
+  };
+
+  runtime.replaceRenderer(nextRenderer);
+
+  assert.deepEqual(nextFocus, focus);
+  assert.equal(dispatchDuringRestore.accepted, false);
+  assert.equal(directDispatchDuringRestore.accepted, false);
+  assert.deepEqual(runtime.trace(), traceBeforeSwap);
+  assert.equal(runtime.rendererDiagnostics().replacements[0].focusCaptured, true);
+  assert.equal(runtime.rendererDiagnostics().replacements[0].focusRestored, true);
+});
+
+test("replacement requires a valid focus record and a truthful boolean restore result", () => {
+  const malformed = setup();
+  malformed.renderer.focusState = () => undefined;
+  malformed.renderer.restoreFocus = () => true;
+  const beforeMalformedCapture = malformed.runtime.trace();
+  const malformedCaptureTarget = makeRenderer();
+  malformedCaptureTarget.focusState = () => null;
+  malformedCaptureTarget.restoreFocus = () => true;
+  assert.throws(
+    () => malformed.runtime.replaceRenderer(malformedCaptureTarget),
+    /focusState\(\).*null.*focus record/i,
+  );
+  assert.equal(malformed.renderer.unmounted, undefined);
+  assert.equal(malformed.runtime.failure(), null);
+  assert.deepEqual(malformed.runtime.trace(), beforeMalformedCapture);
+
+  for (const restoreResult of [undefined, "restored", false]) {
+    const { renderer: oldRenderer, runtime } = setup();
+    oldRenderer.focusState = () => ({
+      identity: JSON.stringify(["keyed-input"]),
+      selectionStart: 1,
+      selectionEnd: 2,
+      selectionDirection: "forward",
+    });
+    oldRenderer.restoreFocus = () => true;
+    const before = runtime.trace();
+    const nextRenderer = makeRenderer();
+    nextRenderer.focusState = () => null;
+    nextRenderer.restoreFocus = () => restoreResult;
+
+    assert.throws(() => runtime.replaceRenderer(nextRenderer), RuntimeFailure);
+    assert.equal(oldRenderer.unmounted, true);
+    assert.deepEqual(runtime.trace(), before);
+    assert.equal(runtime.failure().stage, "renderer-replacement");
+    assert.equal(runtime.rendererDiagnostics().currentGeneration, null);
+    assert.equal(runtime.rendererDiagnostics().replacements.at(-1).phase, "focus-restore");
+    assert.equal(runtime.rendererDiagnostics().replacements.at(-1).focusRestored, false);
+    assert.throws(() => runtime.snapshot(), /unavailable after a failed replacement/i);
+  }
+});
+
+test("replacement rejects invalid, async, and reentrant admissions before old renderer teardown", () => {
+  const { renderer: oldRenderer, runtime } = setup();
+  const traceBefore = runtime.trace();
+  assert.throws(() => runtime.replaceRenderer({ update() {} }), /renderer must provide/i);
+  assert.equal(oldRenderer.unmounted, undefined);
+  assert.deepEqual(runtime.trace(), traceBefore);
+  assert.throws(() => runtime.replaceRenderer(oldRenderer), /with itself/i);
+  assert.equal(oldRenderer.unmounted, undefined);
+  assert.deepEqual(runtime.trace(), traceBefore);
+
+  let asyncCalls = 0;
+  const asyncRenderer = makeRenderer();
+  asyncRenderer.update = async () => {
+    asyncCalls += 1;
+  };
+  assert.throws(() => runtime.replaceRenderer(asyncRenderer), /synchronously/i);
+  assert.equal(asyncCalls, 0);
+  assert.equal(oldRenderer.unmounted, undefined);
+  assert.deepEqual(runtime.trace(), traceBefore);
+
+  let enteredGetter = false;
+  const target = makeRenderer();
+  const reentrantRenderer = new Proxy(target, {
+    get(object, key, receiver) {
+      if (key === "update" && !enteredGetter) {
+        enteredGetter = true;
+        assert.throws(() => runtime.replaceRenderer(makeRenderer()), /reentrant/i);
+      }
+      return Reflect.get(object, key, receiver);
+    },
+  });
+  assert.doesNotThrow(() => runtime.replaceRenderer(reentrantRenderer));
+  assert.equal(enteredGetter, true);
+  assert.equal(oldRenderer.unmounted, true);
+  assert.deepEqual(runtime.trace(), traceBefore);
+  assert.equal(runtime.rendererDiagnostics().replacements[0].outcome, "rejected");
+  assert.equal(runtime.rendererDiagnostics().replacements.at(-1).outcome, "committed");
+});
+
+test("a thenable renderer commit fails closed without claiming the old view was restored", async () => {
+  let deliver;
+  let heldDelivery;
+  const { renderer: oldRenderer, runtime } = setup({
+    effectHost: { request(_request, callback) { deliver = callback; } },
+  });
+  runtime.dispatch(makeAction("1"), makeMessage("load", "q"));
+  const traceBefore = runtime.trace();
+  const reply = {
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: { name: "complete", arg: "must-be-canceled" },
+  };
+  const nextRenderer = makeRenderer();
+  nextRenderer.update = () => {
+    heldDelivery = deliver(reply);
+    return Promise.resolve();
+  };
+
+  assert.throws(() => runtime.replaceRenderer(nextRenderer), RuntimeFailure);
+
+  assert.equal(oldRenderer.unmounted, true);
+  assert.deepEqual(runtime.trace(), traceBefore);
+  assert.equal(heldDelivery.accepted, true);
+  assert.equal(heldDelivery.queued, true);
+  assert.equal(runtime.failure().stage, "renderer-replacement");
+  assert.equal(runtime.rendererDiagnostics().currentGeneration, null);
+  assert.throws(() => runtime.snapshot(), /unavailable after a failed replacement/i);
+  await Promise.resolve();
+  assert.deepEqual(runtime.trace(), traceBefore);
+  assert.equal(runtime.complete(reply).accepted, false);
+  assert.deepEqual(runtime.rendererDiagnostics().replacements.at(-1), {
+    attempt: 1,
+    fromGeneration: 1,
+    toGeneration: 2,
+    outcome: "failed",
+    phase: "new-commit",
+    oldUnmounted: true,
+    focusCaptured: false,
+    focusRestored: false,
+  });
+});
+
+test("a rejected native Promise from renderer update is observed without invoking its then getter", async () => {
+  const { app, renderer: oldRenderer, runtime } = setup();
+  const before = runtime.trace();
+  const unhandled = [];
+  const onUnhandled = (reason) => unhandled.push(reason instanceof Error ? reason.message : String(reason));
+  process.on("unhandledRejection", onUnhandled);
+  let thenGetterCalls = 0;
+  let reentrantDispatch;
+  let nextRenderer;
+  nextRenderer = makeRenderer();
+  nextRenderer.update = (_view, callbacks) => {
+    const rejected = Promise.reject(new Error("late renderer rejection"));
+    Object.defineProperty(rejected, "then", {
+      configurable: true,
+      get() {
+        thenGetterCalls += 1;
+        reentrantDispatch = callbacks.dispatch(makeAction("then-getter"), makeMessage("add"));
+        assert.throws(() => runtime.replaceRenderer(makeRenderer()), /reentrant/i);
+        return Promise.prototype.then;
+      },
+    });
+    return rejected;
+  };
+
+  try {
+    assert.throws(() => runtime.replaceRenderer(nextRenderer), RuntimeFailure);
+    assert.equal(oldRenderer.unmounted, true);
+    assert.equal(runtime.failure().stage, "renderer-replacement");
+    assert.equal(runtime.rendererDiagnostics().currentGeneration, null);
+    assert.deepEqual(runtime.trace(), before);
+    assert.equal(app.calls().updateCalls, 0);
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.deepEqual(unhandled, []);
+    assert.equal(thenGetterCalls, 0);
+    assert.equal(reentrantDispatch, undefined);
+    assert.equal(app.calls().updateCalls, 0);
+    assert.deepEqual(runtime.trace(), before);
+  } finally {
+    process.off("unhandledRejection", onUnhandled);
+  }
+});
+
+test("rejected observation Promises fail a swap closed without leaking rejections", async () => {
+  const unhandled = [];
+  const onUnhandled = (reason) => unhandled.push(reason instanceof Error ? reason.message : String(reason));
+  process.on("unhandledRejection", onUnhandled);
+  try {
+    for (const method of ["viewRecord", "domSnapshot"]) {
+      const { app, renderer: oldRenderer, runtime } = setup();
+      const traceBefore = runtime.trace();
+      const stateBefore = runtime.snapshot().state;
+      const nextRenderer = makeRenderer();
+      nextRenderer[method] = () => Promise.reject(new Error(`late ${method} rejection`));
+
+      assert.throws(() => runtime.replaceRenderer(nextRenderer), RuntimeFailure);
+      assert.equal(oldRenderer.unmounted, true);
+      assert.equal(runtime.failure().stage, "renderer-replacement");
+      assert.equal(runtime.rendererDiagnostics().currentGeneration, null);
+      assert.deepEqual(runtime.trace(), traceBefore);
+      assert.equal(app.calls().updateCalls, 0);
+      assert.equal(app.calls().initCalls, 1);
+      assert.throws(() => runtime.snapshot(), /unavailable after a failed replacement/i);
+      assert.deepEqual(stateBefore.fields[0], { name: "Count", value: { typeId: "int64", kind: "int", int: "0" } });
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.deepEqual(unhandled, []);
+  } finally {
+    process.off("unhandledRejection", onUnhandled);
+  }
+});
+
+test("active runtime unmount rejects a returned Promise without reporting success", async () => {
+  const { app, renderer, runtime } = setup();
+  const traceBefore = runtime.trace();
+  const retainedView = renderer.currentView;
+  const unhandled = [];
+  const onUnhandled = (reason) => unhandled.push(reason instanceof Error ? reason.message : String(reason));
+  process.on("unhandledRejection", onUnhandled);
+  renderer.unmount = () => Promise.reject(new Error("late unmount rejection"));
+
+  try {
+    assert.equal(runtime.unmount(), false);
+    assert.equal(runtime.isUnmounted(), true);
+    assert.equal(runtime.failure().stage, "unmount");
+    assert.equal(renderer.currentView, retainedView);
+    assert.equal(app.calls().updateCalls, 0);
+    assert.deepEqual(runtime.trace(), traceBefore);
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.deepEqual(unhandled, []);
+  } finally {
+    process.off("unhandledRejection", onUnhandled);
+  }
+});
+
+test("completion during replacement stays pending at return, then commits exactly once", async () => {
+  let deliver;
+  let runtime;
+  let duringSwapDispatch;
+  let directDispatch;
+  let firstDelivery;
+  let duplicateDelivery;
+  let proxyDispatch;
+  const effectHost = {
+    request(_request, callback) { deliver = callback; },
+  };
+  const app = makeApp();
+  const oldRenderer = makeRenderer();
+  runtime = mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    appId: APP_ID,
+    encoder: makeHelpers(),
+    renderer: oldRenderer,
+    effectHost,
+  });
+  assert.equal(runtime.dispatch(makeAction("1"), makeMessage("load", "q")).accepted, true);
+  const beforeSwap = runtime.trace();
+  const reply = {
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: { name: "complete", arg: "held-reply" },
+  };
+  const nextRenderer = makeRenderer();
+  const commit = nextRenderer.update.bind(nextRenderer);
+  let injectDuringReplacement = true;
+  nextRenderer.update = (view, callbacks) => {
+    if (injectDuringReplacement) {
+      injectDuringReplacement = false;
+      duringSwapDispatch = callbacks.dispatch(makeAction("nested"), makeMessage("add"));
+      directDispatch = runtime.dispatch(makeAction("direct"), makeMessage("add"));
+      const proxiedReply = new Proxy(reply, {
+        ownKeys(target) {
+          proxyDispatch = runtime.dispatch(makeAction("proxy-trap"), makeMessage("add"));
+          assert.throws(() => runtime.replaceRenderer(makeRenderer()), /reentrant/i);
+          return Reflect.ownKeys(target);
+        },
+      });
+      firstDelivery = deliver(proxiedReply);
+      duplicateDelivery = deliver(reply);
+    }
+    return commit(view, callbacks);
+  };
+
+  const swapped = runtime.replaceRenderer(nextRenderer);
+
+  assert.equal(swapped.dom.html, "<div>count=0;pending=true</div>");
+  assert.equal(stateField(runtime.trace().ticks.at(-1), "Pending").bool, true);
+  assert.deepEqual(runtime.trace(), beforeSwap);
+  assert.equal(duringSwapDispatch.accepted, false);
+  assert.equal(directDispatch.accepted, false);
+  assert.equal(proxyDispatch.accepted, false);
+  assert.equal(firstDelivery.accepted, true);
+  assert.equal(firstDelivery.queued, true);
+  assert.equal(duplicateDelivery.accepted, false);
+  assert.equal(app.calls().updateCalls, 1);
+  assert.equal(runtime.complete(reply).accepted, false);
+  assert.deepEqual(runtime.trace(), beforeSwap);
+
+  await Promise.resolve();
+
+  const afterDrain = runtime.trace();
+  assert.equal(afterDrain.ticks.length, beforeSwap.ticks.length + 1);
+  assert.equal(afterDrain.ticks.at(-1).dispatchId, "dispatch-0002");
+  assert.equal(afterDrain.ticks.at(-1).message.name, "complete");
+  assert.equal(afterDrain.ticks.at(-1).completedEffects[0].dispatchId, "dispatch-0001");
+  assert.equal(stateField(afterDrain.ticks.at(-1), "Pending").bool, false);
+  assert.equal(app.calls().updateCalls, 2);
+});
+
+test("unmount before the held completion microtask cancels it without resurrection", async () => {
+  let deliver;
+  let completionDelivery;
+  const app = makeApp();
+  const oldRenderer = makeRenderer();
+  const originalUnmount = oldRenderer.unmount.bind(oldRenderer);
+  const effectHost = { request(_request, callback) { deliver = callback; } };
+  const runtime = mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    appId: APP_ID,
+    encoder: makeHelpers(),
+    renderer: oldRenderer,
+    effectHost,
+  });
+  runtime.dispatch(makeAction("1"), makeMessage("load", "q"));
+  const before = runtime.trace();
+  const reply = {
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: { name: "complete", arg: "must-not-resurrect" },
+  };
+  oldRenderer.unmount = () => {
+    const result = originalUnmount();
+    completionDelivery = deliver(reply);
+    return result;
+  };
+
+  runtime.replaceRenderer(makeRenderer());
+  assert.equal(completionDelivery.accepted, true);
+  assert.equal(completionDelivery.queued, true);
+  assert.equal(runtime.trace().ticks.length, before.ticks.length);
+  assert.equal(runtime.unmount(), true);
+  await Promise.resolve();
+
+  assert.equal(runtime.isUnmounted(), true);
+  assert.deepEqual(runtime.trace(), before);
+  assert.equal(app.calls().updateCalls, 1);
+  assert.equal(runtime.complete(reply).accepted, false);
 });
 
 test("trace snapshots preserve nil versus empty slices and negative-zero bits", () => {
