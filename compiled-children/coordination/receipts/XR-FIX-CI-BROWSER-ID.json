@@ -1,0 +1,153 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-FIX-CI-BROWSER-ID",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Accepted the isolated browser-version repair. The supplied CI job log reproduces the Chrome for Testing label failure; strict version grammar, unmodified trimmed receipt label, helper/test source pins and required test integration, focused tests, syntax checks, and preserved original bytes all verify.",
+  "reviewed_job": {
+    "job_id": "E-FIX-CI-BROWSER-ID",
+    "worker": "N1",
+    "outcome": "mixed_change"
+  },
+  "source_sha256": {
+    "compiled-children/run.mjs": "22f4915c6aa0b300a23ed8a5ffe3a2d8a710c50d7f08c33e1d9e5d82c45e44ac",
+    "compiled-children/browser-version.mjs": "624fc3369d9f6e47d7d84d23de41e0bdbe07d6ce925c878a8623d08765b4f6ee",
+    "compiled-children/conformance/browser-version.test.mjs": "6c465496d274480ad79bf2fd74f4e6566095edc4022f83361b1d9c400a6586e6"
+  },
+  "findings": [],
+  "review_summary": {
+    "rawCiFailureVerified": true,
+    "strictAllowlistGrammarVerified": true,
+    "exactTrimmedBrowserLabelPreserved": true,
+    "helperAndTestPinnedRequiredAndTested": true,
+    "preAndPostArchiveSourcePinBoundariesPresent": true,
+    "preservedSourceMatchesManifest": true,
+    "focusedNode22TestPasses": true,
+    "allThreeNodeSyntaxChecksPass": true,
+    "actualLFAndCRLFSuffixRejected": true,
+    "fullPipelineOrCiRerun": false
+  },
+  "execution": {
+    "runtime": "Node v22.23.4",
+    "focused_test": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/browser-version.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola-children-ci",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "syntax_checks": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/run.mjs",
+        "exit_code": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/browser-version.mjs",
+        "exit_code": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/browser-version.test.mjs",
+        "exit_code": 0
+      }
+    ],
+    "newline_probe": {
+      "exit_code": 0,
+      "lf_rejected": true,
+      "crlf_rejected": true
+    },
+    "not_run": [
+      "full delivery runner",
+      "npm install",
+      "browser workflow",
+      "CI rerun"
+    ]
+  },
+  "reviewed_evidence": [
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-CI-BROWSER-ID.md",
+      "bytes": 2989,
+      "sha256": "445bd347a6dfa473db61fa3d2315f53f4921ccf4aa1a12ae61e6fdec2104d596"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-FIX-CI-BROWSER-ID.json",
+      "bytes": 7931,
+      "sha256": "300e9abcf72384fb023d43f8e76a4c1fd44e2df2513bab9aa8ae98e8a4092dda"
+    },
+    {
+      "path": "compiled-children/coordination/ci-source-9bd6/run-41206230269-job-124551739981.log",
+      "bytes": 42847,
+      "sha256": "ca07e255cd36e51d99e7de16300880a7ba9c5938c99bc59f00b7a3859d307055"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-CI-BROWSER-ID/originals/manifest.json",
+      "bytes": 329,
+      "sha256": "b930ee55fb5403b79a2d32f93fa220866237402217f926b34b2d6a4b430f972e"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-CI-BROWSER-ID/originals/run.mjs",
+      "bytes": 60431,
+      "sha256": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-review-audit.json",
+      "bytes": 5483,
+      "sha256": "883b2fdfa5d137f97b82c7577347a44e7d54e31f6215c7b408f01db0bf9309a0"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-focused-tests.log",
+      "bytes": 878,
+      "sha256": "51f23c93ca56e26e50d3ad4c2377ef55a47b2b7032ca2988154f8bffed929c3d"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-focused-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-actual-newline-probe.log",
+      "bytes": 217,
+      "sha256": "8353716be4b30176358f7b90cdf4add62a176e19db7522e74740edcd7f375bbb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-actual-newline-probe.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-secondary-runner-check.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-secondary-helper-check.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-secondary-test-check.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-secondary-runner-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-secondary-helper-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-CI-BROWSER-ID-secondary-test-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-FIX-CI-BROWSER-ID.md",
+    "bytes": 2734,
+    "sha256": "98c101a80d7eca33f294c5e9bc340c87c1f2640b80a8e3a78e228e2e8ef874a0"
+  }
+}

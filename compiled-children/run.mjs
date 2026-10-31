@@ -17,6 +17,7 @@ import {
   createExclusiveAttemptDirectory,
   writeImmutableSnapshot,
 } from "../compiled-capabilities/archive-helper.mjs";
+import { isChromiumVersionOutput } from "./browser-version.mjs";
 import { validateInheritedAcceptance } from "./inherited-acceptance.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -33,6 +34,8 @@ const oracleModule = join(oracleDirectory, "oracle.mjs");
 const harnessRunner = join(here, "conformance/run.mjs");
 const hostUnitTest = join(here, "runtime/runtime.test.mjs");
 const inheritedAcceptanceTest = join(here, "inherited-acceptance.test.mjs");
+const browserVersionModule = join(here, "browser-version.mjs");
+const browserVersionTest = join(here, "conformance/browser-version.test.mjs");
 const noWasmUnitTest = join(root, "compiled-frontend/conformance/no-wasm.test.mjs");
 const swapContractTest = join(here, "conformance/swap-contract.test.mjs");
 const demoBuilder = join(here, "demo/build.mjs");
@@ -103,6 +106,8 @@ const sourceFiles = [
   "compiled-children/RESULTS.md",
   "compiled-children/coordination/rawlogs/go.mod",
   "compiled-children/evidence-preflight/go.mod",
+  "compiled-children/browser-version.mjs",
+  "compiled-children/conformance/browser-version.test.mjs",
   "compiled-children/.gitignore",
   ".github/workflows/gobi-compiled-children.yml",
 ];
@@ -288,6 +293,8 @@ async function verifyRequiredInputs() {
     fixturePath,
     join(nativeCommand, "main.go"),
     join(here, "CONTRACT.md"),
+    browserVersionModule,
+    browserVersionTest,
     join(here, "inherited-acceptance.mjs"),
     inheritedAcceptanceTest,
     join(here, "coordination/rawlogs/go.mod"),
@@ -417,7 +424,7 @@ async function collectVersions() {
   if (!versions.node.startsWith("v22.")) throw new Error(`Node 22 required; got ${versions.node}`);
   if (!versions.rootGo.includes("go1.24.")) throw new Error(`root Go 1.24 required; got ${versions.rootGo}`);
   if (!versions.compilerGo.includes("go1.27.3")) throw new Error(`compiler Go 1.27.3 required; got ${versions.compilerGo}`);
-  if (!versions.chromium || !versions.chromium.startsWith("Chromium ")) throw new Error(`Chromium version output is empty or invalid: ${versions.chromium}`);
+  if (!isChromiumVersionOutput(versions.chromium)) throw new Error(`Chromium version output is empty or invalid: ${versions.chromium}`);
   for (const [name, path] of Object.entries({
     react: "interaction/node_modules/react/package.json",
     reactDOM: "interaction/node_modules/react-dom/package.json",
@@ -777,10 +784,10 @@ async function runNewUnitTests() {
   if (!testNames.has("check.test.mjs") || !testNames.has("seeded.test.mjs")) {
     throw new Error("N5 must provide N4 conformance/check.test.mjs and seeded.test.mjs before full acceptance");
   }
-  const requiredUnitTests = [hostUnitTest, inheritedAcceptanceTest, noWasmUnitTest, swapContractTest];
+  const requiredUnitTests = [hostUnitTest, inheritedAcceptanceTest, browserVersionTest, noWasmUnitTest, swapContractTest];
   const missing = [];
   for (const path of requiredUnitTests) if (!await exists(path)) missing.push(rel(path));
-  if (missing.length) throw new Error(`required host, inherited-gate, no-WASM, or swap-contract tests are missing: ${missing.join(", ")}`);
+  if (missing.length) throw new Error(`required host, inherited-gate, browser-version, no-WASM, or swap-contract tests are missing: ${missing.join(", ")}`);
   if (!testNames.has(basename(swapContractTest))) {
     throw new Error("N6 conformance/swap-contract.test.mjs must participate in full acceptance");
   }
