@@ -1,0 +1,319 @@
+{
+  "schema": "gobi.backend-qualification-build-evidence/v1",
+  "job_id": "E-BUILD",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Implemented the agreed buildQualificationInputs API and verified fresh GoScript React/DOM builds plus a native Go trace with exact manifest, AppIR capability, locked-input and source provenance pins.",
+  "scope": {
+    "owned_paths": [
+      "backend-qualification/build/**",
+      "backend-qualification/coordination/reports/E-BUILD.md",
+      "backend-qualification/coordination/receipts/E-BUILD.json",
+      "backend-qualification/coordination/rawlogs/E-BUILD/**"
+    ],
+    "production_paths_changed": [
+      "backend-qualification/build/build.mjs"
+    ],
+    "core_compiler_or_fixture_paths_changed": []
+  },
+  "source": {
+    "base_reference_from_contract": "5662efcd7feb7920e4690d38cc76a297fed69d5",
+    "builder": {
+      "path": "backend-qualification/build/build.mjs",
+      "bytes": 17452,
+      "sha256": "315a0d4f227ec99501b7eb4b4305ab16ed1c7a4a4659ace9975b36b584e66ad0"
+    },
+    "pin_count": 86,
+    "pins_match_before_after_build": true,
+    "source_pins_copy": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/source-pins.json",
+      "bytes": 13934,
+      "sha256": "9a51c830855c5f110da98ba5b7ee1dffa2c0230bb86d75feabacaa70baf2a776"
+    },
+    "fixture": {
+      "path": "fixtures/compiled/publications/scenario.json",
+      "bytes": 12307,
+      "sha256": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819"
+    },
+    "qualification_plan": {
+      "path": "backend-qualification/oracle/plan.json",
+      "bytes": 17627,
+      "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156",
+      "schema": "gobi.backend-qualification-oracle-plan/v1",
+      "caseCount": 13
+    },
+    "baseline_expectations": {
+      "path": "compiled-publications/oracle/expectations.json",
+      "bytes": 2635707,
+      "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+      "schema": "gobi.compiled-publications-oracle-expectations/v1"
+    },
+    "locked_inputs": {
+      "go.mod": {
+        "bytes": 48,
+        "sha256": "e5dba8ed15a331f2bcdc7a35604cadd927fd486bca2543e83953f6a73716c5fa"
+      },
+      "compiled-frontend/go.mod": {
+        "bytes": 528,
+        "sha256": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24"
+      },
+      "compiled-frontend/go.sum": {
+        "bytes": 1831,
+        "sha256": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b"
+      },
+      "package-lock.json": {
+        "bytes": 2478,
+        "sha256": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b"
+      },
+      "compiled-frontend/package-lock.json": {
+        "bytes": 14526,
+        "sha256": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079"
+      },
+      "interaction/package-lock.json": {
+        "bytes": 16564,
+        "sha256": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0"
+      }
+    }
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "nativeGo": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go version go1.27.3 linux/amd64",
+    "goExecutable": "/tmp/gondola-go/bin/go",
+    "nodeExecutable": "/tmp/gondola-node22/node_modules/node/bin/node"
+  },
+  "builds": [
+    {
+      "backend": "react",
+      "manifest": {
+        "path": "builds/react/output/buildmanifest.json",
+        "bytes": 4706,
+        "sha256": "121ab8a802f0d0294235aae43f2fa93eabf22cdc419b135b718346025f45cf15"
+      },
+      "component_id": "github.com/samuelpmahan/gondola/fixtures/compiled/publications",
+      "capabilities": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply",
+        "effect.cancel"
+      ],
+      "output_count_actual": 67,
+      "result_schema": "gobi.build-result/v1",
+      "cli_ok": true,
+      "diagnostics": [],
+      "command_record": {
+        "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/goscript-react.command.json",
+        "sha256": "4d90a404fb79449001548effa19614551a0eb0973bf64684a7410bad8d443671",
+        "exitCode": 0
+      },
+      "module": {
+        "path": "builds/react/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs",
+        "bytes": 550514,
+        "sha256": "70c09acac750c60f20d5ec52fab4de54a9cf7808d88001883194347d3c1a36b7",
+        "absolute_path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/react/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs"
+      },
+      "encoder": {
+        "path": "builds/react/output/apps/publications-5ad33d9496e7/encoder.mjs",
+        "bytes": 17417,
+        "sha256": "12b9b02389aee4493f724a181ec033f3e884d5559755dcb58b98ee6d02b872f9",
+        "absolute_path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/react/output/apps/publications-5ad33d9496e7/encoder.mjs"
+      },
+      "app_ir": {
+        "path": "builds/react/output/apps/publications-5ad33d9496e7/app-ir.json",
+        "bytes": 24682,
+        "sha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f"
+      }
+    },
+    {
+      "backend": "dom",
+      "manifest": {
+        "path": "builds/dom/output/buildmanifest.json",
+        "bytes": 4704,
+        "sha256": "73556d0f1ca736f850aa6a75a88e19f7e8540609c5213015c02a1ae0c82d2f39"
+      },
+      "component_id": "github.com/samuelpmahan/gondola/fixtures/compiled/publications",
+      "capabilities": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply",
+        "effect.cancel"
+      ],
+      "output_count_actual": 67,
+      "result_schema": "gobi.build-result/v1",
+      "cli_ok": true,
+      "diagnostics": [],
+      "command_record": {
+        "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/goscript-dom.command.json",
+        "sha256": "f370d3b5312532ed73c939137b5e5682acbc5b767f714e2ac8d57de7ce999a73",
+        "exitCode": 0
+      },
+      "module": {
+        "path": "builds/dom/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs",
+        "bytes": 550506,
+        "sha256": "9c18a74d1ac3cb4b84679ec4944576f2a8446a12af5f81293506a0e9e7a4bec7",
+        "absolute_path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/dom/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs"
+      },
+      "encoder": {
+        "path": "builds/dom/output/apps/publications-5ad33d9496e7/encoder.mjs",
+        "bytes": 17417,
+        "sha256": "12b9b02389aee4493f724a181ec033f3e884d5559755dcb58b98ee6d02b872f9",
+        "absolute_path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/dom/output/apps/publications-5ad33d9496e7/encoder.mjs"
+      },
+      "app_ir": {
+        "path": "builds/dom/output/apps/publications-5ad33d9496e7/app-ir.json",
+        "bytes": 24682,
+        "sha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f"
+      }
+    }
+  ],
+  "native_trace": {
+    "returned_path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/native/native-trace.json",
+    "rawlog": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/native/native-trace.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    "schema": "gobi.compiled-publications-native/v1",
+    "events": 50,
+    "go_updates": 45,
+    "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+    "command_record": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/native-publications-trace.command.json",
+      "sha256": "4babb7eb2ce68c9b355808375b1e6be3c78ba13e0e4870ddfb779928587d647c",
+      "exitCode": 0
+    }
+  },
+  "output_directory": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031",
+  "returned_paths": {
+    "reactCompiled": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/react/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs",
+    "reactHelpers": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/react/output/apps/publications-5ad33d9496e7/encoder.mjs",
+    "domCompiled": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/dom/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs",
+    "domHelpers": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/dom/output/apps/publications-5ad33d9496e7/encoder.mjs",
+    "fixturePath": "/workspace/scratch/39a56936f173/gondola-qualification/fixtures/compiled/publications/scenario.json",
+    "expectationsPath": "/workspace/scratch/39a56936f173/gondola-qualification/compiled-publications/oracle/expectations.json",
+    "nativePath": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/native/native-trace.json",
+    "provenancePath": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/provenance/build-inputs.json"
+  },
+  "provenance": {
+    "returned_path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/provenance/build-inputs.json",
+    "rawlog": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/build-inputs.json",
+      "bytes": 160549,
+      "sha256": "599b88579961eef51efc74beb9c0915514e59069727a217d6fa7afaa9778d70a"
+    },
+    "audit": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/audit.json",
+      "bytes": 5232,
+      "sha256": "9639d564c007efe7e56dd8db5c9b35be63926cb2273f708f85dcb07f896a80a2"
+    },
+    "source_pin_match_audit_passed": true
+  },
+  "commands": [
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/compiler-go-version.command.json",
+      "sha256": "84541b617ecf62e1112710ceea89ab1e0e733997b18ee3f3411a7b79c43a1331",
+      "exitCode": 0
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/goscript-dom.command.json",
+      "sha256": "f370d3b5312532ed73c939137b5e5682acbc5b767f714e2ac8d57de7ce999a73",
+      "exitCode": 0
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/goscript-react.command.json",
+      "sha256": "4d90a404fb79449001548effa19614551a0eb0973bf64684a7410bad8d443671",
+      "exitCode": 0
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/native-go-version.command.json",
+      "sha256": "6b890851a08b5d18ae2a98af72a4d2afebb82b0ab3c7cd18729176e42f3e9f99",
+      "exitCode": 0
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/native-publications-trace.command.json",
+      "sha256": "4babb7eb2ce68c9b355808375b1e6be3c78ba13e0e4870ddfb779928587d647c",
+      "exitCode": 0
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/commands/node-version.command.json",
+      "sha256": "fc7e0734a82cc3c0e31eeb5432a46aeb28db19ec745e112c49e671e8934adfeb",
+      "exitCode": 0
+    }
+  ],
+  "validation": {
+    "node_syntax_check": "passed",
+    "native_and_both_build_commands_exit_0": true,
+    "react_output_count_actual": 67,
+    "dom_output_count_actual": 67,
+    "react_dom_appir_byte_identical": true,
+    "react_dom_encoder_byte_identical": true,
+    "react_capabilities": [
+      "view.node",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ],
+    "dom_capabilities": [
+      "view.node",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ],
+    "independent_audit_check_count": 18,
+    "independent_audit_all_passed": true
+  },
+  "limitations": [
+    "Build/provenance packet only; mounted 13-case qualification execution is owned by N4 and is not claimed here."
+  ],
+  "report": {
+    "path": "backend-qualification/coordination/reports/E-BUILD.md",
+    "bytes": 3339,
+    "sha256": "4df3b79f25de9a3714c9bd0464d41fb915c7c645438edada5d3401992d04ebcd"
+  },
+  "evidence": {
+    "review_notes": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/review-notes.md",
+      "bytes": 823,
+      "sha256": "75cefcf5ffdb1b81d87be535cf87afd1d412a0d478252615b2a43cd659d95f71"
+    },
+    "audit": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/audit.json",
+      "bytes": 5232,
+      "sha256": "9639d564c007efe7e56dd8db5c9b35be63926cb2273f708f85dcb07f896a80a2"
+    },
+    "provenance_copy": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/build-inputs.json",
+      "bytes": 160549,
+      "sha256": "599b88579961eef51efc74beb9c0915514e59069727a217d6fa7afaa9778d70a"
+    },
+    "source_pins_copy": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/source-pins.json",
+      "bytes": 13934,
+      "sha256": "9a51c830855c5f110da98ba5b7ee1dffa2c0230bb86d75feabacaa70baf2a776"
+    },
+    "native_trace_copy": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/native/native-trace.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    "audit_stdout": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/audit.stdout.json",
+      "bytes": 827,
+      "sha256": "c745e72349eaef0a1f5542868298cba2616e43c5b3515ee85cd7b7cc11aa29f6"
+    },
+    "function_invocation": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/function.command.txt",
+      "bytes": 490,
+      "sha256": "3f0369d579193cc4ece228c72c74b34f0d3b407522d79043fdc6203612b98bd7"
+    },
+    "function_result": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/function-result.json",
+      "bytes": 1016,
+      "sha256": "79b67e00a95d599c2c02fa6a859f175c6a1ee1ddb015984499a0935d6723387c"
+    }
+  }
+}

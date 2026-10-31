@@ -1,0 +1,170 @@
+{
+  "schema": "gobi.backend-qualification-review-evidence/v1",
+  "job_id": "XR-BUILD",
+  "worker": "N3",
+  "decision": "amend",
+  "summary": "The sealed E-BUILD build artifacts and custody reconstruction are confirmed, but the builder/provenance/receipt use a 39-character base-reference prefix instead of the exact 40-character contract literal; superseding provenance needs that metadata corrected.",
+  "scope": {
+    "reviewed_paths": [
+      "backend-qualification/build/build.mjs (immutable sealed source copy)",
+      "backend-qualification/CONTRACT.md",
+      "backend-qualification/coordination/reports/E-BUILD.md",
+      "backend-qualification/coordination/receipts/E-BUILD.json",
+      "backend-qualification/coordination/rawlogs/E-BUILD/**",
+      "backend-qualification/coordination/seals/E-BUILD/**",
+      "retained /tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/{react,dom}/output/**"
+    ],
+    "reviewer_production_paths_changed": []
+  },
+  "source": {
+    "contract": {
+      "path": "backend-qualification/CONTRACT.md",
+      "bytes": 7213,
+      "sha256": "9416f6e12dab2674f355026106e1a8cceb2ab509f8f5287bd189a799e20745be"
+    },
+    "sealed_builder": {
+      "path": "backend-qualification/coordination/seals/E-BUILD/source/build.mjs",
+      "bytes": 17452,
+      "sha256": "315a0d4f227ec99501b7eb4b4305ab16ed1c7a4a4659ace9975b36b584e66ad0"
+    },
+    "sealed_report": {
+      "path": "backend-qualification/coordination/seals/E-BUILD/reports/E-BUILD.md",
+      "bytes": 3339,
+      "sha256": "4df3b79f25de9a3714c9bd0464d41fb915c7c645438edada5d3401992d04ebcd"
+    },
+    "sealed_receipt": {
+      "path": "backend-qualification/coordination/seals/E-BUILD/receipts/E-BUILD.json",
+      "bytes": 13606,
+      "sha256": "2db247b2ab183171c5174726e28c05d3a2e968b274f21a08bd37b66d27189d84"
+    },
+    "reconstruction": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/post-seal-custody-recovery/candidate-original-builder.mjs",
+      "bytes": 17452,
+      "sha256": "315a0d4f227ec99501b7eb4b4305ab16ed1c7a4a4659ace9975b36b584e66ad0"
+    },
+    "recovery_record": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/post-seal-custody-recovery/recovery.json",
+      "bytes": 1589,
+      "sha256": "d2e7f9e1b068540068678a84677e707abbf5de17262d7db2653a4c293c1912e4"
+    },
+    "provenance": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/build-inputs.json",
+      "bytes": 160549,
+      "sha256": "599b88579961eef51efc74beb9c0915514e59069727a217d6fa7afaa9778d70a"
+    },
+    "source_pins": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/source-pins.json",
+      "bytes": 13934,
+      "sha256": "9a51c830855c5f110da98ba5b7ee1dffa2c0230bb86d75feabacaa70baf2a776"
+    },
+    "build_audit": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/audit.json",
+      "bytes": 5232,
+      "sha256": "9639d564c007efe7e56dd8db5c9b35be63926cb2273f708f85dcb07f896a80a2"
+    },
+    "native_trace": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD/native/native-trace.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    "contract_base_ref": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "provenance_base_ref": "5662efcd7feb7920e4690d38cc76a297fed69d5",
+    "receipt_base_ref": "5662efcd7feb7920e4690d38cc76a297fed69d5"
+  },
+  "finding": {
+    "id": "XR-BUILD-BASE-REF-TRUNCATED",
+    "severity": "must_fix",
+    "contract_reference_length": 40,
+    "provenance_reference_length": 39,
+    "contract_reference": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "provenance_reference": "5662efcd7feb7920e4690d38cc76a297fed69d5",
+    "receipt_reference": "5662efcd7feb7920e4690d38cc76a297fed69d5",
+    "exact_match": false,
+    "required_correction": "Keep original sealed E-BUILD packet immutable; supersede provenance with the exact 40-character contract reference and matching repaired-builder source pin."
+  },
+  "verification": {
+    "sealed_report_receipt_match_their_seals": true,
+    "reconstructed_builder_matches_sealed_315a_source": true,
+    "retained_react_outputs": 67,
+    "retained_dom_outputs": 67,
+    "retained_output_inventory_hash_mismatches": 0,
+    "actual_appir_sha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f",
+    "capabilities": [
+      "view.node",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ],
+    "original_build_source_pin_count": 86,
+    "original_build_source_pin_mismatches_using_sealed_builder": 0,
+    "native_events": 50,
+    "native_steps": 45,
+    "native_trace_sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+    "full_build_or_full_pipeline_rerun": false,
+    "current_full_qualification_source_attestation_claimed": false,
+    "git_tracking_status_checked": false
+  },
+  "limitations": [
+    "The 86 build-input pins are not a final attestation of every current qualification source file; root owns that separate audit.",
+    "Git tracked/ignored status for backend-qualification/build/build.mjs was not checked in this review.",
+    "No full build or qualification pipeline was rerun."
+  ],
+  "report": {
+    "path": "backend-qualification/coordination/reports/XR-BUILD.md",
+    "bytes": 3845,
+    "sha256": "5b45963c88f206b1975afb4118b46afdd85ea75423f6dfe6f5c807c430936936"
+  },
+  "evidence": [
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/audit-e-build.py",
+      "bytes": 5874,
+      "sha256": "03cdbe59a68b70460ba6f6a5b64a1482c5956019bcf83e555d79bd47ea6e80cd"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/audit.command.txt",
+      "bytes": 77,
+      "sha256": "13b5bcb51e53ce0c13ae48d54d8e87b98588587ae8c4e33ae65a1c068ac0500d"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/audit.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/audit.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/audit.stdout.json",
+      "bytes": 2352,
+      "sha256": "17111bf42a674250ff370da2cf6df9323c5548fec1fc1298251939cbc852eef9"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/transient-authorized-repair-window.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/transient-authorized-repair-window.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/transient-authorized-repair-window.stdout.json",
+      "bytes": 2389,
+      "sha256": "2cb1022c5b61ffaad810df5a025ecb1bcec56c636beefd0d6325b322d33e5bb6"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/validate-review.command.txt",
+      "bytes": 79,
+      "sha256": "d09d5d8028761aca1896e3eab9016224e839a37f3243f6219b02e1ea3fe46c45"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-BUILD/validate-review.py",
+      "bytes": 1102,
+      "sha256": "0b3ca532034a28a207d3c2427c2dbf7b4b0ae6abcd145abb00eccdef3f7fa043"
+    }
+  ]
+}

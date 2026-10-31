@@ -1,0 +1,92 @@
+{
+  "schema": "gobi.backend-qualification-review/v1",
+  "job_id": "XR-GO",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "Independent review confirmed the Go registry, required-field checks, evidence path/hash validation, five-channel pair derivation, source SHA format, and actual 13-case certificate. It reproduced a must-fix: raw observedChannels unknown and duplicate entries are silently removed by canonicalization and still certify. Supplemental callback invocation metadata is also only presence-checked.",
+  "reviewed_packet": {
+    "job_id": "E-GO",
+    "worker": "N1",
+    "report": {
+      "path": "backend-qualification/coordination/reports/E-GO.md",
+      "sha256": "f5d30fa118ea2e60aea70090541259e5dcde22f780f4f47615c0040ffcf90aed"
+    },
+    "receipt": {
+      "path": "backend-qualification/coordination/receipts/E-GO.json",
+      "sha256": "759000f932ba51670bd2248143ce733f2d3297fd64595e322d31ffaa098db295"
+    },
+    "sourceSha256": {
+      "backendqualification/certify.go": "a1f579e1930cc2bcadf007d58b8ed3e421df3e28283528a2889ac71d801c463c",
+      "backendqualification/registry.go": "e9f1394ff38c26b303d8bd498a84a6a87a7a9514a7cd5878c09a89cd82da61a2",
+      "backendqualification/qualification_test.go": "498f526e54e366b5b4cb190818e98dc991aa629e148c3c239844293f32a0e4eb"
+    }
+  },
+  "review": {
+    "registryPolicy": "Matches the independent 13-case plan, including backend/fault pairs, required/allowed channel policies, fault target paths and event 0, and healthy 50/46 counts.",
+    "requiredFieldsAndIntegrity": "Raw report decoding rejects missing/unknown fields; evidence is report-relative and hashed; traversal and escaping symlinks are rejected.",
+    "channelDerivation": "All five evidence comparison pairs are required and cross-checked to structured expected/observed fields; evidence-derived channels are checked against both evidence and raw claims after canonicalization.",
+    "activationAndSource": "Fault record count, identity, event index, target path, and lowercase 40-hex source commit shape are validated. The certificate library does not bind sourceCommit to the final committed source pins; the delivery runner is responsible for that binding.",
+    "evidenceErrors": "Exception-only and unactivated controls are rejected; page and infrastructure errors disqualify cases.",
+    "finding": "Raw observedChannels accepts appended unknown names and duplicates because canonicalChannels drops unknown values and deduplicates. Evidence bytes and hash remained unchanged in both actual-capture probes.",
+    "secondaryLimitation": "Supplemental activation/observed callbackInvocations metadata is not structurally validated or cross-bound. The dispatch-count channel itself is bound to observed.callbackCounts.dispatch."
+  },
+  "actualCapture": {
+    "owner": "N4/E-HARNESS",
+    "path": "/tmp/gobi-backend-qualification-E-HARNESS-node22/qualification.raw.json",
+    "sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf",
+    "cliExitCode": 0,
+    "certificateSha256": "6877bc6cb8fc31d58d5378f2ac4770c6bf85f30dd06f6918398dd06b0f335174",
+    "qualified": true,
+    "passedCases": 13
+  },
+  "negativeWitnesses": [
+    {
+      "mutation": "fault-react-text-corruption raw observedChannels appended gpu-pixels",
+      "evidenceChanged": false,
+      "evidenceHashRecomputed": false,
+      "cliExitCode": 0,
+      "expected": "reject unknown raw channel"
+    },
+    {
+      "mutation": "fault-react-text-corruption raw observedChannels appended duplicate dom",
+      "evidenceChanged": false,
+      "evidenceHashRecomputed": false,
+      "cliExitCode": 0,
+      "expected": "reject duplicate raw channel"
+    },
+    {
+      "mutation": "fault-react-drop-click callback metadata replaced with false/string/array/null and evidence hash recomputed",
+      "cliExitCode": 0,
+      "expected": "reject malformed supplemental callback count metadata if certificate claims to validate callback evidence"
+    }
+  ],
+  "checks": [
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 ./backendqualification",
+      "exit_code": 0,
+      "result": "N1 Go tests passed."
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/backend-qualification --input /tmp/gobi-backend-qualification-E-HARNESS-node22/qualification.raw.json --output backend-qualification/coordination/rawlogs/XR-GO/actual-certificate-verify.json",
+      "exit_code": 0,
+      "result": "Actual report certified 13/13; certificate exactly matches E-GO's saved certificate hash."
+    }
+  ],
+  "artifacts": [
+    "backend-qualification/coordination/reports/XR-GO.md",
+    "backend-qualification/coordination/rawlogs/XR-GO/run-metadata.json",
+    "backend-qualification/coordination/rawlogs/XR-GO/go-tests.log",
+    "backend-qualification/coordination/rawlogs/XR-GO/actual-certificate-verify.json",
+    "backend-qualification/coordination/rawlogs/XR-GO/raw-channel-probe.log",
+    "backend-qualification/coordination/rawlogs/XR-GO/callback-probe.log"
+  ],
+  "report": {
+    "path": "backend-qualification/coordination/reports/XR-GO.md",
+    "bytes": 4795,
+    "sha256": "72592fb3b6fabeaa296f7a44f228abf8450432fb18ae95e6506acf752c3105f6"
+  },
+  "limitations": [
+    "This review does not rerun browser capture or the complete delivery pipeline.",
+    "No Go, CLI, application, browser, Git, or scheduler source was changed by N5."
+  ]
+}

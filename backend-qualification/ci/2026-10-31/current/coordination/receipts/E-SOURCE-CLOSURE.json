@@ -1,0 +1,83 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-SOURCE-CLOSURE",
+  "worker": "N1",
+  "outcome": "confirmed_reuse",
+  "summary": "Audited the frozen N6 source-path strategy: 175 current outer paths cover all 87 N2 build inputs, eight explicit review-evidence files, and 36 internal JavaScript modules with no missing local imports. Workflow triggers cover the active runtime/test closure and the SOURCE_COMMIT value, checkout ref, HEAD check, and runner argument agree. The final stage checklist calls out the two required force-add source files; no source, Git, or scheduler state was changed.",
+  "evidence": {
+    "report": {
+      "path": "backend-qualification/coordination/reports/E-SOURCE-CLOSURE.md",
+      "bytes": 4414,
+      "sha256": "f63a943516385e7cfe65ac24e914303b2195e74e799ba0f6e3a377804eab4c35"
+    },
+    "sourceClosureManifest": {
+      "path": "backend-qualification/coordination/rawlogs/E-SOURCE-CLOSURE/source-closure-manifest.json",
+      "bytes": 38399,
+      "sha256": "8eb340a6cab2542c10137821a89786b9c9382580094bb877850d91243131d12f",
+      "paths": 175,
+      "n2BuildInputs": 87,
+      "n2BuildInputsMissing": 0,
+      "reviewEvidenceFiles": 8,
+      "reviewEvidenceBytes": 17338,
+      "internalJavaScriptModules": 36,
+      "unresolvedOrUnpinnedLocalImports": 0,
+      "activeWorkflowRuntimeTestPathGaps": 0
+    },
+    "sourceHashesAtAuditSnapshot": {
+      "backend-qualification/run.mjs": "a2e4b6019b0aea2c21eeed001f41da58b4c8504b40bd37fd3dc2cba9f3d6b44c",
+      ".github/workflows/gobi-backend-qualification.yml": "18372f9d9f6f13d859c6bb8b9a3f016a454e9dcacc7e57e6455bcc7465189302",
+      "backend-qualification/build/build.mjs": "a97518f48ea902d4bfe33dd12cdaf6d583fcfe0d845d36aa4f0ab76a3aa0331d",
+      "backend-qualification/build/base-ref.test.mjs": "77a95d7b0d83abd96ceabf23a49ff136a2a6d4a57f78408532d51da8a1ea11b5",
+      "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+      "compiled-children/runtime/runtime.test.mjs": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47"
+    },
+    "auditRunner": {
+      "command": "python3 backend-qualification/coordination/rawlogs/E-SOURCE-CLOSURE/audit.py",
+      "exitCode": 0,
+      "python": "Python 3.12.14",
+      "scriptSha256": "6c792158844d416211d992fcff9bcc721cbf38e6e75fa997576f62a8c8421a1d",
+      "stdoutPath": "backend-qualification/coordination/rawlogs/E-SOURCE-CLOSURE/audit.stdout.json",
+      "stdoutSha256": "127e37d42092301ae95becc2ec9c3d8cd77179fd90b0cc0956960f6bce26cd33",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nativeReceiptValidation": {
+      "validator": "/tmp/gondola-rebalancer-env/bin/python",
+      "function": "probe.validate_receipt(receipt, activeJob, 'N1')",
+      "result": "valid: E-SOURCE-CLOSURE / N1",
+      "exitCode": 0,
+      "stdoutPath": "backend-qualification/coordination/rawlogs/E-SOURCE-CLOSURE/receipt-validation.stdout.log",
+      "stdoutSha256": "939b5cd4195c86daa04431cee657b5e5da2418965f01ca7c0c8b7e55d954e2d7",
+      "stateMutation": false
+    },
+    "n2BuildPinCoverage": {
+      "path": "backend-qualification/coordination/rawlogs/E-BUILD-BASE/build-a/build-inputs.json",
+      "sha256": "633edf32f9e32a7322b0933b9c8b30e72d9e535fc78241800fc811977e48e789",
+      "sourcePinCount": 87,
+      "allPinsInOuterPathSet": true
+    },
+    "outerSourceRehash": {
+      "command": "python3 backend-qualification/coordination/rawlogs/E-SOURCE-CLOSURE/rehash.py",
+      "exitCode": 0,
+      "pathCount": 175,
+      "rehashed": 175,
+      "changed": 0,
+      "missing": 0,
+      "scriptSha256": "b75a5bc3d0113153d9e9afacf3f03ead0e701525dcaeb826e859cdb7a58f0625",
+      "stdoutPath": "backend-qualification/coordination/rawlogs/E-SOURCE-CLOSURE/rehash.stdout.json",
+      "stdoutSha256": "dd879a60726c228a7225ceea64b90372926db1e241eaaf88069be417c9c66bf8"
+    },
+    "stageGate": {
+      "forceAdd": [
+        "backend-qualification/build/build.mjs",
+        "backend-qualification/build/base-ref.test.mjs"
+      ],
+      "gitStageExecuted": false,
+      "finalSourceBytesMustBeRecheckedAgainstFrozenN6Snapshot": true
+    }
+  },
+  "limitations": [
+    "This is a static path/source-closure audit; it is not a committed-candidate identity check or a run of the full qualification pipeline.",
+    "The authorized N2 Go certificate repair was still in progress, so its source byte hashes are intentionally not asserted as final.",
+    "No production, Git, scheduler, browser, or full-suite mutation/execution was performed."
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "gobi.backend-qualification-review-evidence/v1",
+  "job_id": "XR-ORACLE",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independently reviewed E-ORACLE's frozen 13-case plan and literal oracle, rechecked the actual mounted capture and 13/13 Go certificate, and reran the 15-test Node oracle suite with all five malformed-classification controls rejected. No oracle-policy defect found.",
+  "scope": {
+    "reviewed_paths": [
+      "backend-qualification/coordination/reports/E-ORACLE.md",
+      "backend-qualification/coordination/receipts/E-ORACLE.json",
+      "backend-qualification/oracle/plan.json",
+      "backend-qualification/oracle/oracle.mjs",
+      "backend-qualification/oracle/oracle.test.mjs",
+      "backend-qualification/coordination/rawlogs/E-ORACLE/**",
+      "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.raw.json",
+      "backend-qualification/coordination/rawlogs/E-GO/actual-certificate.json"
+    ],
+    "reviewer_production_paths_changed": []
+  },
+  "inputs": {
+    "eOracleReport": {
+      "path": "backend-qualification/coordination/reports/E-ORACLE.md",
+      "sha256": "629bf40428ce561ad4f4aaf67081b7819d2f998cf4c6eef097e66a231be28ddd"
+    },
+    "eOracleReceipt": {
+      "path": "backend-qualification/coordination/receipts/E-ORACLE.json",
+      "sha256": "10fa3c19ce006f68015bfab9bb7394e1b4e4e74886948fb1cdef9a7c0cda4d57"
+    },
+    "plan": {
+      "path": "backend-qualification/oracle/plan.json",
+      "schema": "gobi.backend-qualification-oracle-plan/v1",
+      "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156",
+      "cases": 13,
+      "healthyEvents": 50,
+      "healthyGoUpdates": 45,
+      "healthyTraceCheckpoints": 46,
+      "baselineOracleSha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201"
+    },
+    "oracleModule": {
+      "path": "backend-qualification/oracle/oracle.mjs",
+      "sha256": "e91681b938da3825b1191737046ee2ab7b2de1c2e8d551c99c3d6318389ec689"
+    },
+    "oracleTests": {
+      "path": "backend-qualification/oracle/oracle.test.mjs",
+      "sha256": "7bd0eb0595571f62248a7f451ac942cd45e17c36f4eefe791341c18c4fcdd8ac"
+    },
+    "actualCapture": {
+      "owner": "N4/E-HARNESS",
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.raw.json",
+      "schema": "gobi.backend-qualification-run/v1",
+      "sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf",
+      "sourceCommit": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+      "sourceCommitMeaning": "qualification base / author-run context, not final candidate attestation"
+    },
+    "goCertificate": {
+      "path": "backend-qualification/coordination/rawlogs/E-GO/actual-certificate.json",
+      "sha256": "6877bc6cb8fc31d58d5378f2ac4770c6bf85f30dd06f6918398dd06b0f335174",
+      "qualified": true,
+      "casesPassed": 13,
+      "casesTotal": 13,
+      "sourceCommit": "5662efcd7feb7920e4690d38cc76a297fed69d5a"
+    },
+    "originalEOracleFailuresPreserved": true,
+    "noOraclePolicyRelaxation": true
+  },
+  "verification": {
+    "reviewerRerun": {
+      "command": "GOBI_QUALIFICATION_RAW_REPORT=backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.raw.json GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test backend-qualification/oracle/oracle.test.mjs",
+      "exitCode": 0,
+      "result": "15 passed, 0 failed, 0 skipped; actual report accepted by Go CLI and five malformed-classification controls rejected",
+      "rawLog": "backend-qualification/coordination/rawlogs/XR-ORACLE/node-oracle-review.stdout.log",
+      "rawLogSha256": "49757d10104215774340784c44c5bb2372175a031129badc25d24a143e302dc3",
+      "exitCodeFile": "backend-qualification/coordination/rawlogs/XR-ORACLE/node-oracle-review.exit-code",
+      "exitCodeFileSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "commandFile": "backend-qualification/coordination/rawlogs/XR-ORACLE/node-oracle-review.command.txt",
+      "commandFileSha256": "6c04e4598e589b724bb80caf150461611aeb1a424a7e2e0b75b24b2604c3d43a",
+      "node": "v22.23.4",
+      "go": "go1.24.0 linux/amd64"
+    },
+    "caseInventory": {
+      "path": "backend-qualification/coordination/rawlogs/XR-ORACLE/capture-case-inventory.json",
+      "sha256": "82a994021eb1c275e95b301a5109e376ad3932291b0130ea08b472edf41f7346",
+      "healthyCases": 3,
+      "faultCases": 10,
+      "faultActivations": 10,
+      "healthySourceEventsPerCase": 50,
+      "healthyTraceTicksPerCase": 46,
+      "pageErrors": 0,
+      "infrastructureErrors": 0
+    },
+    "receiptIntegrityCheck": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.mjs",
+      "exitCode": 0,
+      "result": "All cited report, receipt, plan, module, test, capture, certificate, raw-log, inventory, and report hashes matched; capture contains 13 cases and Go certificate passes 13/13.",
+      "script": "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.mjs",
+      "scriptSha256": "38ec7962e0762a7d97c61f0ebd2d2e41f59fa8ebc97f12325444b94f628ea1e1",
+      "stdoutLog": "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.stdout.log",
+      "stdoutLogSha256": "5a3373253562ddd40a80216eaf0c1971554b33cd614c4bfd254778a89bb05371",
+      "exitCodeFile": "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.exit-code",
+      "exitCodeFileSha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "sourcePinsMatchEOracleReceipt": true,
+    "fullBrowserRerun": false,
+    "fullQualificationPipelineRerun": false,
+    "finalCandidateAcceptanceClaimed": false,
+    "gitStateChanged": false
+  },
+  "finding": {
+    "id": "XR-ORACLE-NO-DEFECT",
+    "severity": "none",
+    "result": "The independent expected projections and channel policy are correctly bounded; evidence requires actual activation and rejects error-only or unclassified observations."
+  },
+  "report": {
+    "path": "backend-qualification/coordination/reports/XR-ORACLE.md",
+    "bytes": 3566,
+    "sha256": "ac3ee9d8675059855d343cbcb6cf47e3e3090194a9c2a8e648840451d524d0b8"
+  },
+  "evidence": [
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/node-oracle-review.command.txt",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/node-oracle-review.stdout.log",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/node-oracle-review.exit-code",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/capture-case-inventory.json",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.mjs",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.command.txt",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.stdout.log",
+    "backend-qualification/coordination/rawlogs/XR-ORACLE/receipt-integrity-check.exit-code"
+  ]
+}

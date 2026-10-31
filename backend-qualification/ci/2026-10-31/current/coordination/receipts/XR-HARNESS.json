@@ -1,0 +1,132 @@
+{
+  "schema": "gobi.backend-qualification-review/v1",
+  "job_id": "XR-HARNESS",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently rehashed the sealed 13-case Node22 capture and inputs, re-derived every evidence channel, confirmed actual activation targets and physical-DOM/state comparisons, verified the three full baselines and zero page/infrastructure errors, and independently checked the 13/13 Go certificate.",
+  "scope": {
+    "owned_paths": [
+      "backend-qualification/coordination/reports/XR-HARNESS.md",
+      "backend-qualification/coordination/receipts/XR-HARNESS.json",
+      "backend-qualification/coordination/rawlogs/XR-HARNESS/**"
+    ],
+    "production_source_paths_changed": []
+  },
+  "reviewed_source": {
+    "runner": {
+      "path": "backend-qualification/conformance/qualification.mjs",
+      "bytes": 31110,
+      "sha256": "18991f813d2bfb78499b542a0b99dfd2eae3252fec6c61203759abbde744b050"
+    },
+    "renderer_decorator": {
+      "path": "backend-qualification/adapters/qualification-decorator.mjs",
+      "bytes": 8865,
+      "sha256": "c6e75b5a6b935b7d009ce0fd6d5a0d58f6490bfe44c5a34c54b3ba8544a2ba31"
+    },
+    "browser_entry_seam": {
+      "path": "compiled-publications/conformance/browser-entry.mjs",
+      "bytes": 36027,
+      "sha256": "b99a9d24fd39bfb59662ca6859559f508f60f8da07b3777a004d4397b2ee2492"
+    },
+    "oracle_plan": {
+      "path": "backend-qualification/oracle/plan.json",
+      "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156"
+    }
+  },
+  "reviewed_author_packet": {
+    "report": {
+      "path": "backend-qualification/coordination/reports/E-HARNESS.md",
+      "bytes": 4896,
+      "sha256": "b5efb360092481faa6b0f2571fcd295dc3992e65eb6ff3edd76df584b407cbb5"
+    },
+    "receipt": {
+      "path": "backend-qualification/coordination/receipts/E-HARNESS.json",
+      "sha256": "385d47787449f422b715b9757ccc71dbbdfd0add043d22deeed4be870b0ec08e"
+    },
+    "raw_report": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.raw.json",
+      "bytes": 7820,
+      "sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf"
+    },
+    "summary": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.summary.json",
+      "bytes": 12468,
+      "sha256": "3110e119c325eb644c26671290c482b09ee8408f6a9eca868e0066b5f36c3cc0"
+    },
+    "go_certificate": {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-certificate.json",
+      "bytes": 11072,
+      "sha256": "6877bc6cb8fc31d58d5378f2ac4770c6bf85f30dd06f6918398dd06b0f335174",
+      "schema": "gobi.backend-qualification-certificate/v1",
+      "qualified": true,
+      "passed": 13,
+      "failed": 0
+    },
+    "source_commit": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "source_attestation": "author-uncommitted-base-source"
+  },
+  "findings": [],
+  "review_output": {
+    "report": {
+      "path": "backend-qualification/coordination/reports/XR-HARNESS.md",
+      "bytes": 4760,
+      "sha256": "2db40503ababfe7b7340116d5228003b182ec112401329476611650cddd5de6a"
+    }
+  },
+  "verification": {
+    "command": "/tmp/gondola-rebalancer-env/bin/python backend-qualification/coordination/rawlogs/XR-HARNESS/audit-certificate.py",
+    "exit_code": 0,
+    "checks": {
+      "summary_source_and_build_pins_rehashed": 9,
+      "case_evidence_hashes_rehashed": 13,
+      "case_rows_match_fixed_oracle_order": 13,
+      "healthy_profiles_matched": 3,
+      "healthy_source_events_per_profile": 50,
+      "healthy_checkpoints_per_profile": 46,
+      "healthy_physical_click_dispatches_per_profile": 34,
+      "fault_profiles_activated_once": 10,
+      "activation_events_and_target_paths_match_plan": true,
+      "fault_before_after_targets_and_callback_counts_verified": true,
+      "all_five_channel_pairs_bound_and_rederived": true,
+      "physical_dom_selected_before_renderer_snapshot": true,
+      "literal_oracle_state_and_dom_expected_values": true,
+      "drop_click_source_event": 0,
+      "drop_click_trace_ticks": 1,
+      "duplicate_click_source_event": 0,
+      "duplicate_click_trace_ticks_including_initial": 3,
+      "duplicate_click_go_updates": 2,
+      "page_errors": 0,
+      "infrastructure_errors": 0,
+      "fresh_browser_page_disposed_and_closed_per_case": true,
+      "go_certificate_source_and_case_results_validated": true,
+      "go_certificate_qualified_cases": 13
+    },
+    "healthy_swap_callback_counter_note": "The raw profile's total callback counter is 36 because two retired-callback probes are included. Both are fenced and leave trace/state unchanged; the 34 physical click actions are each verified to dispatch once and are the healthy dispatch comparison."
+  },
+  "review_evidence": {
+    "independent_audit_script": {
+      "path": "backend-qualification/coordination/rawlogs/XR-HARNESS/audit-certificate.py",
+      "sha256": "e72ab0cef07c72ce34302ee16335a22faa898cbeac2f9f5e62304babb1328a19"
+    },
+    "audit_stdout": {
+      "path": "backend-qualification/coordination/rawlogs/XR-HARNESS/audit-certificate.stdout.log",
+      "sha256": "ece8af3f6183251d71c93e543df7a18a45a6de92b649234b47706ab7eb55f7e1"
+    },
+    "evidence_self_check": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/verification.json",
+      "sha256": "54ad4351cdaed91175d7cce337c33a64f1d37664723064b49662f55f8bde2b7f"
+    },
+    "capture_deduplication": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/deduplication.json",
+      "sha256": "58134a096c9829e392f62d767aa8fc5b14d415edb82765cefa67e8f3dd0f9ab7"
+    },
+    "preserved_reviewer_attempts": [
+      "backend-qualification/coordination/rawlogs/XR-HARNESS/audit-extended.*",
+      "backend-qualification/coordination/rawlogs/XR-HARNESS/audit-final-attempt-01.*"
+    ]
+  },
+  "limitations": [
+    "The capture is explicitly an author run against the contract-base reference with uncommitted qualification changes; a root-owned final candidate-pinned run remains necessary.",
+    "This bounded independent review did not rerun the browser matrix."
+  ]
+}

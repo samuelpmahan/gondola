@@ -1,0 +1,89 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ORACLE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Published an independent pinned 13-case backend qualification plan, added literal policy/checkpoint tests, and tested Go certification against N4's real mounted Node 22 capture with five negative controls. The Go CLI accepted the actual report and rejected missing, duplicate, unactivated, generic-error-only, and empty-channel controls.",
+  "oracle": {
+    "planPath": "backend-qualification/oracle/plan.json",
+    "schema": "gobi.backend-qualification-oracle-plan/v1",
+    "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156",
+    "caseCount": 13,
+    "healthyCaseCounts": {
+      "sourceEvents": 50,
+      "goUpdates": 45,
+      "traceCheckpoints": 46
+    },
+    "faultPolicies": {
+      "text-corruption": { "requiredChannels": ["dom"], "rule": "all" },
+      "key-order": { "requiredChannels": ["dom"], "rule": "all" },
+      "enabled-control": { "requiredChannels": ["disabled"], "rule": "all", "disabledPath": "0/1" },
+      "drop-click": { "requiredChannels": ["dispatch-count", "trace-count", "state"], "rule": "any", "activationEvent": 0, "actionPath": "1/0/1" },
+      "duplicate-click": { "requiredChannels": ["dispatch-count"], "rule": "all", "activationEvent": 0, "actionPath": "1/0/1" }
+    }
+  },
+  "actualCaptureInput": {
+    "owner": "N4/E-HARNESS",
+    "path": "/tmp/gobi-backend-qualification-E-HARNESS-node22/qualification.raw.json",
+    "schema": "gobi.backend-qualification-run/v1",
+    "sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf",
+    "summarySha256": "ab85e97ffe18c4b8502fc596babb7904a7c1985c52a09567f7df998632807fca",
+    "usedAs": "positive Go CLI test input; N5 did not produce the browser capture"
+  },
+  "artifacts": [
+    "backend-qualification/oracle/plan.json",
+    "backend-qualification/oracle/oracle.mjs",
+    "backend-qualification/oracle/oracle.test.mjs",
+    "backend-qualification/coordination/reports/E-ORACLE.md",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/run-metadata.json",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/oracle-node-tests-final.log",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/go-package-tests-final.log",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/oracle-node-tests.log",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/go-package-tests.log"
+  ],
+  "toolchains": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4"
+  },
+  "checks": [
+    {
+      "command": "GOBI_QUALIFICATION_RAW_REPORT=/tmp/gobi-backend-qualification-E-HARNESS-node22/qualification.raw.json GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test backend-qualification/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "result": "15 passed, 0 failed, 0 skipped. One actual-report Go CLI certificate plus five negative controls; nine plan/policy tests."
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 ./backendqualification ./cmd/backend-qualification",
+      "exit_code": 0,
+      "result": "After N1/N2 corrected their owned unit tests, both Go package and CLI test packages passed."
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test ./backendqualification ./cmd/backend-qualification",
+      "exit_code": 1,
+      "phase": "initial upstream-owned test run; failure preserved",
+      "result": "N1 synthetic text-corruption fixture reported an unauthorized trace-count channel; N2 help test observed usage on stderr. Both owners corrected their own source/tests and a later uncached rerun passed."
+    }
+  ],
+  "sourceSha256": {
+    "backend-qualification/oracle/plan.json": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156",
+    "backend-qualification/oracle/oracle.mjs": "e91681b938da3825b1191737046ee2ab7b2de1c2e8d551c99c3d6318389ec689",
+    "backend-qualification/oracle/oracle.test.mjs": "7bd0eb0595571f62248a7f451ac942cd45e17c36f4eefe791341c18c4fcdd8ac"
+  },
+  "rawLogSha256": {
+    "backend-qualification/coordination/rawlogs/E-ORACLE/run-metadata.json": "0af7e2f85186edad383fc9e8877e80c650f2316675fd87373773cd40e2788b4c",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/oracle-node-tests-final.log": "338d9d7efee952772e6deb0c0cd57f311f9230696b254dcd837dc49880a28dbb",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/go-package-tests-final.log": "9c4341b37d84d441a9a95fb5dc402c1ef27e7519da0804d21085637dc5416a92",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/oracle-node-tests.log": "603c605eadf94738463a13ccd8658585d2164ca44b3118bf765a50cc53f2aeb5",
+    "backend-qualification/coordination/rawlogs/E-ORACLE/go-package-tests.log": "f6137c3824b71af7626ee3e4a5066ca4bca9fec132be78ba95ad5f724c895e54"
+  },
+  "report": {
+    "path": "backend-qualification/coordination/reports/E-ORACLE.md",
+    "bytes": 4062,
+    "sha256": "629bf40428ce561ad4f4aaf67081b7819d2f998cf4c6eef097e66a231be28ddd"
+  },
+  "limitations": [
+    "The positive mounted run was N4's actual Node 22 capture used as a test input; this packet is not a fresh N6 end-to-end run or a full inherited regression.",
+    "No PR17 CI outcome is asserted; PR17 remained the pinned base context.",
+    "Root identified a separate E-BUILD contract-base-reference provenance issue for scoped repair; N5 made no changes to it.",
+    "No production, browser harness, build, scheduler, or Git state changes were made by N5."
+  ]
+}

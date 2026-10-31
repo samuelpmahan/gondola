@@ -1,0 +1,500 @@
+{
+  "schema": "gobi.backend-qualification-harness-evidence/v1",
+  "job_id": "E-HARNESS",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Implemented a mounted React/DOM qualification runner with one page per case; the Node22 author run matched all 13 healthy and actual-fault cases, and the independent Go certificate qualified all 13 rows.",
+  "scope": {
+    "owned_paths": [
+      "backend-qualification/conformance/**",
+      "backend-qualification/coordination/reports/E-HARNESS.md",
+      "backend-qualification/coordination/receipts/E-HARNESS.json",
+      "backend-qualification/coordination/rawlogs/E-HARNESS/**"
+    ],
+    "production_paths_changed": [
+      "backend-qualification/conformance/qualification.mjs"
+    ],
+    "application_go_compiler_runtime_or_renderer_production_paths_changed": []
+  },
+  "source": {
+    "contract_base_reference": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "source_commit": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "source_attestation": "author-uncommitted-base-source",
+    "runner": {
+      "path": "backend-qualification/conformance/qualification.mjs",
+      "bytes": 31110,
+      "sha256": "18991f813d2bfb78499b542a0b99dfd2eae3252fec6c61203759abbde744b050"
+    },
+    "renderer_decorator": {
+      "path": "backend-qualification/adapters/qualification-decorator.mjs",
+      "bytes": 8865,
+      "sha256": "c6e75b5a6b935b7d009ce0fd6d5a0d58f6490bfe44c5a34c54b3ba8544a2ba31",
+      "owner": "N3"
+    },
+    "browser_entry_seam": {
+      "path": "compiled-publications/conformance/browser-entry.mjs",
+      "bytes": 36027,
+      "sha256": "b99a9d24fd39bfb59662ca6859559f508f60f8da07b3777a004d4397b2ee2492",
+      "owner": "N3"
+    },
+    "run_input_pins": [
+      {
+        "label": "reactCompiled",
+        "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/react/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs",
+        "bytes": 550514,
+        "sha256": "70c09acac750c60f20d5ec52fab4de54a9cf7808d88001883194347d3c1a36b7"
+      },
+      {
+        "label": "reactHelpers",
+        "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/react/output/apps/publications-5ad33d9496e7/encoder.mjs",
+        "bytes": 17417,
+        "sha256": "12b9b02389aee4493f724a181ec033f3e884d5559755dcb58b98ee6d02b872f9"
+      },
+      {
+        "label": "domCompiled",
+        "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/dom/output/apps/publications-5ad33d9496e7/gobi-compiled.mjs",
+        "bytes": 550506,
+        "sha256": "9c18a74d1ac3cb4b84679ec4944576f2a8446a12af5f81293506a0e9e7a4bec7"
+      },
+      {
+        "label": "domHelpers",
+        "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/builds/dom/output/apps/publications-5ad33d9496e7/encoder.mjs",
+        "bytes": 17417,
+        "sha256": "12b9b02389aee4493f724a181ec033f3e884d5559755dcb58b98ee6d02b872f9"
+      },
+      {
+        "label": "fixture",
+        "path": "/workspace/scratch/39a56936f173/gondola-qualification/fixtures/compiled/publications/scenario.json",
+        "bytes": 12307,
+        "sha256": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819"
+      },
+      {
+        "label": "expectations",
+        "path": "/workspace/scratch/39a56936f173/gondola-qualification/compiled-publications/oracle/expectations.json",
+        "bytes": 2635707,
+        "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201"
+      },
+      {
+        "label": "native",
+        "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/native/native-trace.json",
+        "bytes": 1148369,
+        "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+      },
+      {
+        "label": "provenance",
+        "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/provenance/build-inputs.json",
+        "bytes": 160549,
+        "sha256": "599b88579961eef51efc74beb9c0915514e59069727a217d6fa7afaa9778d70a"
+      },
+      {
+        "label": "plan",
+        "path": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/oracle/plan.json",
+        "bytes": 17627,
+        "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156"
+      }
+    ],
+    "source_pins_stable_before_after": true,
+    "qualification_plan": {
+      "path": "backend-qualification/oracle/plan.json",
+      "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156"
+    },
+    "n2_build_provenance": {
+      "path": "/tmp/gobi-backend-qualification-E-BUILD-final-20261031/provenance/build-inputs.json",
+      "sha256": "599b88579961eef51efc74beb9c0915514e59069727a217d6fa7afaa9778d70a"
+    }
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "node_executable": "/tmp/gondola-node22/node_modules/node/bin/node",
+    "chromium": "153.0.8010.0",
+    "chromium_path": "/tmp/chromium",
+    "native_go": "go version go1.24.0 linux/amd64",
+    "compiler_go": "go version go1.27.3 linux/amd64"
+  },
+  "execution": {
+    "raw_report": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.raw.json",
+      "bytes": 7820,
+      "sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf",
+      "schema": "gobi.backend-qualification-run/v1",
+      "source_commit": "5662efcd7feb7920e4690d38cc76a297fed69d5a"
+    },
+    "summary": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/qualification.summary.json",
+      "bytes": 12468,
+      "sha256": "3110e119c325eb644c26671290c482b09ee8408f6a9eca868e0066b5f36c3cc0",
+      "status": "matched",
+      "source_pins_stable": true
+    },
+    "matrix": {
+      "total": 13,
+      "healthy": 3,
+      "faultCases": 10,
+      "passed": 13,
+      "failed": 0
+    },
+    "baseline_checker": {
+      "schema": "gobi.compiled-publications-conformance-check/v1",
+      "status": "matched",
+      "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/publications",
+      "fixture": "typed-keyed-parent-input-delayed-publications",
+      "events": 50,
+      "goUpdates": 45,
+      "stateCheckpoints": 46,
+      "publicationCheckpoints": 26,
+      "physicalClicksPerProfile": 34,
+      "swaps": 2,
+      "acceptedCompatibleSwaps": 1,
+      "rejectedIncompatibleSwaps": 1,
+      "requests": 6,
+      "cancellations": 3,
+      "staleGenerationHostRepliesRejected": 1,
+      "disabledActionsFenced": 2,
+      "mutationControls": [
+        {
+          "name": "native-full-state-generation",
+          "detected": true
+        },
+        {
+          "name": "native-captured-value-remains-frozen",
+          "detected": true
+        },
+        {
+          "name": "native-input-revision",
+          "detected": true
+        },
+        {
+          "name": "native-publication-queue-order",
+          "detected": true
+        },
+        {
+          "name": "native-ordered-go-step",
+          "detected": true
+        },
+        {
+          "name": "direct-typed-state-captured-publication-value",
+          "detected": true
+        },
+        {
+          "name": "browser-raw-physical-dom",
+          "detected": true
+        },
+        {
+          "name": "browser-disabled-control",
+          "detected": true
+        },
+        {
+          "name": "browser-publication-button-order",
+          "detected": true
+        },
+        {
+          "name": "browser-parent-removal-cancellation-order",
+          "detected": true
+        },
+        {
+          "name": "browser-accepted-swap-wrong-backend",
+          "detected": true
+        },
+        {
+          "name": "browser-accepted-swap-wrong-renderer-id",
+          "detected": true
+        },
+        {
+          "name": "browser-post-rejection-live-callback-wrong-backend",
+          "detected": true
+        },
+        {
+          "name": "browser-post-rejection-live-callback-wrong-id",
+          "detected": true
+        },
+        {
+          "name": "browser-post-rejection-action-metadata-mismatch",
+          "detected": true
+        },
+        {
+          "name": "browser-no-wasm-guard-coverage-entry-removed",
+          "detected": true
+        }
+      ],
+      "mutationControlsDetected": 16,
+      "nativeStateCheckedAgainstLiteralOracle": true,
+      "directTypedStateCheckedAgainstLiteralOracle": true,
+      "browserRawDOMCheckedAgainstLiteralOracle": true,
+      "rendererLifecycleChecked": true,
+      "noWasmGuardCoverage": {
+        "status": "complete",
+        "entries": 10,
+        "failures": 0
+      },
+      "browserProfiles": [
+        "react",
+        "dom",
+        "swap"
+      ],
+      "seededRuns": {
+        "count": 0,
+        "seeds": []
+      }
+    },
+    "cases": [
+      {
+        "id": "healthy-react",
+        "backend": "react",
+        "fault": "none",
+        "activated": false,
+        "activationCount": 0,
+        "observedChannels": [],
+        "eventsObserved": 50,
+        "traceTicks": 46,
+        "evidencePath": "cases/healthy-react.json",
+        "evidenceSHA256": "897fde853bd4ac36eeb11f28ad9d9d99ce7a063c6bd31b7bff9376aadd9db5a3",
+        "passed": true
+      },
+      {
+        "id": "healthy-dom",
+        "backend": "dom",
+        "fault": "none",
+        "activated": false,
+        "activationCount": 0,
+        "observedChannels": [],
+        "eventsObserved": 50,
+        "traceTicks": 46,
+        "evidencePath": "cases/healthy-dom.json",
+        "evidenceSHA256": "3c4afe559330ae3778a4b78ccbe15c84ae559c8774fb952d0ee0a48f7298a82e",
+        "passed": true
+      },
+      {
+        "id": "healthy-swap",
+        "backend": "swap",
+        "fault": "none",
+        "activated": false,
+        "activationCount": 0,
+        "observedChannels": [],
+        "eventsObserved": 50,
+        "traceTicks": 46,
+        "evidencePath": "cases/healthy-swap.json",
+        "evidenceSHA256": "44d8c58b1c325ffc943bc7b3d0c30e2ee3eff1ae6b78cc1309614d9b25bfd5eb",
+        "passed": true
+      },
+      {
+        "id": "fault-react-text-corruption",
+        "backend": "react",
+        "fault": "text-corruption",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom"
+        ],
+        "eventsObserved": 0,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-react-text-corruption.json",
+        "evidenceSHA256": "baf18234303877b5928dd32b8068a813f2d4f52bcd426155d53086e70f095c68",
+        "passed": true
+      },
+      {
+        "id": "fault-react-key-order",
+        "backend": "react",
+        "fault": "key-order",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom"
+        ],
+        "eventsObserved": 0,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-react-key-order.json",
+        "evidenceSHA256": "2a80d9eada4ee0b77f0fec95e26951bbdfee34b89e49ac298b1373e6ce9a9f73",
+        "passed": true
+      },
+      {
+        "id": "fault-react-enabled-control",
+        "backend": "react",
+        "fault": "enabled-control",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom",
+          "disabled"
+        ],
+        "eventsObserved": 0,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-react-enabled-control.json",
+        "evidenceSHA256": "14f03c50e7971952c28ab6db2238749ec1381bfda72ac9d694a1327bfc674432",
+        "passed": true
+      },
+      {
+        "id": "fault-react-drop-click",
+        "backend": "react",
+        "fault": "drop-click",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom",
+          "dispatch-count",
+          "trace-count",
+          "state"
+        ],
+        "eventsObserved": 1,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-react-drop-click.json",
+        "evidenceSHA256": "ecdc99917bd5f5d4ff66cbb0b59a0ba2e6da01250acb540c6309588ad87be61c",
+        "passed": true
+      },
+      {
+        "id": "fault-react-duplicate-click",
+        "backend": "react",
+        "fault": "duplicate-click",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom",
+          "dispatch-count",
+          "trace-count",
+          "state"
+        ],
+        "eventsObserved": 1,
+        "traceTicks": 3,
+        "evidencePath": "cases/fault-react-duplicate-click.json",
+        "evidenceSHA256": "09ee34e0b7b30da43bb0d2549809b9066f23df75c7addcdf6106108976baa2dc",
+        "passed": true
+      },
+      {
+        "id": "fault-dom-text-corruption",
+        "backend": "dom",
+        "fault": "text-corruption",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom"
+        ],
+        "eventsObserved": 0,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-dom-text-corruption.json",
+        "evidenceSHA256": "34566758a2d09977562a85b0b909d0081bfc2d305493faf683d62d8b88539f41",
+        "passed": true
+      },
+      {
+        "id": "fault-dom-key-order",
+        "backend": "dom",
+        "fault": "key-order",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom"
+        ],
+        "eventsObserved": 0,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-dom-key-order.json",
+        "evidenceSHA256": "26953c494a773d5ce645c9d32c4c0bb79824cab67c6abd564d520d3b7fef07af",
+        "passed": true
+      },
+      {
+        "id": "fault-dom-enabled-control",
+        "backend": "dom",
+        "fault": "enabled-control",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom",
+          "disabled"
+        ],
+        "eventsObserved": 0,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-dom-enabled-control.json",
+        "evidenceSHA256": "616e34408639c303819b587174be114b739c7c9bea90f4b174a78085d1a0bf6a",
+        "passed": true
+      },
+      {
+        "id": "fault-dom-drop-click",
+        "backend": "dom",
+        "fault": "drop-click",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom",
+          "dispatch-count",
+          "trace-count",
+          "state"
+        ],
+        "eventsObserved": 1,
+        "traceTicks": 1,
+        "evidencePath": "cases/fault-dom-drop-click.json",
+        "evidenceSHA256": "0ed223be0bf4471ead0b624454b1d8e3aece9b2b067af4db5f952e613f783a0c",
+        "passed": true
+      },
+      {
+        "id": "fault-dom-duplicate-click",
+        "backend": "dom",
+        "fault": "duplicate-click",
+        "activated": true,
+        "activationCount": 1,
+        "observedChannels": [
+          "dom",
+          "dispatch-count",
+          "trace-count",
+          "state"
+        ],
+        "eventsObserved": 1,
+        "traceTicks": 3,
+        "evidencePath": "cases/fault-dom-duplicate-click.json",
+        "evidenceSHA256": "5b0f98feb9c157da7e135ec86fb386793908cf5d9c15e9fd2d97406c7a49969f",
+        "passed": true
+      }
+    ],
+    "go_certificate": {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-certificate.json",
+      "bytes": 11072,
+      "sha256": "6877bc6cb8fc31d58d5378f2ac4770c6bf85f30dd06f6918398dd06b0f335174",
+      "schema": "gobi.backend-qualification-certificate/v1",
+      "qualified": true,
+      "passed": 13,
+      "failed": 0,
+      "input_raw_report_sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf"
+    },
+    "report": {
+      "path": "backend-qualification/coordination/reports/E-HARNESS.md",
+      "bytes": 4896,
+      "sha256": "b5efb360092481faa6b0f2571fcd295dc3992e65eb6ff3edd76df584b407cbb5"
+    }
+  },
+  "validation": {
+    "node22_syntax_check": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check backend-qualification/conformance/qualification.mjs",
+      "exit_code": 0
+    },
+    "mounted_qualification": {
+      "command": "runQualification(inputs, outputDir, chromiumPath, sourceCommit)",
+      "exit_code": 0,
+      "passed_cases": 13,
+      "failed_cases": 0
+    },
+    "raw_evidence_self_check": {
+      "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-04-node22-source-pinned/verify-report.mjs",
+      "exit_code": 0,
+      "cases": 13,
+      "evidence_hashes_verified": 13,
+      "derived_channel_pairs_match": true
+    },
+    "go_certificate_cli": {
+      "path": "backend-qualification/coordination/reports/E-GO.md",
+      "result": "13/13 qualified"
+    },
+    "go_cli_combined_tests": {
+      "path": "backend-qualification/coordination/receipts/E-GOCLI.json",
+      "result": "Go packages passed; Node22 CLI black-box tests 15/15 passed"
+    }
+  },
+  "preserved_attempt_history": {
+    "path": "backend-qualification/coordination/rawlogs/E-HARNESS/attempt-history.json",
+    "sha256": "263e03ccecc39534b1ba9d59ce69ac8f876841f7e9b2c6436df680f7d7c7c4ea"
+  },
+  "identical_capture_deduplication": {
+    "path": "backend-qualification/coordination/rawlogs/E-HARNESS/deduplication.json",
+    "sha256": "58134a096c9829e392f62d767aa8fc5b14d415edb82765cefa67e8f3dd0f9ab7"
+  },
+  "limitations": [
+    "This is an author run with uncommitted qualification changes pinned to the contract base source reference; it is not final candidate-source acceptance.",
+    "Root must rerun qualification against the frozen candidate source and bind the supplied candidate commit to the final source-pin audit.",
+    "No hosted workflow or broader runtime/backend capability claim is made."
+  ]
+}

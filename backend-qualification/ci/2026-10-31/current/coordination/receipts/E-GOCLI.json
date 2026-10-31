@@ -1,0 +1,237 @@
+{
+  "schema": "gobi.backend-qualification-cli-evidence/v1",
+  "job_id": "E-GOCLI",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Implemented the Go certificate CLI and tests; verified combined Go packages, Node22 positive/negative CLI controls, and a 13/13 certificate from N4 real mounted-run evidence.",
+  "scope": {
+    "owned_paths": [
+      "cmd/backend-qualification/**",
+      "backend-qualification/coordination/reports/E-GOCLI.md",
+      "backend-qualification/coordination/receipts/E-GOCLI.json",
+      "backend-qualification/coordination/rawlogs/E-GOCLI/**"
+    ],
+    "production_paths_changed": [
+      "cmd/backend-qualification/main.go"
+    ],
+    "tests_added": [
+      "cmd/backend-qualification/main_test.go"
+    ],
+    "backendqualification_library_changed_by_N2": false
+  },
+  "toolchain": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "go_version_log": {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-version.stdout.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    "node_version_log": {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/node-version.stdout.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    }
+  },
+  "reviewed_source_sha256": {
+    "cmd/backend-qualification/main.go": {
+      "path": "cmd/backend-qualification/main.go",
+      "bytes": 2426,
+      "sha256": "cb3a749d8d9c7bed178dc33f9675a64cfa155df0bacc62d602b45d5e48a56854"
+    },
+    "cmd/backend-qualification/main_test.go": {
+      "path": "cmd/backend-qualification/main_test.go",
+      "bytes": 3027,
+      "sha256": "4cdadf0a8a2ee74719ee57dc7956db97452ce8edde203f4222f1ec540955f38a"
+    },
+    "backendqualification/certify.go": {
+      "path": "backendqualification/certify.go",
+      "bytes": 32506,
+      "sha256": "a1f579e1930cc2bcadf007d58b8ed3e421df3e28283528a2889ac71d801c463c"
+    },
+    "backendqualification/registry.go": {
+      "path": "backendqualification/registry.go",
+      "bytes": 4185,
+      "sha256": "e9f1394ff38c26b303d8bd498a84a6a87a7a9514a7cd5878c09a89cd82da61a2"
+    },
+    "backendqualification/qualification_test.go": {
+      "path": "backendqualification/qualification_test.go",
+      "bytes": 18474,
+      "sha256": "498f526e54e366b5b4cb190818e98dc991aa629e148c3c239844293f32a0e4eb"
+    },
+    "backend-qualification/oracle/oracle.test.mjs": {
+      "path": "backend-qualification/oracle/oracle.test.mjs",
+      "bytes": 15466,
+      "sha256": "7bd0eb0595571f62248a7f451ac942cd45e17c36f4eefe791341c18c4fcdd8ac"
+    },
+    "backend-qualification/oracle/plan.json": {
+      "path": "backend-qualification/oracle/plan.json",
+      "bytes": 17627,
+      "sha256": "182fee4d72c2a6492c648591d3fe984fe01cf0d5f5555fd5efa910be2beaf156"
+    }
+  },
+  "input": {
+    "rawReport": {
+      "path": "/tmp/gobi-backend-qualification-E-HARNESS-node22/qualification.raw.json",
+      "bytes": 7820,
+      "sha256": "4222a32d73fde4e9fa31e534ebad7ab61fae8337f6cff7e0b2c9b05486586bcf"
+    },
+    "schema": "gobi.backend-qualification-run/v1",
+    "sourceCommit": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "caseCount": 13,
+    "allEvidenceHashesVerified": true,
+    "caseEvidencePins": {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-inputs.json",
+      "bytes": 3387,
+      "sha256": "7a298c536bfdfd1bd6862e1d56c52d809ccfa3ef5ebd3cebb71336f4c95a7e22"
+    }
+  },
+  "certificate": {
+    "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-certificate.json",
+    "bytes": 11072,
+    "sha256": "6877bc6cb8fc31d58d5378f2ac4770c6bf85f30dd06f6918398dd06b0f335174",
+    "schema": "gobi.backend-qualification-certificate/v1",
+    "qualified": true,
+    "resultCount": 13,
+    "passedCount": 13,
+    "failedCaseIds": [],
+    "sourceCommit": "5662efcd7feb7920e4690d38cc76a297fed69d5a"
+  },
+  "validation": {
+    "combined_go_packages": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 ./backendqualification ./cmd/backend-qualification",
+      "exitCode": 0,
+      "stdout": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-packages.stdout.log",
+        "bytes": 135,
+        "sha256": "2a3bf99cf057e539f23804d36d560a984090a9969f52c9ceec5927ae97be0c4c"
+      },
+      "stderr": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-packages.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "node22_blackbox_suite": {
+      "exitCode": 0,
+      "tests": 15,
+      "passed": 15,
+      "failed": 0,
+      "stdout": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli.stdout.log",
+        "bytes": 3404,
+        "sha256": "523d1dc069edb19e9773f514ef9824415d06e396c8290422c785158443b81c5a"
+      },
+      "stderr": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli.stderr.log",
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    },
+    "direct_go_cli": {
+      "exitCode": 0,
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/backend-qualification --input /tmp/gobi-backend-qualification-E-HARNESS-node22/qualification.raw.json --output /tmp/gobi-backend-qualification-E-GOCLI-20261031/certificate.json",
+      "stderr": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-cli.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "unit_flags_and_malformed_io": "passed",
+    "nonzero_rejection_controls": [
+      "missing case",
+      "duplicate case",
+      "unactivated fault",
+      "generic-exception-only observation",
+      "empty semantic-channel evidence"
+    ]
+  },
+  "preserved_preliminary_failures": [
+    {
+      "reason": "CLI help usage initially wrote to stderr instead of stdout; fixed and targeted rerun passed.",
+      "evidence": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/tests/help-stderr-red/output.log",
+        "bytes": 249,
+        "sha256": "0ab4b7e80910ed1e8fa6ce53ad663c11573785e306ee8daa35d01633a94e4a6e"
+      }
+    },
+    {
+      "reason": "Initial Node CLI suite omitted GOBI_GO_BIN and spawned go ENOENT; rerun with explicit Go 1.24 path passed.",
+      "evidence": {
+        "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli-missing-gobin/observed-failure.md",
+        "bytes": 413,
+        "sha256": "5da1f6f35730d250d0293d9edee885dcbc44dada4d5ccece80af15669f78bf51"
+      }
+    }
+  ],
+  "commandsAndLogs": [
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-cli.command.txt",
+      "bytes": 252,
+      "sha256": "2dd9fe675945178a93072b42c6a5e5c2df12c304402ea8de813da03a8275c773"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-packages.command.txt",
+      "bytes": 130,
+      "sha256": "159aa2456dc1fd6276a9c0240ca5044160b0e42533512d0549a194b145c33a65"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli.command.txt",
+      "bytes": 278,
+      "sha256": "7446f120b955f5f9f94eb13c674459fbf20b55befb074eee2413086eb35264be"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-packages.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-packages.stdout.log",
+      "bytes": 135,
+      "sha256": "2a3bf99cf057e539f23804d36d560a984090a9969f52c9ceec5927ae97be0c4c"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/go-packages.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli.stdout.log",
+      "bytes": 3404,
+      "sha256": "523d1dc069edb19e9773f514ef9824415d06e396c8290422c785158443b81c5a"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/oracle-cli.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-cli.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-cli.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/E-GOCLI/actual-cli.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "report": {
+    "path": "backend-qualification/coordination/reports/E-GOCLI.md",
+    "bytes": 2553,
+    "sha256": "b590b679e1c252f882280af15e40053c0e3be010955c604ce402ed3d32532598"
+  },
+  "limitations": [
+    "Certificate result covers only the supplied N4 capture. No broader runtime or CI claim is made."
+  ]
+}

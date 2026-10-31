@@ -1,0 +1,84 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-BUILD-BASE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Repaired the builder's 39-character PR17 base reference to the full 40-character value from CONTRACT.md, added runtime contract-match validation and targeted malformed/truncated/mismatch tests, and verified two fresh React/DOM builds with stable 67-file outputs, AppIR, native trace, and 87 pinned inputs.",
+  "repair": {
+    "previousBaseReference": "5662efcd7feb7920e4690d38cc76a297fed69d5",
+    "previousLength": 39,
+    "contractBaseReference": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "contractLength": 40,
+    "validation": "exactly 40 lowercase hexadecimal characters and exact match to the PR17 header in backend-qualification/CONTRACT.md",
+    "newSourcePins": ["backend-qualification/CONTRACT.md"],
+    "sourcePinCount": 87
+  },
+  "artifacts": [
+    "backend-qualification/build/build.mjs",
+    "backend-qualification/build/base-ref.test.mjs",
+    "backend-qualification/coordination/reports/E-BUILD-BASE.md",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/run-metadata.json",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/base-ref-tests.log",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/run-two-builds.mjs",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/two-builds.log",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/build-a/build-inputs.json",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/build-b/build-inputs.json"
+  ],
+  "preservedHistory": {
+    "sealedEBuildSource": "backend-qualification/coordination/seals/E-BUILD/source/build.mjs",
+    "sealedEBuildSourceSha256": "315a0d4f227ec99501b7eb4b4305ab16ed1c7a4a4659ace9975b36b584e66ad0",
+    "sealedEBuildReceiptAndReportEdited": false,
+    "note": "The original 86-pin E-BUILD packet remains historical and unchanged. The repair adds CONTRACT.md as a real source input, making the new live set 87 pins."
+  },
+  "verification": {
+    "node": "v22.23.4",
+    "nativeGo": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go version go1.27.3 linux/amd64",
+    "baseRefTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test backend-qualification/build/base-ref.test.mjs",
+      "passed": 4,
+      "failed": 0,
+      "log": "backend-qualification/coordination/rawlogs/E-BUILD-BASE/base-ref-tests.log",
+      "logSha256": "51c629fc2a337c74c368a87a6522a7f08ba5f34d7977ae8690669f13f9ce0f9e"
+    },
+    "freshBuilds": {
+      "command": "GOTOOLCHAIN=local GOBI_GO_BIN=/tmp/gondola-go/bin/go GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-node22/node_modules/node/bin/node backend-qualification/coordination/rawlogs/E-BUILD-BASE/run-two-builds.mjs",
+      "outputRoots": [
+        "/tmp/gobi-backend-qualification-E-BUILD-BASE-20261031-a",
+        "/tmp/gobi-backend-qualification-E-BUILD-BASE-20261031-b"
+      ],
+      "eachRunReactOutputCount": 67,
+      "eachRunDomOutputCount": 67,
+      "eachRunSourcePinCount": 87,
+      "allSourcePinsMatchedAfterBuild": true,
+      "reactAppIRSha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f",
+      "domAppIRSha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f",
+      "nativeTraceSha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+      "bothOutputTreesManifestsAppIRAndNativeTraceValidatedByBuilder": true,
+      "summaryLog": "backend-qualification/coordination/rawlogs/E-BUILD-BASE/two-builds.log",
+      "summaryLogSha256": "dfcdeb24044d2158604e523339cc387c653c6efa2bd16b0b65f08b25bd899f6d"
+    }
+  },
+  "sourceSha256": {
+    "backend-qualification/build/build.mjs": "a97518f48ea902d4bfe33dd12cdaf6d583fcfe0d845d36aa4f0ab76a3aa0331d",
+    "backend-qualification/build/base-ref.test.mjs": "77a95d7b0d83abd96ceabf23a49ff136a2a6d4a57f78408532d51da8a1ea11b5"
+  },
+  "rawLogSha256": {
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/run-metadata.json": "d32ee94d5c03c748b2a23ab6d4b6bb1398fbe95079158b8943ca45b88e554e09",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/base-ref-tests.log": "51c629fc2a337c74c368a87a6522a7f08ba5f34d7977ae8690669f13f9ce0f9e",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/run-two-builds.mjs": "abf69491490aa55f0e8c689826c612b7d22936f03d266a953cb3201c0d731aba",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/two-builds.log": "dfcdeb24044d2158604e523339cc387c653c6efa2bd16b0b65f08b25bd899f6d",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/build-a/build-inputs.json": "633edf32f9e32a7322b0933b9c8b30e72d9e535fc78241800fc811977e48e789",
+    "backend-qualification/coordination/rawlogs/E-BUILD-BASE/build-b/build-inputs.json": "5311cb3f6d054fd3ba5ed51832d94652e8793adcaee4d0183e95cabecda84bc0"
+  },
+  "report": {
+    "path": "backend-qualification/coordination/reports/E-BUILD-BASE.md",
+    "bytes": 3333,
+    "sha256": "1061cb989e88c1edcab11a734d34167d54a4496a4e682c72611672ad762d6223"
+  },
+  "limitations": [
+    "This repair verifies builder provenance and build reproducibility only; it is not a full qualification pipeline or PR17 CI result.",
+    "Root's independent review of the new repair candidate remains pending.",
+    "No application, compiler, renderer, harness, scheduler, Git, or sealed historical E-BUILD artifact was changed."
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "backendqualification/** only; cmd/backend-qualification explicitlycededunstartedtoN2",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes."
+    },
+    {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "backend-qualification/build/**",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes."
+    },
+    {
+      "id": "E-ADAPTERS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "backend-qualification/adapters/**;compiled-publications/conformance/browser-entry.mjs ONLY optional default-off seam",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes."
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "backend-qualification/conformance/**",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes."
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "backend-qualification/oracle/**",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes."
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "backend-qualification/run.mjs,README.md,RESULTS.md,.gitignore,demo/**;run-backend-qualification.sh;.github/workflows/gobi-backend-qualification.yml",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes."
+    },
+    {
+      "id": "E-GOCLI",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "cmd/backend-qualification/** ONLY; own E-GOCLI report/receipt/rawlogs",
+      "summary": "N1explicitlycededunstartedCLI. Implementflag/errorhandlingdrivercallingGo library CertifyFile(inputPath)(Certificate,error),WriteCertificate(outputPath,certificate)error; no librarychanges. FinalgreenCLI gatesN1actualimplementation andN4actual13caseevidence; CLI malformed/flagtests + actualfullrawGo certificate. No Git/scheduler.",
+      "handoff_from": "E-GO"
+    },
+    {
+      "id": "E-BUILD-BASE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "backend-qualification/build/build.mjs and base-ref.test.mjs ONLY; ownnew E-BUILD-BASE report/receipt/rawlogs; sealedoldE-BUILDimmutable",
+      "summary": "Canonicalexactprovenance repair: sealedbuilder315 uses39char contractBaseCommitRef, CONTRACTliteral is40ending69d5a. Gitabbreviatedprefixmayresolve, butfieldmustmatchcanonicalfullcontractSHA. Correctsourceandadd40hex/assertmatch validation; shortfreshbuilderrechecksameAppIR/native; no originalsealedreport/provenance rewrite. Independentreviewgate.",
+      "repair_of": "XR-BUILD"
+    },
+    {
+      "id": "E-GO-CHANNELS",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "backendqualification/certify.go and qualification_test.go ONLY; newownreceipt/report/rawlogs; originalE-GOimmutable",
+      "summary": "RepairXR-GOrealwitness: rawObservedChannels unknown/duplicates canonicalizedaway. Validateallrawrowlistsbeforecanonicalization; preservelegitorder normalization and5-channelpolicy. Testunknown/duplicatefaultrowandunknownhealthyrow, actual13pass, negativecontrols reject. Keepopaque callbackmetadata limitationexplicit notnewsecurityproof.",
+      "repair_of": "XR-GO"
+    },
+    {
+      "id": "E-COUNTER-REGRESSION",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "interaction/build/** generatedoutputs ONLY; owncoordreport/receipt/rawlogs; no sourcechanges",
+      "summary": "RerunoriginalcounterGoWASM/React/native pipeline againstunchangedcounter/Gobi/sourcebase5662 inqualificationworktree. ExactGo1.24Node22Chromiumenv, skipinstalls, bashrun-interaction.sh; captureexit/seeds/scripts/ticks/mismatches/rawtracehashes. No fullGo./... whilecertrepairinflight; onlycounterdependencygraph. Smalltrace~48MB; no deletes. Independentreviewrequired."
+    },
+    {
+      "id": "E-SOURCE-CLOSURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "owncoordreport/receipt/rawlogs ONLY read-onlyprepublicationaudit",
+      "summary": "Auditnewqualificationruntime/testimportpathclosure plusN6outer152+N2actual87inputpaths, ignored build/*.mjs forceaddneed, authorrawpathdependencies/coldcheckoutportability/CIheadenv. No source/Gitchanges. Go repairmaychangecertify.go content, auditpaths ratherthanclaimfinalcandidatebytes. Produceexplicit sourcefile/ignoredfile checklist forroottrackedblobgate; identifyconcreteomissions nothypotheticals. Differentreviewerrequired."
+    },
+    {
+      "id": "E-PR17-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "OLD gondola-publications worktree compiled-publications/run.mjs and .github/workflows/gobi-compiled-publications.yml ONLY; mirrorexacttwofilesintoqualificationworktree; ownnewcoordpacket inqualification",
+      "summary": "ActualC4CI run41222316736 job124599281525 inheritedfullchainpassed butpubpreflight rejectsGoogleChromeForTesting156. Reuseexistingcompiled-children/browser-version.mjs isChromiumVersionOutput ontrimmedoutput, pinhelper+existingtest; focusedNodeincludesexisting2versiontests. Workflowrunnewpubprofilefirstthenfullinheritedchain (bothretained) forfastfailurefeedback. PreserveCIlogs/receipt. Unitobservedbrandred/green+localfullpubonceRootdiskgateopens. No app/compiler changes/Git. ParentPR17sourcepublicationrootonly."
+    }
+  ]
+}

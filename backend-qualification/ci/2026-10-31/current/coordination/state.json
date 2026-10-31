@@ -1,0 +1,2039 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": null,
+      "agent": null
+    },
+    "N6": {
+      "job": null,
+      "agent": null
+    }
+  },
+  "jobs": {
+    "E-GO": {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "backendqualification/** only; cmd/backend-qualification explicitlycededunstartedtoN2",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T17:24:39.351803+00:00",
+      "finished_at": "2026-10-31T17:44:46.931162+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-GO.json"
+    },
+    "E-BUILD": {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "backend-qualification/build/**",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T17:24:39.449703+00:00",
+      "finished_at": "2026-10-31T17:36:03.781632+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-BUILD.json"
+    },
+    "E-ADAPTERS": {
+      "id": "E-ADAPTERS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "backend-qualification/adapters/**;compiled-publications/conformance/browser-entry.mjs ONLY optional default-off seam",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes.",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T17:24:39.536748+00:00",
+      "finished_at": "2026-10-31T17:39:47.253501+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-ADAPTERS.json"
+    },
+    "E-HARNESS": {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "backend-qualification/conformance/**",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T17:24:39.629990+00:00",
+      "finished_at": "2026-10-31T17:44:20.532810+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-HARNESS.json"
+    },
+    "E-ORACLE": {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "backend-qualification/oracle/**",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T17:24:39.740312+00:00",
+      "finished_at": "2026-10-31T17:40:35.771469+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-ORACLE.json"
+    },
+    "E-DELIVERY": {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "backend-qualification/run.mjs,README.md,RESULTS.md,.gitignore,demo/**;run-backend-qualification.sh;.github/workflows/gobi-backend-qualification.yml",
+      "summary": "Read CONTRACT.md and PLAN.md; implement ownedcomposedlane, coordinate exactinterfaces early, validate source, freeze report/receipt/rawlogs; no Git or sharedscope changes.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T17:24:39.841691+00:00",
+      "finished_at": "2026-10-31T18:17:59.309033+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-DELIVERY.json"
+    },
+    "XR-GO": {
+      "id": "XR-GO",
+      "kind": "review",
+      "depends_on": "E-GO",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T17:45:22.485885+00:00",
+      "finished_at": "2026-10-31T17:52:34.972520+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-GO.json"
+    },
+    "XR-BUILD": {
+      "id": "XR-BUILD",
+      "kind": "review",
+      "depends_on": "E-BUILD",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T17:39:55.771965+00:00",
+      "finished_at": "2026-10-31T17:44:20.624762+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-BUILD.json"
+    },
+    "XR-ADAPTERS": {
+      "id": "XR-ADAPTERS",
+      "kind": "review",
+      "depends_on": "E-ADAPTERS",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T17:42:09.885242+00:00",
+      "finished_at": "2026-10-31T17:52:34.579824+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-ADAPTERS.json"
+    },
+    "XR-HARNESS": {
+      "id": "XR-HARNESS",
+      "kind": "review",
+      "depends_on": "E-HARNESS",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T17:44:56.433155+00:00",
+      "finished_at": "2026-10-31T17:52:34.876624+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-HARNESS.json"
+    },
+    "XR-ORACLE": {
+      "id": "XR-ORACLE",
+      "kind": "review",
+      "depends_on": "E-ORACLE",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T17:44:46.808730+00:00",
+      "finished_at": "2026-10-31T17:52:34.677488+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-ORACLE.json"
+    },
+    "XR-DELIVERY": {
+      "id": "XR-DELIVERY",
+      "kind": "review",
+      "depends_on": "E-DELIVERY",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T18:18:05.356538+00:00",
+      "finished_at": "2026-10-31T18:22:26.304824+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-DELIVERY.json"
+    },
+    "E-GOCLI": {
+      "id": "E-GOCLI",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "cmd/backend-qualification/** ONLY; own E-GOCLI report/receipt/rawlogs",
+      "summary": "N1explicitlycededunstartedCLI. Implementflag/errorhandlingdrivercallingGo library CertifyFile(inputPath)(Certificate,error),WriteCertificate(outputPath,certificate)error; no librarychanges. FinalgreenCLI gatesN1actualimplementation andN4actual13caseevidence; CLI malformed/flagtests + actualfullrawGo certificate. No Git/scheduler.",
+      "handoff_from": "E-GO",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T17:36:11.115305+00:00",
+      "finished_at": "2026-10-31T17:41:43.791014+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-GOCLI.json"
+    },
+    "XR-GOCLI": {
+      "id": "XR-GOCLI",
+      "kind": "review",
+      "depends_on": "E-GOCLI",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T17:44:46.709486+00:00",
+      "finished_at": "2026-10-31T17:52:34.777599+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-GOCLI.json"
+    },
+    "E-BUILD-BASE": {
+      "id": "E-BUILD-BASE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "backend-qualification/build/build.mjs and base-ref.test.mjs ONLY; ownnew E-BUILD-BASE report/receipt/rawlogs; sealedoldE-BUILDimmutable",
+      "summary": "Canonicalexactprovenance repair: sealedbuilder315 uses39char contractBaseCommitRef, CONTRACTliteral is40ending69d5a. Gitabbreviatedprefixmayresolve, butfieldmustmatchcanonicalfullcontractSHA. Correctsourceandadd40hex/assertmatch validation; shortfreshbuilderrechecksameAppIR/native; no originalsealedreport/provenance rewrite. Independentreviewgate.",
+      "repair_of": "XR-BUILD",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T17:40:45.259501+00:00",
+      "finished_at": "2026-10-31T17:45:14.435337+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-BUILD-BASE.json"
+    },
+    "XR-BUILD-BASE": {
+      "id": "XR-BUILD-BASE",
+      "kind": "review",
+      "depends_on": "E-BUILD-BASE",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T17:54:12.278492+00:00",
+      "finished_at": "2026-10-31T18:01:07.061500+00:00",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "N3 independentreviewofN5canonicalbasefix; samebaseline reviewer asXR-BUILD; avoidstealingdedicatedsourceaudit/repairlanes",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-BUILD-BASE.json"
+    },
+    "E-GO-CHANNELS": {
+      "id": "E-GO-CHANNELS",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "backendqualification/certify.go and qualification_test.go ONLY; newownreceipt/report/rawlogs; originalE-GOimmutable",
+      "summary": "RepairXR-GOrealwitness: rawObservedChannels unknown/duplicates canonicalizedaway. Validateallrawrowlistsbeforecanonicalization; preservelegitorder normalization and5-channelpolicy. Testunknown/duplicatefaultrowandunknownhealthyrow, actual13pass, negativecontrols reject. Keepopaque callbackmetadata limitationexplicit notnewsecurityproof.",
+      "repair_of": "XR-GO",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T17:54:12.161906+00:00",
+      "finished_at": "2026-10-31T18:01:06.965561+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-GO-CHANNELS.json"
+    },
+    "XR-GO-CHANNELS": {
+      "id": "XR-GO-CHANNELS",
+      "kind": "review",
+      "depends_on": "E-GO-CHANNELS",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T18:01:29.714786+00:00",
+      "finished_at": "2026-10-31T18:09:44.276169+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-GO-CHANNELS.json"
+    },
+    "E-COUNTER-REGRESSION": {
+      "id": "E-COUNTER-REGRESSION",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "interaction/build/** generatedoutputs ONLY; owncoordreport/receipt/rawlogs; no sourcechanges",
+      "summary": "RerunoriginalcounterGoWASM/React/native pipeline againstunchangedcounter/Gobi/sourcebase5662 inqualificationworktree. ExactGo1.24Node22Chromiumenv, skipinstalls, bashrun-interaction.sh; captureexit/seeds/scripts/ticks/mismatches/rawtracehashes. No fullGo./... whilecertrepairinflight; onlycounterdependencygraph. Smalltrace~48MB; no deletes. Independentreviewrequired.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T17:54:12.388160+00:00",
+      "finished_at": "2026-10-31T18:01:07.164693+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-COUNTER-REGRESSION.json"
+    },
+    "XR-COUNTER-REGRESSION": {
+      "id": "XR-COUNTER-REGRESSION",
+      "kind": "review",
+      "depends_on": "E-COUNTER-REGRESSION",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T18:01:29.826679+00:00",
+      "finished_at": "2026-10-31T18:09:44.364864+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-COUNTER-REGRESSION.json"
+    },
+    "E-SOURCE-CLOSURE": {
+      "id": "E-SOURCE-CLOSURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "owncoordreport/receipt/rawlogs ONLY read-onlyprepublicationaudit",
+      "summary": "Auditnewqualificationruntime/testimportpathclosure plusN6outer152+N2actual87inputpaths, ignored build/*.mjs forceaddneed, authorrawpathdependencies/coldcheckoutportability/CIheadenv. No source/Gitchanges. Go repairmaychangecertify.go content, auditpaths ratherthanclaimfinalcandidatebytes. Produceexplicit sourcefile/ignoredfile checklist forroottrackedblobgate; identifyconcreteomissions nothypotheticals. Differentreviewerrequired.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T17:54:12.492046+00:00",
+      "finished_at": "2026-10-31T18:09:44.170689+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-SOURCE-CLOSURE.json"
+    },
+    "XR-SOURCE-CLOSURE": {
+      "id": "XR-SOURCE-CLOSURE",
+      "kind": "review",
+      "depends_on": "E-SOURCE-CLOSURE",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T18:10:00.464397+00:00",
+      "finished_at": "2026-10-31T18:15:33.944060+00:00",
+      "allow_workers": [
+        "N2"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-SOURCE-CLOSURE.json"
+    },
+    "E-PR17-BROWSER": {
+      "id": "E-PR17-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "OLD gondola-publications worktree compiled-publications/run.mjs and .github/workflows/gobi-compiled-publications.yml ONLY; mirrorexacttwofilesintoqualificationworktree; ownnewcoordpacket inqualification",
+      "summary": "ActualC4CI run41222316736 job124599281525 inheritedfullchainpassed butpubpreflight rejectsGoogleChromeForTesting156. Reuseexistingcompiled-children/browser-version.mjs isChromiumVersionOutput ontrimmedoutput, pinhelper+existingtest; focusedNodeincludesexisting2versiontests. Workflowrunnewpubprofilefirstthenfullinheritedchain (bothretained) forfastfailurefeedback. PreserveCIlogs/receipt. Unitobservedbrandred/green+localfullpubonceRootdiskgateopens. No app/compiler changes/Git. ParentPR17sourcepublicationrootonly.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T18:10:00.337524+00:00",
+      "finished_at": "2026-10-31T18:14:11.783888+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/E-PR17-BROWSER.json"
+    },
+    "XR-PR17-BROWSER": {
+      "id": "XR-PR17-BROWSER",
+      "kind": "review",
+      "depends_on": "E-PR17-BROWSER",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T18:14:13.741354+00:00",
+      "finished_at": "2026-10-31T18:18:34.640930+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-qualification/backend-qualification/coordination/receipts/XR-PR17-BROWSER.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-31T17:23:52.332561+00:00",
+      "ready_jobs": [
+        "E-GO",
+        "E-BUILD",
+        "E-ADAPTERS",
+        "E-HARNESS",
+        "E-ORACLE",
+        "E-DELIVERY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "E-ADAPTERS",
+        "N6": "E-DELIVERY",
+        "N2": "E-BUILD",
+        "N5": "E-ORACLE",
+        "N4": "E-HARNESS",
+        "N1": "E-GO"
+      },
+      "dispatch": {
+        "N3": "E-ADAPTERS",
+        "N6": "E-DELIVERY",
+        "N2": "E-BUILD",
+        "N5": "E-ORACLE",
+        "N4": "E-HARNESS",
+        "N1": "E-GO"
+      },
+      "native_seconds": 0.0055739950039424,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 1,
+        "E-ADAPTERS": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-GO": [
+          "N1"
+        ],
+        "E-BUILD": [
+          "N2"
+        ],
+        "E-ADAPTERS": [
+          "N3"
+        ],
+        "E-HARNESS": [
+          "N4"
+        ],
+        "E-ORACLE": [
+          "N5"
+        ],
+        "E-DELIVERY": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-GO": 100,
+        "E-BUILD": 100,
+        "E-ADAPTERS": 100,
+        "E-HARNESS": 100,
+        "E-ORACLE": 100,
+        "E-DELIVERY": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:24:39.351803+00:00",
+      "worker": "N1",
+      "job": "E-GO",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:24:39.449703+00:00",
+      "worker": "N2",
+      "job": "E-BUILD",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:24:39.536748+00:00",
+      "worker": "N3",
+      "job": "E-ADAPTERS",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:24:39.629990+00:00",
+      "worker": "N4",
+      "job": "E-HARNESS",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:24:39.740312+00:00",
+      "worker": "N5",
+      "job": "E-ORACLE",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:24:39.841691+00:00",
+      "worker": "N6",
+      "job": "E-DELIVERY",
+      "agent": "/root/children_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:36:03.781632+00:00",
+      "worker": "N2",
+      "job": "E-BUILD"
+    },
+    {
+      "type": "acknowledged-unstarted-cli-handoff",
+      "at": "2026-10-31T17:36:03.829401+00:00",
+      "from": "N1",
+      "to": "N2",
+      "path": "cmd/backend-qualification/**",
+      "libraryAPI": "CertifyFile(string)(Certificate,error);WriteCertificate(string,Certificate)error",
+      "validationGate": "N1libraryready andN4realrawcapture; no authorreceipt untilactualtests"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-31T17:36:03.926654+00:00",
+      "ready_jobs": [
+        "XR-BUILD",
+        "E-GOCLI"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "E-HARNESS",
+        "N3": "E-ADAPTERS",
+        "N6": "E-DELIVERY",
+        "N1": "E-GO",
+        "N2": "E-GOCLI",
+        "N5": "E-ORACLE"
+      },
+      "dispatch": {
+        "N2": "E-GOCLI"
+      },
+      "native_seconds": 0.00633447700238321,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 1,
+        "XR-GOCLI": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-BUILD": [],
+        "E-GOCLI": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-BUILD": 200,
+        "E-GOCLI": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": "/root/children_harness",
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:36:11.115305+00:00",
+      "worker": "N2",
+      "job": "E-GOCLI",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:39:47.253501+00:00",
+      "worker": "N3",
+      "job": "E-ADAPTERS"
+    },
+    {
+      "type": "canonical-provenance-repair-gate",
+      "at": "2026-10-31T17:39:47.292071+00:00",
+      "review": "XR-BUILD",
+      "repair": "E-BUILD-BASE",
+      "finding": "39charprefixnotexact40charCONTRACTbase; noGo/modulebehaviorfailureclaimed; originalsource315andpostsealrecoverypreserved"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-31T17:39:47.416792+00:00",
+      "ready_jobs": [
+        "XR-BUILD",
+        "XR-ADAPTERS",
+        "E-BUILD-BASE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "E-ORACLE",
+        "N6": "E-DELIVERY",
+        "N4": "E-HARNESS",
+        "N2": "E-GOCLI",
+        "N1": "E-GO",
+        "N3": "XR-BUILD"
+      },
+      "dispatch": {
+        "N3": "XR-BUILD"
+      },
+      "native_seconds": 0.004912390999379568,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-ADAPTERS": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 1,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 1,
+        "XR-BUILD-BASE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-BUILD": [
+          "N3"
+        ],
+        "XR-ADAPTERS": [],
+        "E-BUILD-BASE": []
+      },
+      "weights": {
+        "XR-BUILD": 200,
+        "XR-ADAPTERS": 200,
+        "E-BUILD-BASE": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": "/root/children_compiler",
+        "N3": null,
+        "N4": "/root/children_harness",
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:39:55.771965+00:00",
+      "worker": "N3",
+      "job": "XR-BUILD",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:40:35.771469+00:00",
+      "worker": "N5",
+      "job": "E-ORACLE"
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-31T17:40:35.881517+00:00",
+      "ready_jobs": [
+        "XR-ADAPTERS",
+        "XR-ORACLE",
+        "E-BUILD-BASE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N6": "E-DELIVERY",
+        "N4": "E-HARNESS",
+        "N2": "E-GOCLI",
+        "N1": "E-GO",
+        "N3": "XR-BUILD",
+        "N5": "E-BUILD-BASE"
+      },
+      "dispatch": {
+        "N5": "E-BUILD-BASE"
+      },
+      "native_seconds": 0.0041468460112810135,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-ADAPTERS": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 1,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 1,
+        "XR-BUILD-BASE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ADAPTERS": [
+          "N5"
+        ],
+        "XR-ORACLE": [],
+        "E-BUILD-BASE": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-ADAPTERS": 200,
+        "XR-ORACLE": 200,
+        "E-BUILD-BASE": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": "/root/children_compiler",
+        "N3": "/root/children_host",
+        "N4": "/root/children_harness",
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:40:45.259501+00:00",
+      "worker": "N5",
+      "job": "E-BUILD-BASE",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:41:43.791014+00:00",
+      "worker": "N2",
+      "job": "E-GOCLI"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-31T17:41:43.886186+00:00",
+      "ready_jobs": [
+        "XR-ADAPTERS",
+        "XR-ORACLE",
+        "XR-GOCLI"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N6": "E-DELIVERY",
+        "N4": "E-HARNESS",
+        "N2": "XR-ADAPTERS",
+        "N1": "E-GO",
+        "N3": "XR-BUILD",
+        "N5": "E-BUILD-BASE"
+      },
+      "dispatch": {
+        "N2": "XR-ADAPTERS"
+      },
+      "native_seconds": 0.0037816419935552403,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-ADAPTERS": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 1,
+        "E-BUILD-BASE": 1,
+        "XR-BUILD-BASE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ADAPTERS": [
+          "N2"
+        ],
+        "XR-ORACLE": [
+          "N2"
+        ],
+        "XR-GOCLI": []
+      },
+      "weights": {
+        "XR-ADAPTERS": 200,
+        "XR-ORACLE": 200,
+        "XR-GOCLI": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": "/root/children_harness",
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:42:09.885242+00:00",
+      "worker": "N2",
+      "job": "XR-ADAPTERS",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:44:20.532810+00:00",
+      "worker": "N4",
+      "job": "E-HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:44:20.624762+00:00",
+      "worker": "N3",
+      "job": "XR-BUILD"
+    },
+    {
+      "type": "solve",
+      "epoch": 5,
+      "at": "2026-10-31T17:44:20.725772+00:00",
+      "ready_jobs": [
+        "XR-HARNESS",
+        "XR-ORACLE",
+        "XR-GOCLI"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCLI",
+        "N6": "E-DELIVERY",
+        "N5": "E-BUILD-BASE",
+        "N4": "XR-ORACLE",
+        "N2": "XR-ADAPTERS",
+        "N1": "E-GO"
+      },
+      "dispatch": {
+        "N3": "XR-GOCLI",
+        "N4": "XR-ORACLE"
+      },
+      "native_seconds": 0.004490161998546682,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 1,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 1,
+        "E-BUILD-BASE": 1,
+        "XR-BUILD-BASE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-HARNESS": [
+          "N3"
+        ],
+        "XR-ORACLE": [
+          "N3",
+          "N4"
+        ],
+        "XR-GOCLI": [
+          "N3",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-HARNESS": 200,
+        "XR-ORACLE": 200,
+        "XR-GOCLI": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": "/root/children_compiler",
+        "N3": null,
+        "N4": null,
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:44:46.709486+00:00",
+      "worker": "N3",
+      "job": "XR-GOCLI",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:44:46.808730+00:00",
+      "worker": "N4",
+      "job": "XR-ORACLE",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:44:46.931162+00:00",
+      "worker": "N1",
+      "job": "E-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 6,
+      "at": "2026-10-31T17:44:47.052227+00:00",
+      "ready_jobs": [
+        "XR-GO",
+        "XR-HARNESS"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCLI",
+        "N6": "E-DELIVERY",
+        "N4": "XR-ORACLE",
+        "N2": "XR-ADAPTERS",
+        "N1": "XR-HARNESS",
+        "N5": "E-BUILD-BASE"
+      },
+      "dispatch": {
+        "N1": "XR-HARNESS"
+      },
+      "native_seconds": 0.0042687300010584295,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 1,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 1,
+        "E-BUILD-BASE": 1,
+        "XR-BUILD-BASE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": [],
+        "XR-HARNESS": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-GO": 200,
+        "XR-HARNESS": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/children_compiler",
+        "N3": "/root/children_host",
+        "N4": "/root/children_harness",
+        "N5": "/root/children_oracle",
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:44:56.433155+00:00",
+      "worker": "N1",
+      "job": "XR-HARNESS",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:45:14.435337+00:00",
+      "worker": "N5",
+      "job": "E-BUILD-BASE"
+    },
+    {
+      "type": "solve",
+      "epoch": 7,
+      "at": "2026-10-31T17:45:14.588796+00:00",
+      "ready_jobs": [
+        "XR-GO",
+        "XR-BUILD-BASE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCLI",
+        "N6": "E-DELIVERY",
+        "N4": "XR-ORACLE",
+        "N2": "XR-ADAPTERS",
+        "N1": "XR-HARNESS",
+        "N5": "XR-GO"
+      },
+      "dispatch": {
+        "N5": "XR-GO"
+      },
+      "native_seconds": 0.009619246004149318,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 1,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 1,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": [
+          "N5"
+        ],
+        "XR-BUILD-BASE": []
+      },
+      "weights": {
+        "XR-GO": 200,
+        "XR-BUILD-BASE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": "/root/children_compiler",
+        "N3": "/root/children_host",
+        "N4": "/root/children_harness",
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:45:22.485885+00:00",
+      "worker": "N5",
+      "job": "XR-GO",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:52:34.579824+00:00",
+      "worker": "N2",
+      "job": "XR-ADAPTERS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:52:34.677488+00:00",
+      "worker": "N4",
+      "job": "XR-ORACLE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:52:34.777599+00:00",
+      "worker": "N3",
+      "job": "XR-GOCLI"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:52:34.876624+00:00",
+      "worker": "N1",
+      "job": "XR-HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T17:52:34.972520+00:00",
+      "worker": "N5",
+      "job": "XR-GO"
+    },
+    {
+      "type": "independent-go-review-repair-and-composed-acceptance-gates",
+      "at": "2026-10-31T17:52:35.011461+00:00",
+      "repair": "E-GO-CHANNELS",
+      "review": "XR-GO",
+      "witness": "realrawunknownandduplicatechannelsbothqualifiedincorrectly; sourcea1preservedimmutable",
+      "additional": "originalcounterregression andpublicationimportclosureaudit disjointfromrepair"
+    },
+    {
+      "type": "native-rejection-and-explicit-review-role-refinement",
+      "at": "2026-10-31T17:53:48.396076+00:00",
+      "rejectedNativeScore": 600,
+      "independentMaximum": 700,
+      "noActualDispatch": true,
+      "review": "XR-BUILD-BASE",
+      "allow_workers": [
+        "N3"
+      ],
+      "reason": "N3alreadyreviewedoldbuildbaseline; dedicatedN1sourceaudit,N2Gorepair,N4counterregression remain disjoint; maximum700unchanged"
+    },
+    {
+      "type": "solve",
+      "epoch": 8,
+      "at": "2026-10-31T17:53:48.521377+00:00",
+      "ready_jobs": [
+        "XR-BUILD-BASE",
+        "E-GO-CHANNELS",
+        "E-COUNTER-REGRESSION",
+        "E-SOURCE-CLOSURE"
+      ],
+      "pinned_workers": [
+        "N6"
+      ],
+      "assignments": {
+        "N5": "BENCH",
+        "N3": "XR-BUILD-BASE",
+        "N4": "E-COUNTER-REGRESSION",
+        "N2": "E-GO-CHANNELS",
+        "N1": "E-SOURCE-CLOSURE",
+        "N6": "E-DELIVERY"
+      },
+      "dispatch": {
+        "N3": "XR-BUILD-BASE",
+        "N4": "E-COUNTER-REGRESSION",
+        "N2": "E-GO-CHANNELS",
+        "N1": "E-SOURCE-CLOSURE"
+      },
+      "native_seconds": 0.00814574200194329,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 700,
+      "native_score": 700,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 1,
+        "E-GO-CHANNELS": 1,
+        "XR-GO-CHANNELS": 0,
+        "E-COUNTER-REGRESSION": 1,
+        "XR-COUNTER-REGRESSION": 0,
+        "E-SOURCE-CLOSURE": 1,
+        "XR-SOURCE-CLOSURE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-BUILD-BASE": [
+          "N3"
+        ],
+        "E-GO-CHANNELS": [
+          "N2"
+        ],
+        "E-COUNTER-REGRESSION": [
+          "N4"
+        ],
+        "E-SOURCE-CLOSURE": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-BUILD-BASE": 200,
+        "E-GO-CHANNELS": 300,
+        "E-COUNTER-REGRESSION": 100,
+        "E-SOURCE-CLOSURE": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:54:12.161906+00:00",
+      "worker": "N2",
+      "job": "E-GO-CHANNELS",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:54:12.278492+00:00",
+      "worker": "N3",
+      "job": "XR-BUILD-BASE",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:54:12.388160+00:00",
+      "worker": "N4",
+      "job": "E-COUNTER-REGRESSION",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T17:54:12.492046+00:00",
+      "worker": "N1",
+      "job": "E-SOURCE-CLOSURE",
+      "agent": "/root/children_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:01:06.965561+00:00",
+      "worker": "N2",
+      "job": "E-GO-CHANNELS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:01:07.061500+00:00",
+      "worker": "N3",
+      "job": "XR-BUILD-BASE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:01:07.164693+00:00",
+      "worker": "N4",
+      "job": "E-COUNTER-REGRESSION"
+    },
+    {
+      "type": "solve",
+      "epoch": 9,
+      "at": "2026-10-31T18:01:07.270745+00:00",
+      "ready_jobs": [
+        "XR-GO-CHANNELS",
+        "XR-COUNTER-REGRESSION"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N6"
+      ],
+      "assignments": {
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N6": "E-DELIVERY",
+        "N3": "XR-GO-CHANNELS",
+        "N1": "E-SOURCE-CLOSURE",
+        "N5": "XR-COUNTER-REGRESSION"
+      },
+      "dispatch": {
+        "N3": "XR-GO-CHANNELS",
+        "N5": "XR-COUNTER-REGRESSION"
+      },
+      "native_seconds": 0.005173022000235505,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 0,
+        "E-GO-CHANNELS": 0,
+        "XR-GO-CHANNELS": 1,
+        "E-COUNTER-REGRESSION": 0,
+        "XR-COUNTER-REGRESSION": 1,
+        "E-SOURCE-CLOSURE": 1,
+        "XR-SOURCE-CLOSURE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO-CHANNELS": [
+          "N3",
+          "N4",
+          "N5"
+        ],
+        "XR-COUNTER-REGRESSION": [
+          "N2",
+          "N3",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-GO-CHANNELS": 200,
+        "XR-COUNTER-REGRESSION": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/children_go",
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T18:01:29.714786+00:00",
+      "worker": "N3",
+      "job": "XR-GO-CHANNELS",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T18:01:29.826679+00:00",
+      "worker": "N5",
+      "job": "XR-COUNTER-REGRESSION",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:09:44.170689+00:00",
+      "worker": "N1",
+      "job": "E-SOURCE-CLOSURE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:09:44.276169+00:00",
+      "worker": "N3",
+      "job": "XR-GO-CHANNELS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:09:44.364864+00:00",
+      "worker": "N5",
+      "job": "XR-COUNTER-REGRESSION"
+    },
+    {
+      "type": "actual-parent-ci-browser-brand-repair-gate",
+      "at": "2026-10-31T18:09:44.377714+00:00",
+      "run": 41222316736,
+      "job": 124599281525,
+      "source": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+      "repair": "E-PR17-BROWSER",
+      "inheritedStep": "passed",
+      "failure": "ChromiumonlyregexrejectsGoogleChromeForTesting156.0.8078.4",
+      "sourceClosureReviewN2": "reviewold175boundaryandnew2helperinputsdelta afterN6unsealedintegration; no oldreceipt rewrites"
+    },
+    {
+      "type": "solve",
+      "epoch": 10,
+      "at": "2026-10-31T18:09:44.470310+00:00",
+      "ready_jobs": [
+        "XR-SOURCE-CLOSURE",
+        "E-PR17-BROWSER"
+      ],
+      "pinned_workers": [
+        "N6"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N5": "BENCH",
+        "N6": "E-DELIVERY",
+        "N2": "XR-SOURCE-CLOSURE",
+        "N4": "E-PR17-BROWSER"
+      },
+      "dispatch": {
+        "N2": "XR-SOURCE-CLOSURE",
+        "N4": "E-PR17-BROWSER"
+      },
+      "native_seconds": 0.006690588008495979,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 0,
+        "E-GO-CHANNELS": 0,
+        "XR-GO-CHANNELS": 0,
+        "E-COUNTER-REGRESSION": 0,
+        "XR-COUNTER-REGRESSION": 0,
+        "E-SOURCE-CLOSURE": 0,
+        "XR-SOURCE-CLOSURE": 1,
+        "E-PR17-BROWSER": 1,
+        "XR-PR17-BROWSER": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-SOURCE-CLOSURE": [
+          "N2"
+        ],
+        "E-PR17-BROWSER": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-SOURCE-CLOSURE": 200,
+        "E-PR17-BROWSER": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T18:10:00.337524+00:00",
+      "worker": "N4",
+      "job": "E-PR17-BROWSER",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T18:10:00.464397+00:00",
+      "worker": "N2",
+      "job": "XR-SOURCE-CLOSURE",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:14:11.783888+00:00",
+      "worker": "N4",
+      "job": "E-PR17-BROWSER"
+    },
+    {
+      "type": "solve",
+      "epoch": 11,
+      "at": "2026-10-31T18:14:11.876025+00:00",
+      "ready_jobs": [
+        "XR-PR17-BROWSER"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N4": "BENCH",
+        "N2": "XR-SOURCE-CLOSURE",
+        "N5": "XR-PR17-BROWSER",
+        "N6": "E-DELIVERY"
+      },
+      "dispatch": {
+        "N5": "XR-PR17-BROWSER"
+      },
+      "native_seconds": 0.0040530260012019426,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 0,
+        "E-GO-CHANNELS": 0,
+        "XR-GO-CHANNELS": 0,
+        "E-COUNTER-REGRESSION": 0,
+        "XR-COUNTER-REGRESSION": 0,
+        "E-SOURCE-CLOSURE": 0,
+        "XR-SOURCE-CLOSURE": 1,
+        "E-PR17-BROWSER": 0,
+        "XR-PR17-BROWSER": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-PR17-BROWSER": [
+          "N1",
+          "N3",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-PR17-BROWSER": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/children_compiler",
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": "/root/children_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T18:14:13.741354+00:00",
+      "worker": "N5",
+      "job": "XR-PR17-BROWSER",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:15:33.944060+00:00",
+      "worker": "N2",
+      "job": "XR-SOURCE-CLOSURE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:17:59.309033+00:00",
+      "worker": "N6",
+      "job": "E-DELIVERY"
+    },
+    {
+      "type": "solve",
+      "epoch": 12,
+      "at": "2026-10-31T18:17:59.417553+00:00",
+      "ready_jobs": [
+        "XR-DELIVERY"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N6": "BENCH",
+        "N2": "BENCH",
+        "N5": "XR-PR17-BROWSER",
+        "N4": "XR-DELIVERY"
+      },
+      "dispatch": {
+        "N4": "XR-DELIVERY"
+      },
+      "native_seconds": 0.00501007201091852,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 1,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 0,
+        "E-GO-CHANNELS": 0,
+        "XR-GO-CHANNELS": 0,
+        "E-COUNTER-REGRESSION": 0,
+        "XR-COUNTER-REGRESSION": 0,
+        "E-SOURCE-CLOSURE": 0,
+        "XR-SOURCE-CLOSURE": 0,
+        "E-PR17-BROWSER": 0,
+        "XR-PR17-BROWSER": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-DELIVERY": [
+          "N1",
+          "N2",
+          "N3",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-DELIVERY": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/children_oracle",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T18:18:05.356538+00:00",
+      "worker": "N4",
+      "job": "XR-DELIVERY",
+      "agent": "/root/children_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:18:34.640930+00:00",
+      "worker": "N5",
+      "job": "XR-PR17-BROWSER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T18:22:26.304824+00:00",
+      "worker": "N4",
+      "job": "XR-DELIVERY"
+    },
+    {
+      "type": "solve",
+      "epoch": 13,
+      "at": "2026-10-31T18:22:26.407232+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH"
+      },
+      "dispatch": {},
+      "native_seconds": 0.004488118007429875,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-ADAPTERS": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-ADAPTERS": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-GOCLI": 0,
+        "XR-GOCLI": 0,
+        "E-BUILD-BASE": 0,
+        "XR-BUILD-BASE": 0,
+        "E-GO-CHANNELS": 0,
+        "XR-GO-CHANNELS": 0,
+        "E-COUNTER-REGRESSION": 0,
+        "XR-COUNTER-REGRESSION": 0,
+        "E-SOURCE-CLOSURE": 0,
+        "XR-SOURCE-CLOSURE": 0,
+        "E-PR17-BROWSER": 0,
+        "XR-PR17-BROWSER": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    }
+  ],
+  "epoch": 14,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

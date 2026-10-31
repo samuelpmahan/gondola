@@ -1,0 +1,241 @@
+{
+  "schema": "gobi.backend-qualification-review/v1",
+  "job_id": "XR-PR17-BROWSER",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "The final E-PR17-BROWSER author packet is supported: the publication runner reuses the shared strict Chromium/Chrome-for-Testing parser, both changed source files and both helper pins match across the publications and qualification worktrees and the stated parent commit, the workflow preserves the inherited PR16 step after the publication profile, focused helper tests passed 2/2, and the local eight-stage/363-member evidence reconciles.",
+  "reviewed_packet": {
+    "job_id": "E-PR17-BROWSER",
+    "worker": "N4",
+    "outcome": "mixed_change",
+    "finalAuthorReport": {
+      "path": "backend-qualification/coordination/seals/E-PR17-BROWSER/final-author/reports/E-PR17-BROWSER.md",
+      "bytes": 3852,
+      "sha256": "e945e309dbfcaf4f470c263d65ff6704d3f84e949e5b916dd3285ad00262b77b"
+    },
+    "finalAuthorReceipt": {
+      "path": "backend-qualification/coordination/seals/E-PR17-BROWSER/final-author/receipts/E-PR17-BROWSER.json",
+      "bytes": 8377,
+      "sha256": "5e1ab9a653a6b13ab42c67afaea2f7c778b46188da00570050619779d7178b0a"
+    },
+    "preliminarySeal": {
+      "reportSha256": "d622c0de4873e1deb98087ae36c68e83f96a8697fce3fb853e2060b18cb3884d",
+      "receiptSha256": "c898df23c2768179563da36cc9e3bee241c55787b968981a2c874c1a37cf232f",
+      "attemptReceiptBytesField": 0
+    }
+  },
+  "review": {
+    "baseCheckpoint": {
+      "commit": "5f624b9a46b56d9610e936360e9da2fe46b99a29",
+      "tree": "e020be3eab3b5e0f67f3e9ea7a73662e7d3bf434"
+    },
+    "sourceFiles": {
+      "compiled-publications/run.mjs": {
+        "publications": {
+          "path": "compiled-publications/run.mjs",
+          "bytes": 32106,
+          "sha256": "11ba693e89123da95717076842e033ce300ce06ba45ef341e39e76e4a8d04698"
+        },
+        "qualification": {
+          "path": "compiled-publications/run.mjs",
+          "bytes": 32106,
+          "sha256": "11ba693e89123da95717076842e033ce300ce06ba45ef341e39e76e4a8d04698"
+        },
+        "baseCommitBlobByteIdentical": true
+      },
+      ".github/workflows/gobi-compiled-publications.yml": {
+        "publications": {
+          "path": ".github/workflows/gobi-compiled-publications.yml",
+          "bytes": 1674,
+          "sha256": "c82001bd0fed6a3ede155e83e3308f36e5e2bebddcbef75efdad9e25f04aa493"
+        },
+        "qualification": {
+          "path": ".github/workflows/gobi-compiled-publications.yml",
+          "bytes": 1674,
+          "sha256": "c82001bd0fed6a3ede155e83e3308f36e5e2bebddcbef75efdad9e25f04aa493"
+        },
+        "baseCommitBlobByteIdentical": true
+      }
+    },
+    "sharedHelper": {
+      "path": "compiled-children/browser-version.mjs",
+      "bytes": 503,
+      "sha256": "624fc3369d9f6e47d7d84d23de41e0bdbe07d6ce925c878a8623d08765b4f6ee",
+      "testPath": "compiled-children/conformance/browser-version.test.mjs",
+      "testBytes": 899,
+      "testSha256": "6c465496d274480ad79bf2fd74f4e6566095edc4022f83361b1d9c400a6586e6",
+      "publicationHelperByteIdentical": true,
+      "publicationTestByteIdentical": true,
+      "importedAndCalled": true,
+      "bothFilesInSourcePins": true,
+      "helperTestInFocusedList": true
+    },
+    "workflow": {
+      "publicationProfileBeforeInheritedChain": true,
+      "inheritedCommand": "bash run-compiled-children.sh"
+    },
+    "helperTestRun": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/browser-version.test.mjs",
+      "nodeVersion": "v22.23.4",
+      "exitCode": 0,
+      "passed": 2,
+      "failed": 0,
+      "stdout": {
+        "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/helper-tests.stdout.log",
+        "bytes": 879,
+        "sha256": "f421b3c6cc699a300c37f3c91041ca15738ffc0d20e70ffb588f56bbefada9f8"
+      }
+    },
+    "localAttempt": {
+      "attempt": "attempt-20261031T181141849Z-6",
+      "status": "passed",
+      "receipt": {
+        "path": "compiled-publications/evidence/attempts/attempt-20261031T181141849Z-6/receipt.json",
+        "bytes": 243906,
+        "sha256": "f95934cfe17e8b5e97e3afa5d01115fd78238709ff9f07a1d6caf31c15ed0954"
+      },
+      "report": {
+        "path": "compiled-publications/evidence/attempts/attempt-20261031T181141849Z-6/report.md",
+        "bytes": 911,
+        "sha256": "061147aa13d4e7aaed008caa46db3b4c849110b211389c9a20747c7b7346c625"
+      },
+      "sourcePinsBefore": 130,
+      "sourcePinsAfter": 130,
+      "sourcePinDiffCount": 0,
+      "stages": [
+        {
+          "name": "tool-versions",
+          "status": "passed"
+        },
+        {
+          "name": "focused-node-and-go-tests",
+          "status": "passed"
+        },
+        {
+          "name": "fresh-native-trace",
+          "status": "passed"
+        },
+        {
+          "name": "fresh-react-and-dom-goscript-builds",
+          "status": "passed"
+        },
+        {
+          "name": "native-direct-browser-conformance",
+          "status": "passed"
+        },
+        {
+          "name": "http-demo-build-and-smoke",
+          "status": "passed"
+        },
+        {
+          "name": "source-input-snapshot-and-boundary",
+          "status": "passed"
+        },
+        {
+          "name": "archive-and-independent-consumer",
+          "status": "passed"
+        }
+      ],
+      "archive": {
+        "path": "compiled-publications/demo/output/attempts/attempt-20261031T181141849Z-6.tar.gz",
+        "bytes": 7651792,
+        "sha256": "c449070787424074fc80834c70eb4d79e00f59b1cdccda8aa3879c5b4ffe7783",
+        "manifest": {
+          "path": "compiled-publications/demo/output/attempts/attempt-20261031T181141849Z-6.archive-manifest.json",
+          "bytes": 67884,
+          "sha256": "72b3e3f33556cedaef57a9112eb9a24ee05bd0ed1055e1f70f736c8bce6947ef"
+        },
+        "manifestMembers": 363,
+        "tarMembers": 363,
+        "consumer": {
+          "path": "compiled-publications/evidence/attempts/attempt-20261031T181141849Z-6/independent-archive-consumer.json",
+          "bytes": 842,
+          "sha256": "5aa8d11da5e6610877a7c43bd2ebab9528e41c2e8634d8aacf89061a5d36bea5"
+        },
+        "consumerPassed": true
+      }
+    },
+    "hostedCISnapshot": {
+      "path": "backend-qualification/coordination/pr17-ci-hotfix-observed.json",
+      "sha256": "0e45b8c5f8d4f52a0981f7ae733b1fe0df993c2312e65733c181c5ee5a815a72",
+      "checkedAt": "2026-10-31 18:14:40 UTC",
+      "runId": 41228270986,
+      "jobId": 124616896941,
+      "publicationProfileConclusion": "success",
+      "inheritedChainStatus": "in_progress",
+      "qualificationStatus": "queued"
+    },
+    "originalFailedCIRun": {
+      "runId": 41222316736,
+      "jobId": 124599281525,
+      "sourceCommit": "5f624b9a46b56d9610e936360e9da2fe46b99a29",
+      "reportedIssue": "Google Chrome for Testing 156.0.8078.4 rejected by the prior Chromium-only version gate after the inherited PR16 chain passed",
+      "provenance": "Task-provided and preserved N4 packet context; not independently fetched from GitHub by this reviewer."
+    },
+    "sealReconciliation": {
+      "decisionBasis": "The review binds to final-author copies; the preliminary root seal is an earlier snapshot and remains preserved unchanged.",
+      "finalAttemptReceiptBytes": 243906,
+      "preliminaryAttemptReceiptBytes": 0,
+      "actualAttemptReceiptBytes": 243906,
+      "actualAttemptReceiptSha256": "f95934cfe17e8b5e97e3afa5d01115fd78238709ff9f07a1d6caf31c15ed0954"
+    }
+  },
+  "report": {
+    "path": "backend-qualification/coordination/reports/XR-PR17-BROWSER.md",
+    "bytes": 3941,
+    "sha256": "27fdc0726377519ecf20cc5b76dc5bd8c296f7c510bb113bde79cb71cd36e713"
+  },
+  "rawLogs": [
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/helper-tests.command.txt",
+      "bytes": 109,
+      "sha256": "46db6fca32fd110e76bf3b0ba9787136281cbefa0fa7bde71185a3d8e5871e61"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/helper-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/helper-tests.stdout.log",
+      "bytes": 879,
+      "sha256": "f421b3c6cc699a300c37f3c91041ca15738ffc0d20e70ffb588f56bbefada9f8"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/node-version.txt",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/independent-check.py",
+      "bytes": 10938,
+      "sha256": "1e3509ef5bd0f32127caa187a3cf2ad8504eff8f53e6e019c84b4c73a4a3c6a4"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/independent-check.command.txt",
+      "bytes": 176,
+      "sha256": "77b4c76d3285323b46d337af7e9f1d6fef7d434b7e1544ddc70f293c2a0e9424"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/independent-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/independent-check.log",
+      "bytes": 5150,
+      "sha256": "05ab17dc0a479aab5be0c1d22363498130a561ff3bdd95e0a03a6353ba057686"
+    },
+    {
+      "path": "backend-qualification/coordination/rawlogs/XR-PR17-BROWSER/independent-check.json",
+      "bytes": 5150,
+      "sha256": "05ab17dc0a479aab5be0c1d22363498130a561ff3bdd95e0a03a6353ba057686"
+    }
+  ],
+  "limitations": [
+    "The local full publication profile and inherited PR16 chain were not rerun by this reviewer; the eight-stage result and 363-member archive were checked from preserved artifacts.",
+    "The latest available hosted CI snapshot is in progress: the publication profile passed, but the inherited chain remains in progress and backend qualification is queued. It is not evidence of a completed full workflow.",
+    "The original failed hosted CI run context was supplied and retained in the N4 packet; this reviewer did not independently fetch its hosted logs.",
+    "No source files, Git refs, or scheduler state were changed."
+  ]
+}

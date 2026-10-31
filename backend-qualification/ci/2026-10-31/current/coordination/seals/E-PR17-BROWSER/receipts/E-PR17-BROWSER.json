@@ -1,0 +1,148 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-PR17-BROWSER",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Fixed the publication runner's Chromium version gate by reusing the existing shared exact-version parser, added its existing two tests to focused Node checks and source pins, reordered the workflow to run the publication profile before the retained PR16 chain, passed 18 focused Node tests and one complete local publication profile, then mirrored the exact two fixed files into qualification.",
+  "ciWitness": {
+    "sourceCommit": "5662efcd7feb7920e4690d38cc76a297fed69d5a",
+    "runId": "41222316736",
+    "jobId": "124599281525",
+    "reportedSequence": "full PR16 inherited chain passed; publication tool-versions stage failed",
+    "observedChromiumVersionOutput": "Google Chrome for Testing 156.0.8078.4",
+    "provenance": "task-provided CI failure context; this agent did not fetch hosted CI logs"
+  },
+  "changes": {
+    "publicationsWorktree": "/workspace/scratch/39a56936f173/gondola-publications",
+    "qualificationWorktree": "/workspace/scratch/39a56936f173/gondola-qualification",
+    "onlySourcePathsChanged": [
+      "compiled-publications/run.mjs",
+      ".github/workflows/gobi-compiled-publications.yml"
+    ],
+    "runModule": {
+      "oldRegex": "/Chromium/i",
+      "replacement": "isChromiumVersionOutput(chromiumVersion.trim())",
+      "helperPath": "compiled-children/browser-version.mjs",
+      "helperSha256": "624fc3369d9f6e47d7d84d23de41e0bdbe07d6ce925c878a8623d08765b4f6ee",
+      "testPath": "compiled-children/conformance/browser-version.test.mjs",
+      "testSha256": "6c465496d274480ad79bf2fd74f4e6566095edc4022f83361b1d9c400a6586e6",
+      "sourcePinPathsAdded": [
+        "compiled-children/browser-version.mjs",
+        "compiled-children/conformance/browser-version.test.mjs"
+      ],
+      "focusedTestPathsAdded": [
+        "compiled-children/conformance/browser-version.test.mjs"
+      ]
+    },
+    "workflowOrder": [
+      "Run typed input and keyed publication profile",
+      "Run the full PR16 inherited chain"
+    ],
+    "inheritedWorkflowCommandRetained": "bash run-compiled-children.sh",
+    "oldRegexNegativeReproduction": {
+      "runtime": "Node v22.23.4",
+      "input": "Google Chrome for Testing 156.0.8078.4",
+      "expectedExitCode": 1,
+      "observedDiagnostic": "Chromium version output is invalid: Google Chrome for Testing 156.0.8078.4"
+    },
+    "publicationsSourceHashes": {
+      "compiled-publications/run.mjs": {
+        "bytes": 32106,
+        "sha256": "11ba693e89123da95717076842e033ce300ce06ba45ef341e39e76e4a8d04698"
+      },
+      ".github/workflows/gobi-compiled-publications.yml": {
+        "bytes": 1674,
+        "sha256": "c82001bd0fed6a3ede155e83e3308f36e5e2bebddcbef75efdad9e25f04aa493"
+      }
+    },
+    "qualificationCopyMatchesByteForByte": true,
+    "qualificationCopyVerificationPath": "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/source-copy-verification.json",
+    "qualificationCopyVerificationSha256": "4cfc4fcc5151d9858438d4490b77e6919b07763086798d11ed6350cfe390e3e9"
+  },
+  "verification": {
+    "sharedHelperTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/browser-version.test.mjs",
+      "exitCode": 0,
+      "passed": 2,
+      "failed": 0,
+      "result": "Accepts Chromium and Google Chrome for Testing output; rejects malformed/suffixed/non-Chromium values including unsafe components."
+    },
+    "focusedNodeTests": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/browser-version.test.mjs compiled-publications/runtime/runtime.test.mjs compiled-publications/oracle/oracle.test.mjs compiled-publications/conformance/check.test.mjs compiled-publications/conformance/seeded.test.mjs",
+      "exitCode": 0,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    "fullPublicationProfile": {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_GO_BIN=/tmp/gondola-go/bin/go CHROMIUM_PATH=/tmp/chromium GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 bash run-compiled-publications.sh",
+      "exitCode": 0,
+      "attempt": "attempt-20261031T181141849Z-6",
+      "attemptPath": "/workspace/scratch/39a56936f173/gondola-publications/compiled-publications/demo/output/attempts/attempt-20261031T181141849Z-6",
+      "stageCount": 8,
+      "allStagesPassed": true,
+      "summary": "45 native Go updates, 3 seeded schedules, 20 HTTP smoke checks, 363-member archive roundtrip verified",
+      "seeds": [20261031, 20261032, 20261033],
+      "toolchains": {
+        "node": "v22.23.4",
+        "rootGo": "go version go1.24.0 linux/amd64",
+        "compilerGo": "go version go1.27.3 linux/amd64",
+        "chromium": "Chromium 153.0.8010.0",
+        "react": "19.3.1",
+        "reactDOM": "19.3.1",
+        "playwright": "1.64.1",
+        "esbuild": "0.28.2"
+      },
+      "sourcePinsBefore": 130,
+      "sourcePinsAfter": 130,
+      "sourcePinDiffCount": 0,
+      "attemptReceipt": {
+        "path": "compiled-publications/evidence/attempts/attempt-20261031T181141849Z-6/receipt.json",
+        "bytes": 0,
+        "sha256": "f95934cfe17e8b5e97e3afa5d01115fd78238709ff9f07a1d6caf31c15ed0954"
+      },
+      "attemptReport": {
+        "path": "compiled-publications/evidence/attempts/attempt-20261031T181141849Z-6/report.md",
+        "bytes": 911,
+        "sha256": "061147aa13d4e7aaed008caa46db3b4c849110b211389c9a20747c7b7346c625"
+      },
+      "archive": {
+        "path": "compiled-publications/demo/output/attempts/attempt-20261031T181141849Z-6.tar.gz",
+        "bytes": 7651792,
+        "sha256": "c449070787424074fc80834c70eb4d79e00f59b1cdccda8aa3879c5b4ffe7783",
+        "members": 363
+      }
+    },
+    "noGitOrCIActionRun": true
+  },
+  "rawLogs": [
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/red-old-regex-node22.command.txt",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/red-old-regex-node22.stdout.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/red-old-regex-node22.stderr.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/red-old-regex-node22.exit-code",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/green-shared-helper.command.txt",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/green-shared-helper.stdout.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/green-shared-helper.stderr.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/green-shared-helper.exit-code",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/focused-node-tests.command.txt",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/focused-node-tests.stdout.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/focused-node-tests.stderr.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/focused-node-tests.exit-code",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/full-publication-profile.command.txt",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/full-publication-profile.stdout.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/full-publication-profile.stderr.log",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/full-publication-profile.exit-code",
+    "backend-qualification/coordination/rawlogs/E-PR17-BROWSER/source-copy-verification.json"
+  ],
+  "report": {
+    "path": "backend-qualification/coordination/reports/E-PR17-BROWSER.md",
+    "bytes": 3778,
+    "sha256": "d622c0de4873e1deb98087ae36c68e83f96a8697fce3fb853e2060b18cb3884d"
+  },
+  "limitations": [
+    "The CI workflow itself was not executed on GitHub after the reorder; the full local publication profile passed.",
+    "The inherited PR16 chain was not rerun locally. Its workflow step remains present and now follows the new publication profile.",
+    "The supplied Chrome-for-Testing CI failure context was used; no hosted run logs were independently retrieved.",
+    "No source outside the two authorized runner/workflow paths was edited, no Git state was changed, and no deployment occurred."
+  ]
+}
