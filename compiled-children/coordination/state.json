@@ -520,6 +520,30 @@
       "started_at": "2026-10-31T14:24:26.587840+00:00",
       "finished_at": "2026-10-31T14:28:20.996521+00:00",
       "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/XR-FIX-ORACLE-FRESH-CHECKOUT.json"
+    },
+    "E-FIX-ARCHIVE-SUITE-ADMISSION": {
+      "id": "E-FIX-ARCHIVE-SUITE-ADMISSION",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "gondola-children-archive compiled-capabilities/run.mjs only; own primary children coordination receipt/report/rawlogs/originals",
+      "summary": "Executed exactsource978 full inherited startup rejects5/5 clean archive tests because it hardcodes3. Update admission to require at leastall5 currenttests, pass==tests, fail/cancel/skip/todo0; allowadditionalpassingtests. No weakenedarchivebyte/sourcegates/no newdomaincode. Focused5realtests+boundedadmissionwitness, preserveoriginalfailure.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T14:34:20.829680+00:00",
+      "finished_at": "2026-10-31T14:38:03.136362+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/E-FIX-ARCHIVE-SUITE-ADMISSION.json"
+    },
+    "XR-FIX-ARCHIVE-SUITE-ADMISSION": {
+      "id": "XR-FIX-ARCHIVE-SUITE-ADMISSION",
+      "kind": "review",
+      "depends_on": "E-FIX-ARCHIVE-SUITE-ADMISSION",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T14:38:12.932737+00:00",
+      "finished_at": "2026-10-31T14:41:09.277068+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/XR-FIX-ARCHIVE-SUITE-ADMISSION.json"
     }
   },
   "events": [
@@ -3766,9 +3790,265 @@
       "at": "2026-10-31T14:28:20.996521+00:00",
       "worker": "N3",
       "job": "XR-FIX-ORACLE-FRESH-CHECKOUT"
+    },
+    {
+      "type": "extend-after-executed-inherited-suite-admission-failure",
+      "at": "2026-10-31T14:34:08.356977+00:00",
+      "jobs": [
+        "E-FIX-ARCHIVE-SUITE-ADMISSION",
+        "XR-FIX-ARCHIVE-SUITE-ADMISSION"
+      ],
+      "source": "97864ee2ae7c2e28f8594f6705acc224dc3a0594",
+      "error": "requires3cleanpasses but actual5/5 helpertests"
+    },
+    {
+      "type": "solve",
+      "epoch": 26,
+      "at": "2026-10-31T14:34:08.677714+00:00",
+      "ready_jobs": [
+        "E-FIX-ARCHIVE-SUITE-ADMISSION"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH",
+        "N6": "E-FIX-ARCHIVE-SUITE-ADMISSION"
+      },
+      "dispatch": {
+        "N6": "E-FIX-ARCHIVE-SUITE-ADMISSION"
+      },
+      "native_seconds": 0.00702650700986851,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "E-FIX-ARCHIVE-INVENTORY": 0,
+        "XR-FIX-ARCHIVE-INVENTORY": 0,
+        "E-FIX-ORACLE-FRESH-CHECKOUT": 0,
+        "XR-FIX-ORACLE-FRESH-CHECKOUT": 0,
+        "E-FIX-ARCHIVE-SUITE-ADMISSION": 1,
+        "XR-FIX-ARCHIVE-SUITE-ADMISSION": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIX-ARCHIVE-SUITE-ADMISSION": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-FIX-ARCHIVE-SUITE-ADMISSION": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T14:34:20.829680+00:00",
+      "worker": "N6",
+      "job": "E-FIX-ARCHIVE-SUITE-ADMISSION",
+      "agent": "/root/children_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T14:38:03.136362+00:00",
+      "worker": "N6",
+      "job": "E-FIX-ARCHIVE-SUITE-ADMISSION"
+    },
+    {
+      "type": "solve",
+      "epoch": 27,
+      "at": "2026-10-31T14:38:03.250531+00:00",
+      "ready_jobs": [
+        "XR-FIX-ARCHIVE-SUITE-ADMISSION"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "XR-FIX-ARCHIVE-SUITE-ADMISSION"
+      },
+      "dispatch": {
+        "N3": "XR-FIX-ARCHIVE-SUITE-ADMISSION"
+      },
+      "native_seconds": 0.005261391997919418,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "E-FIX-ARCHIVE-INVENTORY": 0,
+        "XR-FIX-ARCHIVE-INVENTORY": 0,
+        "E-FIX-ORACLE-FRESH-CHECKOUT": 0,
+        "XR-FIX-ORACLE-FRESH-CHECKOUT": 0,
+        "E-FIX-ARCHIVE-SUITE-ADMISSION": 0,
+        "XR-FIX-ARCHIVE-SUITE-ADMISSION": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-ARCHIVE-SUITE-ADMISSION": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-FIX-ARCHIVE-SUITE-ADMISSION": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T14:38:12.932737+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-ARCHIVE-SUITE-ADMISSION",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T14:41:09.277068+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-ARCHIVE-SUITE-ADMISSION"
     }
   ],
-  "epoch": 26,
+  "epoch": 28,
   "policy": {
     "extract_priority": 100,
     "review_priority": 200,

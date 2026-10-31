@@ -1,0 +1,182 @@
+{
+  "schema": "gobi.compiled-children-repair-rawlogs/v1",
+  "job_id": "E-FIX-ARCHIVE-SUITE-ADMISSION",
+  "worker": "N6",
+  "sourceWorkspace": "/workspace/scratch/39a56936f173/gondola-children-archive",
+  "sourceRevision": "978 (task-provided; no revision lookup performed)",
+  "sourcePins": {
+    "compiled-capabilities/run.mjs": {
+      "bytes": 64423,
+      "sha256": "fc579d692f558f64d40983cebef8a229ba079156dd24b7dc40994117314fce1b"
+    }
+  },
+  "originalsManifest": {
+    "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/manifest.json",
+    "bytes": 635,
+    "sha256": "10550d09d99df46d19a19c8dca2c76abe554a14f0d51e2a39b722bf9b740eef5"
+  },
+  "logs": {
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/guard-probe.mjs": {
+      "bytes": 2799,
+      "sha256": "25d4e208c5592fdc298fec333d2eb853d1fd0edd311545f535a076e96bb38b5e"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/guard-probe.stderr.log": {
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/guard-probe.stdout.json": {
+      "bytes": 1182,
+      "sha256": "19a7942242381fb0c057a4d5fc59810b5f9161e940fa09b6190121be4c39d70a"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/node-version.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/node-version.stdout.log": {
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/pinned-python-version.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/pinned-python-version.stdout.log": {
+      "bytes": 15,
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/rebalancer-version.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/rebalancer-version.stdout.log": {
+      "bytes": 292,
+      "sha256": "c4d0339c20189b304f9d39144a52475476aa8ce121777d74d793e0bc49e40e12"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/receipt-validation.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/receipt-validation.stdout.json": {
+      "bytes": 299,
+      "sha256": "957c193cf385f9e4936e2c2759d80024ed3b51f468bb0b3af8fa8f705faff1af"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/run-check.stderr.log": {
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/run-check.stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/validate-receipt.py": {
+      "bytes": 1236,
+      "sha256": "5627fdc79228cdcb0e2b92587622b5abefea102f32c107c273f21faca1ab19ee"
+    }
+  },
+  "exactGuardProbe": {
+    "status": "passed",
+    "method": "extract and evaluate the exact if predicate from runArchiveHelperTests in the supplied source file",
+    "sourcePath": "/workspace/scratch/39a56936f173/gondola-children-archive/compiled-capabilities/run.mjs",
+    "sourceSha256": "fc579d692f558f64d40983cebef8a229ba079156dd24b7dc40994117314fce1b",
+    "guardExpression": "tap.tests === null || tap.pass === null || tap.tests < 5 || tap.pass !== tap.tests || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0",
+    "cases": [
+      {
+        "name": "minimum-five-clean",
+        "expected": "accept"
+      },
+      {
+        "name": "six-clean",
+        "expected": "accept"
+      },
+      {
+        "name": "too-few-four-clean",
+        "expected": "reject"
+      },
+      {
+        "name": "failing-test",
+        "expected": "reject"
+      },
+      {
+        "name": "pass-count-mismatch",
+        "expected": "reject"
+      },
+      {
+        "name": "cancelled-test",
+        "expected": "reject"
+      },
+      {
+        "name": "skipped-test",
+        "expected": "reject"
+      },
+      {
+        "name": "todo-test",
+        "expected": "reject"
+      },
+      {
+        "name": "missing-counts",
+        "expected": "reject"
+      }
+    ]
+  },
+  "source978FailedRun": {
+    "status": "failed at inherited E-BUILD archive-helper startup admission; five helper tests passed but old exact-three guard rejected the TAP counts",
+    "evidenceFiles": {
+      "compiled-children/coordination/failed-full-source-978/E-DELIVERY.json": {
+        "bytes": 214129,
+        "sha256": "a308b5cabc727ca0e44a9a44efc3d5bbed3d938cb23a72cd3fa594fd3af38962"
+      },
+      "compiled-children/coordination/failed-full-source-978/E-DELIVERY.md": {
+        "bytes": 12538,
+        "sha256": "76c809ff9b5baa72bd3045b6a36b33f86c84002ddd3173dfca2532e9728c7e26"
+      },
+      "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.json": {
+        "bytes": 103249,
+        "sha256": "4c89a8a23a7db52280a37ccc475f9a21632f963e4d686a353cbe60444521a486"
+      },
+      "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.md": {
+        "bytes": 8549,
+        "sha256": "b072001210702d1db9c367b953745b9b8287947f7ffb39820af5e11116e9199b"
+      },
+      "compiled-children/coordination/failed-full-source-978/full-console.log": {
+        "bytes": 5845,
+        "sha256": "6ebb76753de37dd0fcd1be3ee14185540318ae5dbc02d563c44c498364ff3d00"
+      }
+    },
+    "inheritedTap": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "admissionDiagnostic": "archive helper Node test stage did not report three clean TAP passes",
+    "secondarySourcePinDiagnostic": "The attempt also reported sourceBefore/pre-archive source-pin errors; root identified these as secondary to sourceBefore being unset, not an actual source edit.",
+    "otherPassedEvidence": {
+      "newHostHarnessUnitTests": "46/46",
+      "reactAndDomGoScriptBuilds": "2 completed",
+      "oracleTests": "9/9",
+      "nativeDirectBrowserEvents": 42,
+      "stateCheckpoints": 39,
+      "mutationControls": 12,
+      "httpSmokeCases": 32,
+      "archiveConsumerMembers": 239
+    },
+    "archive": {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7.tar.gz",
+      "sha256": "a11817d20da1a167a016dba08cedd4ea2baf2aa75232d8fe0110e9193fde5c9f",
+      "manifestPath": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7.archive-manifest.json",
+      "manifestSha256": "ddecfc97e4f2cf21684a6d0148333883e4a155a3ebd31e0fe7fda21dc7fb1738",
+      "status": "239-member round trip and independent post-command consumer passed; this archive validity does not mean the overall source-978 run passed"
+    },
+    "primaryBundle": "compiled-children/coordination/failed-full-source-978/"
+  },
+  "receiptValidation": {
+    "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/validate-receipt.py",
+    "result": "passed exact read-only probe.py::validate_receipt for the active N6 job; scheduler state bytes matched before and after",
+    "versions": {
+      "python": "Python 3.12.14",
+      "rebalancer": "1.0.4"
+    }
+  }
+}

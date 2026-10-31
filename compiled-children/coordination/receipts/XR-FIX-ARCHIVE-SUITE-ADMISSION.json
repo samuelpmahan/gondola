@@ -1,0 +1,197 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-FIX-ARCHIVE-SUITE-ADMISSION",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Accepted the one-guard archive-suite admission change. The exact-source predicate accepts clean five- and six-test suites and rejects too-few, incomplete, or non-clean results. Source 978 remains failed; the change does not rewrite its failed full-run evidence.",
+  "reviewed_job": {
+    "job_id": "E-FIX-ARCHIVE-SUITE-ADMISSION",
+    "worker": "N6",
+    "outcome": "mixed_change"
+  },
+  "source_sha256": {
+    "compiled-capabilities/run.mjs": "fc579d692f558f64d40983cebef8a229ba079156dd24b7dc40994117314fce1b",
+    "compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/run.mjs": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b"
+  },
+  "predicate": {
+    "expression": "tap.tests === null || tap.pass === null || tap.tests < 5 || tap.pass !== tap.tests || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0",
+    "minimumTests": 5,
+    "requiresPassEqualTests": true,
+    "zeroRequired": [
+      "fail",
+      "cancelled",
+      "skipped",
+      "todo"
+    ],
+    "probeCases": 9,
+    "acceptedCases": [
+      "minimum-five-clean",
+      "six-clean"
+    ],
+    "rejectedCases": [
+      "too-few-four-clean",
+      "failing-test",
+      "pass-count-mismatch",
+      "cancelled-test",
+      "skipped-test",
+      "todo-test",
+      "missing-counts"
+    ]
+  },
+  "source978": {
+    "inheritedBuildStatus": "failed",
+    "deliveryStatus": "failed",
+    "helperTap": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "oldAdmissionDiagnostic": "archive helper Node test stage did not report three clean TAP passes",
+    "archiveMemberCount": 239,
+    "archiveConsumerPassed": true,
+    "overallFullRunAccepted": false,
+    "sourcePinDiagnosticsRemainRecorded": true
+  },
+  "review_summary": {
+    "onlyGuardAndReceiptMessageChanged": true,
+    "sourcePinMatchesReceipt": true,
+    "originalBytesAndManifestMatch": true,
+    "all14AuthorRawlogPinsMatch": true,
+    "exactSourcePredicateProbePassed": true,
+    "syntaxPassed": true,
+    "source978FailedStatusPreserved": true,
+    "fullRunnerOrGoRunNotPerformed": true
+  },
+  "execution": {
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node /workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/guard-probe.mjs /workspace/scratch/39a56936f173/gondola-children-archive/compiled-capabilities/run.mjs",
+    "exit_code": 0,
+    "cases": 9,
+    "accepted": 2,
+    "rejected": 7,
+    "syntax_command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs",
+    "syntax_exit_code": 0,
+    "not_run": [
+      "full pipeline",
+      "npm",
+      "Go command",
+      "Git mutation",
+      "native state write"
+    ]
+  },
+  "reviewed_evidence": [
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-ARCHIVE-SUITE-ADMISSION.md",
+      "bytes": 3082,
+      "sha256": "b16553a5311dcb32376690218af63a0b6ddf3e16ca8c898f58a63a78bdc1b70e"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-FIX-ARCHIVE-SUITE-ADMISSION.json",
+      "bytes": 11077,
+      "sha256": "08cbff4b08f59f52c1a48286637810ff154a7063617d280e762b4e61c271e8d9"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/manifest.json",
+      "bytes": 635,
+      "sha256": "10550d09d99df46d19a19c8dca2c76abe554a14f0d51e2a39b722bf9b740eef5"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/run.mjs",
+      "bytes": 64379,
+      "sha256": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/manifest.json",
+      "bytes": 7995,
+      "sha256": "780d76f3f2181945b26104e1e1da523db3268863667ef2fd815a72c296fd5a23"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/guard-probe.mjs",
+      "bytes": 2799,
+      "sha256": "25d4e208c5592fdc298fec333d2eb853d1fd0edd311545f535a076e96bb38b5e"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/guard-probe.stdout.json",
+      "bytes": 1182,
+      "sha256": "19a7942242381fb0c057a4d5fc59810b5f9161e940fa09b6190121be4c39d70a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-source-diff.patch",
+      "bytes": 1403,
+      "sha256": "848f39e558ac5e83fc3aac457aae639ee475bbe6510d4e2f4ea65693761df7eb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-source-diff.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-source-check.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-source-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-predicate-probe.json",
+      "bytes": 1182,
+      "sha256": "19a7942242381fb0c057a4d5fc59810b5f9161e940fa09b6190121be4c39d70a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-predicate-probe.stderr.log",
+      "bytes": 175,
+      "sha256": "84336e09f9c0a345a4a73eca39b2d51e444ce40180e89f516a0d99adc233b163"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-predicate-probe.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-review-audit.json",
+      "bytes": 7299,
+      "sha256": "2213e2d21b4efed085bb77dd0d37079d86e52f20dcda6314666153b82ccd1c14"
+    },
+    {
+      "path": "compiled-children/coordination/failed-full-source-978/E-DELIVERY.json",
+      "bytes": 214129,
+      "sha256": "a308b5cabc727ca0e44a9a44efc3d5bbed3d938cb23a72cd3fa594fd3af38962"
+    },
+    {
+      "path": "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.json",
+      "bytes": 103249,
+      "sha256": "4c89a8a23a7db52280a37ccc475f9a21632f963e4d686a353cbe60444521a486"
+    },
+    {
+      "path": "compiled-children/coordination/failed-full-source-978/full-console.log",
+      "bytes": 5845,
+      "sha256": "6ebb76753de37dd0fcd1be3ee14185540318ae5dbc02d563c44c498364ff3d00"
+    },
+    {
+      "path": "compiled-children/coordination/failed-full-source-978/E-DELIVERY.md",
+      "bytes": 12538,
+      "sha256": "76c809ff9b5baa72bd3045b6a36b33f86c84002ddd3173dfca2532e9728c7e26"
+    },
+    {
+      "path": "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.md",
+      "bytes": 8549,
+      "sha256": "b072001210702d1db9c367b953745b9b8287947f7ffb39820af5e11116e9199b"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-FIX-ARCHIVE-SUITE-ADMISSION.md",
+    "bytes": 2075,
+    "sha256": "c1b4bf5ac2537f22665a62bab7498dc2d84cbfbac42b759f0fa1db62ac6e6747"
+  },
+  "limitations": [
+    "This review covers guard semantics and the preserved failed source-978 record only; fresh integrated acceptance remains pending root.",
+    "No full runner or 239-member archive consumer was rerun."
+  ],
+  "source_workspace": "/workspace/scratch/39a56936f173/gondola-children-archive",
+  "source_revision": "978 (task-provided; no revision lookup performed)"
+}

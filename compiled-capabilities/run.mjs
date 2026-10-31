@@ -696,11 +696,11 @@ async function runArchiveHelperTests() {
     exitCode: 0,
   };
   await saveReceipt();
-  if (tap.tests !== 3 || tap.pass !== 3 || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {
-    throw new Error(`archive helper Node test stage did not report three clean TAP passes: ${JSON.stringify(tap)}`);
+  if (tap.tests === null || tap.pass === null || tap.tests < 5 || tap.pass !== tap.tests || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {
+    throw new Error(`archive helper Node test stage did not report at least five clean TAP passes: ${JSON.stringify(tap)}`);
   }
   receipt.archiveHelperTests.status = "passed";
-  receipt.checks.push("three archive helper regressions passed under Node 22 before the inherited lifecycle chain: missing attempts parent creation, exclusive duplicate-name rejection, and immutable archive round trip");
+  receipt.checks.push(`${tap.pass} archive helper regressions passed under Node 22 before the inherited lifecycle chain (minimum five; all tests must pass with no failures, cancellations, skips, or todos)`);
   await saveReceipt();
   return receipt.archiveHelperTests;
 }

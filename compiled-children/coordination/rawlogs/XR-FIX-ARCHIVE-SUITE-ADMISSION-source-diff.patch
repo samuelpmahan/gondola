@@ -1,0 +1,17 @@
+--- /workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/run.mjs	2026-10-31 22:34:59.760662793 +0800
++++ compiled-capabilities/run.mjs	2026-10-31 22:35:05.544184353 +0800
+@@ -696,11 +696,11 @@
+     exitCode: 0,
+   };
+   await saveReceipt();
+-  if (tap.tests !== 3 || tap.pass !== 3 || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {
+-    throw new Error(`archive helper Node test stage did not report three clean TAP passes: ${JSON.stringify(tap)}`);
++  if (tap.tests === null || tap.pass === null || tap.tests < 5 || tap.pass !== tap.tests || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {
++    throw new Error(`archive helper Node test stage did not report at least five clean TAP passes: ${JSON.stringify(tap)}`);
+   }
+   receipt.archiveHelperTests.status = "passed";
+-  receipt.checks.push("three archive helper regressions passed under Node 22 before the inherited lifecycle chain: missing attempts parent creation, exclusive duplicate-name rejection, and immutable archive round trip");
++  receipt.checks.push(`${tap.pass} archive helper regressions passed under Node 22 before the inherited lifecycle chain (minimum five; all tests must pass with no failures, cancellations, skips, or todos)`);
+   await saveReceipt();
+   return receipt.archiveHelperTests;
+ }

@@ -1,0 +1,176 @@
+{
+  "review": "XR-FIX-ARCHIVE-SUITE-ADMISSION",
+  "reviewer": "N3",
+  "decision": "accepted",
+  "author_packet": {
+    "report": {
+      "path": "compiled-children/coordination/reports/E-FIX-ARCHIVE-SUITE-ADMISSION.md",
+      "bytes": 3082,
+      "sha256": "b16553a5311dcb32376690218af63a0b6ddf3e16ca8c898f58a63a78bdc1b70e"
+    },
+    "receipt": {
+      "path": "compiled-children/coordination/receipts/E-FIX-ARCHIVE-SUITE-ADMISSION.json",
+      "bytes": 11077,
+      "sha256": "08cbff4b08f59f52c1a48286637810ff154a7063617d280e762b4e61c271e8d9"
+    }
+  },
+  "source_comparison": {
+    "secondary": {
+      "path": "compiled-capabilities/run.mjs",
+      "bytes": 64423,
+      "sha256": "fc579d692f558f64d40983cebef8a229ba079156dd24b7dc40994117314fce1b"
+    },
+    "preservedOriginal": {
+      "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/run.mjs",
+      "bytes": 64379,
+      "sha256": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b"
+    },
+    "originalsManifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-SUITE-ADMISSION/originals/manifest.json",
+      "bytes": 635,
+      "sha256": "10550d09d99df46d19a19c8dca2c76abe554a14f0d51e2a39b722bf9b740eef5",
+      "matchesReceipt": true
+    },
+    "diff": {
+      "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-source-diff.patch",
+      "bytes": 1403,
+      "sha256": "848f39e558ac5e83fc3aac457aae639ee475bbe6510d4e2f4ea65693761df7eb",
+      "exitCode": "1",
+      "changedLines": [
+        "-  if (tap.tests !== 3 || tap.pass !== 3 || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {",
+        "-    throw new Error(`archive helper Node test stage did not report three clean TAP passes: ${JSON.stringify(tap)}`);",
+        "+  if (tap.tests === null || tap.pass === null || tap.tests < 5 || tap.pass !== tap.tests || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {",
+        "+    throw new Error(`archive helper Node test stage did not report at least five clean TAP passes: ${JSON.stringify(tap)}`);",
+        "-  receipt.checks.push(\"three archive helper regressions passed under Node 22 before the inherited lifecycle chain: missing attempts parent creation, exclusive duplicate-name rejection, and immutable archive round trip\");",
+        "+  receipt.checks.push(`${tap.pass} archive helper regressions passed under Node 22 before the inherited lifecycle chain (minimum five; all tests must pass with no failures, cancellations, skips, or todos)`);"
+      ]
+    }
+  },
+  "predicate_probe": {
+    "path": "compiled-children/coordination/rawlogs/XR-FIX-ARCHIVE-SUITE-ADMISSION-predicate-probe.json",
+    "bytes": 1182,
+    "sha256": "19a7942242381fb0c057a4d5fc59810b5f9161e940fa09b6190121be4c39d70a",
+    "cases": [
+      {
+        "name": "minimum-five-clean",
+        "expected": "accept"
+      },
+      {
+        "name": "six-clean",
+        "expected": "accept"
+      },
+      {
+        "name": "too-few-four-clean",
+        "expected": "reject"
+      },
+      {
+        "name": "failing-test",
+        "expected": "reject"
+      },
+      {
+        "name": "pass-count-mismatch",
+        "expected": "reject"
+      },
+      {
+        "name": "cancelled-test",
+        "expected": "reject"
+      },
+      {
+        "name": "skipped-test",
+        "expected": "reject"
+      },
+      {
+        "name": "todo-test",
+        "expected": "reject"
+      },
+      {
+        "name": "missing-counts",
+        "expected": "reject"
+      }
+    ],
+    "stderr": {
+      "bytes": 175,
+      "sha256": "84336e09f9c0a345a4a73eca39b2d51e444ce40180e89f516a0d99adc233b163"
+    }
+  },
+  "authorRawlogAudit": {
+    "manifest": {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-SUITE-ADMISSION/manifest.json",
+      "bytes": 7995,
+      "sha256": "780d76f3f2181945b26104e1e1da523db3268863667ef2fd815a72c296fd5a23",
+      "matchesReceipt": true
+    },
+    "receiptLogCount": 14,
+    "receiptMismatches": [],
+    "manifestLogCount": 14,
+    "manifestMismatchCount": 0
+  },
+  "source978": {
+    "failedBundleHashes": {
+      "compiled-children/coordination/failed-full-source-978/E-DELIVERY.json": true,
+      "compiled-children/coordination/failed-full-source-978/E-DELIVERY.md": true,
+      "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.json": true,
+      "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.md": true,
+      "compiled-children/coordination/failed-full-source-978/full-console.log": true
+    },
+    "inheritedStatus": "failed",
+    "deliveryStatus": "failed",
+    "helperTap": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "oldAdmissionFailure": "archive helper Node test stage did not report three clean TAP passes: {\"tests\":5,\"pass\":5,\"fail\":0,\"cancelled\":0,\"skipped\":0,\"todo\":0}",
+    "archiveHash": null,
+    "archiveConsumerStatus": "239 member roundtrip and independent consumer passed per E-FIX packet",
+    "notAcceptedSummary": "2 failure(s) were recorded; this full delivery attempt is not accepted.",
+    "archiveMemberCount": 239,
+    "archiveSha256": "a11817d20da1a167a016dba08cedd4ea2baf2aa75232d8fe0110e9193fde5c9f",
+    "failedBundleFiles": {
+      "compiled-children/coordination/failed-full-source-978/E-DELIVERY.json": {
+        "bytes": 214129,
+        "sha256": "a308b5cabc727ca0e44a9a44efc3d5bbed3d938cb23a72cd3fa594fd3af38962",
+        "matchesReceipt": true
+      },
+      "compiled-children/coordination/failed-full-source-978/E-DELIVERY.md": {
+        "bytes": 12538,
+        "sha256": "76c809ff9b5baa72bd3045b6a36b33f86c84002ddd3173dfca2532e9728c7e26",
+        "matchesReceipt": true
+      },
+      "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.json": {
+        "bytes": 103249,
+        "sha256": "4c89a8a23a7db52280a37ccc475f9a21632f963e4d686a353cbe60444521a486",
+        "matchesReceipt": true
+      },
+      "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.md": {
+        "bytes": 8549,
+        "sha256": "b072001210702d1db9c367b953745b9b8287947f7ffb39820af5e11116e9199b",
+        "matchesReceipt": true
+      },
+      "compiled-children/coordination/failed-full-source-978/full-console.log": {
+        "bytes": 5845,
+        "sha256": "6ebb76753de37dd0fcd1be3ee14185540318ae5dbc02d563c44c498364ff3d00",
+        "matchesReceipt": true
+      }
+    }
+  },
+  "checks": {
+    "singleSourcePinMatches": true,
+    "sourceDiffOnlyChangesArchiveHelperGuardAndReceiptText": true,
+    "exactOriginalSourceAndManifestMatch": true,
+    "EfixReportAndAll14AuthorRawlogsMatch": true,
+    "guardProbeUsesCurrentSourceAndPassesNineCases": true,
+    "syntaxCheckPasses": true,
+    "source978InheritedSuiteWasFiveOfFiveBeforeOldGuardRejectedIt": true,
+    "failedSource978BundleFilesMatchPins": true,
+    "source978InheritedAndDeliveryRemainFailed": true,
+    "archivePassIsNotFullAcceptance": true
+  },
+  "limits": [
+    "Bounded guard review only; no full runner, npm, or Go command was run.",
+    "The 978 failure bundle was read and hash-checked only; its archive consumer was not rerun. No Git or native state write was performed."
+  ]
+}
