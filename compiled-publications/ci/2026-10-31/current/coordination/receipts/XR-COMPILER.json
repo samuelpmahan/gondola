@@ -1,0 +1,131 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-COMPILER",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently reviewed the E-COMPILER analyzer change, negative/positive analyzer tests, current 22-input source pins, both 67-file React/DOM proof builds, and typed encoder parity at 46 checkpoints. The omitted Reply rule is limited to Go's zero string value on a reachable actual gobi.Effect keyed literal; other descriptor constraints remain in force. The N1 app_test pin matches the compiler source pin set.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "job_under_review": "E-COMPILER",
+    "compiler_report": "compiled-publications/coordination/reports/E-COMPILER.md",
+    "compiler_receipt": "compiled-publications/coordination/receipts/E-COMPILER.json"
+  },
+  "source_sha256": {
+    "compiled-frontend/analyze/analyze.go": "9e39ccd6cbe6b68dd5b42af9abf50ee2dc3fe926b4ac08f4f76fafbe59a60f52",
+    "compiled-frontend/analyze/analyze_test.go": "e67a8060324212838ff9e385d0a4d77eea5c830ea1baae957149780aa1942145",
+    "compiled-publications/compiler/rawlogs/N2-E-COMPILER-source-proof-before.json": "f6604b31b7a7fadfb5ce9d7234070502ca800371a5b4e75db8b6f96817e04478",
+    "compiled-publications/compiler/rawlogs/N2-E-COMPILER-source-proof-after.json": "f6604b31b7a7fadfb5ce9d7234070502ca800371a5b4e75db8b6f96817e04478",
+    "fixtures/compiled/publications/app_test.go": "6402baa2a342528c93ef52e4e93ba6e9c51d013193cc2a8fa8d9989bde39c392",
+    "compiled-publications/compiler/build/react-proof/buildmanifest.json": "121ab8a802f0d0294235aae43f2fa93eabf22cdc419b135b718346025f45cf15",
+    "compiled-publications/compiler/build/dom-proof/buildmanifest.json": "73556d0f1ca736f850aa6a75a88e19f7e8540609c5213015c02a1ae0c82d2f39",
+    "compiled-publications/compiler/build/encoder-comparison-proof.json": "25de402fc21407075917ae44d5ef1e8aa5698b0951df36cc12142889a6a1ec62",
+    "compiled-publications/compiler/build/react-proof-encoder-probe.json": "34892cc03d3a1904dc37ab5e86dfd97efc220846bcd69fc90c53e910c4e039e2",
+    "compiled-publications/compiler/build/dom-proof-encoder-probe.json": "4f726b027f00de23d05621938dc82657aba676894d7821395bbf33f105da7aab",
+    "compiled-publications/coordination/rawlogs/E-GO/native-trace.json": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+    "compiled-publications/coordination/reports/E-COMPILER.md": "8ad1535ee951d4882465ef3f008268f55bed2101e53bdc68e0c7abf9a1570ad0",
+    "compiled-publications/coordination/receipts/E-COMPILER.json": "2ecee57f0e5b394af768b43eb8a753a0ac1b7864dda0330c9924430ff20c9c42"
+  },
+  "review": {
+    "analyzer_rule": "Only a missing keyed Reply on actual gobi.Effect receives Go's zero string value. Reachability, literal lifecycle.cancel/cancel kind/name, present string Arg, exact effect type, and empty Reply requirements remain enforced.",
+    "negative_cases_reviewed": [
+      "nonempty Reply literal",
+      "computed Reply expression",
+      "wrong effect type",
+      "mismatched Name",
+      "computed Kind",
+      "unreachable descriptor"
+    ],
+    "source_pins": {
+      "current_count": 22,
+      "before_after_identical": true,
+      "N1_app_test_hash_matches": true,
+      "pin_file_sha256": "f6604b31b7a7fadfb5ce9d7234070502ca800371a5b4e75db8b6f96817e04478"
+    },
+    "backend_builds": {
+      "react_outputs": 67,
+      "dom_outputs": 67,
+      "all_output_hashes_verified": true,
+      "app_ir_identical": true,
+      "encoder_identical": true,
+      "effect_cancel_and_numeric_capabilities_present": true
+    },
+    "encoder_parity": {
+      "native_events": 50,
+      "native_steps": 45,
+      "checkpoints_per_backend": 46,
+      "decoded_values_match_native": true,
+      "react_dom_snapshots_identical": true,
+      "children_publications_typed_slices_at_each_checkpoint": true
+    }
+  },
+  "checks": {
+    "compiler_go": "1.27.3",
+    "analyzer_suite": {
+      "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go test ./analyze -count=1",
+      "exit_code": 0,
+      "result": "ok   github.com/samuelpmahan/gondola/compiled-frontend/analyze 1.833s"
+    },
+    "independent_artifact_check": {
+      "command": "python3 compiled-publications/coordination/rawlogs/XR-COMPILER-independent-check.py",
+      "exit_code": 0,
+      "result": "22/22 source pins current; React and DOM 67/67 files verified; 46/46 checkpoints per backend decoded and matched native states"
+    },
+    "native_go124_analyzer": "Not run as acceptance; compiler module declares Go 1.27.0 minimum."
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-analyzer-tests.command.txt",
+      "bytes": 68,
+      "sha256": "f7aa9ee3eae701148a7c6cff9828746359e3efa07b52f9d1b24038c39a055c39"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-analyzer-tests.stdout.log",
+      "bytes": 70,
+      "sha256": "febf518619e4220c07585112a405a153a315e45239817922d4c4413a50da63af"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-analyzer-tests.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-analyzer-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-independent-check.py",
+      "bytes": 5667,
+      "sha256": "63fb261f7408c6f9409be5f088cffc7b61131aaab4964a0b6b406aa7ceaec642"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-independent-check.command.txt",
+      "bytes": 84,
+      "sha256": "0cb61fdc8bdb3396f9d207f8b7a6851dac6f3db29cc7c3caa885d303560f11c6"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-independent-check.stdout.log",
+      "bytes": 407,
+      "sha256": "65f12d68a7b391c24eb19df90c0fca49885561de381fd19a7f3d18c46657073d"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-independent-check.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-COMPILER-independent-check.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/XR-COMPILER.md",
+    "bytes": 4448,
+    "sha256": "9764203743aee40efcfffe9e52a64ef7135fc7d693e31b33e418452d459dcc9f"
+  },
+  "limitations": [
+    "The compiler profile is proven for the bounded typed publications fixture, not arbitrary Go programs.",
+    "Browser-mounted behavior, HTTP delivery, and full inherited acceptance are not claimed by this compiler review."
+  ]
+}

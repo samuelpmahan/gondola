@@ -1,0 +1,91 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-PORTABLE-ORACLE",
+  "worker": "N4",
+  "date": "2026-10-31",
+  "decision": "accepted",
+  "summary": "Accepted N5's bounded oracle-test portability repair: GOBI_GO_BIN override with PATH go fallback, 64 MiB output buffer, six original tests retained, fresh native CLI execution, and explicit/PATH-mode test logs passing.",
+  "review_scope": {
+    "compared": [
+      "compiled-publications/oracle/oracle.test.mjs",
+      "E-PORTABLE-ORACLE report, receipt and rawlogs",
+      "sealed E-ORACLE source, report and receipt"
+    ],
+    "source_changes_by_reviewer": false,
+    "full_project_suite_rerun": false,
+    "reason_not_rerun": "Root is running the C3 portable Node suite; this bounded review verified the source diff, artifact pins, and both captured resolver-mode runs."
+  },
+  "finding": {
+    "original_problem": "The sealed oracle test fixed nativeGo to /tmp/gondola-go/bin/go and used a 32 MiB output buffer.",
+    "repair": "Resolve nativeGo as process.env.GOBI_GO_BIN ?? go and raise maxBuffer to 64 MiB.",
+    "source_diff_only": [
+      "nativeGo hardcoded path replaced by GOBI_GO_BIN-or-PATH resolution",
+      "maxBuffer raised from 32 MiB to 64 MiB"
+    ],
+    "fresh_cli": true,
+    "author_native_trace_dependency": false,
+    "golden_go_reducer_copy": false,
+    "original_test_count": 6,
+    "retained_test_count": 6
+  },
+  "source_pins": [
+    { "path": "compiled-publications/oracle/oracle.test.mjs", "sha256": "42027774bbb189dbf64e8fd4749187255087d9b27850651e918d5ccc7e9a338f" },
+    { "path": "compiled-publications/coordination/seals/E-ORACLE/source/oracle.test.mjs", "sha256": "e7b820a8bc9ee28e8c5444d7948cce2e310328b98eeb823cc59121050a935536" },
+    { "path": "compiled-publications/oracle/oracle.mjs", "sha256": "f471c540f57212a7fecd719cd0628edbdf8fa09acdf13c0f57875ebaa02ced49", "same_as_sealed": true },
+    { "path": "compiled-publications/oracle/expectations.json", "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201", "same_as_sealed": true },
+    { "path": "compiled-publications/coordination/receipts/E-ORACLE.json", "sha256": "bc4accb8d450b748ff02285f088d2fe5763f80c42c387797beba9aed9ad50eea", "same_as_sealed": true },
+    { "path": "compiled-publications/coordination/reports/E-ORACLE.md", "sha256": "1ca0b5f47d5ecfd36bc5e2a0dee3d00a4ffb732a5dba9b27a042f6b7df46ed4b", "same_as_sealed": true },
+    { "path": "compiled-publications/coordination/reports/E-PORTABLE-ORACLE.md", "sha256": "775626c73aeb5290e6355a5f123a89fdaa0d5d0ac102934d82db72427dda315b", "same_as_sealed": true },
+    { "path": "compiled-publications/coordination/receipts/E-PORTABLE-ORACLE.json", "sha256": "d2b9a290cf95ff7c65549ee5129d0deb353bfbfde5aae54aba4069e6c73c0ac2", "same_as_sealed": true }
+  ],
+  "checks": [
+    {
+      "name": "source-diff",
+      "result": "Only the executable resolver and output-buffer limit differ from the sealed test; all six test declarations remain."
+    },
+    {
+      "name": "explicit-go-path",
+      "command": "GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "tests_passed": 6,
+      "tests_failed": 0,
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/node22-explicit-go.log",
+      "bytes": 1763,
+      "sha256": "a4303cd51dd8a68122d72418fd45c55d5a52b6081dcef1658e4bb9b85be02e36"
+    },
+    {
+      "name": "PATH-go-fallback",
+      "command": "env -u GOBI_GO_BIN PATH=\"/tmp/gondola-go/bin:$PATH\" /tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "tests_passed": 6,
+      "tests_failed": 0,
+      "base_PATH_had_go": false,
+      "PATH_note": "The installed Go 1.24 directory was prepended to PATH for this fallback run.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/node22-path-go.log",
+      "bytes": 1763,
+      "sha256": "8a207216e2783c2847a0c75ed3215708beaf9d2d80e3012dfaf1b889967c0362"
+    },
+    {
+      "name": "toolchain-and-syntax",
+      "result": "Node v22.23.4; Go go1.24.0 linux/amd64; node --check passed.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/environment-and-syntax.log",
+      "bytes": 373,
+      "sha256": "6d22334a6b7b35fbfcc2abbd166f0b76e5496323524b40dbcb4efca3f94c9eeb"
+    },
+    {
+      "name": "E-PORTABLE receipt validation",
+      "result": "Accepted; scheduler state unchanged during validation.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/receipt-validation.log",
+      "bytes": 230,
+      "sha256": "ae9940c2fbec5d5954027437ef3ada64bf7e3e309ba3ba95bb8a91a14396896d"
+    }
+  ],
+  "review_evidence": [
+    { "path": "compiled-publications/coordination/rawlogs/XR-PORTABLE-ORACLE/review.log", "bytes": 2490, "sha256": "04b5f160bcff8cbf62e8ca3c02b3257118adbd0c52e6de597edd9f8e444c22e0" },
+    { "path": "compiled-publications/coordination/reports/XR-PORTABLE-ORACLE.md", "bytes": 2216, "sha256": "a7218d40d81839ffa4028c6abfabdf841633a6f255e7f33f4dfae1627433d684" }
+  ],
+  "limitations": [
+    "The C3 whole portable Node suite is root-run and was not rerun in this independent review.",
+    "This review accepts only the test resolver portability amendment; it does not relabel the original E-ORACLE report or claim final project acceptance."
+  ]
+}

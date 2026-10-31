@@ -1,0 +1,178 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-NATIVECLI",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Independently verified that the sealed Go-owned native CLI emits the publications trace from actual Init/Update/View calls, preserves PR16 metadata on no-tick events, and enforces exact live effect-token correlation.",
+  "reviewed_source_sha256": {
+    "compiled-publications/CONTRACT.md": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296",
+    "compiled-publications/PLAN.md": "ad01f8cfbf9e3dfa8157465591c6c85d35daef3682712ac3b872520a4df6f4b0",
+    "fixtures/compiled/publications/app.go": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb",
+    "fixtures/compiled/publications/view.go": "458e33f640a6fe9edfa3a200405ec9ef381d43668f2088706c58f012481079bc",
+    "fixtures/compiled/publications/app_test.go": "6402baa2a342528c93ef52e4e93ba6e9c51d013193cc2a8fa8d9989bde39c392",
+    "fixtures/compiled/publications/scenario.json": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819",
+    "cmd/compiled-publications-native/main.go": "7fee0e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302",
+    "cmd/compiled-publications-native/main_test.go": "14d68c4a08b0ab46e278c47b0365bbcd991f01f92939094608114dce32137f6c",
+    "compiled-publications/coordination/reports/E-NATIVECLI.md": "3c41159ecb68db4a6cd4333b5b1fde888e855e1608ba376948ba697ccb980cfd",
+    "compiled-publications/coordination/receipts/E-NATIVECLI.json": "ce9f9fbfeaf16d5ca89c944075521a5c614861f5fe89b919f82bd8d8bfa3d1f7",
+    "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture.json": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+  },
+  "evidence": {
+    "report_sha256": "0e1d6c3bebbfd14c8afd72fb148798d83456d31c2f1f4489c4c4ff67568a66db",
+    "author_packet": {
+      "report": {
+        "path": "compiled-publications/coordination/reports/E-NATIVECLI.md",
+        "bytes": 3810,
+        "sha256": "3c41159ecb68db4a6cd4333b5b1fde888e855e1608ba376948ba697ccb980cfd"
+      },
+      "receipt": {
+        "path": "compiled-publications/coordination/receipts/E-NATIVECLI.json",
+        "bytes": 6937,
+        "sha256": "ce9f9fbfeaf16d5ca89c944075521a5c614861f5fe89b919f82bd8d8bfa3d1f7"
+      },
+      "sealed_report": {
+        "path": "compiled-publications/coordination/seals/E-NATIVECLI/reports/E-NATIVECLI.md",
+        "bytes": 3810,
+        "sha256": "3c41159ecb68db4a6cd4333b5b1fde888e855e1608ba376948ba697ccb980cfd"
+      },
+      "sealed_receipt": {
+        "path": "compiled-publications/coordination/seals/E-NATIVECLI/receipts/E-NATIVECLI.json",
+        "bytes": 6937,
+        "sha256": "ce9f9fbfeaf16d5ca89c944075521a5c614861f5fe89b919f82bd8d8bfa3d1f7"
+      },
+      "reportMatchesSeal": true,
+      "receiptMatchesSeal": true,
+      "authorSourcePinsMatchCurrent": true
+    },
+    "reviewSourcePins": {
+      "before": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/source-before.json",
+        "bytes": 2062,
+        "sha256": "0a72b9035c1e8dc11ea703f13232b43739783511947cd0726e11d97f8727515d"
+      },
+      "after": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/source-after.json",
+        "bytes": 2062,
+        "sha256": "0a72b9035c1e8dc11ea703f13232b43739783511947cd0726e11d97f8727515d"
+      },
+      "identical": true,
+      "pathCount": 11
+    },
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "focusedTests": {
+      "command": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/go124-focused-tests.command.txt",
+        "bytes": 363,
+        "sha256": "c2599cd2529f7aa74e06a3f63b84dd156b0c0be9bd01766e4cd8091947b23d70"
+      },
+      "exitCode": 0,
+      "stdout": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/go124-focused-tests.stdout.log",
+        "bytes": 950,
+        "sha256": "0d38c7ca797b6a8608f6e17b1f89667e096d459cb87899d55bd71486292cf746"
+      },
+      "stderr": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/go124-focused-tests.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "passedTopLevel": 4,
+      "passedSubtests": 2,
+      "cached": false
+    },
+    "freshReplay": {
+      "command": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/native-replay.command.txt",
+        "bytes": 353,
+        "sha256": "4067651ccaaa83346ba72987e76888b44dc25254b372bd86639a2bf0b7807707"
+      },
+      "exitCode": 0,
+      "capture": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/native-replay.json",
+        "bytes": 1148369,
+        "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+      },
+      "stderr": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/native-replay.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "byteIdenticalToSealed": true
+    },
+    "independentAudit": {
+      "script": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/audit_trace.py",
+        "bytes": 4748,
+        "sha256": "cb9d4f5ab33668f2f36fb53beaa2428f56e28bccaaba9e24831aa2c88aee56af"
+      },
+      "result": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/independent-audit.json",
+        "bytes": 1026,
+        "sha256": "57d29c6bffcceba9f34e19392229d6ec693b4092c4e8945f2a997bdaa0bbd57f"
+      },
+      "events": 50,
+      "steps": 45,
+      "noTickIndices": [
+        6,
+        7,
+        26,
+        27,
+        28
+      ],
+      "nestedActionRows": 37,
+      "flattenedValuesPreserved": true,
+      "canonicalSafeTokens": true,
+      "exactLiveCorrelation": true,
+      "pendingTokensAtEnd": 0,
+      "cancellationOrder": [
+        "child:elm:g4:r1",
+        "child:oak:g2:r2",
+        "parent:g1:r2"
+      ],
+      "deliveryNoOpEventIndices": [
+        22,
+        48,
+        49
+      ]
+    },
+    "negativeInputCases": {
+      "script": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/probe_invalid_inputs.py",
+        "bytes": 2915,
+        "sha256": "71ea1fc2da0e5a64dfa2899d1cb9ccccbaac1630cf15e241878b02f5a641337b"
+      },
+      "summary": {
+        "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/negative-input-checks.json",
+        "bytes": 765,
+        "sha256": "068ce2a21eb57a3ff884f201052052f0d9119c746795329282a84b78452251ba"
+      },
+      "cases": [
+        {
+          "case": "noncanonical-token",
+          "input": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/negative-cases/noncanonical-token.json",
+          "inputSha256": "88dc919cc647032a0aac9dfe0366d779cf1dacbc2ca179bffd4aa34c1890e0f2",
+          "exitCode": 1,
+          "stdoutBytes": 0,
+          "stderrContainsExpected": "not pending"
+        },
+        {
+          "case": "disabled-click",
+          "input": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/negative-cases/disabled-click.json",
+          "inputSha256": "2c02ed4926fd7374a07e7f1da8479eb90f518d517002a8784b382c8ce618ddbd",
+          "exitCode": 1,
+          "stdoutBytes": 0,
+          "stderrContainsExpected": "targets a disabled node"
+        }
+      ]
+    },
+    "rawlogIndex": {
+      "path": "compiled-publications/coordination/rawlogs/XR-NATIVECLI/index.json",
+      "bytes": 8840,
+      "sha256": "577efad7f3fb08192c4ea8ae406a002ebc26bb10ab83f51f6a1a7ceee69c90bb"
+    }
+  },
+  "limitations": [
+    "This review does not establish mounted React/DOM or HTTP behavior.",
+    "The native stale-callback row is only a validated no-dispatch trace record; browser suppression remains a separate harness claim."
+  ]
+}

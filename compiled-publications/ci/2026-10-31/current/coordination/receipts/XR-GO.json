@@ -1,0 +1,206 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-GO",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independently reviewed the Go-owned publications fixture and native trace against the frozen contract. Current source pins and E-GO evidence validate; all 10 focused Go tests pass, a fresh trace matches both producer captures byte-for-byte, and additional read-only boundary probes confirm safe ceilings and child counter reset on reuse.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "contract": "compiled-publications/CONTRACT.md",
+    "depends_on": "E-GO"
+  },
+  "reviewed_source_sha256": {
+    "compiled-publications/CONTRACT.md": {
+      "bytes": 5361,
+      "sha256": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296"
+    },
+    "fixtures/compiled/publications/app.go": {
+      "bytes": 13874,
+      "sha256": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb"
+    },
+    "fixtures/compiled/publications/view.go": {
+      "bytes": 5263,
+      "sha256": "458e33f640a6fe9edfa3a200405ec9ef381d43668f2088706c58f012481079bc"
+    },
+    "fixtures/compiled/publications/app_test.go": {
+      "bytes": 9703,
+      "sha256": "6402baa2a342528c93ef52e4e93ba6e9c51d013193cc2a8fa8d9989bde39c392"
+    },
+    "fixtures/compiled/publications/scenario.json": {
+      "bytes": 12307,
+      "sha256": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819"
+    },
+    "cmd/compiled-publications-native/main.go": {
+      "bytes": 14704,
+      "sha256": "7fee0e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302"
+    }
+  },
+  "author_evidence_sha256": {
+    "compiled-publications/coordination/reports/E-GO.md": {
+      "bytes": 4005,
+      "sha256": "9f1b7f11050bda38945e4b2f36c8523bba0611d7f65c65db74229dee7881d284"
+    },
+    "compiled-publications/coordination/receipts/E-GO.json": {
+      "bytes": 5165,
+      "sha256": "ebcef3ac63a2e14bf19df00cabaf78b796e6de72103856b27ce0db4039e79116"
+    },
+    "compiled-publications/coordination/rawlogs/E-GO/native-trace.json": {
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture.json": {
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    }
+  },
+  "checks": {
+    "toolchain": {
+      "go": "go version go1.24.0 linux/amd64",
+      "environment": [
+        "GOTOOLCHAIN=local",
+        "GOFLAGS=-buildvcs=false"
+      ]
+    },
+    "focused_tests": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 -v ./fixtures/compiled/publications",
+      "exit_code": 0,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "log": "compiled-publications/coordination/rawlogs/XR-GO/go-test.stdout.log"
+    },
+    "fresh_native_capture": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/compiled-publications-native --script fixtures/compiled/publications/scenario.json",
+      "exit_code": 0,
+      "schema": "gobi.compiled-publications-native/v1",
+      "events": 50,
+      "steps": 45,
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+      "equal_to_E_GO_and_E_NATIVECLI": true
+    },
+    "trace_audit": {
+      "exit_code": 0,
+      "log": "compiled-publications/coordination/rawlogs/XR-GO/trace-audit.log",
+      "assertions": [
+        "initial typed input/generations",
+        "revision increments and same-step no-op",
+        "captured value snapshot after later count edit",
+        "out-of-order delivery and one-time consumption",
+        "stale input, child generation, parent generation fences",
+        "duplicate/malformed no-op and empty final queue",
+        "reverse-child then parent cancellation order"
+      ]
+    },
+    "safe_boundary_probe": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./compiled-publications/coordination/rawlogs/XR-GO/safe-bounds-probe.go",
+      "exit_code": 0,
+      "checks_passed": 9,
+      "checks": [
+        "counter ceiling exact landing and subsequent no-op",
+        "child and parent generation exhaustion",
+        "parent and child request-sequence exhaustion",
+        "accepted and rejected decision-count exhaustion",
+        "lock revision exhaustion",
+        "reused child counter reset and old generation rejection"
+      ]
+    },
+    "E_GO_receipt_validation": {
+      "result": "pass",
+      "validator": "compiled-publications/coordination/probe.py validate_receipt",
+      "source_report_and_rawlog_pins": "pass",
+      "rawlogs_checked": 6
+    }
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/go-test.command.txt",
+      "bytes": 115,
+      "sha256": "3650f2acfdbd6706024fc3f5340f0307739c1760b3ab8a4b4d7030e73723a8c5"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/go-test.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/go-test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/go-test.stdout.log",
+      "bytes": 1434,
+      "sha256": "bfe640a08f00255845fd3cc1d88305c6e021f3c396c68dd1a516485ea418115e"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/go-version.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/native-comparison.log",
+      "bytes": 564,
+      "sha256": "f0d94d32178e41726aa053f2c810393415b0ea09402b8033528ec2ddd09e18dd"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/native-trace.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/native.command.txt",
+      "bytes": 158,
+      "sha256": "ff298cd2d65546a7460ff9b9e6ac7d185a23bb7430c6fdc11572439fcda18be9"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/native.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/native.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/safe-bounds-probe.go",
+      "bytes": 3874,
+      "sha256": "d935fe8c566b8b4229a658d32948bc14967ba33640f6540848e06f85c72f1309"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/safe-bounds.command.txt",
+      "bytes": 141,
+      "sha256": "507e1f0b59ecf281b3a41d7f28c5643935dad634d10fe18da92b2aef9079a270"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/safe-bounds.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/safe-bounds.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/safe-bounds.stdout.log",
+      "bytes": 507,
+      "sha256": "17f430c5c5a398f5a0f5276458fc9c754541b4934195a31fa21ac63e04b1d0dd"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-GO/trace-audit.log",
+      "bytes": 966,
+      "sha256": "6e9711e36995d0b80ce395bd4de2073222ef828a35514a2a601d2c51f914a4c1"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/XR-GO.md",
+    "bytes": 3529,
+    "sha256": "d7c471db75a8790eb05a307d660377bb436104f3c9055f3b8eed704a0e726d77"
+  },
+  "findings": [],
+  "limitations": [
+    "This review is limited to the Go fixture and native trace; it does not claim mounted React/DOM, browser, hosted CI, or full-pipeline acceptance.",
+    "No production source, Git state, or native scheduler state was changed."
+  ]
+}

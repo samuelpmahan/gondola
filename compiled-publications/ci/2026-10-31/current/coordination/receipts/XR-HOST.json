@@ -1,0 +1,134 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-HOST",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently reviewed the sealed publications host facade and its five focused tests against the contract. The facade directly reuses the generic children request/cancel host policy and shared runtime, preserves component numeric capabilities, has no production JavaScript publication queue/reducer, and rejects unsupported effects and renderer candidates fail-closed. The test evidence is mock-backed and does not claim actual generated-module or browser integration.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "job_under_review": "E-HOST",
+    "contract": "compiled-publications/CONTRACT.md",
+    "plan": "compiled-publications/PLAN.md"
+  },
+  "source_sha256": {
+    "compiled-publications/runtime/runtime.mjs": "f496854ad89e8f2ee2b2fa6dc91daeaf81af7218427bd160b8b868f5e6319da0",
+    "compiled-publications/runtime/runtime.test.mjs": "d9670376ec28335e2a8f198530c36799759b23b53c3787ac5b6c99b1fd679214",
+    "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+    "compiled-publications/CONTRACT.md": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296",
+    "compiled-publications/PLAN.md": "ad01f8cfbf9e3dfa8157465591c6c85d35daef3682712ac3b872520a4df6f4b0",
+    "compiled-publications/coordination/reports/E-HOST.md": "284657c558343eceab5821966298dd5caf271a3ca4e38c18d1d10b63da448aef",
+    "compiled-publications/coordination/receipts/E-HOST.json": "e2958dad7637f16baef5fb70ea244632a1fc675b83b0a7cb57f2a06e6f7cc030"
+  },
+  "review": {
+    "facade": "Direct aliases for capability list, effect validator, and correlation driver; mount delegates options to mountCompiledChildrenApp without package/component hardcoding.",
+    "effect_profile": [
+      "fixture.request/lookup/token/complete",
+      "lifecycle.cancel/cancel/token/empty"
+    ],
+    "component_capabilities_preserved": [
+      "view.node",
+      "binding.value",
+      "binding.checked",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ],
+    "fail_closed_evidence": [
+      "invalid and unsupported effect descriptors throw TypeError",
+      "incompatible renderer candidate throws while active renderer snapshot and pending correlation remain intact",
+      "terminal-newline token probe is rejected by pinned Node 22 validator"
+    ],
+    "mock_boundary": "Five runtime tests exercise a synthetic compiled-module ABI. The mock Update owns only test counters/input and forwards publication.deliver as a no-op; it does not implement publication queue or acceptance logic."
+  },
+  "checks": {
+    "node": "v22.23.4",
+    "focused_runtime_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/runtime/runtime.test.mjs",
+      "exit_code": 0,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "terminal_newline_probe": {
+      "token": "parent:g1:r1 followed by LF",
+      "outcome": "rejected with TypeError: gobi.Effect.arg has an invalid compiled children token",
+      "exit_code": 0
+    }
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node-version.command.txt",
+      "bytes": 57,
+      "sha256": "d631cfaba75dc9c63b1fe321ed4bec8f9c3231b1c8c36a97bfac48c64f42d410"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node-version.stdout.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node-version.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node-version.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node22-tests.command.txt",
+      "bytes": 101,
+      "sha256": "da114986c33a7837cb63e056c1fdeed74c2399b135a3c84ad1ef7ebe00f8cd34"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node22-tests.stdout.log",
+      "bytes": 1493,
+      "sha256": "cbe36352abf588ce62a135f91d9b32f1fbf68c632ce3d5c4b13ba4877b092b29"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node22-tests.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-node22-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-terminal-newline.command.txt",
+      "bytes": 435,
+      "sha256": "0775c1d98f2d881729dd8c2418591a2a4613f703489d613fc03407ace437a65e"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-terminal-newline.stdout.log",
+      "bytes": 74,
+      "sha256": "8d2ef50907ce7d1248425ce698d2688034127eeba94fb963cec39005844a5042"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-terminal-newline.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HOST-terminal-newline.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/XR-HOST.md",
+    "bytes": 3645,
+    "sha256": "218d059cbffac1e04512af018936b087ee26a9237b6cb6022623f666db701121"
+  },
+  "limitations": [
+    "Review covers the thin facade and mock-backed focused tests only; the generated publications Go module and browser rendering are not exercised here.",
+    "No production source, Git state, or native scheduler state was changed."
+  ]
+}

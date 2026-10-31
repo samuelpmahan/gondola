@@ -1,0 +1,563 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-HARNESS",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "Independent compact-harness replay, native-Go spawning tests, and capture inspection passed. The sealed E-HARNESS report and receipt contain one incorrect SHA-256 for the preserved attempt-005 fixed browser capture; this is a metadata-only evidence custody finding.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "job_under_review": "E-HARNESS",
+    "author_worker": "N4",
+    "contract": "compiled-publications/CONTRACT.md",
+    "plan": "compiled-publications/PLAN.md"
+  },
+  "reviewed_source_sha256": {
+    "compiled-publications/conformance/browser-entry.mjs": "ee1a3f691287dcb502938c9dd822634207b68f9da2748325f5edc6ed5ba04732",
+    "compiled-publications/conformance/browser.mjs": "322cf204e3fd8beec8b70152521ddac0bdc966a913336576f8bf5979e9ccba5f",
+    "compiled-publications/conformance/check.mjs": "4f1b47b641617861f4ded1142a29a756035063d0fc677c5fad50f165a00414d0",
+    "compiled-publications/conformance/check.test.mjs": "f5479f37ea5b926cded6e6f15e0dca6b302f8a5b28fbb91c52e55b3ad198a281",
+    "compiled-publications/conformance/direct.mjs": "bacc757e6c85ed5c892b3260afb4f8d056bef7e73506c53adc5027659a4de078",
+    "compiled-publications/conformance/run.mjs": "c0431b550637d6feff9405a084188cc794fc235ca1d030bc517f2fa9b822d825",
+    "compiled-publications/conformance/seeded.mjs": "289dc3f5e8bb021aa277d00653b3bbe71c42014ec046334310a75e6c2e42bc61",
+    "compiled-publications/conformance/seeded.test.mjs": "45723d3ec9d148cc5c8a2af3edb95513c83a5da9105324ffe77107f88ce9eb52",
+    "compiled-publications/CONTRACT.md": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296",
+    "compiled-publications/PLAN.md": "ad01f8cfbf9e3dfa8157465591c6c85d35daef3682712ac3b872520a4df6f4b0",
+    "fixtures/compiled/publications/app.go": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb",
+    "fixtures/compiled/publications/view.go": "458e33f640a6fe9edfa3a200405ec9ef381d43668f2088706c58f012481079bc",
+    "fixtures/compiled/publications/scenario.json": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819",
+    "compiled-publications/oracle/oracle.mjs": "f471c540f57212a7fecd719cd0628edbdf8fa09acdf13c0f57875ebaa02ced49",
+    "compiled-publications/oracle/expectations.json": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+    "cmd/compiled-publications-native/main.go": "7fee0e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302",
+    "compiled-publications/runtime/runtime.mjs": "f496854ad89e8f2ee2b2fa6dc91daeaf81af7218427bd160b8b868f5e6319da0",
+    "compiled-publications/compiler/rawlogs/N2-E-COMPILER-source-proof-before.json": "f6604b31b7a7fadfb5ce9d7234070502ca800371a5b4e75db8b6f96817e04478",
+    "compiled-publications/compiler/build/react-proof/buildmanifest.json": "121ab8a802f0d0294235aae43f2fa93eabf22cdc419b135b718346025f45cf15",
+    "compiled-publications/compiler/build/dom-proof/buildmanifest.json": "73556d0f1ca736f850aa6a75a88e19f7e8540609c5213015c02a1ae0c82d2f39",
+    "compiled-publications/compiler/build/react-proof/apps/publications-5ad33d9496e7/app-ir.json": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f",
+    "compiled-publications/compiler/build/dom-proof/apps/publications-5ad33d9496e7/app-ir.json": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f",
+    "compiled-publications/compiler/build/react-proof/apps/publications-5ad33d9496e7/gobi-compiled.mjs": "e56ad0cf6d57d932414110d4dc3733fffb137e0be6d3fd8265abbcfeadf38758",
+    "compiled-publications/compiler/build/dom-proof/apps/publications-5ad33d9496e7/gobi-compiled.mjs": "fa95be22436027720eac19eeb1aa56bc05ee0ff2decb5dbab5ed383fac006e5b",
+    "compiled-publications/compiler/build/react-proof/apps/publications-5ad33d9496e7/encoder.mjs": "12b9b02389aee4493f724a181ec033f3e884d5559755dcb58b98ee6d02b872f9",
+    "compiled-publications/compiler/build/dom-proof/apps/publications-5ad33d9496e7/encoder.mjs": "12b9b02389aee4493f724a181ec033f3e884d5559755dcb58b98ee6d02b872f9",
+    "compiled-publications/coordination/reports/E-HARNESS.md": "1fa324297f6f8b28cbaaf968e548bc22b99326429681f50c699a560f2f94500d",
+    "compiled-publications/coordination/receipts/E-HARNESS.json": "76474e974a98d124a16a0facae04ee18f422eefd4b21544edeed5401d76dedf7"
+  },
+  "author_packet_integrity": {
+    "source_and_input_pin_count": 26,
+    "source_and_input_pins_match_current": true,
+    "author_evidence_pin_count": 15,
+    "author_evidence_hashes_match": 14,
+    "mismatched_evidence": [
+      {
+        "path": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.browser.capture.json",
+        "expected": "10480e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302",
+        "actual": "10480f72f01393911edb85939749dec64deefaa9ba2733720d4b801e67be3be1",
+        "bytes": 160485984,
+        "exists": true,
+        "matches": false
+      }
+    ],
+    "author_report": {
+      "path": "compiled-publications/coordination/reports/E-HARNESS.md",
+      "bytes": 8775,
+      "sha256": "1fa324297f6f8b28cbaaf968e548bc22b99326429681f50c699a560f2f94500d"
+    },
+    "author_receipt": {
+      "path": "compiled-publications/coordination/receipts/E-HARNESS.json",
+      "bytes": 13380,
+      "sha256": "76474e974a98d124a16a0facae04ee18f422eefd4b21544edeed5401d76dedf7"
+    }
+  },
+  "compact_evidence": {
+    "fixed_capture": {
+      "path": "compiled-publications/coordination/rawlogs/E-HARNESS-COMPACT-02/fixed.browser.capture.json",
+      "bytes": 8634354,
+      "sha256": "7014308062b34049db6cf5be3af748772b225f3ece12ddc6a32105c5d042f072"
+    },
+    "fixed_capture_profile_summaries": {
+      "react": {
+        "events": 50,
+        "snapshots": 51,
+        "traceTicks": 46,
+        "actionClicks": 34,
+        "effectRecordsByKind": {
+          "request": 6,
+          "deliver": 4,
+          "cancel": 3
+        },
+        "pendingAtEnd": 0,
+        "swaps": 0,
+        "perEventTraceKeys": [
+          "traceTickCount"
+        ],
+        "eventKeys": [
+          "applied",
+          "event",
+          "eventIndex",
+          "operation",
+          "snapshotIndex",
+          "stateIndex",
+          "stepIndex",
+          "traceTickCount"
+        ],
+        "snapshotKeys": [
+          "eventIndex",
+          "pending",
+          "physicalDOM",
+          "stateIndex",
+          "traceTickIndex"
+        ],
+        "traceTickFields": [
+          "action",
+          "completedEffects",
+          "dispatchId",
+          "dom",
+          "index",
+          "message",
+          "requestedEffects",
+          "state",
+          "view"
+        ]
+      },
+      "dom": {
+        "events": 50,
+        "snapshots": 51,
+        "traceTicks": 46,
+        "actionClicks": 34,
+        "effectRecordsByKind": {
+          "request": 6,
+          "deliver": 4,
+          "cancel": 3
+        },
+        "pendingAtEnd": 0,
+        "swaps": 0,
+        "perEventTraceKeys": [
+          "traceTickCount"
+        ],
+        "eventKeys": [
+          "applied",
+          "event",
+          "eventIndex",
+          "operation",
+          "snapshotIndex",
+          "stateIndex",
+          "stepIndex",
+          "traceTickCount"
+        ],
+        "snapshotKeys": [
+          "eventIndex",
+          "pending",
+          "physicalDOM",
+          "stateIndex",
+          "traceTickIndex"
+        ],
+        "traceTickFields": [
+          "action",
+          "completedEffects",
+          "dispatchId",
+          "dom",
+          "index",
+          "message",
+          "requestedEffects",
+          "state",
+          "view"
+        ]
+      },
+      "swap": {
+        "events": 50,
+        "snapshots": 51,
+        "traceTicks": 46,
+        "actionClicks": 34,
+        "effectRecordsByKind": {
+          "request": 6,
+          "deliver": 4,
+          "cancel": 3
+        },
+        "pendingAtEnd": 0,
+        "swaps": 2,
+        "perEventTraceKeys": [
+          "traceTickCount"
+        ],
+        "eventKeys": [
+          "applied",
+          "event",
+          "eventIndex",
+          "operation",
+          "snapshotIndex",
+          "stateIndex",
+          "stepIndex",
+          "traceTickCount"
+        ],
+        "snapshotKeys": [
+          "eventIndex",
+          "pending",
+          "physicalDOM",
+          "stateIndex",
+          "traceTickIndex"
+        ],
+        "disabledFences": [
+          {
+            "eventIndex": 6,
+            "invariants": {
+              "traceUnchanged": true,
+              "snapshotUnchanged": true,
+              "effectsUnchanged": true,
+              "physicalDOMUnchanged": true
+            }
+          },
+          {
+            "eventIndex": 7,
+            "invariants": {
+              "traceUnchanged": true,
+              "snapshotUnchanged": true,
+              "effectsUnchanged": true,
+              "physicalDOMUnchanged": true
+            }
+          }
+        ],
+        "callbackFences": [
+          {
+            "eventIndex": 27,
+            "sourceEvent": 0,
+            "invariants": {
+              "traceUnchanged": true,
+              "snapshotUnchanged": true,
+              "pendingUnchanged": true,
+              "effectsUnchanged": true
+            }
+          }
+        ],
+        "swapOutcomes": [
+          {
+            "eventIndex": 26,
+            "accepted": true,
+            "acceptedPreserved": {
+              "trace": true,
+              "state": true,
+              "view": true,
+              "pending": true,
+              "effects": true
+            },
+            "rejectionPreserved": null
+          },
+          {
+            "eventIndex": 28,
+            "accepted": false,
+            "acceptedPreserved": null,
+            "rejectionPreserved": {
+              "trace": true,
+              "snapshot": true,
+              "pending": true,
+              "effects": true,
+              "physicalDOM": true
+            }
+          }
+        ],
+        "traceTickFields": [
+          "action",
+          "completedEffects",
+          "dispatchId",
+          "dom",
+          "index",
+          "message",
+          "requestedEffects",
+          "state",
+          "view"
+        ]
+      }
+    },
+    "fixed_check": {
+      "path": "compiled-publications/coordination/rawlogs/E-HARNESS-COMPACT-02/fixed-check.json",
+      "bytes": 2442,
+      "sha256": "59f4183a36dca4fded4695e5c26d5641833c797c5a28af2981f7343378f6802a"
+    },
+    "fixed_check_result": {
+      "status": "matched",
+      "events": 50,
+      "goUpdates": 45,
+      "stateCheckpoints": 46,
+      "browserProfiles": [
+        "react",
+        "dom",
+        "swap"
+      ],
+      "physicalClicksPerProfile": 34,
+      "requests": 6,
+      "cancellations": 3,
+      "mutationsDetected": 16
+    },
+    "mounted_seed_capture": {
+      "path": "compiled-publications/coordination/rawlogs/E-HARNESS-COMPACT-02/seed-20261031.browser.capture.json",
+      "bytes": 6816769,
+      "sha256": "4964f85ac7cb4d970465153037e29194ce107daecf12a979c0840e66148e57ae"
+    },
+    "mounted_seed_summary": {
+      "swap": {
+        "events": 71,
+        "snapshots": 72,
+        "traceTicks": 71,
+        "actionClicks": 2,
+        "effectRecordsByKind": {
+          "request": 10,
+          "cancel": 7,
+          "deliver": 3
+        },
+        "pendingAtEnd": 0,
+        "swaps": 1,
+        "perEventTraceKeys": [
+          "traceTickCount"
+        ],
+        "eventKeys": [
+          "applied",
+          "event",
+          "eventIndex",
+          "operation",
+          "snapshotIndex",
+          "stateIndex",
+          "stepIndex",
+          "traceTickCount"
+        ],
+        "snapshotKeys": [
+          "eventIndex",
+          "pending",
+          "physicalDOM",
+          "stateIndex",
+          "traceTickIndex"
+        ],
+        "disabledFences": [],
+        "callbackFences": [],
+        "swapOutcomes": [
+          {
+            "eventIndex": 45,
+            "accepted": true,
+            "acceptedPreserved": {
+              "trace": true,
+              "state": true,
+              "view": true,
+              "pending": true,
+              "effects": true
+            },
+            "rejectionPreserved": null
+          }
+        ],
+        "traceTickFields": [
+          "action",
+          "completedEffects",
+          "dispatchId",
+          "dom",
+          "index",
+          "message",
+          "requestedEffects",
+          "state",
+          "view"
+        ]
+      }
+    },
+    "mounted_seed_check": {
+      "path": "compiled-publications/coordination/rawlogs/E-HARNESS-COMPACT-02/seed-20261031-check.json",
+      "bytes": 229,
+      "sha256": "34abffe75a4390336b337948dbcb2e3aec4a55be49ceab2683a75d27b9db2a3f"
+    },
+    "mounted_seed_check_result": {
+      "seed": 20261031,
+      "events": 71,
+      "goUpdates": 70,
+      "mountedBrowser": true,
+      "stateTreeDomParity": true
+    },
+    "post_fence_swap_capture": {
+      "path": "compiled-publications/coordination/rawlogs/E-HARNESS-COMPACT-03/swap.browser.capture.json",
+      "bytes": 2893221,
+      "sha256": "40750d0f6c044fa1fc71bc25bdccdc65c60a123949deb016c46d6405a970998b"
+    },
+    "old_attempt005_fixed_capture_pair": [
+      {
+        "path": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.browser.capture.json",
+        "bytes": 160485984,
+        "sha256": "10480f72f01393911edb85939749dec64deefaa9ba2733720d4b801e67be3be1"
+      },
+      {
+        "path": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.browser.json",
+        "bytes": 160485984,
+        "sha256": "10480f72f01393911edb85939749dec64deefaa9ba2733720d4b801e67be3be1"
+      }
+    ],
+    "old_attempt005_seed_capture_pair": [
+      {
+        "path": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.seed-20261031.browser.capture.json",
+        "bytes": 135394686,
+        "sha256": "9f7b24f512f853d21bd73f7ee72d427d77767d8f41efd8dfb969d8e93f33e6f2"
+      },
+      {
+        "path": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.seed-20261031.browser.json",
+        "bytes": 135394686,
+        "sha256": "9f7b24f512f853d21bd73f7ee72d427d77767d8f41efd8dfb969d8e93f33e6f2"
+      }
+    ]
+  },
+  "checks": {
+    "toolchains": {
+      "node": "v22.23.4",
+      "native_go": "go version go1.24.0 linux/amd64"
+    },
+    "portable_node_tests": {
+      "command": "GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/conformance/check.test.mjs compiled-publications/conformance/seeded.test.mjs",
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "log": "compiled-publications/coordination/rawlogs/XR-HARNESS/focused-tests.stdout.log",
+      "fresh_native_go_spawn": true,
+      "buffer_bytes": 134217728
+    },
+    "independent_compact_fixed_check": {
+      "command": "node --input-type=module -e <review script calling checkPublicationsConformance with attempt-005 native/direct captures and compact fixed browser capture>",
+      "exit_code": 0,
+      "status": "matched",
+      "mutations_detected": 16,
+      "stdout": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-fixed-independent-check.stdout.log"
+    },
+    "independent_compact_seed_check": {
+      "command": "node --input-type=module -e <review script calling checkSeededPublicationsReplay for seed 20261031>",
+      "exit_code": 0,
+      "state_tree_dom_parity": true,
+      "stdout": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-seed-independent-check.stdout.log"
+    },
+    "source_pin_audit": "compiled-publications/coordination/rawlogs/XR-HARNESS/capture-audit.json",
+    "read_only_receipt_validation": {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-publications/coordination/rawlogs/XR-HARNESS/validate-review-receipt.py",
+      "exit_code": 0,
+      "status": "accepted",
+      "scheduler_state_unchanged": true,
+      "state_sha256": "35d05092a6420001c03721061536418bd1fe47c6faa40eeee341b18b9b92a878",
+      "stdout": "compiled-publications/coordination/rawlogs/XR-HARNESS/receipt-validation.stdout.log",
+      "stderr": "compiled-publications/coordination/rawlogs/XR-HARNESS/receipt-validation.stderr.log"
+    }
+  },
+  "findings": [
+    {
+      "id": "XR-HARNESS-1",
+      "severity": "must_correct_packet_metadata",
+      "category": "evidence-hash-mismatch",
+      "path": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.browser.capture.json",
+      "receipt_claimed_sha256": "10480e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302",
+      "actual_sha256": "10480f72f01393911edb85939749dec64deefaa9ba2733720d4b801e67be3be1",
+      "actual_bytes": 160485984,
+      "paired_file": "compiled-publications/coordination/rawlogs/E-HARNESS-20261031T-005/run.browser.json",
+      "paired_file_sha256": "10480f72f01393911edb85939749dec64deefaa9ba2733720d4b801e67be3be1",
+      "finding": "The E-HARNESS receipt and report record an incorrect digest for this preserved file. The capture bytes remain present and match the duplicate .browser.json file; all compact captures and the remaining source/input/evidence pins verify.",
+      "required_action": "Preserve the original accepted E-HARNESS report and receipt; issue a new evidence-only correction/supersession packet with the actual fixed-capture digest and independently validate it."
+    }
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/capture-audit.json",
+      "bytes": 28800,
+      "sha256": "1524a8fe9be4f617e3ac0207f7342ebeb3c77c1a89a4b73b21e143c7e2c0a192"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-fixed-independent-check.result.json",
+      "bytes": 1273,
+      "sha256": "ca9720dfb5caf8bad9aade33ab3fee9a092a73778be6f08a8216078ae8e8c3cf"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-fixed-independent-check.stderr.log",
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-fixed-independent-check.stdout.log",
+      "bytes": 1868,
+      "sha256": "813d2cb922449bf06531ea72b1d20394f2765adfa26147667166d775a05aedf9"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-seed-independent-check.result.json",
+      "bytes": 1129,
+      "sha256": "f4258bcae728b1322132e4ccdbf7c98399345e1a42bd984c1a665c757c72901f"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-seed-independent-check.stderr.log",
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/compact-seed-independent-check.stdout.log",
+      "bytes": 192,
+      "sha256": "00377abf0efb281f31dd925e615d50cd30da8a42b2ead0c186fd29b336fffddd"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/focused-tests.result.json",
+      "bytes": 342,
+      "sha256": "cee0d517cb7eb2519bd5240c0a9fe1c074572f964bb5fa4d9dcdc01111c57917"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/focused-tests.stderr.log",
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/focused-tests.stdout.log",
+      "bytes": 1479,
+      "sha256": "cae0cdcfd7ccf45bc5253909528758677b3208cdd36a446a7b441d5827638cb5"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/go-version.result.json",
+      "bytes": 81,
+      "sha256": "83fa421d3c6fa0003117de4934827c56a8c2b11878fd9766f613cc5db9e4af97"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/go-version.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/go-version.stdout.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/node-version.result.json",
+      "bytes": 107,
+      "sha256": "4151565a1c4312c77fc457c5de55cf6ae16db17827ec7136c4fb10b2b7fe24f3"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/node-version.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/node-version.stdout.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/receipt-validation.result.json",
+      "bytes": 235,
+      "sha256": "0603ff95e0978e5d860b31017beffb4c71731017f6f451f7b4ecf6e8d9c3bc1b"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/receipt-validation.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/receipt-validation.stdout.log",
+      "bytes": 217,
+      "sha256": "0c3517869cb267691ae81d709f4f1b7be96089603b26b3f3ca5799e8d66b0aff"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/XR-HARNESS/validate-review-receipt.py",
+      "bytes": 1179,
+      "sha256": "08777430a82486c36b28642798d0ce9ef4f5027d5d7cec841e14faecb177f4f3"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/XR-HARNESS.md",
+    "bytes": 5220,
+    "sha256": "0044e1532ab7d1b1b3eb3c024e0e05d457323bd67b74eb7993faf57887c6de00"
+  },
+  "limitations": [
+    "The large pre-compaction full attempt was not rerun. The compact fixed and mounted-seed captures were independently rechecked against the existing native/direct evidence.",
+    "No complete integrated runner or CI was run after browser capture compaction; E-HARNESS also states this limitation.",
+    "Only seed 20261031 has a compact mounted-browser capture; seeds 20261032 and 20261033 remain native/direct-only.",
+    "This review changed no production, harness, Git, or native scheduler files."
+  ]
+}

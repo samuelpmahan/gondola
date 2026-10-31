@@ -1,0 +1,173 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-NATIVECLI",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Implemented and verified a Go-owned publications native CLI adapter and refreshed the 50-event/45-dispatch capture against the final fixture hash. The adapter preserves the PR16 trace envelope, validates nested input metadata, snapshots publication state, and admits only live correlated effect replies.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "contract": "compiled-publications/CONTRACT.md",
+    "plan": "compiled-publications/PLAN.md"
+  },
+  "source_sha256": {
+    "compiled-publications/CONTRACT.md": {
+      "bytes": 5361,
+      "sha256": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296"
+    },
+    "compiled-publications/PLAN.md": {
+      "bytes": 1942,
+      "sha256": "ad01f8cfbf9e3dfa8157465591c6c85d35daef3682712ac3b872520a4df6f4b0"
+    },
+    "fixtures/compiled/publications/app.go": {
+      "bytes": 13874,
+      "sha256": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb"
+    },
+    "fixtures/compiled/publications/view.go": {
+      "bytes": 5263,
+      "sha256": "458e33f640a6fe9edfa3a200405ec9ef381d43668f2088706c58f012481079bc"
+    },
+    "fixtures/compiled/publications/scenario.json": {
+      "bytes": 12307,
+      "sha256": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819"
+    },
+    "cmd/compiled-publications-native/main.go": {
+      "bytes": 14704,
+      "sha256": "7fee0e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302"
+    },
+    "cmd/compiled-publications-native/main_test.go": {
+      "bytes": 8955,
+      "sha256": "14d68c4a08b0ab46e278c47b0365bbcd991f01f92939094608114dce32137f6c"
+    }
+  },
+  "checks": {
+    "toolchain": {
+      "go": "go version go1.24.0 linux/amd64",
+      "environment": [
+        "GOTOOLCHAIN=local",
+        "GOFLAGS=-buildvcs=false"
+      ]
+    },
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 -v ./cmd/compiled-publications-native",
+        "exit_code": 0,
+        "top_level_tests": 4,
+        "subtests": 2,
+        "pass": 6,
+        "fail": 0,
+        "log": "compiled-publications/coordination/rawlogs/E-NATIVECLI-go124-tests-final.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/compiled-publications-native --script fixtures/compiled/publications/scenario.json",
+        "exit_code": 0,
+        "output": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture.json"
+      },
+      {
+        "command": "python3 read-only trace audit embedded in E-NATIVECLI-trace-audit.log",
+        "exit_code": 0,
+        "log": "compiled-publications/coordination/rawlogs/E-NATIVECLI-trace-audit.log"
+      }
+    ],
+    "trace": {
+      "schema": "gobi.compiled-publications-native/v1",
+      "events": 50,
+      "steps": 45,
+      "no_tick_event_indices": [
+        6,
+        7,
+        26,
+        27,
+        28
+      ],
+      "no_tick_message_null": true,
+      "nested_action_rows": 37,
+      "flattened_action_tuples_match": true,
+      "capture_bytes": 1148369,
+      "capture_sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    "regenerated_after_final_fixture_update": {
+      "app_go_sha256": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb",
+      "previous_capture_preserved": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture-pre-final-app-hash.json",
+      "previous_and_new_capture_byte_identical": true
+    },
+    "compiler_cross_lane_read_only_observation": {
+      "app_ir_sha256_react_and_dom": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f",
+      "capabilities": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply",
+        "effect.cancel"
+      ],
+      "proof_cli_ok_each": true,
+      "diagnostics_each": 0,
+      "outputs_each": 67
+    }
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-checks.json",
+      "bytes": 4682,
+      "sha256": "cb3787395ceccdc0f2350338c60436a573062ff37c23d0954adfaa6481415f65"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-corrections.log",
+      "bytes": 2522,
+      "sha256": "95600223c0547bae15f325bfab7dc26ea0a708ed96c85f839b8d339d1324e4bd"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-go-version.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-go124-tests-final.log",
+      "bytes": 950,
+      "sha256": "e7837b03e87f41f45085dfdd1095dac1820b846a14890ef263aa122cee62d0a5"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-go124-tests-verbose.log",
+      "bytes": 950,
+      "sha256": "cfdb2b0225cc8356c317a6c30f36b8056eecbad50f95922a488896efe23689a3"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-go124-tests.log",
+      "bytes": 77,
+      "sha256": "0a9deba38bc5114c913d7f6f819fb6827c743ea3e138062ed2bef7c7449cd389"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture-pre-app-explicit-reply.json",
+      "bytes": 1147793,
+      "sha256": "588918743fcf6ddf2672484867476300f39a79c483e1b8a6ed76cba523778edd"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture-pre-final-app-hash.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture-pre-flat-action-fix.json",
+      "bytes": 1147666,
+      "sha256": "03c9a09448c4536deac49f19b64805034c89fed7458bd502380c55b6e482e1a9"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-NATIVECLI-trace-audit.log",
+      "bytes": 771,
+      "sha256": "e87d5fa2a9533e04565ea59b0366c0e9dbf377d6ea21460ee87312fabe8266f8"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/E-NATIVECLI.md",
+    "bytes": 3810,
+    "sha256": "3c41159ecb68db4a6cd4333b5b1fde888e855e1608ba376948ba697ccb980cfd"
+  },
+  "limitations": [
+    "CLI verification does not claim mounted React/DOM acceptance; existing compiler artifacts were only inspected read-only.",
+    "No full inherited pipeline, compiler build, browser run, npm install, Git operation, or native scheduler/state write was performed."
+  ]
+}

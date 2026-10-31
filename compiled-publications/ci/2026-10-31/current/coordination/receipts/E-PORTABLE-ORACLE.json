@@ -1,0 +1,76 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-PORTABLE-ORACLE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Made the six-test independent oracle suite portable by using GOBI_GO_BIN when set and `go` from PATH otherwise; verified both invocation modes against fresh native Go traces.",
+  "scope": {
+    "modified_source": "compiled-publications/oracle/oracle.test.mjs only",
+    "change": "nativeGo = process.env.GOBI_GO_BIN ?? \"go\"; maxBuffer = 64 MiB",
+    "sealed_E_ORACLE_test_sha256": "e7b820a8bc9ee28e8c5444d7948cce2e310328b98eeb823cc59121050a935536",
+    "updated_test_sha256": "42027774bbb189dbf64e8fd4749187255087d9b27850651e918d5ccc7e9a338f",
+    "other_oracle_files_unchanged": true
+  },
+  "toolchains": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64"
+  },
+  "source_sha256": {
+    "compiled-publications/oracle/oracle.test.mjs": "42027774bbb189dbf64e8fd4749187255087d9b27850651e918d5ccc7e9a338f",
+    "compiled-publications/coordination/seals/E-ORACLE/source/oracle.test.mjs": "e7b820a8bc9ee28e8c5444d7948cce2e310328b98eeb823cc59121050a935536",
+    "compiled-publications/oracle/oracle.mjs": "f471c540f57212a7fecd719cd0628edbdf8fa09acdf13c0f57875ebaa02ced49",
+    "compiled-publications/oracle/expectations.json": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+    "compiled-publications/coordination/receipts/E-ORACLE.json": "bc4accb8d450b748ff02285f088d2fe5763f80c42c387797beba9aed9ad50eea",
+    "compiled-publications/coordination/reports/E-PORTABLE-ORACLE.md": "775626c73aeb5290e6355a5f123a89fdaa0d5d0ac102934d82db72427dda315b"
+  },
+  "checks": [
+    {
+      "command": "GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "result": "6 passed, 0 failed; each fresh-native test executed the actual CLI using the explicit Go path.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/node22-explicit-go.log",
+      "rawlog_bytes": 1763,
+      "rawlog_sha256": "a4303cd51dd8a68122d72418fd45c55d5a52b6081dcef1658e4bb9b85be02e36"
+    },
+    {
+      "command": "env -u GOBI_GO_BIN PATH=\"/tmp/gondola-go/bin:$PATH\" /tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "result": "6 passed, 0 failed; fresh native execution resolved `go` from PATH. The base environment PATH itself has no Go binary, so the installed Go 1.24 directory was prepended for this fallback check.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/node22-path-go.log",
+      "rawlog_bytes": 1763,
+      "rawlog_sha256": "8a207216e2783c2847a0c75ed3215708beaf9d2d80e3012dfaf1b889967c0362"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-publications/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "result": "Syntax check passed; explicit toolchain versions and base-PATH Go availability were recorded.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/environment-and-syntax.log",
+      "rawlog_bytes": 373,
+      "rawlog_sha256": "6d22334a6b7b35fbfcc2abbd166f0b76e5496323524b40dbcb4efca3f94c9eeb"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/validate-receipt.py",
+      "exit_code": 0,
+      "result": "Pinned native validate_receipt accepted E-PORTABLE-ORACLE/N5 and confirmed scheduler state was unchanged during validation.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/receipt-validation.log",
+      "rawlog_bytes": 230,
+      "rawlog_sha256": "ae9940c2fbec5d5954027437ef3ada64bf7e3e309ba3ba95bb8a91a14396896d"
+    }
+  ],
+  "rawlogs": [
+    { "path": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/node22-explicit-go.log", "bytes": 1763, "sha256": "a4303cd51dd8a68122d72418fd45c55d5a52b6081dcef1658e4bb9b85be02e36" },
+    { "path": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/node22-path-go.log", "bytes": 1763, "sha256": "8a207216e2783c2847a0c75ed3215708beaf9d2d80e3012dfaf1b889967c0362" },
+    { "path": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/environment-and-syntax.log", "bytes": 373, "sha256": "6d22334a6b7b35fbfcc2abbd166f0b76e5496323524b40dbcb4efca3f94c9eeb" },
+    { "path": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/validate-receipt.py", "bytes": 1205, "sha256": "63f803509b50bc5cf9b5b6050921e8b3808b67209333e6c4f2ec94903601553b" },
+    { "path": "compiled-publications/coordination/rawlogs/E-PORTABLE-ORACLE/receipt-validation.log", "bytes": 230, "sha256": "ae9940c2fbec5d5954027437ef3ada64bf7e3e309ba3ba95bb8a91a14396896d" }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/E-PORTABLE-ORACLE.md",
+    "bytes": 2029,
+    "sha256": "775626c73aeb5290e6355a5f123a89fdaa0d5d0ac102934d82db72427dda315b"
+  },
+  "limitations": [
+    "This bounded packet changes only the test executable selection and output buffer. It does not rerun the full project pipeline or claim direct/browser/final project acceptance.",
+    "No fixture, expectation, reducer, module floor, production source, sealed E-ORACLE file, Git history, or scheduler state was changed."
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-HOST",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Added a thin compiled-publications host facade over the existing children request/cancel host policy and shared runtime. Focused Node 22 tests pass 5/5; Go remains the sole owner of typed inputs and the publication queue/delivery decisions.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "contract": "compiled-publications/CONTRACT.md",
+    "plan": "compiled-publications/PLAN.md"
+  },
+  "source_sha256": {
+    "compiled-publications/CONTRACT.md": "c30f41e00b1035cda948bb18b1f9dd506dae50454280083d645d2479a946ac36",
+    "compiled-publications/PLAN.md": "ad01f8cfbf9e3dfa8157465591c6c85d35daef3682712ac3b872520a4df6f4b0",
+    "compiled-publications/runtime/runtime.mjs": "f496854ad89e8f2ee2b2fa6dc91daeaf81af7218427bd160b8b868f5e6319da0",
+    "compiled-publications/runtime/runtime.test.mjs": "d9670376ec28335e2a8f198530c36799759b23b53c3787ac5b6c99b1fd679214",
+    "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f"
+  },
+  "api": {
+    "exports": [
+      "COMPILED_PUBLICATIONS_HOST_CAPABILITIES",
+      "validateCompiledPublicationsEffect",
+      "createCompiledPublicationsEffectDriver",
+      "mountCompiledPublicationsApp"
+    ],
+    "mount_result": [
+      "runtime",
+      "effects"
+    ],
+    "effects_methods": [
+      "pending",
+      "records",
+      "deliver"
+    ],
+    "effect_tuples": [
+      "fixture.request/lookup/token/complete",
+      "lifecycle.cancel/cancel/token/empty"
+    ],
+    "token_profile": "parent:gN:rN or child:<key>:gN:rN; child key [a-z][a-z0-9_-]{0,15}; positive canonical safe integer IDs",
+    "implementation": "Direct aliases to compiled-children host policy/driver/capabilities; mount delegates to mountCompiledChildrenApp. No publication queue/reducer."
+  },
+  "checks": {
+    "node": "v22.23.4",
+    "focused_runtime_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/runtime/runtime.test.mjs",
+      "exit_code": 0,
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "syntax_checks": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-publications/runtime/runtime.mjs",
+        "exit_code": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-publications/runtime/runtime.test.mjs",
+        "exit_code": 0
+      }
+    ],
+    "test_coverage": [
+      "closed request/cancel policy; rejects publication effects",
+      "numeric and view capability mount profile without package/component hardcoding",
+      "typed publication On messages forwarded to Update boundary",
+      "locked view click suppressed and locked capture rejected by GoScript Update boundary",
+      "compatible swap retains pending effect",
+      "stale renderer callback rejected",
+      "incompatible candidate rejected while active renderer and pending effect survive",
+      "Go cancellation and host unmount retire pending request correlations"
+    ],
+    "pre_implementation_red": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/runtime/runtime.test.mjs",
+      "exit_code": 1,
+      "expected": true,
+      "reason": "publication mount export did not exist before facade implementation"
+    }
+  },
+  "not_run": [
+    "full inherited pipeline",
+    "compiler build",
+    "browser demo",
+    "npm installation",
+    "Go tests",
+    "Git operations",
+    "native scheduler writes"
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-HOST-red-missing-facade.log",
+      "bytes": 7250,
+      "sha256": "c86382bf47e556d87e266d1a4a4b3ae8b539e690f4b9eab879ec9b75f79357f1"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-HOST-node22-tests.log",
+      "bytes": 1666,
+      "sha256": "c4c413fe00c4ef8947a89e2a6091b0f5af38784fc10249437d063ea9c155ac9d"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-HOST-checks.json",
+      "bytes": 1161,
+      "sha256": "67194a2e14a2922a7fdeb39b87846398d5ff0a36c4ddbf457d8bf8908c5b1d8c"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/E-HOST.md",
+    "bytes": 2667,
+    "sha256": "284657c558343eceab5821966298dd5caf271a3ca4e38c18d1d10b63da448aef"
+  },
+  "limitations": [
+    "Focused host tests use a GoScript ABI test module; actual Go transitions, compiler output and browser coverage belong to N1/N2/N4.",
+    "No claim of full pipeline acceptance."
+  ]
+}

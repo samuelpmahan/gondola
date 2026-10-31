@@ -1,0 +1,108 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Implemented the Go-owned typed parent input and delayed keyed-child publication queue. Focused Go tests pass, including immutable snapshots, stale identity/revision checks, out-of-order one-time delivery, and accepted-ID watermark preservation across request/count/reorder updates. The canonical native trace records 50 events and 45 Go dispatches.",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-publications",
+    "contract": "compiled-publications/CONTRACT.md",
+    "plan": "compiled-publications/PLAN.md"
+  },
+  "source_sha256": {
+    "compiled-publications/CONTRACT.md": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296",
+    "fixtures/compiled/publications/app.go": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb",
+    "fixtures/compiled/publications/view.go": "458e33f640a6fe9edfa3a200405ec9ef381d43668f2088706c58f012481079bc",
+    "fixtures/compiled/publications/app_test.go": "6402baa2a342528c93ef52e4e93ba6e9c51d013193cc2a8fa8d9989bde39c392",
+    "fixtures/compiled/publications/scenario.json": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819"
+  },
+  "implementation": {
+    "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/publications",
+    "state": [
+      "ParentInput{Step, Locked, Revision}",
+      "ParentState lifecycle and publication summary fields",
+      "value-slice []ChildState with generation and accepted-publication watermark",
+      "Go-owned []Publication queue with parent/child/input identity and captured value"
+    ],
+    "messages": [
+      "input.step",
+      "input.toggleLock",
+      "child.capture",
+      "publication.deliver",
+      "existing child and parent lifecycle/request/reply operations"
+    ],
+    "scenario": "fixtures/compiled/publications/scenario.json",
+    "native_trace_schema": "gobi.compiled-publications-native/v1",
+    "application_reducer": "Go only"
+  },
+  "checks": {
+    "focused_go_test": {
+      "command": "/tmp/gondola-go/bin/go test -count=1 ./fixtures/compiled/publications",
+      "exit_code": 0,
+      "stdout": "ok  github.com/samuelpmahan/gondola/fixtures/compiled/publications  0.002s"
+    },
+    "native_capture": {
+      "source_events": 50,
+      "go_dispatches": 45,
+      "no_tick_rows_have_null_message": true,
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+      "path": "compiled-publications/coordination/rawlogs/E-GO/native-trace.json",
+      "producer_copy": "compiled-publications/coordination/rawlogs/E-NATIVECLI-native-capture.json"
+    },
+    "compiled_backends": {
+      "status": "React and DOM CLI build outputs were generated and validated by N2 on unchanged app.go/view.go/scenario.json sources",
+      "react_app_ir": {
+        "bytes": 24682,
+        "sha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f"
+      },
+      "dom_app_ir": {
+        "bytes": 24682,
+        "sha256": "e673590e57b0b4e5afbf77f5b654f73767f8f410cd35e5315e332c00d325c07f"
+      },
+      "declared_effect_capability": "effect.cancel",
+      "test_source_pin": "N2 is refreshing its app_test.go source pin after the test-only watermark regression was added"
+    }
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-GO/test-watermark-final.command.txt",
+      "bytes": 70,
+      "sha256": "19d74280170bd761d210c5b7684a41a5bba41ea2078753ec5b2f2d6ce05d5356"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-GO/test-watermark-final.stdout.log",
+      "bytes": 75,
+      "sha256": "1557de15d4df339aed0e62735b1e1b2f36b1d3c7e6f261a018812cebf371f073"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-GO/test-watermark-final.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-GO/test-watermark-final.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-GO/native-trace.json",
+      "bytes": 1148369,
+      "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d"
+    },
+    {
+      "path": "compiled-publications/coordination/rawlogs/E-GO/native-trace-pre-final-envelope.json",
+      "bytes": 1147666,
+      "sha256": "03c9a09448c4536deac49f19b64805034c89fed7458bd502380c55b6e482e1a9"
+    }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/E-GO.md",
+    "bytes": 4005,
+    "sha256": "9f1b7f11050bda38945e4b2f36c8523bba0611d7f65c65db74229dee7881d284"
+  },
+  "limitations": [
+    "No full inherited pipeline, mounted browser replay, hosted CI acceptance, Git operation, or native scheduler mutation was performed in this E-GO lane.",
+    "N2 owns the final compiler source-pin and encoder-probe receipt; the test-only app_test.go pin refresh was in progress when this E-GO packet was sealed."
+  ]
+}

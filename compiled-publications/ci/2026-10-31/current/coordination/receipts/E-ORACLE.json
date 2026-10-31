@@ -1,0 +1,128 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ORACLE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added independent literal expectations for all 50 typed-input/publication source events and 46 full Go state, view, and DOM checkpoints; fresh native Go trace matched all 45 Go steps, and six focused oracle tests passed.",
+  "contract": {
+    "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/publications",
+    "scenario": "fixtures/compiled/publications/scenario.json",
+    "scenarioEvents": 50,
+    "goUpdates": 45,
+    "stateProjections": 46,
+    "hostOnlyEvents": [6, 7, 26, 27, 28],
+    "typedInput": "step 1/2/3; lock toggle advances revision; child count uses current unlocked step",
+    "publication": "captured count value plus parent/child generation and input revision; globally increasing ID",
+    "parentRemovalCancellationOrder": ["child:elm:g4:r1", "child:oak:g2:r2", "parent:g1:r2"],
+    "rendererEvents": ["DOM to React accepted", "incompatible candidate rejected"],
+    "seed": "none; fixed deterministic scenario"
+  },
+  "artifacts": [
+    "compiled-publications/oracle/oracle.mjs",
+    "compiled-publications/oracle/oracle.test.mjs",
+    "compiled-publications/oracle/expectations.json",
+    "compiled-publications/oracle/audit-native-protocol.mjs",
+    "compiled-publications/coordination/reports/E-ORACLE.md",
+    "compiled-publications/coordination/rawlogs/E-ORACLE-native-current.json",
+    "compiled-publications/coordination/rawlogs/E-ORACLE-node22-tests.log",
+    "compiled-publications/coordination/rawlogs/E-ORACLE-protocol-audit.json"
+  ],
+  "toolchains": {
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "python": "Python 3.12.14",
+    "nativeRebalancer": "1.0.4"
+  },
+  "source_sha256": {
+    "compiled-publications/CONTRACT.md": "2ad4be1aeb1da3f3e6905bb01a7b3ef0eed22ecf60df7307aecbb997a0a2e296",
+    "compiled-publications/PLAN.md": "ad01f8cfbf9e3dfa8157465591c6c85d35daef3682712ac3b872520a4df6f4b0",
+    "fixtures/compiled/publications/app.go": "c9865a8d2c6e4da3568f1e288d3506144d94c5f987006f9128878acd479fa0bb",
+    "fixtures/compiled/publications/view.go": "458e33f640a6fe9edfa3a200405ec9ef381d43668f2088706c58f012481079bc",
+    "fixtures/compiled/publications/scenario.json": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819",
+    "cmd/compiled-publications-native/main.go": "7fee0e56a8f9a0c411e2b3fa794f95744616f538cd15ffa7e5910d28a1d19302",
+    "compiled-publications/oracle/oracle.mjs": "f471c540f57212a7fecd719cd0628edbdf8fa09acdf13c0f57875ebaa02ced49",
+    "compiled-publications/oracle/oracle.test.mjs": "e7b820a8bc9ee28e8c5444d7948cce2e310328b98eeb823cc59121050a935536",
+    "compiled-publications/oracle/expectations.json": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+    "compiled-publications/oracle/audit-native-protocol.mjs": "8c44ec51dfddbad26ea6bd564fa1682ae69e8389d513ec069a6088a2904a5507"
+  },
+  "protocol_snapshot_sha256": {
+    "compiled-publications/coordination/spec.json": "15f5132add0eb703f31f18f16791cb93fcdff84d2ebf3345746e0d73b95fd4f4",
+    "compiled-publications/coordination/actual-capacity.json": "6f7b0bef79e16fbde5f522a75e9836a1733883c116116cc17b532c80cb2b781b",
+    "compiled-publications/coordination/native/epoch-00.json": "ca0f5cc101d4ede7e241dcab6045f61238d8f447f70fae4729ecae2d1bf24062",
+    "compiled-publications/coordination/native/epoch-01.json": "6a7440210e55627a98f597c49b5bc9f11a03e03f420d927e06bfe44a3fffbaf8",
+    "compiled-publications/coordination/receipts/E-HOST.json": "e2958dad7637f16baef5fb70ea244632a1fc675b83b0a7cb57f2a06e6f7cc030"
+  },
+  "protocol_audit_cutoff": {
+    "scheduler_state_sha256": "724776f12f352622632ca23536d6fee641a549274767c0ccad55e2eb32bfa193",
+    "note": "The scheduler advanced after this read-only epoch-0–1 audit; the later active-worker validation used the new state hash recorded in its raw log."
+  },
+  "checks": [
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/compiled-publications-native --script fixtures/compiled/publications/scenario.json > compiled-publications/coordination/rawlogs/E-ORACLE-native-current.json 2> compiled-publications/coordination/rawlogs/E-ORACLE-native-current.stderr",
+      "exit_code": 0,
+      "result": "Fresh native trace matched the independent literal initial state, all 50 event rows, and all 45 ordered Go steps including state, Gobi view, and effects.",
+      "trace_bytes": 1148369,
+      "trace_sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-publications/oracle/oracle.mjs --write",
+      "exit_code": 0,
+      "result": "Wrote the JSON checker oracle from the separate hand-authored complete Go snapshots and independent presentation projections.",
+      "expectations_bytes": 2635707,
+      "expectations_sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-publications/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "result": "6 passed, 0 failed. Fresh native comparisons cover event/state/view/effect parity. Negative controls rejected mutations to captured value, child generation, input revision, view order, and cancellation order.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-ORACLE-node22-tests.log",
+      "rawlog_bytes": 1764,
+      "rawlog_sha256": "cc892f97f3867a40aa6ce96b073b7c90c00a277a7111b1842995d8dd6778cfa7"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-publications/oracle/audit-native-protocol.mjs",
+      "exit_code": 0,
+      "result": "Read-only native protocol audit matched epoch 0–1 reports to the state ledger; checked constraints, independent scores, six distinct acknowledged initial starts, accepted N1-to-N3 CLI handoff, active worker assignments, and unchanged scheduler state bytes.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-ORACLE-protocol-audit.json",
+      "rawlog_bytes": 1004,
+      "rawlog_sha256": "368b5d7d763f70e1a9732de5bcbf2712dc7610c5a2c3a2cbf78080c3092ae649"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-publications/oracle/oracle.mjs; /tmp/gondola-node22/node_modules/node/bin/node --check compiled-publications/oracle/oracle.test.mjs; /tmp/gondola-node22/node_modules/node/bin/node --check compiled-publications/oracle/audit-native-protocol.mjs",
+      "exit_code": 0,
+      "result": "All three Node syntax checks passed.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-ORACLE-versions-and-syntax.log",
+      "rawlog_bytes": 635,
+      "rawlog_sha256": "f08ca6d5b8d1641a2d360872dde5b4ce80814248f5d38a86879984df277315ab"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-publications/coordination/rawlogs/E-ORACLE-validate-receipt.py",
+      "exit_code": 0,
+      "result": "Pinned native validate_receipt accepted the active E-ORACLE/N5 receipt. Scheduler state SHA-256 dea19757ef8264878f628093555a73f7ee1be35abc6f96a30d087fd1693f4a08 was unchanged during validation.",
+      "rawlog": "compiled-publications/coordination/rawlogs/E-ORACLE-receipt-validation.log",
+      "rawlog_bytes": 221,
+      "rawlog_sha256": "e15eb3d47a5096771322bf655d178fda127d8119176f487bf6be7b034a7a6b13"
+    }
+  ],
+  "rawlogs": [
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-native-current.json", "bytes": 1148369, "sha256": "bbf6db314e6f9f68802e0dd3d49b5216c4ed93db5696d9f9980055de12bced3d" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-native-current.stderr", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-node22-tests.log", "bytes": 1764, "sha256": "cc892f97f3867a40aa6ce96b073b7c90c00a277a7111b1842995d8dd6778cfa7" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-protocol-audit.json", "bytes": 1004, "sha256": "368b5d7d763f70e1a9732de5bcbf2712dc7610c5a2c3a2cbf78080c3092ae649" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-protocol-audit.stderr", "bytes": 174, "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-versions-and-syntax.log", "bytes": 635, "sha256": "f08ca6d5b8d1641a2d360872dde5b4ce80814248f5d38a86879984df277315ab" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-validate-receipt.py", "bytes": 1169, "sha256": "53eb619096466edfa1478070fc8b3c0347e8fbb81d4352224bfc55649ca05e7a" },
+    { "path": "compiled-publications/coordination/rawlogs/E-ORACLE-receipt-validation.log", "bytes": 221, "sha256": "e15eb3d47a5096771322bf655d178fda127d8119176f487bf6be7b034a7a6b13" }
+  ],
+  "report": {
+    "path": "compiled-publications/coordination/reports/E-ORACLE.md",
+    "bytes": 4872,
+    "sha256": "1ca0b5f47d5ecfd36bc5e2a0dee3d00a4ffb732a5dba9b27a042f6b7df46ed4b"
+  },
+  "limitations": [
+    "This packet verifies the fixed literal oracle and read-only native allocation evidence through epochs 0–1 only; direct/browser conformance, delivery, reviews, and final project acceptance remain separate lanes/root-owned.",
+    "No full project pipeline, browser capture, Git commit, merge, deployment, or scheduler-state write was performed by N5."
+  ]
+}
