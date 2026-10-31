@@ -1,0 +1,192 @@
+{
+  "job_id": "R-COMPILER",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Checked method selection shape before the trusted Gobi builder fast path. Added isolated RED/GREEN coverage for Gobi method expressions, promoted methods, pointer/interface forms, and a supported direct builder chain. Scoped Go tests/race/vet and fresh React/DOM methods CLI builds pass.",
+  "source_scope": [
+    "compiled-frontend/analyze/**",
+    "compiled-methods/evidence/repairs/r-compiler/**",
+    "compiled-methods/coordination/reports/R-COMPILER.md",
+    "compiled-methods/coordination/receipts/R-COMPILER.json"
+  ],
+  "evidence": {
+    "report_sha256": "b91446ddba16e6fbd6cb712e8a3b6dfd2e69a3a61d3b0b2a1c6a8552cca91d33",
+    "production_source_sha256": "55b2968ff627c6a9cd63032bbc8c01de395cd7638ab78efe2c44e80071f190a3",
+    "regression_test_sha256": "d826393d21f95d8ee6b795827395f80d3d35c4921ed6ad2ff3c0b0caca23cf5a",
+    "red_isolated_log": "compiled-methods/evidence/repairs/r-compiler/red-isolated-test.log",
+    "green_log": "compiled-methods/evidence/repairs/r-compiler/green-test.log",
+    "go_test_log": "compiled-methods/evidence/repairs/r-compiler/go-test-final.log",
+    "go_test_race_log": "compiled-methods/evidence/repairs/r-compiler/go-test-race-final.log",
+    "go_vet_log": "compiled-methods/evidence/repairs/r-compiler/go-vet-final.log",
+    "build_inventory_path": "compiled-methods/evidence/repairs/r-compiler/build-inventory.json",
+    "build_inventory_sha256": "3d3621138db710a1bde38a40bef927f66e82d850936f30976a8a1dfaf3b1c85d",
+    "original_gate_verification_path": "compiled-methods/evidence/repairs/r-compiler/original-gate-verification.json",
+    "original_gate_verification_sha256": "18ed440f11ad0dde1393fabb542dbbd586e48ad22fc22c06b8357c5920a0a123",
+    "toolchain": {
+      "go": "go version go1.27.3 linux/amd64",
+      "node": "v22.23.4",
+      "goscript_module": {
+        "Path": "github.com/s4wave/goscript",
+        "Version": "v0.6.2",
+        "Time": "2026-10-28T13:31:33Z",
+        "Dir": "/root/go/pkg/mod/github.com/s4wave/goscript@v0.6.2",
+        "GoMod": "/root/go/pkg/mod/cache/download/github.com/s4wave/goscript/@v/v0.6.2.mod",
+        "GoVersion": "1.27.0",
+        "Sum": "h1:GucUqQ+xvaBzAH6W4U9Ec62T4ytUBDbmGojJbWrVEKc=",
+        "GoModSum": "h1:g2psiTXAhkiM7vtr8YEgkq/xUlYHLSghruODJL8VpAU="
+      }
+    },
+    "scoped_builds": {
+      "react": {
+        "request_sha256": "024757017595e9618a6b96a75c6e34f1177e36ba1492d13d6d55bf1054557853",
+        "result_sha256": "398ebfef67d49bcab0335c497e8370515830f29a079629fa9424a50564af81b1",
+        "manifest_sha256": "0a76ea62736f98efcee3cdca8c1492701e19ff121dd0569cbb73db265642b683",
+        "output_count": 67,
+        "raw_bundle_sha256": "f6ffc400d9eed117e16fafc42071767ecad631c579b2f970aebaf4edb5771278",
+        "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+        "encoder_sha256": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4"
+      },
+      "dom": {
+        "request_sha256": "408e1f328f68597f45ffe8f406063005f98fb1bcfd10e9d8b9e9dd1b5a2f4a31",
+        "result_sha256": "17f7a04531cc125560014d1c0445dd56e03e2ea09716ecace2131c5915b29b2a",
+        "manifest_sha256": "6b0d8dd3b02685908080b1871e423d1651f5ff587ee8b5bb0324b2c633dec90e",
+        "output_count": 67,
+        "raw_bundle_sha256": "b96017fdb10ecf7c1b5e134f470cda63b878bffe8b9eec4a7097f5c829d95bfa",
+        "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+        "encoder_sha256": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4"
+      }
+    },
+    "original_gate_archive": {
+      "archive_sha256": "bc043f86742d2bc380a6b3c7220459905ed2f674b7288ccf7892fd89aadc9fc6",
+      "archive_bytes": 701639,
+      "current_members_match": true,
+      "member_count": 138
+    },
+    "backend_neutral_comparison": {
+      "same_output_path_set": true,
+      "exactly_allowed_differences": [
+        "apps/methods-0cac42b0a982/gobi-compiled.mjs",
+        "buildmanifest.json"
+      ],
+      "app_ir_byte_identical": true,
+      "encoder_byte_identical": true,
+      "components_role_metadata_byte_identical": true,
+      "forwarders_and_emitted_typescript_byte_identical": true,
+      "raw_bundle_hashes_separate": true,
+      "bundle_normalization_claim": false
+    },
+    "limits": [
+      "This is a fresh CLI build check for the methods fixture after the analyzer change, not a browser/runtime run.",
+      "Raw React and DOM GoScript bundle hashes are kept separate; no normalized or cross-directory bundle-byte claim is made.",
+      "Compatibility evidence is the targeted compiled-frontend analyzer/build/cmd/emit package set; no root-wide ./... claim is made."
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/audit_builds.py",
+      "bytes": 10462,
+      "sha256": "c6e5f566dd8b6409618481da43a851afcc6ccf59c80bfc34aae25730c951d741"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/build-audit.stdout.json",
+      "bytes": 793,
+      "sha256": "6319c341c285a790afa4cc7fad4167e76f8e454652e236226b4a101274504618"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/build-inventory.json",
+      "bytes": 35952,
+      "sha256": "3d3621138db710a1bde38a40bef927f66e82d850936f30976a8a1dfaf3b1c85d"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/dom/build-result.json",
+      "bytes": 21644,
+      "sha256": "17f7a04531cc125560014d1c0445dd56e03e2ea09716ecace2131c5915b29b2a"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/dom/output-inventory.json",
+      "bytes": 12142,
+      "sha256": "54c2913fe88f41ff160e2a0c6788cc71202029996a7852ea17cde0e9e0e57ecc"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/dom/request.json",
+      "bytes": 315,
+      "sha256": "408e1f328f68597f45ffe8f406063005f98fb1bcfd10e9d8b9e9dd1b5a2f4a31"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/dom/stderr.log",
+      "bytes": 12,
+      "sha256": "bde294368bfed77c2cddf8cec271d398aee9cdbab3b26e1059281bd33adb0120"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/react/build-result.json",
+      "bytes": 21644,
+      "sha256": "398ebfef67d49bcab0335c497e8370515830f29a079629fa9424a50564af81b1"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/react/output-inventory.json",
+      "bytes": 12144,
+      "sha256": "3174a1bb13fe75408fd4159cda4ebf50d024b9257670634e51163638cb8956ed"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/react/request.json",
+      "bytes": 319,
+      "sha256": "024757017595e9618a6b96a75c6e34f1177e36ba1492d13d6d55bf1054557853"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/builds/react/stderr.log",
+      "bytes": 12,
+      "sha256": "bde294368bfed77c2cddf8cec271d398aee9cdbab3b26e1059281bd33adb0120"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/go-test-final.log",
+      "bytes": 303,
+      "sha256": "98fd30e786217a34ce175aec58bd04b89d4339948207e4798f6ba8a62201102f"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/go-test-race-final.log",
+      "bytes": 303,
+      "sha256": "3ed30d8f22ef04e5734429db7019ac276e43bdbfbee6cdb5cb5f9a8e5b664813"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/go-test-race.log",
+      "bytes": 303,
+      "sha256": "0691a53aee6231e42cf9ad0f29739dda9d4719c566e791fa42de212f87319c2e"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/go-test.log",
+      "bytes": 303,
+      "sha256": "b776cead07e26adc7c6a97b10fc1ade2a5f2dfaa258ba32cec4fde21100454de"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/go-vet-final.log",
+      "bytes": 12,
+      "sha256": "bde294368bfed77c2cddf8cec271d398aee9cdbab3b26e1059281bd33adb0120"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/go-vet.log",
+      "bytes": 12,
+      "sha256": "bde294368bfed77c2cddf8cec271d398aee9cdbab3b26e1059281bd33adb0120"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/green-test.log",
+      "bytes": 82,
+      "sha256": "ab855bcb0e9cd11099022bae24f6dc31cd43a9b92a88dc6e91d5c63ef70df863"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/original-gate-verification.json",
+      "bytes": 37997,
+      "sha256": "18ed440f11ad0dde1393fabb542dbbd586e48ad22fc22c06b8357c5920a0a123"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/red-isolated-test.log",
+      "bytes": 941,
+      "sha256": "b7883969f3a3c881620bdf1aaeed7633ea7d81b3dc81d00342cb7cf9364d61f2"
+    },
+    {
+      "path": "compiled-methods/evidence/repairs/r-compiler/red-test.log",
+      "bytes": 1716,
+      "sha256": "120f203bd55f22e311ed3be78bfc1e39fcc70429ae0ccf05e4ee7c06ca2f174b"
+    }
+  ],
+  "reported_stage": "final_source_frozen_scoped_checks_and_actual_cli_builds_passed"
+}

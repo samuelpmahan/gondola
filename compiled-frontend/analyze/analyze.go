@@ -44,10 +44,17 @@ func Analyze(program compilercontract.TypedProgram, options compilercontract.Ana
 
 func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.TypedPackage) (compilercontract.AppIR, []compilercontract.Diagnostic) {
 	var diagnostics []compilercontract.Diagnostic
-	functions := make(map[compilercontract.SymbolID]compilercontract.TypedFunction, len(pkg.Functions))
+	functions := make(map[compilercontract.SymbolID]compilercontract.TypedFunction)
 	byName := make(map[string][]compilercontract.TypedFunction)
+	for _, sourcePackage := range program.Packages {
+		for _, function := range sourcePackage.Functions {
+			functions[function.ID] = function
+		}
+	}
 	for _, function := range pkg.Functions {
-		functions[function.ID] = function
+		if function.PackagePath != pkg.ImportPath || function.ID != compilercontract.SymbolID(pkg.ImportPath+"."+function.Name) {
+			continue
+		}
 		byName[function.Name] = append(byName[function.Name], function)
 	}
 	roles := make(map[string]compilercontract.TypedFunction)
@@ -96,6 +103,16 @@ func analyzePackage(program compilercontract.TypedProgram, pkg compilercontract.
 	diagnostics = append(diagnostics, ValidateOperations(program, roots)...)
 
 	types := append([]compilercontract.TypeInfo{}, pkg.Types...)
+	for _, function := range reachable {
+		if function.PackagePath == pkg.ImportPath {
+			continue
+		}
+		for _, sourcePackage := range program.Packages {
+			if sourcePackage.ImportPath == function.PackagePath {
+				types = mergeTypeInfo(types, sourcePackage.Types)
+			}
+		}
+	}
 	sort.SliceStable(types, func(i, j int) bool { return types[i].ID < types[j].ID })
 	appSymbols := make([]compilercontract.Symbol, 0, len(reachable))
 	for _, function := range reachable {

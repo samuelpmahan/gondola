@@ -1,0 +1,102 @@
+{
+  "decision": "amend",
+  "evidence": {
+    "author_job": "E-COMPILER",
+    "author_worker": "N4",
+    "author_report_sha256": "cf1411be4998175e1c09c8307675cd2846164bc6eb1a5b7650300f78ace1c837",
+    "author_receipt_sha256": "3721354dc701424f93257bbeaf39c9a123bb6dd191337101e9b5971f17875398",
+    "audit_path": "compiled-methods/evidence/reviews/xr-compiler/audit.json",
+    "audit_sha256": "9f0fcd4c38d8123d15604f63582826469924615a9746ddb2d6baeb0fae8a5562",
+    "counterexample_path": "compiled-methods/evidence/reviews/xr-compiler/gobi-whitelist-bypass.md",
+    "counterexample_sha256": "d7c60a1b15d9f3ab5438864fe7cfbb07ac799dc67206f6ceddd36cc0d313940a",
+    "source_hashes_match_author_receipt": true,
+    "react_dom_artifact_audit": {
+      "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+      "react_dom_app_ir_byte_identical": true,
+      "react_inventory_files_checked": 67,
+      "dom_inventory_files_checked": 67,
+      "react_build_ok": true,
+      "dom_build_ok": true,
+      "roles_are_package_functions": true
+    },
+    "finding": {
+      "id": "XR-COMPILER-1",
+      "severity": "major",
+      "status": "amend",
+      "kind": "trusted_gobi_method_selection_bypass",
+      "evidence_path": "compiled-methods/evidence/reviews/xr-compiler/gobi-whitelist-bypass.md",
+      "trusted_fast_path_precedes_selection_guards": true,
+      "missing_predicate_checks": [
+        "selection.Kind() == types.MethodVal",
+        "len(selection.Index()) == 1",
+        "selected receiver expression has concrete gobi.Node value type"
+      ],
+      "source_spans": [
+        {
+          "path": "compiled-frontend/analyze/project.go",
+          "lines": "418-424"
+        },
+        {
+          "path": "compiled-frontend/analyze/project.go",
+          "lines": "426-433"
+        },
+        {
+          "path": "compiled-frontend/analyze/project.go",
+          "lines": "455-479"
+        },
+        {
+          "path": "compiled-frontend/analyze/project.go",
+          "lines": "481-490"
+        },
+        {
+          "path": "compiled-frontend/analyze/methods_test.go",
+          "lines": "231-290"
+        }
+      ],
+      "source_derived_counterexamples": [
+        {
+          "form": "gobi.Node.Set(node, \"role\", \"x\")",
+          "selection": "MethodExpr",
+          "accepted_by_trusted_predicate": true
+        },
+        {
+          "form": "wrapper{gobi.Node}.Set(\"role\", \"x\")",
+          "selection": "promoted MethodVal",
+          "accepted_by_trusted_predicate": true
+        }
+      ],
+      "executed_by_review": false,
+      "required_action": "Narrow trusted Gobi exception to direct, unpromoted MethodVal selections on concrete gobi.Node values and add positive/negative regression tests."
+    },
+    "limits": [
+      "Independent read-only source and artifact review; no analyzer tests or build commands were rerun.",
+      "The trusted Gobi bypass counterexamples are source-derived and were not executed through the analyzer.",
+      "Generated GoScript modules were verified as pinned build outputs but not executed by this review.",
+      "No browser/native runtime or end-to-end behavior is claimed."
+    ],
+    "source_hashes": {
+      "compiled-frontend/analyze/analyze.go": "841ecd25ce5a7f2c89bd2708cfaa0b8ca727ae7c4a0fef53384303e0fef82701",
+      "compiled-frontend/analyze/load.go": "36d4218e5bac025c644ce19bf5bd7af4aa41b7429265a0f75030e794ea32dc4f",
+      "compiled-frontend/analyze/methods_test.go": "f81f8add88939131dac870b182aab60dc1e88fce0265ec06bfdc2bf58b5e359c",
+      "compiled-frontend/analyze/project.go": "39a7f7e6d99a55dbbb0729f98ea4458da8be61d5093b76a7c6a1a8ddd6ff5d9d",
+      "compiled-frontend/go.mod": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+      "fixtures/compiled/methods/app.go": "456eecae2077e269da2b17327d39a40f60dbab5b82d82e9b2825f4f69baf3c47",
+      "fixtures/compiled/methods/view.go": "b534c2f522ee71afbe21188d6b90262551f7cbdad8c1820462055f47ebb8a8d3"
+    },
+    "review_report_sha256": "c33632a72b4e65b9b64581e71bd8bed4e28dea0cea998f47ae8c98b20a47a79f",
+    "reviewer_changed_files": [
+      "compiled-methods/coordination/reports/XR--COMPILER.md",
+      "compiled-methods/evidence/reviews/xr-compiler/audit.json",
+      "compiled-methods/evidence/reviews/xr-compiler/gobi-whitelist-bypass.md"
+    ]
+  },
+  "job_id": "XR--COMPILER",
+  "reported_stage": "independent_source_and_frozen_artifact_review_found_trusted_gobi_selection_bypass",
+  "source_scope": [
+    "compiled-methods/evidence/reviews/xr-compiler/**",
+    "compiled-methods/coordination/reports/XR--COMPILER.md",
+    "compiled-methods/coordination/receipts/XR--COMPILER.json"
+  ],
+  "summary": "The bounded value-receiver lowering, role ABI, and frozen React/DOM build artifacts are otherwise supported. The trusted Gobi method allowlist bypasses MethodExpr and promoted-selection rejection because its predicate runs before selection-shape checks.",
+  "worker": "N1"
+}

@@ -1,0 +1,322 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": "E-FIXTURE",
+      "agent": "/root/backend_runtime"
+    },
+    "N2": {
+      "job": "E-BROWSER",
+      "agent": "/root/backend_dom"
+    },
+    "N3": {
+      "job": "E-HARNESS",
+      "agent": "/root/backend_harness"
+    },
+    "N4": {
+      "job": "E-COMPILER",
+      "agent": "/root/backend_build"
+    },
+    "N5": {
+      "job": "E-DEMO",
+      "agent": "/root/backend_demo"
+    },
+    "N6": {
+      "job": "E-CONTRACT",
+      "agent": "/root/backend_contract"
+    }
+  },
+  "jobs": {
+    "E-FIXTURE": {
+      "id": "E-FIXTURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/methods/**,compilercontract/native.go registration and cmd/compiled-native fixture dispatch only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: FIXTURE",
+      "status": "running",
+      "worker": "N1",
+      "started_at": "2026-10-31T03:13:29.522502+00:00",
+      "finished_at": null
+    },
+    "E-BROWSER": {
+      "id": "E-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-methods/browser/**; newapp independent DOM oracle expectations only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: BROWSER",
+      "status": "running",
+      "worker": "N2",
+      "started_at": "2026-10-31T03:13:29.158269+00:00",
+      "finished_at": null
+    },
+    "E-HARNESS": {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-methods/conformance/**,native/direct replay integration and fixedfixtures only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: HARNESS",
+      "status": "running",
+      "worker": "N3",
+      "started_at": "2026-10-31T03:13:29.427097+00:00",
+      "finished_at": null
+    },
+    "E-COMPILER": {
+      "id": "E-COMPILER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-frontend/analyze/** only; source projection/static call graph/value-receiver methods with no schema weakening",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: COMPILER",
+      "status": "running",
+      "worker": "N4",
+      "started_at": "2026-10-31T03:13:29.247893+00:00",
+      "finished_at": null
+    },
+    "E-DEMO": {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-methods/demo/**,run-compiled-methods.sh,compiled-methods/run.mjs,.github/workflows/compiled-methods.yml only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: DEMO",
+      "status": "running",
+      "worker": "N5",
+      "started_at": "2026-10-31T03:13:29.335804+00:00",
+      "finished_at": null
+    },
+    "E-CONTRACT": {
+      "id": "E-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-methods/CONTRACT.md PLAN.md,compilercontract shared schema ONLY if necessary after coordination, compiled-methods/evidence/**",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: CONTRACT",
+      "status": "running",
+      "worker": "N6",
+      "started_at": "2026-10-31T03:13:29.067917+00:00",
+      "finished_at": null
+    },
+    "XR--FIXTURE": {
+      "id": "XR--FIXTURE",
+      "kind": "review",
+      "depends_on": "E-FIXTURE",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "XR--BROWSER": {
+      "id": "XR--BROWSER",
+      "kind": "review",
+      "depends_on": "E-BROWSER",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "XR--HARNESS": {
+      "id": "XR--HARNESS",
+      "kind": "review",
+      "depends_on": "E-HARNESS",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "XR--COMPILER": {
+      "id": "XR--COMPILER",
+      "kind": "review",
+      "depends_on": "E-COMPILER",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "XR--DEMO": {
+      "id": "XR--DEMO",
+      "kind": "review",
+      "depends_on": "E-DEMO",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "XR--CONTRACT": {
+      "id": "XR--CONTRACT",
+      "kind": "review",
+      "depends_on": "E-CONTRACT",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-31T03:13:28.957618+00:00",
+      "ready_jobs": [
+        "E-FIXTURE",
+        "E-BROWSER",
+        "E-HARNESS",
+        "E-COMPILER",
+        "E-DEMO",
+        "E-CONTRACT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "E-CONTRACT",
+        "N2": "E-BROWSER",
+        "N4": "E-COMPILER",
+        "N5": "E-DEMO",
+        "N3": "E-HARNESS",
+        "N1": "E-FIXTURE"
+      },
+      "dispatch": {
+        "N6": "E-CONTRACT",
+        "N2": "E-BROWSER",
+        "N4": "E-COMPILER",
+        "N5": "E-DEMO",
+        "N3": "E-HARNESS",
+        "N1": "E-FIXTURE"
+      },
+      "native_seconds": 0.008361380998394452,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-FIXTURE": 1,
+        "E-BROWSER": 1,
+        "E-HARNESS": 1,
+        "E-COMPILER": 1,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIXTURE": [
+          "N1"
+        ],
+        "E-BROWSER": [
+          "N2"
+        ],
+        "E-HARNESS": [
+          "N3"
+        ],
+        "E-COMPILER": [
+          "N4"
+        ],
+        "E-DEMO": [
+          "N5"
+        ],
+        "E-CONTRACT": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-FIXTURE": 100,
+        "E-BROWSER": 100,
+        "E-HARNESS": 100,
+        "E-COMPILER": 100,
+        "E-DEMO": 100,
+        "E-CONTRACT": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.067917+00:00",
+      "worker": "N6",
+      "job": "E-CONTRACT",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.158269+00:00",
+      "worker": "N2",
+      "job": "E-BROWSER",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.247893+00:00",
+      "worker": "N4",
+      "job": "E-COMPILER",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.335804+00:00",
+      "worker": "N5",
+      "job": "E-DEMO",
+      "agent": "/root/backend_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.427097+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.522502+00:00",
+      "worker": "N1",
+      "job": "E-FIXTURE",
+      "agent": "/root/backend_runtime"
+    }
+  ],
+  "epoch": 1,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

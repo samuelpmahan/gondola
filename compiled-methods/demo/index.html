@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f3ef">
+    <title>Go value methods · compiled view demo</title>
+    <link rel="stylesheet" href="./demo.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Gobi compiled methods home">
+        <span class="brand-mark" aria-hidden="true">g</span>
+        <span>gobi<span class="brand-muted"> / compiled methods</span></span>
+      </a>
+      <span class="topbar-note"><span class="live-dot"></span> Live Go state</span>
+    </header>
+
+    <main id="top" class="page-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="eyebrow">ONE COMPILED GO APP · TWO RENDERERS</div>
+        <h1 id="page-title">Value methods,<br><span>composed in Go.</span></h1>
+        <p class="intro-copy">A parent counter owns its child value. Capture the child, keep editing, then publish the saved value back to the parent. The view and transitions come from Go; switch renderers at any point.</p>
+        <div class="intro-meta">
+          <span class="meta-chip"><span class="chip-dot"></span> GoScript module</span>
+          <span class="meta-divider" aria-hidden="true"></span>
+          <span>Value receiver methods</span>
+          <span class="meta-divider" aria-hidden="true"></span>
+          <span>No application reducer in JavaScript</span>
+        </div>
+      </section>
+
+      <section class="workbench" aria-label="Compiled Go method demo">
+        <div class="workbench-head">
+          <div>
+            <div class="panel-kicker">METHOD COMPOSITION</div>
+            <h2>Counter values</h2>
+          </div>
+          <div class="renderer-switch" role="group" aria-label="Choose renderer">
+            <button type="button" data-renderer="react" aria-pressed="true">
+              <span class="renderer-icon react-icon" aria-hidden="true">R</span> React
+            </button>
+            <button type="button" data-renderer="dom" aria-pressed="false">
+              <span class="renderer-icon dom-icon" aria-hidden="true">D</span> DOM
+            </button>
+          </div>
+        </div>
+
+        <div class="workbench-body">
+          <section class="go-panel" aria-label="Go generated view">
+            <div class="panel-label"><span class="tiny-dot"></span> VIEW FROM GO</div>
+            <div id="go-view" class="go-view"></div>
+          </section>
+
+          <aside class="state-panel" aria-label="Runtime state">
+            <div class="panel-label">RUNTIME</div>
+            <div class="runtime-state">
+              <span>Active renderer</span>
+              <strong id="active-renderer">React</strong>
+            </div>
+            <div class="runtime-rule"></div>
+            <div class="panel-label state-label">GO STATE SNAPSHOT</div>
+            <pre id="state-snapshot" class="state-snapshot" aria-live="polite">Starting compiled module…</pre>
+            <details class="trace-details">
+              <summary>Ordered runtime trace</summary>
+              <pre id="runtime-trace" class="runtime-trace"></pre>
+            </details>
+          </aside>
+        </div>
+
+        <footer class="workbench-foot">
+          <span id="status" role="status" aria-live="polite">Loading GoScript module…</span>
+          <span class="foot-note">Renderer swaps retain the mounted Go state</span>
+        </footer>
+      </section>
+
+      <section class="notes" aria-label="What this demo shows">
+        <article>
+          <span class="note-index">01</span>
+          <div><h3>Parent and child are values</h3><p>Go methods update nested counter values and return the next app state.</p></div>
+        </article>
+        <article>
+          <span class="note-index">02</span>
+          <div><h3>Read-only is enforced in Go</h3><p>Locking the child disables its controls while parent actions remain available.</p></div>
+        </article>
+        <article>
+          <span class="note-index">03</span>
+          <div><h3>Capture keeps its value</h3><p>Publish the captured child count after further edits to see the saved value transfer.</p></div>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="./demo.bundle.mjs"></script>
+  </body>
+</html>

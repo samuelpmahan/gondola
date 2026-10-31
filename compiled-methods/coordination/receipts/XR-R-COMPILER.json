@@ -1,0 +1,167 @@
+{
+  "job_id": "XR-R-COMPILER",
+  "worker": "N1",
+  "decision": "accepted",
+  "author_job": "R-COMPILER",
+  "author_worker": "N4",
+  "summary": "The trusted Gobi fast path now runs only after method-selection validation. Focused tests reject method expressions and promoted selections while retaining direct builder chains. Precise source spans, fresh React/DOM inventories, scoped author logs, and the original 138-file archive were independently checked.",
+  "source_scope": [
+    "compiled-methods/evidence/reviews/xr-r-compiler/**",
+    "compiled-methods/coordination/reports/XR-R-COMPILER.md",
+    "compiled-methods/coordination/receipts/XR-R-COMPILER.json"
+  ],
+  "evidence": {
+    "author_report_path": "compiled-methods/coordination/reports/R-COMPILER.md",
+    "author_report_sha256": "b91446ddba16e6fbd6cb712e8a3b6dfd2e69a3a61d3b0b2a1c6a8552cca91d33",
+    "author_receipt_path": "compiled-methods/coordination/receipts/R-COMPILER.json",
+    "author_receipt_sha256": "8f0811be03c34406344052ef6e118374ad29e104469463db3d99ee9942e0749a",
+    "author_source_sha256": {
+      "project_path": "compiled-frontend/analyze/project.go",
+      "project_sha256": "55b2968ff627c6a9cd63032bbc8c01de395cd7638ab78efe2c44e80071f190a3",
+      "regression_test_path": "compiled-frontend/analyze/method_selection_test.go",
+      "regression_test_sha256": "d826393d21f95d8ee6b795827395f80d3d35c4921ed6ad2ff3c0b0caca23cf5a",
+      "selection_order": {
+        "selection_validation_before_trusted_gobi": true
+      },
+      "method_body_excerpt": "selection reason check runs before trusted Gobi method fast path"
+    },
+    "original_review": {
+      "report_path": "compiled-methods/coordination/reports/XR--COMPILER.md",
+      "receipt_path": "compiled-methods/coordination/receipts/XR--COMPILER.json",
+      "finding_id": "XR-COMPILER-1",
+      "reviewed_source_sha256": "39a7f7e6d99a55dbbb0729f98ea4458da8be61d5093b76a7c6a1a8ddd6ff5d9d",
+      "report_sha256": "c33632a72b4e65b9b64581e71bd8bed4e28dea0cea998f47ae8c98b20a47a79f",
+      "receipt_sha256": "1b6b78ddafa52d6eca02ed5b4c7523c191b70db4494b815fc81a41ce5c26450b"
+    },
+    "source_order_check": {
+      "selection_validation_before_trusted_gobi": true
+    },
+    "focused_test": {
+      "command": "PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go test -count=1 ./analyze -run '^(TestTrustedGobiBuilderSelectionShapes|TestUnsupportedMethodDispatchFormsFailClosed)$' -v",
+      "toolchain": "go version go1.27.3 linux/amd64",
+      "log_path": "compiled-methods/evidence/reviews/xr-r-compiler/focused-tests.log",
+      "log_sha256": "e771792e2ce7d5b7308ff3f9f308eec61e8b517e14ec12e96887a06b9276b71e",
+      "exit_code": 0,
+      "all_regression_subtests_pass": true,
+      "existing_boundary_test_pass": true
+    },
+    "red_green": {
+      "red_isolated_path": "compiled-methods/evidence/repairs/r-compiler/red-isolated-test.log",
+      "red_isolated_sha256": "b7883969f3a3c881620bdf1aaeed7633ea7d81b3dc81d00342cb7cf9364d61f2",
+      "red_log_contains_old_order_failure": true,
+      "green_path": "compiled-methods/evidence/repairs/r-compiler/green-test.log",
+      "green_sha256": "ab855bcb0e9cd11099022bae24f6dc31cd43a9b92a88dc6e91d5c63ef70df863",
+      "green_passed": false,
+      "regression_subtests": [
+        "method-expression",
+        "promoted-method",
+        "pointer-receiver-selection",
+        "interface-dispatch",
+        "direct-builder-chain"
+      ],
+      "generic_and_other_custom_method_boundary_test": "TestUnsupportedMethodDispatchFormsFailClosed in compiled-frontend/analyze/methods_test.go"
+    },
+    "precise_span_probe": {
+      "source_path": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/app/app.go.txt",
+      "source_sha256": "15053e32df8c20720155fb6725a85da514fc11c3d62216098f7103fe86c383e2",
+      "harness_path": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/main.go.txt",
+      "harness_sha256": "a27c4367dcde88137e889c71840b38af85fec85fbdd31f2da912d3469b132b94",
+      "output_path": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe-output.json",
+      "output_sha256": "5b9f47ddbb63017d5603457fe8ca43417b8631443e6c2cd637d80982a042c1e0",
+      "diagnostics": [
+        {
+          "code": "analyze.unsupported-operation",
+          "message": "unsupported reachable Go construct method expression",
+          "file": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/app/app.go",
+          "startByte": 242,
+          "endByte": 294,
+          "excerpt": "gobi.Node.Set(gobi.El(\"div\"), \"class\", \"expression\")"
+        },
+        {
+          "code": "analyze.unsupported-operation",
+          "message": "unsupported reachable Go construct promoted method selection",
+          "file": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/app/app.go",
+          "startByte": 341,
+          "endByte": 373,
+          "excerpt": "wrapper.Set(\"class\", \"promoted\")"
+        }
+      ],
+      "only_expected_diagnostics": true,
+      "original_execution_paths": {
+        "source": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/app/app.go",
+        "harness": "compiled-methods/evidence/reviews/xr-r-compiler/span-probe/main.go",
+        "moved_after_execution_to": [
+          "/tmp/xr-r-compiler-span-probe/app/app.go",
+          "/tmp/xr-r-compiler-span-probe/main.go"
+        ],
+        "matching_snapshot_hashes_confirmed": true,
+        "rerun_after_move": false
+      }
+    },
+    "fresh_cli_outputs": {
+      "react": {
+        "request_sha256": "024757017595e9618a6b96a75c6e34f1177e36ba1492d13d6d55bf1054557853",
+        "build_result_sha256": "398ebfef67d49bcab0335c497e8370515830f29a079629fa9424a50564af81b1",
+        "manifest_sha256": "0a76ea62736f98efcee3cdca8c1492701e19ff121dd0569cbb73db265642b683",
+        "manifest_backend": "react",
+        "backend_matches_request": true,
+        "build_ok": true,
+        "app_count": 1,
+        "output_count": 67,
+        "diagnostics": [],
+        "inventory_count": 67,
+        "actual_count": 67,
+        "same_exact_paths": true,
+        "all_inventory_hashes_match": true,
+        "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+        "encoder_sha256": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4",
+        "raw_module_sha256": "f6ffc400d9eed117e16fafc42071767ecad631c579b2f970aebaf4edb5771278"
+      },
+      "dom": {
+        "request_sha256": "408e1f328f68597f45ffe8f406063005f98fb1bcfd10e9d8b9e9dd1b5a2f4a31",
+        "build_result_sha256": "17f7a04531cc125560014d1c0445dd56e03e2ea09716ecace2131c5915b29b2a",
+        "manifest_sha256": "6b0d8dd3b02685908080b1871e423d1651f5ff587ee8b5bb0324b2c633dec90e",
+        "manifest_backend": "dom",
+        "backend_matches_request": true,
+        "build_ok": true,
+        "app_count": 1,
+        "output_count": 67,
+        "diagnostics": [],
+        "inventory_count": 67,
+        "actual_count": 67,
+        "same_exact_paths": true,
+        "all_inventory_hashes_match": true,
+        "app_ir_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+        "encoder_sha256": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4",
+        "raw_module_sha256": "b96017fdb10ecf7c1b5e134f470cda63b878bffe8b9eec4a7097f5c829d95bfa"
+      },
+      "different_files": [
+        "apps/methods-0cac42b0a982/gobi-compiled.mjs",
+        "buildmanifest.json"
+      ],
+      "app_ir_byte_identical": true,
+      "encoder_byte_identical": true,
+      "raw_module_hashes_kept_separate": true
+    },
+    "original_gate_preservation": {
+      "archive_path": "compiled-methods/evidence/builds/original-compiler-gate.tar.gz",
+      "archive_sha256_actual": "bc043f86742d2bc380a6b3c7220459905ed2f674b7288ccf7892fd89aadc9fc6",
+      "archive_sha256_expected": "bc043f86742d2bc380a6b3c7220459905ed2f674b7288ccf7892fd89aadc9fc6",
+      "member_count": 138,
+      "all_138_member_bytes_and_hashes_match": true
+    },
+    "all_author_source_pins_match": true,
+    "all_author_artifact_pins_match": true,
+    "author_report_build_inventory_hash_matches": true,
+    "independent_audit_path": "compiled-methods/evidence/reviews/xr-r-compiler/audit.json",
+    "independent_audit_sha256": "cb2f02ec3b05e7faa5dfc9469d1b1f9f2199c455f5d95232f8a633886c323783",
+    "review_report_path": "compiled-methods/coordination/reports/XR-R-COMPILER.md",
+    "review_report_sha256": "67fdbce41f0530af9622ac1b4f4c1ce56a2684471a6f8944331f1e6e66b517aa",
+    "limits": [
+      "Reviewer ran the focused analyzer regression and an isolated source diagnostic-span probe; reviewer did not rerun the complete scoped race/vet suite or CLI builds.",
+      "Fresh CLI output trees were independently enumerated and all per-file byte/hash pins checked; browser/runtime execution is outside this repair lane.",
+      "No production, compiler-contract, fixture, Git, or shared state files were modified.",
+      "The diagnostic span probe was run with its sources inside the repository; after execution runnable copies were moved to /tmp and evidence snapshots were renamed .go.txt to keep Go module-wide tests from discovering review probe packages. The original command and path mapping are retained; no probe rerun followed the move."
+    ]
+  }
+}

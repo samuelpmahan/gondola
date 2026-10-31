@@ -1,0 +1,14 @@
+Focused analyzer tests (working directory: compiled-frontend):
+PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test -count=1 -v ./analyze -run 'TestLoadAndAnalyzeStaticallyLowersValueReceiverMethods|TestReachableValueReceiverMethodBodyUsesNumericGuards|TestReachableValueReceiverMethodInLocalDependencyUsesNumericGuards|TestReachableLocalDependencyFunctionsJoinMethodCallGraph|TestUnsupportedMethodDispatchFormsFailClosed'
+
+Compiler gate commands reported by N4 (working directory: compiled-frontend):
+PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build < ../compiled-methods/artifacts/compiler-gate/react/request.json > ../compiled-methods/artifacts/compiler-gate/react/result.json
+PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build < ../compiled-methods/artifacts/compiler-gate/dom/request.json > ../compiled-methods/artifacts/compiler-gate/dom/result.json
+
+Native replay binary build (working directory: repository root):
+PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go build -o compiled-methods/evidence/contract/compiled-native ./cmd/compiled-native
+
+Native replay (working directory: repository root):
+compiled-methods/evidence/contract/compiled-native --app-ir compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/app-ir.json --script compiled-methods/conformance/fixtures/methods.json > compiled-methods/evidence/contract/native-trace.json
+
+The Go CLI validates the AppIR, fixture expectations, trace, and all 19 ticks before writing native-trace.json. No emitted JavaScript module or browser was executed by this contract lane.

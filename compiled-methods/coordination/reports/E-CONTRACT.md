@@ -1,0 +1,24 @@
+# E-CONTRACT
+
+**Outcome: mixed change.** Authored the proposed bounded value-receiver method profile in `compiled-methods/CONTRACT.md`. It preserves the existing package-level `Init`/`Update`/`View` role ABI and AppIR v1 schema, defines receiver-qualified IDs and receiver-first signature metadata, scopes supported direct method calls, states the reachable-body numeric gate, and lists fail-closed cases. The contract explicitly avoids Manager, ownership, cancellation, or universal deep-copy claims.
+
+## Source and artifact findings
+
+- `project.go` resolves method calls with `go/types`. Supported user methods require a direct non-promoted `MethodVal` selection and a concrete non-pointer named receiver without generic type parameters or arguments. Method IDs use `<packagePath>.<ReceiverType>.<Method>`. `projectFunction` prepends the receiver type to `Signature.Params`; `methodCall` stores the receiver operation before explicit argument operations. Source review supports receiver-before-arguments lowering order; this packet did not run a side-effect evaluation-order probe.
+- The existing package roles remain the only component roles. Reachability roots at `Init`, `Update`, and `View` and follows source-resolved call edges, including reachable receiver methods and source-local dependency methods. The focused dependency test confirms an unguarded integer operation in a reachable local dependency method is diagnosed. AppIR stays `gobi.app-ir/v1`.
+- Reachable methods use the same integer guard validator as role functions. The five focused analyzer tests passed, covering receiver-qualified IDs/signatures, unguarded arithmetic in a receiver method, numeric validation in a reachable dependency method, local dependency call edges, and fail-closed pointer/interface/method-value/method-expression/promoted/generic forms.
+- The N4 compiler-gate request/result files show successful React and DOM builds (`ok: true`), each producing one app and 67 output files. Both AppIR files have SHA-256 `07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b`; the generated module hashes differ by backend. The React bundle includes the method receiver bodies and direct tuple forwarding from the role wrapper through `State.Reduce`. This establishes successful module generation, not execution of that module.
+- A pinned Go 1.24 native CLI binary replayed the canonical methods script against the generated React AppIR. The CLI completed its fixture expectation and trace validation and wrote 19 ticks for 18 actions, 14 dispatches, and four suppressed action ticks at indexes `[7, 10, 11, 18]` (fixture action indexes `[6, 9, 10, 17]`).
+- N1's native tests also retain original nested scalar state through CaptureChild/AddChild/PublishSaved and both `Update(..., publishSaved)` scenarios, and send `childAdd`/`childReset` directly through `Update` in locked state. They verify unchanged inputs, returned values, and no effects. This evidence applies to the fixture's scalar fields and nested `counter.State` structs only.
+
+## Verification
+
+- Focused analyzer suite, run from `compiled-frontend` with Go `1.27.3`:
+  `PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test -count=1 -v ./analyze -run 'TestLoadAndAnalyzeStaticallyLowersValueReceiverMethods|TestReachableValueReceiverMethodBodyUsesNumericGuards|TestReachableValueReceiverMethodInLocalDependencyUsesNumericGuards|TestReachableLocalDependencyFunctionsJoinMethodCallGraph|TestUnsupportedMethodDispatchFormsFailClosed'` — passed all five tests. Raw output is `compiled-methods/evidence/contract/analyzer-methods-tests.log`.
+- The N4 compiler gate ran `go run ./cmd/gobi-build` with separate React and DOM request files from `compiled-methods/artifacts/compiler-gate/`; both retained BuildResults report `ok: true`. The command templates, toolchains, AppIR/module pins, and a selected symbol summary are retained in `compiled-methods/evidence/contract/`.
+- Native binary build and fixture replay commands are in `compiled-methods/evidence/contract/commands.txt`. The build used Go `1.24.0 linux/amd64`; the binary SHA-256 is `382b6151683c9816847f72e46a71740f579e97ee791c43fb933002bc6dd1211b`. The replay wrote `native-trace.json`; summary is retained beside it.
+- N1 native Go test output is preserved in `compiled-methods/evidence/fixture/go-test.log` and described in the E-FIXTURE receipt. Source and artifact hashes for this packet are listed in `compiled-methods/evidence/contract/source-pins.sha256`.
+
+## Limits
+
+This packet documents and inspects the N4 analyzer and compiler-gate output. It does not execute the generated GoScript module, assert its retained-object behavior, or run the browser swap matrix. N3's public-role value and direct ReadOnly probes are source files, but their emitted-module results are not claimed here. N2/N3/N5 own the browser, native/direct/browser matrix, and demo integration evidence. The required independent review remains pending.

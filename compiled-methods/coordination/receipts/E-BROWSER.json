@@ -1,0 +1,138 @@
+{
+  "job_id": "E-BROWSER",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Added an independent hand-authored DOM/live-control oracle and a browser adapter for the value-method fixture. N3's final Node 22/Chromium matrix matched native/direct traces across React-only, DOM-only, and 18 alternating renderer swaps; N2 independently rechecked the retained raw browser profiles against its oracle.",
+  "source_scope": [
+    "compiled-methods/browser/runner.mjs",
+    "compiled-methods/browser/browser-entry.mjs",
+    "compiled-methods/browser/dom-oracle.mjs",
+    "compiled-methods/browser/dom-oracle.test.mjs",
+    "compiled-methods/evidence/browser/dom-oracle.node22.test.log",
+    "compiled-methods/evidence/browser/dom-oracle.test.log",
+    "compiled-methods/evidence/browser/node22-checks.log",
+    "compiled-methods/evidence/browser/static-checks.log",
+    "compiled-methods/evidence/browser/observed-run-audit.json",
+    "compiled-methods/evidence/harness/attempt-04-final/methods.browser.json",
+    "compiled-methods/evidence/harness/attempt-04-final/methods.check.json",
+    "compiled-methods/evidence/harness/attempt-04-final/methods.run.json",
+    "compiled-methods/evidence/harness/attempt-04-final/methods.independent-audit-replay.json",
+    "compiled-methods/coordination/reports/E-BROWSER.md",
+    "compiled-methods/coordination/receipts/E-BROWSER.json"
+  ],
+  "evidence": {
+    "report_sha256": "c4d8f465ef98211803083ac7d2c19b049a211409a5358c1d2cb5fb5fbd41ccd0",
+    "source_files": {
+      "compiled-methods/browser/runner.mjs": {
+        "sha256": "29eba63b3acbf624a79c60d034c73fca95736525bf8a4ebe64c37addbd19b55e",
+        "bytes": 15517
+      },
+      "compiled-methods/browser/browser-entry.mjs": {
+        "sha256": "4a120c83d70f46ca27da719893b60384d5a87712c9da3a3a140328a54ee0fee7",
+        "bytes": 19301
+      },
+      "compiled-methods/browser/dom-oracle.mjs": {
+        "sha256": "0c4c1cb3792c34f36a2d7668b64f436f9ef01ff24e8fc4ff43d4e58d3f9b0b48",
+        "bytes": 7678
+      },
+      "compiled-methods/browser/dom-oracle.test.mjs": {
+        "sha256": "602de5461df394a0b046ae4db1bd2b23647235bee2dab0c047a6de6a8e9a4ee9",
+        "bytes": 5361
+      }
+    },
+    "local_checks": {
+      "node": "v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+      "commands": [
+        {
+          "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/runner.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/browser-entry.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/dom-oracle.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-methods/browser/dom-oracle.test.mjs",
+          "exit_code": 0,
+          "result": "all four modules passed syntax checks",
+          "evidence_path": "compiled-methods/evidence/browser/node22-checks.log",
+          "evidence_sha256": "3c2dcda31159a284f95700d37ef2cc63d632b5d300443a8deaec966983182ed2"
+        },
+        {
+          "command": "/tmp/gondola-node22/node_modules/node/bin/node --input-type=module -e \"import('./compiled-methods/browser/runner.mjs').then((m) => { if (typeof m.runMethodsBrowserConformance !== 'function') process.exit(1); process.stdout.write('runner export ok\\\\n'); })\"",
+          "exit_code": 0,
+          "result": "runMethodsBrowserConformance export resolved",
+          "evidence_path": "compiled-methods/evidence/browser/node22-checks.log",
+          "evidence_sha256": "3c2dcda31159a284f95700d37ef2cc63d632b5d300443a8deaec966983182ed2"
+        },
+        {
+          "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-methods/browser/dom-oracle.test.mjs",
+          "exit_code": 0,
+          "result": "6 passed, 0 failed",
+          "evidence_path": "compiled-methods/evidence/browser/dom-oracle.node22.test.log",
+          "evidence_sha256": "ada5d42802ea514a820dd6736b7d4051e2e2814b33e6c0cc9ea76814898099a7"
+        }
+      ],
+      "warning": "Node emitted an experimental UNDICI-EHPA environment proxy-agent notice; all command exit codes were zero."
+    },
+    "observed_integrated_browser_run": {
+      "owner": "N3 orchestration; observed and independently audited by N2",
+      "run_directory": "compiled-methods/evidence/harness/attempt-04-final/",
+      "run_record": {
+        "path": "compiled-methods/evidence/harness/attempt-04-final/methods.run.json",
+        "sha256": "bcd101e4aa015bea9f0551b82e3a5c1f17cf7998ee932bcaad0ac0d391e80e11",
+        "status": "matched",
+        "source_stable": true,
+        "source_pin_count_before_after": 188
+      },
+      "checker_record": {
+        "path": "compiled-methods/evidence/harness/attempt-04-final/methods.check.json",
+        "sha256": "611b2bb056b28e980b235011f182e099353afd6ed43fea768b9a12ef063ea8a7",
+        "status": "matched"
+      },
+      "browser_record": {
+        "path": "compiled-methods/evidence/harness/attempt-04-final/methods.browser.json",
+        "sha256": "e46650f8b06c47c352661ea8b49c0d49d8846fb6d915bda264cadbdb5271606b",
+        "browser": "153.0.8010.0",
+        "trace_sha256_by_profile": {
+          "react": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98",
+          "dom": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98",
+          "swap": "5f4337422d692fabafa1dd77ab33273c524c9268ce40046d1fed15b87f031a98"
+        },
+        "counts": {
+          "ticks_per_profile": 19,
+          "fixture_actions": 18,
+          "active_dispatches": 14,
+          "suppressed_action_indexes": [6, 9, 10, 17],
+          "oracle_snapshots_per_profile": 19,
+          "physical_snapshots_per_profile": 19,
+          "renderer_swaps": 18,
+          "retired_callback_fences": 18,
+          "page_errors": 0,
+          "wasm_requests": 0,
+          "wasm_api_attempts": 0
+        },
+        "react_module_sha256": "9260f395881015f56233165936fb5176f181d47a8a1ee5193fdd7e061fbca9ac",
+        "dom_module_sha256_pinned_separately": "47b70259d75162989826d6444ca25bea9a8ec603fbc0b81c73912a5191fbde3b",
+        "toolchains": {
+          "node": "v22.23.4",
+          "go": "go1.24.0 linux/amd64",
+          "chromium": "153.0.8010.0 at /tmp/chromium"
+        },
+        "command": "GOBI_GO_BIN=/tmp/gondola-go/bin/go /tmp/gondola-node22/node_modules/node/bin/node compiled-methods/conformance/run.mjs --app-ir compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/app-ir.json --compiled compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/gobi-compiled.mjs --helpers compiled-methods/artifacts/compiler-gate/react/output/apps/methods-0cac42b0a982/encoder.mjs --native-bin compiled-methods/artifacts/harness-gate/compiled-native --fixture compiled-methods/conformance/fixtures/methods.json --output compiled-methods/evidence/harness/attempt-04-final/methods --browser-adapter compiled-methods/browser/runner.mjs --schedule compiled-methods/conformance/swap-schedule.json --dom-app-ir compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/app-ir.json --dom-compiled compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/gobi-compiled.mjs --dom-helpers compiled-methods/artifacts/compiler-gate/dom/output/apps/methods-0cac42b0a982/encoder.mjs --chromium /tmp/chromium",
+        "scope_note": "This was N3's integrated run; N2 did not launch an additional browser matrix."
+      },
+      "n2_raw_record_audit": {
+        "path": "compiled-methods/evidence/browser/observed-run-audit.json",
+        "sha256": "dbc264efe29f6fe097ac06e625bd178973b2ae498c16d6d5156f9806efa7237a",
+        "exit_code": 0,
+        "checks": [
+          "all 171 trace, oracle, and physical DOM snapshots (57 in each collection across three profiles) equal the hand-authored expectedMethodsDOM snapshots",
+          "React, DOM, and swap browser traces exactly match each other",
+          "all 18 swap records keep trace ticks unchanged and fence one detached callback",
+          "all profile action records preserve expected path, message, value, and suppression behavior",
+          "no-WASM, no-page-error, empty-unmount, and 188-pin source-stability records"
+        ]
+      }
+    },
+    "limits": [
+      "The fixture has only buttons; it does not exercise portable input focus or selection restoration.",
+      "The fixture has no effects and contains one deterministic 18-action sequence.",
+      "Chromium evidence is a local /tmp/chromium run; managed-CI browser execution is not claimed.",
+      "The React-built module is the one mounted in all three browser profiles; the separate DOM build is pinned for AppIR/module parity but not mounted by this browser matrix."
+    ]
+  },
+  "reported_stage": "independent_dom_live_control_oracle_and_browser_adapter_implemented_node22_unit_checks_passed_final_n3_chromium_matrix_observed_and_independently_audited"
+}

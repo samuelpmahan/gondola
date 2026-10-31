@@ -1,0 +1,64 @@
+{
+  "job_id": "XR--CONTRACT",
+  "worker": "N3",
+  "decision": "amend",
+  "review_scope": "Read-only audit of E-CONTRACT, its receipt, the value-receiver contract, analyzer/source and retained React/DOM compiler artifacts.",
+  "author_pins": {
+    "report_sha256": "32257ff1db08f5d062ae12ece56c53d1cd06377f78618bbf9225c4cb68bc70ce",
+    "receipt_sha256": "1d949ecadc349194df6068cc53e09b5796aea9110bb78b02d9d745d0f24a8b2f",
+    "contract_sha256": "d55d080589f54da08571d723cd4faac2cdc77613450b66e1361a3f9f93be62c0",
+    "source_pins_sha256": "8ecedfaa8f8a16e840e7d983fd319c9e3ed475b1579dd85252bdf74c5180a7d9",
+    "all_source_pin_entries_match": true,
+    "focused_analyzer_log_sha256": "81de4f52d988c69df940050d8b032b54b461722527a9bc56618b98d7070bf8ce",
+    "compiler_gate_summary_sha256": "b95e3c1490a16cad60a653205d91879cec2e43c2d60220632390f808251cf476",
+    "native_trace_sha256": "2e9e620a788fbc6e1973e62b2d9775fdf1c03f8ab72a28f5c61aea8f16dfc4f2"
+  },
+  "cross_checks": {
+    "method_selection_and_receiver_rules": {
+      "source": "compiled-frontend/analyze/project.go",
+      "source_sha256": "39a7f7e6d99a55dbbb0729f98ea4458da8be61d5093b76a7c6a1a8ddd6ff5d9d",
+      "result": "matches: concrete same-package named value receivers; no pointer, interface dispatch, promotion, generic receiver, MethodExpr, or MethodVal function values"
+    },
+    "trusted_gobi_builders": {
+      "source": "compiled-frontend/analyze/project.go",
+      "result": "matches exact gobi package, Node receiver, and Set/Flag/Css/Keyed/Handle whitelist; gobi/node.go declares these as value methods"
+    },
+    "role_and_schema_isolation": {
+      "app_ir_schema": "gobi.app-ir/v1",
+      "component_count": 1,
+      "role_ids": [
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Init",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.Update",
+        "github.com/samuelpmahan/gondola/fixtures/compiled/methods.View"
+      ],
+      "symbol_count": 15,
+      "app_ir_sha256_react_dom": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+      "manifest_backend_tags": ["react", "dom"],
+      "encoder_sha256_react_dom": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4",
+      "result": "no AppIR schema or role ABI change observed; backend tags are build manifest metadata"
+    },
+    "tuple_and_call_graph": {
+      "react_compiled_module_sha256": "9260f395881015f56233165936fb5176f181d47a8e1ee5193fdd7e061fbca9ac",
+      "dom_compiled_module_sha256": "47b70259d75162989826d6444ca25bea9a8ec603fbc0b81c73912a5191fbde3b",
+      "result": "AppIR signatures preserve helper results State plus []gobi.Effect; Reduce calls the seven action methods; Add/Reset reach counter.Update; Initialize reaches counter.Init; role symbols remain Init/Update/View"
+    },
+    "fixture_runtime_follow_up": {
+      "job": "E-HARNESS",
+      "report_sha256": "6d46c1093e483d7a3bcfc699d87cb277ecf967f88a6a5068dcee8c76f81533fa",
+      "receipt_sha256": "138e536cbdf56b21c0b5fbbc31adc6d021462593f150bdebbe6e66f1e8250d7e",
+      "original_state_probe_sha256": "fa1dbb98aad1f133edc25c1d8099ff3fee1475a09b3e44a6a25af8230a301169",
+      "locked_guard_probe_sha256": "17ac9c1d0c29d8467ad7243c7e2fd984de8ccd850a4d4efe195f209316d9a0b4",
+      "result": "the fixed compiled fixture passed 14 retained-input Update checks, two direct locked-role guard probes, and native/direct/React/DOM/swap trace comparisons; this does not establish the opaque role-state identity policy for all compiled apps"
+    }
+  },
+  "amendment": {
+    "finding": "The contract's general wording 'promises the Go value-copy semantics for the supported receiver expression and method body' should explicitly identify this as source-level Go value-receiver semantics, separate from any guarantee that an external JavaScript caller's retained opaque state object is unchanged after invoking the exported role ABI. The retained executable evidence proves that object-isolation behavior for the frozen scalar/nested-struct fixture only.",
+    "no_counterexample_claimed": true,
+    "recommendation": "Retain the Go value-receiver profile and fixture-specific copy result; state that external ABI alias preservation/consumption is outside the general promise unless separately specified and proven. Reconcile the older compiled-frontend/CONTRACT.md statement that an Update adapter clones the argument: current pipeline code directly forwards the role call, while the conformance fixture preserves its input through its emitted method-call path. This review does not infer a Go semantic failure from forwarding alone."
+  },
+  "limits": [
+    "No tests, analyzer probes, builds, or production edits were made for this review; N5's full run was not disturbed.",
+    "The review checks author pins, inspected source, and retained artifacts; it is not a new managed-CI run.",
+    "No Manager, session ownership, cancellation, general composition, or unsupported receiver-form claim is accepted."
+  ]
+}

@@ -1,0 +1,10 @@
+Focused analyzer regression (run in compiled-frontend):
+PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go test -count=1 ./analyze -run '^(TestTrustedGobiBuilderSelectionShapes|TestUnsupportedMethodDispatchFormsFailClosed)$' -v
+
+Diagnostic-span probe (run in compiled-frontend; source and harness are retained beside this file):
+PATH=/tmp/gondola-go/bin:/usr/bin:/bin GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go run ../compiled-methods/evidence/reviews/xr-r-compiler/span-probe/main.go /workspace/scratch/39a56936f173/gondola-methods github.com/samuelpmahan/gondola/compiled-methods/evidence/reviews/xr-r-compiler/span-probe/app > ../compiled-methods/evidence/reviews/xr-r-compiler/span-probe-output.json
+
+Hygiene mapping after execution:
+- The source files named in the exact command above were executed from their original repository paths under `compiled-methods/evidence/reviews/xr-r-compiler/span-probe/`.
+- After the probe completed, runnable copies were moved outside the repository to `/tmp/xr-r-compiler-span-probe/{main.go,app/app.go}`. Exact source snapshots remain in this evidence directory as `main.go.txt` and `app/app.go.txt` with matching byte hashes.
+- The recorded output JSON is the output of that original invocation. The probe was not rerun after moving the runnable sources.

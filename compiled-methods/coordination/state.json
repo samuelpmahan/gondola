@@ -1,0 +1,1348 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": null,
+      "agent": null
+    },
+    "N2": {
+      "job": null,
+      "agent": null
+    },
+    "N3": {
+      "job": null,
+      "agent": null
+    },
+    "N4": {
+      "job": null,
+      "agent": null
+    },
+    "N5": {
+      "job": "E-DEMO",
+      "agent": "/root/backend_demo"
+    }
+  },
+  "jobs": {
+    "E-FIXTURE": {
+      "id": "E-FIXTURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/methods/**,compilercontract/native.go registration and cmd/compiled-native fixture dispatch only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: FIXTURE",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T03:13:29.522502+00:00",
+      "finished_at": "2026-10-31T03:25:03.274528+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/E-FIXTURE.json"
+    },
+    "E-BROWSER": {
+      "id": "E-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-methods/browser/**; newapp independent DOM oracle expectations only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: BROWSER",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T03:13:29.158269+00:00",
+      "finished_at": "2026-10-31T03:35:32.662976+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/E-BROWSER.json"
+    },
+    "E-HARNESS": {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-methods/conformance/**,native/direct replay integration and fixedfixtures only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: HARNESS",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T03:13:29.427097+00:00",
+      "finished_at": "2026-10-31T03:33:43.198166+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/E-HARNESS.json"
+    },
+    "E-COMPILER": {
+      "id": "E-COMPILER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-frontend/analyze/** only; source projection/static call graph/value-receiver methods with no schema weakening",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: COMPILER",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T03:13:29.247893+00:00",
+      "finished_at": "2026-10-31T03:30:08.192283+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/E-COMPILER.json"
+    },
+    "E-DEMO": {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-methods/demo/**,run-compiled-methods.sh,compiled-methods/run.mjs,.github/workflows/compiled-methods.yml only",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: DEMO",
+      "status": "running",
+      "worker": "N5",
+      "started_at": "2026-10-31T03:13:29.335804+00:00",
+      "finished_at": null
+    },
+    "E-CONTRACT": {
+      "id": "E-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "owner": "compiled-methods/CONTRACT.md PLAN.md,compilercontract shared schema ONLY if necessary after coordination, compiled-methods/evidence/**",
+      "summary": "End-to-end statically resolved value receiver method compilation milestone: CONTRACT",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T03:25:03.473572+00:00",
+      "finished_at": "2026-10-31T03:33:42.262519+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/E-CONTRACT.json"
+    },
+    "XR--FIXTURE": {
+      "id": "XR--FIXTURE",
+      "kind": "review",
+      "depends_on": "E-FIXTURE",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T03:30:08.405429+00:00",
+      "finished_at": "2026-10-31T03:33:42.729824+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR--FIXTURE.json"
+    },
+    "XR--BROWSER": {
+      "id": "XR--BROWSER",
+      "kind": "review",
+      "depends_on": "E-BROWSER",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T03:38:21.561615+00:00",
+      "finished_at": "2026-10-31T03:41:18.695122+00:00",
+      "allow_workers": [
+        "N4"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR--BROWSER.json"
+    },
+    "XR--HARNESS": {
+      "id": "XR--HARNESS",
+      "kind": "review",
+      "depends_on": "E-HARNESS",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T03:34:19.548914+00:00",
+      "finished_at": "2026-10-31T03:38:05.327410+00:00",
+      "allow_workers": [
+        "N4"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR--HARNESS.json"
+    },
+    "XR--COMPILER": {
+      "id": "XR--COMPILER",
+      "kind": "review",
+      "depends_on": "E-COMPILER",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T03:34:19.083428+00:00",
+      "finished_at": "2026-10-31T03:38:43.373125+00:00",
+      "allow_workers": [
+        "N1"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR--COMPILER.json"
+    },
+    "XR--DEMO": {
+      "id": "XR--DEMO",
+      "kind": "review",
+      "depends_on": "E-DEMO",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "XR--CONTRACT": {
+      "id": "XR--CONTRACT",
+      "kind": "review",
+      "depends_on": "E-CONTRACT",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T03:34:19.989469+00:00",
+      "finished_at": "2026-10-31T03:38:05.772664+00:00",
+      "allow_workers": [
+        "N3"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR--CONTRACT.json"
+    },
+    "R-HARNESS": {
+      "id": "R-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "XR--HARNESS",
+      "depends_on": "XR--HARNESS",
+      "owner": "compiled-methods/conformance/check.mjs,check.test.mjs; evidence/repairs/r-harness/**",
+      "summary": "Correct malformed message mutation to a well-formed semantic change; assert rejection reason; clarify graph counts in repair report; replay on pinned compiler outputs.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T03:38:21.112657+00:00",
+      "finished_at": "2026-10-31T03:41:56.675877+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/R-HARNESS.json"
+    },
+    "XR-R-HARNESS": {
+      "id": "XR-R-HARNESS",
+      "kind": "review",
+      "depends_on": "R-HARNESS",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T03:42:04.622528+00:00",
+      "finished_at": "2026-10-31T03:44:36.031528+00:00",
+      "allow_workers": [
+        "N3"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR-R-HARNESS.json"
+    },
+    "R-CONTRACT": {
+      "id": "R-CONTRACT",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "repair_of": "XR--CONTRACT",
+      "depends_on": "XR--CONTRACT",
+      "owner": "compiled-methods/CONTRACT.md, compiled-frontend/CONTRACT.md ABI wording only; evidence/repairs/r-contract/**",
+      "summary": "Narrow finite fixture isolation vs opaque external ABI identity; reconcile stale clone-wrapper prose with current direct Go forwarding; no ABI code changes.",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T03:38:22.006145+00:00",
+      "finished_at": "2026-10-31T03:41:18.254469+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/R-CONTRACT.json"
+    },
+    "XR-R-CONTRACT": {
+      "id": "XR-R-CONTRACT",
+      "kind": "review",
+      "depends_on": "R-CONTRACT",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T03:41:35.538020+00:00",
+      "finished_at": "2026-10-31T03:44:35.580483+00:00",
+      "allow_workers": [
+        "N1"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR-R-CONTRACT.json"
+    },
+    "R-COMPILER": {
+      "id": "R-COMPILER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "repair_of": "XR--COMPILER",
+      "depends_on": "XR--COMPILER",
+      "owner": "compiled-frontend/analyze/**; compiled-methods/evidence/repairs/r-compiler/**",
+      "summary": "Reject method expressions/promoted trusted Gobi builder selections before fast path, retain normal direct calls; meaningful failing-before/passing-after regression and real CLI builds.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T03:41:35.098515+00:00",
+      "finished_at": "2026-10-31T03:47:58.714310+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/R-COMPILER.json"
+    },
+    "XR-R-COMPILER": {
+      "id": "XR-R-COMPILER",
+      "kind": "review",
+      "depends_on": "R-COMPILER",
+      "allow_workers": [
+        "N1"
+      ],
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T03:48:08.136254+00:00",
+      "finished_at": "2026-10-31T03:52:33.653331+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR-R-COMPILER.json"
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-10-31T03:13:28.957618+00:00",
+      "ready_jobs": [
+        "E-FIXTURE",
+        "E-BROWSER",
+        "E-HARNESS",
+        "E-COMPILER",
+        "E-DEMO",
+        "E-CONTRACT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N6": "E-CONTRACT",
+        "N2": "E-BROWSER",
+        "N4": "E-COMPILER",
+        "N5": "E-DEMO",
+        "N3": "E-HARNESS",
+        "N1": "E-FIXTURE"
+      },
+      "dispatch": {
+        "N6": "E-CONTRACT",
+        "N2": "E-BROWSER",
+        "N4": "E-COMPILER",
+        "N5": "E-DEMO",
+        "N3": "E-HARNESS",
+        "N1": "E-FIXTURE"
+      },
+      "native_seconds": 0.008361380998394452,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-FIXTURE": 1,
+        "E-BROWSER": 1,
+        "E-HARNESS": 1,
+        "E-COMPILER": 1,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIXTURE": [
+          "N1"
+        ],
+        "E-BROWSER": [
+          "N2"
+        ],
+        "E-HARNESS": [
+          "N3"
+        ],
+        "E-COMPILER": [
+          "N4"
+        ],
+        "E-DEMO": [
+          "N5"
+        ],
+        "E-CONTRACT": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-FIXTURE": 100,
+        "E-BROWSER": 100,
+        "E-HARNESS": 100,
+        "E-COMPILER": 100,
+        "E-DEMO": 100,
+        "E-CONTRACT": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.067917+00:00",
+      "worker": "N6",
+      "job": "E-CONTRACT",
+      "agent": "/root/backend_contract"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.158269+00:00",
+      "worker": "N2",
+      "job": "E-BROWSER",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.247893+00:00",
+      "worker": "N4",
+      "job": "E-COMPILER",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.335804+00:00",
+      "worker": "N5",
+      "job": "E-DEMO",
+      "agent": "/root/backend_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.427097+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:13:29.522502+00:00",
+      "worker": "N1",
+      "job": "E-FIXTURE",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "dispatch_failed",
+      "worker": "N6",
+      "job": "E-CONTRACT",
+      "agent": "/root/backend_contract",
+      "error": "collab tool failed: agent thread limit reached",
+      "at": "2026-10-31T03:15:26.539884+00:00"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-10-31T03:15:26.635919+00:00",
+      "ready_jobs": [
+        "E-CONTRACT"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N2": "E-BROWSER",
+        "N3": "E-HARNESS",
+        "N1": "E-FIXTURE",
+        "N4": "E-COMPILER",
+        "N5": "E-DEMO"
+      },
+      "dispatch": {},
+      "native_seconds": 0.004254644001775887,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-FIXTURE": 1,
+        "E-BROWSER": 1,
+        "E-HARNESS": 1,
+        "E-COMPILER": 1,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "E-CONTRACT": []
+      },
+      "weights": {
+        "E-CONTRACT": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:25:03.274528+00:00",
+      "worker": "N1",
+      "job": "E-FIXTURE"
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-10-31T03:25:03.365374+00:00",
+      "ready_jobs": [
+        "E-CONTRACT",
+        "XR--FIXTURE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "E-CONTRACT",
+        "N2": "E-BROWSER",
+        "N3": "E-HARNESS",
+        "N4": "E-COMPILER",
+        "N5": "E-DEMO"
+      },
+      "dispatch": {
+        "N1": "E-CONTRACT"
+      },
+      "native_seconds": 0.0036569230069289915,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 1,
+        "E-HARNESS": 1,
+        "E-COMPILER": 1,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--FIXTURE": 1,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "E-CONTRACT": [
+          "N1"
+        ],
+        "XR--FIXTURE": []
+      },
+      "weights": {
+        "E-CONTRACT": 100,
+        "XR--FIXTURE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:25:03.473572+00:00",
+      "worker": "N1",
+      "job": "E-CONTRACT",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:30:08.192283+00:00",
+      "worker": "N4",
+      "job": "E-COMPILER"
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-10-31T03:30:08.300950+00:00",
+      "ready_jobs": [
+        "XR--FIXTURE",
+        "XR--COMPILER"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "E-CONTRACT",
+        "N2": "E-BROWSER",
+        "N4": "XR--FIXTURE",
+        "N3": "E-HARNESS",
+        "N5": "E-DEMO"
+      },
+      "dispatch": {
+        "N4": "XR--FIXTURE"
+      },
+      "native_seconds": 0.0035089999946649186,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 1,
+        "E-HARNESS": 1,
+        "E-COMPILER": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 1,
+        "XR--FIXTURE": 1,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 1,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR--FIXTURE": [
+          "N4"
+        ],
+        "XR--COMPILER": []
+      },
+      "weights": {
+        "XR--FIXTURE": 200,
+        "XR--COMPILER": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": "/root/backend_dom",
+        "N3": "/root/backend_harness",
+        "N4": null,
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:30:08.405429+00:00",
+      "worker": "N4",
+      "job": "XR--FIXTURE",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:33:42.262519+00:00",
+      "worker": "N1",
+      "job": "E-CONTRACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:33:42.729824+00:00",
+      "worker": "N4",
+      "job": "XR--FIXTURE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:33:43.198166+00:00",
+      "worker": "N3",
+      "job": "E-HARNESS"
+    },
+    {
+      "type": "solve_rejected",
+      "at": "2026-10-31T03:34:05.237624+00:00",
+      "epoch": 4,
+      "reason": "nonoptimal_native_score",
+      "nativeScore": 400,
+      "exactScore": 600,
+      "dispatch": false,
+      "log": "epoch-04-retry.log",
+      "attempts": 2
+    },
+    {
+      "type": "review_ownership_policy",
+      "at": "2026-10-31T03:34:05.237641+00:00",
+      "allow_workers": {
+        "XR--COMPILER": [
+          "N1"
+        ],
+        "XR--HARNESS": [
+          "N4"
+        ],
+        "XR--CONTRACT": [
+          "N3"
+        ]
+      },
+      "reason": "Explicit disjoint independent cross-review ownership; native seed-7 local search twice returned 2/3 of feasible ready review assignments, rejected by exhaustive-score gate. Unmodified probe rerun under explicit review-lane eligibility."
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-10-31T03:34:05.748574+00:00",
+      "ready_jobs": [
+        "XR--HARNESS",
+        "XR--COMPILER",
+        "XR--CONTRACT"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N5"
+      ],
+      "assignments": {
+        "N5": "E-DEMO",
+        "N1": "XR--COMPILER",
+        "N4": "XR--HARNESS",
+        "N3": "XR--CONTRACT",
+        "N2": "E-BROWSER"
+      },
+      "dispatch": {
+        "N1": "XR--COMPILER",
+        "N4": "XR--HARNESS",
+        "N3": "XR--CONTRACT"
+      },
+      "native_seconds": 0.004820796006242745,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 1,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 1,
+        "XR--COMPILER": 1,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 1,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR--HARNESS": [
+          "N4"
+        ],
+        "XR--COMPILER": [
+          "N1"
+        ],
+        "XR--CONTRACT": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR--HARNESS": 200,
+        "XR--COMPILER": 200,
+        "XR--CONTRACT": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/backend_dom",
+        "N3": null,
+        "N4": null,
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:34:19.083428+00:00",
+      "worker": "N1",
+      "job": "XR--COMPILER",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:34:19.548914+00:00",
+      "worker": "N4",
+      "job": "XR--HARNESS",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:34:19.989469+00:00",
+      "worker": "N3",
+      "job": "XR--CONTRACT",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:35:32.662976+00:00",
+      "worker": "N2",
+      "job": "E-BROWSER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:38:05.327410+00:00",
+      "worker": "N4",
+      "job": "XR--HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:38:05.772664+00:00",
+      "worker": "N3",
+      "job": "XR--CONTRACT"
+    },
+    {
+      "type": "repair_gates_released",
+      "at": "2026-10-31T03:38:06.160528+00:00",
+      "repairs": [
+        "R-HARNESS",
+        "R-CONTRACT"
+      ],
+      "reason": "Independent amend reports verified; prior evidence retained unchanged. Scope includes stale contract reconciliation, not inferred Go semantic failure."
+    },
+    {
+      "type": "solve",
+      "epoch": 5,
+      "at": "2026-10-31T03:38:06.602591+00:00",
+      "ready_jobs": [
+        "XR--BROWSER",
+        "R-HARNESS",
+        "R-CONTRACT"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N5"
+      ],
+      "assignments": {
+        "N5": "E-DEMO",
+        "N4": "XR--BROWSER",
+        "N3": "R-CONTRACT",
+        "N2": "R-HARNESS",
+        "N1": "XR--COMPILER"
+      },
+      "dispatch": {
+        "N4": "XR--BROWSER",
+        "N3": "R-CONTRACT",
+        "N2": "R-HARNESS"
+      },
+      "native_seconds": 0.005315951995726209,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 800,
+      "native_score": 800,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 1,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 1,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 1,
+        "XR-R-HARNESS": 0,
+        "R-CONTRACT": 1,
+        "XR-R-CONTRACT": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR--BROWSER": [
+          "N4"
+        ],
+        "R-HARNESS": [
+          "N2"
+        ],
+        "R-CONTRACT": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR--BROWSER": 200,
+        "R-HARNESS": 300,
+        "R-CONTRACT": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:38:21.112657+00:00",
+      "worker": "N2",
+      "job": "R-HARNESS",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:38:21.561615+00:00",
+      "worker": "N4",
+      "job": "XR--BROWSER",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:38:22.006145+00:00",
+      "worker": "N3",
+      "job": "R-CONTRACT",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:38:43.373125+00:00",
+      "worker": "N1",
+      "job": "XR--COMPILER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:41:18.254469+00:00",
+      "worker": "N3",
+      "job": "R-CONTRACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:41:18.695122+00:00",
+      "worker": "N4",
+      "job": "XR--BROWSER"
+    },
+    {
+      "type": "solve",
+      "epoch": 6,
+      "at": "2026-10-31T03:41:19.534835+00:00",
+      "ready_jobs": [
+        "XR-R-CONTRACT",
+        "R-COMPILER"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N5"
+      ],
+      "assignments": {
+        "N2": "R-HARNESS",
+        "N4": "R-COMPILER",
+        "N5": "E-DEMO",
+        "N3": "BENCH",
+        "N1": "XR-R-CONTRACT"
+      },
+      "dispatch": {
+        "N4": "R-COMPILER",
+        "N1": "XR-R-CONTRACT"
+      },
+      "native_seconds": 0.004518809997534845,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 500,
+      "native_score": 500,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 1,
+        "XR-R-HARNESS": 0,
+        "R-CONTRACT": 0,
+        "XR-R-CONTRACT": 1,
+        "R-COMPILER": 1,
+        "XR-R-COMPILER": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR-R-CONTRACT": [
+          "N1"
+        ],
+        "R-COMPILER": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-R-CONTRACT": 200,
+        "R-COMPILER": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/backend_dom",
+        "N3": null,
+        "N4": null,
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:41:35.098515+00:00",
+      "worker": "N4",
+      "job": "R-COMPILER",
+      "agent": "/root/backend_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:41:35.538020+00:00",
+      "worker": "N1",
+      "job": "XR-R-CONTRACT",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:41:56.675877+00:00",
+      "worker": "N2",
+      "job": "R-HARNESS"
+    },
+    {
+      "type": "solve",
+      "epoch": 7,
+      "at": "2026-10-31T03:41:57.129419+00:00",
+      "ready_jobs": [
+        "XR-R-HARNESS"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N1": "XR-R-CONTRACT",
+        "N2": "BENCH",
+        "N3": "XR-R-HARNESS",
+        "N5": "E-DEMO",
+        "N4": "R-COMPILER"
+      },
+      "dispatch": {
+        "N3": "XR-R-HARNESS"
+      },
+      "native_seconds": 0.0041961819952121004,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 0,
+        "XR-R-HARNESS": 1,
+        "R-CONTRACT": 0,
+        "XR-R-CONTRACT": 1,
+        "R-COMPILER": 1,
+        "XR-R-COMPILER": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR-R-HARNESS": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-R-HARNESS": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/backend_runtime",
+        "N2": null,
+        "N3": null,
+        "N4": "/root/backend_build",
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:42:04.622528+00:00",
+      "worker": "N3",
+      "job": "XR-R-HARNESS",
+      "agent": "/root/backend_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:44:35.580483+00:00",
+      "worker": "N1",
+      "job": "XR-R-CONTRACT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:44:36.031528+00:00",
+      "worker": "N3",
+      "job": "XR-R-HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:47:58.714310+00:00",
+      "worker": "N4",
+      "job": "R-COMPILER"
+    },
+    {
+      "type": "solve",
+      "epoch": 8,
+      "at": "2026-10-31T03:47:59.180021+00:00",
+      "ready_jobs": [
+        "XR-R-COMPILER"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N2": "BENCH",
+        "N4": "BENCH",
+        "N3": "BENCH",
+        "N5": "E-DEMO",
+        "N1": "XR-R-COMPILER"
+      },
+      "dispatch": {
+        "N1": "XR-R-COMPILER"
+      },
+      "native_seconds": 0.006724808001308702,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 1,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 0,
+        "XR-R-HARNESS": 0,
+        "R-CONTRACT": 0,
+        "XR-R-CONTRACT": 0,
+        "R-COMPILER": 0,
+        "XR-R-COMPILER": 1,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR-R-COMPILER": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-R-COMPILER": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/backend_demo"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T03:48:08.136254+00:00",
+      "worker": "N1",
+      "job": "XR-R-COMPILER",
+      "agent": "/root/backend_runtime"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T03:52:33.653331+00:00",
+      "worker": "N1",
+      "job": "XR-R-COMPILER"
+    }
+  ],
+  "epoch": 9,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

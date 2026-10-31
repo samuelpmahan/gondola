@@ -118,3 +118,13 @@ bash run-typed-composition.sh
 ```
 
 See [typed-composition/README.md](typed-composition/README.md), [contracts](typed-composition/DESIGN.md), [execution evidence and limits](typed-composition/RESULTS.md), and [assignment/review receipts](typed-composition/coordination/PROTOCOL.md). This remains a bounded application experiment; a general component compiler is not supplied.
+
+## Compiled Go methods across replaceable frontends
+
+The compiled frontend experiments use actual GoScript output instead of a WebAssembly application bridge. The same compiled Go application module can run through React or the standalone DOM renderer. The value-method experiment adds a nested counter whose Go value-receiver methods enforce child read-only behavior, capture a saved value, and publish that value to the parent.
+
+```sh
+bash run-compiled-methods.sh
+```
+
+This default command includes the complete inherited regression chain, then builds both frontend profiles, compares native Go and emitted-module execution with mounted browser traces, and checks an HTTP demo. See [compiled-methods/README.md](compiled-methods/README.md) for prerequisites and the executable demo, [the bounded source/ABI contract](compiled-methods/CONTRACT.md), and [executed status and limitations](compiled-methods/RESULTS.md). Concrete value methods are a prerequisite to broader compiled composition; the existing pointer-based session manager and cancellation lifecycle remain outside this compiler profile.

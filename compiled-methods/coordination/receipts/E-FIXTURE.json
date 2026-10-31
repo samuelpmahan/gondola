@@ -1,0 +1,64 @@
+{
+  "job_id": "E-FIXTURE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Added a nested Go value-composition fixture and native replay adapter/tests. Package Init/Update/View delegate to value-receiver methods; add/reset methods call counter.Update and preserve its effect result. Native replay validates the 19-tick script, saved-value publication, read-only child policy, suppressed disabled intents, direct locked Add/Reset no-ops, and retained nested input values through both PublishSaved Update cases.",
+  "source_scope": [
+    "fixtures/compiled/methods/app.go",
+    "fixtures/compiled/methods/view.go",
+    "cmd/compiled-native/replay.go",
+    "cmd/compiled-native/replay_test.go",
+    "compiled-methods/FIXTURE.md",
+    "compiled-methods/coordination/reports/E-FIXTURE.md",
+    "compiled-methods/coordination/receipts/E-FIXTURE.json",
+    "compiled-methods/evidence/fixture/go-test.log"
+  ],
+  "evidence": {
+    "report_sha256": "829b272a052d7dc48e097badc28a1ae5497941717290a5967456ac85b737f7db",
+    "toolchains": {
+      "go": "go1.24.0 linux/amd64"
+    },
+    "tests": [
+      {
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local go test -count=1 -v ./cmd/compiled-native ./fixtures/compiled/methods",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed",
+        "evidence_path": "compiled-methods/evidence/fixture/go-test.log",
+        "evidence_sha256": "7073c0f84e779df0f231caa99f775cbf716ceb3b5ee3b23d0d33f48e8ae78be7"
+      },
+      {
+        "command": "git diff --check -- cmd/compiled-native/replay.go cmd/compiled-native/replay_test.go fixtures/compiled/methods/app.go fixtures/compiled/methods/view.go",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed"
+      }
+    ],
+    "formatting": {
+      "command": "/tmp/gondola-go/bin/gofmt -w cmd/compiled-native/replay.go cmd/compiled-native/replay_test.go fixtures/compiled/methods/app.go fixtures/compiled/methods/view.go",
+      "exit_code": 0,
+      "result": "passed",
+      "initial_lookup": {
+        "command": "gofmt -w cmd/compiled-native/replay.go cmd/compiled-native/replay_test.go fixtures/compiled/methods/app.go fixtures/compiled/methods/view.go",
+        "exit_code": 127,
+        "reason": "gofmt was not on the default PATH; the pinned Go 1.24 formatter was used successfully"
+      }
+    },
+    "source_sha256": {
+      "cmd/compiled-native/replay.go": "010ed4f5d0a0a0f9956dffc46f5dd8a8bf4ed5b0e551bfcd863ee9419604d0c9",
+      "cmd/compiled-native/replay_test.go": "c1e6f6acca8db6fd8a5a2cfc426a155e0e8f62b36aa6cc1aa619c7802d0e9213",
+      "fixtures/compiled/methods/app.go": "456eecae2077e269da2b17327d39a40f60dbab5b82d82e9b2825f4f69baf3c47",
+      "fixtures/compiled/methods/view.go": "b534c2f522ee71afbe21188d6b90262551f7cbdad8c1820462055f47ebb8a8d3",
+      "compiled-methods/FIXTURE.md": "49c4970e0191e60772aa0cc9d57d3e2b64b5df4a1b7453e7c83feb4b3a02bd41",
+      "compiled-methods/conformance/fixtures/methods.json": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7",
+      "compiled-methods/conformance/method-contract.json": "170eced300ac302ec80402140d17e72502df675544834eb0f05f4c4d6ebcea31"
+    },
+    "limits": [
+      "N4 owns emitted GoScript/AppIR method-call analysis and code-generation proof; it was not executed in this author lane.",
+      "N2/N3 own browser and cross-backend integration evidence; those results are not claimed here.",
+      "The fixture demonstrates value-based delegation and typed saved-value transfer only; it does not claim Manager, session ownership, cancellation, or production composition semantics.",
+      "The N3-owned method-contract.json is a read-only dependency and now records all seven helper results as State plus []gobi.Effect."
+    ]
+  },
+  "reported_stage": "native_value_fixture_and_direct_go_replay_verified_pending_compiler_browser_integration"
+}
