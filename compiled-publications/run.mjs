@@ -76,7 +76,7 @@ const sourceDirectories = [
   "compiled-publications/runtime",
 ];
 const sourceFiles = [
-  "go.mod", "go.sum", "package.json", "package-lock.json",
+  "go.mod", "package.json", "package-lock.json",
   "interaction/package.json", "interaction/package-lock.json",
   "compiled-frontend/go.mod", "compiled-frontend/go.sum",
   "compiled-frontend/package.json", "compiled-frontend/package-lock.json",
