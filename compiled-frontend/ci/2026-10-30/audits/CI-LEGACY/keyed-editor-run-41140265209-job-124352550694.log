@@ -1,0 +1,2046 @@
+﻿2026-10-30T22:46:08.4935596Z Current runner version: '2.338.2'
+2026-10-30T22:46:08.4960240Z ##[group]Runner Image Provisioner
+2026-10-30T22:46:08.4961127Z Hosted Compute Agent
+2026-10-30T22:46:08.4961867Z Version: 20261021.618
+2026-10-30T22:46:08.4962541Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-30T22:46:08.4963279Z Build Date: 2026-10-21T00:45:21Z
+2026-10-30T22:46:08.4964060Z Worker ID: {c584c1cc-0528-4e7f-8a37-b24c08b8c617}
+2026-10-30T22:46:08.4964797Z Region: westus3
+2026-10-30T22:46:08.4965854Z Cloud: Azure
+2026-10-30T22:46:08.4966533Z ##[endgroup]
+2026-10-30T22:46:08.4968429Z ##[group]Operating System
+2026-10-30T22:46:08.4969214Z Ubuntu
+2026-10-30T22:46:08.4969806Z 24.04.5
+2026-10-30T22:46:08.4970409Z LTS
+2026-10-30T22:46:08.4970965Z ##[endgroup]
+2026-10-30T22:46:08.4971595Z ##[group]Runner Image
+2026-10-30T22:46:08.4972317Z Image: ubuntu-24.04
+2026-10-30T22:46:08.4972912Z Version: 20261025.353.1
+2026-10-30T22:46:08.4974301Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-30T22:46:08.4976261Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-30T22:46:08.4977331Z ##[endgroup]
+2026-10-30T22:46:08.4978584Z ##[group]GITHUB_TOKEN Permissions
+2026-10-30T22:46:08.4980622Z Contents: read
+2026-10-30T22:46:08.4981311Z Metadata: read
+2026-10-30T22:46:08.4981981Z Packages: read
+2026-10-30T22:46:08.4982592Z ##[endgroup]
+2026-10-30T22:46:08.4984730Z Secret source: Actions
+2026-10-30T22:46:08.4986099Z Cache mode: write
+2026-10-30T22:46:08.4986868Z Prepare workflow directory
+2026-10-30T22:46:08.5354241Z Prepare all required actions
+2026-10-30T22:46:08.5402060Z Getting action download info
+2026-10-30T22:46:08.8891454Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-30T22:46:08.9932350Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+2026-10-30T22:46:09.6487524Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-30T22:46:09.7338794Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-30T22:46:09.9449727Z Complete job name: keyed-editor
+2026-10-30T22:46:10.0452135Z ##[group]Run actions/checkout@v4
+2026-10-30T22:46:10.0453151Z with:
+2026-10-30T22:46:10.0453703Z   repository: samuelpmahan/gondola
+2026-10-30T22:46:10.0458699Z   token: ***
+2026-10-30T22:46:10.0459244Z   ssh-strict: true
+2026-10-30T22:46:10.0459749Z   ssh-user: git
+2026-10-30T22:46:10.0460259Z   persist-credentials: true
+2026-10-30T22:46:10.0460818Z   clean: true
+2026-10-30T22:46:10.0461320Z   sparse-checkout-cone-mode: true
+2026-10-30T22:46:10.0461921Z   fetch-depth: 1
+2026-10-30T22:46:10.0462440Z   fetch-tags: false
+2026-10-30T22:46:10.0462964Z   show-progress: true
+2026-10-30T22:46:10.0463484Z   lfs: false
+2026-10-30T22:46:10.0463962Z   submodules: false
+2026-10-30T22:46:10.0464479Z   set-safe-directory: true
+2026-10-30T22:46:10.0465257Z   allow-unsafe-pr-checkout: false
+2026-10-30T22:46:10.0466343Z ##[endgroup]
+2026-10-30T22:46:10.3571752Z Syncing repository: samuelpmahan/gondola
+2026-10-30T22:46:10.3575292Z ##[group]Getting Git version info
+2026-10-30T22:46:10.3576917Z Working directory is '/home/runner/work/gondola/gondola'
+2026-10-30T22:46:10.3579142Z [command]/usr/bin/git version
+2026-10-30T22:46:10.3665725Z git version 2.56.0
+2026-10-30T22:46:10.3689353Z ##[endgroup]
+2026-10-30T22:46:10.3706089Z Temporarily overriding HOME='/home/runner/work/_temp/5d9b3c13-16f7-49e9-9ccc-7b20d633a667' before making global git config changes
+2026-10-30T22:46:10.3708869Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-30T22:46:10.3712048Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gondola/gondola
+2026-10-30T22:46:10.3801792Z Deleting the contents of '/home/runner/work/gondola/gondola'
+2026-10-30T22:46:10.3804488Z ##[group]Initializing the repository
+2026-10-30T22:46:10.3806766Z [command]/usr/bin/git init /home/runner/work/gondola/gondola
+2026-10-30T22:46:10.3928261Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-30T22:46:10.3929654Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-30T22:46:10.3931143Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-30T22:46:10.3932421Z hint: call:
+2026-10-30T22:46:10.3933545Z hint:
+2026-10-30T22:46:10.3934773Z hint: 	git config --global init.defaultBranch <name>
+2026-10-30T22:46:10.3936202Z hint:
+2026-10-30T22:46:10.3937369Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-30T22:46:10.3939182Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-30T22:46:10.3940603Z hint:
+2026-10-30T22:46:10.3941334Z hint: 	git branch -m <name>
+2026-10-30T22:46:10.3942285Z hint:
+2026-10-30T22:46:10.3943539Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-30T22:46:10.3945833Z Initialized empty Git repository in /home/runner/work/gondola/gondola/.git/
+2026-10-30T22:46:10.3953300Z [command]/usr/bin/git remote add origin https://github.com/samuelpmahan/gondola
+2026-10-30T22:46:10.4007396Z ##[endgroup]
+2026-10-30T22:46:10.4010113Z ##[group]Disabling automatic garbage collection
+2026-10-30T22:46:10.4012790Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-30T22:46:10.4051945Z ##[endgroup]
+2026-10-30T22:46:10.4054191Z ##[group]Setting up auth
+2026-10-30T22:46:10.4061489Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-30T22:46:10.4107866Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-30T22:46:10.4560646Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-30T22:46:10.4689007Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-30T22:46:10.4878615Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-30T22:46:10.4923988Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-30T22:46:10.5164665Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-30T22:46:10.5214059Z ##[endgroup]
+2026-10-30T22:46:10.5215681Z ##[group]Fetching the repository
+2026-10-30T22:46:10.5228401Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2dc5918b4401d54bd991303c5b345f6491288016:refs/remotes/pull/11/merge
+2026-10-30T22:46:14.2806985Z From https://github.com/samuelpmahan/gondola
+2026-10-30T22:46:14.2809797Z  * [new ref]         2dc5918b4401d54bd991303c5b345f6491288016 -> pull/11/merge
+2026-10-30T22:46:14.2816000Z ##[endgroup]
+2026-10-30T22:46:14.2818213Z ##[group]Determining the checkout info
+2026-10-30T22:46:14.2820545Z ##[endgroup]
+2026-10-30T22:46:14.2824022Z [command]/usr/bin/git sparse-checkout disable
+2026-10-30T22:46:14.2895283Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-30T22:46:14.2936897Z ##[group]Checking out the ref
+2026-10-30T22:46:14.2940284Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/11/merge
+2026-10-30T22:46:14.5011018Z Note: switching to 'refs/remotes/pull/11/merge'.
+2026-10-30T22:46:14.5011636Z 
+2026-10-30T22:46:14.5012113Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-30T22:46:14.5013201Z changes and commit them, and you can discard any commits you make in this
+2026-10-30T22:46:14.5014377Z state without impacting any branches by switching back to a branch.
+2026-10-30T22:46:14.5015376Z 
+2026-10-30T22:46:14.5015896Z If you want to create a new branch to retain commits you create, you may
+2026-10-30T22:46:14.5017449Z do so (now or later) by using -c with the switch command. Example:
+2026-10-30T22:46:14.5018024Z 
+2026-10-30T22:46:14.5018319Z   git switch -c <new-branch-name>
+2026-10-30T22:46:14.5018725Z 
+2026-10-30T22:46:14.5018992Z Or undo this operation with:
+2026-10-30T22:46:14.5019368Z 
+2026-10-30T22:46:14.5020083Z   git switch -
+2026-10-30T22:46:14.5020427Z 
+2026-10-30T22:46:14.5021112Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-30T22:46:14.5021845Z 
+2026-10-30T22:46:14.5022814Z HEAD is now at 2dc5918 Merge 408e330517b1dd5e5f865e2ff1914465f98bcf66 into 42df6883337605d901a23e9fed874768c7ce1824
+2026-10-30T22:46:14.5040505Z ##[endgroup]
+2026-10-30T22:46:14.5096299Z [command]/usr/bin/git log -1 --format=%H
+2026-10-30T22:46:14.5130783Z 2dc5918b4401d54bd991303c5b345f6491288016
+2026-10-30T22:46:14.5432713Z ##[group]Run actions/setup-go@v5
+2026-10-30T22:46:14.5433103Z with:
+2026-10-30T22:46:14.5433403Z   go-version: 1.24.x
+2026-10-30T22:46:14.5433701Z   check-latest: false
+2026-10-30T22:46:14.5436752Z   token: ***
+2026-10-30T22:46:14.5437044Z   cache: true
+2026-10-30T22:46:14.5437323Z ##[endgroup]
+2026-10-30T22:46:14.6805761Z Setup go version spec 1.24.x
+2026-10-30T22:46:14.6954687Z Found in cache @ /opt/hostedtoolcache/go/1.24.13/x64
+2026-10-30T22:46:14.6957340Z (node:2380) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-30T22:46:14.6958393Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-30T22:46:14.6960577Z Added go to the path
+2026-10-30T22:46:14.6964511Z Successfully set up Go version 1.24.x
+2026-10-30T22:46:15.6223749Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOMODCACHE
+2026-10-30T22:46:15.6266169Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOCACHE
+2026-10-30T22:46:15.6336568Z /home/runner/go/pkg/mod
+2026-10-30T22:46:15.6350138Z /home/runner/.cache/go-build
+2026-10-30T22:46:15.6383779Z ##[warning]Restore cache failed: Dependencies file is not found in /home/runner/work/gondola/gondola. Supported file pattern: go.sum
+2026-10-30T22:46:15.6414139Z go version go1.24.13 linux/amd64
+2026-10-30T22:46:15.6414347Z 
+2026-10-30T22:46:15.6414760Z ##[group]go env
+2026-10-30T22:46:15.8032806Z AR='ar'
+2026-10-30T22:46:15.8033221Z CC='gcc'
+2026-10-30T22:46:15.8033506Z CGO_CFLAGS='-O2 -g'
+2026-10-30T22:46:15.8033812Z CGO_CPPFLAGS=''
+2026-10-30T22:46:15.8034045Z CGO_CXXFLAGS='-O2 -g'
+2026-10-30T22:46:15.8034313Z CGO_ENABLED='1'
+2026-10-30T22:46:15.8034529Z CGO_FFLAGS='-O2 -g'
+2026-10-30T22:46:15.8034797Z CGO_LDFLAGS='-O2 -g'
+2026-10-30T22:46:15.8035345Z CXX='g++'
+2026-10-30T22:46:15.8035915Z GCCGO='gccgo'
+2026-10-30T22:46:15.8036283Z GO111MODULE=''
+2026-10-30T22:46:15.8036661Z GOAMD64='v1'
+2026-10-30T22:46:15.8037004Z GOARCH='amd64'
+2026-10-30T22:46:15.8037408Z GOAUTH='netrc'
+2026-10-30T22:46:15.8037726Z GOBIN=''
+2026-10-30T22:46:15.8038111Z GOCACHE='/home/runner/.cache/go-build'
+2026-10-30T22:46:15.8038663Z GOCACHEPROG=''
+2026-10-30T22:46:15.8039002Z GODEBUG=''
+2026-10-30T22:46:15.8039350Z GOENV='/home/runner/.config/go/env'
+2026-10-30T22:46:15.8039774Z GOEXE=''
+2026-10-30T22:46:15.8040121Z GOEXPERIMENT=''
+2026-10-30T22:46:15.8040470Z GOFIPS140='off'
+2026-10-30T22:46:15.8040827Z GOFLAGS=''
+2026-10-30T22:46:15.8041969Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build3824945345=/tmp/go-build -gno-record-gcc-switches'
+2026-10-30T22:46:15.8043090Z GOHOSTARCH='amd64'
+2026-10-30T22:46:15.8043320Z GOHOSTOS='linux'
+2026-10-30T22:46:15.8043566Z GOINSECURE=''
+2026-10-30T22:46:15.8043868Z GOMOD='/home/runner/work/gondola/gondola/go.mod'
+2026-10-30T22:46:15.8044211Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-10-30T22:46:15.8044497Z GONOPROXY=''
+2026-10-30T22:46:15.8044691Z GONOSUMDB=''
+2026-10-30T22:46:15.8044875Z GOOS='linux'
+2026-10-30T22:46:15.8045444Z GOPATH='/home/runner/go'
+2026-10-30T22:46:15.8045718Z GOPRIVATE=''
+2026-10-30T22:46:15.8046282Z GOPROXY='https://proxy.golang.org,direct'
+2026-10-30T22:46:15.8046670Z GOROOT='/opt/hostedtoolcache/go/1.24.13/x64'
+2026-10-30T22:46:15.8046982Z GOSUMDB='sum.golang.org'
+2026-10-30T22:46:15.8047224Z GOTELEMETRY='local'
+2026-10-30T22:46:15.8047493Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-10-30T22:46:15.8047796Z GOTMPDIR=''
+2026-10-30T22:46:15.8047991Z GOTOOLCHAIN='auto'
+2026-10-30T22:46:15.8048307Z GOTOOLDIR='/opt/hostedtoolcache/go/1.24.13/x64/pkg/tool/linux_amd64'
+2026-10-30T22:46:15.8048660Z GOVCS=''
+2026-10-30T22:46:15.8048849Z GOVERSION='go1.24.13'
+2026-10-30T22:46:15.8049079Z GOWORK=''
+2026-10-30T22:46:15.8049279Z PKG_CONFIG='pkg-config'
+2026-10-30T22:46:15.8049425Z 
+2026-10-30T22:46:15.8049770Z ##[endgroup]
+2026-10-30T22:46:15.8221150Z ##[group]Run actions/setup-node@v4
+2026-10-30T22:46:15.8221443Z with:
+2026-10-30T22:46:15.8221638Z   node-version: 22
+2026-10-30T22:46:15.8221857Z   cache: npm
+2026-10-30T22:46:15.8222187Z   cache-dependency-path: package-lock.json
+interaction/package-lock.json
+
+2026-10-30T22:46:15.8222604Z   always-auth: false
+2026-10-30T22:46:15.8222820Z   check-latest: false
+2026-10-30T22:46:15.8225540Z   token: ***
+2026-10-30T22:46:15.8225755Z ##[endgroup]
+2026-10-30T22:46:15.9717577Z Found in cache @ /opt/hostedtoolcache/node/22.23.4/x64
+2026-10-30T22:46:15.9719170Z (node:2445) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-30T22:46:15.9720426Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-30T22:46:15.9723562Z ##[group]Environment details
+2026-10-30T22:46:16.4069983Z node: v22.23.4
+2026-10-30T22:46:16.4070382Z npm: 10.9.9
+2026-10-30T22:46:16.4070733Z yarn: 1.22.22
+2026-10-30T22:46:16.4071421Z ##[endgroup]
+2026-10-30T22:46:16.4096424Z [command]/opt/hostedtoolcache/node/22.23.4/x64/bin/npm config get cache
+2026-10-30T22:46:16.5207261Z /home/runner/.npm
+2026-10-30T22:46:16.7613713Z Cache hit for: node-cache-Linux-x64-npm-90b127dcd6765ca2c051251bef17731da37759a93403a4f6db400a1efee489c1
+2026-10-30T22:46:16.7767780Z (node:2445) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-30T22:46:17.6417147Z Received 10662894 of 10662894 (100.0%), 15.2 MBs/sec
+2026-10-30T22:46:17.6417656Z Cache Size: ~10 MB (10662894 B)
+2026-10-30T22:46:17.6445366Z [command]/usr/bin/tar -xf /home/runner/work/_temp/ec59980b-bbca-447e-8ca5-58eccbe25c7d/cache.tzst -P -C /home/runner/work/gondola/gondola --use-compress-program unzstd
+2026-10-30T22:46:17.6675672Z Cache restored successfully
+2026-10-30T22:46:17.6684103Z Cache restored from key: node-cache-Linux-x64-npm-90b127dcd6765ca2c051251bef17731da37759a93403a4f6db400a1efee489c1
+2026-10-30T22:46:17.6872516Z ##[group]Run npm ci --prefix interaction --no-audit --no-fund
+2026-10-30T22:46:17.6873049Z [36;1mnpm ci --prefix interaction --no-audit --no-fund[0m
+2026-10-30T22:46:17.6902351Z shell: /usr/bin/bash -e {0}
+2026-10-30T22:46:17.6902619Z ##[endgroup]
+2026-10-30T22:46:18.6580524Z 
+2026-10-30T22:46:18.6587599Z added 7 packages in 911ms
+2026-10-30T22:46:18.7059577Z ##[group]Run interaction/node_modules/.bin/playwright install --with-deps chromium
+2026-10-30T22:46:18.7060215Z [36;1minteraction/node_modules/.bin/playwright install --with-deps chromium[0m
+2026-10-30T22:46:18.7080618Z shell: /usr/bin/bash -e {0}
+2026-10-30T22:46:18.7080873Z ##[endgroup]
+2026-10-30T22:46:19.2298155Z Installing dependencies...
+2026-10-30T22:46:19.2422718Z Switching to root user to install dependencies...
+2026-10-30T22:46:19.3214847Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-30T22:46:19.3638139Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-30T22:46:19.3757171Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-30T22:46:19.3788956Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-30T22:46:19.3839780Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-30T22:46:19.3917782Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-30T22:46:19.4525861Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [682 kB]
+2026-10-30T22:46:19.4684600Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [617 kB]
+2026-10-30T22:46:19.5612222Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1408 kB]
+2026-10-30T22:46:19.5687409Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [311 kB]
+2026-10-30T22:46:19.5733173Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1708 kB]
+2026-10-30T22:46:19.5821268Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [343 kB]
+2026-10-30T22:46:19.5836558Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1813 kB]
+2026-10-30T22:46:19.5951049Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [412 kB]
+2026-10-30T22:46:19.5957538Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-10-30T22:46:19.6730291Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1146 kB]
+2026-10-30T22:46:19.6782709Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-30T22:46:19.6801702Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1223 kB]
+2026-10-30T22:46:19.7296934Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-30T22:46:22.6973777Z Fetched 10.5 MB in 1s (9644 kB/s)
+2026-10-30T22:46:23.7589697Z Reading package lists...
+2026-10-30T22:46:23.7901856Z Reading package lists...
+2026-10-30T22:46:24.0041067Z Building dependency tree...
+2026-10-30T22:46:24.0058560Z Reading state information...
+2026-10-30T22:46:24.1506852Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-30T22:46:24.1507898Z libasound2t64 set to manually installed.
+2026-10-30T22:46:24.1508992Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-30T22:46:24.1510107Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-30T22:46:24.1511030Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-30T22:46:24.1511861Z libatk1.0-0t64 set to manually installed.
+2026-10-30T22:46:24.1512768Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-30T22:46:24.1513443Z libatspi2.0-0t64 set to manually installed.
+2026-10-30T22:46:24.1514241Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-30T22:46:24.1515344Z libcairo2 set to manually installed.
+2026-10-30T22:46:24.1516328Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-30T22:46:24.1517264Z libcups2t64 set to manually installed.
+2026-10-30T22:46:24.1518114Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-30T22:46:24.1519054Z libdbus-1-3 set to manually installed.
+2026-10-30T22:46:24.1520445Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-30T22:46:24.1521258Z libdrm2 set to manually installed.
+2026-10-30T22:46:24.1522013Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-30T22:46:24.1522700Z libgbm1 set to manually installed.
+2026-10-30T22:46:24.1523450Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.10).
+2026-10-30T22:46:24.1524190Z libglib2.0-0t64 set to manually installed.
+2026-10-30T22:46:24.1524915Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-30T22:46:24.1525665Z libnspr4 set to manually installed.
+2026-10-30T22:46:24.1526090Z libnss3 is already the newest version (2:3.98-1ubuntu0.3).
+2026-10-30T22:46:24.1526475Z libnss3 set to manually installed.
+2026-10-30T22:46:24.1526898Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-30T22:46:24.1527544Z libpango-1.0-0 set to manually installed.
+2026-10-30T22:46:24.1528288Z libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+2026-10-30T22:46:24.1529001Z libx11-6 set to manually installed.
+2026-10-30T22:46:24.1529698Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-30T22:46:24.1530365Z libxcb1 set to manually installed.
+2026-10-30T22:46:24.1531149Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-30T22:46:24.1531946Z libxcomposite1 set to manually installed.
+2026-10-30T22:46:24.1532752Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-30T22:46:24.1533490Z libxdamage1 set to manually installed.
+2026-10-30T22:46:24.1534233Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-30T22:46:24.1534927Z libxext6 set to manually installed.
+2026-10-30T22:46:24.1536007Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-30T22:46:24.1536730Z libxfixes3 set to manually installed.
+2026-10-30T22:46:24.1537512Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-30T22:46:24.1538244Z libxkbcommon0 set to manually installed.
+2026-10-30T22:46:24.1539013Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-30T22:46:24.1539730Z libxrandr2 set to manually installed.
+2026-10-30T22:46:24.1540475Z xvfb is already the newest version (2:21.1.12-1ubuntu1.9).
+2026-10-30T22:46:24.1541501Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-30T22:46:24.1542568Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-30T22:46:24.1543364Z libfontconfig1 set to manually installed.
+2026-10-30T22:46:24.1544191Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+2026-10-30T22:46:24.1545017Z libfreetype6 set to manually installed.
+2026-10-30T22:46:24.1546108Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-30T22:46:24.1546888Z fonts-liberation set to manually installed.
+2026-10-30T22:46:24.1547682Z The following additional packages will be installed:
+2026-10-30T22:46:24.1548354Z   xfonts-encodings xfonts-utils
+2026-10-30T22:46:24.1548878Z Recommended packages:
+2026-10-30T22:46:24.1549473Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-10-30T22:46:24.1708271Z The following NEW packages will be installed:
+2026-10-30T22:46:24.1708897Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-30T22:46:24.1715401Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-30T22:46:24.1715828Z   xfonts-utils
+2026-10-30T22:46:24.1918312Z 0 upgraded, 9 newly installed, 0 to remove and 6 not upgraded.
+2026-10-30T22:46:24.1918803Z Need to get 21.1 MB of archives.
+2026-10-30T22:46:24.1919265Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-30T22:46:24.1919779Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-30T22:46:24.2553098Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-30T22:46:24.3524326Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-30T22:46:24.4917685Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-30T22:46:24.5387111Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-30T22:46:24.6329528Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-30T22:46:24.7890033Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-30T22:46:24.8390063Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-30T22:46:24.8863675Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-30T22:46:24.9355792Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-30T22:46:25.2002826Z Fetched 21.1 MB in 1s (27.8 MB/s)
+2026-10-30T22:46:25.2250386Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-30T22:46:25.2549492Z (Reading database ... 
+2026-10-30T22:46:25.2550346Z (Reading database ... 5%
+2026-10-30T22:46:25.2551008Z (Reading database ... 10%
+2026-10-30T22:46:25.2551333Z (Reading database ... 15%
+2026-10-30T22:46:25.2551613Z (Reading database ... 20%
+2026-10-30T22:46:25.2551881Z (Reading database ... 25%
+2026-10-30T22:46:25.2552138Z (Reading database ... 30%
+2026-10-30T22:46:25.2552384Z (Reading database ... 35%
+2026-10-30T22:46:25.2552653Z (Reading database ... 40%
+2026-10-30T22:46:25.2553085Z (Reading database ... 45%
+2026-10-30T22:46:25.2553575Z (Reading database ... 50%
+2026-10-30T22:46:25.2603317Z (Reading database ... 55%
+2026-10-30T22:46:25.3683893Z (Reading database ... 60%
+2026-10-30T22:46:25.5730915Z (Reading database ... 65%
+2026-10-30T22:46:25.7649810Z (Reading database ... 70%
+2026-10-30T22:46:25.9756784Z (Reading database ... 75%
+2026-10-30T22:46:26.1079833Z (Reading database ... 80%
+2026-10-30T22:46:26.2173457Z (Reading database ... 85%
+2026-10-30T22:46:26.2851329Z (Reading database ... 90%
+2026-10-30T22:46:26.4196906Z (Reading database ... 95%
+2026-10-30T22:46:26.4197475Z (Reading database ... 100%
+2026-10-30T22:46:26.4198392Z (Reading database ... 215504 files and directories currently installed.)
+2026-10-30T22:46:26.4241017Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-30T22:46:26.4346562Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-30T22:46:26.6707851Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-30T22:46:26.6848283Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-30T22:46:26.6860240Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-30T22:46:26.7774964Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-30T22:46:26.7916267Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-30T22:46:26.7924731Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-30T22:46:26.8171794Z Selecting previously unselected package fonts-unifont.
+2026-10-30T22:46:26.8313106Z Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-30T22:46:26.8322674Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-30T22:46:26.9454797Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-30T22:46:26.9596697Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-30T22:46:26.9716571Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-30T22:46:27.4607463Z Selecting previously unselected package xfonts-encodings.
+2026-10-30T22:46:27.4748333Z Preparing to unpack .../5-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-30T22:46:27.4762922Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-30T22:46:27.5112531Z Selecting previously unselected package xfonts-utils.
+2026-10-30T22:46:27.5253026Z Preparing to unpack .../6-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-30T22:46:27.5260922Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-30T22:46:27.5681055Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-30T22:46:27.5822117Z Preparing to unpack .../7-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-30T22:46:27.5830194Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-30T22:46:27.6210712Z Selecting previously unselected package xfonts-scalable.
+2026-10-30T22:46:27.6351449Z Preparing to unpack .../8-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-30T22:46:27.6361000Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-30T22:46:27.6820676Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-30T22:46:27.6951166Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-30T22:46:27.6977451Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-30T22:46:27.6999763Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-30T22:46:27.7020702Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-30T22:46:27.7087319Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-30T22:46:27.7103755Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-30T22:46:27.7127280Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-30T22:46:27.7173155Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-30T22:46:27.7490978Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-30T22:46:27.7779168Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-30T22:46:27.7802957Z Not building database; man-db/auto-update is not 'true'.
+2026-10-30T22:46:27.7816254Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-30T22:46:28.5776524Z 
+2026-10-30T22:46:28.5777774Z Running kernel seems to be up-to-date.
+2026-10-30T22:46:28.5778148Z 
+2026-10-30T22:46:28.5778379Z No services need to be restarted.
+2026-10-30T22:46:28.5778664Z 
+2026-10-30T22:46:28.5778868Z No containers need to be restarted.
+2026-10-30T22:46:28.5779112Z 
+2026-10-30T22:46:28.5779388Z No user sessions are running outdated binaries.
+2026-10-30T22:46:28.5779678Z 
+2026-10-30T22:46:28.5780089Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-30T22:46:29.5139660Z Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-linux64.zip
+2026-10-30T22:46:29.9911000Z |                                                                                |   0% of 191.1 MiB
+2026-10-30T22:46:30.1893875Z |■■■■■■■■                                                                        |  10% of 191.1 MiB
+2026-10-30T22:46:30.2776329Z |■■■■■■■■■■■■■■■■                                                                |  20% of 191.1 MiB
+2026-10-30T22:46:30.3433875Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 191.1 MiB
+2026-10-30T22:46:30.4177133Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 191.1 MiB
+2026-10-30T22:46:30.4976880Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 191.1 MiB
+2026-10-30T22:46:30.5823744Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 191.1 MiB
+2026-10-30T22:46:30.6746978Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 191.1 MiB
+2026-10-30T22:46:30.8059213Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 191.1 MiB
+2026-10-30T22:46:30.9946328Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 191.1 MiB
+2026-10-30T22:46:31.1287713Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 191.1 MiB
+2026-10-30T22:46:33.9946269Z Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to /home/runner/.cache/ms-playwright/chromium-1248
+2026-10-30T22:46:33.9952788Z Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-linux.zip
+2026-10-30T22:46:34.4127276Z |                                                                                |   0% of 2.2 MiB
+2026-10-30T22:46:34.4329876Z |■■■■■■■■                                                                        |  10% of 2.2 MiB
+2026-10-30T22:46:34.4425931Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.2 MiB
+2026-10-30T22:46:34.4486184Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.2 MiB
+2026-10-30T22:46:34.4524924Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.2 MiB
+2026-10-30T22:46:34.4566132Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.2 MiB
+2026-10-30T22:46:34.4576060Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.2 MiB
+2026-10-30T22:46:34.4593211Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.2 MiB
+2026-10-30T22:46:34.4611048Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.2 MiB
+2026-10-30T22:46:34.4624974Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.2 MiB
+2026-10-30T22:46:34.4638888Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.2 MiB
+2026-10-30T22:46:34.5369444Z FFmpeg (playwright ffmpeg v1013) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1013
+2026-10-30T22:46:34.5372302Z Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-headless-shell-linux64.zip
+2026-10-30T22:46:35.0166658Z |                                                                                |   0% of 120 MiB
+2026-10-30T22:46:35.1708765Z |■■■■■■■■                                                                        |  10% of 120 MiB
+2026-10-30T22:46:35.2476169Z |■■■■■■■■■■■■■■■■                                                                |  20% of 120 MiB
+2026-10-30T22:46:35.3294619Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 120 MiB
+2026-10-30T22:46:35.3944567Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 120 MiB
+2026-10-30T22:46:35.5038765Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 120 MiB
+2026-10-30T22:46:35.5698365Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 120 MiB
+2026-10-30T22:46:35.6336544Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 120 MiB
+2026-10-30T22:46:35.6841284Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+2026-10-30T22:46:35.7536566Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+2026-10-30T22:46:35.8213058Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+2026-10-30T22:46:37.7570761Z Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1248
+2026-10-30T22:46:37.7757329Z ##[group]Run bash run-keyed-editor.sh
+2026-10-30T22:46:37.7757692Z [36;1mbash run-keyed-editor.sh[0m
+2026-10-30T22:46:37.7777884Z shell: /usr/bin/bash -e {0}
+2026-10-30T22:46:37.7778139Z env:
+2026-10-30T22:46:37.7778337Z   GONDOLA_SKIP_NPM_CI: 1
+2026-10-30T22:46:37.7778588Z   GONDOLA_SKIP_BROWSER_INSTALL: 1
+2026-10-30T22:46:37.7778844Z ##[endgroup]
+2026-10-30T22:46:38.2030453Z 
+2026-10-30T22:46:38.2031047Z added 5 packages in 329ms
+2026-10-30T22:46:47.2140153Z wrote react-map.gen.mjs
+2026-10-30T22:47:00.2470165Z ok  	github.com/samuelpmahan/gondola/asyncsave	0.004s
+2026-10-30T22:47:00.2486380Z ?   	github.com/samuelpmahan/gondola/cmd/async-save-wasm	[no test files]
+2026-10-30T22:47:00.2513877Z ?   	github.com/samuelpmahan/gondola/cmd/collection-wasm	[no test files]
+2026-10-30T22:47:00.2540871Z ?   	github.com/samuelpmahan/gondola/cmd/compare-interaction	[no test files]
+2026-10-30T22:47:00.5004293Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-native	0.016s
+2026-10-30T22:47:00.5020125Z ok  	github.com/samuelpmahan/gondola/cmd/composition-replay	0.003s
+2026-10-30T22:47:00.5787339Z ok  	github.com/samuelpmahan/gondola/cmd/composition-wasm	0.003s
+2026-10-30T22:47:00.9793960Z ok  	github.com/samuelpmahan/gondola/cmd/conformance-fixtures	0.358s
+2026-10-30T22:47:00.9795446Z ?   	github.com/samuelpmahan/gondola/cmd/counter-wasm	[no test files]
+2026-10-30T22:47:00.9796764Z ?   	github.com/samuelpmahan/gondola/cmd/editor-wasm	[no test files]
+2026-10-30T22:47:00.9797831Z ok  	github.com/samuelpmahan/gondola/cmd/gobi	0.003s
+2026-10-30T22:47:00.9798878Z ?   	github.com/samuelpmahan/gondola/cmd/godom-wasm	[no test files]
+2026-10-30T22:47:02.0867880Z ?   	github.com/samuelpmahan/gondola/cmd/http-lab	[no test files]
+2026-10-30T22:47:02.0868991Z ?   	github.com/samuelpmahan/gondola/cmd/http-save-wasm	[no test files]
+2026-10-30T22:47:02.0961893Z ok  	github.com/samuelpmahan/gondola/cmd/multi-root-wasm	0.004s
+2026-10-30T22:47:02.0963392Z ok  	github.com/samuelpmahan/gondola/cmd/render-contract	0.004s
+2026-10-30T22:47:02.4688912Z ok  	github.com/samuelpmahan/gondola/collection	0.006s
+2026-10-30T22:47:02.6629689Z ok  	github.com/samuelpmahan/gondola/compilercontract	0.064s
+2026-10-30T22:47:02.6642398Z ok  	github.com/samuelpmahan/gondola/composition	0.011s
+2026-10-30T22:47:02.6643414Z ?   	github.com/samuelpmahan/gondola/counter	[no test files]
+2026-10-30T22:47:02.7891308Z ok  	github.com/samuelpmahan/gondola/editor	0.003s
+2026-10-30T22:47:02.8746305Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/effect	0.008s
+2026-10-30T22:47:02.9395951Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/form	0.002s
+2026-10-30T22:47:02.9418455Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/list	0.003s
+2026-10-30T22:47:03.3956722Z ok  	github.com/samuelpmahan/gondola/gobi	0.136s
+2026-10-30T22:47:03.3958412Z ?   	github.com/samuelpmahan/gondola/godom	[no test files]
+2026-10-30T22:47:03.5154980Z ok  	github.com/samuelpmahan/gondola/httplab	0.038s
+2026-10-30T22:47:03.5158074Z ok  	github.com/samuelpmahan/gondola/httpwire	0.005s
+2026-10-30T22:47:03.5396615Z ok  	github.com/samuelpmahan/gondola/inputbinding	0.003s
+2026-10-30T22:47:03.6715602Z ok  	github.com/samuelpmahan/gondola/interaction	0.004s
+2026-10-30T22:47:03.8557073Z ok  	github.com/samuelpmahan/gondola/multisession	0.013s
+2026-10-30T22:47:03.8581805Z ok  	github.com/samuelpmahan/gondola/reactmap	0.003s
+2026-10-30T22:47:03.8849725Z ok  	github.com/samuelpmahan/gondola/rendercontract	0.011s
+2026-10-30T22:47:03.8884937Z ?   	github.com/samuelpmahan/gondola/renderer-conformance/coordination/reports	[no test files]
+2026-10-30T22:47:04.0448610Z ok  	github.com/samuelpmahan/gondola/wire	0.002s
+2026-10-30T22:47:05.1963122Z same over 5000 inputs
+2026-10-30T22:47:05.2737689Z receipt matches
+2026-10-30T22:47:05.2822962Z SHA256SUMS ok
+2026-10-30T22:47:09.9571623Z 
+2026-10-30T22:47:09.9608379Z   interaction/build/react-reference.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:47:09.9609181Z 
+2026-10-30T22:47:09.9609444Z ⚡ Done in 53ms
+2026-10-30T22:47:10.0077820Z TAP version 13
+2026-10-30T22:47:10.4544101Z # Subtest: matching snapshots have no differences
+2026-10-30T22:47:10.4551389Z ok 1 - matching snapshots have no differences
+2026-10-30T22:47:10.4555945Z   ---
+2026-10-30T22:47:10.4556374Z   duration_ms: 1.698234
+2026-10-30T22:47:10.4556797Z   type: 'test'
+2026-10-30T22:47:10.4557128Z   ...
+2026-10-30T22:47:10.4557658Z # Subtest: the comparator catches state drift
+2026-10-30T22:47:10.4582925Z ok 2 - the comparator catches state drift
+2026-10-30T22:47:10.4588183Z   ---
+2026-10-30T22:47:10.4588713Z   duration_ms: 0.217947
+2026-10-30T22:47:10.4589151Z   type: 'test'
+2026-10-30T22:47:10.4589491Z   ...
+2026-10-30T22:47:10.4590034Z # Subtest: the comparator catches full Node tree drift
+2026-10-30T22:47:10.4590784Z ok 3 - the comparator catches full Node tree drift
+2026-10-30T22:47:10.4591276Z   ---
+2026-10-30T22:47:10.4591642Z   duration_ms: 0.275103
+2026-10-30T22:47:10.4592052Z   type: 'test'
+2026-10-30T22:47:10.4592374Z   ...
+2026-10-30T22:47:10.4592973Z # Subtest: the comparator catches ordered message-log drift
+2026-10-30T22:47:10.4593760Z ok 4 - the comparator catches ordered message-log drift
+2026-10-30T22:47:10.4594308Z   ---
+2026-10-30T22:47:10.4594661Z   duration_ms: 0.336337
+2026-10-30T22:47:10.4595352Z   type: 'test'
+2026-10-30T22:47:10.4595710Z   ...
+2026-10-30T22:47:10.4596258Z # Subtest: the comparator checks serialized DOM and disabled state separately
+2026-10-30T22:47:10.4597114Z ok 5 - the comparator checks serialized DOM and disabled state separately
+2026-10-30T22:47:10.4597520Z   ---
+2026-10-30T22:47:10.4597904Z   duration_ms: 0.236791
+2026-10-30T22:47:10.4598143Z   type: 'test'
+2026-10-30T22:47:10.4598336Z   ...
+2026-10-30T22:47:10.4783494Z # Subtest: fixed scripts cover disabled reset, interleaving, and burst clicks
+2026-10-30T22:47:10.4784565Z ok 6 - fixed scripts cover disabled reset, interleaving, and burst clicks
+2026-10-30T22:47:10.4785364Z   ---
+2026-10-30T22:47:10.4786010Z   duration_ms: 1.559596
+2026-10-30T22:47:10.4786518Z   type: 'test'
+2026-10-30T22:47:10.4787003Z   ...
+2026-10-30T22:47:10.4787908Z # Subtest: seeded scripts are stable and retain enough context to reproduce failures
+2026-10-30T22:47:10.4789063Z ok 7 - seeded scripts are stable and retain enough context to reproduce failures
+2026-10-30T22:47:10.4789736Z   ---
+2026-10-30T22:47:10.4790094Z   duration_ms: 0.933079
+2026-10-30T22:47:10.4790485Z   type: 'test'
+2026-10-30T22:47:10.4790816Z   ...
+2026-10-30T22:47:10.4791367Z # Subtest: seed and size arguments reject invalid values
+2026-10-30T22:47:10.4792104Z ok 8 - seed and size arguments reject invalid values
+2026-10-30T22:47:10.4792625Z   ---
+2026-10-30T22:47:10.4792978Z   duration_ms: 1.268784
+2026-10-30T22:47:10.4793371Z   type: 'test'
+2026-10-30T22:47:10.4793700Z   ...
+2026-10-30T22:47:10.4793997Z 1..8
+2026-10-30T22:47:10.4794305Z # tests 8
+2026-10-30T22:47:10.4794634Z # suites 0
+2026-10-30T22:47:10.4794950Z # pass 8
+2026-10-30T22:47:10.4795488Z # fail 0
+2026-10-30T22:47:10.4795839Z # cancelled 0
+2026-10-30T22:47:10.4796086Z # skipped 0
+2026-10-30T22:47:10.4796295Z # todo 0
+2026-10-30T22:47:10.4796521Z # duration_ms 488.708674
+2026-10-30T22:47:29.4182210Z interaction parity matched 107 scripts over 4473 initial/action ticks (seed 20261030)
+2026-10-30T22:47:29.4182823Z native comparator: matched
+2026-10-30T22:47:29.4183483Z full traces: /home/runner/work/gondola/gondola/interaction/build/interaction-traces-seed-20261030.json
+2026-10-30T22:47:29.6036931Z 
+2026-10-30T22:47:29.6038226Z   backend-replacement/build/react-backend.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:47:29.6040772Z 
+2026-10-30T22:47:29.6041042Z ⚡ Done in 55ms
+2026-10-30T22:47:29.6526278Z TAP version 13
+2026-10-30T22:47:30.0185796Z # Subtest: three matching snapshot channels have no differences
+2026-10-30T22:47:30.0192113Z ok 1 - three matching snapshot channels have no differences
+2026-10-30T22:47:30.0193333Z   ---
+2026-10-30T22:47:30.0193777Z   duration_ms: 1.840218
+2026-10-30T22:47:30.0194246Z   type: 'test'
+2026-10-30T22:47:30.0194623Z   ...
+2026-10-30T22:47:30.0199456Z # Subtest: comparison is strict for state, full Node tree, and ordered messages
+2026-10-30T22:47:30.0200720Z ok 2 - comparison is strict for state, full Node tree, and ordered messages
+2026-10-30T22:47:30.0201421Z   ---
+2026-10-30T22:47:30.0201844Z   duration_ms: 0.242492
+2026-10-30T22:47:30.0202283Z   type: 'test'
+2026-10-30T22:47:30.0202646Z   ...
+2026-10-30T22:47:30.0204046Z # Subtest: comparison checks actual HTML, disabled paths, and root outerHTML independently
+2026-10-30T22:47:30.0216849Z ok 3 - comparison checks actual HTML, disabled paths, and root outerHTML independently
+2026-10-30T22:47:30.0217859Z   ---
+2026-10-30T22:47:30.0218423Z   duration_ms: 0.309436
+2026-10-30T22:47:30.0219026Z   type: 'test'
+2026-10-30T22:47:30.0219561Z   ...
+2026-10-30T22:47:30.0220623Z # Subtest: fixed scripts include clicks, repeated mid-session swaps, and unknown backend failures
+2026-10-30T22:47:30.0222197Z ok 4 - fixed scripts include clicks, repeated mid-session swaps, and unknown backend failures
+2026-10-30T22:47:30.0223175Z   ---
+2026-10-30T22:47:30.0223711Z   duration_ms: 0.323462
+2026-10-30T22:47:30.0224305Z   type: 'test'
+2026-10-30T22:47:30.0224790Z   ...
+2026-10-30T22:47:30.0226148Z # Subtest: seeded scripts are deterministic, bounded, and exercise both hosts when budget permits
+2026-10-30T22:47:30.0227982Z ok 5 - seeded scripts are deterministic, bounded, and exercise both hosts when budget permits
+2026-10-30T22:47:30.0229152Z   ---
+2026-10-30T22:47:30.0229823Z   duration_ms: 0.861956
+2026-10-30T22:47:30.0230305Z   type: 'test'
+2026-10-30T22:47:30.0230673Z   ...
+2026-10-30T22:47:30.0231513Z # Subtest: short generated scripts respect maxActions and retain at least one replacement
+2026-10-30T22:47:30.0232816Z ok 6 - short generated scripts respect maxActions and retain at least one replacement
+2026-10-30T22:47:30.0233607Z   ---
+2026-10-30T22:47:30.0234028Z   duration_ms: 0.197398
+2026-10-30T22:47:30.0234491Z   type: 'test'
+2026-10-30T22:47:30.0234863Z   ...
+2026-10-30T22:47:30.0235964Z # Subtest: native steps distinguish backend swaps and preserve real click input
+2026-10-30T22:47:30.0237108Z ok 7 - native steps distinguish backend swaps and preserve real click input
+2026-10-30T22:47:30.0237813Z   ---
+2026-10-30T22:47:30.0238217Z   duration_ms: 0.283989
+2026-10-30T22:47:30.0238766Z   type: 'test'
+2026-10-30T22:47:30.0239144Z   ...
+2026-10-30T22:47:30.0240155Z # Subtest: scoped expected runtime failure passes only with an exact manifest and no global browser errors
+2026-10-30T22:47:30.0241691Z ok 8 - scoped expected runtime failure passes only with an exact manifest and no global browser errors
+2026-10-30T22:47:30.0242588Z   ---
+2026-10-30T22:47:30.0242998Z   duration_ms: 0.221613
+2026-10-30T22:47:30.0243444Z   type: 'test'
+2026-10-30T22:47:30.0243829Z   ...
+2026-10-30T22:47:30.0244663Z # Subtest: unrelated browser errors remain fatal when the expected error was scoped
+2026-10-30T22:47:30.0275995Z ok 9 - unrelated browser errors remain fatal when the expected error was scoped
+2026-10-30T22:47:30.0276426Z   ---
+2026-10-30T22:47:30.0276678Z   duration_ms: 0.379578
+2026-10-30T22:47:30.0276943Z   type: 'test'
+2026-10-30T22:47:30.0277142Z   ...
+2026-10-30T22:47:30.0277509Z # Subtest: a duplicate sentinel in global errors remains fatal
+2026-10-30T22:47:30.0277998Z ok 10 - a duplicate sentinel in global errors remains fatal
+2026-10-30T22:47:30.0278314Z   ---
+2026-10-30T22:47:30.0278532Z   duration_ms: 0.403842
+2026-10-30T22:47:30.0278792Z   type: 'test'
+2026-10-30T22:47:30.0278984Z   ...
+2026-10-30T22:47:30.0279421Z # Subtest: CLI options default to the required seed and generated trace size
+2026-10-30T22:47:30.0280301Z ok 11 - CLI options default to the required seed and generated trace size
+2026-10-30T22:47:30.0280667Z   ---
+2026-10-30T22:47:30.0280879Z   duration_ms: 0.336337
+2026-10-30T22:47:30.0281108Z   type: 'test'
+2026-10-30T22:47:30.0281445Z   ...
+2026-10-30T22:47:30.0281809Z # Subtest: CLI rejects malformed ranges and unknown flags
+2026-10-30T22:47:30.0282283Z ok 12 - CLI rejects malformed ranges and unknown flags
+2026-10-30T22:47:30.0282737Z   ---
+2026-10-30T22:47:30.0282969Z   duration_ms: 0.321379
+2026-10-30T22:47:30.0283197Z   type: 'test'
+2026-10-30T22:47:30.0283386Z   ...
+2026-10-30T22:47:30.0447614Z # Subtest: switches renderers around one runtime while preserving snapshots and dispatch order
+2026-10-30T22:47:30.0449109Z ok 13 - switches renderers around one runtime while preserving snapshots and dispatch order
+2026-10-30T22:47:30.0449940Z   ---
+2026-10-30T22:47:30.0450364Z   duration_ms: 3.918881
+2026-10-30T22:47:30.0450807Z   type: 'test'
+2026-10-30T22:47:30.0451199Z   ...
+2026-10-30T22:47:30.0452100Z # Subtest: stale renderer facades cannot dispatch and same-backend replacement is idempotent
+2026-10-30T22:47:30.0453466Z ok 14 - stale renderer facades cannot dispatch and same-backend replacement is idempotent
+2026-10-30T22:47:30.0454312Z   ---
+2026-10-30T22:47:30.0454730Z   duration_ms: 0.727515
+2026-10-30T22:47:30.0460618Z   type: 'test'
+2026-10-30T22:47:30.0461036Z   ...
+2026-10-30T22:47:30.0461825Z # Subtest: unknown backend names fail before changing the current renderer
+2026-10-30T22:47:30.0462942Z ok 15 - unknown backend names fail before changing the current renderer
+2026-10-30T22:47:30.0463623Z   ---
+2026-10-30T22:47:30.0464028Z   duration_ms: 0.366583
+2026-10-30T22:47:30.0464471Z   type: 'test'
+2026-10-30T22:47:30.0464842Z   ...
+2026-10-30T22:47:30.0465998Z # Subtest: failed replacement remounts the old backend from the latest cached snapshot
+2026-10-30T22:47:30.0467268Z ok 16 - failed replacement remounts the old backend from the latest cached snapshot
+2026-10-30T22:47:30.0468037Z   ---
+2026-10-30T22:47:30.0468447Z   duration_ms: 0.476167
+2026-10-30T22:47:30.0468898Z   type: 'test'
+2026-10-30T22:47:30.0469256Z   ...
+2026-10-30T22:47:30.0470034Z # Subtest: a backend cannot mutate runtime state during a mount that later fails
+2026-10-30T22:47:30.0471175Z ok 17 - a backend cannot mutate runtime state during a mount that later fails
+2026-10-30T22:47:30.0471866Z   ---
+2026-10-30T22:47:30.0472263Z   duration_ms: 0.63861
+2026-10-30T22:47:30.0472713Z   type: 'test'
+2026-10-30T22:47:30.0473095Z   ...
+2026-10-30T22:47:30.0474026Z # Subtest: renderer click failure fences dispatch without resetting an accepted runtime snapshot
+2026-10-30T22:47:30.0475712Z ok 18 - renderer click failure fences dispatch without resetting an accepted runtime snapshot
+2026-10-30T22:47:30.0476533Z   ---
+2026-10-30T22:47:30.0476950Z   duration_ms: 0.60143
+2026-10-30T22:47:30.0477387Z   type: 'test'
+2026-10-30T22:47:30.0477754Z   ...
+2026-10-30T22:47:30.0478326Z # Subtest: host operations reject use after unmount
+2026-10-30T22:47:30.0479135Z ok 19 - host operations reject use after unmount
+2026-10-30T22:47:30.0479699Z   ---
+2026-10-30T22:47:30.0480095Z   duration_ms: 0.292585
+2026-10-30T22:47:30.0480534Z   type: 'test'
+2026-10-30T22:47:30.0480891Z   ...
+2026-10-30T22:47:30.0481651Z # Subtest: runtime errors do not replace the last successful cached snapshot
+2026-10-30T22:47:30.0482755Z ok 20 - runtime errors do not replace the last successful cached snapshot
+2026-10-30T22:47:30.0483477Z   ---
+2026-10-30T22:47:30.0483890Z   duration_ms: 0.291453
+2026-10-30T22:47:30.0484321Z   type: 'test'
+2026-10-30T22:47:30.0484679Z   ...
+2026-10-30T22:47:30.0485000Z 1..20
+2026-10-30T22:47:30.0485885Z # tests 20
+2026-10-30T22:47:30.0486257Z # suites 0
+2026-10-30T22:47:30.0486634Z # pass 20
+2026-10-30T22:47:30.0486976Z # fail 0
+2026-10-30T22:47:30.0487288Z # cancelled 0
+2026-10-30T22:47:30.0487608Z # skipped 0
+2026-10-30T22:47:30.0487912Z # todo 0
+2026-10-30T22:47:30.0488254Z # duration_ms 409.280616
+2026-10-30T22:47:30.7274100Z PASS initial DOM render: backend=dom, Count=0, messages=0, DOM matches
+2026-10-30T22:47:30.7959550Z PASS first Add: backend=dom, Count=1, messages=1, DOM matches
+2026-10-30T22:47:30.8740365Z PASS second Add: backend=dom, Count=2, messages=2, DOM matches
+2026-10-30T22:47:30.9234583Z PASS swap to React: backend=react, Count=2, messages=2, DOM matches
+2026-10-30T22:47:30.9872756Z PASS Add on React: backend=react, Count=3, messages=3, DOM matches
+2026-10-30T22:47:31.0280960Z PASS swap back to DOM: backend=dom, Count=3, messages=3, DOM matches
+2026-10-30T22:47:31.0875951Z PASS Reset after swap: backend=dom, Count=0, messages=4, DOM matches
+2026-10-30T22:47:31.0877013Z Demo smoke passed (7 states across DOM and React renderers).
+2026-10-30T22:48:02.6304112Z backend replacement parity matched 103 scripts over 5249 initial/action ticks (seed 20261030)
+2026-10-30T22:48:02.6306338Z native Gobi trace comparison: matched
+2026-10-30T22:48:02.6307415Z full traces: /home/runner/work/gondola/gondola/backend-replacement/build/report-seed-20261030.json
+2026-10-30T22:48:03.0895830Z 
+2026-10-30T22:48:03.0926618Z   controlled-input/build/react.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:48:03.0926931Z 
+2026-10-30T22:48:03.0927071Z ⚡ Done in 54ms
+2026-10-30T22:48:03.1483133Z 
+2026-10-30T22:48:03.1484304Z   controlled-input/build/reference.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:48:03.1484615Z 
+2026-10-30T22:48:03.1484755Z ⚡ Done in 52ms
+2026-10-30T22:48:03.2970752Z ok  	github.com/samuelpmahan/gondola/asyncsave	(cached)
+2026-10-30T22:48:03.2971809Z ?   	github.com/samuelpmahan/gondola/cmd/async-save-wasm	[no test files]
+2026-10-30T22:48:03.2972917Z ?   	github.com/samuelpmahan/gondola/cmd/collection-wasm	[no test files]
+2026-10-30T22:48:03.2974283Z ?   	github.com/samuelpmahan/gondola/cmd/compare-interaction	[no test files]
+2026-10-30T22:48:03.3464597Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-native	(cached)
+2026-10-30T22:48:03.3466449Z ok  	github.com/samuelpmahan/gondola/cmd/composition-replay	(cached)
+2026-10-30T22:48:03.3467555Z ok  	github.com/samuelpmahan/gondola/cmd/composition-wasm	(cached)
+2026-10-30T22:48:03.3468607Z ok  	github.com/samuelpmahan/gondola/cmd/conformance-fixtures	(cached)
+2026-10-30T22:48:03.3528184Z ?   	github.com/samuelpmahan/gondola/cmd/counter-wasm	[no test files]
+2026-10-30T22:48:03.3620017Z ?   	github.com/samuelpmahan/gondola/cmd/editor-wasm	[no test files]
+2026-10-30T22:48:03.3804286Z ok  	github.com/samuelpmahan/gondola/cmd/gobi	(cached)
+2026-10-30T22:48:03.3818878Z ?   	github.com/samuelpmahan/gondola/cmd/godom-wasm	[no test files]
+2026-10-30T22:48:03.4139053Z ?   	github.com/samuelpmahan/gondola/cmd/http-lab	[no test files]
+2026-10-30T22:48:03.4142636Z ?   	github.com/samuelpmahan/gondola/cmd/http-save-wasm	[no test files]
+2026-10-30T22:48:03.4154636Z ok  	github.com/samuelpmahan/gondola/cmd/multi-root-wasm	(cached)
+2026-10-30T22:48:03.4156751Z ok  	github.com/samuelpmahan/gondola/cmd/render-contract	(cached)
+2026-10-30T22:48:03.4494949Z ok  	github.com/samuelpmahan/gondola/collection	(cached)
+2026-10-30T22:48:03.4648077Z ok  	github.com/samuelpmahan/gondola/compilercontract	(cached)
+2026-10-30T22:48:03.4666434Z ok  	github.com/samuelpmahan/gondola/composition	(cached)
+2026-10-30T22:48:03.4668085Z ?   	github.com/samuelpmahan/gondola/counter	[no test files]
+2026-10-30T22:48:03.4687301Z ok  	github.com/samuelpmahan/gondola/editor	(cached)
+2026-10-30T22:48:03.4877020Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/effect	(cached)
+2026-10-30T22:48:03.4955411Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/form	(cached)
+2026-10-30T22:48:03.4976402Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/list	(cached)
+2026-10-30T22:48:03.7144431Z ok  	github.com/samuelpmahan/gondola/gobi	0.113s
+2026-10-30T22:48:03.7145541Z ?   	github.com/samuelpmahan/gondola/godom	[no test files]
+2026-10-30T22:48:03.7146375Z ok  	github.com/samuelpmahan/gondola/httplab	(cached)
+2026-10-30T22:48:03.7147152Z ok  	github.com/samuelpmahan/gondola/httpwire	(cached)
+2026-10-30T22:48:03.7147961Z ok  	github.com/samuelpmahan/gondola/inputbinding	(cached)
+2026-10-30T22:48:03.7149154Z ok  	github.com/samuelpmahan/gondola/interaction	(cached)
+2026-10-30T22:48:03.7150005Z ok  	github.com/samuelpmahan/gondola/multisession	(cached)
+2026-10-30T22:48:03.7150809Z ok  	github.com/samuelpmahan/gondola/reactmap	(cached)
+2026-10-30T22:48:03.7151636Z ok  	github.com/samuelpmahan/gondola/rendercontract	(cached)
+2026-10-30T22:48:03.7153005Z ?   	github.com/samuelpmahan/gondola/renderer-conformance/coordination/reports	[no test files]
+2026-10-30T22:48:03.7154062Z ok  	github.com/samuelpmahan/gondola/wire	(cached)
+2026-10-30T22:48:03.7812957Z TAP version 13
+2026-10-30T22:48:03.8392671Z # Subtest: the complete controlled-input snapshot and its separate literal click handler validate
+2026-10-30T22:48:03.8416567Z ok 1 - the complete controlled-input snapshot and its separate literal click handler validate
+2026-10-30T22:48:03.8444491Z   ---
+2026-10-30T22:48:03.8445499Z   duration_ms: 5.858455
+2026-10-30T22:48:03.8446206Z   type: 'test'
+2026-10-30T22:48:03.8446839Z   ...
+2026-10-30T22:48:03.8475495Z # Subtest: browser protocol rejects duplicate path/event bindings
+2026-10-30T22:48:03.8477136Z ok 2 - browser protocol rejects duplicate path/event bindings
+2026-10-30T22:48:03.8478227Z   ---
+2026-10-30T22:48:03.8478919Z   duration_ms: 1.063081
+2026-10-30T22:48:03.8479632Z   type: 'test'
+2026-10-30T22:48:03.8480235Z   ...
+2026-10-30T22:48:03.8481483Z # Subtest: browser protocol rejects an input Node.On event at a bound path by its click-only rule
+2026-10-30T22:48:03.8483275Z ok 3 - browser protocol rejects an input Node.On event at a bound path by its click-only rule
+2026-10-30T22:48:03.8484417Z   ---
+2026-10-30T22:48:03.8485425Z   duration_ms: 0.484363
+2026-10-30T22:48:03.8486946Z   type: 'test'
+2026-10-30T22:48:03.8487574Z   ...
+2026-10-30T22:48:03.8488513Z # Subtest: browser protocol rejects unsupported event and source semantics
+2026-10-30T22:48:03.8491025Z ok 4 - browser protocol rejects unsupported event and source semantics
+2026-10-30T22:48:03.8492020Z   ---
+2026-10-30T22:48:03.8492532Z   duration_ms: 0.863789
+2026-10-30T22:48:03.8493081Z   type: 'test'
+2026-10-30T22:48:03.8493676Z   ...
+2026-10-30T22:48:03.8494531Z # Subtest: target.value requires a text input with exactly one value attribute
+2026-10-30T22:48:03.8496063Z ok 5 - target.value requires a text input with exactly one value attribute
+2026-10-30T22:48:03.8496812Z   ---
+2026-10-30T22:48:03.8497311Z   duration_ms: 2.370908
+2026-10-30T22:48:03.8497926Z   type: 'test'
+2026-10-30T22:48:03.8498466Z   ...
+2026-10-30T22:48:03.8499387Z # Subtest: browser protocol rejects malformed and non-canonical binding paths
+2026-10-30T22:48:03.8500630Z ok 6 - browser protocol rejects malformed and non-canonical binding paths
+2026-10-30T22:48:03.8501458Z   ---
+2026-10-30T22:48:03.8501987Z   duration_ms: 0.842581
+2026-10-30T22:48:03.8502625Z   type: 'test'
+2026-10-30T22:48:03.8503120Z   ...
+2026-10-30T22:48:03.8504031Z # Subtest: runAdversarial requires the Playwright keyboard and locator APIs
+2026-10-30T22:48:03.8505533Z ok 7 - runAdversarial requires the Playwright keyboard and locator APIs
+2026-10-30T22:48:03.8506369Z   ---
+2026-10-30T22:48:03.8506901Z   duration_ms: 1.346539
+2026-10-30T22:48:03.8507474Z   type: 'test'
+2026-10-30T22:48:03.8507983Z   ...
+2026-10-30T22:48:03.8602702Z # Subtest: mounts once and patches text input in place while preserving focus and currentTarget value
+2026-10-30T22:48:03.8626555Z ok 8 - mounts once and patches text input in place while preserving focus and currentTarget value
+2026-10-30T22:48:03.8634568Z   ---
+2026-10-30T22:48:03.8635790Z   duration_ms: 8.150165
+2026-10-30T22:48:03.8636588Z   type: 'test'
+2026-10-30T22:48:03.8636970Z   ...
+2026-10-30T22:48:03.8637861Z # Subtest: literal clicks transport their declared Arg unchanged and disabled clicks are suppressed
+2026-10-30T22:48:03.8639170Z ok 9 - literal clicks transport their declared Arg unchanged and disabled clicks are suppressed
+2026-10-30T22:48:03.8639916Z   ---
+2026-10-30T22:48:03.8640269Z   duration_ms: 1.365895
+2026-10-30T22:48:03.8641081Z   type: 'test'
+2026-10-30T22:48:03.8641407Z   ...
+2026-10-30T22:48:03.8642277Z # Subtest: invalid dispatch snapshots fail closed before the renderer changes its accepted snapshot
+2026-10-30T22:48:03.8643636Z ok 10 - invalid dispatch snapshots fail closed before the renderer changes its accepted snapshot
+2026-10-30T22:48:03.8644383Z   ---
+2026-10-30T22:48:03.8644727Z   duration_ms: 0.989323
+2026-10-30T22:48:03.8645317Z   type: 'test'
+2026-10-30T22:48:03.8645928Z   ...
+2026-10-30T22:48:03.8646680Z # Subtest: a null dispatch result is invalid and fences later input events
+2026-10-30T22:48:03.8647616Z ok 11 - a null dispatch result is invalid and fences later input events
+2026-10-30T22:48:03.8648269Z   ---
+2026-10-30T22:48:03.8648682Z   duration_ms: 1.61029
+2026-10-30T22:48:03.8649109Z   type: 'test'
+2026-10-30T22:48:03.8649472Z   ...
+2026-10-30T22:48:03.8650271Z # Subtest: detached and unmounted native input elements cannot dispatch stale events
+2026-10-30T22:48:03.8651385Z ok 12 - detached and unmounted native input elements cannot dispatch stale events
+2026-10-30T22:48:03.8652032Z   ---
+2026-10-30T22:48:03.8652383Z   duration_ms: 0.555785
+2026-10-30T22:48:03.8652784Z   type: 'test'
+2026-10-30T22:48:03.8653095Z   ...
+2026-10-30T22:48:03.8653792Z # Subtest: invalid initial snapshots leave preexisting root children untouched
+2026-10-30T22:48:03.8654813Z ok 13 - invalid initial snapshots leave preexisting root children untouched
+2026-10-30T22:48:03.8655723Z   ---
+2026-10-30T22:48:03.8656087Z   duration_ms: 0.330556
+2026-10-30T22:48:03.8656519Z   type: 'test'
+2026-10-30T22:48:03.8656881Z   ...
+2026-10-30T22:48:04.1957299Z # Subtest: matching snapshot and browser observations have no differences
+2026-10-30T22:48:04.1986295Z ok 14 - matching snapshot and browser observations have no differences
+2026-10-30T22:48:04.2015757Z   ---
+2026-10-30T22:48:04.2016952Z   duration_ms: 1.902556
+2026-10-30T22:48:04.2022941Z   type: 'test'
+2026-10-30T22:48:04.2023618Z   ...
+2026-10-30T22:48:04.2025337Z # Subtest: snapshot comparison rejects state, tree, bindings, and ordered-message differences independently
+2026-10-30T22:48:04.2027314Z ok 15 - snapshot comparison rejects state, tree, bindings, and ordered-message differences independently
+2026-10-30T22:48:04.2028484Z   ---
+2026-10-30T22:48:04.2029124Z   duration_ms: 0.792847
+2026-10-30T22:48:04.2029835Z   type: 'test'
+2026-10-30T22:48:04.2030471Z   ...
+2026-10-30T22:48:04.2032033Z # Subtest: browser comparison checks raw HTML, value property, disabled paths, and disabled properties separately
+2026-10-30T22:48:04.2034003Z ok 16 - browser comparison checks raw HTML, value property, disabled paths, and disabled properties separately
+2026-10-30T22:48:04.2035548Z   ---
+2026-10-30T22:48:04.2036290Z   duration_ms: 0.539656
+2026-10-30T22:48:04.2037003Z   type: 'test'
+2026-10-30T22:48:04.2037652Z   ...
+2026-10-30T22:48:04.2038801Z # Subtest: renderer-reported DOM channels are checked against actual DOM independently
+2026-10-30T22:48:04.2040399Z ok 17 - renderer-reported DOM channels are checked against actual DOM independently
+2026-10-30T22:48:04.2041462Z   ---
+2026-10-30T22:48:04.2042128Z   duration_ms: 0.245067
+2026-10-30T22:48:04.2042869Z   type: 'test'
+2026-10-30T22:48:04.2043511Z   ...
+2026-10-30T22:48:04.2044598Z # Subtest: native steps preserve browser input values and literal button arguments
+2026-10-30T22:48:04.2046515Z ok 18 - native steps preserve browser input values and literal button arguments
+2026-10-30T22:48:04.2047519Z   ---
+2026-10-30T22:48:04.2048147Z   duration_ms: 0.460528
+2026-10-30T22:48:04.2048742Z   type: 'test'
+2026-10-30T22:48:04.2049248Z   ...
+2026-10-30T22:48:04.2050255Z # Subtest: CompareInteraction envelope carries extra binding, message, value, and disabled fields
+2026-10-30T22:48:04.2051901Z ok 19 - CompareInteraction envelope carries extra binding, message, value, and disabled fields
+2026-10-30T22:48:04.2052870Z   ---
+2026-10-30T22:48:04.2053379Z   duration_ms: 0.34393
+2026-10-30T22:48:04.2054044Z   type: 'test'
+2026-10-30T22:48:04.2055336Z   ...
+2026-10-30T22:48:04.2056658Z # Subtest: fixed scripts cover empty and repeated saves, reset at zero, Unicode, typing, swaps, and stale input
+2026-10-30T22:48:04.2058463Z ok 20 - fixed scripts cover empty and repeated saves, reset at zero, Unicode, typing, swaps, and stale input
+2026-10-30T22:48:04.2059542Z   ---
+2026-10-30T22:48:04.2060141Z   duration_ms: 0.638739
+2026-10-30T22:48:04.2060873Z   type: 'test'
+2026-10-30T22:48:04.2061452Z   ...
+2026-10-30T22:48:04.2062804Z # Subtest: seeded scripts are deterministic, bounded, and guarantee an edit plus swaps
+2026-10-30T22:48:04.2064336Z ok 21 - seeded scripts are deterministic, bounded, and guarantee an edit plus swaps
+2026-10-30T22:48:04.2065556Z   ---
+2026-10-30T22:48:04.2066202Z   duration_ms: 1.376525
+2026-10-30T22:48:04.2066871Z   type: 'test'
+2026-10-30T22:48:04.2067455Z   ...
+2026-10-30T22:48:04.2068535Z # Subtest: CLI defaults to both required seeds and accepts explicit seeds and report paths
+2026-10-30T22:48:04.2069978Z ok 22 - CLI defaults to both required seeds and accepts explicit seeds and report paths
+2026-10-30T22:48:04.2071009Z   ---
+2026-10-30T22:48:04.2071606Z   duration_ms: 0.588577
+2026-10-30T22:48:04.2072232Z   type: 'test'
+2026-10-30T22:48:04.2072842Z   ...
+2026-10-30T22:48:04.2073788Z # Subtest: CLI rejects invalid ranges, duplicate seeds, and unknown flags
+2026-10-30T22:48:04.2075255Z ok 23 - CLI rejects invalid ranges, duplicate seeds, and unknown flags
+2026-10-30T22:48:04.2076168Z   ---
+2026-10-30T22:48:04.2076791Z   duration_ms: 0.55801
+2026-10-30T22:48:04.2090657Z   type: 'test'
+2026-10-30T22:48:04.2092498Z   ...
+2026-10-30T22:48:04.2236863Z # Subtest: validates the shared snapshot and resolves canonical paths, bindings and literal arguments
+2026-10-30T22:48:04.2238871Z ok 24 - validates the shared snapshot and resolves canonical paths, bindings and literal arguments
+2026-10-30T22:48:04.2240598Z   ---
+2026-10-30T22:48:04.2241221Z   duration_ms: 4.409075
+2026-10-30T22:48:04.2241875Z   type: 'test'
+2026-10-30T22:48:04.2242453Z   ...
+2026-10-30T22:48:04.2243436Z # Subtest: keeps browser protocol generic about state and application message names
+2026-10-30T22:48:04.2244838Z ok 25 - keeps browser protocol generic about state and application message names
+2026-10-30T22:48:04.2246599Z   ---
+2026-10-30T22:48:04.2247189Z   duration_ms: 0.834124
+2026-10-30T22:48:04.2247804Z   type: 'test'
+2026-10-30T22:48:04.2248339Z   ...
+2026-10-30T22:48:04.2249369Z # Subtest: rejects malformed snapshot envelopes, runtime errors, messages and tree nodes
+2026-10-30T22:48:04.2250609Z ok 26 - rejects malformed snapshot envelopes, runtime errors, messages and tree nodes
+2026-10-30T22:48:04.2251203Z   ---
+2026-10-30T22:48:04.2251585Z   duration_ms: 1.244418
+2026-10-30T22:48:04.2251975Z   type: 'test'
+2026-10-30T22:48:04.2252312Z   ...
+2026-10-30T22:48:04.2252894Z # Subtest: rejects unsupported tags, attributes, styles, and literal event names
+2026-10-30T22:48:04.2253670Z ok 27 - rejects unsupported tags, attributes, styles, and literal event names
+2026-10-30T22:48:04.2254201Z   ---
+2026-10-30T22:48:04.2254558Z   duration_ms: 0.886312
+2026-10-30T22:48:04.2254938Z   type: 'test'
+2026-10-30T22:48:04.2255729Z   ...
+2026-10-30T22:48:04.2256678Z # Subtest: rejects malformed and ambiguous value bindings
+2026-10-30T22:48:04.2257396Z ok 28 - rejects malformed and ambiguous value bindings
+2026-10-30T22:48:04.2257711Z   ---
+2026-10-30T22:48:04.2257922Z   duration_ms: 2.904773
+2026-10-30T22:48:04.2258154Z   type: 'test'
+2026-10-30T22:48:04.2258368Z   ...
+2026-10-30T22:48:04.2258684Z # Subtest: rejects malformed child paths before lookup
+2026-10-30T22:48:04.2259115Z ok 29 - rejects malformed child paths before lookup
+2026-10-30T22:48:04.2259421Z   ---
+2026-10-30T22:48:04.2259635Z   duration_ms: 0.315738
+2026-10-30T22:48:04.2259865Z   type: 'test'
+2026-10-30T22:48:04.2260060Z   ...
+2026-10-30T22:48:04.2877092Z # Subtest: invalid initial trees are rejected before React claims or mutates a reusable root
+2026-10-30T22:48:04.2878742Z ok 30 - invalid initial trees are rejected before React claims or mutates a reusable root
+2026-10-30T22:48:04.2880191Z   ---
+2026-10-30T22:48:04.2880793Z   duration_ms: 1.922783
+2026-10-30T22:48:04.2881314Z   type: 'test'
+2026-10-30T22:48:04.2881554Z   ...
+2026-10-30T22:48:04.2885647Z # Subtest: unsupported tags, attributes and events fail closed before createRoot
+2026-10-30T22:48:04.2888150Z ok 31 - unsupported tags, attributes and events fail closed before createRoot
+2026-10-30T22:48:04.2888940Z   ---
+2026-10-30T22:48:04.2889540Z   duration_ms: 0.882394
+2026-10-30T22:48:04.2890084Z   type: 'test'
+2026-10-30T22:48:04.2890562Z   ...
+2026-10-30T22:48:04.7814166Z # Subtest: native typing dispatches target.value synchronously and preserves the controlled input node
+2026-10-30T22:48:04.7816112Z ok 32 - native typing dispatches target.value synchronously and preserves the controlled input node
+2026-10-30T22:48:04.7816966Z   ---
+2026-10-30T22:48:04.7817217Z   duration_ms: 496.563051
+2026-10-30T22:48:04.7817631Z   type: 'test'
+2026-10-30T22:48:04.7818004Z   ...
+2026-10-30T22:48:04.8005984Z 1..32
+2026-10-30T22:48:04.8006257Z # tests 32
+2026-10-30T22:48:04.8006825Z # suites 0
+2026-10-30T22:48:04.8007291Z # pass 32
+2026-10-30T22:48:04.8007931Z # fail 0
+2026-10-30T22:48:04.8008657Z # cancelled 0
+2026-10-30T22:48:04.8009171Z # skipped 0
+2026-10-30T22:48:04.8009858Z # todo 0
+2026-10-30T22:48:04.8010490Z # duration_ms 1044.625459
+2026-10-30T22:48:05.4966095Z PASS initial DOM editor: backend=dom, draft="", saved="", saves=0, messages=0, live DOM matches
+2026-10-30T22:48:05.5897308Z PASS ordinary DOM typing: backend=dom, draft="draft", saved="", saves=0, messages=5, live DOM matches
+2026-10-30T22:48:05.6544791Z PASS swap with an unsaved draft: backend=react, draft="draft", saved="", saves=0, messages=5, live DOM matches
+2026-10-30T22:48:05.7053736Z PASS ordinary React typing: backend=react, draft="draft!", saved="", saves=0, messages=6, live DOM matches
+2026-10-30T22:48:06.0392560Z PASS save exact draft: backend=react, draft="draft!", saved="draft!", saves=1, messages=7, live DOM matches
+2026-10-30T22:48:06.1042849Z PASS repeat save: backend=react, draft="draft!", saved="draft!", saves=2, messages=8, live DOM matches
+2026-10-30T22:48:06.1479900Z PASS swap back with saved state: backend=dom, draft="draft!", saved="draft!", saves=2, messages=8, live DOM matches
+2026-10-30T22:48:06.2230629Z PASS reset after renderer swap: backend=dom, draft="", saved="", saves=0, messages=9, live DOM matches
+2026-10-30T22:48:06.2247402Z Demo smoke passed (8 observed states, ordinary typing in both renderers, one Go session).
+2026-10-30T22:55:10.0052639Z controlled-input parity matched 216 scripts over 10149 observations
+2026-10-30T22:55:10.0054214Z native CompareInteraction: matched
+2026-10-30T22:55:10.0055993Z full traces: /home/runner/work/gondola/gondola/controlled-input/build/report-seeds-20261030-20261031.json
+2026-10-30T22:55:10.4684033Z WASM API smoke passed: exact Step/Reply schemas, atomic malformed-input rejection, valid reply recovery, outbox drain, audit, safe IDs, and unserializable-input recovery.
+2026-10-30T22:55:10.5481304Z 
+2026-10-30T22:55:10.5506795Z   async-effects/build/reference.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:55:10.5507126Z 
+2026-10-30T22:55:10.5507276Z ⚡ Done in 56ms
+2026-10-30T22:55:10.7006011Z ok  	github.com/samuelpmahan/gondola/asyncsave	(cached)
+2026-10-30T22:55:10.7007086Z ?   	github.com/samuelpmahan/gondola/cmd/async-save-wasm	[no test files]
+2026-10-30T22:55:10.7008127Z ?   	github.com/samuelpmahan/gondola/cmd/collection-wasm	[no test files]
+2026-10-30T22:55:10.7009089Z ?   	github.com/samuelpmahan/gondola/cmd/compare-interaction	[no test files]
+2026-10-30T22:55:10.7489882Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-native	(cached)
+2026-10-30T22:55:10.7495279Z ok  	github.com/samuelpmahan/gondola/cmd/composition-replay	(cached)
+2026-10-30T22:55:10.7516904Z ok  	github.com/samuelpmahan/gondola/cmd/composition-wasm	(cached)
+2026-10-30T22:55:10.7532896Z ok  	github.com/samuelpmahan/gondola/cmd/conformance-fixtures	(cached)
+2026-10-30T22:55:10.7534293Z ?   	github.com/samuelpmahan/gondola/cmd/counter-wasm	[no test files]
+2026-10-30T22:55:10.7563362Z ?   	github.com/samuelpmahan/gondola/cmd/editor-wasm	[no test files]
+2026-10-30T22:55:10.7822825Z ok  	github.com/samuelpmahan/gondola/cmd/gobi	(cached)
+2026-10-30T22:55:10.7823736Z ?   	github.com/samuelpmahan/gondola/cmd/godom-wasm	[no test files]
+2026-10-30T22:55:10.8100305Z ?   	github.com/samuelpmahan/gondola/cmd/http-lab	[no test files]
+2026-10-30T22:55:10.8118132Z ?   	github.com/samuelpmahan/gondola/cmd/http-save-wasm	[no test files]
+2026-10-30T22:55:10.8119292Z ok  	github.com/samuelpmahan/gondola/cmd/multi-root-wasm	(cached)
+2026-10-30T22:55:10.8120243Z ok  	github.com/samuelpmahan/gondola/cmd/render-contract	(cached)
+2026-10-30T22:55:10.8435459Z ok  	github.com/samuelpmahan/gondola/collection	(cached)
+2026-10-30T22:55:10.8526092Z ok  	github.com/samuelpmahan/gondola/compilercontract	(cached)
+2026-10-30T22:55:10.8544115Z ok  	github.com/samuelpmahan/gondola/composition	(cached)
+2026-10-30T22:55:10.8568807Z ?   	github.com/samuelpmahan/gondola/counter	[no test files]
+2026-10-30T22:55:10.8729044Z ok  	github.com/samuelpmahan/gondola/editor	(cached)
+2026-10-30T22:55:10.8742893Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/effect	(cached)
+2026-10-30T22:55:10.8756706Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/form	(cached)
+2026-10-30T22:55:10.8786483Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/list	(cached)
+2026-10-30T22:55:10.9250992Z ok  	github.com/samuelpmahan/gondola/gobi	(cached)
+2026-10-30T22:55:10.9270545Z ?   	github.com/samuelpmahan/gondola/godom	[no test files]
+2026-10-30T22:55:10.9271732Z ok  	github.com/samuelpmahan/gondola/httplab	(cached)
+2026-10-30T22:55:10.9272638Z ok  	github.com/samuelpmahan/gondola/httpwire	(cached)
+2026-10-30T22:55:10.9476587Z ok  	github.com/samuelpmahan/gondola/inputbinding	(cached)
+2026-10-30T22:55:10.9506481Z ok  	github.com/samuelpmahan/gondola/interaction	(cached)
+2026-10-30T22:55:10.9583008Z ok  	github.com/samuelpmahan/gondola/multisession	(cached)
+2026-10-30T22:55:10.9584179Z ok  	github.com/samuelpmahan/gondola/reactmap	(cached)
+2026-10-30T22:55:10.9780427Z ok  	github.com/samuelpmahan/gondola/rendercontract	(cached)
+2026-10-30T22:55:10.9784739Z ?   	github.com/samuelpmahan/gondola/renderer-conformance/coordination/reports	[no test files]
+2026-10-30T22:55:10.9795673Z ok  	github.com/samuelpmahan/gondola/wire	(cached)
+2026-10-30T22:55:11.0486291Z TAP version 13
+2026-10-30T22:55:11.0886732Z # Subtest: the browser adversarial probe contract is a frozen, exact inventory
+2026-10-30T22:55:11.0888338Z ok 1 - the browser adversarial probe contract is a frozen, exact inventory
+2026-10-30T22:55:11.0915764Z   ---
+2026-10-30T22:55:11.0922206Z   duration_ms: 1.445143
+2026-10-30T22:55:11.0922925Z   type: 'test'
+2026-10-30T22:55:11.0923539Z   ...
+2026-10-30T22:55:11.0924485Z # Subtest: probe validation accepts every required case exactly once
+2026-10-30T22:55:11.0925988Z ok 2 - probe validation accepts every required case exactly once
+2026-10-30T22:55:11.0926892Z   ---
+2026-10-30T22:55:11.0927532Z   duration_ms: 0.554092
+2026-10-30T22:55:11.0928213Z   type: 'test'
+2026-10-30T22:55:11.0928805Z   ...
+2026-10-30T22:55:11.0929691Z # Subtest: probe validation rejects a missing required case
+2026-10-30T22:55:11.0930818Z ok 3 - probe validation rejects a missing required case
+2026-10-30T22:55:11.0931649Z   ---
+2026-10-30T22:55:11.0932290Z   duration_ms: 0.541098
+2026-10-30T22:55:11.0932961Z   type: 'test'
+2026-10-30T22:55:11.0933555Z   ...
+2026-10-30T22:55:11.0934536Z # Subtest: probe validation rejects duplicate and unknown case names
+2026-10-30T22:55:11.0936185Z ok 4 - probe validation rejects duplicate and unknown case names
+2026-10-30T22:55:11.0937122Z   ---
+2026-10-30T22:55:11.0937769Z   duration_ms: 0.329714
+2026-10-30T22:55:11.0938459Z   type: 'test'
+2026-10-30T22:55:11.0939069Z   ...
+2026-10-30T22:55:11.0940075Z # Subtest: synthetic transport and facade probes must be labeled synthetic
+2026-10-30T22:55:11.0941418Z ok 5 - synthetic transport and facade probes must be labeled synthetic
+2026-10-30T22:55:11.0942852Z   ---
+2026-10-30T22:55:11.0943487Z   duration_ms: 0.433007
+2026-10-30T22:55:11.0944172Z   type: 'test'
+2026-10-30T22:55:11.0944787Z   ...
+2026-10-30T22:55:11.0946098Z # Subtest: probe validation preserves case-specific failures in its result
+2026-10-30T22:55:11.0947431Z ok 6 - probe validation preserves case-specific failures in its result
+2026-10-30T22:55:11.0948341Z   ---
+2026-10-30T22:55:11.0948961Z   duration_ms: 0.329905
+2026-10-30T22:55:11.0949887Z   type: 'test'
+2026-10-30T22:55:11.0950502Z   ...
+2026-10-30T22:55:11.0951409Z # Subtest: runAdversarial requires a Playwright-compatible page
+2026-10-30T22:55:11.0952587Z ok 7 - runAdversarial requires a Playwright-compatible page
+2026-10-30T22:55:11.0953454Z   ---
+2026-10-30T22:55:11.0954087Z   duration_ms: 0.939721
+2026-10-30T22:55:11.0954757Z   type: 'test'
+2026-10-30T22:55:11.0955651Z   ...
+2026-10-30T22:55:11.4440186Z # Subtest: identical full observations compare cleanly
+2026-10-30T22:55:11.4441161Z ok 8 - identical full observations compare cleanly
+2026-10-30T22:55:11.4443611Z   ---
+2026-10-30T22:55:11.4445703Z   duration_ms: 1.881696
+2026-10-30T22:55:11.4446181Z   type: 'test'
+2026-10-30T22:55:11.4446565Z   ...
+2026-10-30T22:55:11.4447569Z # Subtest: snapshot comparison checks state, tree, bindings and ordered messages
+2026-10-30T22:55:11.4448918Z ok 9 - snapshot comparison checks state, tree, bindings and ordered messages
+2026-10-30T22:55:11.4449660Z   ---
+2026-10-30T22:55:11.4450084Z   duration_ms: 0.486968
+2026-10-30T22:55:11.4450541Z   type: 'test'
+2026-10-30T22:55:11.4450916Z   ...
+2026-10-30T22:55:11.4452745Z # Subtest: full observation comparison catches audit, transport order and pending drift
+2026-10-30T22:55:11.4454047Z ok 10 - full observation comparison catches audit, transport order and pending drift
+2026-10-30T22:55:11.4476179Z   ---
+2026-10-30T22:55:11.4476940Z   duration_ms: 0.538954
+2026-10-30T22:55:11.4477665Z   type: 'test'
+2026-10-30T22:55:11.4478068Z   ...
+2026-10-30T22:55:11.4478914Z # Subtest: full observation comparison catches each raw DOM and property drift
+2026-10-30T22:55:11.4480088Z ok 11 - full observation comparison catches each raw DOM and property drift
+2026-10-30T22:55:11.4480790Z   ---
+2026-10-30T22:55:11.4481207Z   duration_ms: 0.554954
+2026-10-30T22:55:11.4481682Z   type: 'test'
+2026-10-30T22:55:11.4482053Z   ...
+2026-10-30T22:55:11.4482743Z # Subtest: renderer DOM reports must match the captured live DOM
+2026-10-30T22:55:11.4483725Z ok 12 - renderer DOM reports must match the captured live DOM
+2026-10-30T22:55:11.4484378Z   ---
+2026-10-30T22:55:11.4484800Z   duration_ms: 0.281755
+2026-10-30T22:55:11.4485513Z   type: 'test'
+2026-10-30T22:55:11.4485894Z   ...
+2026-10-30T22:55:11.4486796Z # Subtest: native ticks retain existing CompareInteraction fields and extended diagnostics
+2026-10-30T22:55:11.4488153Z ok 13 - native ticks retain existing CompareInteraction fields and extended diagnostics
+2026-10-30T22:55:11.4489044Z   ---
+2026-10-30T22:55:11.4489445Z   duration_ms: 0.310488
+2026-10-30T22:55:11.4489908Z   type: 'test'
+2026-10-30T22:55:11.4490280Z   ...
+2026-10-30T22:55:11.4490933Z # Subtest: native steps encode every user-visible action family
+2026-10-30T22:55:11.4491886Z ok 14 - native steps encode every user-visible action family
+2026-10-30T22:55:11.4492485Z   ---
+2026-10-30T22:55:11.4492868Z   duration_ms: 0.297745
+2026-10-30T22:55:11.4493304Z   type: 'test'
+2026-10-30T22:55:11.4493665Z   ...
+2026-10-30T22:55:11.4494472Z # Subtest: CLI defaults and seed validation preserve the required two-seed run
+2026-10-30T22:55:11.4496058Z ok 15 - CLI defaults and seed validation preserve the required two-seed run
+2026-10-30T22:55:11.4496787Z   ---
+2026-10-30T22:55:11.4497275Z   duration_ms: 0.66561
+2026-10-30T22:55:11.4497817Z   type: 'test'
+2026-10-30T22:55:11.4498179Z   ...
+2026-10-30T22:55:11.4661126Z # Subtest: effect draining is deferred until after dispatch returns; completion remounts without Go init
+2026-10-30T22:55:11.4662731Z ok 16 - effect draining is deferred until after dispatch returns; completion remounts without Go init
+2026-10-30T22:55:11.4664124Z   ---
+2026-10-30T22:55:11.4664556Z   duration_ms: 11.026355
+2026-10-30T22:55:11.4665028Z   type: 'test'
+2026-10-30T22:55:11.4667893Z   ...
+2026-10-30T22:55:11.4669027Z # Subtest: replacement, late replies, duplicate replies, and current replies preserve Go request-ID authority
+2026-10-30T22:55:11.4670943Z ok 17 - replacement, late replies, duplicate replies, and current replies preserve Go request-ID authority
+2026-10-30T22:55:11.4671891Z   ---
+2026-10-30T22:55:11.4672308Z   duration_ms: 6.038897
+2026-10-30T22:55:11.4672844Z   type: 'test'
+2026-10-30T22:55:11.4673221Z   ...
+2026-10-30T22:55:11.4674027Z # Subtest: renderer swaps use cached Go snapshots and fence the previous facade
+2026-10-30T22:55:11.4676611Z ok 18 - renderer swaps use cached Go snapshots and fence the previous facade
+2026-10-30T22:55:11.4677348Z   ---
+2026-10-30T22:55:11.4677771Z   duration_ms: 2.59225
+2026-10-30T22:55:11.4678217Z   type: 'test'
+2026-10-30T22:55:11.4678597Z   ...
+2026-10-30T22:55:11.4679644Z # Subtest: one runtime object cannot be initialized by a second live host; ownership transfers after unmount
+2026-10-30T22:55:11.4681208Z ok 19 - one runtime object cannot be initialized by a second live host; ownership transfers after unmount
+2026-10-30T22:55:11.4682093Z   ---
+2026-10-30T22:55:11.4682510Z   duration_ms: 4.734441
+2026-10-30T22:55:11.4682964Z   type: 'test'
+2026-10-30T22:55:11.4683340Z   ...
+2026-10-30T22:55:11.4684051Z # Subtest: failed initial renderer mount releases its runtime lease
+2026-10-30T22:55:11.4685544Z ok 20 - failed initial renderer mount releases its runtime lease
+2026-10-30T22:55:11.4687479Z   ---
+2026-10-30T22:55:11.4688128Z   duration_ms: 1.143971
+2026-10-30T22:55:11.4688682Z   type: 'test'
+2026-10-30T22:55:11.4689057Z   ...
+2026-10-30T22:55:11.4689882Z # Subtest: failed cleanup still releases runtime ownership and fences old callbacks
+2026-10-30T22:55:11.4691083Z ok 21 - failed cleanup still releases runtime ownership and fences old callbacks
+2026-10-30T22:55:11.4691851Z   ---
+2026-10-30T22:55:11.4692234Z   duration_ms: 2.679142
+2026-10-30T22:55:11.4692673Z   type: 'test'
+2026-10-30T22:55:11.4693043Z   ...
+2026-10-30T22:55:11.4693922Z # Subtest: mount-time dispatch is blocked and a failed replacement restores the prior renderer
+2026-10-30T22:55:11.4697205Z ok 22 - mount-time dispatch is blocked and a failed replacement restores the prior renderer
+2026-10-30T22:55:11.4698064Z   ---
+2026-10-30T22:55:11.4698500Z   duration_ms: 1.027445
+2026-10-30T22:55:11.4698951Z   type: 'test'
+2026-10-30T22:55:11.4699345Z   ...
+2026-10-30T22:55:11.4700259Z # Subtest: a save's queued effect survives an immediate renderer swap in the same Go session
+2026-10-30T22:55:11.4701622Z ok 23 - a save's queued effect survives an immediate renderer swap in the same Go session
+2026-10-30T22:55:11.4702480Z   ---
+2026-10-30T22:55:11.4702963Z   duration_ms: 1.18044
+2026-10-30T22:55:11.4703458Z   type: 'test'
+2026-10-30T22:55:11.4703852Z   ...
+2026-10-30T22:55:11.4704789Z # Subtest: unmount before the drain microtask fences the unsent start command
+2026-10-30T22:55:11.4706370Z ok 24 - unmount before the drain microtask fences the unsent start command
+2026-10-30T22:55:11.4707005Z   ---
+2026-10-30T22:55:11.4707352Z   duration_ms: 1.060055
+2026-10-30T22:55:11.4707715Z   type: 'test'
+2026-10-30T22:55:11.4708080Z   ...
+2026-10-30T22:55:11.4708913Z # Subtest: unmount cancels active transport and fences late callbacks from every Go method
+2026-10-30T22:55:11.4710116Z ok 25 - unmount cancels active transport and fences late callbacks from every Go method
+2026-10-30T22:55:11.4710869Z   ---
+2026-10-30T22:55:11.4711252Z   duration_ms: 1.819951
+2026-10-30T22:55:11.4711658Z   type: 'test'
+2026-10-30T22:55:11.4711999Z   ...
+2026-10-30T22:55:11.4712926Z # Subtest: unmount remains available after a renderer failure and fences its outstanding reply
+2026-10-30T22:55:11.4714437Z ok 26 - unmount remains available after a renderer failure and fences its outstanding reply
+2026-10-30T22:55:11.4715786Z   ---
+2026-10-30T22:55:11.4716157Z   duration_ms: 1.416279
+2026-10-30T22:55:11.4716593Z   type: 'test'
+2026-10-30T22:55:11.4716939Z   ...
+2026-10-30T22:55:11.4717711Z # Subtest: the timeout transport exercises a real setTimeout completion path
+2026-10-30T22:55:11.4718736Z ok 27 - the timeout transport exercises a real setTimeout completion path
+2026-10-30T22:55:11.4719425Z   ---
+2026-10-30T22:55:11.4719780Z   duration_ms: 19.279442
+2026-10-30T22:55:11.4720441Z   type: 'test'
+2026-10-30T22:55:11.4720794Z   ...
+2026-10-30T22:55:11.4721464Z # Subtest: transport start failures reject flush instead of disappearing
+2026-10-30T22:55:11.4722540Z ok 28 - transport start failures reject flush instead of disappearing
+2026-10-30T22:55:11.4723244Z   ---
+2026-10-30T22:55:11.4723664Z   duration_ms: 1.812677
+2026-10-30T22:55:11.4724141Z   type: 'test'
+2026-10-30T22:55:11.4724522Z   ...
+2026-10-30T22:55:11.4725801Z # Subtest: a cancellation failure is surfaced without dropping later commands from the same outbox
+2026-10-30T22:55:11.4727321Z ok 29 - a cancellation failure is surfaced without dropping later commands from the same outbox
+2026-10-30T22:55:11.4728096Z   ---
+2026-10-30T22:55:11.4728444Z   duration_ms: 1.024409
+2026-10-30T22:55:11.4728857Z   type: 'test'
+2026-10-30T22:55:11.4729185Z   ...
+2026-10-30T22:55:11.4730053Z # Subtest: initial oracle snapshot and extended projection match the frozen contract
+2026-10-30T22:55:11.4731366Z ok 30 - initial oracle snapshot and extended projection match the frozen contract
+2026-10-30T22:55:11.4732157Z   ---
+2026-10-30T22:55:11.4732572Z   duration_ms: 2.490671
+2026-10-30T22:55:11.4733031Z   type: 'test'
+2026-10-30T22:55:11.4733418Z   ...
+2026-10-30T22:55:11.4734340Z # Subtest: replacement saves capture exact drafts and audit out-of-order full reply history
+2026-10-30T22:55:11.4735954Z ok 31 - replacement saves capture exact drafts and audit out-of-order full reply history
+2026-10-30T22:55:11.4736785Z   ---
+2026-10-30T22:55:11.4737193Z   duration_ms: 1.965061
+2026-10-30T22:55:11.4737651Z   type: 'test'
+2026-10-30T22:55:11.4738020Z   ...
+2026-10-30T22:55:11.4738861Z # Subtest: cancel and reset make late replies stale while request IDs stay monotonic
+2026-10-30T22:55:11.4740104Z ok 32 - cancel and reset make late replies stale while request IDs stay monotonic
+2026-10-30T22:55:11.4740854Z   ---
+2026-10-30T22:55:11.4741253Z   duration_ms: 1.20169
+2026-10-30T22:55:11.4741780Z   type: 'test'
+2026-10-30T22:55:11.4742156Z   ...
+2026-10-30T22:55:11.4743108Z # Subtest: duplicate completion is stale and active errors preserve prior saved data for retry
+2026-10-30T22:55:11.4744520Z ok 33 - duplicate completion is stale and active errors preserve prior saved data for retry
+2026-10-30T22:55:11.4745652Z   ---
+2026-10-30T22:55:11.4746080Z   duration_ms: 1.393186
+2026-10-30T22:55:11.4746536Z   type: 'test'
+2026-10-30T22:55:11.4746907Z   ...
+2026-10-30T22:55:11.4747774Z # Subtest: disabled actions are inert and invalid dispatch or reply input is atomic
+2026-10-30T22:55:11.4749017Z ok 34 - disabled actions are inert and invalid dispatch or reply input is atomic
+2026-10-30T22:55:11.4749770Z   ---
+2026-10-30T22:55:11.4750184Z   duration_ms: 2.237148
+2026-10-30T22:55:11.4750639Z   type: 'test'
+2026-10-30T22:55:11.4751007Z   ...
+2026-10-30T22:55:11.4752448Z # Subtest: the largest safe reply ID is valid and retained as an exact decimal message
+2026-10-30T22:55:11.4753739Z ok 35 - the largest safe reply ID is valid and retained as an exact decimal message
+2026-10-30T22:55:11.4754498Z   ---
+2026-10-30T22:55:11.4754918Z   duration_ms: 0.446522
+2026-10-30T22:55:11.4755628Z   type: 'test'
+2026-10-30T22:55:11.4756000Z   ...
+2026-10-30T22:55:11.4756658Z # Subtest: snapshots, effects, and audit receipts are copied
+2026-10-30T22:55:11.4757547Z ok 36 - snapshots, effects, and audit receipts are copied
+2026-10-30T22:55:11.4758079Z   ---
+2026-10-30T22:55:11.4758432Z   duration_ms: 0.836057
+2026-10-30T22:55:11.4758837Z   type: 'test'
+2026-10-30T22:55:11.4759169Z   ...
+2026-10-30T22:55:11.4760336Z # Subtest: fixed and seeded schedules are deterministic, bounded, and only reply to allocated IDs
+2026-10-30T22:55:11.4762136Z ok 37 - fixed and seeded schedules are deterministic, bounded, and only reply to allocated IDs
+2026-10-30T22:55:11.4763210Z   ---
+2026-10-30T22:55:11.4763647Z   duration_ms: 27.633758
+2026-10-30T22:55:11.4764123Z   type: 'test'
+2026-10-30T22:55:11.4764525Z   ...
+2026-10-30T22:55:11.4765601Z # Subtest: manual transport captures the command value and returns defensive logs
+2026-10-30T22:55:11.4767032Z ok 38 - manual transport captures the command value and returns defensive logs
+2026-10-30T22:55:11.4767740Z   ---
+2026-10-30T22:55:11.4768121Z   duration_ms: 3.01053
+2026-10-30T22:55:11.4768567Z   type: 'test'
+2026-10-30T22:55:11.4768932Z   ...
+2026-10-30T22:55:11.4769764Z # Subtest: cancel is advisory; late and duplicate deliveries still reach the callback
+2026-10-30T22:55:11.4770981Z ok 39 - cancel is advisory; late and duplicate deliveries still reach the callback
+2026-10-30T22:55:11.4771713Z   ---
+2026-10-30T22:55:11.4772141Z   duration_ms: 0.697199
+2026-10-30T22:55:11.4772612Z   type: 'test'
+2026-10-30T22:55:11.4773004Z   ...
+2026-10-30T22:55:11.4773811Z # Subtest: manual transport rejects malformed commands, options, IDs, and unknown deliveries
+2026-10-30T22:55:11.4774929Z ok 40 - manual transport rejects malformed commands, options, IDs, and unknown deliveries
+2026-10-30T22:55:11.4775913Z   ---
+2026-10-30T22:55:11.4776258Z   duration_ms: 2.382409
+2026-10-30T22:55:11.4776639Z   type: 'test'
+2026-10-30T22:55:11.4776947Z   ...
+2026-10-30T22:55:11.4777753Z # Subtest: timeout transport delivers through a timer and cancellation clears queued work
+2026-10-30T22:55:11.4778970Z ok 41 - timeout transport delivers through a timer and cancellation clears queued work
+2026-10-30T22:55:11.4779747Z   ---
+2026-10-30T22:55:11.4780097Z   duration_ms: 21.43987
+2026-10-30T22:55:11.4780512Z   type: 'test'
+2026-10-30T22:55:11.4780861Z   ...
+2026-10-30T22:55:11.4781612Z # Subtest: timeout result-provider failures become visible error replies
+2026-10-30T22:55:11.4782627Z ok 42 - timeout result-provider failures become visible error replies
+2026-10-30T22:55:11.4783239Z   ---
+2026-10-30T22:55:11.4783626Z   duration_ms: 10.536091
+2026-10-30T22:55:11.4784053Z   type: 'test'
+2026-10-30T22:55:11.4784393Z   ...
+2026-10-30T22:55:11.4784718Z 1..42
+2026-10-30T22:55:11.4785271Z # tests 42
+2026-10-30T22:55:11.4785590Z # suites 0
+2026-10-30T22:55:11.4785943Z # pass 42
+2026-10-30T22:55:11.4786354Z # fail 0
+2026-10-30T22:55:11.4786752Z # cancelled 0
+2026-10-30T22:55:11.4787130Z # skipped 0
+2026-10-30T22:55:11.4787484Z # todo 0
+2026-10-30T22:55:11.4787875Z # duration_ms 443.031377
+2026-10-30T22:55:12.2417178Z PASS initial Go editor: backend=dom, status=idle, pending=0, saved="", audit=0
+2026-10-30T22:55:12.3581471Z PASS manual request A starts: backend=dom, status=pending, pending=1, saved="", audit=0
+2026-10-30T22:55:12.4102987Z PASS request A remains pending after renderer swap: backend=react, status=pending, pending=1, saved="", audit=0
+2026-10-30T22:55:12.6143915Z PASS request B supersedes A after renderer swap: backend=react, status=pending, pending=2, saved="", audit=0
+2026-10-30T22:55:12.6768473Z PASS late A reply is recorded and ignored: backend=react, status=pending, pending=2, saved="", audit=1
+2026-10-30T22:55:12.7214391Z PASS current B reply is accepted: backend=react, status=saved, pending=0, saved="request B", audit=2
+2026-10-30T22:55:12.7731293Z PASS duplicate B reply is ignored: backend=react, status=saved, pending=0, saved="request B", audit=3
+2026-10-30T22:55:12.8579096Z PASS manual request C starts: backend=react, status=pending, pending=3, saved="request B", audit=3
+2026-10-30T22:55:12.9229147Z PASS request C is canceled: backend=react, status=cancelled, pending=0, saved="request B", audit=3
+2026-10-30T22:55:12.9891969Z PASS reset clears the canceled editor but keeps IDs monotonic: backend=react, status=idle, pending=0, saved="", audit=3
+2026-10-30T22:55:13.0365021Z PASS late C reply after cancel and reset is ignored: backend=react, status=idle, pending=0, saved="", audit=4
+2026-10-30T22:55:13.1694280Z PASS timer request stays pending through an immediate renderer swap: backend=dom, status=pending, pending=4, saved="", audit=4
+2026-10-30T22:55:13.8449560Z PASS setTimeout reply is accepted after the renderer swap: backend=dom, status=saved, pending=0, saved="timed save", audit=5
+2026-10-30T22:55:13.9906335Z PASS rejected reply preserves the previous saved result: backend=dom, status=error: demo transport rejected the save, pending=0, saved="timed save", audit=6
+2026-10-30T22:55:14.1067372Z PASS retry receives a new request ID: backend=dom, status=saved, pending=0, saved="retry me", audit=7
+2026-10-30T22:55:14.1068367Z Async-effects demo smoke passed: manual stale/error/duplicate replies, reset, timer delivery, and live DOM matched.
+2026-10-30T22:56:23.8654222Z async-effects parity matched 76 scripts over 1552 initial/action observations
+2026-10-30T22:56:23.8655321Z native CompareInteraction: matched
+2026-10-30T22:56:23.8656593Z full traces: /home/runner/work/gondola/gondola/async-effects/build/async-effects-traces-seeds-20261030-20261031.json
+2026-10-30T22:56:24.7682136Z http-save-wasm bridge smoke passed
+2026-10-30T22:56:24.8464990Z 
+2026-10-30T22:56:24.8476821Z   http-effects/build/react.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:56:24.8477192Z 
+2026-10-30T22:56:24.8477345Z ⚡ Done in 55ms
+2026-10-30T22:56:24.9117852Z 
+2026-10-30T22:56:24.9146737Z   http-effects/build/reference.bundle.mjs  1.1mb ⚠️
+2026-10-30T22:56:24.9147099Z 
+2026-10-30T22:56:24.9147251Z ⚡ Done in 59ms
+2026-10-30T22:56:25.0616848Z ok  	github.com/samuelpmahan/gondola/asyncsave	(cached)
+2026-10-30T22:56:25.0617848Z ?   	github.com/samuelpmahan/gondola/cmd/async-save-wasm	[no test files]
+2026-10-30T22:56:25.0618868Z ?   	github.com/samuelpmahan/gondola/cmd/collection-wasm	[no test files]
+2026-10-30T22:56:25.0619731Z ?   	github.com/samuelpmahan/gondola/cmd/compare-interaction	[no test files]
+2026-10-30T22:56:25.1111614Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-native	(cached)
+2026-10-30T22:56:25.1138769Z ok  	github.com/samuelpmahan/gondola/cmd/composition-replay	(cached)
+2026-10-30T22:56:25.1140287Z ok  	github.com/samuelpmahan/gondola/cmd/composition-wasm	(cached)
+2026-10-30T22:56:25.1141525Z ok  	github.com/samuelpmahan/gondola/cmd/conformance-fixtures	(cached)
+2026-10-30T22:56:25.1186542Z ?   	github.com/samuelpmahan/gondola/cmd/counter-wasm	[no test files]
+2026-10-30T22:56:25.1187614Z ?   	github.com/samuelpmahan/gondola/cmd/editor-wasm	[no test files]
+2026-10-30T22:56:25.1449431Z ok  	github.com/samuelpmahan/gondola/cmd/gobi	(cached)
+2026-10-30T22:56:25.1467603Z ?   	github.com/samuelpmahan/gondola/cmd/godom-wasm	[no test files]
+2026-10-30T22:56:25.1742928Z ?   	github.com/samuelpmahan/gondola/cmd/http-lab	[no test files]
+2026-10-30T22:56:25.1744498Z ?   	github.com/samuelpmahan/gondola/cmd/http-save-wasm	[no test files]
+2026-10-30T22:56:25.1746222Z ok  	github.com/samuelpmahan/gondola/cmd/multi-root-wasm	(cached)
+2026-10-30T22:56:25.1762712Z ok  	github.com/samuelpmahan/gondola/cmd/render-contract	(cached)
+2026-10-30T22:56:25.2106616Z ok  	github.com/samuelpmahan/gondola/collection	(cached)
+2026-10-30T22:56:25.2230473Z ok  	github.com/samuelpmahan/gondola/compilercontract	(cached)
+2026-10-30T22:56:25.2264224Z ok  	github.com/samuelpmahan/gondola/composition	(cached)
+2026-10-30T22:56:25.2290338Z ?   	github.com/samuelpmahan/gondola/counter	[no test files]
+2026-10-30T22:56:25.2394393Z ok  	github.com/samuelpmahan/gondola/editor	(cached)
+2026-10-30T22:56:25.2436094Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/effect	(cached)
+2026-10-30T22:56:25.2516769Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/form	(cached)
+2026-10-30T22:56:25.2517904Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/list	(cached)
+2026-10-30T22:56:25.2838809Z ok  	github.com/samuelpmahan/gondola/gobi	(cached)
+2026-10-30T22:56:25.2840065Z ?   	github.com/samuelpmahan/gondola/godom	[no test files]
+2026-10-30T22:56:25.3017518Z ok  	github.com/samuelpmahan/gondola/httplab	(cached)
+2026-10-30T22:56:25.3043705Z ok  	github.com/samuelpmahan/gondola/httpwire	(cached)
+2026-10-30T22:56:25.3064078Z ok  	github.com/samuelpmahan/gondola/inputbinding	(cached)
+2026-10-30T22:56:25.3070574Z ok  	github.com/samuelpmahan/gondola/interaction	(cached)
+2026-10-30T22:56:25.3291636Z ok  	github.com/samuelpmahan/gondola/multisession	(cached)
+2026-10-30T22:56:25.3334866Z ok  	github.com/samuelpmahan/gondola/reactmap	(cached)
+2026-10-30T22:56:25.3444508Z ok  	github.com/samuelpmahan/gondola/rendercontract	(cached)
+2026-10-30T22:56:25.3456704Z ?   	github.com/samuelpmahan/gondola/renderer-conformance/coordination/reports	[no test files]
+2026-10-30T22:56:25.3509799Z ok  	github.com/samuelpmahan/gondola/wire	(cached)
+2026-10-30T22:56:25.4165771Z TAP version 13
+2026-10-30T22:56:25.7911819Z # Subtest: comparison covers runtime, audit, real DOM controls, transport order, and server records
+2026-10-30T22:56:25.7921935Z ok 1 - comparison covers runtime, audit, real DOM controls, transport order, and server records
+2026-10-30T22:56:25.7923140Z   ---
+2026-10-30T22:56:25.7923666Z   duration_ms: 1.945224
+2026-10-30T22:56:25.7924078Z   type: 'test'
+2026-10-30T22:56:25.7924407Z   ...
+2026-10-30T22:56:25.7926729Z # Subtest: comparison flags reported renderer snapshots that disagree with live DOM
+2026-10-30T22:56:25.7929316Z ok 2 - comparison flags reported renderer snapshots that disagree with live DOM
+2026-10-30T22:56:25.7930160Z   ---
+2026-10-30T22:56:25.7930417Z   duration_ms: 0.397781
+2026-10-30T22:56:25.7930703Z   type: 'test'
+2026-10-30T22:56:25.7932084Z   ...
+2026-10-30T22:56:25.7932621Z # Subtest: native input steps preserve browser actions and deterministic control actions
+2026-10-30T22:56:25.7935280Z ok 3 - native input steps preserve browser actions and deterministic control actions
+2026-10-30T22:56:25.7936854Z   ---
+2026-10-30T22:56:25.7937091Z   duration_ms: 0.281684
+2026-10-30T22:56:25.7937335Z   type: 'test'
+2026-10-30T22:56:25.7937527Z   ...
+2026-10-30T22:56:25.7941817Z # Subtest: CLI parsing accepts reproducible seeds and rejects invalid limits
+2026-10-30T22:56:25.7943052Z ok 4 - CLI parsing accepts reproducible seeds and rejects invalid limits
+2026-10-30T22:56:25.7951484Z   ---
+2026-10-30T22:56:25.7951937Z   duration_ms: 0.637197
+2026-10-30T22:56:25.7952371Z   type: 'test'
+2026-10-30T22:56:25.7952717Z   ...
+2026-10-30T22:56:25.7954074Z # Subtest: native comparator is a required gate
+2026-10-30T22:56:25.7956015Z ok 5 - native comparator is a required gate
+2026-10-30T22:56:25.7957114Z   ---
+2026-10-30T22:56:25.7957673Z   duration_ms: 0.291112
+2026-10-30T22:56:25.7958297Z   type: 'test'
+2026-10-30T22:56:25.7958898Z   ...
+2026-10-30T22:56:25.7971221Z # Subtest: only console diagnostics matching an expected API URL and observed status are classified
+2026-10-30T22:56:25.7983464Z ok 6 - only console diagnostics matching an expected API URL and observed status are classified
+2026-10-30T22:56:25.7984374Z   ---
+2026-10-30T22:56:25.7984954Z   duration_ms: 0.457232
+2026-10-30T22:56:25.7985615Z   type: 'test'
+2026-10-30T22:56:25.7986134Z   ...
+2026-10-30T22:56:25.7987274Z # Subtest: expected non-success API routes require exactly the declared URL and status count
+2026-10-30T22:56:25.7988843Z ok 7 - expected non-success API routes require exactly the declared URL and status count
+2026-10-30T22:56:25.7989894Z   ---
+2026-10-30T22:56:25.7990502Z   duration_ms: 0.3918
+2026-10-30T22:56:25.7991181Z   type: 'test'
+2026-10-30T22:56:25.7991851Z   ...
+2026-10-30T22:56:25.7992952Z # Subtest: partial-body network diagnostics are scoped to an observed mode=drop URL and status
+2026-10-30T22:56:25.7994478Z ok 8 - partial-body network diagnostics are scoped to an observed mode=drop URL and status
+2026-10-30T22:56:25.7995712Z   ---
+2026-10-30T22:56:25.7996254Z   duration_ms: 0.333231
+2026-10-30T22:56:25.7996818Z   type: 'test'
+2026-10-30T22:56:25.7997315Z   ...
+2026-10-30T22:56:25.8158579Z # Subtest: HTTP encoder emits the exact Go request wire shape and validates values
+2026-10-30T22:56:25.8170411Z ok 9 - HTTP encoder emits the exact Go request wire shape and validates values
+2026-10-30T22:56:25.8174616Z   ---
+2026-10-30T22:56:25.8175513Z   duration_ms: 2.021255
+2026-10-30T22:56:25.8175953Z   type: 'test'
+2026-10-30T22:56:25.8176295Z   ...
+2026-10-30T22:56:25.8177020Z # Subtest: HTTP decoder preserves only exact correlated replies
+2026-10-30T22:56:25.8177863Z ok 10 - HTTP decoder preserves only exact correlated replies
+2026-10-30T22:56:25.8178572Z   ---
+2026-10-30T22:56:25.8179066Z   duration_ms: 3.707266
+2026-10-30T22:56:25.8179927Z   type: 'test'
+2026-10-30T22:56:25.8180507Z   ...
+2026-10-30T22:56:25.8181484Z # Subtest: HTTP reference runtime keeps the async model API and exposes independent codecs
+2026-10-30T22:56:25.8182828Z ok 11 - HTTP reference runtime keeps the async model API and exposes independent codecs
+2026-10-30T22:56:25.8183676Z   ---
+2026-10-30T22:56:25.8184165Z   duration_ms: 1.404857
+2026-10-30T22:56:25.8184720Z   type: 'test'
+2026-10-30T22:56:25.8185421Z   ...
+2026-10-30T22:56:25.8186365Z # Subtest: fixed HTTP schedules cover real response outcomes, hold/release, swaps, and retry
+2026-10-30T22:56:25.8189000Z ok 12 - fixed HTTP schedules cover real response outcomes, hold/release, swaps, and retry
+2026-10-30T22:56:25.8189841Z   ---
+2026-10-30T22:56:25.8190664Z   duration_ms: 2.263066
+2026-10-30T22:56:25.8191192Z   type: 'test'
+2026-10-30T22:56:25.8191859Z   ...
+2026-10-30T22:56:25.8192667Z # Subtest: fixed and seeded scripts use the documented action wire schema
+2026-10-30T22:56:25.8193765Z ok 13 - fixed and seeded scripts use the documented action wire schema
+2026-10-30T22:56:25.8194435Z   ---
+2026-10-30T22:56:25.8194906Z   duration_ms: 3.252639
+2026-10-30T22:56:25.8196566Z   type: 'test'
+2026-10-30T22:56:25.8197066Z   ...
+2026-10-30T22:56:25.8197738Z # Subtest: makeScripts is reproducible and uses explicit unique seeds
+2026-10-30T22:56:25.8198538Z ok 14 - makeScripts is reproducible and uses explicit unique seeds
+2026-10-30T22:56:25.8198918Z   ---
+2026-10-30T22:56:25.8199136Z   duration_ms: 7.79454
+2026-10-30T22:56:25.8199377Z   type: 'test'
+2026-10-30T22:56:25.8199586Z   ...
+2026-10-30T22:56:25.8200001Z # Subtest: HTTP transport POSTs encoded JSON and returns one decoded reply
+2026-10-30T22:56:25.8200595Z ok 15 - HTTP transport POSTs encoded JSON and returns one decoded reply
+2026-10-30T22:56:25.8201068Z   ---
+2026-10-30T22:56:25.8201434Z   duration_ms: 2.982667
+2026-10-30T22:56:25.8201835Z   type: 'test'
+2026-10-30T22:56:25.8202157Z   ...
+2026-10-30T22:56:25.8203067Z # Subtest: HTTP transport converts fetch, encoder, and resolver failures to safe network replies
+2026-10-30T22:56:25.8204357Z ok 16 - HTTP transport converts fetch, encoder, and resolver failures to safe network replies
+2026-10-30T22:56:25.8208830Z   ---
+2026-10-30T22:56:25.8209191Z   duration_ms: 0.532512
+2026-10-30T22:56:25.8209563Z   type: 'test'
+2026-10-30T22:56:25.8209855Z   ...
+2026-10-30T22:56:25.8210642Z # Subtest: settled retains a delivery callback failure until it is consumed exactly once
+2026-10-30T22:56:25.8211807Z ok 17 - settled retains a delivery callback failure until it is consumed exactly once
+2026-10-30T22:56:25.8212510Z   ---
+2026-10-30T22:56:25.8212861Z   duration_ms: 5.89886
+2026-10-30T22:56:25.8213240Z   type: 'test'
+2026-10-30T22:56:25.8213563Z   ...
+2026-10-30T22:56:25.8214370Z # Subtest: decode exceptions and malformed decoder replies become invalid-response replies
+2026-10-30T22:56:25.8215745Z ok 18 - decode exceptions and malformed decoder replies become invalid-response replies
+2026-10-30T22:56:25.8216532Z   ---
+2026-10-30T22:56:25.8216985Z   duration_ms: 0.920444
+2026-10-30T22:56:25.8217464Z   type: 'test'
+2026-10-30T22:56:25.8217878Z   ...
+2026-10-30T22:56:25.8218755Z # Subtest: cancel is advisory and fences a late fetch result even when fetch ignores AbortSignal
+2026-10-30T22:56:25.8220098Z ok 19 - cancel is advisory and fences a late fetch result even when fetch ignores AbortSignal
+2026-10-30T22:56:25.8220920Z   ---
+2026-10-30T22:56:25.8221296Z   duration_ms: 0.475746
+2026-10-30T22:56:25.8221767Z   type: 'test'
+2026-10-30T22:56:25.8222095Z   ...
+2026-10-30T22:56:25.8223458Z # Subtest: cancel during response-body reading logs before abort and suppresses decoded completion
+2026-10-30T22:56:25.8224516Z ok 20 - cancel during response-body reading logs before abort and suppresses decoded completion
+2026-10-30T22:56:25.8225364Z   ---
+2026-10-30T22:56:25.8225843Z   duration_ms: 0.485313
+2026-10-30T22:56:25.8226293Z   type: 'test'
+2026-10-30T22:56:25.8226535Z   ...
+2026-10-30T22:56:25.8227482Z # Subtest: dispose aborts pending requests, suppresses late delivery, and is idempotent
+2026-10-30T22:56:25.8228268Z ok 21 - dispose aborts pending requests, suppresses late delivery, and is idempotent
+2026-10-30T22:56:25.8228886Z   ---
+2026-10-30T22:56:25.8229272Z   duration_ms: 0.504791
+2026-10-30T22:56:25.8229777Z   type: 'test'
+2026-10-30T22:56:25.8230231Z   ...
+2026-10-30T22:56:25.8231317Z # Subtest: HTTP status is passed to the decoder and response-body read failures are network errors
+2026-10-30T22:56:25.8232351Z ok 22 - HTTP status is passed to the decoder and response-body read failures are network errors
+2026-10-30T22:56:25.8232822Z   ---
+2026-10-30T22:56:25.8233038Z   duration_ms: 0.587495
+2026-10-30T22:56:25.8233467Z   type: 'test'
+2026-10-30T22:56:25.8233803Z   ...
+2026-10-30T22:56:25.8234612Z # Subtest: default fetch sends a real HTTP request and decodes the response
+2026-10-30T22:56:25.8236092Z ok 23 - default fetch sends a real HTTP request and decodes the response
+2026-10-30T22:56:25.8236806Z   ---
+2026-10-30T22:56:25.8237242Z   duration_ms: 44.98769
+2026-10-30T22:56:25.8237748Z   type: 'test'
+2026-10-30T22:56:25.8238083Z   ...
+2026-10-30T22:56:25.8238428Z 1..23
+2026-10-30T22:56:25.8238774Z # tests 23
+2026-10-30T22:56:25.8239101Z # suites 0
+2026-10-30T22:56:25.8239428Z # pass 23
+2026-10-30T22:56:25.8239785Z # fail 0
+2026-10-30T22:56:25.8240114Z # cancelled 0
+2026-10-30T22:56:25.8240449Z # skipped 0
+2026-10-30T22:56:25.8240784Z # todo 0
+2026-10-30T22:56:25.8241161Z # duration_ms 423.020705
+2026-10-30T22:56:26.5166745Z PASS initial Go editor: backend=dom, status=idle, pending=0, saved="", audit=0
+2026-10-30T22:56:26.8415730Z PASS captured pending-request DOM→React swap screenshot: /home/runner/work/gondola/gondola/http-effects/build/demo-pending-swap.png
+2026-10-30T22:56:26.8417760Z PASS real held request survives renderer swap: backend=react, status=pending, pending=1, saved="", audit=0
+2026-10-30T22:56:26.9993814Z PASS released HTTP response is accepted after swap: backend=react, status=saved, pending=0, saved="held across renderer swap", audit=1
+2026-10-30T22:56:27.0799371Z PASS server error preserves the previous saved value: backend=react, status=error: server rejected, pending=0, saved="held across renderer swap", audit=2
+2026-10-30T22:56:27.1578102Z PASS retry uses a fresh ID and succeeds over HTTP: backend=react, status=saved, pending=0, saved="retry after server error", audit=3
+2026-10-30T22:56:27.2263404Z PASS malformed HTTP body becomes a typed error: backend=react, status=error: invalid response, pending=0, saved="retry after server error", audit=4
+2026-10-30T22:56:27.3060069Z PASS malformed response retry succeeds: backend=react, status=saved, pending=0, saved="retry after malformed response", audit=5
+2026-10-30T22:56:27.4560973Z PASS cancel aborts the pending fetch and is recorded by the server: backend=react, status=cancelled, pending=0, saved="retry after malformed response", audit=5
+2026-10-30T22:56:27.4566518Z HTTP effects demo smoke passed: held HTTP release, pending renderer swap, server error and retry, malformed reply and retry, and observed fetch abort.
+2026-10-30T22:57:40.3292074Z HTTP effects parity matched 82 scripts over 1572 initial/action observations
+2026-10-30T22:57:40.3293681Z native CompareInteraction: matched
+2026-10-30T22:57:40.3295600Z full traces: /home/runner/work/gondola/gondola/http-effects/build/http-effects-traces-seeds-20261030-20261031.json
+2026-10-30T22:57:40.7696795Z collection-wasm bridge smoke passed
+2026-10-30T22:57:40.8580748Z 
+2026-10-30T22:57:40.8586655Z   keyed-editor/build/react.bundle.mjs  1.2mb ⚠️
+2026-10-30T22:57:40.8587270Z 
+2026-10-30T22:57:40.8587423Z ⚡ Done in 56ms
+2026-10-30T22:57:40.9303266Z 
+2026-10-30T22:57:40.9304503Z   keyed-editor/build/reference.bundle.mjs  2.3mb ⚠️
+2026-10-30T22:57:40.9304948Z 
+2026-10-30T22:57:40.9305418Z ⚡ Done in 66ms
+2026-10-30T22:57:41.0842040Z ok  	github.com/samuelpmahan/gondola/asyncsave	(cached)
+2026-10-30T22:57:41.0857429Z ?   	github.com/samuelpmahan/gondola/cmd/async-save-wasm	[no test files]
+2026-10-30T22:57:41.0916352Z ?   	github.com/samuelpmahan/gondola/cmd/collection-wasm	[no test files]
+2026-10-30T22:57:41.0917532Z ?   	github.com/samuelpmahan/gondola/cmd/compare-interaction	[no test files]
+2026-10-30T22:57:41.1323238Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-native	(cached)
+2026-10-30T22:57:41.1353738Z ok  	github.com/samuelpmahan/gondola/cmd/composition-replay	(cached)
+2026-10-30T22:57:41.1387054Z ok  	github.com/samuelpmahan/gondola/cmd/composition-wasm	(cached)
+2026-10-30T22:57:41.1394239Z ok  	github.com/samuelpmahan/gondola/cmd/conformance-fixtures	(cached)
+2026-10-30T22:57:41.1415187Z ?   	github.com/samuelpmahan/gondola/cmd/counter-wasm	[no test files]
+2026-10-30T22:57:41.1443370Z ?   	github.com/samuelpmahan/gondola/cmd/editor-wasm	[no test files]
+2026-10-30T22:57:41.1663694Z ok  	github.com/samuelpmahan/gondola/cmd/gobi	(cached)
+2026-10-30T22:57:41.1676218Z ?   	github.com/samuelpmahan/gondola/cmd/godom-wasm	[no test files]
+2026-10-30T22:57:41.1987763Z ?   	github.com/samuelpmahan/gondola/cmd/http-lab	[no test files]
+2026-10-30T22:57:41.2024204Z ?   	github.com/samuelpmahan/gondola/cmd/http-save-wasm	[no test files]
+2026-10-30T22:57:41.2031164Z ok  	github.com/samuelpmahan/gondola/cmd/multi-root-wasm	(cached)
+2026-10-30T22:57:41.2047072Z ok  	github.com/samuelpmahan/gondola/cmd/render-contract	(cached)
+2026-10-30T22:57:41.2335953Z ok  	github.com/samuelpmahan/gondola/collection	(cached)
+2026-10-30T22:57:41.2436298Z ok  	github.com/samuelpmahan/gondola/compilercontract	(cached)
+2026-10-30T22:57:41.2440867Z ok  	github.com/samuelpmahan/gondola/composition	(cached)
+2026-10-30T22:57:41.2466010Z ?   	github.com/samuelpmahan/gondola/counter	[no test files]
+2026-10-30T22:57:41.2623471Z ok  	github.com/samuelpmahan/gondola/editor	(cached)
+2026-10-30T22:57:41.2662015Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/effect	(cached)
+2026-10-30T22:57:41.2663508Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/form	(cached)
+2026-10-30T22:57:41.2664818Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/list	(cached)
+2026-10-30T22:57:41.3188624Z ok  	github.com/samuelpmahan/gondola/gobi	(cached)
+2026-10-30T22:57:41.3192976Z ?   	github.com/samuelpmahan/gondola/godom	[no test files]
+2026-10-30T22:57:41.3216659Z ok  	github.com/samuelpmahan/gondola/httplab	(cached)
+2026-10-30T22:57:41.3245830Z ok  	github.com/samuelpmahan/gondola/httpwire	(cached)
+2026-10-30T22:57:41.3375327Z ok  	github.com/samuelpmahan/gondola/inputbinding	(cached)
+2026-10-30T22:57:41.3383430Z ok  	github.com/samuelpmahan/gondola/interaction	(cached)
+2026-10-30T22:57:41.3503113Z ok  	github.com/samuelpmahan/gondola/multisession	(cached)
+2026-10-30T22:57:41.3516703Z ok  	github.com/samuelpmahan/gondola/reactmap	(cached)
+2026-10-30T22:57:41.3693829Z ok  	github.com/samuelpmahan/gondola/rendercontract	(cached)
+2026-10-30T22:57:41.3696891Z ?   	github.com/samuelpmahan/gondola/renderer-conformance/coordination/reports	[no test files]
+2026-10-30T22:57:41.3712948Z ok  	github.com/samuelpmahan/gondola/wire	(cached)
+2026-10-30T22:57:41.4386622Z TAP version 13
+2026-10-30T22:57:41.9656903Z # Subtest: observation comparison catches every required snapshot, HTTP, and raw DOM channel
+2026-10-30T22:57:41.9717454Z ok 1 - observation comparison catches every required snapshot, HTTP, and raw DOM channel
+2026-10-30T22:57:41.9723459Z   ---
+2026-10-30T22:57:41.9726754Z   duration_ms: 4.771494
+2026-10-30T22:57:41.9730490Z   type: 'test'
+2026-10-30T22:57:41.9775667Z   ...
+2026-10-30T22:57:41.9781389Z # Subtest: focus and selection parity is gated by an explicit focus action and enforced on follow-up ticks
+2026-10-30T22:57:41.9783707Z ok 2 - focus and selection parity is gated by an explicit focus action and enforced on follow-up ticks
+2026-10-30T22:57:41.9784777Z   ---
+2026-10-30T22:57:41.9785722Z   duration_ms: 1.696281
+2026-10-30T22:57:41.9786533Z   type: 'test'
+2026-10-30T22:57:41.9787103Z   ...
+2026-10-30T22:57:41.9788244Z # Subtest: native envelopes include all observable trace fields while using the supported step tuple
+2026-10-30T22:57:41.9790128Z ok 3 - native envelopes include all observable trace fields while using the supported step tuple
+2026-10-30T22:57:41.9791194Z   ---
+2026-10-30T22:57:41.9791749Z   duration_ms: 0.63805
+2026-10-30T22:57:41.9792356Z   type: 'test'
+2026-10-30T22:57:41.9792887Z   ...
+2026-10-30T22:57:41.9793858Z # Subtest: native comparison is a required gate and cannot pass with an empty trace set
+2026-10-30T22:57:41.9795533Z ok 4 - native comparison is a required gate and cannot pass with an empty trace set
+2026-10-30T22:57:41.9796498Z   ---
+2026-10-30T22:57:41.9816586Z   duration_ms: 0.81017
+2026-10-30T22:57:41.9817297Z   type: 'test'
+2026-10-30T22:57:41.9817846Z   ...
+2026-10-30T22:57:41.9818823Z # Subtest: CLI requires deterministic seeds and rejects missing or invalid ranges
+2026-10-30T22:57:41.9820163Z ok 5 - CLI requires deterministic seeds and rejects missing or invalid ranges
+2026-10-30T22:57:41.9821042Z   ---
+2026-10-30T22:57:41.9821644Z   duration_ms: 0.71877
+2026-10-30T22:57:41.9822253Z   type: 'test'
+2026-10-30T22:57:41.9822819Z   ...
+2026-10-30T22:57:42.3662047Z # Subtest: HTTP lab readiness failures clear timers and terminate and reap the child
+2026-10-30T22:57:42.3669974Z ok 6 - HTTP lab readiness failures clear timers and terminate and reap the child
+2026-10-30T22:57:42.3671160Z   ---
+2026-10-30T22:57:42.3671825Z   duration_ms: 407.082863
+2026-10-30T22:57:42.3672507Z   type: 'test'
+2026-10-30T22:57:42.3673274Z   ...
+2026-10-30T22:57:42.4156965Z # Subtest: fresh layout prefers the inherited HTTP lab and performs real startup and cleanup
+2026-10-30T22:57:42.4166435Z ok 7 - fresh layout prefers the inherited HTTP lab and performs real startup and cleanup
+2026-10-30T22:57:42.4175989Z   ---
+2026-10-30T22:57:42.4176629Z   duration_ms: 47.212911
+2026-10-30T22:57:42.4177266Z   type: 'test'
+2026-10-30T22:57:42.4177842Z   ...
+2026-10-30T22:57:42.4233053Z # Subtest: Go fallback skips missing configured candidates and resolves PATH commands
+2026-10-30T22:57:42.4246056Z ok 8 - Go fallback skips missing configured candidates and resolves PATH commands
+2026-10-30T22:57:42.4275644Z   ---
+2026-10-30T22:57:42.4305947Z   duration_ms: 5.048
+2026-10-30T22:57:42.4320700Z   type: 'test'
+2026-10-30T22:57:42.4376066Z   ...
+2026-10-30T22:57:42.4378162Z # Subtest: required adversarial checks must all run once and pass
+2026-10-30T22:57:42.4379050Z ok 9 - required adversarial checks must all run once and pass
+2026-10-30T22:57:42.4379606Z   ---
+2026-10-30T22:57:42.4380002Z   duration_ms: 1.467616
+2026-10-30T22:57:42.4380428Z   type: 'test'
+2026-10-30T22:57:42.4380786Z   ...
+2026-10-30T22:57:42.4557951Z # Subtest: retains keyed row and input identity across reorder/update and preserves focused selection
+2026-10-30T22:57:42.4586253Z ok 10 - retains keyed row and input identity across reorder/update and preserves focused selection
+2026-10-30T22:57:42.4645746Z   ---
+2026-10-30T22:57:42.4676293Z   duration_ms: 8.463746
+2026-10-30T22:57:42.4735844Z   type: 'test'
+2026-10-30T22:57:42.4744398Z   ...
+2026-10-30T22:57:42.4776833Z # Subtest: events use current path/key after keyed movement and preserve target.value
+2026-10-30T22:57:42.4812514Z ok 11 - events use current path/key after keyed movement and preserve target.value
+2026-10-30T22:57:42.4827878Z   ---
+2026-10-30T22:57:42.4828514Z   duration_ms: 3.618845
+2026-10-30T22:57:42.4829725Z   type: 'test'
+2026-10-30T22:57:42.4830275Z   ...
+2026-10-30T22:57:42.4831484Z # Subtest: removed or manually detached controls and their handlers cannot dispatch at a reused path
+2026-10-30T22:57:42.4833067Z ok 12 - removed or manually detached controls and their handlers cannot dispatch at a reused path
+2026-10-30T22:57:42.4834648Z   ---
+2026-10-30T22:57:42.4835552Z   duration_ms: 4.489939
+2026-10-30T22:57:42.4836197Z   type: 'test'
+2026-10-30T22:57:42.4845836Z   ...
+2026-10-30T22:57:42.4846912Z # Subtest: captures and restores focus by logical key across backend replacement
+2026-10-30T22:57:42.4848257Z ok 13 - captures and restores focus by logical key across backend replacement
+2026-10-30T22:57:42.4849191Z   ---
+2026-10-30T22:57:42.4850109Z   duration_ms: 2.477969
+2026-10-30T22:57:42.4851453Z   type: 'test'
+2026-10-30T22:57:42.4852025Z   ...
+2026-10-30T22:57:42.4853021Z # Subtest: deleting the focused row does not transfer focus to another keyed input
+2026-10-30T22:57:42.4854336Z ok 14 - deleting the focused row does not transfer focus to another keyed input
+2026-10-30T22:57:42.4855486Z   ---
+2026-10-30T22:57:42.4856234Z   duration_ms: 3.258387
+2026-10-30T22:57:42.4856884Z   type: 'test'
+2026-10-30T22:57:42.4857391Z   ...
+2026-10-30T22:57:42.4858377Z # Subtest: disabled controls are reported and do not dispatch or receive logical focus
+2026-10-30T22:57:42.4859790Z ok 15 - disabled controls are reported and do not dispatch or receive logical focus
+2026-10-30T22:57:42.4860702Z   ---
+2026-10-30T22:57:42.4862588Z   duration_ms: 2.114282
+2026-10-30T22:57:42.4863231Z   type: 'test'
+2026-10-30T22:57:42.4863769Z   ...
+2026-10-30T22:57:42.4865684Z # Subtest: invalid update is rejected before accepted snapshot or DOM changes
+2026-10-30T22:57:42.4867010Z ok 16 - invalid update is rejected before accepted snapshot or DOM changes
+2026-10-30T22:57:42.4876521Z   ---
+2026-10-30T22:57:42.4877183Z   duration_ms: 2.533211
+2026-10-30T22:57:42.4877860Z   type: 'test'
+2026-10-30T22:57:42.4878401Z   ...
+2026-10-30T22:57:42.4879340Z # Subtest: native event patch failures notify the host after fencing the renderer
+2026-10-30T22:57:42.4880678Z ok 17 - native event patch failures notify the host after fencing the renderer
+2026-10-30T22:57:42.4881599Z   ---
+2026-10-30T22:57:42.4882187Z   duration_ms: 1.677526
+2026-10-30T22:57:42.4882733Z   type: 'test'
+2026-10-30T22:57:42.4883225Z   ...
+2026-10-30T22:57:42.4884192Z # Subtest: fetch tracker resolves a request waiter only after the response body is consumed
+2026-10-30T22:57:42.4885719Z ok 18 - fetch tracker resolves a request waiter only after the response body is consumed
+2026-10-30T22:57:42.4886571Z   ---
+2026-10-30T22:57:42.4887063Z   duration_ms: 1.770019
+2026-10-30T22:57:42.4887592Z   type: 'test'
+2026-10-30T22:57:42.4888056Z   ...
+2026-10-30T22:57:42.4889014Z # Subtest: fetch tracker resolves aborted or failed fetch waiters with the original failure
+2026-10-30T22:57:42.4890398Z ok 19 - fetch tracker resolves aborted or failed fetch waiters with the original failure
+2026-10-30T22:57:42.4891901Z   ---
+2026-10-30T22:57:42.4892454Z   duration_ms: 1.166475
+2026-10-30T22:57:42.4893036Z   type: 'test'
+2026-10-30T22:57:42.4893552Z   ...
+2026-10-30T22:57:42.4895702Z # Subtest: HTTP completion updates the mounted keyed renderer without a remount or second Go init
+2026-10-30T22:57:42.4898431Z ok 20 - HTTP completion updates the mounted keyed renderer without a remount or second Go init
+2026-10-30T22:57:42.4899927Z   ---
+2026-10-30T22:57:42.4900499Z   duration_ms: 19.058314
+2026-10-30T22:57:42.4901112Z   type: 'test'
+2026-10-30T22:57:42.4902386Z   ...
+2026-10-30T22:57:42.4904116Z # Subtest: refresh updates the existing renderer from the runtime snapshot and drains effects
+2026-10-30T22:57:42.4907782Z ok 21 - refresh updates the existing renderer from the runtime snapshot and drains effects
+2026-10-30T22:57:42.4909186Z   ---
+2026-10-30T22:57:42.4910114Z   duration_ms: 1.824771
+2026-10-30T22:57:42.4910732Z   type: 'test'
+2026-10-30T22:57:42.4911289Z   ...
+2026-10-30T22:57:42.4912335Z # Subtest: backend replacement transfers key-based selection and fences the old facade
+2026-10-30T22:57:42.4913799Z ok 22 - backend replacement transfers key-based selection and fences the old facade
+2026-10-30T22:57:42.4914694Z   ---
+2026-10-30T22:57:42.4915589Z   duration_ms: 2.474112
+2026-10-30T22:57:42.4916588Z   type: 'test'
+2026-10-30T22:57:42.4917095Z   ...
+2026-10-30T22:57:42.4918205Z # Subtest: failed replacement cleans the attempted renderer and restores the old backend with focus
+2026-10-30T22:57:42.4919868Z ok 23 - failed replacement cleans the attempted renderer and restores the old backend with focus
+2026-10-30T22:57:42.4920914Z   ---
+2026-10-30T22:57:42.4921582Z   duration_ms: 2.025796
+2026-10-30T22:57:42.4922213Z   type: 'test'
+2026-10-30T22:57:42.4922729Z   ...
+2026-10-30T22:57:42.4924006Z # Subtest: late and duplicate replies are serialized and cannot overwrite the latest save
+2026-10-30T22:57:42.4926103Z ok 24 - late and duplicate replies are serialized and cannot overwrite the latest save
+2026-10-30T22:57:42.4927434Z   ---
+2026-10-30T22:57:42.4928147Z   duration_ms: 4.148412
+2026-10-30T22:57:42.4928758Z   type: 'test'
+2026-10-30T22:57:42.4929296Z   ...
+2026-10-30T22:57:42.4930281Z # Subtest: mount and update failures clean up roots and release the runtime lease
+2026-10-30T22:57:42.4931678Z ok 25 - mount and update failures clean up roots and release the runtime lease
+2026-10-30T22:57:42.4932756Z   ---
+2026-10-30T22:57:42.4933351Z   duration_ms: 3.21332
+2026-10-30T22:57:42.4933933Z   type: 'test'
+2026-10-30T22:57:42.4934462Z   ...
+2026-10-30T22:57:42.4935942Z # Subtest: native event paint failure fences the host and skips its already queued effect drain
+2026-10-30T22:57:42.4937537Z ok 26 - native event paint failure fences the host and skips its already queued effect drain
+2026-10-30T22:57:42.4938514Z   ---
+2026-10-30T22:57:42.4939082Z   duration_ms: 1.944765
+2026-10-30T22:57:42.4939664Z   type: 'test'
+2026-10-30T22:57:42.4940189Z   ...
+2026-10-30T22:57:42.4941173Z # Subtest: one live host owns the Go runtime object and unmount releases the lease
+2026-10-30T22:57:42.4942528Z ok 27 - one live host owns the Go runtime object and unmount releases the lease
+2026-10-30T22:57:42.4943409Z   ---
+2026-10-30T22:57:42.4943976Z   duration_ms: 1.489556
+2026-10-30T22:57:42.4944574Z   type: 'test'
+2026-10-30T22:57:42.4945362Z   ...
+2026-10-30T22:57:42.4946412Z # Subtest: validates unique element keys and retains them in cloned snapshots
+2026-10-30T22:57:42.4947687Z ok 28 - validates unique element keys and retains them in cloned snapshots
+2026-10-30T22:57:42.4948558Z   ---
+2026-10-30T22:57:42.4949097Z   duration_ms: 6.000816
+2026-10-30T22:57:42.4949676Z   type: 'test'
+2026-10-30T22:57:42.4950182Z   ...
+2026-10-30T22:57:42.4951011Z # Subtest: rejects absent, malformed, duplicate, and text-node keys
+2026-10-30T22:57:42.4952128Z ok 29 - rejects absent, malformed, duplicate, and text-node keys
+2026-10-30T22:57:42.4952896Z   ---
+2026-10-30T22:57:42.4953416Z   duration_ms: 2.068555
+2026-10-30T22:57:42.4953980Z   type: 'test'
+2026-10-30T22:57:42.4954482Z   ...
+2026-10-30T22:57:42.4955627Z # Subtest: keyed validation preserves the controlled-input schema checks
+2026-10-30T22:57:42.4957059Z ok 30 - keyed validation preserves the controlled-input schema checks
+2026-10-30T22:57:42.4958123Z   ---
+2026-10-30T22:57:42.4958851Z   duration_ms: 2.171227
+2026-10-30T22:57:42.4959583Z   type: 'test'
+2026-10-30T22:57:42.4960264Z   ...
+2026-10-30T22:57:42.4961168Z # Subtest: contains exotic getter failures from untrusted snapshots
+2026-10-30T22:57:42.4962241Z ok 31 - contains exotic getter failures from untrusted snapshots
+2026-10-30T22:57:42.4962985Z   ---
+2026-10-30T22:57:42.4963582Z   duration_ms: 0.428548
+2026-10-30T22:57:42.4964135Z   type: 'test'
+2026-10-30T22:57:42.4964631Z   ...
+2026-10-30T22:57:42.9170274Z # Subtest: keyed React keeps moved input identity, updates event paths, and restores logical selection
+2026-10-30T22:57:42.9183697Z ok 32 - keyed React keeps moved input identity, updates event paths, and restores logical selection
+2026-10-30T22:57:42.9236078Z   ---
+2026-10-30T22:57:42.9267464Z   duration_ms: 752.601757
+2026-10-30T22:57:42.9288374Z   type: 'test'
+2026-10-30T22:57:42.9289287Z   ...
+2026-10-30T22:57:43.3420733Z # Subtest: native React commit failure fences the host before queued effects can start
+2026-10-30T22:57:43.3423834Z ok 33 - native React commit failure fences the host before queued effects can start
+2026-10-30T22:57:43.3434728Z   ---
+2026-10-30T22:57:43.3435600Z   duration_ms: 426.648756
+2026-10-30T22:57:43.3436266Z   type: 'test'
+2026-10-30T22:57:43.3436871Z   ...
+2026-10-30T22:57:43.3633822Z # Subtest: independent React reference keeps keyed input identity, focus, selection, and HTTP updates
+2026-10-30T22:57:43.3635499Z ok 34 - independent React reference keeps keyed input identity, focus, selection, and HTTP updates
+2026-10-30T22:57:43.3636098Z   ---
+2026-10-30T22:57:43.3636425Z   duration_ms: 947.904872
+2026-10-30T22:57:43.3636854Z   type: 'test'
+2026-10-30T22:57:43.3637197Z   ...
+2026-10-30T22:57:43.3637998Z # Subtest: independent collection model projects the exact empty Go snapshot shape
+2026-10-30T22:57:43.3639132Z ok 35 - independent collection model projects the exact empty Go snapshot shape
+2026-10-30T22:57:43.3639602Z   ---
+2026-10-30T22:57:43.3639979Z   duration_ms: 3.453377
+2026-10-30T22:57:43.3640426Z   type: 'test'
+2026-10-30T22:57:43.3640766Z   ...
+2026-10-30T22:57:43.3641466Z # Subtest: rows add, edit, reorder, remove, and reset without reusing row IDs
+2026-10-30T22:57:43.3642494Z ok 36 - rows add, edit, reorder, remove, and reset without reusing row IDs
+2026-10-30T22:57:43.3643142Z   ---
+2026-10-30T22:57:43.3643399Z   duration_ms: 3.904067
+2026-10-30T22:57:43.3643781Z   type: 'test'
+2026-10-30T22:57:43.3644003Z   ...
+2026-10-30T22:57:43.3644744Z # Subtest: four-row connection cap disables Add atomically without allocating an identity
+2026-10-30T22:57:43.3645976Z ok 37 - four-row connection cap disables Add atomically without allocating an identity
+2026-10-30T22:57:43.3646610Z   ---
+2026-10-30T22:57:43.3646943Z   duration_ms: 7.030805
+2026-10-30T22:57:43.3647282Z   type: 'test'
+2026-10-30T22:57:43.3647493Z   ...
+2026-10-30T22:57:43.3648125Z # Subtest: save effects are per row; reset and remove cancel before removal; late audit retains row ID
+2026-10-30T22:57:43.3649116Z ok 38 - save effects are per row; reset and remove cancel before removal; late audit retains row ID
+2026-10-30T22:57:43.3649574Z   ---
+2026-10-30T22:57:43.3649929Z   duration_ms: 1.212671
+2026-10-30T22:57:43.3650161Z   type: 'test'
+2026-10-30T22:57:43.3650459Z   ...
+2026-10-30T22:57:43.3651028Z # Subtest: completion updates only its matching row and preserves edited drafts
+2026-10-30T22:57:43.3651765Z ok 39 - completion updates only its matching row and preserves edited drafts
+2026-10-30T22:57:43.3652250Z   ---
+2026-10-30T22:57:43.3652467Z   duration_ms: 1.052582
+2026-10-30T22:57:43.3652808Z   type: 'test'
+2026-10-30T22:57:43.3652999Z   ...
+2026-10-30T22:57:43.3653508Z # Subtest: wrong key, malformed path, and invalid exact fields reject atomically
+2026-10-30T22:57:43.3654258Z ok 40 - wrong key, malformed path, and invalid exact fields reject atomically
+2026-10-30T22:57:43.3654788Z   ---
+2026-10-30T22:57:43.3655009Z   duration_ms: 2.138647
+2026-10-30T22:57:43.3655728Z   type: 'test'
+2026-10-30T22:57:43.3655925Z   ...
+2026-10-30T22:57:43.3656420Z # Subtest: disabled targets suppress handler resolution after matching key validation
+2026-10-30T22:57:43.3657295Z ok 41 - disabled targets suppress handler resolution after matching key validation
+2026-10-30T22:57:43.3657851Z   ---
+2026-10-30T22:57:43.3658278Z   duration_ms: 0.977592
+2026-10-30T22:57:43.3658529Z   type: 'test'
+2026-10-30T22:57:43.3658732Z   ...
+2026-10-30T22:57:43.3659229Z # Subtest: public reference carries the independent HTTP wire codec
+2026-10-30T22:57:43.3659885Z ok 42 - public reference carries the independent HTTP wire codec
+2026-10-30T22:57:43.3660336Z   ---
+2026-10-30T22:57:43.3660546Z   duration_ms: 1.278544
+2026-10-30T22:57:43.3660777Z   type: 'test'
+2026-10-30T22:57:43.3661021Z   ...
+2026-10-30T22:57:43.3661561Z # Subtest: stale reply to an unknown request uses RowID zero and the largest safe ID stays exact
+2026-10-30T22:57:43.3662495Z ok 43 - stale reply to an unknown request uses RowID zero and the largest safe ID stays exact
+2026-10-30T22:57:43.3662923Z   ---
+2026-10-30T22:57:43.3663433Z   duration_ms: 0.85313
+2026-10-30T22:57:43.3663729Z   type: 'test'
+2026-10-30T22:57:43.3664037Z   ...
+2026-10-30T22:57:43.3664607Z # Subtest: fixed schedules cover each required identity, focus, and HTTP outcome
+2026-10-30T22:57:43.3665640Z ok 44 - fixed schedules cover each required identity, focus, and HTTP outcome
+2026-10-30T22:57:43.3666098Z   ---
+2026-10-30T22:57:43.3666313Z   duration_ms: 2.550514
+2026-10-30T22:57:43.3666543Z   type: 'test'
+2026-10-30T22:57:43.3666885Z   ...
+2026-10-30T22:57:43.3667434Z # Subtest: removed last row path is reused by a new ID and rejects the old key atomically
+2026-10-30T22:57:43.3668420Z ok 45 - removed last row path is reused by a new ID and rejects the old key atomically
+2026-10-30T22:57:43.3668901Z   ---
+2026-10-30T22:57:43.3669161Z   duration_ms: 13.440914
+2026-10-30T22:57:43.3669453Z   type: 'test'
+2026-10-30T22:57:43.3669701Z   ...
+2026-10-30T22:57:43.3670211Z # Subtest: fixed and seeded action objects follow the frozen harness schema
+2026-10-30T22:57:43.3670902Z ok 46 - fixed and seeded action objects follow the frozen harness schema
+2026-10-30T22:57:43.3671357Z   ---
+2026-10-30T22:57:43.3671571Z   duration_ms: 4.81215
+2026-10-30T22:57:43.3671903Z   type: 'test'
+2026-10-30T22:57:43.3672095Z   ...
+2026-10-30T22:57:43.3672746Z # Subtest: seeded scripts are reproducible, bounded, and avoid allocating more than four live rows
+2026-10-30T22:57:43.3673690Z ok 47 - seeded scripts are reproducible, bounded, and avoid allocating more than four live rows
+2026-10-30T22:57:43.3674127Z   ---
+2026-10-30T22:57:43.3674333Z   duration_ms: 13.452733
+2026-10-30T22:57:43.3674575Z   type: 'test'
+2026-10-30T22:57:43.3674766Z   ...
+2026-10-30T22:57:43.3675523Z # Subtest: seed parsing rejects empty, duplicate, and out-of-range seeds
+2026-10-30T22:57:43.3676138Z ok 48 - seed parsing rejects empty, duplicate, and out-of-range seeds
+2026-10-30T22:57:43.3676489Z   ---
+2026-10-30T22:57:43.3676692Z   duration_ms: 0.81543
+2026-10-30T22:57:43.3676922Z   type: 'test'
+2026-10-30T22:57:43.3677118Z   ...
+2026-10-30T22:57:43.3677286Z 1..48
+2026-10-30T22:57:43.3677465Z # tests 48
+2026-10-30T22:57:43.3677645Z # suites 0
+2026-10-30T22:57:43.3677829Z # pass 48
+2026-10-30T22:57:43.3678008Z # fail 0
+2026-10-30T22:57:43.3678195Z # cancelled 0
+2026-10-30T22:57:43.3678389Z # skipped 0
+2026-10-30T22:57:43.3678576Z # todo 0
+2026-10-30T22:57:43.3678801Z # duration_ms 1950.326205
+2026-10-30T22:57:44.8173333Z PASS retained input identity during edit/reorder; held HTTP request #1 captured its original value
+2026-10-30T22:57:44.8175500Z PASS DOM→React replacement changed the node and restored row-1 key plus backward selection
+2026-10-30T22:57:44.8985746Z PASS real HTTP completion updates the retained React input without moving its draft or selection
+2026-10-30T22:57:45.1421691Z PASS removing a pending row aborts HTTP, the next row reuses its path with a different key, and stale dispatch is atomic
+2026-10-30T22:57:45.3681666Z PASS typed HTTP error preserves saved state and a fresh request ID retry succeeds
+2026-10-30T22:57:45.3743837Z keyed collection real-HTTP demo smoke passed
+2026-10-30T22:57:45.7778296Z [keyed-editor] HTTP lab ready: http://127.0.0.1:38791
+2026-10-30T22:57:45.8356372Z [keyed-editor] Chromium 156.0.8078.4 launched; isolating the three participants
+2026-10-30T22:57:46.1566091Z [keyed-editor] dom context ready
+2026-10-30T22:57:46.4396968Z [keyed-editor] react context ready
+2026-10-30T22:57:46.6795606Z [keyed-editor] reference context ready
+2026-10-30T22:57:46.6818504Z [keyed-editor] scenario 1/70: four-row-cap-keeps-add-disabled-and-identity-stable
+2026-10-30T22:57:47.1015569Z [keyed-editor] scenario four-row-cap-keeps-add-disabled-and-identity-stable: 6 ticks
+2026-10-30T22:57:47.1056762Z [keyed-editor] scenario 2/70: keyed-reorder-keeps-logical-focus-and-selection
+2026-10-30T22:57:47.5756265Z [keyed-editor] scenario keyed-reorder-keeps-logical-focus-and-selection: 11 ticks
+2026-10-30T22:57:47.5822097Z [keyed-editor] scenario 3/70: pending-save-edit-reorder-and-live-completion
+2026-10-30T22:57:48.0071444Z [keyed-editor] scenario pending-save-edit-reorder-and-live-completion: 11 ticks
+2026-10-30T22:57:48.0121464Z [keyed-editor] scenario 4/70: remove-pending-add-new-id-path-reuse-and-detached-event
+2026-10-30T22:57:48.3970261Z [keyed-editor] scenario remove-pending-add-new-id-path-reuse-and-detached-event: 12 ticks
+2026-10-30T22:57:48.4019729Z [keyed-editor] scenario 5/70: reset-cancels-in-row-order-and-never-reuses-identities
+2026-10-30T22:57:48.8409346Z [keyed-editor] scenario reset-cancels-in-row-order-and-never-reuses-identities: 15 ticks
+2026-10-30T22:57:48.8459074Z [keyed-editor] scenario 6/70: repeat-save-cancel-and-late-replies
+2026-10-30T22:57:49.2120996Z [keyed-editor] scenario repeat-save-cancel-and-late-replies: 13 ticks
+2026-10-30T22:57:49.2160536Z [keyed-editor] scenario 7/70: http-error-retry-wrong-id-malformed-status-and-drop
+2026-10-30T22:57:49.7418071Z [keyed-editor] scenario http-error-retry-wrong-id-malformed-status-and-drop: 19 ticks
+2026-10-30T22:57:49.7488551Z [keyed-editor] scenario 8/70: independent-row-completions-preserve-other-row
+2026-10-30T22:57:50.1337874Z [keyed-editor] scenario independent-row-completions-preserve-other-row: 12 ticks
+2026-10-30T22:57:50.1388872Z [keyed-editor] scenario 9/70: old-path-old-key-cannot-edit-row-after-up
+2026-10-30T22:57:50.4026912Z [keyed-editor] scenario old-path-old-key-cannot-edit-row-after-up: 8 ticks
+2026-10-30T22:57:50.4068055Z [keyed-editor] scenario 10/70: deleting-focused-row-does-not-transfer-logical-focus
+2026-10-30T22:57:50.6360508Z [keyed-editor] scenario deleting-focused-row-does-not-transfer-logical-focus: 7 ticks
+2026-10-30T22:57:50.6387205Z [keyed-editor] scenario 11/70: seed-20261030-case-0
+2026-10-30T22:57:50.9840402Z [keyed-editor] scenario seed-20261030-case-0: 9 ticks
+2026-10-30T22:57:50.9895932Z [keyed-editor] scenario 12/70: seed-20261030-case-1
+2026-10-30T22:57:51.5050331Z [keyed-editor] scenario seed-20261030-case-1: 20 ticks
+2026-10-30T22:57:51.5115819Z [keyed-editor] scenario 13/70: seed-20261030-case-2
+2026-10-30T22:57:51.8260168Z [keyed-editor] scenario seed-20261030-case-2: 12 ticks
+2026-10-30T22:57:51.8295771Z [keyed-editor] scenario 14/70: seed-20261030-case-3
+2026-10-30T22:57:52.1123779Z [keyed-editor] scenario seed-20261030-case-3: 10 ticks
+2026-10-30T22:57:52.1151111Z [keyed-editor] scenario 15/70: seed-20261030-case-4
+2026-10-30T22:57:52.9652323Z [keyed-editor] scenario seed-20261030-case-4: 26 ticks
+2026-10-30T22:57:52.9796537Z [keyed-editor] scenario 16/70: seed-20261030-case-5
+2026-10-30T22:57:53.6709809Z [keyed-editor] scenario seed-20261030-case-5: 17 ticks
+2026-10-30T22:57:53.6844987Z [keyed-editor] scenario 17/70: seed-20261030-case-6
+2026-10-30T22:57:54.0069503Z [keyed-editor] scenario seed-20261030-case-6: 10 ticks
+2026-10-30T22:57:54.0112267Z [keyed-editor] scenario 18/70: seed-20261030-case-7
+2026-10-30T22:57:54.7622681Z [keyed-editor] scenario seed-20261030-case-7: 24 ticks
+2026-10-30T22:57:54.7732056Z [keyed-editor] scenario 19/70: seed-20261030-case-8
+2026-10-30T22:57:55.0858469Z [keyed-editor] scenario seed-20261030-case-8: 11 ticks
+2026-10-30T22:57:55.0897608Z [keyed-editor] scenario 20/70: seed-20261030-case-9
+2026-10-30T22:57:55.5114724Z [keyed-editor] scenario seed-20261030-case-9: 17 ticks
+2026-10-30T22:57:55.5167048Z [keyed-editor] scenario 21/70: seed-20261030-case-10
+2026-10-30T22:57:56.0402149Z [keyed-editor] scenario seed-20261030-case-10: 18 ticks
+2026-10-30T22:57:56.0481670Z [keyed-editor] scenario 22/70: seed-20261030-case-11
+2026-10-30T22:57:56.4159526Z [keyed-editor] scenario seed-20261030-case-11: 12 ticks
+2026-10-30T22:57:56.4222587Z [keyed-editor] scenario 23/70: seed-20261030-case-12
+2026-10-30T22:57:57.1163886Z [keyed-editor] scenario seed-20261030-case-12: 26 ticks
+2026-10-30T22:57:57.1259683Z [keyed-editor] scenario 24/70: seed-20261030-case-13
+2026-10-30T22:57:57.6612445Z [keyed-editor] scenario seed-20261030-case-13: 17 ticks
+2026-10-30T22:57:57.6687465Z [keyed-editor] scenario 25/70: seed-20261030-case-14
+2026-10-30T22:57:58.5258134Z [keyed-editor] scenario seed-20261030-case-14: 29 ticks
+2026-10-30T22:57:58.5397866Z [keyed-editor] scenario 26/70: seed-20261030-case-15
+2026-10-30T22:57:59.4550857Z [keyed-editor] scenario seed-20261030-case-15: 25 ticks
+2026-10-30T22:57:59.4740976Z [keyed-editor] scenario 27/70: seed-20261030-case-16
+2026-10-30T22:58:00.2106445Z [keyed-editor] scenario seed-20261030-case-16: 27 ticks
+2026-10-30T22:58:00.2214850Z [keyed-editor] scenario 28/70: seed-20261030-case-17
+2026-10-30T22:58:00.7146926Z [keyed-editor] scenario seed-20261030-case-17: 20 ticks
+2026-10-30T22:58:00.7223766Z [keyed-editor] scenario 29/70: seed-20261030-case-18
+2026-10-30T22:58:01.2980490Z [keyed-editor] scenario seed-20261030-case-18: 19 ticks
+2026-10-30T22:58:01.3049008Z [keyed-editor] scenario 30/70: seed-20261030-case-19
+2026-10-30T22:58:02.0467092Z [keyed-editor] scenario seed-20261030-case-19: 26 ticks
+2026-10-30T22:58:02.0583422Z [keyed-editor] scenario 31/70: seed-20261030-case-20
+2026-10-30T22:58:02.3521536Z [keyed-editor] scenario seed-20261030-case-20: 9 ticks
+2026-10-30T22:58:02.3559168Z [keyed-editor] scenario 32/70: seed-20261030-case-21
+2026-10-30T22:58:02.9874265Z [keyed-editor] scenario seed-20261030-case-21: 22 ticks
+2026-10-30T22:58:02.9978784Z [keyed-editor] scenario 33/70: seed-20261030-case-22
+2026-10-30T22:58:03.2514861Z [keyed-editor] scenario seed-20261030-case-22: 8 ticks
+2026-10-30T22:58:03.2549000Z [keyed-editor] scenario 34/70: seed-20261030-case-23
+2026-10-30T22:58:03.9164590Z [keyed-editor] scenario seed-20261030-case-23: 25 ticks
+2026-10-30T22:58:03.9257265Z [keyed-editor] scenario 35/70: seed-20261030-case-24
+2026-10-30T22:58:04.1472652Z [keyed-editor] scenario seed-20261030-case-24: 8 ticks
+2026-10-30T22:58:04.1496968Z [keyed-editor] scenario 36/70: seed-20261030-case-25
+2026-10-30T22:58:04.7733600Z [keyed-editor] scenario seed-20261030-case-25: 27 ticks
+2026-10-30T22:58:04.7821220Z [keyed-editor] scenario 37/70: seed-20261030-case-26
+2026-10-30T22:58:04.9953921Z [keyed-editor] scenario seed-20261030-case-26: 7 ticks
+2026-10-30T22:58:04.9977957Z [keyed-editor] scenario 38/70: seed-20261030-case-27
+2026-10-30T22:58:05.4131289Z [keyed-editor] scenario seed-20261030-case-27: 12 ticks
+2026-10-30T22:58:05.4193545Z [keyed-editor] scenario 39/70: seed-20261030-case-28
+2026-10-30T22:58:05.7543437Z [keyed-editor] scenario seed-20261030-case-28: 11 ticks
+2026-10-30T22:58:05.7594048Z [keyed-editor] scenario 40/70: seed-20261030-case-29
+2026-10-30T22:58:06.0717685Z [keyed-editor] scenario seed-20261030-case-29: 11 ticks
+2026-10-30T22:58:06.0764053Z [keyed-editor] scenario 41/70: seed-20261031-case-0
+2026-10-30T22:58:06.3346867Z [keyed-editor] scenario seed-20261031-case-0: 8 ticks
+2026-10-30T22:58:06.3377359Z [keyed-editor] scenario 42/70: seed-20261031-case-1
+2026-10-30T22:58:06.9301435Z [keyed-editor] scenario seed-20261031-case-1: 17 ticks
+2026-10-30T22:58:06.9395974Z [keyed-editor] scenario 43/70: seed-20261031-case-2
+2026-10-30T22:58:07.1442997Z [keyed-editor] scenario seed-20261031-case-2: 7 ticks
+2026-10-30T22:58:07.1465684Z [keyed-editor] scenario 44/70: seed-20261031-case-3
+2026-10-30T22:58:07.7186867Z [keyed-editor] scenario seed-20261031-case-3: 23 ticks
+2026-10-30T22:58:07.7269243Z [keyed-editor] scenario 45/70: seed-20261031-case-4
+2026-10-30T22:58:08.5358527Z [keyed-editor] scenario seed-20261031-case-4: 27 ticks
+2026-10-30T22:58:08.5494832Z [keyed-editor] scenario 46/70: seed-20261031-case-5
+2026-10-30T22:58:09.1559636Z [keyed-editor] scenario seed-20261031-case-5: 25 ticks
+2026-10-30T22:58:09.1640866Z [keyed-editor] scenario 47/70: seed-20261031-case-6
+2026-10-30T22:58:09.6410890Z [keyed-editor] scenario seed-20261031-case-6: 17 ticks
+2026-10-30T22:58:09.6480617Z [keyed-editor] scenario 48/70: seed-20261031-case-7
+2026-10-30T22:58:09.9205905Z [keyed-editor] scenario seed-20261031-case-7: 9 ticks
+2026-10-30T22:58:09.9235839Z [keyed-editor] scenario 49/70: seed-20261031-case-8
+2026-10-30T22:58:10.1552312Z [keyed-editor] scenario seed-20261031-case-8: 7 ticks
+2026-10-30T22:58:10.1581604Z [keyed-editor] scenario 50/70: seed-20261031-case-9
+2026-10-30T22:58:10.3707039Z [keyed-editor] scenario seed-20261031-case-9: 6 ticks
+2026-10-30T22:58:10.3727856Z [keyed-editor] scenario 51/70: seed-20261031-case-10
+2026-10-30T22:58:11.2069351Z [keyed-editor] scenario seed-20261031-case-10: 28 ticks
+2026-10-30T22:58:11.2208339Z [keyed-editor] scenario 52/70: seed-20261031-case-11
+2026-10-30T22:58:11.8843297Z [keyed-editor] scenario seed-20261031-case-11: 24 ticks
+2026-10-30T22:58:11.8948431Z [keyed-editor] scenario 53/70: seed-20261031-case-12
+2026-10-30T22:58:12.2762400Z [keyed-editor] scenario seed-20261031-case-12: 11 ticks
+2026-10-30T22:58:12.2819233Z [keyed-editor] scenario 54/70: seed-20261031-case-13
+2026-10-30T22:58:12.6231902Z [keyed-editor] scenario seed-20261031-case-13: 13 ticks
+2026-10-30T22:58:12.6283760Z [keyed-editor] scenario 55/70: seed-20261031-case-14
+2026-10-30T22:58:13.3443581Z [keyed-editor] scenario seed-20261031-case-14: 24 ticks
+2026-10-30T22:58:13.3552858Z [keyed-editor] scenario 56/70: seed-20261031-case-15
+2026-10-30T22:58:13.5877906Z [keyed-editor] scenario seed-20261031-case-15: 8 ticks
+2026-10-30T22:58:13.5907464Z [keyed-editor] scenario 57/70: seed-20261031-case-16
+2026-10-30T22:58:14.1884439Z [keyed-editor] scenario seed-20261031-case-16: 23 ticks
+2026-10-30T22:58:14.1969073Z [keyed-editor] scenario 58/70: seed-20261031-case-17
+2026-10-30T22:58:14.6491197Z [keyed-editor] scenario seed-20261031-case-17: 19 ticks
+2026-10-30T22:58:14.6547819Z [keyed-editor] scenario 59/70: seed-20261031-case-18
+2026-10-30T22:58:14.8517446Z [keyed-editor] scenario seed-20261031-case-18: 6 ticks
+2026-10-30T22:58:14.8542208Z [keyed-editor] scenario 60/70: seed-20261031-case-19
+2026-10-30T22:58:15.4207173Z [keyed-editor] scenario seed-20261031-case-19: 20 ticks
+2026-10-30T22:58:15.4280033Z [keyed-editor] scenario 61/70: seed-20261031-case-20
+2026-10-30T22:58:15.6182849Z [keyed-editor] scenario seed-20261031-case-20: 6 ticks
+2026-10-30T22:58:15.6205424Z [keyed-editor] scenario 62/70: seed-20261031-case-21
+2026-10-30T22:58:16.1110242Z [keyed-editor] scenario seed-20261031-case-21: 12 ticks
+2026-10-30T22:58:16.1175291Z [keyed-editor] scenario 63/70: seed-20261031-case-22
+2026-10-30T22:58:16.3952975Z [keyed-editor] scenario seed-20261031-case-22: 10 ticks
+2026-10-30T22:58:16.3982396Z [keyed-editor] scenario 64/70: seed-20261031-case-23
+2026-10-30T22:58:17.2488644Z [keyed-editor] scenario seed-20261031-case-23: 25 ticks
+2026-10-30T22:58:17.2672731Z [keyed-editor] scenario 65/70: seed-20261031-case-24
+2026-10-30T22:58:17.6998117Z [keyed-editor] scenario seed-20261031-case-24: 18 ticks
+2026-10-30T22:58:17.7050889Z [keyed-editor] scenario 66/70: seed-20261031-case-25
+2026-10-30T22:58:18.4892681Z [keyed-editor] scenario seed-20261031-case-25: 29 ticks
+2026-10-30T22:58:18.5025868Z [keyed-editor] scenario 67/70: seed-20261031-case-26
+2026-10-30T22:58:19.0200932Z [keyed-editor] scenario seed-20261031-case-26: 19 ticks
+2026-10-30T22:58:19.0273695Z [keyed-editor] scenario 68/70: seed-20261031-case-27
+2026-10-30T22:58:19.3198646Z [keyed-editor] scenario seed-20261031-case-27: 9 ticks
+2026-10-30T22:58:19.3253781Z [keyed-editor] scenario 69/70: seed-20261031-case-28
+2026-10-30T22:58:19.8330112Z [keyed-editor] scenario seed-20261031-case-28: 19 ticks
+2026-10-30T22:58:19.8397290Z [keyed-editor] scenario 70/70: seed-20261031-case-29
+2026-10-30T22:58:20.3409044Z [keyed-editor] scenario seed-20261031-case-29: 15 ticks
+2026-10-30T22:58:23.7414109Z keyed collection parity matched 70 scripts over 1113 initial/action observations
+2026-10-30T22:58:23.7415485Z native CompareInteraction: matched
+2026-10-30T22:58:23.7416671Z full traces: /home/runner/work/gondola/gondola/keyed-editor/build/keyed-editor-traces-seeds-20261030-20261031.json
+2026-10-30T22:58:23.8330613Z ##[group]Run actions/upload-artifact@v4
+2026-10-30T22:58:23.8330919Z with:
+2026-10-30T22:58:23.8331139Z   name: gobi-keyed-editor-artifacts
+2026-10-30T22:58:23.8332220Z   path: interaction/build/
+interaction/artifacts/
+backend-replacement/build/
+backend-replacement/artifacts/
+controlled-input/build/
+controlled-input/artifacts/
+async-effects/build/
+async-effects/artifacts/
+http-effects/build/
+http-effects/artifacts/
+keyed-editor/build/
+
+2026-10-30T22:58:23.8333496Z   if-no-files-found: ignore
+2026-10-30T22:58:23.8333735Z   compression-level: 6
+2026-10-30T22:58:23.8333958Z   overwrite: false
+2026-10-30T22:58:23.8334173Z   include-hidden-files: false
+2026-10-30T22:58:23.8334412Z ##[endgroup]
+2026-10-30T22:58:24.0094005Z (node:18184) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-30T22:58:24.0095807Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-30T22:58:24.2494182Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-30T22:58:24.2499186Z The least common ancestor is /home/runner/work/gondola/gondola. This will be the root directory of the artifact
+2026-10-30T22:58:24.2500051Z With the provided path, there will be 1233 files uploaded
+2026-10-30T22:58:24.2507272Z Artifact name is valid!
+2026-10-30T22:58:24.2508246Z Root directory input is valid!
+2026-10-30T22:58:24.6104970Z Beginning upload of artifact content to blob storage
+2026-10-30T22:58:27.0844777Z (node:18184) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-30T22:58:27.9491816Z Uploaded bytes 8388608
+2026-10-30T22:58:30.8622202Z Uploaded bytes 16777216
+2026-10-30T22:58:33.0024671Z Uploaded bytes 25165824
+2026-10-30T22:58:33.4556042Z Uploaded bytes 33554432
+2026-10-30T22:58:35.5191407Z Uploaded bytes 40082820
+2026-10-30T22:58:35.5867148Z Finished uploading artifact content to blob storage!
+2026-10-30T22:58:35.5870410Z SHA256 digest of uploaded artifact zip is ba15d1c65f06d431d8289460f8ef4bb97079347f23b35976b66fcecc7518a7b8
+2026-10-30T22:58:35.5872368Z Finalizing artifact upload
+2026-10-30T22:58:36.1938825Z Artifact gobi-keyed-editor-artifacts.zip successfully finalized. Artifact ID 13018934113
+2026-10-30T22:58:36.1944746Z Artifact gobi-keyed-editor-artifacts has been successfully uploaded! Final size is 40082820 bytes. Artifact ID is 13018934113
+2026-10-30T22:58:36.1950318Z Artifact download URL: https://github.com/samuelpmahan/gondola/actions/runs/41140265209/artifacts/13018934113
+2026-10-30T22:58:36.2336265Z Post job cleanup.
+2026-10-30T22:58:36.3671468Z (node:18200) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-30T22:58:36.3673421Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-30T22:58:36.3676656Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-90b127dcd6765ca2c051251bef17731da37759a93403a4f6db400a1efee489c1, not saving cache.
+2026-10-30T22:58:36.3831556Z Post job cleanup.
+2026-10-30T22:58:36.5593683Z (node:18208) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-30T22:58:36.5594840Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-30T22:58:36.5717514Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOMODCACHE
+2026-10-30T22:58:36.5754430Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOCACHE
+2026-10-30T22:58:36.5800750Z /home/runner/go/pkg/mod
+2026-10-30T22:58:36.5839428Z /home/runner/.cache/go-build
+2026-10-30T22:58:36.5856178Z Primary key was not generated. Please check the log messages above for more errors or information
+2026-10-30T22:58:36.6070186Z Post job cleanup.
+2026-10-30T22:58:36.7039269Z [command]/usr/bin/git version
+2026-10-30T22:58:36.7108539Z git version 2.56.0
+2026-10-30T22:58:36.7153616Z Temporarily overriding HOME='/home/runner/work/_temp/c4c6e708-f986-4ec3-b981-284ade3c6486' before making global git config changes
+2026-10-30T22:58:36.7154737Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-30T22:58:36.7160197Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gondola/gondola
+2026-10-30T22:58:36.7205804Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-30T22:58:36.7246293Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-30T22:58:36.7559685Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-30T22:58:36.7606184Z http.https://github.com/.extraheader
+2026-10-30T22:58:36.7610948Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-30T22:58:36.7650318Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-30T22:58:36.7918435Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-30T22:58:36.7986896Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-30T22:58:36.8418850Z Cleaning up orphan processes
+2026-10-30T22:58:36.8785843Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

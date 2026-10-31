@@ -1,0 +1,87 @@
+{
+  "job_id": "CI2-DEMO",
+  "worker": "N4",
+  "outcome": "confirmed_reuse",
+  "summary": "Run 41144116537 completed successfully on PR head 184ccdaabe9e6e46e1052ee79cd7e0be26fe3281. All 309 extracted compiler artifacts, 209 generated outputs, and 116 source pins verify; the four-app real HTTP demo passed all five smoke checks with a retained screenshot and no runtime failures, page errors, or WASM requests.",
+  "run": {
+    "run_id": "41144116537",
+    "job_id": "124365059288",
+    "conclusion": "success",
+    "head": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "parent": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "artifact_id": "13020568606",
+    "artifact_bytes": 124558516,
+    "archive_sha256": "c3332c9b5d0186c47dab921902774de05eb2b8d0819c3ad69dc9eb045166947e",
+    "extracted_path": "provider/repaired-extracted"
+  },
+  "environment": {
+    "go_root": "go version go1.24.13 linux/amd64",
+    "go_compiler": "go version go1.27.3 linux/amd64",
+    "node": "v22.23.4",
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1",
+    "browser": "156.0.8078.4"
+  },
+  "provenance": {
+    "extracted_compiler_artifact_files": 309,
+    "extracted_files_hash_mismatches": 0,
+    "source_pins_before": 116,
+    "source_pins_after": 116,
+    "source_pins_equal": true,
+    "local_source_pin_mismatches": 0,
+    "compiler_outputs": 209,
+    "compiler_output_hashes_verified": 209,
+    "compiler_output_pins_before_after_equal": true,
+    "command_count": 33,
+    "failed_commands": 0,
+    "command_log_hashes_verified": 66,
+    "emitted_typescript_files": 186,
+    "generated_go_forwarder_sources": 4,
+    "generated_app_modules_and_encoders": 4
+  },
+  "conformance": {
+    "profiles": ["counter", "form", "list", "effect", "list-growth"],
+    "all_matched": true,
+    "total_matched_ticks": 43,
+    "wasm_requests": 0,
+    "wasm_api_attempts": 0
+  },
+  "http_demo": {
+    "status": "passed",
+    "transport": "node:http on 127.0.0.1 with Playwright Chromium",
+    "checks": [
+      "all four compiled Go components mounted",
+      "counter Add/Add/Reset and disabled Reset",
+      "controlled text/checkbox save and literal argument",
+      "keyed list edit and reorder",
+      "effect pending DOM then one manual captured reply"
+    ],
+    "failures": [],
+    "page_errors": [],
+    "wasm_requests": [],
+    "demo_entry_uses_generated_modules_and_encoders": true,
+    "assets": {
+      "demo_entry_sha256": "780d510286921d23f0e2f6410991e99e01ffb91fb6acee39ca104b161debedb6",
+      "demo_bundle_sha256": "0ad9ef17d2bc015451f7cf63c4e46a76fd937e4d1e5de2d8bb645a43f488e5d7",
+      "demo_bundle_bytes": 5463820,
+      "demo_html_sha256": "34ddd4edb89d8f26369e8dd91d9c48e989e620eaba56f74318b1511ac20c7ae2",
+      "smoke_json_sha256": "2e24416f9a29a3dcb75e683f80976e8f7b0e05e0508a9dc39dff88058a1373ee",
+      "screenshot_path": "provider/repaired-extracted/compiled-frontend/artifacts/demo.png",
+      "screenshot_sha256": "685f5e427e3b268ed71a8dc3ed197e3f956ae11a2fd8e1a3034badf1346cc896",
+      "screenshot_bytes": 119529,
+      "screenshot_dimensions": "1280x1252"
+    }
+  },
+  "audit": "audits/CI2-DEMO/verification.json",
+  "limits": [
+    "The initial extraction attempt hit ENOSPC on large inherited JSON only; bounded recovery retained all 309 compiled artifact files and four small inherited reports from the complete verified archive.",
+    "The demo smoke records pageerror, runtime failures, and .wasm requests, but not separate console.error, requestfailed, document response status, or a dedicated API-attempt counter.",
+    "The final screenshot captures the post-interaction state; the pending effect state is established by smoke assertions before completion.",
+    "Acceptance is scoped to this run/head and the four apps/five script profiles."
+  ],
+  "report": "coordination/reports/CI2-DEMO.md",
+  "report_sha256": "c1ddc2b4a52cceff9657180d3c33e011ee230f4edcc4388662403c2df48ce785"
+}

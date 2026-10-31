@@ -1,0 +1,35 @@
+{
+  "job_id": "XR-CI-GO",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independent bounded review accepts the accuracy of N1's CI-GO failed-first-attempt report and receipt. The archive/source-pin checks, six passing Go test/race/vet commands, 79/81 Node result, Chromium launcher cause, and pre-compile stop point match the preserved artifact. This does not accept compiler outputs or browser behavior.",
+  "subject": {
+    "report": "compiled-frontend/ci/2026-10-30/coordination/reports/CI-GO.md",
+    "report_sha256": "a7ba5ba23fc530b7fbbbe519ee10b30bb67951509e4339bc9bb2f442ecfa656b",
+    "receipt": "compiled-frontend/ci/2026-10-30/coordination/receipts/CI-GO.json",
+    "receipt_sha256": "052b6e1637df64aaca95c7d0356091af5126e7c44d4eec2f1cad9d29de85c850",
+    "attempt_run_id": "41140265213",
+    "attempt_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66"
+  },
+  "independent_review": {
+    "audit": "compiled-frontend/ci/2026-10-30/audits/XR-CI-GO/review.json",
+    "audit_sha256": "a9b22847622c63c68375dd71306c7ca82e851e1d9fea42811f1141f6315bf223",
+    "cross_checks_passed": 12,
+    "discrepancies": 0,
+    "findings": [
+      "provider archive SHA matches the extraction manifest",
+      "19 compiled-artifact files match manifest hashes and byte lengths",
+      "116 CI sourceBefore pins match the current exact-head checkout",
+      "all six root and compiler Go test/race/vet commands exited 0",
+      "Node reported 79 passed and 2 failed of 81 tests",
+      "both failures are the no-WASM tests and both error before browser assertions because /tmp/chromium is absent while CHROMIUM_PATH is unset",
+      "execution stops at node-tests; compile-four and sourceAfter were not reached",
+      "no app browser traces or output inventory are present"
+    ]
+  },
+  "limits": [
+    "This is an independent review of the first failed CI attempt only.",
+    "CI-GO workflow-run/artifact binding is separately reviewed by CI-PUBLICATION.",
+    "This acceptance concerns report accuracy, not compiler/output or browser acceptance; a repaired CI run belongs to a separate review packet."
+  ]
+}

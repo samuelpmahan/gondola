@@ -1,0 +1,47 @@
+{
+  "schema": "gobi.ci2-demo-preflight/v1",
+  "worker": "N4",
+  "evidenceClass": "read-only local source review; no CI execution evidence",
+  "target": {
+    "pr_head": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "parent": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "run_id": "41144116537",
+    "run_status_at_assignment": "in_progress",
+    "canonical_checkout_match": true
+  },
+  "sourceSha256": {
+    ".github/workflows/compiled-frontend.yml": "87d756a359b6851f4a0c78743d7f8a2f38c43832f7db91ebca3f25537535a276",
+    "run-compiled-frontend.sh": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad",
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+    "compiled-frontend/demo/app.mjs": "cea72624525c608ee1207f7e9cdafad254bad0ae7a41a6a04bbb30fb89b57d15",
+    "compiled-frontend/demo/build.mjs": "5d0f7c626a00eb59f37ea5d42eb1a8dbda306fb9b5257a28f62a06652a194f62",
+    "compiled-frontend/demo/index.html": "34ddd4edb89d8f26369e8dd91d9c48e989e620eaba56f74318b1511ac20c7ae2",
+    "compiled-frontend/demo/smoke.mjs": "613078c7a6ca8ce37441c2c8344c7e74e0d30af6fb02901fe486fa580a5358da",
+    "compiled-frontend/conformance/no-wasm.test.mjs": "4092cbd692428e647d8c2deb361beb5032d3a39f4599aa4d55a0a207c4700775",
+    "compiled-frontend/conformance/browser.mjs": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea"
+  },
+  "sourceReview": {
+    "entrypoint": "The workflow installs Node 22, Go 1.24.x, npm dependencies, and Playwright-managed Chromium, then calls the full default run-compiled-frontend.sh. The script runs the inherited typed-composition gate, sets Go 1.27.3 for the compiled suite, and then invokes compiled-frontend/run.mjs.",
+    "launcherRepair": "The no-WASM unit tests now call shared chromiumLaunchOptions from conformance/browser.mjs. With no CHROMIUM_PATH they omit executablePath and use Playwright-managed Chromium; WASM assertions remain unchanged. Focused source repair evidence is separate from this full CI run.",
+    "buildAndSourcePins": "run.mjs records tool versions, commands and logs, pins source files before and after execution, compiles the four apps, verifies every BuildResult-listed generated output by path/bytes/SHA before and after replays, and fails if source pins differ.",
+    "generatedDemo": "demo/build.mjs composes exactly counter, form, list and effect from each generated gobi-compiled.mjs and encoder.mjs, creates entry.mjs, bundles demo.bundle.mjs, and copies index.html. The demo bundle itself has no output digest field in execution.json, so record extracted asset hashes independently.",
+    "httpSmoke": "demo/smoke.mjs serves the built artifacts over node:http bound to 127.0.0.1, launches headless Playwright, mounts four sessions, exercises counter Add/Add/Reset and disabled Reset, form text/checkbox/save/literal argument, keyed list edit/reorder, and effect pending/disabled state plus one manual captured reply. It asserts no runtime failures, pageerrors, or .wasm requests, then captures full-page demo.png and writes demo-smoke.json.",
+    "errorCaptureLimit": "Smoke records pageerror, runtime onFailure, and .wasm requests. It does not separately record console.error, requestfailed, or the navigation response status, and does not expose a dedicated WebAssembly API-attempt counter."
+  },
+  "offlineAcceptanceChecklist": [
+    "Wait for root's immutable repaired-extracted path, artifact digest, run/job/artifact IDs and completed-run attribution; do not read a local artifacts directory as CI evidence.",
+    "Confirm run head is 184ccdaabe9e6e46e1052ee79cd7e0be26fe3281 and independently reconcile source tree/parent from publication metadata.",
+    "Check execution.json status passed, no command failures, expected 33 full-chain commands, 81 Node tests pass, and actual Go/Node/React/ReactDOM/esbuild/Playwright versions; record browser.version from demo-smoke.json.",
+    "Match CI sourceBefore pins to the exact source checkout and sourceAfter byte-for-byte; confirm source/output inventories are stable and build-result outputs verify against actual artifact files.",
+    "Check build request/result contains one clean four-app React build, each counter/form/list/effect AppIR, compiled module and encoder, shared React map, generated TypeScript, and complete output path/byte/hash records.",
+    "Check demo build entry imports all four generated modules and encoders; compute SHA-256/bytes for entry.mjs, demo.bundle.mjs, copied index.html, demo-smoke.json, and demo.png from the immutable extraction.",
+    "Check demo-smoke.json status, four-app mounted check, all five interaction check labels, empty failures/errors/wasmRequests, nonempty screenshot, and the actual browser version. Independently view the extracted screenshot read-only.",
+    "Check the execution command list reached build-demo and demo-smoke and its logs report success; keep any console/network/error-capture gaps explicit."
+  ],
+  "limits": [
+    "No local build, test, browser run, network poll, artifact download, or Git mutation was performed.",
+    "The hashes above describe the canonical local source snapshot only; CI source identity remains pending the new artifact's source pins and publication binding.",
+    "No receipt or report is finalized until root announces the completed immutable CI artifact."
+  ]
+}

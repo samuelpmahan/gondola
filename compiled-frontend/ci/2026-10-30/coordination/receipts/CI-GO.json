@@ -1,0 +1,62 @@
+{
+  "job_id": "CI-GO",
+  "worker": "N1",
+  "outcome": "insufficient_evidence",
+  "status": "closed_first_attempt",
+  "summary": "This receipt closes run 41140265213 only. Its verified artifact shows all recorded Go 1.24.13 root and Go 1.27.3 compiler test/race/vet commands exiting 0, but the run fails at Node tests (79/81 pass) before compiler CLI execution and output inventory. The outcome is insufficient evidence for compiler/output acceptance; no later CI run is covered.",
+  "attempt": {
+    "run_id": "41140265213",
+    "job_id": "124352550636",
+    "artifact_id": "13019432197",
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "provider_archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "execution_json_sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "execution_status": "failed"
+  },
+  "go_checks": {
+    "root_go_version": "go1.24.13",
+    "root_tests_exit": 0,
+    "root_race_exit": 0,
+    "root_vet_exit": 0,
+    "compiled_frontend_go_version": "go1.27.3",
+    "compiled_frontend_tests_exit": 0,
+    "compiled_frontend_race_exit": 0,
+    "compiled_frontend_vet_exit": 0,
+    "details": "audits/CI-GO/failed-run-audit.json"
+  },
+  "tool_versions": {
+    "node": "v22.23.4",
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1"
+  },
+  "blocking_failure": {
+    "command": "node-tests",
+    "exit": 1,
+    "tests_passed": 79,
+    "tests_failed": 2,
+    "failure": "The two no-WASM browser tests launch Chromium at /tmp/chromium when CHROMIUM_PATH is unset; the executable is absent at that path in this CI job.",
+    "log_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5"
+  },
+  "not_reached": [
+    "compiler CLI four-app build",
+    "native compiler binary output",
+    "four-app output inventory",
+    "direct/browser comparison and demo build/smoke"
+  ],
+  "provider_integrity": {
+    "compiler_files_manifested": 19,
+    "all_hashes_and_sizes_verified": true,
+    "source_before_pins": 116,
+    "source_before_matches_current_exact_head": true,
+    "source_after_present": false,
+    "record": "audits/CI-GO/provider-verification.json"
+  },
+  "scope_notes": [
+    "This receipt is limited to the first attempt at head 408e330517b1dd5e5f865e2ff1914465f98bcf66.",
+    "Any repaired fresh-CI run is outside this receipt and belongs to separate CI2-GO evidence.",
+    "Workflow-run/artifact binding is reviewed separately by CI-PUBLICATION."
+  ]
+}

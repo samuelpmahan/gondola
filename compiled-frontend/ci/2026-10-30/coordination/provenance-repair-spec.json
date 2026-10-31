@@ -1,0 +1,27 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-CI2-PROVENANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "CI2-TRACE",
+      "owner": "NamedCI2-TRACEreport/receipt/rawaudit plus namedrepairreport/receipt/audit only; preserveoldbytesbeforelabelcorrection",
+      "summary": "Correct directparent184->408 versusPRbase42df provenance label; traces/application/source unchanged; independent rereviewrequired"
+    }
+  ]
+}

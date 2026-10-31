@@ -1,0 +1,110 @@
+{
+  "schema": "gobi.ci2-trace-receipt/v1",
+  "job_id": "CI2-TRACE",
+  "worker": "N2",
+  "outcome": "confirmed_reuse",
+  "summary": "Independent offline audit of the completed repaired-head workflow artifact confirms exact native/direct typed traces and browser trace cores for four apps across five profiles, with zero mismatches and all 89 mutation controls detected.",
+  "report": "compiled-frontend/ci/2026-10-30/coordination/reports/CI2-TRACE.md",
+  "report_sha256": "c29bb70c9fcf52c61108c1f425a3d1c3ce3f6ee01686dff4104a265f955ed752",
+  "workflow": {
+    "run_id": 41144116537,
+    "job_id": 124365059288,
+    "artifact_id": 13020568606,
+    "conclusion": "success",
+    "head_sha": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree_sha": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "artifact_bytes": 124558516,
+    "artifact_sha256": "c3332c9b5d0186c47dab921902774de05eb2b8d0819c3ad69dc9eb045166947e",
+    "extraction_manifest_sha256": "a79aa22c45f3b5cac2af4ddc2e5015352e038a7c6b88012c1c807a43f22631bc",
+    "compiler_files_verified": 309,
+    "direct_parent_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "pr_base_sha": "42df6883337605d901a23e9fed874768c7ce1824"
+  },
+  "verification": {
+    "execution_sha256": "5f889f586b69b4fd89d3bd8c2b232e447d74c154abea2c14d65808318794c0d5",
+    "source_pins": 116,
+    "source_pins_match_checkout": true,
+    "source_before_after_equal": true,
+    "command_count": 33,
+    "command_logs_verified": 66,
+    "node": "v22.23.4",
+    "node_tests": 81,
+    "node_passed": 81,
+    "node_failed": 0,
+    "root_go": "go version go1.24.13 linux/amd64",
+    "nested_go": "go version go1.27.3 linux/amd64",
+    "chromium": "156.0.8078.4",
+    "chromium_path": null,
+    "app_count": 4,
+    "profile_count": 5,
+    "ticks": 43,
+    "action_ticks": 37,
+    "mutation_controls": 89,
+    "mismatches": 0,
+    "output_pins_verified": 209,
+    "profiles": [
+      {
+        "profile": "counter",
+        "fixture": "unchanged-counter-add-reset-disabled",
+        "appId": "github.com/samuelpmahan/gondola/counter",
+        "ticks": 5,
+        "actionTicks": 4,
+        "requestedEffects": 0,
+        "completedEffects": 0,
+        "mutationControls": 17
+      },
+      {
+        "profile": "form",
+        "fixture": "compiled-form-text-checked-literal-save-reset",
+        "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/form",
+        "ticks": 10,
+        "actionTicks": 9,
+        "requestedEffects": 0,
+        "completedEffects": 0,
+        "mutationControls": 18
+      },
+      {
+        "profile": "list",
+        "fixture": "compiled-keyed-list-identity-empty-and-detached",
+        "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/list",
+        "ticks": 11,
+        "actionTicks": 10,
+        "requestedEffects": 0,
+        "completedEffects": 0,
+        "mutationControls": 19
+      },
+      {
+        "profile": "effect",
+        "fixture": "compiled-effect-commit-before-deterministic-reply",
+        "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/effect",
+        "ticks": 5,
+        "actionTicks": 3,
+        "requestedEffects": 1,
+        "completedEffects": 1,
+        "mutationControls": 18
+      },
+      {
+        "profile": "list-growth",
+        "fixture": "compiled-list-growth-spare-capacity-edit-reorder-reset",
+        "appId": "github.com/samuelpmahan/gondola/fixtures/compiled/list",
+        "ticks": 12,
+        "actionTicks": 11,
+        "requestedEffects": 0,
+        "completedEffects": 0,
+        "mutationControls": 17
+      }
+    ]
+  },
+  "audit": {
+    "path": "compiled-frontend/ci/2026-10-30/audits/CI2-TRACE/raw-evidence.json",
+    "sha256": "816c79648576a12102626460e7ccc4c703c83e30c9a07ce178a3f8da97728430",
+    "implementation_path": "compiled-frontend/ci/2026-10-30/audits/CI2-TRACE/audit-traces.mjs",
+    "implementation_sha256": "8b7ce7cd8dc37732297d6ad0f2fb11939a3b7820ccd0bdc245dcccd3e17b189f"
+  },
+  "limits": [
+    "The result covers these four apps and five fixture profiles, not arbitrary Go programs or a general backend guarantee.",
+    "BigInt-backed uint64 state values are small list IDs in this trace set; full-width BigInt boundaries are not exercised.",
+    "Float64Array-backed GoSlice wrappers are not exercised by these fixtures.",
+    "The prior failed first-run receipt remains closed and unchanged; this receipt covers only workflow run 41144116537."
+  ]
+}

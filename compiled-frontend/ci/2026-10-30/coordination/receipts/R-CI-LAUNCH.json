@@ -1,0 +1,55 @@
+{
+  "job_id": "R-CI-LAUNCH",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Repaired the two no-WASM browser tests to use shared chromiumLaunchOptions. Focused Node 22.23.4 execution passed both tests (2/2); no broader CI pass is claimed.",
+  "report_sha256": "bbb9580336a325ea96241a33e4c7b9126f2d2869f6ef7ce5f2dfb4756dafb40b",
+  "scope": [
+    "compiled-frontend/conformance/no-wasm.test.mjs",
+    "compiled-frontend/ci/2026-10-30/coordination/reports/R-CI-LAUNCH.md",
+    "compiled-frontend/ci/2026-10-30/coordination/receipts/R-CI-LAUNCH.json",
+    "compiled-frontend/ci/2026-10-30/audits/R-CI-LAUNCH/**"
+  ],
+  "native_allocation": {
+    "epoch": 2,
+    "worker": "N6",
+    "job": "R-CI-LAUNCH",
+    "native_score": 500,
+    "exact_score": 500,
+    "broken_constraints": 0
+  },
+  "source": {
+    "path": "compiled-frontend/conformance/no-wasm.test.mjs",
+    "sha256": "4092cbd692428e647d8c2deb361beb5032d3a39f4599aa4d55a0a207c4700775",
+    "change": "imports chromiumLaunchOptions from ./browser.mjs and uses it for both chromium.launch calls",
+    "assertions_changed": false,
+    "skips_added": false
+  },
+  "verification": {
+    "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH CHROMIUM_PATH=/tmp/chromium node --test compiled-frontend/conformance/no-wasm.test.mjs",
+    "node": "v22.23.4",
+    "chromium_path": "/tmp/chromium",
+    "invocations": 2,
+    "both_exit_codes": [
+      0,
+      0
+    ],
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "duration_ms_saved_invocation": 804.62169,
+    "stdout_path": "compiled-frontend/ci/2026-10-30/audits/R-CI-LAUNCH/focused.stdout.log",
+    "stdout_sha256": "abcd25ecb369d936d2419f64c5a9f216734699759247dfa9ecef7dd644932e0e",
+    "stderr_path": "compiled-frontend/ci/2026-10-30/audits/R-CI-LAUNCH/focused.stderr.log",
+    "stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "subtests": [
+      "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+      "browser guard rejects WASM asset requests"
+    ]
+  },
+  "limits": [
+    "Only the focused no-wasm.test.mjs file was executed; the complete Node suite and composed compiled CI gate remain for root.",
+    "The prior CI-PUBLICATION run 41140265213 remains recorded as failed; this focused repair does not change that historical result.",
+    "Both current focused invocations used the explicit CHROMIUM_PATH=/tmp/chromium. Managed Chromium fallback is supplied by the shared helper and has existing browser-options unit coverage, but was not exercised by this focused command."
+  ]
+}

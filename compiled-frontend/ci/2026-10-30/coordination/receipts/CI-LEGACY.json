@@ -1,0 +1,124 @@
+{
+  "schema": "gondola.ci-legacy-receipt/v1",
+  "job_id": "CI-LEGACY",
+  "worker": "N5",
+  "status": "complete",
+  "outcome": "mixed_change",
+  "summary": "For the frozen PR #11 head 408e330517b1dd5e5f865e2ff1914465f98bcf66 (tree cd615e4bd0e83e31dd87232207afb2bf6416ccff), all 11 PR workflows completed: 10 succeeded and primary compiled-frontend run 41140265213 failed at Node tests (79/81; two No-WASM browser guard tests hardcode /tmp/chromium). All 11 inherited root baselines pass the seeded 5,000-case check, receipt and 24 checksum pins. The 1,228 parent paths remain unchanged and the 602 PR changes are additions. This historical result is mixed and the bounded audit is complete on this head; a repaired head is a separate CI2-LEGACY packet.",
+  "repository": "samuelpmahan/gondola",
+  "pull_request": 11,
+  "historical_head": {
+    "sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "base_parent": "42df6883337605d901a23e9fed874768c7ce1824"
+  },
+  "observed_at_utc": "2026-10-30 23:12:46 UTC",
+  "workflows": {
+    "completed": 11,
+    "success": 10,
+    "failure": 1,
+    "failed_run_id": 41140265213,
+    "failed_job_id": 124352550636,
+    "success_run_ids": [
+      41140265272,
+      41140265291,
+      41140265370,
+      41140265247,
+      41140265315,
+      41140265209,
+      41140265325,
+      41140265349,
+      41140265396,
+      41140265323
+    ],
+    "failed_gate": "node-tests",
+    "node_test_totals": {
+      "passed": 79,
+      "failed": 2,
+      "total": 81
+    },
+    "failing_tests": [
+      "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+      "browser guard rejects WASM asset requests"
+    ],
+    "failure_detail": "The two tests attempt to launch /tmp/chromium, which is absent; the artifact execution manifest reports CHROMIUM_PATH=null and Playwright-managed Chromium. The primary job log reports Node exit code 1. Root's single primary artifact materialization confirms the specific two failures."
+  },
+  "inherited_baseline": {
+    "workflows_with_seeded_baseline_pass": 11,
+    "cases": 5000,
+    "seed": 20261030,
+    "verdict": "same over 5000 inputs",
+    "rules": 59,
+    "sha256_pins": 24,
+    "baseline_commands": [
+      "npm ci --no-audit --no-fund",
+      "go run ./cmd/gobi emit react",
+      "go vet ./...",
+      "go test ./...",
+      "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "sha256sum -c --quiet SHA256SUMS"
+    ]
+  },
+  "toolchains": {
+    "workflow_setup_go": "1.24.x",
+    "workflow_setup_node": "22",
+    "observed_go": "go1.24.13 linux/amd64",
+    "observed_node": "v22.23.4",
+    "observed_npm": "10.9.9",
+    "primary_compiled_go": "go1.27.3 linux/amd64",
+    "primary_root_go": "go1.24.13 linux/amd64"
+  },
+  "compiled_frontend_scopes": {
+    "root_go24_unit_race_vet": {
+      "packages": "./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+      "commands": [
+        "GOTOOLCHAIN=local go test ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+        "GOTOOLCHAIN=local go test -race ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+        "GOTOOLCHAIN=local go vet ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native"
+      ],
+      "all_exit_zero": true
+    },
+    "compiled_go127_unit_race_vet": {
+      "packages": "./analyze ./build ./cmd/... ./emit",
+      "commands": [
+        "go test ./analyze ./build ./cmd/... ./emit",
+        "go test -race ./analyze ./build ./cmd/... ./emit",
+        "go vet ./analyze ./build ./cmd/... ./emit"
+      ],
+      "all_exit_zero": true
+    },
+    "node_suite": "79/81 pass; two No-WASM browser guard tests fail; later compiled build/trace/demo stages were not reached",
+    "race_scope_limit": "No root-wide go test -race ./... claim"
+  },
+  "predecessor_preservation": {
+    "base_path_count": 1228,
+    "head_path_count": 1830,
+    "added": 602,
+    "modified": 0,
+    "deleted": 0,
+    "conclusion": "All 1,228 parent paths are retained unchanged; all 602 PR paths are additions."
+  },
+  "primary_artifact": {
+    "owner": "root",
+    "download_count_by_n5": 0,
+    "artifact_id": 13019432197,
+    "archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "bytes": 119128377,
+    "extraction_manifest": "provider/extracted/extraction-manifest.json"
+  },
+  "snapshots": {
+    "runs": {
+      "path": "audits/CI-LEGACY/workflow-runs.snapshot-3.json",
+      "sha256": "98ba0818a54d74bde370f1bd63c426aacb68461933c45f80cbd97fb61ec195af"
+    },
+    "jobs": {
+      "path": "audits/CI-LEGACY/workflow-jobs.snapshot-3.json",
+      "sha256": "4eab17cbe8902599373d267fff0faf1477deadbc2b2ce3cb9ab29a31cc457054"
+    },
+    "run_details": {
+      "path": "audits/CI-LEGACY/workflow-run-details.snapshot-3.json",
+      "sha256": "0a0477738c73ecc69ab7a844f5707f4ec936cdea985a779d90bbbd3b66bea309"
+    }
+  },
+  "scope_close": "This receipt closes CI-LEGACY for frozen head 408e330 only. Any repaired head requires a separate CI2-LEGACY packet and fresh workflow-run evidence."
+}

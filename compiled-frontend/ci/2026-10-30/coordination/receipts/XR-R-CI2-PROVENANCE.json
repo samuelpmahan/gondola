@@ -1,0 +1,68 @@
+{
+  "schema": "gobi.ci-independent-review/v1",
+  "job_id": "XR-R-CI2-PROVENANCE",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independent bounded review confirms that R-CI2-PROVENANCE correctly separates head 184ccda's direct parent 408e330 from PR base 42df688 and preserves the original R/producer evidence. The report, receipt, and raw-evidence hash chain matches; trace data outside provenance fields is unchanged.",
+  "reviewed_packet": {
+    "job_id": "R-CI2-PROVENANCE",
+    "worker": "N2",
+    "outcome": "mixed_change",
+    "report": "coordination/reports/R-CI2-PROVENANCE.md",
+    "report_sha256": "65654eef04c5b0ac82614b54671f5e8af36aea44affd9d9e93a285df2febe466",
+    "receipt": "coordination/receipts/R-CI2-PROVENANCE.json",
+    "receipt_sha256": "f1ca02f31b6e8d1afdfc8af657494e27d8aab51247cd92961b7f4d0ff0f0615d",
+    "audit": "audits/R-CI2-PROVENANCE/audit.json",
+    "audit_sha256": "8344a30aa5256690e7083fcf92a631cd40ff6b7f82f4d708929debd2f67c7b6f"
+  },
+  "provenance": {
+    "head_sha": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree_sha": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "direct_parent_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "pr_base_sha": "42df6883337605d901a23e9fed874768c7ce1824",
+    "head_git_parent_verified": true,
+    "pr_base_verified_from_completed_run_metadata": true,
+    "completed_run_metadata_sha256": "662b8d03fb9c7a3f594914ebb8649a080ad45ec89147ec850bf04ae91e3fc8f0"
+  },
+  "preserved_history": {
+    "n5_original_report_sha256": "5b1118ab47f600b7677cb2f97af31a26d44bb005b5b12d04aa212ee9fd37dce7",
+    "n5_original_receipt_sha256": "b56f577bc47e08cf21d57e9671a71a303bfb0a82d1a0ac49930281d3c4f689b1",
+    "n2_original_raw_evidence_sha256": "e637db3cbe5049e449c0adf35fe94ebce3183b538613786a7b5f1a5b5af5dfa7",
+    "n5_review_receipt_sha256": "d0923870b7403a0783054b56bda7ca02d89a30dafb4b28040d88307c8a9d96f8",
+    "n5_independent_crosscheck_sha256": "5fdd84a1a38a118040ec38f7587f558243c6f134b306fc182a3234e7789ce444",
+    "n5_crosscheck_parent_base_match": true
+  },
+  "before_after_chain": {
+    "report_before_sha256": "5b1118ab47f600b7677cb2f97af31a26d44bb005b5b12d04aa212ee9fd37dce7",
+    "report_after_sha256": "c29bb70c9fcf52c61108c1f425a3d1c3ce3f6ee01686dff4104a265f955ed752",
+    "receipt_before_sha256": "b56f577bc47e08cf21d57e9671a71a303bfb0a82d1a0ac49930281d3c4f689b1",
+    "receipt_after_sha256": "fd05c3530180d5245a4412b6a45fa8dad45bcb79ac037197f7f3247eeeebab08",
+    "raw_evidence_before_sha256": "e637db3cbe5049e449c0adf35fe94ebce3183b538613786a7b5f1a5b5af5dfa7",
+    "raw_evidence_preserved_copy_sha256": "e637db3cbe5049e449c0adf35fe94ebce3183b538613786a7b5f1a5b5af5dfa7",
+    "raw_evidence_after_sha256": "816c79648576a12102626460e7ccc4c703c83e30c9a07ce178a3f8da97728430",
+    "r_audit_sha256": "8344a30aa5256690e7083fcf92a631cd40ff6b7f82f4d708929debd2f67c7b6f"
+  },
+  "independent_checks": {
+    "head_tree_and_direct_parent_match_git_object": true,
+    "pr_base_matches_saved_completed_run_metadata": true,
+    "report_change_is_one_provenance_line": true,
+    "receipt_nonprovenance_fields_unchanged": true,
+    "raw_reverse_transformation_recreates_original_json_object": true,
+    "raw_payload_outside_workflow_provenance_unchanged": true,
+    "current_receipt_pins_current_report_and_raw_evidence": true,
+    "r_audit_hash_matches_r_receipt": true,
+    "n5_originals_and_review_chain_hashes_match": true,
+    "r_packet_audit_checks_reported": "10/10"
+  },
+  "independent_review": {
+    "report": "coordination/reports/XR-R-CI2-PROVENANCE.md",
+    "audit": "audits/XR-R-CI2-PROVENANCE/review.json",
+    "discrepancies": 0,
+    "report_sha256": "9922e2604ba79a6c79d27f781402c624529ff8a24da616d28526a96e6a179ac2",
+    "audit_sha256": "c64d2518af613d078e16fbb8c00054a74be0ba68567fa5582e3e8c5ef2f63c10"
+  },
+  "limits": [
+    "Acceptance covers the provenance-only correction and preservation/hash chain, not a new run or trace validation.",
+    "No build, test, browser run, artifact download, workflow poll, network lookup, or Git mutation was performed."
+  ]
+}

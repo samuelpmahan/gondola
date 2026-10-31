@@ -1,0 +1,34 @@
+{
+  "schema": "gobi.ci-trace-receipt/v1",
+  "job_id": "CI-TRACE",
+  "worker": "N2",
+  "outcome": "insufficient_evidence",
+  "summary": "First primary workflow attempt 41140265213 failed at Node tests before compile-four. The immutable artifact contains no app build or traces, so typed native/direct/browser conformance is untested; a separate repaired CI run is required.",
+  "scope": "failed first run only; no claim about the later repaired CI run",
+  "workflow_run_id": "41140265213",
+  "artifact_id": "13019432197",
+  "tested_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+  "artifact_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+  "execution_status": "failed",
+  "failure_stage": "node-tests",
+  "node_tests": {
+    "passed": 79,
+    "failed": 2,
+    "total": 81,
+    "cause": "Both failed no-WASM tests attempted to launch hard-coded /tmp/chromium, unavailable in the managed CI environment."
+  },
+  "go_gates": {
+    "root_go": "go1.24.13; tests, race tests, and vet exited 0",
+    "nested_go": "go1.27.3; tests, race tests, and vet exited 0"
+  },
+  "trace_evidence": {
+    "compile_four_reached": false,
+    "apps": 0,
+    "scripts": 0,
+    "ticks": null,
+    "source_before_pins": 116,
+    "source_after": null,
+    "source_stable": null
+  },
+  "audit_record": "audits/CI-TRACE/partial-failure-41140265213.json"
+}

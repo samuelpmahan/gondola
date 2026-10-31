@@ -1,0 +1,126 @@
+{
+  "schema": "gobi.ci-browser-first-attempt-audit/v1",
+  "workflow_binding": {
+    "run_id": 41140265213,
+    "workflow_name": "Gobi compiled Go frontend",
+    "provider_snapshot_status": "in_progress",
+    "provider_snapshot_conclusion": null,
+    "published_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "published_tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "published_parent": "42df6883337605d901a23e9fed874768c7ce1824",
+    "archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "archive_sha256_expected": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "archive_matches_extraction_manifest": true
+  },
+  "execution": {
+    "status": "failed",
+    "finished_at": "2026-10-30T23:10:22.989Z",
+    "toolchain": {
+      "go": "go version go1.27.3 linux/amd64",
+      "node": "v22.23.4",
+      "react": "19.3.1",
+      "react-dom": "19.3.1",
+      "esbuild": "0.28.2",
+      "playwright": "1.64.1",
+      "rootGo": "go version go1.24.13 linux/amd64"
+    },
+    "command_names_in_order": [
+      "version-go",
+      "version-root-go",
+      "root-go-tests",
+      "root-go-race",
+      "root-go-vet",
+      "go-tests",
+      "go-race",
+      "go-vet",
+      "node-tests"
+    ],
+    "command_exit_codes": [
+      {
+        "name": "version-go",
+        "exitCode": 0
+      },
+      {
+        "name": "version-root-go",
+        "exitCode": 0
+      },
+      {
+        "name": "root-go-tests",
+        "exitCode": 0
+      },
+      {
+        "name": "root-go-race",
+        "exitCode": 0
+      },
+      {
+        "name": "root-go-vet",
+        "exitCode": 0
+      },
+      {
+        "name": "go-tests",
+        "exitCode": 0
+      },
+      {
+        "name": "go-race",
+        "exitCode": 0
+      },
+      {
+        "name": "go-vet",
+        "exitCode": 0
+      },
+      {
+        "name": "node-tests",
+        "exitCode": 1
+      }
+    ],
+    "source_before_count": 116,
+    "source_after_present": false,
+    "current_source_pins_matched": 116,
+    "current_source_pin_mismatches": [],
+    "compile_four_reached": false,
+    "compiled_app_outputs_present": false,
+    "raw_browser_traces_present": false
+  },
+  "extraction": {
+    "compiler_artifact_files_verified": 19,
+    "mismatches": [],
+    "execution_json_sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "node_test_log_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+    "manifest_node_test_log_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5"
+  },
+  "node_tests": {
+    "counts": {
+      "tests": 81,
+      "pass": 79,
+      "fail": 2
+    },
+    "failed_tests": [
+      {
+        "index": 26,
+        "name": "browser guard detects compilation and instantiation attempts instead of allowing fallback"
+      },
+      {
+        "index": 27,
+        "name": "browser guard rejects WASM asset requests"
+      }
+    ],
+    "launch_errors": [
+      "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium",
+      "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium"
+    ],
+    "chromium_path_environment": null,
+    "failing_test_source_sha256": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f",
+    "source_has_tmp_chromium_fallback": true,
+    "failed_before_guard_behavior": true
+  },
+  "other_gates": {
+    "root_and_compiler_go_tests_race_vet_passed": true,
+    "browser_conformance_started": false,
+    "four_app_ci_result": "not reached"
+  },
+  "limits": [
+    "The CI entrypoint failed in node-tests before compile-four; it produced no four-app build or browser conformance traces.",
+    "The two failed tests stopped at chromium.launch because the test defaulted to /tmp/chromium while CHROMIUM_PATH was unset; the no-WASM guards did not execute in these failed tests.",
+    "This is a preserved failed first attempt; CI-BROWSER remains open for the repaired workflow run."
+  ]
+}

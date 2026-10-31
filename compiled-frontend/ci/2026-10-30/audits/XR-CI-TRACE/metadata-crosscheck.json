@@ -1,0 +1,55 @@
+{
+  "schema": "gobi.xr-ci-trace-artifact-metadata-review/v1",
+  "reviewer": "N6",
+  "observed_with_node": "v22.23.4",
+  "reviewed_run": 41140265213,
+  "reviewed_artifact": 13019432197,
+  "archive": {
+    "path": "provider/downloads/run-41140265213.zip",
+    "expected_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "independently_observed_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "matches": true
+  },
+  "inventory": {
+    "n2_partial_audit_path": "audits/CI-TRACE/partial-failure-41140265213.json",
+    "n2_partial_audit_sha256": "61f1846ad3f97e9d764df1d55e8d3698f851636c921d7144a541a8c67824cc7b",
+    "extraction_manifest_path": "provider/extracted/extraction-manifest.json",
+    "extraction_manifest_sha256": "504a7b04f88da14d79fa0c6d91e3792c44badebb089220d8a152acc81c8dda4c",
+    "n2_file_count": 19,
+    "manifest_file_count": 19,
+    "fields_compared": [
+      "path",
+      "bytes",
+      "sha256",
+      "zipCRC32"
+    ],
+    "physical_extracted_file_bytes_and_sha256_recomputed": true,
+    "inventory_and_bytes_match": true,
+    "mismatches": []
+  },
+  "execution": {
+    "path": "provider/extracted/compiled-frontend/artifacts/execution.json",
+    "sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "status": "failed",
+    "last_command": "node-tests",
+    "compile_four_reached": false,
+    "source_before_pins": 116,
+    "source_after": null,
+    "output_path_count": 19,
+    "trace_outputs_present": false,
+    "trace_ticks": null
+  },
+  "node_tests": {
+    "log_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+    "tests": 81,
+    "passed": 79,
+    "failed": 2,
+    "failed_tests": [
+      "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+      "browser guard rejects WASM asset requests"
+    ],
+    "recorded_cause": "Chromium executable did not exist at /tmp/chromium",
+    "comparison_with_n2_receipt": "matches"
+  },
+  "method": "Read-only comparison of N2's 19 inventory rows against the extraction manifest, then recomputation of each extracted file's byte length/SHA-256 and the original ZIP SHA-256. No app execution, source change, CI rerun, or artifact download by this reviewer."
+}

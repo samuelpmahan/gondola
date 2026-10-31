@@ -1,0 +1,64 @@
+{
+  "schema": "gobi.ci-trace-independent-review/v1",
+  "job_id": "XR-CI-TRACE",
+  "worker": "N6",
+  "decision": "accepted",
+  "summary": "N2's report and receipt are supported for the failed first attempt only. Artifact hash and all 19 pinned metadata rows match the canonical extraction; execution stops at node-tests, so the report correctly claims no new app traces or CI trace acceptance.",
+  "review_report_sha256": "c64695f6608e824a206ce667965f3a0ed3415ad0416e3901c5cbbe364a944184",
+  "scope": [
+    "compiled-frontend/ci/2026-10-30/coordination/reports/XR-CI-TRACE.md",
+    "compiled-frontend/ci/2026-10-30/coordination/receipts/XR-CI-TRACE.json",
+    "compiled-frontend/ci/2026-10-30/audits/XR-CI-TRACE/**"
+  ],
+  "reviewed_packet": {
+    "job_id": "CI-TRACE",
+    "worker": "N2",
+    "report_path": "compiled-frontend/ci/2026-10-30/coordination/reports/CI-TRACE.md",
+    "report_sha256": "b19bbdf9e3e2e42daaa4e60371f1847c9cac08ce521383b8c13606afeca25ab7",
+    "receipt_path": "compiled-frontend/ci/2026-10-30/coordination/receipts/CI-TRACE.json",
+    "receipt_sha256": "df5e25c6480179d3142d09f2ab42377c8bd8508f7b7131a15fb9d457423fe54f",
+    "partial_failure_audit": "compiled-frontend/ci/2026-10-30/audits/CI-TRACE/partial-failure-41140265213.json",
+    "partial_failure_audit_sha256": "61f1846ad3f97e9d764df1d55e8d3698f851636c921d7144a541a8c67824cc7b"
+  },
+  "evidence": {
+    "workflow_run_id": 41140265213,
+    "job_id": 124352550636,
+    "artifact_id": 13019432197,
+    "tested_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "archive_expected_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "archive_observed_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "extraction_manifest_sha256": "504a7b04f88da14d79fa0c6d91e3792c44badebb089220d8a152acc81c8dda4c",
+    "pinned_file_rows": 19,
+    "manifest_file_rows": 19,
+    "metadata_fields_compared": [
+      "path",
+      "bytes",
+      "sha256",
+      "zipCRC32"
+    ],
+    "extracted_bytes_and_hashes_match": true,
+    "mismatch_count": 0,
+    "execution_receipt_sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "execution_status": "failed",
+    "failure_stage": "node-tests",
+    "node_tests": {
+      "total": 81,
+      "passed": 79,
+      "failed": 2
+    },
+    "compile_four_reached": false,
+    "new_app_trace_outputs_present": false,
+    "source_before_pins": 116,
+    "source_after": null,
+    "trace_conformance_outcome": "insufficient_evidence"
+  },
+  "independent_audit": {
+    "path": "compiled-frontend/ci/2026-10-30/audits/XR-CI-TRACE/metadata-crosscheck.json",
+    "sha256": "d4c9100bf1b7d7ce85ada7db700a9ba0a19228f208378b4bae2c7d202517cf5d"
+  },
+  "limits": [
+    "Acceptance applies only to factual accuracy and evidence integrity of N2's first-attempt partial-failure packet.",
+    "This review does not establish CI trace conformance or application success.",
+    "No source changes, CI reruns, artifact downloads, or Git mutations were performed."
+  ]
+}

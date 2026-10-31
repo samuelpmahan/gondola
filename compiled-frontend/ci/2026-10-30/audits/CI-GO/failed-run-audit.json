@@ -1,0 +1,152 @@
+{
+  "schema": "gondola.ci-go.failed-run-audit/v1",
+  "status": "closed first-attempt audit; insufficient evidence for compiler/output acceptance",
+  "run": {
+    "run_id": "41140265213",
+    "job_id": "124352550636",
+    "artifact_id": "13019432197",
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "execution_status": "failed",
+    "execution_error": "node-tests failed; see compiled-frontend/artifacts/logs/node-tests.*.log",
+    "started_at": "2026-10-30T23:09:22.185Z",
+    "finished_at": "2026-10-30T23:10:22.989Z"
+  },
+  "provider": {
+    "archive": "compiled-frontend/ci/2026-10-30/provider/downloads/run-41140265213.zip",
+    "archive_bytes": 119128377,
+    "archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "extracted_root": "compiled-frontend/ci/2026-10-30/provider/extracted",
+    "extraction_manifest": "compiled-frontend/ci/2026-10-30/provider/extracted/extraction-manifest.json",
+    "extraction_manifest_sha256": "504a7b04f88da14d79fa0c6d91e3792c44badebb089220d8a152acc81c8dda4c",
+    "compiler_file_count": 19,
+    "all_compiler_files_hash_and_size_verified": true,
+    "execution_json": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/execution.json",
+    "execution_json_sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "verification_record": "compiled-frontend/ci/2026-10-30/audits/CI-GO/provider-verification.json",
+    "workflow_run_artifact_binding": "pending independent CI-PUBLICATION review"
+  },
+  "source_attribution": {
+    "execution_source_before_count": 116,
+    "all_source_before_pins_match_current_head_checkout": true,
+    "source_after_record_present": false,
+    "source_after_absence_reason": "Runner stopped at Node tests before build and post-run source pin comparison.",
+    "relevant_source_sha256": {
+      "run-compiled-frontend.sh": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad9",
+      "run-typed-composition.sh": "2e3a4116f72e5661037bb090cbb94a4ed49096ce7a79e0b6bc1abd0c5b88edf9",
+      "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+      "compiled-frontend/conformance/no-wasm.test.mjs": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f"
+    }
+  },
+  "toolchain": {
+    "root_go": "go version go1.24.13 linux/amd64",
+    "compiled_frontend_go": "go version go1.27.3 linux/amd64",
+    "node": "v22.23.4",
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1",
+    "environment": {
+      "GOTOOLCHAIN": "go1.27.3",
+      "GOFLAGS": null,
+      "CHROMIUM_PATH": null,
+      "CHROMIUM_EXECUTABLE_PATH": null
+    },
+    "version_log_sha256": {
+      "version-go.stdout.log": "5707bf75dd54b4fdd5ac209444d48c9c4179ebf8510f80e2f7293dfbedc1012b",
+      "version-root-go.stdout.log": "07b0d66d21bcdfdc8456adcb17203f3af8656dc11549da62e6940f99b8d45444"
+    }
+  },
+  "go_checks": [
+    {
+      "name": "root-go-tests",
+      "command": "go test ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+      "go_version": "go1.24.13",
+      "exit": 0,
+      "result": "pass; five packages reported, test results were marked cached",
+      "stdout": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/root-go-tests.stdout.log",
+      "stdout_sha256": "663848b4cc0bba7c2aa376f0bb11cf2185f02d027d87e1373ac5f7a03902f663",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root-go-race",
+      "command": "go test -race ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+      "go_version": "go1.24.13",
+      "exit": 0,
+      "result": "pass; five packages reported",
+      "stdout": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/root-go-race.stdout.log",
+      "stdout_sha256": "9ca301383c1f9ffc8bc5ef467aa3a20936096894b2da64954ffda2bb95ab66cc",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root-go-vet",
+      "command": "go vet ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+      "go_version": "go1.24.13",
+      "exit": 0,
+      "result": "pass; no diagnostics",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-tests",
+      "command": "go test ./analyze ./build ./cmd/... ./emit",
+      "cwd": "/home/runner/work/gondola/gondola/compiled-frontend",
+      "go_version": "go1.27.3",
+      "exit": 0,
+      "result": "pass; analyze, build, gobi-build command package, and emit reported",
+      "stdout": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/go-tests.stdout.log",
+      "stdout_sha256": "8033b4854d5b8722b43cd692182eabe1a81b17b7e53668bd251a1044bb101a68",
+      "stderr": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/go-tests.stderr.log",
+      "stderr_sha256": "46360a04d0812ee0127aa3e9c53ea8153f6172469d08621cc3af4f2286fafcf9"
+    },
+    {
+      "name": "go-race",
+      "command": "go test -race ./analyze ./build ./cmd/... ./emit",
+      "cwd": "/home/runner/work/gondola/gondola/compiled-frontend",
+      "go_version": "go1.27.3",
+      "exit": 0,
+      "result": "pass; analyze, build, gobi-build command package, and emit reported",
+      "stdout": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/go-race.stdout.log",
+      "stdout_sha256": "260c2324781025d74eff1923e88b020c85183b6105cb3ffc32a93a22c9404ac8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "go-vet",
+      "command": "go vet ./analyze ./build ./cmd/... ./emit",
+      "cwd": "/home/runner/work/gondola/gondola/compiled-frontend",
+      "go_version": "go1.27.3",
+      "exit": 0,
+      "result": "pass; no diagnostics",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "blocking_node_gate": {
+    "name": "node-tests",
+    "exit": 1,
+    "summary": "79 passed, 2 failed, 0 skipped of 81 tests",
+    "failed_tests": [
+      "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+      "browser guard rejects WASM asset requests"
+    ],
+    "failure": "Both tests fail to launch Chromium because the executable does not exist at /tmp/chromium.",
+    "source_cause_evidence": "no-wasm.test.mjs uses executablePath: process.env.CHROMIUM_PATH ?? '/tmp/chromium'; execution.environment records CHROMIUM_PATH as null.",
+    "source_sha256": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f",
+    "stdout": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/node-tests.stdout.log",
+    "stdout_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "not_reached": [
+    "compile-four compiler CLI execution",
+    "build-native output",
+    "four-app compiled output inventory and output hashes",
+    "native/direct/browser fixture comparisons",
+    "demo build and smoke",
+    "post-run source pin comparison"
+  ],
+  "limits": [
+    "The Go test, race, and vet commands above completed successfully in the failed CI run; this does not establish compiler CLI or generated artifact correctness.",
+    "Artifact-to-run and workflow-to-checkout linkage is reviewed separately by CI-PUBLICATION.",
+    "This audit covers only run 41140265213 at head 408e330517b1dd5e5f865e2ff1914465f98bcf66. Any later repaired run belongs to separate CI2-GO evidence."
+  ]
+}

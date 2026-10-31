@@ -1,0 +1,119 @@
+{
+  "schema": "gondola.ci-workflow-source-inventory/v1",
+  "source_tree": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+  "all_configured_workflows": [
+    {
+      "run_id": 41140265272,
+      "name": "Counter interaction parity",
+      "path": ".github/workflows/interaction.yml",
+      "workflow_sha256": "c5a980ec8b99de3a46768598db6478a2f635fc980a1cbb3cc5cd212389811c66",
+      "root_baseline": "Explicit `bash run.sh` step",
+      "feature_entrypoint": "GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 bash run-interaction.sh",
+      "default_inherited_chain": "Root static/Go gates, then interaction parity"
+    },
+    {
+      "run_id": 41140265291,
+      "name": "Gobi backend replacement",
+      "path": ".github/workflows/backend-replacement.yml",
+      "workflow_sha256": "ef71e5d625ec7725d2858276f6e5b7b58b5ff76b895c82b4a5061393393899bb",
+      "root_baseline": "Explicit `bash run.sh` step",
+      "feature_entrypoint": "bash run-backend-replacement.sh",
+      "default_inherited_chain": "Backend replacement runner calls run-interaction.sh"
+    },
+    {
+      "run_id": 41140265370,
+      "name": "Gobi controlled input",
+      "path": ".github/workflows/controlled-input.yml",
+      "workflow_sha256": "7a25d2faac9b962dcd534ca5edc92250cb77cafa1e8b11bcd1dea8980d432847",
+      "root_baseline": "Explicit `bash run.sh` step",
+      "feature_entrypoint": "bash run-controlled-input.sh",
+      "default_inherited_chain": "Controlled-input runner calls run-backend-replacement.sh"
+    },
+    {
+      "run_id": 41140265247,
+      "name": "Gobi async effects",
+      "path": ".github/workflows/async-effects.yml",
+      "workflow_sha256": "e488896862ba07aa24ee9f0404e493cae02b4b825aaa7b86f2beaba261fa2535",
+      "root_baseline": "Explicit `bash run.sh` step",
+      "feature_entrypoint": "bash run-async-effects.sh",
+      "default_inherited_chain": "Async runner calls run-controlled-input.sh"
+    },
+    {
+      "run_id": 41140265315,
+      "name": "Gobi HTTP effects",
+      "path": ".github/workflows/http-effects.yml",
+      "workflow_sha256": "ff9c98849e6a4d88e6f7fd9060531565b9e6a50d402d7c2ee056abfa224b87b5",
+      "root_baseline": "run-http-effects.sh runs run.sh and run-async-effects.sh by default",
+      "feature_entrypoint": "GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 bash run-http-effects.sh",
+      "default_inherited_chain": "No inherited-skip flag is set by the workflow"
+    },
+    {
+      "run_id": 41140265209,
+      "name": "Gobi keyed collection editor",
+      "path": ".github/workflows/keyed-editor.yml",
+      "workflow_sha256": "ba2f5b05b3cda549259682e5c78641c7908c8702a7696ad816d2ad4a261dbd6a",
+      "root_baseline": "run-keyed-editor.sh unsets both inherited skip flags",
+      "feature_entrypoint": "bash run-keyed-editor.sh",
+      "default_inherited_chain": "Keyed editor calls run-http-effects.sh with the default inherited chain"
+    },
+    {
+      "run_id": 41140265325,
+      "name": "Gobi renderer conformance",
+      "path": ".github/workflows/renderer-conformance.yml",
+      "workflow_sha256": "1784d5f8ee9a4e1cc1f264a5a0655dbbc08abc24859d1a76feb6144d36c9a243",
+      "root_baseline": "run-renderer-conformance.sh calls run-keyed-editor.sh",
+      "feature_entrypoint": "bash run-renderer-conformance.sh",
+      "default_inherited_chain": "Renderer conformance includes the keyed editor and all earlier default gates"
+    },
+    {
+      "run_id": 41140265349,
+      "name": "Gobi multi-root sessions",
+      "path": ".github/workflows/multi-root.yml",
+      "workflow_sha256": "5355ae51576b49c476c73c8ee9837cab65844d517b9f7b4b1dbdbf68c07d173b",
+      "root_baseline": "run-multi-root.sh calls run-renderer-conformance.sh",
+      "feature_entrypoint": "bash run-multi-root.sh",
+      "default_inherited_chain": "Multi-root includes renderer/keyed and all earlier default gates"
+    },
+    {
+      "run_id": 41140265396,
+      "name": "Gobi nested session tree",
+      "path": ".github/workflows/session-tree.yml",
+      "workflow_sha256": "fa650b478d4aba94b714a74bb8e734ccdfe7064b54cd1d2fb07708345236a135",
+      "root_baseline": "run-session-tree.sh calls run-multi-root.sh",
+      "feature_entrypoint": "bash run-session-tree.sh",
+      "default_inherited_chain": "Session tree includes multi-root/renderer/keyed and all earlier default gates"
+    },
+    {
+      "run_id": 41140265323,
+      "name": "Gobi typed parent and child composition",
+      "path": ".github/workflows/typed-composition.yml",
+      "workflow_sha256": "8d166f5b246ff5145fb5ee03c139ba3f61367b091e6c49b976909441f329069f",
+      "root_baseline": "run-typed-composition.sh calls run-session-tree.sh",
+      "feature_entrypoint": "bash run-typed-composition.sh",
+      "default_inherited_chain": "Typed composition includes session-tree/multi-root/renderer/keyed and all earlier default gates"
+    },
+    {
+      "run_id": 41140265213,
+      "name": "Gobi compiled Go frontend",
+      "path": ".github/workflows/compiled-frontend.yml",
+      "workflow_sha256": "87d756a359b6851f4a0c78743d7f8a2f38c43832f7db91ebca3f25537535a276",
+      "root_baseline": "run-compiled-frontend.sh calls run-typed-composition.sh by default; workflow does not pass --compiled-only",
+      "feature_entrypoint": "bash run-compiled-frontend.sh",
+      "default_inherited_chain": "Compiled frontend includes typed-composition/session-tree/multi-root/renderer/keyed and all earlier default gates"
+    }
+  ],
+  "setup_versions_declared": {
+    "go": "1.24.x",
+    "node": "22"
+  },
+  "setup_versions_observed_in_completed_logs": {
+    "go": "go1.24.13 linux/amd64",
+    "node": "v22.23.4",
+    "npm": "10.9.9"
+  },
+  "source_hashes": {
+    "run.sh": "e2b3fe3101d50e509daae6d0feb630b7becbd01b286bef63cc53493f9e62f2f6",
+    "run-compiled-frontend.sh": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad",
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b"
+  }
+}

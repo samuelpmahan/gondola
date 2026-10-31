@@ -1,0 +1,97 @@
+{
+  "schema": "ci-publication-artifact-analysis/v1",
+  "observed_at_utc": "2026-10-30 23:13:30 UTC",
+  "provider_artifact": {
+    "path": "compiled-frontend/ci/2026-10-30/provider/downloads/run-41140265213.zip",
+    "artifact_id": 13019432197,
+    "name": "gobi-compiled-frontend-artifacts",
+    "bytes": 119128377,
+    "expected_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "observed_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "extracted_path": "compiled-frontend/ci/2026-10-30/provider/extracted",
+    "extraction_manifest": "compiled-frontend/ci/2026-10-30/provider/extracted/extraction-manifest.json",
+    "extraction_manifest_sha256": "504a7b04f88da14d79fa0c6d91e3792c44badebb089220d8a152acc81c8dda4c",
+    "extraction_selection": "complete compiled-frontend/artifacts plus inherited aggregate JSON reports",
+    "selected_compiler_artifact_files": 19,
+    "selected_inherited_aggregate_reports": 71,
+    "remaining_inherited_shards": "remain inside the preserved original archive and were not inspected in this N6 packet"
+  },
+  "run": {
+    "repository": "samuelpmahan/gondola",
+    "run_id": 41140265213,
+    "job_id": 124352550636,
+    "run_attempt": 1,
+    "event": "pull_request",
+    "pull_request": 11,
+    "source_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "source_tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "base": "42df6883337605d901a23e9fed874768c7ce1824",
+    "synthetic_checkout": "2dc5918b4401d54bd991303c5b345f6491288016",
+    "synthetic_checkout_tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "conclusion": "failure",
+    "artifact_api_binding": {
+      "workflow_run_id": 41140265213,
+      "head_branch": "codex/gobi-compiled-frontend-20261030",
+      "head_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66"
+    }
+  },
+  "captured_execution": {
+    "path": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/execution.json",
+    "sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "status": "failed",
+    "error": "node-tests failed; see compiled-frontend/artifacts/logs/node-tests.*.log",
+    "source_before_pin_count": 116,
+    "source_after_present": false,
+    "source_after_limit": "the execution stopped at node-tests and did not record a sourceAfter list"
+  },
+  "source_pin_reproduction": {
+    "script": "compiled-frontend/ci/2026-10-30/audits/CI-PUBLICATION/verify-source-before.mjs",
+    "script_sha256": "d64d0ad93a85f50ec52ea9c22efdfec1b7fce9bc3a0bb665f00d725201ab65b6",
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-frontend/ci/2026-10-30/audits/CI-PUBLICATION/verify-source-before.mjs",
+    "node": "v22.23.4",
+    "checkout_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "checked_pins": 116,
+    "mismatches": 0
+  },
+  "node_tests": {
+    "path": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/node-tests.stdout.log",
+    "sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+    "node": "v22.23.4",
+    "total": 81,
+    "passed": 79,
+    "failed": 2,
+  "failure_log": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/node-tests.stdout.log",
+  "stderr_log": "compiled-frontend/ci/2026-10-30/provider/extracted/compiled-frontend/artifacts/logs/node-tests.stderr.log",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "failures": [
+      {
+        "test": "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+        "location": "compiled-frontend/conformance/no-wasm.test.mjs:7",
+        "error": "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium",
+        "location_stack": "compiled-frontend/conformance/no-wasm.test.mjs:8"
+      },
+      {
+        "test": "browser guard rejects WASM asset requests",
+        "location": "compiled-frontend/conformance/no-wasm.test.mjs:33",
+        "error": "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium",
+        "location_stack": "compiled-frontend/conformance/no-wasm.test.mjs:34"
+      }
+    ],
+    "test_source": "compiled-frontend/conformance/no-wasm.test.mjs",
+    "test_source_sha256": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f",
+    "observed_source_behavior": "both test cases call chromium.launch with executablePath process.env.CHROMIUM_PATH ?? /tmp/chromium; the missing executable error occurs before the WASM guard assertions",
+    "ci_node_test_environment_overrides": {}
+  },
+  "go_steps": {
+    "root_go": "go1.24.13 linux/amd64",
+    "compiler_go": "go1.27.3 linux/amd64",
+    "root_go_tests_race_vet": "all exit 0",
+    "compiler_go_tests_race_vet": "all exit 0"
+  },
+  "limits": [
+    "The full GitHub Actions job concluded failure; this run does not establish an accepted CI pass for PR #11.",
+    "This N6 packet covers PR/run/artifact identity and a bounded error-cause analysis, not every inherited artifact shard.",
+    "sourceAfter is absent because the run stopped on node-tests; no before/after source-mutation claim is made.",
+    "No claim is made that the two browser guard behaviors executed successfully in CI; both failed at Chromium launch."
+  ]
+}

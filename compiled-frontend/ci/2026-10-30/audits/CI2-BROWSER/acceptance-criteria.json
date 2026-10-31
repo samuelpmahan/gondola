@@ -1,0 +1,31 @@
+{
+  "schema": "gobi.ci2-browser-review-criteria/v1",
+  "status": "criteria only; actual CI audit results are recorded separately in browser-evidence.json",
+  "expected_attempt": {
+    "head": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "parent": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "root_status": "await completed immutable artifact announcement"
+  },
+  "acceptance_gates": {
+    "completed_ci": "execution status passed; actual Node/React/Playwright/managed Chromium versions from captured logs; 81 Node tests pass with 0 failures",
+    "five_profiles": "counter, form, list, effect, list-growth; 43 trace ticks total; all four-way checks matched; 89 mutation controls",
+    "no_wasm": "per-profile browser API attempts and .wasm requests are empty; page error arrays are empty",
+    "mounted_dom_and_controls": "per-profile live DOM/control observations match expected trees after actions; checked, disabled, text values and action target values reflect mounted browser behavior",
+    "literal_vs_bound_action": "preserve requested action intent, actual target/button value, lower-camel renderer Action and uppercase GoMessage as separate observations",
+    "keyed_focus": "list input retains same keyed node after reorder; active target remains focused before/immediately/settled with selection start 0, end 2, direction backward",
+    "detached_callback": "callback retained from removed node produces one stale observation and no message or dispatch increment",
+    "effect_lifecycle": "pending view and physically disabled Request button are visible before correlated completion; one completion applies; duplicate is rejected without another tick",
+    "unmount": "physical mounted root and renderer snapshot are both empty after unmount for each profile"
+  },
+  "provenance_gates": {
+    "workflow_head_tree_parent": "must match the assigned CI2 head/tree/parent",
+    "execution_source_pins": "verify recorded before/after pins and compare the captured browser/direct inputs against current exact-head source",
+    "artifact_hashes": "verify the root-announced archive digest and extraction manifest; do not redownload or inspect another provider directory"
+  },
+  "limits_to_record": [
+    "Do not use prior local explicit-browser output as fresh-CI evidence.",
+    "Do not infer app browser behavior if Node tests, compile-four, or browser replay was not reached.",
+    "Retained callback after runtime unmount remains untested unless the captured CI artifact explicitly establishes it."
+  ]
+}

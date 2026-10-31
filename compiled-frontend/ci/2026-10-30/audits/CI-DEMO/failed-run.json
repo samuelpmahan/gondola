@@ -1,0 +1,103 @@
+{
+  "schema": "gobi.ci-demo-attempt/v1",
+  "worker": "N4",
+  "job": "CI-DEMO",
+  "evidenceClass": "immutable failed CI artifact; demo phase was not reached",
+  "providerGate": {
+    "runId": "41140265213",
+    "jobId": "124352550636",
+    "artifactId": "13019432197",
+    "runHead": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "archiveSha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "immutableExtractedPath": "provider/extracted",
+    "bindingNote": "Run/job/artifact/head identity was supplied by the root's provider gate. extraction-manifest.json records archiveSha256 and per-file hashes but does not itself carry runId, jobId, artifactId, or headSha. This audit checked the execution receipt and Node test log hashes against their manifest entries."
+  },
+  "checkout": {
+    "expectedHead": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "expectedTree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "localEvidenceWorktreeMatchesExpectedHeadAndTree": true,
+    "ciSourcePinsForDemoAndRunnerMatchExpectedSource": true
+  },
+  "executionReceipt": {
+    "path": "provider/extracted/compiled-frontend/artifacts/execution.json",
+    "sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "schema": "gobi.compiled-execution/v1",
+    "status": "failed",
+    "startedAt": "2026-10-30T23:09:22.185Z",
+    "finishedAt": "2026-10-30T23:10:22.989Z",
+    "error": "node-tests failed; see compiled-frontend/artifacts/logs/node-tests.*.log",
+    "toolVersions": {
+      "go": "go version go1.27.3 linux/amd64",
+      "rootGo": "go version go1.24.13 linux/amd64",
+      "node": "v22.23.4",
+      "react": "19.3.1",
+      "reactDom": "19.3.1",
+      "esbuild": "0.28.2",
+      "playwright": "1.64.1"
+    },
+    "browserEnvironment": {
+      "CHROMIUM_PATH": null,
+      "CHROMIUM_EXECUTABLE_PATH": null,
+      "browserVersion": null
+    }
+  },
+  "commands": [
+    {"name":"root-go-tests","exitCode":0},
+    {"name":"root-go-race","exitCode":0},
+    {"name":"root-go-vet","exitCode":0},
+    {"name":"go-tests","exitCode":0},
+    {"name":"go-race","exitCode":0},
+    {"name":"go-vet","exitCode":0},
+    {"name":"node-tests","exitCode":1}
+  ],
+  "nodeTests": {
+    "path": "provider/extracted/compiled-frontend/artifacts/logs/node-tests.stdout.log",
+    "sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+    "summary": {"tests":81,"passed":79,"failed":2,"cancelled":0,"skipped":0,"todo":0},
+    "failedTests": [
+      {
+        "name": "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+        "source": "compiled-frontend/conformance/no-wasm.test.mjs:7",
+        "error": "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium"
+      },
+      {
+        "name": "browser guard rejects WASM asset requests",
+        "source": "compiled-frontend/conformance/no-wasm.test.mjs:33",
+        "error": "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium"
+      }
+    ],
+    "causeConfirmedBySource": "Both tests use process.env.CHROMIUM_PATH ?? '/tmp/chromium'. CI execution.json records CHROMIUM_PATH=null and the executable was absent. Workflow setup installs Playwright-managed Chromium but does not populate CHROMIUM_PATH."
+  },
+  "completedBeforeFailure": [
+    "Go 1.24 root contract test/race/vet commands completed with exit code 0.",
+    "Go 1.27.3 compiler test/race/vet commands completed with exit code 0.",
+    "The Node suite began and reported 79 of 81 passing tests."
+  ],
+  "notReached": [
+    "four-app compile-four build and generated output inventory",
+    "native/direct-js/browser/checker profiles for four apps and list-growth",
+    "demo build and real HTTP Playwright smoke",
+    "demo-smoke.json and demo.png screenshot",
+    "demo.bundle.mjs, generated entry.mjs, generated GoScript TypeScript, app IR, compiled modules, encoders, or React map from this CI run",
+    "execution receipt sourceAfter and final outputPinsAfter"
+  ],
+  "sourcePinsObservedInCiReceipt": {
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+    "compiled-frontend/demo/app.mjs": "cea72624525c608ee1207f7e9cdafad254bad0ae7a41a6a04bbb30fb89b57d15",
+    "compiled-frontend/demo/build.mjs": "5d0f7c626a00eb59f37ea5d42eb1a8dbda306fb9b5257a28f62a06652a194f62",
+    "compiled-frontend/demo/smoke.mjs": "613078c7a6ca8ce37441c2c8344c7e74e0d30af6fb02901fe486fa580a5358da",
+    "compiled-frontend/demo/index.html": "34ddd4edb89d8f26369e8dd91d9c48e989e620eaba56f74318b1511ac20c7ae2",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+    "compiled-frontend/conformance/no-wasm.test.mjs": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f"
+  },
+  "extractionIntegrity": {
+    "executionJsonFileHashMatchesManifest": true,
+    "nodeTestsLogHashMatchesManifest": true,
+    "extractionManifest": "provider/extracted/extraction-manifest.json"
+  },
+  "limits": [
+    "No four-app or demo artifact exists in this failed CI packet; local or later-build demo output cannot fill this gap.",
+    "No browser version or browser demo trace/screenshot is available from this run.",
+    "This finding applies only to run 41140265213 job 124352550636 and does not state the result of a later repaired run."
+  ]
+}

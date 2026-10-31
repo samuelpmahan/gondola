@@ -1,0 +1,67 @@
+{
+  "job_id": "CI-DEMO",
+  "worker": "N4",
+  "outcome": "insufficient_evidence",
+  "summary": "Primary CI run 41140265213 failed at the Node test gate: 79/81 tests passed and both no-WASM browser tests could not launch missing /tmp/chromium. Go 1.24 and 1.27.3 test/race/vet stages passed, but four-app build, HTTP demo smoke, generated demo assets, and screenshot were not reached.",
+  "evidence": {
+    "provider": {
+      "run_id": "41140265213",
+      "job_id": "124352550636",
+      "artifact_id": "13019432197",
+      "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+      "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+      "parent": "42df6883337605d901a23e9fed874768c7ce1824",
+      "archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+      "extracted_path": "provider/extracted",
+      "receipt_path": "provider/extracted/compiled-frontend/artifacts/execution.json",
+      "receipt_sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86"
+    },
+    "ci_result": {
+      "status": "failed",
+      "tool_versions": {
+        "root_go": "go version go1.24.13 linux/amd64",
+        "compiler_go": "go version go1.27.3 linux/amd64",
+        "node": "v22.23.4",
+        "react": "19.3.1",
+        "react_dom": "19.3.1",
+        "esbuild": "0.28.2",
+        "playwright": "1.64.1",
+        "browser": null
+      },
+      "successful_commands": [
+        "root-go-tests",
+        "root-go-race",
+        "root-go-vet",
+        "go-tests",
+        "go-race",
+        "go-vet"
+      ],
+      "node_tests": {
+        "total": 81,
+        "passed": 79,
+        "failed": 2,
+        "stdout_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+        "cause": "Both no-WASM tests selected the absent /tmp/chromium because CHROMIUM_PATH was null; the CI workflow installs Playwright-managed Chromium but does not set CHROMIUM_PATH."
+      }
+    },
+    "demo_assessment": {
+      "four_app_build_reached": false,
+      "conformance_reached": false,
+      "demo_bundle_reached": false,
+      "real_http_smoke_reached": false,
+      "screenshot_present": false,
+      "generated_typescript_or_app_outputs_present": false,
+      "demo_smoke_json_present": false,
+      "source_after_pins_present": false,
+      "source_before_demo_hashes_match_worktree": true,
+      "audit": "audits/CI-DEMO/failed-run.json"
+    },
+    "source_review": "audits/CI-DEMO/static-review.json"
+  },
+  "limits": [
+    "No real HTTP demo, browser interaction, four-app generated asset, or screenshot result is available from this run.",
+    "No local or later-build output is used as CI evidence.",
+    "A later launcher repair requires a separate completed immutable CI artifact before this demo claim can be assessed."
+  ],
+  "report": "coordination/reports/CI-DEMO.md"
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "gobi.xr-ci-go-review/v1",
+  "job_id": "XR-CI-GO",
+  "worker": "N3",
+  "decision": "accepted",
+  "subject": {
+    "report": "compiled-frontend/ci/2026-10-30/coordination/reports/CI-GO.md",
+    "reportSha256": "a7ba5ba23fc530b7fbbbe519ee10b30bb67951509e4339bc9bb2f442ecfa656b",
+    "receipt": "compiled-frontend/ci/2026-10-30/coordination/receipts/CI-GO.json",
+    "receiptSha256": "052b6e1637df64aaca95c7d0356091af5126e7c44d4eec2f1cad9d29de85c850",
+    "audit": "compiled-frontend/ci/2026-10-30/audits/CI-GO/failed-run-audit.json",
+    "auditSha256": "39e6c90c165398cc18e2002fe02929f932e3b2ee2bfc9145f8ba13ab6800b5e3"
+  },
+  "independentCrossChecks": {
+    "receiptIdentity": true,
+    "reportAndReceiptCloseFailedRun": true,
+    "archiveHashMatchesExtraction": true,
+    "executionHashMatchesReceipt": true,
+    "executionIsFailed": true,
+    "rootAndCompilerGoGatesPassed": true,
+    "nodeCountsMatch": true,
+    "failingTestsMatch": true,
+    "launcherFailureMatchesEnvironment": true,
+    "sourceHashMatchesExecutionPin": true,
+    "noCompileOrPostrunPins": true,
+    "noBrowserAppTraceInArtifact": true
+  },
+  "allChecksPass": true,
+  "findings": {
+    "attempt": "run 41140265213 / job 124352550636 / artifact 13019432197",
+    "scope": "failed first attempt only; no later CI attempt covered",
+    "browserEvidence": "no compiled-app build or browser traces; no application browser acceptance claim",
+    "goEvidence": "all six root and compiler test/race/vet commands exited 0",
+    "nodeFailure": "two no-WASM launch tests failed at absent /tmp/chromium with CHROMIUM_PATH unset"
+  },
+  "limits": [
+    "Review accepts the accuracy and boundary of CI-GO first-attempt reporting, not compiler/output acceptance.",
+    "Workflow run and artifact linkage is separately reviewed by CI-PUBLICATION.",
+    "A repaired fresh-CI run belongs to a separate packet."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "job_id": "XR-R-CI-LAUNCH",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Independent review accepts the bounded Chromium launcher repair. The only source change among the 116 run-pinned paths is the no-WASM test file; it delegates both launches to the shared helper, preserves assertions, and the recorded composed run passes all gates.",
+  "subject": {
+    "report": "compiled-frontend/ci/2026-10-30/coordination/reports/R-CI-LAUNCH.md",
+    "report_sha256": "bbb9580336a325ea96241a33e4c7b9126f2d2869f6ef7ce5f2dfb4756dafb40b",
+    "receipt": "compiled-frontend/ci/2026-10-30/coordination/receipts/R-CI-LAUNCH.json",
+    "receipt_sha256": "6742ff4bc40e76028f986bda6d74960ea2d09d1e865137c32cae986923599908",
+    "attempt_head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "source_path": "compiled-frontend/conformance/no-wasm.test.mjs",
+    "source_sha256": "4092cbd692428e647d8c2deb361beb5032d3a39f4599aa4d55a0a207c4700775",
+    "composed_execution_path": "/workspace/scratch/39a56936f173/gondola-compiled-fix/compiled-frontend/artifacts/execution.json",
+    "composed_execution_sha256": "ecff3e303fa0cb32f5e618c27a10d013796f5b43835433f84c15abe21faa975c"
+  },
+  "independent_review": {
+    "audit": "compiled-frontend/ci/2026-10-30/audits/XR-R-CI-LAUNCH/review-evidence.json",
+    "audit_sha256": "982280a3d268ab8c861ac8b027ffd46a6f8477f608778531606e4c807d34336d",
+    "cross_checks_passed": 11,
+    "discrepancies": 0,
+    "findings": [
+      "Compared all 116 run-pinned source files with the PR11 base snapshot; only compiled-frontend/conformance/no-wasm.test.mjs changed.",
+      "The repaired no-WASM tests use chromiumLaunchOptions for both browser launches; their API/network assertions and remaining test bodies are unchanged.",
+      "The shared helper unit tests for undefined (managed default) and explicit executable path both passed.",
+      "The repair import graph has no cycle.",
+      "All 116 fixed-worktree files match sourceBefore pins; sourceBefore and sourceAfter are equal.",
+      "All 33 recorded composed-run commands exited zero.",
+      "Node v22.23.4 reported 81 passed and 0 failed tests.",
+      "Build result reports four apps and zero diagnostics; all 209 output path/hash/byte pins match.",
+      "Five saved native/direct/browser conformance profiles are matched and total 43 ticks.",
+      "Demo smoke passed with no errors, failures, or WASM requests.",
+      "The reviewed source hash and repair-report hash agree with N6 repair receipt."
+    ]
+  },
+  "limits": [
+    "The composed run had CHROMIUM_PATH=/tmp/chromium, so its live tests used the explicit-path branch; managed-default behavior is unit-tested but was not exercised by a live browser launch in that run.",
+    "This review covers source correctness and the root-composed local run, not a repaired remote workflow artifact or PR-head movement; publication is separately owned."
+  ],
+  "review_report": {
+    "path": "compiled-frontend/ci/2026-10-30/coordination/reports/XR-R-CI-LAUNCH.md",
+    "sha256": "045038466a9504139fe3099316abea5e695c769b81240e4ccd5fd2f3ca27fd38"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schema": "gondola.ci-legacy-audit/v1",
+  "status": "partial_in_flight",
+  "scope": "Read-only inventory of PR #11 inherited/static source and actual completed GitHub Actions logs; final disposition awaits all 11 workflow runs.",
+  "repository": "samuelpmahan/gondola",
+  "pull_request": 11,
+  "base": {
+    "commit": "42df6883337605d901a23e9fed874768c7ce1824",
+    "tracked_path_count": 1228
+  },
+  "head": {
+    "commit": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "tracked_path_count": 1830
+  },
+  "ancestry_check": {
+    "command": "git diff-tree --no-commit-id -r --name-status --no-renames 42df6883337605d901a23e9fed874768c7ce1824 408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "changed_path_count": 602,
+    "added": 602,
+    "modified": 0,
+    "deleted": 0,
+    "conclusion": "All 1,228 parent paths are retained unchanged by the head; the 602 changed paths are additions. This agrees with the frozen PR metadata (changed_files=602) and description."
+  },
+  "inherited_static_baseline": {
+    "entrypoint": "run.sh",
+    "commands": [
+      "npm ci --no-audit --no-fund",
+      "go run ./cmd/gobi emit react",
+      "go vet ./...",
+      "go test ./...",
+      "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "sha256sum -c --quiet SHA256SUMS"
+    ],
+    "seeded_case_count": 5000,
+    "seed": 20261030,
+    "expected_verdict": "same over 5000 inputs",
+    "expected_cases_sha256": "36be8659504a42e3d50c224323d9117a1cb9fa858e4d02bc2a03b0077ab42260",
+    "expected_verdict_sha256": "180297809767b3d65c35b64abeb23ad53775d961128d9a235cb273bbc955ec23",
+    "react_rules": 59,
+    "rules_evidence": "README.md states that the rules table has 59 rows; gobi/rules_test.go contains 59 executable rule literals and the root Go test run exercises them.",
+    "sha256_pins": 24,
+    "sha256_evidence": "SHA256SUMS has 24 entries; the two preserved successful CI logs include `SHA256SUMS ok` and `receipt matches`.",
+    "workflow_toolchain_setup": "All 11 workflow YAML files specify setup-go 1.24.x and setup-node 22. Completed logs report Go 1.24.13 linux/amd64 and Node v22.23.4 (npm 10.9.9)."
+  },
+  "race_scope_source_inventory": {
+    "note": "Exact CI execution results are taken from completed logs, not inferred from source. The primary compiled-frontend run is still in progress in snapshot 1.",
+    "typed_composition": "go test -race ./composition ./cmd/composition-wasm ./cmd/composition-replay",
+    "session_tree": "go test -race ./multisession ./cmd/multi-root-wasm",
+    "compiled_frontend_root_go24_packages": "go test -race ./compilercontract ./fixtures/compiled/... ./cmd/compiled-native (run.mjs sets GOTOOLCHAIN=local for the root Go compatibility scope)",
+    "compiled_frontend_go127_packages": "go test -race ./analyze ./build ./cmd/... ./emit (run.mjs compiler scope uses the selected Go 1.27.3 toolchain)",
+    "caveat": "These are explicit package scopes, not a root-wide `go test -race ./...` claim. The inherited normal unit gate is root-wide go test ./...."
+  },
+  "current_workflow_snapshot": {
+    "observed_at_utc": "2026-10-30 22:51:33 UTC",
+    "run_snapshot": "audits/CI-LEGACY/workflow-runs.snapshot-1.json",
+    "job_snapshot": "audits/CI-LEGACY/workflow-jobs.snapshot-1.json",
+    "run_details": "audits/CI-LEGACY/workflow-run-details.snapshot-1.json",
+    "completed_success": [41140265272, 41140265291],
+    "in_progress_or_queued": [41140265247, 41140265323, 41140265370, 41140265349, 41140265209, 41140265213, 41140265315, 41140265396, 41140265325],
+    "primary_compiled_run": 41140265213,
+    "artifacts_downloaded": false
+  },
+  "source_sha256": {
+    "run.sh": "e2b3fe3101d50e509daae6d0feb630b7becbd01b286bef63cc53493f9e62f2f6",
+    "README.md": "8f2d142a0544630ce1a6787cc33c1bd94d4c38a9281f05fe58ab71bbf3bd57ed",
+    "EXPECTED.json": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+    "SHA256SUMS": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+    "gobi/rules_test.go": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+    "compiled-frontend/PLAN.md": "856f87a35ad130e12ea4edea452a9d18ac6a130787aa25057774edd46dec5b2f",
+    "compiled-frontend/evidence/inherited/full.log": "8041da184cf0b6255c5dc0fc2801a659f7fd0dbbc99abf6635bbef98e365113f",
+    "compiled-frontend/evidence/inherited/execution.json": "795b36bfd55cbf3e55ec523676efd99e42fbe38009a6054c51aa47edc549e671"
+  },
+  "limits": [
+    "Two workflow logs have completed successfully; nine workflows were still queued or in progress in the initial captured status. No all-eleven pass is claimed.",
+    "The completed runs execute on GitHub's synthetic PR merge ref. Their logs show merge commit 2dc5918b4401d54bd991303c5b345f6491288016 (head 408e330... merged into base 42df688...). PR head/tree and artifact-to-run attribution are also owned by CI-PUBLICATION.",
+    "The primary workflow artifact was not downloaded; root owns its single download after upload."
+  ]
+}

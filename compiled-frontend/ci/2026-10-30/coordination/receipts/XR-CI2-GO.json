@@ -1,0 +1,73 @@
+{
+  "schema": "gobi.ci-independent-review/v1",
+  "job_id": "XR-CI2-GO",
+  "worker": "N6",
+  "decision": "accepted",
+  "summary": "Independent read-only review found N1's CI2-GO report and receipt factually supported by the retained extraction manifest, execution receipt, source/output pins, build manifest, and command logs for PR #11 compiled-frontend run 41144116537. No discrepancies were found.",
+  "reviewed_packet": {
+    "job_id": "CI2-GO",
+    "worker": "N1",
+    "report": "coordination/reports/CI2-GO.md",
+    "report_sha256": "8eb9078e0e02a7d547412b376a12d6b9a26157e8ac64d0ab97feb47520fc76d1",
+    "receipt": "coordination/receipts/CI2-GO.json",
+    "receipt_sha256": "fd89bd2b8be2300119fe442d267517f474153b56bd2daf05871807aeae98b8e4",
+    "execution_audit_sha256": "d05dd09bc4f358087acc52b8b7f20d5e2104ed25c91a5ba136354c7fef3692d5",
+    "source_preflight_sha256": "b6e3755a0a049a6edf7c4395e68bdda1c581ab54de5071276a4d3ac84ba27c2f"
+  },
+  "evidence": {
+    "pull_request": 11,
+    "head": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "workflow_run_id": 41144116537,
+    "workflow_job_id": 124365059288,
+    "workflow_conclusion": "success",
+    "artifact_id": 13020568606,
+    "archive_sha256": "c3332c9b5d0186c47dab921902774de05eb2b8d0819c3ad69dc9eb045166947e",
+    "extraction_manifest_sha256": "a79aa22c45f3b5cac2af4ddc2e5015352e038a7c6b88012c1c807a43f22631bc",
+    "extraction_counts": {
+      "compiler_files": 309,
+      "inherited_reports": 4
+    },
+    "execution_receipt_sha256": "5f889f586b69b4fd89d3bd8c2b232e447d74c154abea2c14d65808318794c0d5",
+    "commands": 33,
+    "command_logs_checked": 66,
+    "command_log_hash_mismatches": 0,
+    "source_pins_checked": 116,
+    "source_pin_mismatches": 0,
+    "source_before_after_identical": true,
+    "output_pins_checked": 209,
+    "output_pin_mismatches": 0,
+    "output_before_after_identical": true,
+    "node_tests": {
+      "total": 81,
+      "passed": 81,
+      "failed": 0
+    },
+    "go_versions": [
+      "go1.24.13 linux/amd64",
+      "go1.27.3 linux/amd64"
+    ],
+    "manifest": {
+      "apps": 4,
+      "emitted_typescript_files": 186,
+      "forwarder_entries": 5
+    },
+    "profiles": 5,
+    "ticks": 43,
+    "conformance_mismatches": 0,
+    "wasm_requests_or_api_attempts": 0
+  },
+  "independent_review": {
+    "report": "coordination/reports/XR-CI2-GO.md",
+    "report_sha256": "e4e7958aa5d04e7104c79149dccaa1c56ed3c6b1ab59dcc15cee65ee2347c956",
+    "audit": "audits/XR-CI2-GO/review.json",
+    "audit_sha256": "4964870947801ece1c57f56d6380364400d8f9dab2d70cafc1ab065e56647fb8",
+    "discrepancies": 0
+  },
+  "limits": [
+    "Acceptance applies to the factual accuracy and evidence integrity of this named CI2-GO packet and compiled-frontend workflow only; it does not assert that all PR workflows passed.",
+    "Root Go unit-test output is cached; only the recorded zero exits for the listed package scopes are accepted as evidence.",
+    "The conformance claim is bounded to four apps and five fixture profiles; it is not a universal compiler guarantee or cross-toolchain byte-identity claim.",
+    "No builds, tests, downloads, workflow polls, network lookups, or Git mutations were performed during this review."
+  ]
+}

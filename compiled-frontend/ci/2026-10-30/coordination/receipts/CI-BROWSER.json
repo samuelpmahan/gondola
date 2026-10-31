@@ -1,0 +1,73 @@
+{
+  "job_id": "CI-BROWSER",
+  "worker": "N3",
+  "outcome": "insufficient_evidence",
+  "summary": "The first fresh-CI run is bound to PR 11 head 408e3305… and its archive/source pins verify, but it failed at Node tests (79/81): two no-WASM tests could not launch the hardcoded /tmp/chromium fallback with CHROMIUM_PATH unset. CI stopped before compile-four and produced no app browser traces, so this attempt supplies no executed-browser application claim.",
+  "attempt": {
+    "run_id": 41140265213,
+    "job_id": 124352550636,
+    "attempt": 1,
+    "artifact_id": 13019432197,
+    "artifact_name": "gobi-compiled-frontend-artifacts",
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "parent": "42df6883337605d901a23e9fed874768c7ce1824",
+    "archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "extraction_manifest_sha256": "504a7b04f88da14d79fa0c6d91e3792c44badebb089220d8a152acc81c8dda4c",
+    "execution_json_sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+    "execution_status": "failed"
+  },
+  "verification": {
+    "archive_matches_extraction_manifest": true,
+    "extracted_compiler_artifact_files_verified": 19,
+    "source_before_pins": 116,
+    "source_before_pins_matching_exact_checkout": 116,
+    "source_after_present": false,
+    "audit": "compiled-frontend/ci/2026-10-30/audits/CI-BROWSER/first-attempt.json",
+    "audit_sha256": "18fb8b157309df7ea0d1f9bfebc6e949db4cc89b56f59c9c909d9f3783c502e6",
+    "audit_script": "compiled-frontend/ci/2026-10-30/audits/CI-BROWSER/audit-first-attempt.mjs",
+    "audit_script_sha256": "a7aef6ae314d8152646a8a3e2919d8fc0e8c7952e92fa25b12f2782bdb2aa8ef"
+  },
+  "environment": {
+    "go_compiler": "go1.27.3 linux/amd64",
+    "go_root": "go1.24.13 linux/amd64",
+    "node": "v22.23.4",
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "playwright": "1.64.1",
+    "CHROMIUM_PATH": null,
+    "CHROMIUM_EXECUTABLE_PATH": null
+  },
+  "gates": {
+    "root_go_tests_race_vet_exit": 0,
+    "compiled_go_tests_race_vet_exit": 0,
+    "node_tests": {
+      "passed": 79,
+      "failed": 2,
+      "total": 81,
+      "command_exit": 1,
+      "failing_tests": [
+        "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+        "browser guard rejects WASM asset requests"
+      ],
+      "failure": "Both failed at chromium.launch because the executable did not exist at /tmp/chromium.",
+      "no_wasm_guard_assertions_reached": false,
+      "stdout_sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compile_four_reached": false,
+    "compiled_app_outputs_present": false,
+    "raw_browser_traces_present": false
+  },
+  "not_established": [
+    "Four-app mounted DOM and live-value conformance",
+    "Checked and disabled physical control observations",
+    "Literal action intent versus observed button value and Go message",
+    "Keyed focus and backward selection after reorder",
+    "Detached handler fencing in a mounted browser",
+    "Pending effect DOM before reply and duplicate completion behavior",
+    "Application-level no-WASM attempts and requests",
+    "Physical and renderer-snapshot DOM after unmount"
+  ],
+  "scope_status": "This receipt closes only failed attempt 1. The repaired fresh-CI run and browser acceptance require a separate follow-up packet."
+}

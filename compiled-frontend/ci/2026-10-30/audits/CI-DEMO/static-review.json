@@ -1,0 +1,33 @@
+{
+  "schema": "gobi.ci-demo-static-review/v1",
+  "worker": "N4",
+  "evidenceClass": "source inspection only; not CI execution evidence",
+  "checkout": {
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "parent": "42df6883337605d901a23e9fed874768c7ce1824",
+    "matchesPlanBase": true
+  },
+  "sourceSha256": {
+    ".github/workflows/compiled-frontend.yml": "87d756a359b6851f4a0c78743d7f8a2f38c43832f7db91ebca3f25537535a276",
+    "run-compiled-frontend.sh": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad",
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+    "compiled-frontend/demo/app.mjs": "cea72624525c608ee1207f7e9cdafad254bad0ae7a41a6a04bbb30fb89b57d15",
+    "compiled-frontend/demo/build.mjs": "5d0f7c626a00eb59f37ea5d42eb1a8dbda306fb9b5257a28f62a06652a194f62",
+    "compiled-frontend/demo/smoke.mjs": "613078c7a6ca8ce37441c2c8344c7e74e0d30af6fb02901fe486fa580a5358da",
+    "compiled-frontend/demo/index.html": "34ddd4edb89d8f26369e8dd91d9c48e989e620eaba56f74318b1511ac20c7ae2"
+  },
+  "sourceFindings": {
+    "entrypoint": "The CI workflow installs Node 22, Go 1.24.x, npm dependencies and Playwright Chromium, then invokes the default bash run-compiled-frontend.sh with no --compiled-only flag. The script preserves run-typed-composition.sh, selects Go 1.27.3 for the compiled suite, and invokes compiled-frontend/run.mjs.",
+    "buildAndPins": "run.mjs records Go/Node/React/ReactDOM/esbuild/Playwright versions and command logs; hashes source files before/after; compiles four apps (counter/form/list/effect); records a build request/result and validates every compiler output's byte count and SHA-256 both before and after conformance/demo. The compiler pipeline publishes GoScript TypeScript plus app IR, gobi-compiled modules, encoders, and the shared React map in its output inventory.",
+    "demoBundle": "demo/build.mjs imports exactly the four generated gobi-compiled modules and their encoder modules, bundles them with esbuild as browser ESM, and copies index.html. The execution receipt source shown here does not itself add a digest/byte inventory for demo.bundle.mjs, demo entry.mjs, demo.png, or demo-smoke.json; the downloaded artifact can be hashed independently, but those per-file hashes must not be attributed to a receipt field that is absent.",
+    "httpSmoke": "demo/smoke.mjs serves the built demo over a dynamically assigned 127.0.0.1 HTTP port using node:http, launches headless Playwright Chromium, navigates to the demo URL, waits until four sessions mount, and drives counter Add/Add/Reset, controlled form/checkbox/save/literal argument, keyed list edit/reorder, and one manually delivered effect request. It checks pending/disabled effect UI and one captured reply, asserts empty runtime failures/pageerror/wasm-request arrays, and writes a full-page demo.png only after the successful checks.",
+    "wasmGuard": "app.mjs replaces callable WebAssembly Module/Instance/compile/instantiate/compileStreaming/instantiateStreaming APIs with throwing guards and records four runtime sessions. The smoke captures any .wasm request and requires none.",
+    "errorCoverageLimit": "The smoke records pageerror and runtime onFailure events. It does not explicitly record console.error, requestfailed, or assert the navigation response status; interaction and mount assertions still require the served page and bundle to work."
+  },
+  "executionStatus": "CI run 41140265213 job 124352550636 was reported in progress by root at assignment; no downloaded immutable provider artifact or CI execution receipt had been materialized at this static-review checkpoint.",
+  "limits": [
+    "No test, build, browser, dependency-install, or CI command was executed locally for this review.",
+    "This source inspection does not establish that the cited CI run completed, used this exact checkout, passed, or produced any of the demo artifacts."
+  ]
+}

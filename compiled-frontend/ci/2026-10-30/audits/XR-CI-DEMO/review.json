@@ -1,0 +1,140 @@
+{
+  "schema": "gobi.ci-demo-review/v1",
+  "worker": "N5",
+  "review_target": "CI-DEMO",
+  "decision": "accepted",
+  "acceptance_scope": "Accuracy and boundedness of N4's failed-run demo evidence; not acceptance of CI success.",
+  "reviewed_files": {
+    "report": {
+      "path": "coordination/reports/CI-DEMO.md",
+      "sha256": "04fb38606eda8572d3878308c099c018dcb8f4cdae929cc16956ab06fe29378a"
+    },
+    "receipt": {
+      "path": "coordination/receipts/CI-DEMO.json",
+      "sha256": "0c45936cbb533dca737247ff5eaeb1f45e75541fc60c5f79d8d8a1e67544bdac"
+    },
+    "failed_run_audit": {
+      "path": "audits/CI-DEMO/failed-run.json",
+      "sha256": "f5a531056388647cc98029f97ca9a25c24c6c963b060fa62f60ae491c7f8b330"
+    },
+    "static_review": {
+      "path": "audits/CI-DEMO/static-review.json",
+      "sha256": "9f93e929c8227f942ecfd4a599f8aeebc5c4f94b22678a1e58dcc04a25cea297"
+    }
+  },
+  "provider_cross_checks": {
+    "run_id": 41140265213,
+    "job_id": 124352550636,
+    "artifact_id": 13019432197,
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "parent": "42df6883337605d901a23e9fed874768c7ce1824",
+    "artifact_bytes": 119128377,
+    "archive_sha256": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "archive_sha256_recomputed_from_existing_download": "7159fdd1c372d804f95671700cb1c760f22cef4855d32f8ea24708789c03eda4",
+    "root_binding_snapshot": {
+      "path": "audits/CI-PUBLICATION/completed-run-artifact-20261030T231204Z.json",
+      "sha256": "3ebd0c660e9a8eed62456fe9bc958ab3eb9528cb6fb933271b64e17b7202c43b"
+    },
+    "provider_artifact_analysis": {
+      "path": "audits/CI-PUBLICATION/artifact-analysis.json",
+      "sha256": "8d7bf56741d4438ed8fcf939628835c9199b700cbca7bf247c8384d5d006773c"
+    }
+  },
+  "immutable_extraction_checks": {
+    "manifest": {
+      "path": "provider/extracted/extraction-manifest.json",
+      "sha256": "504a7b04f88da14d79fa0c6d91e3792c44badebb089220d8a152acc81c8dda4"
+    },
+    "execution_receipt": {
+      "path": "provider/extracted/compiled-frontend/artifacts/execution.json",
+      "sha256": "26d4f82477d0989543f0fdaa9e6885c53990961e0a4c7de74bb9bd5d1c825c86",
+      "manifest_hash_matches": true,
+      "status": "failed",
+      "last_command": "node-tests",
+      "last_command_exit_code": 1
+    },
+    "node_tests_stdout": {
+      "path": "provider/extracted/compiled-frontend/artifacts/logs/node-tests.stdout.log",
+      "sha256": "176208369d53a4d77ad53f5f40f7e8ac4f540dd88bbdd340667c254b5e74a1c5",
+      "manifest_hash_matches": true,
+      "tests": 81,
+      "passed": 79,
+      "failed": 2,
+      "failing_tests": [
+        "browser guard detects compilation and instantiation attempts instead of allowing fallback",
+        "browser guard rejects WASM asset requests"
+      ],
+      "both_errors": "browserType.launch: Failed to launch chromium because executable doesn't exist at /tmp/chromium"
+    },
+    "execution_environment": {
+      "CHROMIUM_PATH": null,
+      "CHROMIUM_EXECUTABLE_PATH": null,
+      "browser_version": null,
+      "playwright_version": "1.64.1"
+    },
+    "successful_commands": [
+      "root-go-tests",
+      "root-go-race",
+      "root-go-vet",
+      "go-tests",
+      "go-race",
+      "go-vet"
+    ],
+    "later_commands_not_reached": [
+      "compile-four",
+      "build-demo",
+      "demo-smoke"
+    ],
+    "source_after_present": false,
+    "output_pins_after_present": false
+  },
+  "source_reproduction": {
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "no_wasm_test": {
+      "path": "compiled-frontend/conformance/no-wasm.test.mjs",
+      "sha256": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f",
+      "behavior": "Both cases use process.env.CHROMIUM_PATH ?? /tmp/chromium as executablePath before reaching their assertions."
+    },
+    "workflow_browser_setup": {
+      "path": ".github/workflows/compiled-frontend.yml",
+      "sha256": "87d756a359b6851f4a0c78743d7f8a2f38c43832f7db91ebca3f25537535a276",
+      "behavior": "Installs Playwright-managed Chromium and does not set CHROMIUM_PATH."
+    },
+    "runner_browser_setup": {
+      "path": "run-compiled-frontend.sh",
+      "sha256": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad",
+      "behavior": "Only exports /tmp/chromium when that path exists and is executable."
+    },
+    "node_tests_precede_compilation_and_demo": {
+      "path": "compiled-frontend/run.mjs",
+      "sha256": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+      "behavior": "Runs node-tests before compile-four, build-demo, and demo-smoke."
+    },
+    "additional_source_hashes_match_head": {
+      "compiled-frontend/demo/app.mjs": "cea72624525c608ee1207e7f9cdafad254bad0ae7a41a6a04bbb30fb89b57d15",
+      "compiled-frontend/demo/build.mjs": "5d0f7c626a00eb59f37ea5d42eb1a8dbda306fb9b5257a28f62a06652a194f62",
+      "compiled-frontend/demo/smoke.mjs": "613078c7a6ca8ce37441c2c8344c7e74e0d30af6fb02901fe486fa580a5358da",
+      "compiled-frontend/demo/index.html": "34ddd4edb89d8f26369e8dd91d9c48e989e620eaba56f74318b1511ac20c7ae2",
+      "compiled-frontend/frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704"
+    }
+  },
+  "source_hash_rechecks": {
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b",
+    "compiled-frontend/demo/app.mjs": "cea72624525c608ee1207e7f9cdafad254bad0ae7a41a6a04bbb30fb89b57d15",
+    "compiled-frontend/demo/build.mjs": "5d0f7c626a00eb59f37ea5d42eb1a8dbda306fb9b5257a28f62a06652a194f62",
+    "compiled-frontend/demo/smoke.mjs": "613078c7a6ca8ce37441c2c8344c7e74e0d30af6fb02901fe486fa580a5358da",
+    "compiled-frontend/demo/index.html": "34ddd4edb89d8f26369e8dd91d9c48e989e620eaba56f74318b1511ac20c7ae2",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "ab0a2fe8c97293a8e45a035b92e46a80ae53b702103de47ca337f0a830b26704",
+    "compiled-frontend/conformance/no-wasm.test.mjs": "79d92ad4be99f76122736f4851b7ca84397bdd2f38772a5c4623caaed5badf9f"
+  },
+  "reviewed_log": {
+    "path": "audits/CI-LEGACY/compiled-frontend-run-41140265213-job-124352550636.log",
+    "sha256": "de4414998b422c078ed7e2d6cb3cbc99551ac9d25911f9b164e14950ba9405e2"
+  },
+  "limits": [
+    "Review covers the N4 CI-DEMO packet and selected artifact files, not every ZIP member.",
+    "No CI build, test, browser, or HTTP demo was executed by N5.",
+    "No conclusion is made about a later repaired run."
+  ]
+}

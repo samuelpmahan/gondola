@@ -1,0 +1,52 @@
+{
+  "schema": "gobi.r-ci2-provenance-audit/v1",
+  "job_id": "R-CI2-PROVENANCE",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "scope": "Metadata-only correction of CI2-TRACE report, receipt, and raw-evidence provenance. No trace payload, source, execution output, provider artifact, or application was changed.",
+  "provenance": {
+    "head_sha": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree_sha": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "direct_parent_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "pr_base_sha": "42df6883337605d901a23e9fed874768c7ce1824"
+  },
+  "preserved_originals": {
+    "raw_evidence_original": "audits/R-CI2-PROVENANCE/raw-evidence.original.json",
+    "raw_evidence_original_sha256": "e637db3cbe5049e449c0adf35fe94ebce3183b538613786a7b5f1a5b5af5dfa7",
+    "producer_report_original": "audits/XR-CI2-TRACE/producer-report.original.md",
+    "producer_report_original_sha256": "5b1118ab47f600b7677cb2f97af31a26d44bb005b5b12d04aa212ee9fd37dce7",
+    "producer_receipt_original": "audits/XR-CI2-TRACE/producer-receipt.original.json",
+    "producer_receipt_original_sha256": "b56f577bc47e08cf21d57e9671a71a303bfb0a82d1a0ac49930281d3c4f689b1"
+  },
+  "hashes": {
+    "ci2_report_before": "5b1118ab47f600b7677cb2f97af31a26d44bb005b5b12d04aa212ee9fd37dce7",
+    "ci2_report_after": "c29bb70c9fcf52c61108c1f425a3d1c3ce3f6ee01686dff4104a265f955ed752",
+    "ci2_receipt_before": "b56f577bc47e08cf21d57e9671a71a303bfb0a82d1a0ac49930281d3c4f689b1",
+    "ci2_receipt_after": "fd05c3530180d5245a4412b6a45fa8dad45bcb79ac037197f7f3247eeeebab08",
+    "raw_evidence_before": "e637db3cbe5049e449c0adf35fe94ebce3183b538613786a7b5f1a5b5af5dfa7",
+    "raw_evidence_preserved_copy": "e637db3cbe5049e449c0adf35fe94ebce3183b538613786a7b5f1a5b5af5dfa7",
+    "raw_evidence_after": "816c79648576a12102626460e7ccc4c703c83e30c9a07ce178a3f8da97728430",
+    "xr_review_receipt": "d0923870b7403a0783054b56bda7ca02d89a30dafb4b28040d88307c8a9d96f8",
+    "xr_crosscheck": "5fdd84a1a38a118040ec38f7587f558243c6f134b306fc182a3234e7789ce444",
+    "source_inventory": "1f465641c27b4bc1808ac12f5786c5cb3ba846b8235c346287ce2b2a2f0be0f4"
+  },
+  "checks": {
+    "raw_evidence_original_preserved_byte_for_byte": true,
+    "raw_evidence_original_reverse_transform_equal": true,
+    "raw_evidence_direct_parent_and_pr_base_explicit": true,
+    "report_changes_only_parent_label": true,
+    "receipt_direct_parent_and_pr_base_explicit": true,
+    "receipt_report_sha_matches": true,
+    "receipt_raw_evidence_sha_matches": true,
+    "head_tree_parent_base_crosscheck": true,
+    "xr_independent_finding_matches_corrected_values": true,
+    "original_report_and_receipt_preserved_by_xr_review": true
+  },
+  "checks_passed": 10,
+  "checks_total": 10,
+  "change_description": "CI2-TRACE report now labels 408e330 as direct parent and 42df688 as PR base. Receipt keys are direct_parent_sha and pr_base_sha. Raw evidence keys are directParentSha and prBaseSha. Reversing only this key/value transformation reproduces the preserved original JSON exactly.",
+  "limits": [
+    "This is provenance-label repair only. It does not repeat the trace checker, application tests, browser runs, CI, or artifact download.",
+    "The existing XR-CI2-TRACE independent audit remains an amendment record for the original evidence; this packet does not rewrite that historical review."
+  ]
+}

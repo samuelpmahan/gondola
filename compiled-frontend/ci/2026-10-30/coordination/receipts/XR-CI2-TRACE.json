@@ -1,0 +1,81 @@
+{
+  "schema": "gobi.xr-ci2-trace-review/v1",
+  "job_id": "XR-CI2-TRACE",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "The bounded trace packet is independently verified: all 309 compiler artifacts, 116 source pins, 209 outputs, 33 command exit records/66 logs, 81 Node tests, and five profile traces totaling 43 ticks and 89 detected controls check out. Amend the producer metadata because it labels PR base 42df688... as the head's direct parent; the actual direct parent is 408e330....",
+  "target": {
+    "report_path": "coordination/reports/CI2-TRACE.md",
+    "report_sha256": "5b1118ab47f600b7677cb2f97af31a26d44bb005b5b12d04aa212ee9fd37dce7",
+    "receipt_path": "coordination/receipts/CI2-TRACE.json",
+    "receipt_sha256": "b56f577bc47e08cf21d57e9671a71a303bfb0a82d1a0ac49930281d3c4f689b1",
+    "head_sha": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree_sha": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "direct_parent_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "pr_base_sha": "42df6883337605d901a23e9fed874768c7ce1824"
+  },
+  "artifact": {
+    "workflow_run_id": 41144116537,
+    "workflow_job_id": 124365059288,
+    "artifact_id": 13020568606,
+    "conclusion": "success",
+    "archive_sha256": "c3332c9b5d0186c47dab921902774de05eb2b8d0819c3ad69dc9eb045166947e",
+    "archive_bytes": 124558516,
+    "manifest_path": "provider/repaired-extracted/extraction-manifest.json",
+    "manifest_sha256": "a79aa22c45f3b5cac2af4ddc2e5015352e038a7c6b88012c1c807a43f22631bc",
+    "compiler_file_count": 309,
+    "exact_compiler_file_set": true,
+    "all_manifest_file_hashes_and_sizes_match": true,
+    "selected_inherited_report_count": 4,
+    "all_selected_inherited_reports_match": true
+  },
+  "independent_checks": {
+    "source_pin_count": 116,
+    "source_pins_match_checkout": true,
+    "output_pin_count": 209,
+    "output_pins_match_extracted_outputs": true,
+    "command_count": 33,
+    "command_exit_zero_count": 33,
+    "command_stdout_stderr_hash_count": 66,
+    "command_log_hashes_match": true,
+    "node_version_from_workflow_record": "v22.23.4",
+    "node_tests": 81,
+    "node_passed": 81,
+    "node_failed": 0,
+    "browser_version": "156.0.8078.4",
+    "chromium_path_override": null,
+    "browser_profiles_matched": 5,
+    "ticks": 43,
+    "action_ticks": 37,
+    "mutation_controls": 89,
+    "all_mutation_controls_detected": true,
+    "mismatches": 0,
+    "offline_checker_reproduced_producer_core_payload": true,
+    "offline_checker_local_node": "v24.22.1"
+  },
+  "finding": {
+    "severity": "metadata_correction_required",
+    "producer_field": "parent_sha",
+    "producer_value": "42df6883337605d901a23e9fed874768c7ce1824",
+    "correct_direct_parent_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "correct_interpretation_of_producer_value": "PR base commit",
+    "impact": "The producer's direct-parent label is inaccurate. Head/tree, workflow/artifact binding, compiler pins, and trace comparisons verify; no trace mismatch was found.",
+    "recommended_metadata": {
+      "direct_parent_sha": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+      "pr_base_sha": "42df6883337605d901a23e9fed874768c7ce1824"
+    }
+  },
+  "audit_paths": {
+    "crosscheck": "audits/XR-CI2-TRACE/crosscheck.json",
+    "crosscheck_sha256": "5fdd84a1a38a118040ec38f7587f558243c6f134b306fc182a3234e7789ce444",
+    "offline_checker_copy": "audits/XR-CI2-TRACE/audit-traces-independent.mjs",
+    "offline_checker_copy_sha256": "8b7ce7cd8dc37732297d6ad0f2fb11939a3b7820ccd0bdc245dcccd3e17b189f",
+    "offline_checker_result": "audits/XR-CI2-TRACE/raw-evidence.json",
+    "offline_checker_result_sha256": "c1dde49296dc3b7ccb02e44ceb30dc4913985fb82ed496f6282312ae3e4f191f",
+    "producer_report_copy": "audits/XR-CI2-TRACE/producer-report.original.md",
+    "producer_report_sha256": "5b1118ab47f600b7677cb2f97af31a26d44bb005b5b12d04aa212ee9fd37dce7",
+    "producer_receipt_copy": "audits/XR-CI2-TRACE/producer-receipt.original.json",
+    "producer_receipt_sha256": "b56f577bc47e08cf21d57e9671a71a303bfb0a82d1a0ac49930281d3c4f689b1"
+  },
+  "scope": "Independent review of the immutable repaired-head trace packet only. No application/browser rerun, artifact download, source edit, or producer-evidence modification. Bounded to four apps and five profiles; not a general compiler guarantee."
+}

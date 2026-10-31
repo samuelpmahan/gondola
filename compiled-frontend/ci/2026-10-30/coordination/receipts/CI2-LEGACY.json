@@ -1,0 +1,229 @@
+{
+  "schema": "gobi.ci2-legacy-receipt/v1",
+  "job_id": "CI2-LEGACY",
+  "worker": "N5",
+  "status": "complete",
+  "decision": "accepted",
+  "outcome": "confirmed_reuse",
+  "summary": "On PR #11 head 184ccdaabe9e6e46e1052ee79cd7e0be26fe3281 (tree ca99e9432dca87a6bf6718c20186b1223b870126, parent 408e330517b1dd5e5f865e2ff1914465f98bcf66), all 11 pull-request-triggered workflows completed successfully, and a final unfiltered API snapshot also showed all 11 push-triggered runs successful. All completed logs record inherited 5,000-case parity, matching receipt and 24 checksum pins. The full compiled-frontend pipeline passed its Go/Node gates, compiled and compared four apps across five scripts with 43 ticks and zero mismatches, and passed demo smoke. The 1,228 base paths remain unchanged; the 613 head additions do not modify or delete predecessor paths. The conclusion is limited to this PR head and PR-triggered workflow set.",
+  "repository": "samuelpmahan/gondola",
+  "pull_request": 11,
+  "observed_at_utc": "2026-10-30 23:51:16 UTC",
+  "source": {
+    "head": "184ccdaabe9e6e46e1052ee79cd7e0be26fe3281",
+    "tree": "ca99e9432dca87a6bf6718c20186b1223b870126",
+    "parent": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "base": "42df6883337605d901a23e9fed874768c7ce1824",
+    "inventory_path": "audits/CI2-LEGACY/source-inventory.json",
+    "inventory_sha256": "1f465641c27b4bc1808ac12f5786c5cb3ba846b8235c346287ce2b2a2f0be0f4",
+    "tracked_worktree_clean": true
+  },
+  "trigger_scope": {
+    "final_claim": "11 PR-triggered workflows and 11 push-triggered runs independently observed successful for this head; detailed job logs retained for PR-triggered runs.",
+    "workflow_count": 11,
+    "success": 11,
+    "failure": 0,
+    "runs_snapshot_path": "audits/CI2-LEGACY/workflow-runs.final.json",
+    "runs_snapshot_sha256": "f2e465ca1e543a02df576f37ef31d5967fc0956658c2f3172452e26fcdb32850",
+    "jobs_snapshot_path": "audits/CI2-LEGACY/workflow-jobs.final.json",
+    "jobs_snapshot_sha256": "0948cd50f6443feeaa8f40b43088406f95a9ea32ccc9e066155d86646aa43678",
+    "runs": [
+      {
+        "name": "Counter interaction parity",
+        "run_id": 41144116468,
+        "job_id": 124365058811,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi backend replacement",
+        "run_id": 41144116458,
+        "job_id": 124365058812,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi controlled input",
+        "run_id": 41144116513,
+        "job_id": 124365059027,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi async effects",
+        "run_id": 41144116565,
+        "job_id": 124365059314,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi HTTP effects",
+        "run_id": 41144116494,
+        "job_id": 124365059043,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi keyed collection editor",
+        "run_id": 41144116527,
+        "job_id": 124365059261,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi renderer conformance",
+        "run_id": 41144116518,
+        "job_id": 124365058837,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi multi-root sessions",
+        "run_id": 41144116510,
+        "job_id": 124365059205,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi nested session tree",
+        "run_id": 41144116622,
+        "job_id": 124365059491,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi typed parent and child composition",
+        "run_id": 41144116560,
+        "job_id": 124365059421,
+        "conclusion": "success"
+      },
+      {
+        "name": "Gobi compiled Go frontend",
+        "run_id": 41144116537,
+        "job_id": 124365059288,
+        "conclusion": "success"
+      }
+    ],
+    "unfiltered_push_observation": {
+      "path": "audits/CI2-LEGACY/workflow-runs-unfiltered.snapshot-1.json",
+      "sha256": "f5e2fd33088dca68bf37265b58271d4f850c04cb4cb298ba96de880edea17410",
+      "observed_at_utc": "2026-10-30 23:33:13 UTC",
+      "push_runs": 11,
+      "completed_success_at_snapshot": 4,
+      "in_progress_at_snapshot": 7,
+      "final_push_status_claimed": true
+    },
+    "final_unfiltered_snapshot": {
+      "path": "audits/CI2-LEGACY/workflow-runs-unfiltered.final.json",
+      "sha256": "57817099659ac3d8f8939b0eda26f69c458d2dfb38c2ca8d5e0484d346372dd5",
+      "observed_at_utc": "2026-10-30 23:51:16 UTC",
+      "total_runs": 22,
+      "pull_request": {
+        "completed_success": 11,
+        "failure": 0
+      },
+      "push": {
+        "completed_success": 11,
+        "failure": 0
+      },
+      "duplicate_push_job_logs_fetched": false
+    }
+  },
+  "inherited_baseline": {
+    "workflows_with_baseline_pass": 11,
+    "cases": 5000,
+    "seed": 20261030,
+    "verdict": "same over 5000 inputs",
+    "rules": 59,
+    "sha256_pins": 24,
+    "commands": [
+      "npm ci --no-audit --no-fund",
+      "go run ./cmd/gobi emit react",
+      "go vet ./...",
+      "go test ./...",
+      "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "sha256sum -c --quiet SHA256SUMS"
+    ]
+  },
+  "toolchains": {
+    "workflow_setup_go": "1.24.x",
+    "workflow_setup_node": "22",
+    "observed_go": "go1.24.13 linux/amd64",
+    "observed_node": "v22.23.4",
+    "observed_npm": "10.9.9",
+    "compiled_frontend_toolchain_download": "go1.27.3 linux/amd64"
+  },
+  "compiled_frontend": {
+    "run_id": 41144116537,
+    "job_id": 124365059288,
+    "conclusion": "success",
+    "root_go24_unit_race_vet": {
+      "packages": "./compilercontract ./fixtures/compiled/... ./cmd/compiled-native",
+      "all_exit_zero": true
+    },
+    "compiled_go_unit_race_vet": {
+      "packages": "./analyze ./build ./cmd/... ./emit",
+      "all_exit_zero": true
+    },
+    "compiled_output": {
+      "apps": 4,
+      "scripts": 5,
+      "ticks": 43,
+      "mismatches": 0,
+      "demo_smoke_passed": true
+    },
+    "primary_artifact_as_reported_in_job_log": {
+      "artifact_id": 13020568606,
+      "bytes": 124558516,
+      "archive_sha256": "c3332c9b5d0186c47dab921902774de05eb2b8d0819c3ad69dc9eb045166947e",
+      "n5_downloaded": false,
+      "root_materializes_once": true
+    }
+  },
+  "predecessor_preservation": {
+    "base_path_count": 1228,
+    "head_path_count": 1841,
+    "base_to_head_additions": 613,
+    "base_to_head_modifications": 0,
+    "base_to_head_deletions": 0,
+    "conclusion": "All 1,228 predecessor paths remain unchanged."
+  },
+  "raw_job_logs": [
+    {
+      "path": "audits/CI2-LEGACY/interaction-run-41144116468-job-124365058811.log",
+      "sha256": "4a92d8d97e5c52c021d9ea92d36f186b6f4b338ef246b4876e8b9ca76c6dd2f9"
+    },
+    {
+      "path": "audits/CI2-LEGACY/backend-replacement-run-41144116458-job-124365058812.log",
+      "sha256": "402601364cf27218841fe83704193f1484d9d3ee243c895b9ad60bb0ffd97140"
+    },
+    {
+      "path": "audits/CI2-LEGACY/controlled-input-run-41144116513-job-124365059027.log",
+      "sha256": "2568ea6342a9b6aea67cfbba9dc1aa58d4383d66b666c55bfedf6300104b1a69"
+    },
+    {
+      "path": "audits/CI2-LEGACY/async-effects-run-41144116565-job-124365059314.log",
+      "sha256": "7e3372d351b5f53c3f07e42b3b48d61e0641671034d8b25c2276a229734ea60e"
+    },
+    {
+      "path": "audits/CI2-LEGACY/http-effects-run-41144116494-job-124365059043.log",
+      "sha256": "7b3d4517481d4ba442d5a1f930a2d0b0e76fe8864962d0e74c56e2cbfdf3de44"
+    },
+    {
+      "path": "audits/CI2-LEGACY/keyed-editor-run-41144116527-job-124365059261.log",
+      "sha256": "3b08c64b98c9b19750a950cd4b7f277f5b3fab45f6465312ed0e0e7ae9d72988"
+    },
+    {
+      "path": "audits/CI2-LEGACY/renderer-conformance-run-41144116518-job-124365058837.log",
+      "sha256": "e5689a17a69298c1145b687ced025d9c6fe08811e98b3265462dbceb6ee095bb"
+    },
+    {
+      "path": "audits/CI2-LEGACY/multi-root-run-41144116510-job-124365059205.log",
+      "sha256": "ad12701441a5ebee491c09dba777a534666d3b606f5a5f7ea883e69ab2fc4580"
+    },
+    {
+      "path": "audits/CI2-LEGACY/session-tree-run-41144116622-job-124365059491.log",
+      "sha256": "3a96b4508546e31396b9ecdd827cbb25f1959a8324cb233c7f92215de77863cc"
+    },
+    {
+      "path": "audits/CI2-LEGACY/typed-composition-run-41144116560-job-124365059421.log",
+      "sha256": "7ddc5da87b22010d3075ed894b34e46c89251f1ffa0b3e436bfc123c30ac0f59"
+    },
+    {
+      "path": "audits/CI2-LEGACY/compiled-frontend-run-41144116537-job-124365059288.log",
+      "sha256": "e705351874b8053731f74f43c626e8c5be7f4d469981554d697390eff6c42ec8"
+    }
+  ],
+  "scope_limit": "This accepts inherited CI reuse and source preservation for this exact PR head. The final unfiltered status API confirms 11 PR-triggered and 11 push-triggered runs succeeded; retained per-job logs are for the PR-triggered runs. This does not imply deployment readiness, merge, or general compiler correctness."
+}

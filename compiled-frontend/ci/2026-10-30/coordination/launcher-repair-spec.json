@@ -1,0 +1,27 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-CI-LAUNCH",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "repair_of": "CI-BROWSER",
+      "owner": "sourcefixworktree conformance/no-wasm.test.mjs only; CI named report/receipt/audits/R-CI-LAUNCH",
+      "summary": "Repair both no-WASM guard unit launchers to use shared configured/managed Chromium options; preserve actual guard/network assertions and app source"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "gondola.ci-go.source-inspection/v1",
+  "status": "source inspection plus closed first-attempt audit",
+  "checkout": {
+    "head": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+    "tree": "cd615e4bd0e83e31dd87232207afb2bf6416ccff",
+    "parent": "42df6883337605d901a23e9fed874768c7ce1824"
+  },
+  "workflow": {
+    "path": ".github/workflows/compiled-frontend.yml",
+    "sha256": "87d756a359b6851f4a0c78743d7f8a2f38c43832f7db91ebca3f25537535a276",
+    "declared_setup": "Go 1.24.x, Node 22",
+    "runner": "ubuntu-latest",
+    "execution": "bash run-compiled-frontend.sh",
+    "artifact_name": "gobi-compiled-frontend-artifacts"
+  },
+  "driver": {
+    "run-compiled-frontend.sh": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad9",
+    "run-typed-composition.sh": "2e3a4116f72e5661037bb090cbb94a4ed49096ce7a79e0b6bc1abd0c5b88edf9",
+    "compiled-frontend/run.mjs": "fa5117aaf8ff135089b448424b770516f39e556031a275f16275a4240dc8088b"
+  },
+  "source_defined_gates": {
+    "inherited_baseline": "run-typed-composition.sh calls run-session-tree.sh and preserves the inherited baseline interaction gates before the compiled frontend run.",
+    "root_go_124_packages": [
+      "./compilercontract",
+      "./fixtures/compiled/...",
+      "./cmd/compiled-native"
+    ],
+    "nested_go_127_packages": [
+      "./analyze",
+      "./build",
+      "./cmd/...",
+      "./emit"
+    ],
+    "go_checks": ["test", "test -race", "vet"],
+    "remaining_compiled_run": [
+      "Node tests",
+      "four-app compiler build",
+      "native/direct/browser fixture comparisons",
+      "demo build and smoke",
+      "output pin validation before and after",
+      "source pin comparison before and after"
+    ]
+  },
+  "claims": {
+    "actual_tool_versions": "verified from provider execution.json and version logs; see failed-run-audit.json",
+    "completed_go_checks": "all recorded Go 1.24 root and Go 1.27.3 compiler test/race/vet commands exited 0; see failed-run-audit.json",
+    "compiler_output_inventory": "not present because Node tests failed before compile-four; not claimed in this first-attempt packet",
+    "artifact_to_workflow_binding": "pending CI-PUBLICATION and provider manifest"
+  }
+}

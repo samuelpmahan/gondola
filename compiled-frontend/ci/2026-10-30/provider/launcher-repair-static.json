@@ -1,0 +1,48 @@
+{
+  "atUTC": "2026-10-30T23:21:43.855041+00:00",
+  "worktree": "gondola-compiled-fix",
+  "sourceParent": "408e330517b1dd5e5f865e2ff1914465f98bcf66",
+  "tree": "ca99e9432dca87a6bf6718c20186b1223b870126",
+  "commands": [
+    {
+      "command": "sha256sum --check SHA256SUMS",
+      "result": "initial preflight: 23 files match; generated react-map.gen.mjs absent in fresh worktree (not tracked)"
+    },
+    {
+      "command": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH go run ./cmd/gobi emit react",
+      "exitCode": 0
+    },
+    {
+      "command": "sha256sum --check --quiet SHA256SUMS",
+      "exitCode": 0,
+      "pins": 24
+    },
+    {
+      "command": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "exitCode": 0,
+      "stdout": "launcher-repair-static.log",
+      "stdoutSha256": "4e683a05c5a4d2b13396f3a27332261da4e2de359e7b9119f00ab3246ecf1d16",
+      "cases": 5000,
+      "seed": 20261030,
+      "mismatches": 0
+    }
+  ],
+  "limits": "Dependencies were already pinned/installed rather than reinstalled in this focused local root check. Full clean CI/default runner is separately attributed.",
+  "additionalCurrentRootChecks": [
+    {
+      "command": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH go test ./...",
+      "exitCode": 0,
+      "combinedLog": "launcher-repair-root-tests.log",
+      "sha256": "0a3e8ac8eb5c7ce526607c0f79f592a1e0b30092ab5aa0ca3697c84b01bfd8c7",
+      "rootGo": "go1.24.0",
+      "note": "all root packages include the59 executableReact compatibilityrules; loghasgobi0.106s, notcached"
+    },
+    {
+      "command": "GOFLAGS=-buildvcs=false GOTOOLCHAIN=local PATH=/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH go vet ./...",
+      "exitCode": 0,
+      "combinedLog": "launcher-repair-root-vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "Initial combined-shell vet/test invocation saved emptyvetlog butnotseparatevetstatus; this focusedvetretryretains itsownexit0."
+    }
+  ]
+}
