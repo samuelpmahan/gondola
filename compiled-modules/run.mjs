@@ -747,7 +747,7 @@ async function freezeArchive(sourcePinsAfter) {
   const sourcePinsAfterCopy = await snapshotSourcePins();
   const changedAfterCopy = comparePins(sourcePinsBefore, sourcePinsAfterCopy);
   if (changedAfterCopy.length !== 0) throw new Error(`source inputs changed while copying the archive snapshot: ${changedAfterCopy.join(", ")}`);
-  await writeImmutableSnapshot(join(attemptRoot, "metadata/execution-before-archive.json"), {
+  await writeImmutableSnapshot(join(attemptRoot, "execution-before-archive.json"), {
     schema: "gobi.compiled-modules-execution-snapshot/v1",
     sourceCommit: sourceCommitArgument,
     verifierGitHead: gitStart.head,
@@ -766,7 +766,7 @@ async function freezeArchive(sourcePinsAfter) {
       attemptRoot,
       archivePath,
       verifyRoot,
-      includePaths: ["source", "builds", "native", "tests", "conformance", "demo", "metadata", "logs"],
+      includePaths: ["source", "builds", "native", "tests", "conformance", "demo", "metadata", "logs", "execution-before-archive.json"],
       members,
       execute: async (name, command, args) => execute(`archive-${name}`, command, args, {
         cwd: root,
