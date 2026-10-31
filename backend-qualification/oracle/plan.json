@@ -1,0 +1,678 @@
+{
+  "schema": "gobi.backend-qualification-oracle-plan/v1",
+  "caseCount": 13,
+  "caseIds": [
+    "healthy-react",
+    "healthy-dom",
+    "healthy-swap",
+    "fault-react-text-corruption",
+    "fault-react-key-order",
+    "fault-react-enabled-control",
+    "fault-react-drop-click",
+    "fault-react-duplicate-click",
+    "fault-dom-text-corruption",
+    "fault-dom-key-order",
+    "fault-dom-enabled-control",
+    "fault-dom-drop-click",
+    "fault-dom-duplicate-click"
+  ],
+  "scenario": {
+    "path": "fixtures/compiled/publications/scenario.json",
+    "schema": "gobi.compiled-publications-scenario/v1",
+    "name": "typed-keyed-parent-input-delayed-publications",
+    "sha256": "824240f36750c9806265edc4511143188d20e3d1ba0686cd37fe7cd996193819",
+    "eventCount": 50,
+    "goUpdateCount": 45,
+    "stateProjectionCount": 46,
+    "firstAction": {
+      "eventIndex": 0,
+      "path": "1/0/1",
+      "event": "click",
+      "value": "",
+      "message": {
+        "name": "counter.add",
+        "arg": "oak"
+      }
+    }
+  },
+  "baselineOracle": {
+    "path": "compiled-publications/oracle/expectations.json",
+    "schema": "gobi.compiled-publications-oracle-expectations/v1",
+    "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+    "initialStateProjection": 0,
+    "firstActionStateProjection": 1
+  },
+  "baseline": {
+    "fullTrace": {
+      "eventsObserved": 50,
+      "traceTicks": 46
+    },
+    "goUpdates": 45,
+    "stateProjections": 46,
+    "firstAction": {
+      "eventIndex": 0,
+      "dispatchCount": 1,
+      "traceTicksAfterDispatch": 2,
+      "oakCountAfterDispatch": 1,
+      "input": {
+        "Step": 1,
+        "Locked": false,
+        "Revision": 1
+      }
+    },
+    "initialLiteral": {
+      "parentStatusText": "Parent generation 1; input step=1 locked=false revision=1; idle",
+      "childOrder": [
+        "oak",
+        "elm"
+      ],
+      "controls": [
+        {
+          "path": "0/1",
+          "disabled": true
+        }
+      ]
+    }
+  },
+  "faultPolicy": {
+    "oneFaultPerCase": true,
+    "faultsMustActivate": true,
+    "activationCountPerFaultCase": 1,
+    "genericExceptionsAreNotDetection": true,
+    "infrastructureErrorsDisqualify": true,
+    "pageErrorsDisqualify": true,
+    "unknownObservedChannelsFail": true,
+    "channelNames": [
+      "dom",
+      "disabled",
+      "dispatch-count",
+      "trace-count",
+      "state"
+    ],
+    "rules": {
+      "text-corruption": {
+        "required": [
+          "dom"
+        ],
+        "allowed": [
+          "dom"
+        ],
+        "mode": "all"
+      },
+      "key-order": {
+        "required": [
+          "dom"
+        ],
+        "allowed": [
+          "dom"
+        ],
+        "mode": "all"
+      },
+      "enabled-control": {
+        "required": [
+          "disabled"
+        ],
+        "allowed": [
+          "disabled",
+          "dom"
+        ],
+        "mode": "all"
+      },
+      "drop-click": {
+        "required": [
+          "dispatch-count",
+          "trace-count",
+          "state"
+        ],
+        "allowed": [
+          "dispatch-count",
+          "trace-count",
+          "state",
+          "dom"
+        ],
+        "mode": "any"
+      },
+      "duplicate-click": {
+        "required": [
+          "dispatch-count"
+        ],
+        "allowed": [
+          "dispatch-count",
+          "trace-count",
+          "state",
+          "dom"
+        ],
+        "mode": "all"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "healthy-react",
+      "backend": "react",
+      "fault": "none",
+      "activation": {
+        "point": "none",
+        "eventIndex": null,
+        "targetPath": null,
+        "expectedCount": 0
+      },
+      "expectedChannels": [],
+      "allowedChannels": [],
+      "channelRule": "exact",
+      "checkpoint": {
+        "kind": "full-baseline",
+        "eventsObserved": 50,
+        "traceTicks": 46,
+        "stateProjectionCount": 46,
+        "expectedEventsObserved": 50,
+        "expectedTraceTicks": 46
+      },
+      "action": null
+    },
+    {
+      "id": "healthy-dom",
+      "backend": "dom",
+      "fault": "none",
+      "activation": {
+        "point": "none",
+        "eventIndex": null,
+        "targetPath": null,
+        "expectedCount": 0
+      },
+      "expectedChannels": [],
+      "allowedChannels": [],
+      "channelRule": "exact",
+      "checkpoint": {
+        "kind": "full-baseline",
+        "eventsObserved": 50,
+        "traceTicks": 46,
+        "stateProjectionCount": 46,
+        "expectedEventsObserved": 50,
+        "expectedTraceTicks": 46
+      },
+      "action": null
+    },
+    {
+      "id": "healthy-swap",
+      "backend": "swap",
+      "fault": "none",
+      "activation": {
+        "point": "none",
+        "eventIndex": null,
+        "targetPath": null,
+        "expectedCount": 0
+      },
+      "expectedChannels": [],
+      "allowedChannels": [],
+      "channelRule": "exact",
+      "checkpoint": {
+        "kind": "full-baseline",
+        "eventsObserved": 50,
+        "traceTicks": 46,
+        "stateProjectionCount": 46,
+        "expectedEventsObserved": 50,
+        "expectedTraceTicks": 46
+      },
+      "action": null
+    },
+    {
+      "id": "fault-react-text-corruption",
+      "backend": "react",
+      "fault": "text-corruption",
+      "activation": {
+        "point": "after-initial-render",
+        "eventIndex": null,
+        "targetPath": "0/0/0",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "initial",
+        "stateIndex": 0,
+        "eventIndex": null,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "parentStatusText": "Parent generation 1; input step=1 locked=false revision=1; idle"
+        },
+        "expectedEventsObserved": 0,
+        "expectedTraceTicks": 1
+      },
+      "action": null
+    },
+    {
+      "id": "fault-react-key-order",
+      "backend": "react",
+      "fault": "key-order",
+      "activation": {
+        "point": "after-initial-render",
+        "eventIndex": null,
+        "targetPath": "1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "initial",
+        "stateIndex": 0,
+        "eventIndex": null,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "childOrder": [
+            "oak",
+            "elm"
+          ]
+        },
+        "expectedEventsObserved": 0,
+        "expectedTraceTicks": 1
+      },
+      "action": null
+    },
+    {
+      "id": "fault-react-enabled-control",
+      "backend": "react",
+      "fault": "enabled-control",
+      "activation": {
+        "point": "after-initial-render",
+        "eventIndex": null,
+        "targetPath": "0/1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "disabled"
+      ],
+      "allowedChannels": [
+        "disabled",
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "initial",
+        "stateIndex": 0,
+        "eventIndex": null,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "controls": [
+            {
+              "path": "0/1",
+              "disabled": true
+            }
+          ]
+        },
+        "expectedEventsObserved": 0,
+        "expectedTraceTicks": 1
+      },
+      "action": null
+    },
+    {
+      "id": "fault-react-drop-click",
+      "backend": "react",
+      "fault": "drop-click",
+      "activation": {
+        "point": "physical-click",
+        "eventIndex": 0,
+        "targetPath": "1/0/1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "any",
+      "checkpoint": {
+        "kind": "after-event",
+        "stateIndex": 1,
+        "eventIndex": 0,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "expectedDispatchCount": 1,
+          "expectedTraceTicks": 2,
+          "expectedEventsObserved": 1,
+          "expectedOakCount": 1,
+          "expectedInput": {
+            "Step": 1,
+            "Locked": false,
+            "Revision": 1
+          }
+        },
+        "expectedEventsObserved": 1,
+        "expectedTraceTicks": 2
+      },
+      "action": {
+        "path": "1/0/1",
+        "event": "click",
+        "value": "",
+        "message": {
+          "name": "counter.add",
+          "arg": "oak"
+        }
+      }
+    },
+    {
+      "id": "fault-react-duplicate-click",
+      "backend": "react",
+      "fault": "duplicate-click",
+      "activation": {
+        "point": "physical-click",
+        "eventIndex": 0,
+        "targetPath": "1/0/1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dispatch-count"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "after-event",
+        "stateIndex": 1,
+        "eventIndex": 0,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "expectedDispatchCount": 1,
+          "expectedTraceTicks": 2,
+          "expectedEventsObserved": 1,
+          "expectedOakCount": 1,
+          "expectedInput": {
+            "Step": 1,
+            "Locked": false,
+            "Revision": 1
+          }
+        },
+        "expectedEventsObserved": 1,
+        "expectedTraceTicks": 2
+      },
+      "action": {
+        "path": "1/0/1",
+        "event": "click",
+        "value": "",
+        "message": {
+          "name": "counter.add",
+          "arg": "oak"
+        }
+      }
+    },
+    {
+      "id": "fault-dom-text-corruption",
+      "backend": "dom",
+      "fault": "text-corruption",
+      "activation": {
+        "point": "after-initial-render",
+        "eventIndex": null,
+        "targetPath": "0/0/0",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "initial",
+        "stateIndex": 0,
+        "eventIndex": null,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "parentStatusText": "Parent generation 1; input step=1 locked=false revision=1; idle"
+        },
+        "expectedEventsObserved": 0,
+        "expectedTraceTicks": 1
+      },
+      "action": null
+    },
+    {
+      "id": "fault-dom-key-order",
+      "backend": "dom",
+      "fault": "key-order",
+      "activation": {
+        "point": "after-initial-render",
+        "eventIndex": null,
+        "targetPath": "1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dom"
+      ],
+      "allowedChannels": [
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "initial",
+        "stateIndex": 0,
+        "eventIndex": null,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "childOrder": [
+            "oak",
+            "elm"
+          ]
+        },
+        "expectedEventsObserved": 0,
+        "expectedTraceTicks": 1
+      },
+      "action": null
+    },
+    {
+      "id": "fault-dom-enabled-control",
+      "backend": "dom",
+      "fault": "enabled-control",
+      "activation": {
+        "point": "after-initial-render",
+        "eventIndex": null,
+        "targetPath": "0/1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "disabled"
+      ],
+      "allowedChannels": [
+        "disabled",
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "initial",
+        "stateIndex": 0,
+        "eventIndex": null,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "controls": [
+            {
+              "path": "0/1",
+              "disabled": true
+            }
+          ]
+        },
+        "expectedEventsObserved": 0,
+        "expectedTraceTicks": 1
+      },
+      "action": null
+    },
+    {
+      "id": "fault-dom-drop-click",
+      "backend": "dom",
+      "fault": "drop-click",
+      "activation": {
+        "point": "physical-click",
+        "eventIndex": 0,
+        "targetPath": "1/0/1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "any",
+      "checkpoint": {
+        "kind": "after-event",
+        "stateIndex": 1,
+        "eventIndex": 0,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "expectedDispatchCount": 1,
+          "expectedTraceTicks": 2,
+          "expectedEventsObserved": 1,
+          "expectedOakCount": 1,
+          "expectedInput": {
+            "Step": 1,
+            "Locked": false,
+            "Revision": 1
+          }
+        },
+        "expectedEventsObserved": 1,
+        "expectedTraceTicks": 2
+      },
+      "action": {
+        "path": "1/0/1",
+        "event": "click",
+        "value": "",
+        "message": {
+          "name": "counter.add",
+          "arg": "oak"
+        }
+      }
+    },
+    {
+      "id": "fault-dom-duplicate-click",
+      "backend": "dom",
+      "fault": "duplicate-click",
+      "activation": {
+        "point": "physical-click",
+        "eventIndex": 0,
+        "targetPath": "1/0/1",
+        "expectedCount": 1
+      },
+      "expectedChannels": [
+        "dispatch-count"
+      ],
+      "allowedChannels": [
+        "dispatch-count",
+        "trace-count",
+        "state",
+        "dom"
+      ],
+      "channelRule": "all",
+      "checkpoint": {
+        "kind": "after-event",
+        "stateIndex": 1,
+        "eventIndex": 0,
+        "baselineOracle": {
+          "path": "compiled-publications/oracle/expectations.json",
+          "schema": "gobi.compiled-publications-oracle-expectations/v1",
+          "sha256": "b27821506c20b23f5eaa53be6f80d49d157c9d26db682d565604c6b70bfcf201",
+          "initialStateProjection": 0,
+          "firstActionStateProjection": 1
+        },
+        "literal": {
+          "expectedDispatchCount": 1,
+          "expectedTraceTicks": 2,
+          "expectedEventsObserved": 1,
+          "expectedOakCount": 1,
+          "expectedInput": {
+            "Step": 1,
+            "Locked": false,
+            "Revision": 1
+          }
+        },
+        "expectedEventsObserved": 1,
+        "expectedTraceTicks": 2
+      },
+      "action": {
+        "path": "1/0/1",
+        "event": "click",
+        "value": "",
+        "message": {
+          "name": "counter.add",
+          "arg": "oak"
+        }
+      }
+    }
+  ]
+}

@@ -38,7 +38,7 @@ function messageObject(message) {
 /** Install the real GoScript module and renderer behind a deterministic manual
  * effect driver. This module records physical browser behavior only; it owns
  * no application state or transition logic. */
-export function installPublicationsBrowser({ gobiReact, encoderReact, gobiDom, encoderDom }) {
+export function installPublicationsBrowser({ gobiReact, encoderReact, gobiDom, encoderDom, rendererDecorator = null }) {
   const container = document.getElementById("app");
   if (!container) throw new Error("#app container is missing");
   let activeAction = null;
@@ -65,10 +65,12 @@ export function installPublicationsBrowser({ gobiReact, encoderReact, gobiDom, e
       core,
       callbackBatches: [],
       lastObservation: null,
+      updateCount: 0,
     };
     const renderer = {
       viewCapabilities: candidateOnly ? [] : core.viewCapabilities,
       update(view, hooks) {
+        const updateIndex = record.updateCount++;
         const callbacks = {
           dispatch(observed, message) {
             callbackCounts.dispatch += 1;
@@ -107,8 +109,27 @@ export function installPublicationsBrowser({ gobiReact, encoderReact, gobiDom, e
             return hooks.onStaleAction(action, renderEpoch);
           },
         };
-        record.callbackBatches.push({ callbacks, hooks });
-        return core.update(view, callbacks);
+        const getActiveEventIndex = () => activeEventIndex;
+        const decoratedCallbacks = rendererDecorator?.wrapCallbacks?.({
+          backend,
+          rendererId: record.id,
+          callbacks,
+          getActiveEventIndex,
+          container,
+        }) ?? callbacks;
+        record.callbackBatches.push({ callbacks: decoratedCallbacks, hooks });
+        const result = core.update(view, decoratedCallbacks);
+        rendererDecorator?.afterUpdate?.({
+          backend,
+          rendererId: record.id,
+          updateIndex,
+          container,
+          core,
+          view: clone(view),
+          getActiveEventIndex,
+          getActiveAction: () => clone(activeAction),
+        });
+        return result;
       },
       viewRecord: (...args) => core.viewRecord(...args),
       domSnapshot: (...args) => core.domSnapshot(...args),
@@ -137,6 +158,124 @@ export function installPublicationsBrowser({ gobiReact, encoderReact, gobiDom, e
       html: container.firstElementChild?.outerHTML ?? "",
       controls: clone(currentRendererSnapshot.controls),
     };
+  }
+
+  function pathFromRoot(root, target) {
+    if (!root || !target) return null;
+    if (root === target) return "";
+    const indexes = [];
+    let node = target;
+    while (node && node !== root) {
+      const parent = node.parentNode;
+      if (!parent) return null;
+      const index = Array.prototype.indexOf.call(parent.childNodes, node);
+      if (index < 0) return null;
+      indexes.unshift(index);
+      node = parent;
+    }
+    return node === root ? indexes.join("/") : null;
+  }
+
+  function actualPhysicalSnapshot() {
+    const root = container.firstElementChild;
+    const controls = [...container.querySelectorAll("button, input, select, textarea")].map((element) => ({
+      path: pathFromRoot(root, element),
+      key: element.getAttribute("data-key"),
+      tag: element.localName,
+      type: typeof element.type === "string" ? element.type : "",
+      value: typeof element.value === "string" ? element.value : "",
+      checked: typeof element.checked === "boolean" ? element.checked : false,
+      disabled: element.disabled === true,
+      text: element.textContent ?? "",
+      outerHTML: element.outerHTML,
+    }));
+    return {
+      normalization: "outerHTML-v1",
+      html: root?.outerHTML ?? "",
+      controls,
+    };
+  }
+
+  function rawRead(callback) {
+    try {
+      return { value: clone(callback()), error: null };
+    } catch (error) {
+      return { value: null, error: error instanceof Error ? `${error.name}: ${error.message}` : String(error) };
+    }
+  }
+
+  function inspectRaw() {
+    const instance = activeInstance;
+    const snapshot = instance ? rawRead(() => instance.runtime.snapshot()) : { value: null, error: null };
+    const trace = instance ? rawRead(() => instance.runtime.trace()) : { value: null, error: null };
+    const rendererDOM = instance ? rawRead(() => instance.renderer.domSnapshot()) : { value: null, error: null };
+    const effects = instance
+      ? {
+          records: rawRead(() => instance.effects.records()),
+          pending: rawRead(() => instance.effects.pending()),
+        }
+      : { records: { value: [], error: null }, pending: { value: [], error: null } };
+    let physicalDOM;
+    let physicalDOMError = null;
+    try {
+      physicalDOM = actualPhysicalSnapshot();
+    } catch (error) {
+      physicalDOM = null;
+      physicalDOMError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+    }
+    return {
+      mounted: Boolean(instance),
+      profile: instance?.profile ?? null,
+      backend: instance?.backend ?? null,
+      componentId: instance?.component?.id ?? null,
+      runtime: { snapshot: snapshot.value, snapshotError: snapshot.error, trace: trace.value, traceError: trace.error },
+      rendererDOM: rendererDOM.value,
+      rendererDOMError: rendererDOM.error,
+      physicalDOM,
+      physicalDOMError,
+      callbackCounts: clone(callbackCounts),
+      observations: clone(observations),
+      effects: { records: effects.records.value, recordsError: effects.records.error,
+        pending: effects.pending.value, pendingError: effects.pending.error },
+      pageErrors: [...pageErrors],
+      rendererSequence: rendererRecords.map(({ id, backend }) => ({ id, backend })),
+    };
+  }
+
+  let disposed = false;
+  let disposeResult = null;
+  function dispose() {
+    if (disposed) return clone(disposeResult);
+    const errors = [];
+    const wasMounted = Boolean(activeInstance);
+    if (activeInstance) {
+      try {
+        activeInstance.runtime.unmount();
+      } catch (error) {
+        errors.push(error instanceof Error ? `runtime.unmount: ${error.name}: ${error.message}` : `runtime.unmount: ${String(error)}`);
+      }
+    }
+    activeInstance = null;
+    try {
+      rendererDecorator?.dispose?.();
+    } catch (error) {
+      errors.push(error instanceof Error ? `rendererDecorator.dispose: ${error.name}: ${error.message}` : `rendererDecorator.dispose: ${String(error)}`);
+    }
+    try {
+      container.replaceChildren();
+    } catch (error) {
+      errors.push(error instanceof Error ? `container cleanup: ${error.name}: ${error.message}` : `container cleanup: ${String(error)}`);
+      while (container.firstChild) container.removeChild(container.firstChild);
+    }
+    let physicalDOMCleared = false;
+    try {
+      physicalDOMCleared = (container.firstElementChild?.outerHTML ?? "") === "" && container.childNodes.length === 0;
+    } catch (error) {
+      errors.push(error instanceof Error ? `cleanup inspection: ${error.name}: ${error.message}` : `cleanup inspection: ${String(error)}`);
+    }
+    disposed = true;
+    disposeResult = { disposed: true, wasMounted, physicalDOMCleared, errors };
+    return clone(disposeResult);
   }
 
   function currentInstance() {
@@ -626,6 +765,8 @@ export function installPublicationsBrowser({ gobiReact, encoderReact, gobiDom, e
     compiled: { react: gobiReact, dom: gobiDom },
     runProfile,
     deliverStale(token, label = "probe") { return applyHostStaleDelivery(token, label); },
+    inspectRaw,
+    dispose,
   };
-  return { runProfile };
+  return { runProfile, inspectRaw, dispose };
 }
