@@ -472,7 +472,7 @@ test("an effect-host failure is explicit and does not duplicate the committed tr
 });
 
 test("compiled effects require the exact marked GoScript struct ABI", () => {
-  const makeRuntimeWithEffect = (rawEffect) => {
+  const makeRuntimeWithEffect = (rawEffect, effectPolicy = null) => {
     const app = makeApp({
       update(state, message, countCall) {
         countCall();
@@ -487,6 +487,7 @@ test("compiled effects require the exact marked GoScript struct ABI", () => {
       encoder: makeHelpers(),
       renderer: makeRenderer(),
       effectHost: { request(request) { hostRequests.push(request); } },
+      effectPolicy,
     });
     return { app, hostRequests, runtime };
   };
@@ -538,6 +539,97 @@ test("compiled effects require the exact marked GoScript struct ABI", () => {
   assert.equal(wrongResult.accepted, false);
   assert.match(wrongResult.error, /lookup\/complete/i);
   assert.equal(wrongContract.hostRequests.length, 0);
+
+  const extensionEffect = makeGoEffect({
+    Kind: "lifecycle.request", Name: "lookup", Arg: "parent:g1:r1", Reply: "complete",
+  });
+  const strict = makeRuntimeWithEffect(extensionEffect);
+  const strictResult = strict.runtime.dispatch(makeAction("1"), makeMessage("load", "parent:g1:r1"));
+  assert.equal(strictResult.accepted, false);
+  assert.match(strictResult.error, /unsupported effect kind/i);
+  assert.equal(strict.hostRequests.length, 0);
+
+  const policyCalls = [];
+  const extended = makeRuntimeWithEffect(extensionEffect, (effect, label) => {
+    assert.equal(Object.isFrozen(effect), true);
+    assert.throws(() => { effect.kind = "mutated.by.policy"; }, TypeError);
+    policyCalls.push({ effect: { ...effect }, label });
+    if (effect.kind !== "lifecycle.request" || effect.name !== "lookup" || effect.reply !== "complete") {
+      throw new TypeError("lifecycle effect is outside the closed request policy");
+    }
+  });
+  const extendedResult = extended.runtime.dispatch(makeAction("1"), makeMessage("load", "parent:g1:r1"));
+  assert.equal(extendedResult.accepted, true);
+  assert.deepEqual(extended.hostRequests[0].effect, {
+    kind: "lifecycle.request", name: "lookup", arg: "parent:g1:r1", reply: "complete",
+  });
+  assert.deepEqual(policyCalls, [{
+    effect: { kind: "lifecycle.request", name: "lookup", arg: "parent:g1:r1", reply: "complete" },
+    label: "gobi.Effect",
+  }]);
+
+  const closed = makeRuntimeWithEffect(makeGoEffect({
+    Kind: "lifecycle.cancel", Name: "cancel", Arg: "parent:g1:r1", Reply: "",
+  }), (effect) => {
+    if (effect.kind !== "lifecycle.request") {
+      throw new TypeError("lifecycle effect is outside the closed request policy");
+    }
+  });
+  const closedResult = closed.runtime.dispatch(makeAction("1"), makeMessage("load", "parent:g1:r1"));
+  assert.equal(closedResult.accepted, false);
+  assert.match(closedResult.error, /closed request policy/i);
+  assert.equal(closed.hostRequests.length, 0);
+});
+
+test("cancelEffect removes the live correlation and fences its retained callback", () => {
+  const app = makeApp();
+  const requests = [];
+  const renderer = makeRenderer();
+  const runtime = mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    appId: APP_ID,
+    encoder: makeHelpers(),
+    renderer,
+    effectHost: {
+      request(request, deliver) { requests.push({ request, deliver }); },
+    },
+  });
+
+  const result = runtime.dispatch(makeAction("1"), makeMessage("load", "parent:g1:r1"));
+  assert.equal(result.accepted, true);
+  assert.deepEqual(runtime.effectDiagnostics().pending, [{
+    dispatchId: "dispatch-0001", effectIndex: 0, queued: false,
+  }]);
+
+  const cancellation = runtime.cancelEffect({ dispatchId: "dispatch-0001", effectIndex: 0 });
+  assert.deepEqual(cancellation, {
+    accepted: true, cancelled: true, dispatchId: "dispatch-0001", effectIndex: 0,
+  });
+  assert.deepEqual(runtime.effectDiagnostics(), {
+    pending: [],
+    cancellations: [{ dispatchId: "dispatch-0001", effectIndex: 0, outcome: "cancelled" }],
+  });
+  assert.equal(app.calls().updateCalls, 1);
+  assert.equal(runtime.trace().ticks.length, 2);
+
+  const late = requests[0].deliver({
+    dispatchId: "dispatch-0001", effectIndex: 0,
+    message: { name: "complete", arg: "parent:g1:r1" },
+  });
+  assert.deepEqual(late, { accepted: false, error: "unknown or extra effect completion" });
+  assert.equal(app.calls().updateCalls, 1);
+  assert.equal(stateField({ state: runtime.snapshot().state }, "Pending").bool, true);
+
+  const duplicateCancel = runtime.cancelEffect({ dispatchId: "dispatch-0001", effectIndex: 0 });
+  assert.deepEqual(duplicateCancel, {
+    accepted: false, cancelled: false, error: "unknown or completed effect",
+  });
+  assert.deepEqual(runtime.effectDiagnostics().cancellations.at(-1), {
+    dispatchId: "dispatch-0001", effectIndex: 0,
+    outcome: "rejected", reason: "unknown or completed effect",
+  });
+  assert.equal(runtime.cancelEffect({ dispatchId: "dispatch-0001", effectIndex: 0, token: "extra" }).accepted, false);
 });
 
 test("renderer lowerCamel actions are accepted and dispatch admission precedes input traps", () => {
@@ -1081,6 +1173,60 @@ test("completion during replacement stays pending at return, then commits exactl
   assert.equal(afterDrain.ticks.at(-1).completedEffects[0].dispatchId, "dispatch-0001");
   assert.equal(stateField(afterDrain.ticks.at(-1), "Pending").bool, false);
   assert.equal(app.calls().updateCalls, 2);
+});
+
+test("cancelEffect removes a completion held during renderer replacement before it drains", async () => {
+  let deliver;
+  let runtime;
+  let queuedDelivery;
+  let cancellation;
+  const app = makeApp();
+  const effectHost = { request(_request, callback) { deliver = callback; } };
+  runtime = mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    appId: APP_ID,
+    encoder: makeHelpers(),
+    renderer: makeRenderer(),
+    effectHost,
+  });
+  runtime.dispatch(makeAction("1"), makeMessage("load", "q"));
+  const before = runtime.trace();
+  const reply = {
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: { name: "complete", arg: "cancel-during-replacement" },
+  };
+  const nextRenderer = makeRenderer();
+  const commit = nextRenderer.update.bind(nextRenderer);
+  let inject = true;
+  nextRenderer.update = (view, callbacks) => {
+    if (inject) {
+      inject = false;
+      queuedDelivery = deliver(reply);
+      cancellation = runtime.cancelEffect({ dispatchId: reply.dispatchId, effectIndex: reply.effectIndex });
+    }
+    return commit(view, callbacks);
+  };
+
+  runtime.replaceRenderer(nextRenderer);
+  assert.deepEqual(queuedDelivery, { accepted: true, queued: true, dispatchId: null });
+  assert.deepEqual(cancellation, {
+    accepted: true, cancelled: true, dispatchId: "dispatch-0001", effectIndex: 0,
+  });
+  assert.deepEqual(runtime.trace(), before);
+  assert.deepEqual(runtime.effectDiagnostics(), {
+    pending: [],
+    cancellations: [{ dispatchId: "dispatch-0001", effectIndex: 0, outcome: "cancelled" }],
+  });
+
+  await Promise.resolve();
+
+  assert.deepEqual(runtime.trace(), before);
+  assert.equal(app.calls().updateCalls, 1);
+  assert.deepEqual(runtime.complete(reply), {
+    accepted: false, error: "unknown or extra effect completion",
+  });
 });
 
 test("unmount before the held completion microtask cancels it without resurrection", async () => {

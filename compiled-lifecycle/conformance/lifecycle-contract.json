@@ -1,0 +1,42 @@
+{
+  "schema": "gobi.compiled-lifecycle-conformance-contract/v1",
+  "fixtureSchema": "gobi.compiled-lifecycle-fixture/v1",
+  "fixture": "compiled-lifecycle-parent-child-grandchild-remount-fence",
+  "experimentLabel": "compiled-lifecycle",
+  "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+  "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+  "stateType": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle.State",
+  "messageType": "github.com/samuelpmahan/gondola/gobi.Message",
+  "roles": {
+    "init": "Init",
+    "update": "Update",
+    "view": "View"
+  },
+  "capabilities": [
+    "view.node",
+    "effect.request-reply"
+  ],
+  "updateResults": [
+    "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle.State",
+    "[]github.com/samuelpmahan/gondola/gobi.Effect"
+  ],
+  "effectTypes": [
+    "fixture.request",
+    "lifecycle.cancel"
+  ],
+  "requiredEvents": 26,
+  "requiredGoTicks": 26,
+  "requiredPhysicalClicks": 16,
+  "requiredPhysicalSubtreeRetirementProbes": 6,
+  "requiredRendererSwapEvent": {
+    "index": 8,
+    "from": "dom",
+    "to": "react",
+    "target": "root"
+  },
+  "requiredChildFirstCancelOrder": [
+    "grandchild:g1:r3",
+    "child:g1:r2",
+    "parent:g1:r1"
+  ]
+}
