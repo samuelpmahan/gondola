@@ -1,0 +1,160 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-DELIVERY",
+  "worker": "N4",
+  "decision": "amend",
+  "summary": "The sealed delivery implementation, documentation and seven owned source files check out. Amend the runner\u2019s source closure, focused tests and workflow triggers to include archive-helper.test.mjs; the separate helper test run passes 7/7, but the full N6 delivery runner is explicitly unrun and does not cover atomic-publication regressions.",
+  "reviewedPacket": {
+    "job_id": "E-DELIVERY",
+    "worker": "N6",
+    "report": {
+      "path": "module-coordination/reports/E-DELIVERY.md",
+      "bytes": 5235,
+      "sha256": "6ed5095127c2f31604fe04286933d74ab7c02378581336620d462c8a9c3695e3"
+    },
+    "receipt": {
+      "path": "module-coordination/receipts/E-DELIVERY.json",
+      "bytes": 11829,
+      "sha256": "2590d6151e485bd013234e815502537c9e91dabb00ba5ed938f88d5f8213bfa7"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-DELIVERY/seal.json",
+      "bytes": 179,
+      "sha256": "7b44513b8c455609c4c542b5554bc6e3e64ce9e4362162976dd878f1e71f800b"
+    },
+    "reportAndReceiptMatchSeal": true,
+    "ownedSourceFilesMatched": 7,
+    "ownedSourceFileCount": 7
+  },
+  "reviewedSourcePins": {
+    "compiled-modules/run.mjs": {
+      "bytes": 42153,
+      "sha256": "0334c315835df933204a002dd244d6797f7efc8f83e1c3cf84c6e61ad58b99da",
+      "sealedMatches": true,
+      "currentMatches": true
+    },
+    "compiled-modules/demo/build.mjs": {
+      "bytes": 9900,
+      "sha256": "14c48be8d97e877056986e91c0c361e3df5db162554a09280504717be8f7df03",
+      "sealedMatches": true,
+      "currentMatches": true
+    },
+    "compiled-modules/README.md": {
+      "bytes": 3907,
+      "sha256": "8dabefc22bceb9133adc5eed222e662cc9548de77e8119c462600e62e7276267",
+      "sealedMatches": true,
+      "currentMatches": true
+    },
+    "compiled-modules/RESULTS.md": {
+      "bytes": 739,
+      "sha256": "3d1f93d12e012012b4a706d90f158c8f645c08764fc732e05f0ebd38161202f0",
+      "sealedMatches": true,
+      "currentMatches": true
+    },
+    "compiled-modules/.gitignore": {
+      "bytes": 43,
+      "sha256": "dddd5e670c8e6439ff22be68bccb6e9956f51cb150483be0c8cf315e257f4c92",
+      "sealedMatches": true,
+      "currentMatches": true
+    },
+    "run-compiled-modules.sh": {
+      "bytes": 1247,
+      "sha256": "930b4b4bcab4423b000bfbecc7051d010fe7185da2b93cebd32c09ed8192d9a9",
+      "sealedMatches": true,
+      "currentMatches": true
+    },
+    ".github/workflows/gobi-compiled-modules.yml": {
+      "bytes": 5250,
+      "sha256": "59e8053af85eef3545e1a42c4a959651df1a7967b758b9d8bdbe6c1f8881445d",
+      "sealedMatches": true,
+      "currentMatches": true
+    }
+  },
+  "review": {
+    "runner": {
+      "expectedFixedEvents": 24,
+      "expectedFixedGoUpdates": 16,
+      "expectedFixedCheckpoints": 17,
+      "seedSet": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "seedEvents": 40,
+      "expectedBrowserProfiles": 12,
+      "minimumMutationControls": 5,
+      "fullRunnerObserved": false
+    },
+    "sourceClosure": {
+      "codecWalk": "compiled-frontend/build is recursively pinned, including codec and testdata inputs on a fresh source snapshot",
+      "explicitPaths": [
+        "compiled-capabilities/archive-helper.mjs",
+        "compiled-children/browser-version.mjs",
+        "compiled-children/conformance/browser-version.test.mjs"
+      ],
+      "gitGate": "exact supplied HEAD and clean-tree gate; source files checked against Git blob and rechecked after run"
+    },
+    "archive": {
+      "sameDirectoryStagingAndNoClobber": true,
+      "independentConsumerChecksInventoryAndBytes": true,
+      "consumerIsSemanticProof": false,
+      "semanticConformanceSeparate": true
+    },
+    "demo": {
+      "manifestResolvedActualModuleAndEncoder": true,
+      "descriptorSidecarAndFourArtifactBytesPinned": true,
+      "ownDataEncoderProperty": true,
+      "priorSmokeUsedStaleCompilerOutputs": true
+    },
+    "documentationAndWorkflow": {
+      "reproductionGuidePresent": true,
+      "backendRegistrationGuidancePresent": true,
+      "workflowToolchainAndEnvironmentReviewed": true,
+      "separateExistingM0AndCounterJobRetained": true
+    },
+    "gap": {
+      "archiveHelperTestsExecutedByDeliveryRunner": false,
+      "testExplicitlyPinned": false,
+      "pushAndPullRequestPathsIncludeTest": false,
+      "amendment": "Pin and run compiled-capabilities/archive-helper.test.mjs and add it to both workflow path lists; then execute source-attested delivery profile."
+    },
+    "focusedReadOnlyTest": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/XR-DELIVERY/attempt-001-readonly/archive-helper-tests.stdout.log",
+        "bytes": 1918,
+        "sha256": "5132f96a7aa929cbf9eeb7732e6b017dd5c2086c40a5115978b74595ab429007"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/XR-DELIVERY/attempt-001-readonly/archive-helper-tests.stderr.log",
+        "bytes": 175,
+        "sha256": "b0343106b237559a08eb9526e3dcf829c326274eaf598c40bb5201705dc331cf"
+      }
+    },
+    "packetBoundary": "N6 author report marks its full runner not_run and prior artifact smoke stale; no acceptance result inferred."
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-DELIVERY",
+    "index": "module-coordination/rawlogs/XR-DELIVERY/index.json",
+    "indexBytes": 3315,
+    "indexSHA256": "3b779d85640f86ee1368d24defefc43d68f46484eeb8623da56a7f6af8e1fb10",
+    "reviewEvidence": {
+      "path": "module-coordination/rawlogs/XR-DELIVERY/attempt-001-readonly/review-findings.json",
+      "bytes": 9134,
+      "sha256": "787ac91d8fcc5c10f2c51c201c2025474423a8668560972cc309df37781b2330"
+    }
+  },
+  "report": {
+    "path": "module-coordination/reports/XR-DELIVERY.md",
+    "bytes": 4883,
+    "sha256": "f229d8bf5fe4d816cbcf8a2c72937b38e4e2c8fd77e76e3c9fd3bcdea13b2f74"
+  },
+  "limits": [
+    "Read-only review; no source, Git, native scheduler or workflow changes.",
+    "No full delivery profile was executed.",
+    "The separately run helper suite is review evidence and was not run by the sealed N6 profile."
+  ]
+}

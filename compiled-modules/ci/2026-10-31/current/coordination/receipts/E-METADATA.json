@@ -1,0 +1,132 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-METADATA",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Reject unpaired UTF-16 surrogate values and keys in copied descriptor/AppIR metadata, raw descriptor and AppIR JSON, artifact map paths, and canonicalization. The exact frozen JS false-accept witness now rejects before hashing; Go still rejects the same sidecar. Valid astral Unicode, five Go escaping vectors, five real artifact pairs, and ordinary ASCII hashes continue to pass.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-modules/abi/validate.mjs",
+      "compiled-modules/abi/validate.test.mjs",
+      "module-coordination/reports/E-METADATA.md",
+      "module-coordination/receipts/E-METADATA.json",
+      "module-coordination/rawlogs/E-METADATA/**"
+    ],
+    "productionPathsModified": [
+      "compiled-modules/abi/validate.mjs",
+      "compiled-modules/abi/validate.test.mjs"
+    ],
+    "gitActionsByWorker": false,
+    "schedulerChangesByWorker": false
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "sourcePins": [
+    {
+      "path": "compiled-modules/abi/validate.mjs",
+      "bytes": 36096,
+      "sha256": "f3673bac84514039c80ee2eb74651a38720a9c21ccaab9007247866b8b49397e"
+    },
+    {
+      "path": "compiled-modules/abi/validate.test.mjs",
+      "bytes": 16340,
+      "sha256": "2f6dee40274860b226d8c13e5a3d778ce1b1ace9d50dc4cab771f1cd2e6fccc1"
+    }
+  ],
+  "previousFinding": {
+    "job_id": "XR-DIGEST",
+    "decision": "amend",
+    "report": {
+      "path": "module-coordination/reports/XR-DIGEST.md",
+      "sha256": "6f5d11565a5bf4f8eaa20f21ddcd9b087ed2356b15f4568f925216e198de4531"
+    },
+    "receipt": {
+      "path": "module-coordination/receipts/XR-DIGEST.json",
+      "sha256": "713e394836fc863597bdd2849cc7e3788bfa8e368663289102b37a79c85e696c"
+    }
+  },
+  "repairEvidence": {
+    "redBaseline": {
+      "baselineValidatorSHA256": "2a8f0c4cfb2a60c08a71f2596b5e06563b663c1aa60d07384d488a8268bc95b0",
+      "nodeSuiteExitCode": 1,
+      "passed": 8,
+      "failed": 2,
+      "log": "module-coordination/rawlogs/E-METADATA/red-baseline.stdout.log"
+    },
+    "frozenWitness": {
+      "path": "module-coordination/rawlogs/E-METADATA/unpaired-surrogate-descriptor.json",
+      "bytes": 5973,
+      "sha256": "034334f2973f7bcfeda8d806fdeb3b5af4a3ffa43504be9102b1315e0b1028ca",
+      "identicalToXRDigestWitness": true,
+      "baselineJS": "ADMITTED",
+      "repairedJS": "REJECTED before hashing",
+      "goDecode": "REJECT: artifact digest does not match artifact inventory"
+    },
+    "nodeSuite": {
+      "version": "v22.23.4",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/abi/validate.test.mjs",
+      "exitCode": 0,
+      "passed": 10,
+      "failed": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-METADATA/node-tests.stdout.log",
+        "bytes": 2512,
+        "sha256": "cc0e9eac3b9d9bb32e88d9ac43c23806a23c8b5c5c63d993a845b40495f72101"
+      }
+    },
+    "goModuleABITests": {
+      "version": "go version go1.24.0 linux/amd64",
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./moduleabi",
+      "exitCode": 0,
+      "stdoutSHA256": "f1f49d26ffba4ed2a5a063fb398334bccf905487314a3efdafe5ba939f847eb7"
+    },
+    "goCanonicalVectors": {
+      "matched": 5,
+      "stdout": "module-coordination/rawlogs/E-METADATA/node-check-go-vectors.stdout.log"
+    },
+    "actualGoNodePairs": {
+      "matched": 5,
+      "compare": {
+        "path": "module-coordination/rawlogs/E-METADATA/actual-witness-compare.json",
+        "sha256": "34109894d739ddc1fdbf9a588c9f75427552da1a5cd4e96b234a667b4f81b268"
+      }
+    },
+    "ordinaryAsciiPair": {
+      "admitted": true,
+      "parentArtifactSHA256": "3dfd31c0e783ef39c03343d19a74fe65484b2304e2b721d829d9d1038c90752f",
+      "parentABISHA256": "7ac5a916d9cf08667b7dddec2cb70f2f2ad9147c9a2cdb5820e5dc301f215277",
+      "childArtifactSHA256": "970aa7a2350fd8c27418f8113422524ed267bef01b89342657a3dbe4fc95e894",
+      "childABISHA256": "092380b7c276452369752cf77d306b89c28f7facfad653045e3d42e4c4df30d3"
+    },
+    "validAstral": "admitted"
+  },
+  "sourceChangeChronology": {
+    "path": "module-coordination/rawlogs/E-METADATA/source-change-chronology.json",
+    "finalTestSHA256": "2f6dee40274860b226d8c13e5a3d778ce1b1ace9d50dc4cab771f1cd2e6fccc1",
+    "note": "The test file changed after the first stable notice to add embedded app-ir.json key cases. validate.mjs hash remained f3673bac84514039c80ee2eb74651a38720a9c21ccaab9007247866b8b49397e. No source changes followed the final pin."
+  },
+  "limits": [
+    "No Go decoder policy or ABI schema/API changed.",
+    "No fresh producer, browser, or full integration acceptance is claimed.",
+    "N5 made no Git or scheduler changes."
+  ],
+  "report": {
+    "path": "module-coordination/reports/E-METADATA.md",
+    "bytes": 3001,
+    "sha256": "df2d22cac255afdbbc8ee76566ffd1a2cc28a55c337374fdb9783076527ce804"
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-METADATA",
+    "index": "module-coordination/rawlogs/E-METADATA/index.json",
+    "indexBytes": 13884,
+    "indexSHA256": "75a72167ffd198d4a9a657cb25d066b5b7fae34042d080627b29f54cec85ef16",
+    "indexedFiles": 68,
+    "indexVerification": {
+      "path": "module-coordination/rawlogs/E-METADATA/index-verification.json",
+      "allMatch": true,
+      "files": 68
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CLEANUP",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Fixed renderer candidate lifecycle cleanup after capability rejection on initial mount and swap. Added red-first coverage for rejected candidates, cleanup exceptions, sibling candidate cleanup, and preservation of the live pair; focused runtime suite passes 7/7.",
+  "scope": {
+    "owned_paths": [
+      "compiled-modules/runtime/runtime.mjs",
+      "compiled-modules/runtime/runtime.test.mjs",
+      "module-coordination/reports/E-CLEANUP.md",
+      "module-coordination/receipts/E-CLEANUP.json",
+      "module-coordination/rawlogs/E-CLEANUP/**"
+    ],
+    "production_paths_modified": [
+      "compiled-modules/runtime/runtime.mjs"
+    ],
+    "test_paths_modified": [
+      "compiled-modules/runtime/runtime.test.mjs"
+    ],
+    "git_or_native_scheduler_changed": false
+  },
+  "sourcePins": {
+    "compiled-modules/runtime/runtime.mjs": {
+      "beforeBytes": 39802,
+      "beforeSHA256": "aa84e7c443ae7a72178ef20c36af5859e37ee11627b8a65865fa6eb8e0b08f9b",
+      "afterBytes": 39892,
+      "afterSHA256": "82aa27d2bad433ce945487c38aa3afcb5848655bd39cf62664aa8e94cb5eda42"
+    },
+    "compiled-modules/runtime/runtime.test.mjs": {
+      "beforeBytes": 13776,
+      "beforeSHA256": "dc79a062e9f74f9f56dcc87e6043df333cbdf9fe785f59d1ddf80261f1db4df5",
+      "afterBytes": 17192,
+      "afterSHA256": "86046cacbac8802caaec8ae7b8982108a053ebb45a171305e619955046e2ab1d"
+    }
+  },
+  "verification": {
+    "nodeVersion": "v22.23.4",
+    "redRun": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/runtime/runtime.test.mjs",
+      "passed": 4,
+      "failed": 3,
+      "exitCode": 1,
+      "failureNames": [
+        "renderer capability mismatch fails before Go roles and leaves outer DOM untouched",
+        "initial capability failure cleans both rejected and previously accepted candidates",
+        "failed swap cleans rejected candidate, preserves the live pair, and keeps the capability error"
+      ]
+    },
+    "syntaxRuntime": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/runtime/runtime.mjs",
+      "exitCode": 0
+    },
+    "syntaxTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/runtime/runtime.test.mjs",
+      "exitCode": 0
+    },
+    "targetedCleanupWitness": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern=\"renderer capability mismatch|initial capability failure|failed swap cleans\" compiled-modules/runtime/runtime.test.mjs",
+      "passed": 3,
+      "failed": 0,
+      "exitCode": 0
+    },
+    "focusedRuntimeTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/runtime/runtime.test.mjs",
+      "passed": 7,
+      "failed": 0,
+      "exitCode": 0
+    }
+  },
+  "knownScopeLimits": [
+    "No browser capture was created in this author packet; N4 is validating the new source separately.",
+    "The change does not alter module ABI, Go transitions, callback resolution, bridge ordering, or renderer capability policy.",
+    "No claim of arbitrary renderers or other browser/OS coverage."
+  ],
+  "report": {
+    "path": "module-coordination/reports/E-CLEANUP.md",
+    "bytes": 2419,
+    "sha256": "539f4d3641e646fd6bb8f648ef834a65f801683094b42753c26caa45f56f73a9"
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-CLEANUP",
+    "index": "module-coordination/rawlogs/E-CLEANUP/index.json",
+    "indexBytes": 6708,
+    "indexSHA256": "a2b7cd571db320e6c449b7ac27359cdef8bca69f9e0c17dc872c407f064ef25d",
+    "fileCount": 29
+  }
+}

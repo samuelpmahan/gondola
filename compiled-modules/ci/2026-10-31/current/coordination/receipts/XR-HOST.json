@@ -1,0 +1,118 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-HOST",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "The pinned host passes its fail-closed ABI/renderer gates and focused ordering/action tests, but capability-rejected initial and swap renderer candidates are not unmounted. The previous browser traces are pre-UTF8 and do not establish current producer acceptance.",
+  "reviewedPacket": {
+    "job_id": "E-HOST",
+    "worker": "N3",
+    "report": {
+      "path": "module-coordination/seals/E-HOST/E-HOST.md",
+      "bytes": 4688,
+      "sha256": "89eb67ef239955163a4d49eb5d1fd18ea743b5980022b17284d74b8d91dbf3cb"
+    },
+    "receipt": {
+      "path": "module-coordination/seals/E-HOST/E-HOST.json",
+      "bytes": 5753,
+      "sha256": "0e12c8526461a6d8b646da87bb22303f216c04f3f5419ac03ac70e65e582ace3"
+    },
+    "sourceInventorySHA256": "6a305d2bf90b65e50669930f99e5ef5fd72f2b083acdd065fea39e945ce54c44",
+    "reportAndReceiptMatchSeal": true,
+    "ownedSourceFilesMatched": 4,
+    "ownedSourceFileCount": 4,
+    "allAuthorPinsMatched": 14
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "rulings": {
+    "path": "module-coordination/RULINGS.md",
+    "sha256": "15612273fa54d60ae92a0175231b369abb6bc9b1d521620f954fe5d0e48616a2"
+  },
+  "acceptance": {
+    "path": "module-coordination/ACCEPTANCE.md",
+    "sha256": "2449f2eb33dea9b38d9f1151472b6c4a492b8be2b42f9bfc38e1e889d7d60ea8"
+  },
+  "checks": {
+    "nodeVersion": "v22.23.4",
+    "sealedFocusedTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/runtime/runtime.test.mjs",
+      "passed": 5,
+      "failed": 0,
+      "exitCode": 0
+    },
+    "reviewerWitness": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test /workspace/scratch/39a56936f173/module-coordination/rawlogs/XR-HOST/capability-leak-witness.test.mjs",
+      "passed": 8,
+      "failed": 0,
+      "exitCode": 0,
+      "observations": [
+        "initial rejected candidate was not unmounted; no Go Init or outer DOM writes occurred",
+        "swap rejected candidate was not unmounted; existing roots/state/callCounts remained; old callback still dispatched",
+        "parent event order/call counts were Update, Output, Input, parent View, child View; no Publication/Receive increment"
+      ]
+    },
+    "sourcePins": {
+      "count": 14,
+      "matched": 14,
+      "ownedFilesMatched": 4
+    },
+    "priorBrowserCaptures": [
+      {
+        "path": "/tmp/module-pair-harness-smoke.browser.json",
+        "bytes": 5000597,
+        "sha256": "c2e43437fcc45c5ba6bee960b4b86c47d93ca2709d578f8bfced030f6d314655",
+        "profileRuns": 3,
+        "fixedProfileSourceEventsPerRun": 24,
+        "goStepsPerRun": 16,
+        "checkpointsPerRun": 17,
+        "currentProducerAcceptance": false
+      },
+      {
+        "path": "/tmp/module-pair-seed1.browser.json",
+        "bytes": 14171421,
+        "sha256": "07646a3bf626d6f0f8573b65d63cc1f6344a25c2dcbeb9957c668cd3a35fca58",
+        "profileRuns": 3,
+        "fixedProfileSourceEventsPerRun": 24,
+        "goStepsPerRun": 16,
+        "checkpointsPerRun": 17,
+        "currentProducerAcceptance": false
+      }
+    ],
+    "knownPriorArtifactMismatch": "Strict literal view text expected Step \u2212 but prior compiled output contained Step \u00e2\u0088\u0092; separate UTF-8 repair pending at E-HOST time."
+  },
+  "finding": {
+    "id": "XR-HOST-1",
+    "severity": "must-fix for host lifecycle acceptance",
+    "location": [
+      "compiled-modules/runtime/runtime.mjs:701-702",
+      "compiled-modules/runtime/runtime.mjs:724-728",
+      "compiled-modules/runtime/runtime.mjs:758",
+      "compiled-modules/runtime/runtime.mjs:790-795"
+    ],
+    "description": "The assignment is not completed when requireRenderer throws on capability mismatch, so failure cleanup sees null and skips candidate unmount. Reproduced in initial mount and renderer swap.",
+    "repair": "Capture each factory return before capability validation; ensure rejected initial/swap candidates are unmounted once. Preserve the capability error if cleanup throws. Regression assertions must retain zero Go calls/outer DOM writes for initial mount and active old backend/callbacks after a failed swap."
+  },
+  "limitations": [
+    "No fresh browser run: E-HOST captures are from artifacts predating the UTF-8 producer repair, and strict literal acceptance was already red.",
+    "Shared module ABI validator is a pinned dependency; this scoped host review does not independently certify its implementation.",
+    "Test helper JavaScript reducers are host test doubles; they are not evidence of production JavaScript business transitions.",
+    "No claim of arbitrary module graphs, asynchronous effects, malicious-code isolation, or other browser/OS coverage."
+  ],
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-HOST",
+    "index": "module-coordination/rawlogs/XR-HOST/index.json",
+    "indexBytes": 4674,
+    "indexSHA256": "4802605fb691cefbffaaa2c9c2f325e49d242564c3949e1ad6a9d3ae6fc3a4bc",
+    "fileCount": 19
+  },
+  "report": {
+    "path": "module-coordination/reports/XR-HOST.md",
+    "bytes": 4871,
+    "sha256": "c0381f7cd7bd21d36603b769e53a2d31bc39176b7aed60f71d36871fe1ebb3e6"
+  },
+  "productionChanges": false,
+  "gitOrSchedulerChanges": false
+}

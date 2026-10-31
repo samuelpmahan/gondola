@@ -1,0 +1,129 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-SNAPSHOT",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Moved the immutable execution snapshot to the attempt root and included the root filename in the archive allowlist. Recursive inventory and an actual archiveAndVerify round trip passed; syntax and all seven shared archive-helper tests passed. The full producer was not rerun by this task.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-modules/run.mjs",
+      "module-coordination/reports/E-SNAPSHOT.md",
+      "module-coordination/receipts/E-SNAPSHOT.json",
+      "module-coordination/rawlogs/E-SNAPSHOT/**"
+    ],
+    "productionPathsModified": [
+      "compiled-modules/run.mjs"
+    ],
+    "sharedArchiveHelperChanged": false,
+    "gitOrSchedulerChanged": false
+  },
+  "sourcePin": {
+    "path": "gondola/compiled-modules/run.mjs",
+    "bytes": 46750,
+    "sha256": "7c46f2bb16acfefb9a2beaaea63dac750b9bb4022ab192d4c452ff9db485b12c",
+    "baselinePath": "E-TEMP source",
+    "baselineSHA256": "b0286a398073eb6e7fa01d965714628457d1ee0a6c1a83565629580cc644ca42"
+  },
+  "unchangedInputs": [
+    {
+      "path": "gondola/compiled-capabilities/archive-helper.mjs",
+      "bytes": 3691,
+      "sha256": "df6c99a645d9164461889b8f0585fc79d3c486fc399a84ff7016e8648d2e7e5f"
+    },
+    {
+      "path": "gondola/compiled-capabilities/archive-helper.test.mjs",
+      "bytes": 17475,
+      "sha256": "1697da7cbbe9927d75a6907feaba9dc0e4212e8f3e714dca2131715ad23466db"
+    }
+  ],
+  "triggeringAttempt": {
+    "schema": "gobi.e-snapshot-triggering-attempt/v1",
+    "attempt": "attempt-20261031T212507314Z-35",
+    "conformanceSummary": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T212507314Z-35/conformance/summary.json",
+      "bytes": 4025,
+      "sha256": "2c49b8835d3ead1250688d0644f3fa424b015ddbb5232c518ef5eae79db8708e",
+      "status": "matched"
+    },
+    "runnerRecord": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T212507314Z-35/conformance/module-pair.run.json",
+      "bytes": 6256,
+      "sha256": "8b7340d6bf1ad5dc4b81cdc6276acebdaeb7e459cf1a84b99d7995eaec99587f"
+    },
+    "scopeNote": "Root reported the full producer reached archive round-trip and failed when the helper requested extracted root execution-before-archive.json; this captured run record shows matched conformance. No assertion here that the snapshot file itself was present in attempt metadata."
+  },
+  "verification": {
+    "node": "v22.23.4",
+    "gnuTar": "1.35",
+    "syntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/run.mjs",
+      "exitCode": 0,
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    },
+    "archiveHelperTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "stdout": {
+        "bytes": 1920,
+        "sha256": "ad4f805654529456646b411e2e2679a72b5f77549dcd0e2648e61b72c1c8e022"
+      },
+      "stderr": {
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    },
+    "rootSnapshotArchiveRoundTrip": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node module-coordination/rawlogs/E-SNAPSHOT/archive-root-roundtrip.mjs",
+      "exitCode": 0,
+      "summary": {
+        "status": "passed",
+        "archiveMembers": 2,
+        "snapshotPath": "execution-before-archive.json",
+        "sourcePins": {
+          "source/fixture.txt": {
+            "bytes": 27,
+            "sha256": "6d7c43e310af3f284012c1fdfc0293aeb982454d237edc8aba386fbd02abcc8a"
+          }
+        },
+        "archiveSHA256": "c059b138df643500fb1092624ddc1840b38ff41bdffa3ab900a2bbb43c41685b"
+      },
+      "script": {
+        "bytes": 3685,
+        "sha256": "3da6083bde256f7e8a028dd0cbc787beeafae4f09dac9cd65137171c7bc9c3ad"
+      },
+      "stdout": {
+        "bytes": 294,
+        "sha256": "ff22ff750b5b6d41cb37a2ae4afc37c47cfbcadd8c90142f607a2c4dbf1cd631"
+      },
+      "stderr": {
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    },
+    "fullProducerRun": false
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-SNAPSHOT",
+    "index": "module-coordination/rawlogs/E-SNAPSHOT/index.json",
+    "bytes": 3225,
+    "sha256": "81cbb92486b0b025a53c521a7191e6c71534bfd15bcf8d4ed8709a4b3bbb0a4b"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-SNAPSHOT.md",
+    "bytes": 1693,
+    "sha256": "208630e9da696c2898c8c7d3cc7fda94c14e34d0b8c77dcbd53df159b2df7f08"
+  },
+  "limits": [
+    "The full producer is owned by root and was not rerun by N4.",
+    "The local round trip is a small helper-level fixture, not an end-to-end producer certification."
+  ]
+}

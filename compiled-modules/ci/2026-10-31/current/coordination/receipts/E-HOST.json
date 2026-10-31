@@ -1,0 +1,159 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-HOST",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Implemented the ABI-preflighted, typed two-module host and demo. Node 22 focused runtime checks passed 5/5, and N4 mounted old React/DOM artifacts without a host defect; strict literal acceptance remains blocked by the separately assigned old-build GoScript UTF-8 text mismatch.",
+  "scope": {
+    "owned_paths": [
+      "compiled-modules/runtime/**",
+      "compiled-modules/demo/app.mjs",
+      "compiled-modules/demo/index.html",
+      "module-coordination/reports/E-HOST.md",
+      "module-coordination/receipts/E-HOST.json",
+      "module-coordination/rawlogs/E-HOST/**"
+    ],
+    "production_paths_modified": [
+      "compiled-modules/runtime/runtime.mjs",
+      "compiled-modules/runtime/runtime.test.mjs",
+      "compiled-modules/demo/app.mjs",
+      "compiled-modules/demo/index.html"
+    ],
+    "git_or_native_scheduler_changed": false
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "bytes": 5478,
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "sourcePins": {
+    "compiled-modules/runtime/runtime.mjs": {
+      "bytes": 39802,
+      "sha256": "aa84e7c443ae7a72178ef20c36af5859e37ee11627b8a65865fa6eb8e0b08f9b"
+    },
+    "compiled-modules/runtime/runtime.test.mjs": {
+      "bytes": 13776,
+      "sha256": "dc79a062e9f74f9f56dcc87e6043df333cbdf9fe785f59d1ddf80261f1db4df5"
+    },
+    "compiled-modules/demo/app.mjs": {
+      "bytes": 2839,
+      "sha256": "4d276bc6560b3f5deed8756889c09dbc933afb11a0ef81eb76f8e7598014faea"
+    },
+    "compiled-modules/demo/index.html": {
+      "bytes": 2278,
+      "sha256": "a3a0e2821c503dabdb67b5e4bcd50f386c2c3fd8d79ba54f76b562c4734bc9a8"
+    },
+    "compiled-modules/abi/validate.mjs": {
+      "bytes": 34000,
+      "sha256": "a392febf57509bc61c0f221e74429c0f6e268540ac2b675e931e5dc6396a16bd"
+    },
+    "compiled-modules/abi/test-fixtures.mjs": {
+      "bytes": 6834,
+      "sha256": "ecedbc119e5bf441f0f265b3b5a67398fad28a03c8065d3466261575d779bbc1"
+    },
+    "compiled-frontend/frontend/dom/renderer.mjs": {
+      "bytes": 16327,
+      "sha256": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54"
+    },
+    "compiled-frontend/frontend/react/renderer.mjs": {
+      "bytes": 14863,
+      "sha256": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4"
+    },
+    "compiled-frontend/frontend/react/bindings.mjs": {
+      "bytes": 8970,
+      "sha256": "29711c7dea81be8e71549984246c7efdb97e8163096f9cf49d6e04ab1917e02b"
+    },
+    "compiled-frontend/frontend/runtime/runtime.mjs": {
+      "bytes": 62312,
+      "sha256": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f"
+    },
+    "fixtures/compiled/moduleparent/app.go": {
+      "bytes": 3151,
+      "sha256": "1da626a1e56e34c9b08bb9d56e6d99f4cbf783439c25053cd61d83eca1830c37"
+    },
+    "fixtures/compiled/modulechild/app.go": {
+      "bytes": 2656,
+      "sha256": "68d462ac1ca616f05249392cbac894fbd954687441377e255944c84a74441265"
+    },
+    "module-coordination/CONTRACT.md": {
+      "bytes": 5478,
+      "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+    },
+    "module-coordination/rawlogs/E-COMPILER/stable-builds/index.json": {
+      "bytes": 9243,
+      "sha256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022"
+    }
+  },
+  "focusedTests": {
+    "nodeVersion": "v22.23.4",
+    "commands": [
+      {
+        "argv": [
+          "/tmp/gondola-node22/node_modules/node/bin/node",
+          "--check",
+          "compiled-modules/runtime/runtime.mjs"
+        ],
+        "exitCode": 0
+      },
+      {
+        "argv": [
+          "/tmp/gondola-node22/node_modules/node/bin/node",
+          "--test",
+          "compiled-modules/runtime/runtime.test.mjs"
+        ],
+        "exitCode": 0
+      },
+      {
+        "argv": [
+          "/tmp/gondola-node22/node_modules/node/bin/node",
+          "--check",
+          "compiled-modules/demo/app.mjs"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "runtimeTests": {
+      "passed": 5,
+      "failed": 0
+    }
+  },
+  "priorBuildBrowserEvidence": {
+    "buildIndex": {
+      "path": "module-coordination/rawlogs/E-COMPILER/stable-builds/index.json",
+      "sha256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022"
+    },
+    "captureMetadata": {
+      "artifacts": [
+        {
+          "path": "/tmp/module-pair-harness-smoke.browser.json",
+          "bytes": 5000597,
+          "sha256": "c2e43437fcc45c5ba6bee960b4b86c47d93ca2709d578f8bfced030f6d314655"
+        },
+        {
+          "path": "/tmp/module-pair-seed1.browser.json",
+          "bytes": 14171421,
+          "sha256": "07646a3bf626d6f0f8573b65d63cc1f6344a25c2dcbeb9957c668cd3a35fca58"
+        }
+      ],
+      "status": "prior compiled artifacts; UTF-8 literal check red, not current source acceptance"
+    },
+    "strictLiteralAcceptance": false,
+    "failure": "Old compiled parent View text encoded Step − as Step â; N1/N2 UTF-8 producer repair is separately pending. This is not current-source end-to-end acceptance."
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-HOST",
+    "index": "module-coordination/rawlogs/E-HOST/index.json",
+    "indexBytes": 703,
+    "indexSHA256": "3981b8b0499dc976b5f8ff1e42e6b2e946e37dd69aed6185d280c1e0d31e96b6"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-HOST.md",
+    "bytes": 4688,
+    "sha256": "89eb67ef239955163a4d49eb5d1fd18ea743b5980022b17284d74b8d91dbf3cb"
+  },
+  "verification": {
+    "rendererHarnessHostDefectsReported": 0,
+    "latestBuiltProducerAcceptance": "pending separate UTF-8 rebuild",
+    "focusedCommandsAllExitZero": true
+  }
+}

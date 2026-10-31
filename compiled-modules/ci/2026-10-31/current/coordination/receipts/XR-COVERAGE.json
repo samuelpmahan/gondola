@@ -1,0 +1,130 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-COVERAGE",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "The sealed coverage amendment matches its source inventory and makes only the requested test-closure changes. The runner now pins and discovers the archive helper test, and both workflow filters trigger on it. All three tests discovered under compiled-capabilities pass (22/22); syntax, actionlint and mechanical checks pass. No full profile was run.",
+  "reviewedPacket": {
+    "job_id": "E-COVERAGE",
+    "worker": "N2",
+    "report": {
+      "path": "module-coordination/reports/E-COVERAGE.md",
+      "bytes": 1723,
+      "sha256": "40a290c0094be16159e93169b5fe941cfdf05f9da04aa381b3bf8c90d3ae4f1c"
+    },
+    "receipt": {
+      "path": "module-coordination/receipts/E-COVERAGE.json",
+      "bytes": 6048,
+      "sha256": "b87912fbc03a0664454a46e09d3310085476047ce446abd2fec487b3a7bf6a55"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-COVERAGE/seal.json",
+      "bytes": 179,
+      "sha256": "ab08558b84599c8430cb742c88345a518c6a4efa8da9b578c887a78a87a79b47"
+    },
+    "sourceInventory": {
+      "path": "module-coordination/seals/E-COVERAGE/SOURCE-INVENTORY.json",
+      "bytes": 321,
+      "sha256": "1718eced516a1bd61ab6f19b74c65ebeb4c5fe696efebba7637876216aa8e5d7"
+    },
+    "reportAndReceiptMatchSeal": true,
+    "sourceFilesMatched": 2,
+    "sourceFileCount": 2
+  },
+  "sourcePins": [
+    {
+      "path": "compiled-modules/run.mjs",
+      "bytes": 42241,
+      "sha256": "369804cb17f57f21bafa591851aba85b2aac8b8a33759049fe83b1d85c65f177",
+      "currentMatchesSeal": true
+    },
+    {
+      "path": ".github/workflows/gobi-compiled-modules.yml",
+      "bytes": 5362,
+      "sha256": "c4917e7385ce02941d045e5cc420497010aeb6bed4f3cb6d7cc69393ae674fb1",
+      "currentMatchesSeal": true
+    },
+    {
+      "path": "compiled-capabilities/archive-helper.test.mjs",
+      "bytes": 17475,
+      "sha256": "1697da7cbbe9927d75a6907feaba9dc0e4212e8f3e714dca2131715ad23466db",
+      "role": "existing test input; explicitly pinned by runner"
+    }
+  ],
+  "checks": {
+    "diffAgainstPriorSealedSource": {
+      "path": "module-coordination/rawlogs/XR-COVERAGE/attempt-001-readonly/sealed-source-diff.patch",
+      "bytes": 1674,
+      "sha256": "bbb4eda58190c15a407ee304a120503d3c78b8ed44446b58e9f9caf7e3f4511e",
+      "onlyRequestedChanges": true
+    },
+    "discoveredTests": [
+      "compiled-capabilities/archive-helper.test.mjs",
+      "compiled-capabilities/oracle/literal-oracle.test.mjs",
+      "compiled-capabilities/runner-acceptance.test.mjs"
+    ],
+    "suite": {
+      "node": "v22.23.4",
+      "exitCode": 0,
+      "tests": 22,
+      "passed": 22,
+      "failed": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/XR-COVERAGE/attempt-001-readonly/compiled-capabilities-test-suite.stdout.log",
+        "bytes": 5962,
+        "sha256": "e7041ea73ab0325a3e17789f1d876f4f6561cace244bd6c5c167d305391c9dcc"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/XR-COVERAGE/attempt-001-readonly/compiled-capabilities-test-suite.stderr.log",
+        "bytes": 174,
+        "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+      }
+    },
+    "nodeSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/run.mjs",
+      "exitCode": 0,
+      "stderrSHA256": "357d92a12b89b0b80a0734e8b5802fc8f95280beb9778c6110550b880f7b5e12"
+    },
+    "actionlint": {
+      "version": "v1.7.12",
+      "command": "/tmp/portable-tools/actionlint .github/workflows/gobi-compiled-modules.yml",
+      "exitCode": 0
+    },
+    "mechanicalChecks": {
+      "exitCode": 0,
+      "sourcePinExactlyOnce": true,
+      "capabilitiesDiscoveryRootExactlyOnce": true,
+      "singleFocusedNodeInvocation": true,
+      "pushAndPullRequestFiltersExactlyOnce": true
+    },
+    "profileGatesUnchanged": {
+      "fixedEvents": 24,
+      "fixedGoUpdates": 16,
+      "fixedStateCheckpoints": 17,
+      "seeds": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "eventsPerSeed": 40,
+      "browserProfiles": 12,
+      "minimumMutationControls": 5
+    },
+    "fullProfileRun": false
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-COVERAGE",
+    "index": "module-coordination/rawlogs/XR-COVERAGE/index.json",
+    "indexBytes": 4747,
+    "indexSHA256": "0e71b049439994e8d2c54b8386bd8570423fda9e30dadc18132e48edb73a3c78"
+  },
+  "report": {
+    "path": "module-coordination/reports/XR-COVERAGE.md",
+    "bytes": 2724,
+    "sha256": "19cd1273f3c1809e3fb9ce9681e361b9c7db3dfb814e80b24a7231a951c2d819"
+  },
+  "limits": [
+    "Read-only review; no source, Git or scheduler edits.",
+    "No full producer/profile acceptance run."
+  ]
+}

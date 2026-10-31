@@ -1,0 +1,146 @@
+{
+  "schema": "gobi.module-coordination-receipt/v1",
+  "job_id": "E-COVERAGE",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Added the archive-helper test to the compiled-modules producer source pins and its existing focused Node test discovery, and added the test path to push and pull_request CI filters. The targeted seven tests, runner syntax, actionlint and mechanical path checks passed; no full profile was launched.",
+  "readOnly": false,
+  "productionFilesModified": true,
+  "testsOrBuildsRun": true,
+  "scope": {
+    "ownedPaths": [
+      "compiled-modules/run.mjs",
+      ".github/workflows/gobi-compiled-modules.yml",
+      "module-coordination/reports/E-COVERAGE.md",
+      "module-coordination/receipts/E-COVERAGE.json",
+      "module-coordination/rawlogs/E-COVERAGE/**"
+    ],
+    "productionPathsModified": [
+      "compiled-modules/run.mjs",
+      ".github/workflows/gobi-compiled-modules.yml"
+    ],
+    "noOtherProductionPathsModifiedByThisPacket": true,
+    "changes": [
+      "sourceFiles pins compiled-capabilities/archive-helper.test.mjs exactly once",
+      "discoverTests scans compiled-capabilities as an additional test root",
+      "existing focused node --test invocation remains singular",
+      "push and pull_request path filters both include compiled-capabilities/archive-helper.test.mjs"
+    ]
+  },
+  "sourcePins": [
+    {
+      "path": "gondola/compiled-modules/run.mjs",
+      "bytes": 42241,
+      "sha256": "369804cb17f57f21bafa591851aba85b2aac8b8a33759049fe83b1d85c65f177"
+    },
+    {
+      "path": "gondola/.github/workflows/gobi-compiled-modules.yml",
+      "bytes": 5362,
+      "sha256": "c4917e7385ce02941d045e5cc420497010aeb6bed4f3cb6d7cc69393ae674fb1"
+    },
+    {
+      "path": "gondola/compiled-capabilities/archive-helper.test.mjs",
+      "bytes": 17475,
+      "sha256": "1697da7cbbe9927d75a6907feaba9dc0e4212e8f3e714dca2131715ad23466db"
+    }
+  ],
+  "verification": {
+    "node": "v22.23.4",
+    "actionlint": {
+      "command": "/tmp/portable-tools/actionlint .github/workflows/gobi-compiled-modules.yml",
+      "exitCode": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/actionlint.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/actionlint.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/actionlint.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "runSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/run.mjs",
+      "exitCode": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/run-syntax.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/run-syntax.stderr.log",
+        "bytes": 174,
+        "sha256": "119993fee89521c0aae7896b4a56857f0721429ac7a7a287dd47c5031fa4b6fd"
+      },
+      "exitCodeFile": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/run-syntax.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "archiveHelperTest": {
+      "command": "GOBI_GO_BIN=/tmp/gondola-go/go/bin/go GOBI_GO_EXECUTABLE=/tmp/gondola-go/go/bin/go /tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/archive-helper-test.stdout.log",
+        "bytes": 1918,
+        "sha256": "ad676ed07cbdf26312b17f070d4d28a8d07fdc4a97bebd50d426e3ee1b62e2ac"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/archive-helper-test.stderr.log",
+        "bytes": 175,
+        "sha256": "c6834112bf065716f10e22a08aeaee0ad8268294002115f63678f9bab270c158"
+      },
+      "exitCodeFile": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/archive-helper-test.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      "stderrNote": "Node emitted the experimental EnvHttpProxyAgent warning; the test process exited 0."
+    },
+    "mechanicalCheck": {
+      "command": "python3 ../module-coordination/rawlogs/E-COVERAGE/mechanical-check.py",
+      "exitCode": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/mechanical-check.stdout.log",
+        "bytes": 140,
+        "sha256": "e87c6b178fdf4cf6606437fc64f5e32e497e9a7344c4cbac0d1c147657b4c4d0"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/mechanical-check.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "module-coordination/rawlogs/E-COVERAGE/mechanical-check.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      "checks": [
+        "exactly one sourceFiles pin",
+        "compiled-capabilities discovered exactly once",
+        "one focused Node test invocation",
+        "both CI event filters contain test path exactly once"
+      ]
+    },
+    "fullProfileLaunched": false,
+    "rawIndex": {
+      "path": "module-coordination/rawlogs/E-COVERAGE/index.json",
+      "bytes": 4012,
+      "sha256": "851be4df73b2548171079763fd098ee7138a5b04578ec6adc48c155ce9a13803"
+    }
+  },
+  "report": {
+    "path": "module-coordination/reports/E-COVERAGE.md",
+    "bytes": 1723,
+    "sha256": "40a290c0094be16159e93169b5fe941cfdf05f9da04aa381b3bf8c90d3ae4f1c"
+  }
+}

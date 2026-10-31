@@ -1,0 +1,170 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-CLEANUP",
+  "worker": "N6",
+  "decision": "accepted",
+  "summary": "Independent review accepts the sealed renderer cleanup repair. Initial and swap capability failures dispose returned renderer candidates exactly once, cleanup exceptions do not mask the original validation error, and failed swaps preserve the live roots, state, call counts, and old callback. The exact source/test pins match; the focused suite passes 7/7.",
+  "reviewed_job": "E-CLEANUP",
+  "reviewed_worker": "N5",
+  "reviewedArtifacts": {
+    "authorReport": {
+      "path": "reports/E-CLEANUP.md",
+      "bytes": 2419,
+      "sha256": "539f4d3641e646fd6bb8f648ef834a65f801683094b42753c26caa45f56f73a9"
+    },
+    "sealedReport": {
+      "path": "seals/E-CLEANUP/E-CLEANUP.md",
+      "bytes": 2419,
+      "sha256": "539f4d3641e646fd6bb8f648ef834a65f801683094b42753c26caa45f56f73a9"
+    },
+    "authorReceipt": {
+      "path": "receipts/E-CLEANUP.json",
+      "bytes": 3706,
+      "sha256": "7224c43d99d8847c790197d5446578a43a92481c8fff608b26f5f66ca583bcd3"
+    },
+    "sealedReceipt": {
+      "path": "seals/E-CLEANUP/E-CLEANUP.json",
+      "bytes": 3706,
+      "sha256": "7224c43d99d8847c790197d5446578a43a92481c8fff608b26f5f66ca583bcd3"
+    },
+    "sourceInventory": {
+      "path": "seals/E-CLEANUP/SOURCE-INVENTORY.json",
+      "bytes": 332,
+      "sha256": "fe656ac18a7c032a6e7b3e6a05dc2db4981cced78e95523430736731b6d92fac"
+    },
+    "seal": {
+      "path": "seals/E-CLEANUP/seal.json",
+      "bytes": 177,
+      "sha256": "f23ad15d00666b4ae72192039d334d96a84cb9360bbb5122b72e6d89d7109e80"
+    },
+    "rawlogIndex": {
+      "path": "rawlogs/E-CLEANUP/index.json",
+      "bytes": 6708,
+      "sha256": "a2b7cd571db320e6c449b7ac27359cdef8bca69f9e0c17dc872c407f064ef25d"
+    },
+    "rawlogCount": 29
+  },
+  "sourcePins": {
+    "compiled-modules/runtime/runtime.mjs": {
+      "bytes": 39892,
+      "sha256": "82aa27d2bad433ce945487c38aa3afcb5848655bd39cf62664aa8e94cb5eda42",
+      "matchesAuthorAfterPin": true
+    },
+    "compiled-modules/runtime/runtime.test.mjs": {
+      "bytes": 17192,
+      "sha256": "86046cacbac8802caaec8ae7b8982108a053ebb45a171305e619955046e2ab1d",
+      "matchesAuthorAfterPin": true
+    }
+  },
+  "verification": {
+    "authorRawlogPinsVerified": 29,
+    "preFixRed": {
+      "passed": 4,
+      "failed": 3,
+      "exitCode": 1,
+      "failureNames": [
+        "renderer capability mismatch fails before Go roles and leaves outer DOM untouched",
+        "initial capability failure cleans both rejected and previously accepted candidates",
+        "failed swap cleans rejected candidate, preserves the live pair, and keeps the capability error"
+      ],
+      "stdoutSHA256": "7fba1c2df38e8d96cfce7a338024e2e372a6c18f8894fd78b77a44180c930b57"
+    },
+    "independentFocusedTests": {
+      "node": "v22.23.4",
+      "command": [
+        "/tmp/gondola-node22/node_modules/node/bin/node",
+        "--test",
+        "compiled-modules/runtime/runtime.test.mjs"
+      ],
+      "passed": 7,
+      "failed": 0,
+      "exitCode": 0,
+      "stdout": {
+        "path": "rawlogs/XR-CLEANUP/runtime-tests.stdout.log",
+        "bytes": 1916,
+        "sha256": "cae5c878f752aea2a60cd949da6d6588c4cb06e1e6356e3d4e1a98ae434c3d27"
+      },
+      "stderr": {
+        "path": "rawlogs/XR-CLEANUP/runtime-tests.stderr.log",
+        "bytes": 174,
+        "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+      }
+    },
+    "factoryResultRetainedBeforeCapabilityCheck": true,
+    "candidateCleanup": {
+      "initialRejectedParentUnmountsOnce": true,
+      "initialAcceptedParentThenRejectedChildBothUnmountOnce": true,
+      "swapRejectedCandidateUnmountsOnce": true,
+      "cleanupThrowsOriginalCapabilityErrorPreserved": true
+    },
+    "failedSwapPreservesLivePair": {
+      "oldDOMRootsSame": true,
+      "parentChildStateSame": true,
+      "goCallCountsSame": true,
+      "oldCallbackStillAccepted": true
+    },
+    "n4MountedProfileCapture": {
+      "classification": "read-only existing capture; not rerun by this review",
+      "checkSummary": {
+        "path": "rawlogs/XR-CLEANUP/n4-attempt-007-check.json",
+        "bytes": 1641,
+        "sha256": "8f34b3aee36b39e9f6ba6deeac50dd7df2b1f89ac1330d340e6544505a535174"
+      },
+      "runMetadata": {
+        "path": "rawlogs/XR-CLEANUP/n4-attempt-007-run.json",
+        "bytes": 5693,
+        "sha256": "d8cd61e6e5c70c07ad3eaa56ced25c168dcb9325b0665c1d12d35a7dc26dd4d7"
+      },
+      "status": "matched",
+      "browserProfileCount": 12,
+      "browserProfiles": [
+        "react",
+        "dom",
+        "swap",
+        "seed-20261031-react",
+        "seed-20261031-dom",
+        "seed-20261031-swap",
+        "seed-20261032-react",
+        "seed-20261032-dom",
+        "seed-20261032-swap",
+        "seed-20261033-react",
+        "seed-20261033-dom",
+        "seed-20261033-swap"
+      ],
+      "mutationControlsDetected": 6,
+      "pageErrors": [],
+      "fixedEventCount": 24,
+      "fixedGoUpdates": 16,
+      "fixedStateCheckpoints": 17
+    }
+  },
+  "findings": {
+    "returnedFactoryObjectReachableByCleanupOnCapabilityFailure": true,
+    "initialParentRejectedCandidateCleanedOnce": true,
+    "acceptedParentAndRejectedChildCandidatesBothCleanedOnce": true,
+    "swapRejectedCandidateCleanedOnce": true,
+    "cleanupErrorDoesNotMaskOriginalCapabilityError": true,
+    "failedSwapLeavesLiveDOMStateAndCallbackUntouched": true,
+    "redRunExposesThreeCleanupFailures": true,
+    "currentFocusedSuitePasses7Of7": true
+  },
+  "limits": [
+    "This review did not rerun the browser matrix; the cited N4 capture is existing read-only evidence.",
+    "No claim beyond the tested renderer candidate rejection and cleanup paths.",
+    "No production source, Git state, or scheduler state was changed."
+  ],
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-CLEANUP",
+    "index": {
+      "path": "rawlogs/XR-CLEANUP/index.json",
+      "bytes": 971,
+      "sha256": "8bc093af805b8205b8f00a5ae9d3ecfcca01720b3ba8eb272d7e0395e2b2ab3c"
+    },
+    "fileCount": 6
+  },
+  "report": {
+    "path": "reports/XR-CLEANUP.md",
+    "bytes": 4122,
+    "sha256": "db2a64e6b0842c50c295bbb6fa7e4cb82f036e607950f4ab5c88c8c2f5a0d7ab"
+  }
+}

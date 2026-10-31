@@ -1,0 +1,456 @@
+{
+  "schema": "gobi.module-coordination-receipt/v1",
+  "job_id": "E-NUMERIC",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Added all-or-nothing child Add guards at the MAX_SAFE publication boundary while preserving counter.Update reuse and Reset behavior. Test-first Go regressions, native fixture tests, fresh React/DOM GoScript builds, and six-case compiled boundary probes passed.",
+  "readOnly": false,
+  "sourceCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+  "productionFilesModified": true,
+  "testsOrBuildsRun": true,
+  "report": {
+    "path": "module-coordination/reports/E-NUMERIC.md",
+    "bytes": 4520,
+    "sha256": "66d6452fee1406cf3fb43a846ef43178980c9ed1c21d618c90b2cdf852fefbe9"
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "bytes": 5478,
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "rulings": {
+    "path": "module-coordination/RULINGS.md",
+    "bytes": 2583,
+    "sha256": "15612273fa54d60ae92a0175231b369abb6bc9b1d521620f954fe5d0e48616a2"
+  },
+  "sourcePins": [
+    {
+      "path": "gondola/fixtures/compiled/modulechild/app.go",
+      "bytes": 2656,
+      "sha256": "68d462ac1ca616f05249392cbac894fbd954687441377e255944c84a74441265"
+    },
+    {
+      "path": "gondola/fixtures/compiled/modulechild/app_test.go",
+      "bytes": 5749,
+      "sha256": "2e4d1234fcf9973c96a73c50a450e796cf43ca328a7fb7cbd20c69892876b6c1"
+    },
+    {
+      "path": "gondola/fixtures/compiled/modulewire/modulewire.go",
+      "bytes": 278,
+      "sha256": "9d29a10bdf9069852d861a38ede52f11b40a650da057dbd85070bb7da5c4561f"
+    },
+    {
+      "path": "gondola/fixtures/compiled/moduleparent/app.go",
+      "bytes": 3151,
+      "sha256": "1da626a1e56e34c9b08bb9d56e6d99f4cbf783439c25053cd61d83eca1830c37"
+    },
+    {
+      "path": "gondola/counter/counter.go",
+      "bytes": 827,
+      "sha256": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e"
+    },
+    {
+      "path": "gondola/compiled-frontend/build/pipeline.go",
+      "bytes": 40718,
+      "sha256": "78463101a450aec88cf2ecf8b7182fe2da432aab99885edd6304aeccab264c16"
+    },
+    {
+      "path": "gondola/moduleabi/descriptor.go",
+      "bytes": 37686,
+      "sha256": "d255480f6a10792e1f7f4e6d2204014f128fbb764cd98be8bd23797016b51ced"
+    },
+    {
+      "path": "gondola/compiled-frontend/go.mod",
+      "bytes": 528,
+      "sha256": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24"
+    },
+    {
+      "path": "gondola/compiled-frontend/go.sum",
+      "bytes": 1831,
+      "sha256": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b"
+    }
+  ],
+  "generatedOutputPins": [
+    {
+      "build": "react-modulechild",
+      "role": "manifest",
+      "path": "/tmp/gobi-module-gate1-numeric-react-modulechild-20261031/buildmanifest.json",
+      "bytes": 4962,
+      "sha256": "48cb8aa9d8b529b2a0dbcc3c71276c4870f718efcc3cec9c27ee58c6e5a72a97"
+    },
+    {
+      "build": "react-modulechild",
+      "role": "appIR",
+      "path": "/tmp/gobi-module-gate1-numeric-react-modulechild-20261031/apps/modulechild-7f78e25dc32b/app-ir.json",
+      "bytes": 7865,
+      "sha256": "97ddf63063a99623feba5b7fb793a3e744300c050064a5ff20eff3152b0d6737"
+    },
+    {
+      "build": "react-modulechild",
+      "role": "module",
+      "path": "/tmp/gobi-module-gate1-numeric-react-modulechild-20261031/apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+      "bytes": 505983,
+      "sha256": "ee3a516886651e5711d5ec3fe0488aeae769838376ea456a993449e34fe2d347"
+    },
+    {
+      "build": "react-modulechild",
+      "role": "encoder",
+      "path": "/tmp/gobi-module-gate1-numeric-react-modulechild-20261031/apps/modulechild-7f78e25dc32b/encoder.mjs",
+      "bytes": 15213,
+      "sha256": "d44ebb9284ee72e8c8e7b943726547a112c7a08f3cb50fca94cb39716cd4190f"
+    },
+    {
+      "build": "react-modulechild",
+      "role": "components",
+      "path": "/tmp/gobi-module-gate1-numeric-react-modulechild-20261031/apps/modulechild-7f78e25dc32b/components.gen.mjs",
+      "bytes": 8337,
+      "sha256": "8860db30174247163a6c856ac9ec07acf0f4177fba1c4a0bd2c7805ac2d958db"
+    },
+    {
+      "build": "react-modulechild",
+      "role": "moduleABI",
+      "path": "/tmp/gobi-module-gate1-numeric-react-modulechild-20261031/apps/modulechild-7f78e25dc32b/module-abi.json",
+      "bytes": 9037,
+      "sha256": "0eeb2e0f241f59082ddb29c212206d2780ed5ca35896300050e801785dadb230"
+    },
+    {
+      "build": "dom-modulechild",
+      "role": "manifest",
+      "path": "/tmp/gobi-module-gate1-numeric-dom-modulechild-20261031/buildmanifest.json",
+      "bytes": 4960,
+      "sha256": "8b1d8d74a9faa802b08e488b660cc00d2aae2b2d8bd59065900afa8295bdcf7c"
+    },
+    {
+      "build": "dom-modulechild",
+      "role": "appIR",
+      "path": "/tmp/gobi-module-gate1-numeric-dom-modulechild-20261031/apps/modulechild-7f78e25dc32b/app-ir.json",
+      "bytes": 7865,
+      "sha256": "97ddf63063a99623feba5b7fb793a3e744300c050064a5ff20eff3152b0d6737"
+    },
+    {
+      "build": "dom-modulechild",
+      "role": "module",
+      "path": "/tmp/gobi-module-gate1-numeric-dom-modulechild-20261031/apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+      "bytes": 506014,
+      "sha256": "e540b6445642fc5de1086ffcbecfa41f0dd3d41709dafadd2bb6af7a94f05662"
+    },
+    {
+      "build": "dom-modulechild",
+      "role": "encoder",
+      "path": "/tmp/gobi-module-gate1-numeric-dom-modulechild-20261031/apps/modulechild-7f78e25dc32b/encoder.mjs",
+      "bytes": 15213,
+      "sha256": "d44ebb9284ee72e8c8e7b943726547a112c7a08f3cb50fca94cb39716cd4190f"
+    },
+    {
+      "build": "dom-modulechild",
+      "role": "components",
+      "path": "/tmp/gobi-module-gate1-numeric-dom-modulechild-20261031/apps/modulechild-7f78e25dc32b/components.gen.mjs",
+      "bytes": 8337,
+      "sha256": "8860db30174247163a6c856ac9ec07acf0f4177fba1c4a0bd2c7805ac2d958db"
+    },
+    {
+      "build": "dom-modulechild",
+      "role": "moduleABI",
+      "path": "/tmp/gobi-module-gate1-numeric-dom-modulechild-20261031/apps/modulechild-7f78e25dc32b/module-abi.json",
+      "bytes": 9037,
+      "sha256": "ed0f4ea2b378e2a84ed632a8b8fc3d912c17d727571b5e989b64a968e8ab4519"
+    },
+    {
+      "build": "react-moduleparent-frozen",
+      "role": "module",
+      "path": "/tmp/gobi-module-gate1-react-moduleparent-20261031/apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+      "bytes": 502779,
+      "sha256": "fbc75cd6d8e25f41a8195e534bc2435fa38edfbe6f34ea3c669ae1ca696362bf"
+    },
+    {
+      "build": "dom-moduleparent-frozen",
+      "role": "module",
+      "path": "/tmp/gobi-module-gate1-dom-moduleparent-20261031/apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+      "bytes": 502748,
+      "sha256": "8ce52f48df624a41e21d74edd022455ee0521e8a1f9b838fac2612d244e27381"
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/01-child-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/01-child-tests.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/01-child-tests.stdout.log",
+      "bytes": 74,
+      "sha256": "ce9fcbb4307fd7ba9ae5d4b444b0615cf2d1fc5d4b655075339d950533737297"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/02-go-pair-tests.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/02-go-pair-tests.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/02-go-pair-tests.stdout.log",
+      "bytes": 294,
+      "sha256": "6eba7c4889839b71441bd7024ea45d5c03df4fea18b4b1e4167fac07c7e9a335"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/03-native-replay.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/03-native-replay.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/03-native-replay.stdout.log",
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/build-index.json",
+      "bytes": 5692,
+      "sha256": "7f279786637db87390d3cf6d7bf2f0dcd0ff0eed8ab6f37bd08eef66371a929a"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/compiled-boundary-probe.mjs",
+      "bytes": 1815,
+      "sha256": "efe630ae22a3842f709279b1c1fb11dd0f30972eed1c09d0a2fe0db26e6593d8"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/compiler-go-version.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/compiler-go-version.stdout.log",
+      "bytes": 32,
+      "sha256": "5707bf75dd54b4fdd5ac209444d48c9c4179ebf8510f80e2f7293dfbedc1012b"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-compiled-boundary.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-compiled-boundary.stderr.log",
+      "bytes": 175,
+      "sha256": "c6834112bf065716f10e22a08aeaee0ad8268294002115f63678f9bab270c158"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-compiled-boundary.stdout.log",
+      "bytes": 39,
+      "sha256": "274e77dff6ab2dbdd46e57683ce6782336f325eb95c7bc5a4e2c234db04c6e50"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-modulechild.build-result.json",
+      "bytes": 18328,
+      "sha256": "2b41f3e0be2c590a395eb1e3ca20665a81f73c3465feb498313ae516619baef5"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-modulechild.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-modulechild.request.json",
+      "bytes": 258,
+      "sha256": "8404b774875993258e2cb55e1043175a22c7367144bc586f3b1835212a6e7813"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/dom-modulechild.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/failures/01-gofmt-path.log",
+      "bytes": 183,
+      "sha256": "2ff2589e6d05aac605ab448440504411457a4a4e0ab7611c4090f1853d85df03"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/failures/02-build-evidence-collector.log",
+      "bytes": 352,
+      "sha256": "39e735fad1cf904367e9a4230d37782c33bfea79e284ab3165400417c53384ad"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/native-test-index.json",
+      "bytes": 1857,
+      "sha256": "989a614a570de39865b6758553f3e5da8f21189ae3a6f7c12923773122cffa78"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/native-trace-after-fix.json",
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/node-boundary-index.json",
+      "bytes": 2147,
+      "sha256": "7b953fc96e862d989a3e6a6caa2ee633b7efa38206dbafcf3cef06f123dcd228"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-compiled-boundary.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-compiled-boundary.stderr.log",
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-compiled-boundary.stdout.log",
+      "bytes": 41,
+      "sha256": "f94647da9a05ee5b0dd75853f74e6349b26bb03113ddce79beb84e38299ad14f"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-modulechild.build-result.json",
+      "bytes": 18328,
+      "sha256": "6ed1af1d74f479c1e9316982f0656859b829f9ffa143eb073a1b34fc0b57ad68"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-modulechild.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-modulechild.request.json",
+      "bytes": 262,
+      "sha256": "36e61c591bfcbe2916df545afade5974428032b32ca476784b31d92a3ad9d478"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/react-modulechild.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/test-red.command.txt",
+      "bytes": 225,
+      "sha256": "6a3b43c50095a0666c41575b6bdb9445ab7eb476fd1699f000f9cd2b64d317fa"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/test-red.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/test-red.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-NUMERIC/test-red.stdout.log",
+      "bytes": 731,
+      "sha256": "82560e86c0598bcecd741a363a48953499260b3b71efa914bde61364397f9ba5"
+    }
+  ],
+  "reviewedArtifactPins": [
+    {
+      "path": "module-coordination/CONTRACT.md",
+      "bytes": 5478,
+      "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+    },
+    {
+      "path": "module-coordination/RULINGS.md",
+      "bytes": 2583,
+      "sha256": "15612273fa54d60ae92a0175231b369abb6bc9b1d521620f954fe5d0e48616a2"
+    },
+    {
+      "path": "module-coordination/reports/XR-GO.md",
+      "bytes": 6016,
+      "sha256": "ed38ec74f2bb1dc6872d1178d223d4b2af7abfd419ca9fffaeaba6905acf3fb7"
+    },
+    {
+      "path": "module-coordination/receipts/XR-GO.json",
+      "bytes": 10878,
+      "sha256": "4bc2dd8e303062c42b660078c3eda917167bec1587d8c8230d7dd89657fc1a78"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/E-GO.md",
+      "bytes": 5839,
+      "sha256": "8615a4e96d02f6265222fc67473b3ed97004fa3f158f49fdade44d94eb39fb24"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/E-GO.json",
+      "bytes": 4807,
+      "sha256": "f1b2cb8df5d69acd36c61061061e2110a1343c6ba8d229db0c95f555f567b5aa"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/SOURCE-INVENTORY.json",
+      "bytes": 1652,
+      "sha256": "a37fbc65661d3a65a458e4d843c1716627ecca0be96c61da04bdab67e63418a8"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/seal.json",
+      "bytes": 167,
+      "sha256": "d6c8c60c64d6e40ff78f4600e4f76644a32a3846ebcd83da817358c4522256ef"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-COMPILER/stable-builds/index.json",
+      "bytes": 9243,
+      "sha256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/index.json",
+      "bytes": 6555,
+      "sha256": "a58f92f9339558c45e0a44a908265f5735449396c940ad4ebcc980f6087b690d"
+    }
+  ],
+  "verification": {
+    "go": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go version go1.27.3 linux/amd64",
+    "node": "v22.23.4",
+    "testFirstRed": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./fixtures/compiled/modulechild -run Test(AddAtSafePublicationBoundaryIsAtomicAndAcceptedByParent|ResetRemainsUsableAtSafePublicationBoundary)",
+      "exit": 1,
+      "stdoutSHA256": "82560e86c0598bcecd741a363a48953499260b3b71efa914bde61364397f9ba5"
+    },
+    "nativeTests": {
+      "path": "module-coordination/rawlogs/E-NUMERIC/native-test-index.json",
+      "bytes": 1857,
+      "sha256": "989a614a570de39865b6758553f3e5da8f21189ae3a6f7c12923773122cffa78"
+    },
+    "compilerBuilds": {
+      "path": "module-coordination/rawlogs/E-NUMERIC/build-index.json",
+      "bytes": 5692,
+      "sha256": "7f279786637db87390d3cf6d7bf2f0dcd0ff0eed8ab6f37bd08eef66371a929a"
+    },
+    "compiledNodeBoundary": {
+      "path": "module-coordination/rawlogs/E-NUMERIC/node-boundary-index.json",
+      "bytes": 2147,
+      "sha256": "7b953fc96e862d989a3e6a6caa2ee633b7efa38206dbafcf3cef06f123dcd228"
+    },
+    "nativeReplayUnchanged": {
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a",
+      "bytes": 208651
+    },
+    "postFixBoundaryAssertions": {
+      "profiles": [
+        "react",
+        "dom"
+      ],
+      "casesPerProfile": 6,
+      "passedPerProfile": 6,
+      "maxCount": 9007199254740991
+    }
+  },
+  "limits": [
+    "Boundary states are seeded in focused tests; no trillions-operation replay was attempted.",
+    "This packet verifies Go reducer behavior and the actual compiled module boundary probe, not browser-mounted pair acceptance.",
+    "Only the frozen step-1/2/3 counter fixture is covered; no general arbitrary-Go numeric claim."
+  ],
+  "noGitMutation": true,
+  "rawEvidenceIndex": {
+    "path": "module-coordination/rawlogs/E-NUMERIC/index.json",
+    "bytes": 14867,
+    "sha256": "3f4a6476a1abd38f46b47184e029424e41afc78f3456074e2f2475e7bee6d8fc"
+  }
+}

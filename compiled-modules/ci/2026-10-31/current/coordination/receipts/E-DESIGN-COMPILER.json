@@ -1,0 +1,113 @@
+{
+  "schema": "gobi.module-coordination-receipt/v1",
+  "job_id": "E-DESIGN-COMPILER",
+  "worker": "N2",
+  "outcome": "confirmed_reuse",
+  "summary": "Read-only compiler recon confirms separate Build invocations can produce independent parent/child modules using the existing GoScript/AppIR pipeline; a bounded analyzer role extension, separate primitive bridge export/module ABI manifest, and N3 pair adapter are required while preserving the legacy three-role gobiCompiled object.",
+  "readOnly": true,
+  "sourceCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+  "productionFilesModified": false,
+  "testsOrBuildsRun": false,
+  "report": {
+    "path": "module-coordination/reports/E-DESIGN-COMPILER.md",
+    "bytes": 8445,
+    "sha256": "902de7042403a75c04baf85e568d8983f6b2fe4f4d603135d8ab241db32a2480"
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "bytes": 5478,
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "sourcePins": [
+    {
+      "path": "gondola/compiled-frontend/CONTRACT.md",
+      "sha256": "97246c9051d57341b6c92c0516e15e4282f9c709fab4189af7279a32169e3038",
+      "bytes": 16747
+    },
+    {
+      "path": "gondola/compiled-frontend/analyze/analyze.go",
+      "sha256": "9e39ccd6cbe6b68dd5b42af9abf50ee2dc3fe926b4ac08f4f76fafbe59a60f52",
+      "bytes": 39143
+    },
+    {
+      "path": "gondola/compiled-frontend/analyze/types.go",
+      "sha256": "50562366a1ec36c2c3b1ce19c1919ce451500f02cf90e80cc1bcbf82a05afbbf",
+      "bytes": 6949
+    },
+    {
+      "path": "gondola/compiled-frontend/analyze/load.go",
+      "sha256": "36d4218e5bac025c644ce19bf5bd7af4aa41b7429265a0f75030e794ea32dc4f",
+      "bytes": 15368
+    },
+    {
+      "path": "gondola/compiled-frontend/build/pipeline.go",
+      "sha256": "1c3b98f253f011b00a01460eb7b1611d05fb27792e775bd2cd57ab17a5c79309",
+      "bytes": 31422
+    },
+    {
+      "path": "gondola/compiled-frontend/build/request.go",
+      "sha256": "7d288b0cd06e480a7dea0098ece974432f5e9e89cc602ba52a5f697ec1c6d6e6",
+      "bytes": 3596
+    },
+    {
+      "path": "gondola/compilercontract/contract.go",
+      "sha256": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188",
+      "bytes": 7144
+    },
+    {
+      "path": "gondola/compilercontract/validation.go",
+      "sha256": "43b7ca7356782caa23ed8826b8778e5ce91eabaab50dcd06580a10d70deadc8e",
+      "bytes": 20785
+    },
+    {
+      "path": "gondola/compilercontract/js_encoder.go",
+      "sha256": "a605b3267f63f7c7ed90c17ee2ed9bf04c7667827a23496c8620070f13b9b46d",
+      "bytes": 12467
+    },
+    {
+      "path": "gondola/compiled-frontend/emit/backend.go",
+      "sha256": "b2486fff69d106a4801e5a5400c961b3b6ab55ff9be440dcbdec5a9631f3d3ed",
+      "bytes": 8598
+    },
+    {
+      "path": "gondola/compiled-frontend/frontend/runtime/runtime.mjs",
+      "sha256": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+      "bytes": 62312
+    },
+    {
+      "path": "gondola/compiled-frontend/frontend/react/renderer.mjs",
+      "sha256": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4",
+      "bytes": 14863
+    },
+    {
+      "path": "gondola/compiled-frontend/frontend/dom/renderer.mjs",
+      "sha256": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54",
+      "bytes": 16327
+    },
+    {
+      "path": "gondola/compiled-frontend/build/bundle.mjs",
+      "sha256": "62683c1073645b1748f9607c4d29d09956883fa038e5613745bba45e006f6f1b",
+      "bytes": 1558
+    },
+    {
+      "path": "gondola/compiled-frontend/cmd/gobi-build/main.go",
+      "sha256": "9f9dbbf3c0bf5e90333e3d406d4150cc5d354dfb5af59df76b5fc11a3f7f21ee",
+      "bytes": 1118
+    },
+    {
+      "path": "gondola/gobi/node.go",
+      "sha256": "e51a1970f0a8e72ffd3d5aaf06f8fcce2137fd87113bb7412f692671743bcc93",
+      "bytes": 3071
+    }
+  ],
+  "implementationPaths": [
+    "gondola/compiled-frontend/analyze/analyze.go",
+    "gondola/compiled-frontend/build/pipeline.go",
+    "gondola/compilercontract or a bounded bridge descriptor helper",
+    "gondola/compiled-frontend/frontend/runtime/runtime.mjs (N3-owned pair mounting)"
+  ],
+  "limitations": [
+    "No source implementation, build, test, native trace, or browser run was performed in this read-only gate.",
+    "The recommendation covers only the frozen two-module Input/Publication ABI with flat primitive fields and effect-free v1 composition; it does not establish arbitrary Go modules, arbitrary graph linking, effects, or cross-bundle GoScript object identity."
+  ]
+}

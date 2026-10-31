@@ -1,0 +1,90 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-PARSER",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Fixed the runner JSON parser to parse complete trimmed stdout before its prior last-line fallback. The preserved actual native pretty-JSON trace now parses as 24 events/16 steps, an actual single-line GoScript Build result parses as 67 outputs, and logged-summary fallback remains effective. Syntax check passed; the full producer/profile was not rerun.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-modules/run.mjs",
+      "module-coordination/reports/E-PARSER.md",
+      "module-coordination/receipts/E-PARSER.json",
+      "module-coordination/rawlogs/E-PARSER/**"
+    ],
+    "productionPathsModified": [
+      "compiled-modules/run.mjs"
+    ],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "sourcePin": {
+    "path": "gondola/compiled-modules/run.mjs",
+    "bytes": 42348,
+    "sha256": "caa3c2493b33764d91aea7902a5710015c6c8f32af70ec200a446a2b13c3a5b0",
+    "baselineBytes": 42241,
+    "baselineSHA256": "369804cb17f57f21bafa591851aba85b2aac8b8a33759049fe83b1d85c65f177",
+    "diffPath": "module-coordination/rawlogs/E-PARSER/attempt-001/source-diff.patch",
+    "diffBytes": 556,
+    "diffSHA256": "f7aca85f0a2db97803db073bb26020d0ac03c290752a399906dc252d4f35bafe"
+  },
+  "failureWitness": {
+    "commandRecord": "module-coordination/source2173-failed-final-producer-command.json",
+    "commandRecordSHA256": "9a74d0d3dd50f857fab6054a852cf4d3407b7922ef00ed333e8b6136335a6135",
+    "failureLog": "module-coordination/source2173-failed-final-producer.log",
+    "failureLogSHA256": "454c586a586c19af0d7c874b2ecd5de2a97f13cbad7960c4e51905d2f22c8a54",
+    "failure": "fresh-native-trace: fresh native trace produced no parseable JSON result",
+    "preserved": true
+  },
+  "verification": {
+    "parserRegression": {
+      "path": "module-coordination/rawlogs/E-PARSER/attempt-001/parser-regression.json",
+      "bytes": 1307,
+      "sha256": "846bb8ed0297b7ff4ac8846b661d837d431bf39c07e3ec46dd8787600c22933b",
+      "status": "passed"
+    },
+    "nativePrettyJSON": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T211700375Z-35/logs/native-trace.stdout.bin",
+      "bytes": 209146,
+      "sha256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec",
+      "schema": "gobi.compiled-modules-native/v1",
+      "events": 24,
+      "steps": 16,
+      "lines": 8661
+    },
+    "actualGoScriptBuild": {
+      "command": "go run ./cmd/gobi-build (parent/react request; Go 1.27.3 toolchain)",
+      "exitCode": 0,
+      "stdoutBytes": 16495,
+      "stdoutSHA256": "093e78c7536d9283a1cdf33224d8b638391d89f7c522bbce055f2b84f3b445a3",
+      "lineCount": 1,
+      "schema": "gobi.build-result/v1",
+      "ok": true,
+      "outputs": 67
+    },
+    "summaryLastLineFallback": {
+      "input": "diagnostic line followed by one-line conformance JSON",
+      "status": "passed"
+    },
+    "nodeSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/run.mjs",
+      "node": "v22.23.4",
+      "exitCode": 0,
+      "stderrSHA256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    "fullProducerProfileRerun": false
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-PARSER",
+    "index": "module-coordination/rawlogs/E-PARSER/index.json",
+    "indexBytes": 2582,
+    "indexSHA256": "ab7ab4e30630992d7dc5eaba4cd97fd5c5975b8c9110baf39e7552ae464103d0"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-PARSER.md",
+    "bytes": 1796,
+    "sha256": "8438c1342b7a8ad8bd0f6ed906d03524578c558c80c9548ce6501821a6da8a9b"
+  },
+  "limits": [
+    "The parser regression uses the actual preserved native stdout and a fresh actual GoScript build result.",
+    "The full native/direct/browser producer profile remains root-owned and was not run in this task."
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-DIGEST",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "The five Go-generated escaping vectors, five actual Go Describe/Node pair witnesses, ordinary ASCII descriptor hashes, strict sidecar path, and source custody checks pass. A JS-self-hashed sidecar with an escaped unpaired surrogate is admitted by JS but rejected by Go, so the broader admission boundary still needs parity repair.",
+  "reviewedPacket": {
+    "job_id": "E-DIGEST",
+    "worker": "N3",
+    "outcome": "mixed_change",
+    "report": {
+      "path": "module-coordination/seals/E-DIGEST/E-DIGEST.md",
+      "bytes": 4408,
+      "sha256": "01271435450278a6b44fd3207d7719002ca6a2bd8a555f44c1f37c1672def758"
+    },
+    "receipt": {
+      "path": "module-coordination/seals/E-DIGEST/E-DIGEST.json",
+      "bytes": 5162,
+      "sha256": "ffe561c17ae122e46aaf8ae5e074494c4f5f453a24c579b2956660cb86080a97"
+    },
+    "sourceInventory": {
+      "path": "module-coordination/seals/E-DIGEST/SOURCE-INVENTORY.json",
+      "bytes": 489,
+      "sha256": "bcf85803a476af2f94d99e560f03acda3a6bc1f245774b0967ddff5782d447f4"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-DIGEST/seal.json",
+      "bytes": 175,
+      "sha256": "23ef59d5cdce5737515fac5afa3b03e9d2b4c75fe293ed9a99cb92ce0cdd931b"
+    },
+    "reportReceiptMatchSeal": true,
+    "sourcePinsChecked": 3,
+    "sourcePinsAllMatch": true,
+    "rawlogEntriesChecked": 48,
+    "rawlogEntriesAllMatch": true
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "checks": {
+    "nodeVersion": "v22.23.4",
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "nodeABItests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/abi/validate.test.mjs",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "stdoutSHA256": "f50223210ad722c5fb7a389a93a5aa40e9729b1500b5632cd67ee36b1a48ed46"
+    },
+    "goModuleABITests": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./moduleabi",
+      "exitCode": 0,
+      "stdoutSHA256": "e89534d35b49a970b8ea64659fa31f96f37a26c6cf36b77b6b7e0c02baf502d0"
+    },
+    "goGeneratedVectors": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run module-coordination/rawlogs/XR-DIGEST/generate-go-vectors.go",
+      "comparisonCommand": "/tmp/gondola-node22/node_modules/node/bin/node module-coordination/rawlogs/XR-DIGEST/verify-go-vectors.mjs",
+      "matched": 5,
+      "summary": "verified 5 Go-generated digest vectors",
+      "comparisonStdoutSHA256": "564db2a57da1802418ab71734f06c4cd75f40829609bf0e5626cfab66f4b114f"
+    },
+    "actualArtifactPairs": {
+      "goCommand": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run module-coordination/rawlogs/XR-DIGEST/actual-artifact-witness.go",
+      "nodeCommand": "/tmp/gondola-node22/node_modules/node/bin/node module-coordination/rawlogs/XR-DIGEST/actual-artifact-witness.mjs",
+      "compareCommand": "/tmp/gondola-node22/node_modules/node/bin/node module-coordination/rawlogs/XR-DIGEST/compare-witnesses.mjs",
+      "matchedPairs": 5,
+      "goNodePairsMatch": true,
+      "compareOutput": {
+        "path": "module-coordination/rawlogs/XR-DIGEST/actual-witness-compare.json",
+        "bytes": 1187,
+        "sha256": "34109894d739ddc1fdbf9a588c9f75427552da1a5cd4e96b234a667b4f81b268"
+      },
+      "inputs": "Historical actual React parent/child build artifact bytes; E-DIGEST pins all 20 files across four historical React/DOM builds, and independent rehash matched all 20. No fresh build or browser claim."
+    },
+    "ordinaryAsciiDescriptors": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node module-coordination/rawlogs/XR-DIGEST/ordinary-artifact-witness.mjs",
+      "admitted": true,
+      "parentArtifactSHA256": "3dfd31c0e783ef39c03343d19a74fe65484b2304e2b721d829d9d1038c90752f",
+      "parentABISHA256": "7ac5a916d9cf08667b7dddec2cb70f2f2ad9147c9a2cdb5820e5dc301f215277",
+      "childArtifactSHA256": "970aa7a2350fd8c27418f8113422524ed267bef01b89342657a3dbe4fc95e894",
+      "childABISHA256": "092380b7c276452369752cf77d306b89c28f7facfad653045e3d42e4c4df30d3"
+    },
+    "sourceAndStrictSidecarReview": {
+      "sourcePinsMatched": 3,
+      "sourceDiff": "module-coordination/rawlogs/XR-DIGEST/validator-source.diff",
+      "finding": "Only Go-compatible escaping and string-ordering/canonicalization code changed. Strict UTF-8 sidecar decoding, duplicate-key rejection, sidecar/object equality, artifact-byte hashing, and app-ir.json validation are unchanged in the diff.",
+      "utf8Ordering": "Source reviewed: compareGoStrings encodes strings to UTF-8 and compares bytes lexicographically, matching Go string order for valid Unicode inputs."
+    },
+    "unpairedSurrogateDisagreement": {
+      "jsCommand": "/tmp/gondola-node22/node_modules/node/bin/node module-coordination/rawlogs/XR-DIGEST/surrogate-preflight.mjs",
+      "goCommand": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run module-coordination/rawlogs/XR-DIGEST/surrogate-go-decode.go",
+      "jsPairAdmitted": true,
+      "goDescriptorRejected": true,
+      "goError": "artifact digest does not match artifact inventory",
+      "evidence": {
+        "sidecar": "module-coordination/rawlogs/XR-DIGEST/unpaired-surrogate-descriptor.json",
+        "jsStdout": "module-coordination/rawlogs/XR-DIGEST/surrogate-js-pair.stdout.log",
+        "goStdout": "module-coordination/rawlogs/XR-DIGEST/surrogate-go.stdout.log"
+      },
+      "classification": "bounded parity gap for JS-admissible metadata not emitted by the standard Go builder; current path validation does not reject unpaired UTF-16 surrogates"
+    },
+    "reviewerRunFailure": {
+      "attempt": "first Go actual-artifact witness invocation",
+      "exitCode": 1,
+      "cause": "review output actual-descriptors directory was not initialized",
+      "retryExitCode": 0,
+      "failurePreserved": true
+    }
+  },
+  "noSourceChanges": true,
+  "gitOrSchedulerChanged": false,
+  "report": {
+    "path": "module-coordination/reports/XR-DIGEST.md",
+    "bytes": 4161,
+    "sha256": "6f5d11565a5bf4f8eaa20f21ddcd9b087ed2356b15f4568f925216e198de4531"
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-DIGEST",
+    "index": "module-coordination/rawlogs/XR-DIGEST/index.json",
+    "indexBytes": 12593,
+    "indexSHA256": "ab4fde612628a34ad240f0b43220718e81294dfda43df521d54ca6675b664b00",
+    "indexedFiles": 62,
+    "indexVerification": {
+      "path": "module-coordination/rawlogs/XR-DIGEST/index-verification.json",
+      "allMatch": true,
+      "files": 62
+    }
+  }
+}

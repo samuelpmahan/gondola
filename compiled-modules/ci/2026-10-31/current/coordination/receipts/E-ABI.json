@@ -1,0 +1,99 @@
+{
+  "schema": "gobi.module-coordination-receipt/v1",
+  "job_id": "E-ABI",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Implemented source-derived closed Go module ABI descriptors, strict Go and WebCrypto pair admission, primitive record validation, and adversarial tests. Go/Node suites and both actual independently built React and DOM parent/child pairs passed; BOM and unsafe-JavaScript-integer admission findings are fixed and regression-tested.",
+  "readOnly": false,
+  "sourceCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+  "productionFilesModified": true,
+  "testsOrBuildsRun": true,
+  "scope": {
+    "owned_paths": [
+      "moduleabi/**",
+      "compiled-modules/abi/**",
+      "module-coordination/reports/E-ABI.md",
+      "module-coordination/receipts/E-ABI.json",
+      "module-coordination/rawlogs/E-ABI/**"
+    ],
+    "shared_production_paths_changed": [],
+    "git_or_native_scheduler_changed": false
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "bytes": 5478,
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "sourcePins": {
+    "moduleabi/descriptor.go": "d255480f6a10792e1f7f4e6d2204014f128fbb764cd98be8bd23797016b51ced",
+    "moduleabi/descriptor_test.go": "6685a14593ab18f83fc9c0fc244b135c1378f21fc51e4e82e81ecc8c7a46e442",
+    "compiled-modules/abi/validate.mjs": "a392febf57509bc61c0f221e74429c0f6e268540ac2b675e931e5dc6396a16bd",
+    "compiled-modules/abi/test-fixtures.mjs": "ecedbc119e5bf441f0f265b3b5a67398fad28a03c8065d3466261575d779bbc1",
+    "compiled-modules/abi/validate.test.mjs": "111d40153ae1a6f326373430a518908047a8e66a96b6971b68fe62060d28cd14",
+    "compiled-frontend/analyze/analyze.go": "b1c29537e11223fa10b262bd9a6f3ee3fb57cfd43594f4b13f52215e7f54b28b",
+    "compiled-frontend/build/pipeline.go": "78463101a450aec88cf2ecf8b7182fe2da432aab99885edd6304aeccab264c16",
+    "compilercontract/contract.go": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188",
+    "compilercontract/validation.go": "43b7ca7356782caa23ed8826b8778e5ce91eabaab50dcd06580a10d70deadc8e"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-ABI.md",
+    "bytes": 7277,
+    "sha256": "626ed9badff450064ca60aaa30ea4b8fa733d09c8d4bf49d29985bd6aeb5f827"
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-ABI",
+    "index": "module-coordination/rawlogs/E-ABI/index.json",
+    "indexBytes": 1782,
+    "indexSHA256": "f85024f1a85e89869070757b805c48d7753e2d20330828cb746506c3e3004d7a"
+  },
+  "verification": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "nodeVersion": "v22.23.4",
+    "goTest": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./moduleabi",
+      "exit": 0,
+      "stdoutPath": "module-coordination/rawlogs/E-ABI/go-test.stdout.log",
+      "stdoutBytes": 62,
+      "stdoutSHA256": "f1f49d26ffba4ed2a5a063fb398334bccf905487314a3efdafe5ba939f847eb7",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nodeTest": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/abi/validate.test.mjs",
+      "exit": 0,
+      "passed": 6,
+      "failed": 0,
+      "stdoutPath": "module-coordination/rawlogs/E-ABI/node-test.stdout.log",
+      "stdoutBytes": 1645,
+      "stdoutSHA256": "6d0eaa9a05c0652e0dfd27ede7ee4b144d162f1f3dc09f74390a1d42f3864db1",
+      "stderrSHA256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "actualPairGo": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run /tmp/moduleabi-actual-pair-check.go",
+      "exit": 0,
+      "stdoutPath": "module-coordination/rawlogs/E-ABI/actual-pair-go.stdout.log",
+      "stdoutBytes": 406,
+      "stdoutSHA256": "baf284cac13d8b972157a1cf20f7cbf3e710f6f2aa21851c1fcbf7866146af9f",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actualPairNode": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node /tmp/moduleabi-actual-pair-check.mjs",
+      "exit": 0,
+      "stdoutPath": "module-coordination/rawlogs/E-ABI/actual-pair-node.stdout.log",
+      "stdoutBytes": 406,
+      "stdoutSHA256": "5f44257965e7289bcaed693f6a9d53add56f72ea570961595f6fcf29aa539fc0",
+      "stderrSHA256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "actualBuildPairs": {
+      "reactParentABI": "7ac5a916d9cf08667b7dddec2cb70f2f2ad9147c9a2cdb5820e5dc301f215277",
+      "reactChildABI": "092380b7c276452369752cf77d306b89c28f7facfad653045e3d42e4c4df30d3",
+      "domParentABI": "2f8c61741f2cae080b7b68b9a6780421e0e71f41283bc3b208c80011eff3b2fc",
+      "domChildABI": "d3c9e119047ab254cbb0c342f261750531ad478dd5b950bda64c7f23d1444a8d",
+      "source": "N2's independent React and DOM builds under /tmp/gobi-module-gate1-*-module{parent,child}-20261031/"
+    }
+  },
+  "limits": [
+    "Finite one-parent/one-child Input/Publication ABI only; arbitrary Go module graphs, asynchronous effects, and arbitrary type closures are not established.",
+    "SHA-256 binds metadata to supplied artifact bytes but does not authenticate artifact provenance or isolate malicious code.",
+    "JavaScript validator tests used Node 22 WebCrypto; mounted browser admission and lifecycle behavior are owned by host/conformance lanes."
+  ]
+}

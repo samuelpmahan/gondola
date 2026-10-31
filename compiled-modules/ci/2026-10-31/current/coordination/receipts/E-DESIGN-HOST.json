@@ -1,0 +1,72 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-DESIGN-HOST",
+  "worker": "N3",
+  "outcome": "confirmed_reuse",
+  "summary": "Read-only reconnaissance confirmed the existing encoder and React/DOM renderer protocol can serve as the per-module substrate; the finite typed parent/child pair needs an additive bridge-aware host loop, ABI preflight, and two scoped renderer roots.",
+  "scope": {
+    "owned_paths": [
+      "module-coordination/reports/E-DESIGN-HOST.md",
+      "module-coordination/receipts/E-DESIGN-HOST.json"
+    ],
+    "production_paths_changed": [],
+    "test_paths_changed": [],
+    "git_or_native_state_changed": false
+  },
+  "selectedContract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "52e0ce00c2a4975881a28990b864854f02285b8b4a916bd830b736d39696d219",
+    "baseCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857"
+  },
+  "recommendation": {
+    "api": "mountCompiledModulePair(options)",
+    "roleOrder": [
+      "init both",
+      "parent.Output -> child.Input",
+      "child.Publication -> parent.Receive",
+      "parent event: Update -> Output -> Input",
+      "child event: Update -> Publication -> Receive"
+    ],
+    "rendererRoots": 2,
+    "effects": "reject nonempty effect lists",
+    "abiPreflight": "validate both gobi.module-abi/v1 descriptors and exact bridge type/signature closure before Init/View/renderer calls",
+    "bridgeExport": "gobiModuleBridges named export, linked by additive moduleABI; keep gobiCompiled exact legacy envelope and three standard symbol exports"
+  },
+  "inspectedSources": [
+    {
+      "path": "gondola/compiled-frontend/frontend/runtime/runtime.mjs",
+      "bytes": 62312,
+      "sha256": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f"
+    },
+    {
+      "path": "gondola/compiled-frontend/frontend/dom/renderer.mjs",
+      "bytes": 16327,
+      "sha256": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54"
+    },
+    {
+      "path": "gondola/compiled-frontend/frontend/react/renderer.mjs",
+      "bytes": 14863,
+      "sha256": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4"
+    },
+    {
+      "path": "gondola/compiled-children/runtime/runtime.mjs",
+      "bytes": 12303,
+      "sha256": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b"
+    },
+    {
+      "path": "gondola/session-tree/host.mjs",
+      "bytes": 21782,
+      "sha256": "f5ce451235ec2506d80d9ac3ebc364a9e43ba774cd56a66e25e3f8f7bd8a0c5a"
+    }
+  ],
+  "report": {
+    "path": "module-coordination/reports/E-DESIGN-HOST.md",
+    "bytes": 6803,
+    "sha256": "9afd9be9676dc74dec4adfce2b76644394b086a813a77b1294d4011d4966cb8b"
+  },
+  "verification": {
+    "mode": "read-only source inspection",
+    "testsRun": false,
+    "productionChanges": false
+  }
+}

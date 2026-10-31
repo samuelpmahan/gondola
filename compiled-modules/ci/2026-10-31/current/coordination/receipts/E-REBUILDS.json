@@ -1,0 +1,619 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-REBUILDS",
+  "worker": "N2",
+  "outcome": "confirmed_reuse",
+  "summary": "Fresh independent React and DOM GoScript builds succeeded for moduleparent and modulechild after E-UTF8. Output inventories match, actual parent/child bridge and state encoders pass direct probes, both ABI pairs validate, and the exact Unicode parent label is emitted.",
+  "baselineCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+  "scope": {
+    "owned": [
+      "module-coordination/reports/E-REBUILDS.md",
+      "module-coordination/receipts/E-REBUILDS.json",
+      "module-coordination/rawlogs/E-REBUILDS/**"
+    ],
+    "productionChanges": false,
+    "gitOperations": false,
+    "sourceCleanlinessAttested": false,
+    "sourcePinCoverage": "46 enumerated compiler/contract/module fixture Go inputs only"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-REBUILDS.md",
+    "bytes": 5278,
+    "sha256": "daef8cfe6efce0d579c94a6c7f8904662ea8493475cc293f6771de836092a34c"
+  },
+  "runtime": [
+    {
+      "name": "compiler-go",
+      "argv": [
+        "/tmp/gondola-go/go/bin/go",
+        "version"
+      ],
+      "exitCode": 0,
+      "stdout": "go version go1.27.3 linux/amd64",
+      "stderr": ""
+    },
+    {
+      "name": "node",
+      "argv": [
+        "/tmp/gondola-node22/node_modules/node/bin/node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "v22.23.4",
+      "stderr": ""
+    }
+  ],
+  "buildEnvironment": {
+    "GOTOOLCHAIN": "go1.27.3",
+    "GOFLAGS": "-buildvcs=false",
+    "GOBI_NODE": "/tmp/gondola-node22/node_modules/node/bin/node",
+    "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go"
+  },
+  "buildCommand": [
+    "/tmp/gondola-go/go/bin/go",
+    "run",
+    "./cmd/gobi-build"
+  ],
+  "buildCwd": "/workspace/scratch/39a56936f173/gondola/compiled-frontend",
+  "runDirectory": "/tmp/gobi-module-postutf8-1793480293941773629",
+  "builds": [
+    {
+      "backend": "react",
+      "role": "parent",
+      "exitCode": 0,
+      "buildResult": {
+        "ok": true,
+        "schema": "gobi.build-result/v1",
+        "appCount": 1,
+        "outputCount": 67,
+        "diagnostics": []
+      },
+      "manifest": {
+        "path": "/tmp/gobi-module-postutf8-1793480293941773629/react-parent/output/buildmanifest.json",
+        "bytes": 4718,
+        "sha256": "d4e7f39173467fd433d409ce53c8b7ab3340b60f353e5a0d47522c1081654d37",
+        "schema": "gobi.build-manifest/v1",
+        "apps": [
+          {
+            "backend": "react",
+            "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+            "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+            "appIR": "apps/moduleparent-462c3bad7b95/app-ir.json",
+            "module": "apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+            "encoder": "apps/moduleparent-462c3bad7b95/encoder.mjs",
+            "components": "apps/moduleparent-462c3bad7b95/components.gen.mjs",
+            "moduleABI": "apps/moduleparent-462c3bad7b95/module-abi.json",
+            "forwarderPackage": "gobi.generated/compiled/facades/moduleparent-462c3bad7b95",
+            "roleBindings": [
+              {
+                "role": "init",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent.Init",
+                "forwarderExport": "GobiCompiledInit"
+              },
+              {
+                "role": "update",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent.Update",
+                "forwarderExport": "GobiCompiledUpdate"
+              },
+              {
+                "role": "view",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent.View",
+                "forwarderExport": "GobiCompiledView"
+              }
+            ]
+          }
+        ]
+      },
+      "outputFilesCount": 67,
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requestPath": "module-coordination/rawlogs/E-REBUILDS/react-parent.request.json",
+      "stdoutPath": "module-coordination/rawlogs/E-REBUILDS/react-parent.stdout.json"
+    },
+    {
+      "backend": "react",
+      "role": "child",
+      "exitCode": 0,
+      "buildResult": {
+        "ok": true,
+        "schema": "gobi.build-result/v1",
+        "appCount": 1,
+        "outputCount": 70,
+        "diagnostics": []
+      },
+      "manifest": {
+        "path": "/tmp/gobi-module-postutf8-1793480293941773629/react-child/output/buildmanifest.json",
+        "bytes": 4962,
+        "sha256": "48cb8aa9d8b529b2a0dbcc3c71276c4870f718efcc3cec9c27ee58c6e5a72a97",
+        "schema": "gobi.build-manifest/v1",
+        "apps": [
+          {
+            "backend": "react",
+            "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+            "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+            "appIR": "apps/modulechild-7f78e25dc32b/app-ir.json",
+            "module": "apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+            "encoder": "apps/modulechild-7f78e25dc32b/encoder.mjs",
+            "components": "apps/modulechild-7f78e25dc32b/components.gen.mjs",
+            "moduleABI": "apps/modulechild-7f78e25dc32b/module-abi.json",
+            "forwarderPackage": "gobi.generated/compiled/facades/modulechild-7f78e25dc32b",
+            "roleBindings": [
+              {
+                "role": "init",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild.Init",
+                "forwarderExport": "GobiCompiledInit"
+              },
+              {
+                "role": "update",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild.Update",
+                "forwarderExport": "GobiCompiledUpdate"
+              },
+              {
+                "role": "view",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild.View",
+                "forwarderExport": "GobiCompiledView"
+              }
+            ]
+          }
+        ]
+      },
+      "outputFilesCount": 70,
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requestPath": "module-coordination/rawlogs/E-REBUILDS/react-child.request.json",
+      "stdoutPath": "module-coordination/rawlogs/E-REBUILDS/react-child.stdout.json"
+    },
+    {
+      "backend": "dom",
+      "role": "parent",
+      "exitCode": 0,
+      "buildResult": {
+        "ok": true,
+        "schema": "gobi.build-result/v1",
+        "appCount": 1,
+        "outputCount": 67,
+        "diagnostics": []
+      },
+      "manifest": {
+        "path": "/tmp/gobi-module-postutf8-1793480293941773629/dom-parent/output/buildmanifest.json",
+        "bytes": 4716,
+        "sha256": "3a1866ae2b7bd5c816a88c2d4703083ea42c9b4c0954f6f7088395a81ef08389",
+        "schema": "gobi.build-manifest/v1",
+        "apps": [
+          {
+            "backend": "dom",
+            "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+            "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+            "appIR": "apps/moduleparent-462c3bad7b95/app-ir.json",
+            "module": "apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+            "encoder": "apps/moduleparent-462c3bad7b95/encoder.mjs",
+            "components": "apps/moduleparent-462c3bad7b95/components.gen.mjs",
+            "moduleABI": "apps/moduleparent-462c3bad7b95/module-abi.json",
+            "forwarderPackage": "gobi.generated/compiled/facades/moduleparent-462c3bad7b95",
+            "roleBindings": [
+              {
+                "role": "init",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent.Init",
+                "forwarderExport": "GobiCompiledInit"
+              },
+              {
+                "role": "update",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent.Update",
+                "forwarderExport": "GobiCompiledUpdate"
+              },
+              {
+                "role": "view",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent.View",
+                "forwarderExport": "GobiCompiledView"
+              }
+            ]
+          }
+        ]
+      },
+      "outputFilesCount": 67,
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requestPath": "module-coordination/rawlogs/E-REBUILDS/dom-parent.request.json",
+      "stdoutPath": "module-coordination/rawlogs/E-REBUILDS/dom-parent.stdout.json"
+    },
+    {
+      "backend": "dom",
+      "role": "child",
+      "exitCode": 0,
+      "buildResult": {
+        "ok": true,
+        "schema": "gobi.build-result/v1",
+        "appCount": 1,
+        "outputCount": 70,
+        "diagnostics": []
+      },
+      "manifest": {
+        "path": "/tmp/gobi-module-postutf8-1793480293941773629/dom-child/output/buildmanifest.json",
+        "bytes": 4960,
+        "sha256": "8b1d8d74a9faa802b08e488b660cc00d2aae2b2d8bd59065900afa8295bdcf7c",
+        "schema": "gobi.build-manifest/v1",
+        "apps": [
+          {
+            "backend": "dom",
+            "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+            "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+            "appIR": "apps/modulechild-7f78e25dc32b/app-ir.json",
+            "module": "apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+            "encoder": "apps/modulechild-7f78e25dc32b/encoder.mjs",
+            "components": "apps/modulechild-7f78e25dc32b/components.gen.mjs",
+            "moduleABI": "apps/modulechild-7f78e25dc32b/module-abi.json",
+            "forwarderPackage": "gobi.generated/compiled/facades/modulechild-7f78e25dc32b",
+            "roleBindings": [
+              {
+                "role": "init",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild.Init",
+                "forwarderExport": "GobiCompiledInit"
+              },
+              {
+                "role": "update",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild.Update",
+                "forwarderExport": "GobiCompiledUpdate"
+              },
+              {
+                "role": "view",
+                "appIRSymbol": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild.View",
+                "forwarderExport": "GobiCompiledView"
+              }
+            ]
+          }
+        ]
+      },
+      "outputFilesCount": 70,
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requestPath": "module-coordination/rawlogs/E-REBUILDS/dom-child.request.json",
+      "stdoutPath": "module-coordination/rawlogs/E-REBUILDS/dom-child.stdout.json"
+    }
+  ],
+  "sourceSnapshot": {
+    "path": "module-coordination/rawlogs/E-REBUILDS/source-pins.json",
+    "bytes": 14781,
+    "sha256": "1653781498f4b420a85370c6a8fc60207b60675c9f07f24aff0efef1ff04b6ed",
+    "pinCount": 46,
+    "beforeAfterIdentical": true
+  },
+  "outputIntegrity": {
+    "path": "module-coordination/rawlogs/E-REBUILDS/output-integrity.json",
+    "bytes": 9500,
+    "sha256": "99c58f1864ad2992f46b5216dbbe28fdd8d64065815e41e2fb4bcbf535f5ffe7",
+    "allExactInventories": true,
+    "artifactRecords": [
+      {
+        "build": "react-parent",
+        "manifestPath": "/tmp/gobi-module-postutf8-1793480293941773629/react-parent/output/buildmanifest.json",
+        "manifestBytes": 4718,
+        "manifestSHA256": "d4e7f39173467fd433d409ce53c8b7ab3340b60f353e5a0d47522c1081654d37",
+        "appIRPath": "apps/moduleparent-462c3bad7b95/app-ir.json",
+        "modulePath": "apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+        "encoderPath": "apps/moduleparent-462c3bad7b95/encoder.mjs",
+        "componentsPath": "apps/moduleparent-462c3bad7b95/components.gen.mjs",
+        "moduleABIPath": "apps/moduleparent-462c3bad7b95/module-abi.json",
+        "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+        "capabilities": [
+          "view.node",
+          "numeric.safe-integer",
+          "numeric.float64"
+        ],
+        "abiRoles": [
+          "Init",
+          "Output",
+          "Receive",
+          "Update",
+          "View"
+        ],
+        "abiSHA256": "40d55419983742c17dca568b421e30f70a297c78213f755bc4be30c4579c8364",
+        "artifactSHA256": "e0f1c14138c10b5a5afa15351f50c540e1d84082eb5ebe5fef8386176a5f30d8",
+        "descriptorBytes": 8864,
+        "descriptorFileSHA256": "5d1236bab18c649a8340c71c7a7b7864dded95cbcb05dbb80b8442020f8f7679",
+        "artifactHashes": [
+          {
+            "path": "apps/moduleparent-462c3bad7b95/app-ir.json",
+            "bytes": 6560,
+            "sha256": "02ac7fe364180cf39264fe4739c00a52fde76c1bcad18cfd992484d5f0870cf1"
+          },
+          {
+            "path": "apps/moduleparent-462c3bad7b95/components.gen.mjs",
+            "bytes": 7032,
+            "sha256": "4efb56cf0615db92e2e3b3281f237e1d76b17669a97c5120b1773fe75bbcc7c8"
+          },
+          {
+            "path": "apps/moduleparent-462c3bad7b95/encoder.mjs",
+            "bytes": 15652,
+            "sha256": "13f54db9f92e4800e4505374998abeb220020b030965cde3651178c9deff8026"
+          },
+          {
+            "path": "apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+            "bytes": 508842,
+            "sha256": "6cf08ad87364de67e49a2d2182dbed12871bcc481884a861370ee5e412ee46d6"
+          }
+        ]
+      },
+      {
+        "build": "react-child",
+        "manifestPath": "/tmp/gobi-module-postutf8-1793480293941773629/react-child/output/buildmanifest.json",
+        "manifestBytes": 4962,
+        "manifestSHA256": "48cb8aa9d8b529b2a0dbcc3c71276c4870f718efcc3cec9c27ee58c6e5a72a97",
+        "appIRPath": "apps/modulechild-7f78e25dc32b/app-ir.json",
+        "modulePath": "apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+        "encoderPath": "apps/modulechild-7f78e25dc32b/encoder.mjs",
+        "componentsPath": "apps/modulechild-7f78e25dc32b/components.gen.mjs",
+        "moduleABIPath": "apps/modulechild-7f78e25dc32b/module-abi.json",
+        "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+        "capabilities": [
+          "view.node",
+          "numeric.float64",
+          "numeric.safe-integer"
+        ],
+        "abiRoles": [
+          "Init",
+          "Input",
+          "Publication",
+          "Update",
+          "View"
+        ],
+        "abiSHA256": "d0f7ba8eaa4b1b189e70e93003c1a0764e924760efecd8e6c61be2a624605e2f",
+        "artifactSHA256": "2b13ed642fb719be1a29069c63750b67ee8d261fa17e6c0f3ee6d4292d20b6af",
+        "descriptorBytes": 9037,
+        "descriptorFileSHA256": "3f3655c8c1cb985a60a64269800b9dd8cd08676a8bbfa81008d37e9789a7bfc2",
+        "artifactHashes": [
+          {
+            "path": "apps/modulechild-7f78e25dc32b/app-ir.json",
+            "bytes": 7865,
+            "sha256": "97ddf63063a99623feba5b7fb793a3e744300c050064a5ff20eff3152b0d6737"
+          },
+          {
+            "path": "apps/modulechild-7f78e25dc32b/components.gen.mjs",
+            "bytes": 8337,
+            "sha256": "8860db30174247163a6c856ac9ec07acf0f4177fba1c4a0bd2c7805ac2d958db"
+          },
+          {
+            "path": "apps/modulechild-7f78e25dc32b/encoder.mjs",
+            "bytes": 15788,
+            "sha256": "431290dd8295affb374feb7810e19444b37418da02f4372ebeadd21f7e137dfc"
+          },
+          {
+            "path": "apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+            "bytes": 512044,
+            "sha256": "1a7237561c9e7b6db24fee78dc39b3badb38df8b474ab3ebdcb27d75a6b3d518"
+          }
+        ]
+      },
+      {
+        "build": "dom-parent",
+        "manifestPath": "/tmp/gobi-module-postutf8-1793480293941773629/dom-parent/output/buildmanifest.json",
+        "manifestBytes": 4716,
+        "manifestSHA256": "3a1866ae2b7bd5c816a88c2d4703083ea42c9b4c0954f6f7088395a81ef08389",
+        "appIRPath": "apps/moduleparent-462c3bad7b95/app-ir.json",
+        "modulePath": "apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+        "encoderPath": "apps/moduleparent-462c3bad7b95/encoder.mjs",
+        "componentsPath": "apps/moduleparent-462c3bad7b95/components.gen.mjs",
+        "moduleABIPath": "apps/moduleparent-462c3bad7b95/module-abi.json",
+        "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/moduleparent",
+        "capabilities": [
+          "view.node",
+          "numeric.safe-integer",
+          "numeric.float64"
+        ],
+        "abiRoles": [
+          "Init",
+          "Output",
+          "Receive",
+          "Update",
+          "View"
+        ],
+        "abiSHA256": "ee3aa871864f42fb012bccb1a04bd273c953d42a7797656a111415802f6c15c6",
+        "artifactSHA256": "bf2f1eeeffee24fdc54eb04713ecdecbbed5164e2a4c30c76f53e50dd48c77e9",
+        "descriptorBytes": 8864,
+        "descriptorFileSHA256": "b22e3a669de346632ad3ece17db8800cf52655c2add88719d5b89f28db38100c",
+        "artifactHashes": [
+          {
+            "path": "apps/moduleparent-462c3bad7b95/app-ir.json",
+            "bytes": 6560,
+            "sha256": "02ac7fe364180cf39264fe4739c00a52fde76c1bcad18cfd992484d5f0870cf1"
+          },
+          {
+            "path": "apps/moduleparent-462c3bad7b95/components.gen.mjs",
+            "bytes": 7032,
+            "sha256": "4efb56cf0615db92e2e3b3281f237e1d76b17669a97c5120b1773fe75bbcc7c8"
+          },
+          {
+            "path": "apps/moduleparent-462c3bad7b95/encoder.mjs",
+            "bytes": 15652,
+            "sha256": "13f54db9f92e4800e4505374998abeb220020b030965cde3651178c9deff8026"
+          },
+          {
+            "path": "apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+            "bytes": 508836,
+            "sha256": "5f62faebe458ae90c1f83b71655cb32a758d5315f00e3861e64af26c211e7e76"
+          }
+        ]
+      },
+      {
+        "build": "dom-child",
+        "manifestPath": "/tmp/gobi-module-postutf8-1793480293941773629/dom-child/output/buildmanifest.json",
+        "manifestBytes": 4960,
+        "manifestSHA256": "8b1d8d74a9faa802b08e488b660cc00d2aae2b2d8bd59065900afa8295bdcf7c",
+        "appIRPath": "apps/modulechild-7f78e25dc32b/app-ir.json",
+        "modulePath": "apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+        "encoderPath": "apps/modulechild-7f78e25dc32b/encoder.mjs",
+        "componentsPath": "apps/modulechild-7f78e25dc32b/components.gen.mjs",
+        "moduleABIPath": "apps/modulechild-7f78e25dc32b/module-abi.json",
+        "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+        "capabilities": [
+          "view.node",
+          "numeric.float64",
+          "numeric.safe-integer"
+        ],
+        "abiRoles": [
+          "Init",
+          "Input",
+          "Publication",
+          "Update",
+          "View"
+        ],
+        "abiSHA256": "e7bc5dfed179b167870d3558f4b1826c6d92b12fbbf1eee58dc96ddbe9061cd0",
+        "artifactSHA256": "ddd96f802a4affd0888b3149b451ef4b65b959a9c169345ed04011ddd46aa863",
+        "descriptorBytes": 9037,
+        "descriptorFileSHA256": "26375c6ec7a208a93beece44de3ba4d697c41beb87750ae8442c6f79d2423b64",
+        "artifactHashes": [
+          {
+            "path": "apps/modulechild-7f78e25dc32b/app-ir.json",
+            "bytes": 7865,
+            "sha256": "97ddf63063a99623feba5b7fb793a3e744300c050064a5ff20eff3152b0d6737"
+          },
+          {
+            "path": "apps/modulechild-7f78e25dc32b/components.gen.mjs",
+            "bytes": 8337,
+            "sha256": "8860db30174247163a6c856ac9ec07acf0f4177fba1c4a0bd2c7805ac2d958db"
+          },
+          {
+            "path": "apps/modulechild-7f78e25dc32b/encoder.mjs",
+            "bytes": 15788,
+            "sha256": "431290dd8295affb374feb7810e19444b37418da02f4372ebeadd21f7e137dfc"
+          },
+          {
+            "path": "apps/modulechild-7f78e25dc32b/gobi-compiled.mjs",
+            "bytes": 512073,
+            "sha256": "d1bbc19340e8cdc415c7c7cd200f3b31e6a8a12fbdf0e9afd5db79c5b545f433"
+          }
+        ]
+      }
+    ]
+  },
+  "probes": {
+    "summary": {
+      "path": "module-coordination/rawlogs/E-REBUILDS/probe-summary.json",
+      "bytes": 2026,
+      "sha256": "93a250ebe36803dbdf6ada9fe83c2b63b21012f13591142ce3de21a85587c035",
+      "allPass": true,
+      "checks": {
+        "schema": "gobi.module-rebuild-probe-summary/v1",
+        "bridgeEncoderChecks": [
+          {
+            "backend": "react",
+            "role": "parent",
+            "initStateEncoded": true,
+            "viewContainsExactStepMinus": true,
+            "viewContainsMojibake": false,
+            "outputBridgeRecord": {
+              "Step": 1,
+              "Locked": false,
+              "Revision": 1
+            },
+            "receiveBridgePublishedCountBits": "4000000000000000",
+            "receiveBridgeRevision": "1",
+            "pass": true
+          },
+          {
+            "backend": "react",
+            "role": "child",
+            "bridgeKeys": [
+              "input",
+              "publication"
+            ],
+            "inputStep": "2",
+            "inputRevision": "7",
+            "publication": {
+              "Count": 0,
+              "Revision": 7
+            },
+            "afterAddCountBits": "4000000000000000",
+            "pass": true
+          },
+          {
+            "backend": "dom",
+            "role": "parent",
+            "initStateEncoded": true,
+            "viewContainsExactStepMinus": true,
+            "viewContainsMojibake": false,
+            "outputBridgeRecord": {
+              "Step": 1,
+              "Locked": false,
+              "Revision": 1
+            },
+            "receiveBridgePublishedCountBits": "4000000000000000",
+            "receiveBridgeRevision": "1",
+            "pass": true
+          },
+          {
+            "backend": "dom",
+            "role": "child",
+            "bridgeKeys": [
+              "input",
+              "publication"
+            ],
+            "inputStep": "2",
+            "inputRevision": "7",
+            "publication": {
+              "Count": 0,
+              "Revision": 7
+            },
+            "afterAddCountBits": "4000000000000000",
+            "pass": true
+          }
+        ],
+        "abiPairChecks": [
+          {
+            "backend": "react",
+            "valid": true,
+            "parentABI": "40d55419983742c17dca568b421e30f70a297c78213f755bc4be30c4579c8364",
+            "childABI": "d0f7ba8eaa4b1b189e70e93003c1a0764e924760efecd8e6c61be2a624605e2f"
+          },
+          {
+            "backend": "dom",
+            "valid": true,
+            "parentABI": "ee3aa871864f42fb012bccb1a04bd273c953d42a7797656a111415802f6c15c6",
+            "childABI": "e7bc5dfed179b167870d3558f4b1826c6d92b12fbbf1eee58dc96ddbe9061cd0"
+          }
+        ],
+        "allPass": true
+      }
+    },
+    "abiPairOutput": {
+      "path": "module-coordination/rawlogs/E-REBUILDS/abi-pair-probe.stdout.json",
+      "bytes": 3513,
+      "sha256": "2a71d22d96632059b412b3175e1b309c83c67232b778c1b80513bfefe8106528"
+    },
+    "abiPairExit": "module-coordination/rawlogs/E-REBUILDS/abi-pair-probe.exit-code",
+    "correctedBridgeEncoderOutput": {
+      "path": "module-coordination/rawlogs/E-REBUILDS/probe-green.stdout.json",
+      "bytes": 20319,
+      "sha256": "b11fb56b2b668558344023da6ec0bbcb0f1c29565b459966a7857c9ce6012d5b"
+    },
+    "correctedBridgeEncoderExit": "module-coordination/rawlogs/E-REBUILDS/probe-green.exit-code",
+    "initialProbeFailure": {
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-REBUILDS/probe-first-red.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/E-REBUILDS/probe-first-red.stderr.log",
+        "bytes": 1058,
+        "sha256": "453fd96debb83a49de18b3971b93b91fb325190a250512a657b2e7bd723e0a45"
+      },
+      "exit": {
+        "path": "module-coordination/rawlogs/E-REBUILDS/probe-first-red.exit-code",
+        "bytes": 2,
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      "classification": "Probe passed a two-result GoScript Update tuple to the single-State encoder; corrected to encode result[0]."
+    }
+  },
+  "rawEvidenceIndex": {
+    "path": "module-coordination/rawlogs/E-REBUILDS/index.json",
+    "bytes": 10717,
+    "sha256": "0286411f8a6e1703b97203f2862ebfa0f3cadbde39a153aa7fb2f844b857be87"
+  },
+  "tests_or_builds_run": true,
+  "limits": [
+    "No browser interaction/profile acceptance is claimed by this packet.",
+    "Only the 46 explicit compiler/contract/module fixture Go inputs were compared before/after; this is not a whole-worktree cleanliness attestation.",
+    "No production source or Git state was modified."
+  ]
+}

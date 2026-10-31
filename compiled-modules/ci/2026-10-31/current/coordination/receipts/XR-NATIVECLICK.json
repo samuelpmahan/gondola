@@ -1,0 +1,126 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-NATIVECLICK",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "The sealed native click resolver correctly suppresses disabled physical clicks without Go steps, derives enabled messages from Go View handlers, retains explicit disabled-action assertions, and preserves the pinned canonical/seed source events. Independent package, replay, and strict unknown-field checks passed.",
+  "reviewedPacket": {
+    "job_id": "E-NATIVECLICK",
+    "worker": "N2",
+    "sourceCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+    "report": {
+      "path": "module-coordination/seals/E-NATIVECLICK/E-NATIVECLICK.md",
+      "bytes": 4674,
+      "sha256": "f47d30b057b582c828dd6351294f48009205bfe4420fe5ea64efade9f5fb3269"
+    },
+    "receipt": {
+      "path": "module-coordination/seals/E-NATIVECLICK/E-NATIVECLICK.json",
+      "bytes": 12703,
+      "sha256": "ed7727ed124bd89b9f756c12ca0c95fe65aa04932e9a9f27f967985e710bc6ac"
+    },
+    "sourceInventorySHA256": "0e23ba586a0b3453b355bd0dcfccade0a3eed1ed6e9cca970cd78fbb7c4d1373",
+    "reportReceiptMatchSeal": true,
+    "ownedSourceFilesMatched": 2,
+    "ownedSourceFileCount": 2,
+    "receiptReferencedPins": 49,
+    "receiptReferencedPinsMatched": 49,
+    "sealedPacketArtifactsAlsoMatched": 4,
+    "totalArtifactsVerified": 53
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "acceptance": {
+    "path": "module-coordination/ACCEPTANCE.md",
+    "sha256": "2449f2eb33dea9b38d9f1151472b6c4a492b8be2b42f9bfc38e1e889d7d60ea8"
+  },
+  "checks": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "environment": {
+      "GOTOOLCHAIN": "local",
+      "GOFLAGS": "-buildvcs=false"
+    },
+    "packageTests": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./cmd/compiled-modules-native",
+      "exitCode": 0,
+      "stdout": "ok   github.com/samuelpmahan/gondola/cmd/compiled-modules-native 0.007s"
+    },
+    "canonicalReplay": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/compiled-modules-native --script fixtures/compiled/moduleparent/scenario.json",
+      "exitCode": 0,
+      "schema": "gobi.compiled-modules-native/v1",
+      "sourceEvents": 24,
+      "goSteps": 16,
+      "traceBytes": 209146,
+      "traceSHA256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec"
+    },
+    "seedReplays": [
+      {
+        "seed": "20261031",
+        "sourceEvents": 40,
+        "goSteps": 29,
+        "disabledClicks": 11,
+        "enabledClicks": 29,
+        "traceSHA256": "e2c479d97fdb19e639a63b6c9092208d4d2984b1f1d0f85e951cb6f3f975b365"
+      },
+      {
+        "seed": "20261032",
+        "sourceEvents": 40,
+        "goSteps": 27,
+        "disabledClicks": 13,
+        "enabledClicks": 27,
+        "traceSHA256": "a608333a3b77392b821f81b5af6e44863b1b53793deebc49f5992fa2bc66e92a"
+      },
+      {
+        "seed": "20261033",
+        "sourceEvents": 40,
+        "goSteps": 27,
+        "disabledClicks": 13,
+        "enabledClicks": 27,
+        "traceSHA256": "393d897e13fdf950ebe10ba35af81338cb232531848173940231ed7853e857dd"
+      }
+    ],
+    "unknownFieldCLI": {
+      "topLevelExtraField": {
+        "exitCode": 1,
+        "stdoutBytes": 0
+      },
+      "nestedActionExtraField": {
+        "exitCode": 1,
+        "stdoutBytes": 0
+      }
+    },
+    "canonicalScenarioSourceClassification": {
+      "path": "fixtures/compiled/moduleparent/scenario.json",
+      "bytes": 2229,
+      "sha256": "9b99a2d7ac7f9d044bcc590414787ea4a9d934f180503a45aac7684778f94539",
+      "matchesEGoPin": true,
+      "events": 24
+    },
+    "threePinnedSeedScripts": {
+      "all40Events": true,
+      "allEventsKindClick": true,
+      "hashesAndCountsMatchReceipt": true
+    }
+  },
+  "limitations": [
+    "Native Go runner review only; no mounted browser/React/DOM behavior is claimed.",
+    "No arbitrary scenario resource limit is claimed beyond the reviewed finite inputs.",
+    "The Unicode encoder overlay is outside the native CLI change and was not reviewed in this packet."
+  ],
+  "noSourceChanges": true,
+  "gitOrSchedulerChanged": false,
+  "report": {
+    "path": "module-coordination/reports/XR-NATIVECLICK.md",
+    "bytes": 3625,
+    "sha256": "0c9189c8880a22b52c84cae672b97fbc3b349441bf6fe7c2801d5776ca19a176"
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-NATIVECLICK",
+    "index": "module-coordination/rawlogs/XR-NATIVECLICK/index.json",
+    "indexBytes": 5171,
+    "indexSHA256": "6c401e6ab2df2a821d23dab865b587da20aebbe595d2e249740fec64895b81e4",
+    "fileCount": 32
+  }
+}

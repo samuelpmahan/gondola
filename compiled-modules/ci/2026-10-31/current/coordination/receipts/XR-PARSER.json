@@ -1,0 +1,109 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-PARSER",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "The sealed parser repair accepts the actual pretty-printed native trace while preserving parsing of the actual single-line GoScript build result and the existing logged-summary fallback. The current root-approved E-LOGS overlay preserves the sealed parser function bytes. All sealed source and raw evidence pins checked here matched.",
+  "reviewedPacket": {
+    "job_id": "E-PARSER",
+    "worker": "N4",
+    "outcome": "mixed_change",
+    "report": {
+      "path": "module-coordination/seals/E-PARSER/E-PARSER.md",
+      "bytes": 1796,
+      "sha256": "8438c1342b7a8ad8bd0f6ed906d03524578c558c80c9548ce6501821a6da8a9b"
+    },
+    "receipt": {
+      "path": "module-coordination/seals/E-PARSER/E-PARSER.json",
+      "bytes": 3901,
+      "sha256": "b386c52928a75dedec56949f36240e3f9dfca63e753cbac544576fd806bb216d"
+    },
+    "sourceInventory": {
+      "path": "module-coordination/seals/E-PARSER/SOURCE-INVENTORY.json",
+      "bytes": 153,
+      "sha256": "7654388673786afa68136e9b63cf167722b685d188fc2a35fff6c1461ee561d6"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-PARSER/seal.json",
+      "bytes": 175,
+      "sha256": "8fcdd33950de1798eee598fd250a4a9a955e75f4c7854042895954f8629e3fbc"
+    },
+    "reportReceiptMatchSeal": true,
+    "sourcePin": {
+      "path": "compiled-modules/run.mjs",
+      "bytes": 42348,
+      "sha256": "caa3c2493b33764d91aea7902a5710015c6c8f32af70ec200a446a2b13c3a5b0"
+    },
+    "rawLogs": {
+      "indexPath": "module-coordination/rawlogs/E-PARSER/index.json",
+      "indexBytes": 2582,
+      "indexSHA256": "ab7ab4e30630992d7dc5eaba4cd97fd5c5975b8c9110baf39e7552ae464103d0",
+      "indexedFilesChecked": 10,
+      "allIndexedFilesMatch": true,
+      "referencedInputsChecked": 4,
+      "allReferencedInputsMatch": true
+    }
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "currentApprovedOverlay": {
+    "path": "compiled-modules/run.mjs",
+    "bytes": 42541,
+    "sha256": "707226121e9baf65fd092d8a574dbc7df9e9c88904e3f1b97bdf7fd25ac2f668",
+    "overlayDiffPath": "module-coordination/rawlogs/XR-PARSER/approved-overlay.diff",
+    "overlayDiffSHA256": "eb48f8c434118aa11f711d340467c1800f4d012247a3423fcac9647a3eab77a7",
+    "reviewFinding": "Diff contains the root-approved E-LOGS before/after Git metadata names and test discovery scope; parser function text matches sealed E-PARSER source exactly."
+  },
+  "checks": {
+    "nodeVersion": "v22.23.4",
+    "parserFunctionSourceIdentical": true,
+    "baselineParserRejectsNativePrettyJSON": true,
+    "sealedParserAcceptsNativePrettyJSON": true,
+    "currentOverlayParserAcceptsNativePrettyJSON": true,
+    "nativePrettyJSON": {
+      "bytes": 209146,
+      "sha256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec",
+      "lines": 8661,
+      "schema": "gobi.compiled-modules-native/v1",
+      "events": 24,
+      "steps": 16
+    },
+    "actualGoScriptBuildJSON": {
+      "bytes": 16495,
+      "sha256": "093e78c7536d9283a1cdf33224d8b638391d89f7c522bbce055f2b84f3b445a3",
+      "lines": 1,
+      "schema": "gobi.build-result/v1",
+      "ok": true,
+      "outputs": 67
+    },
+    "loggedSummaryFallback": {
+      "accepted": true,
+      "schema": "gobi.compiled-modules-conformance/v1",
+      "status": "matched",
+      "fixedEventCount": 24
+    },
+    "replayMethod": "Direct JSON.parse through the source-extracted parser on preserved raw stdout; no CLI replay and no oracle transformation.",
+    "fullProducerProfileRerun": false
+  },
+  "noSourceChangesByReviewer": true,
+  "gitOrSchedulerChangedByReviewer": false,
+  "report": {
+    "path": "module-coordination/reports/XR-PARSER.md",
+    "bytes": 2904,
+    "sha256": "82087a9f45c91a62047718b0507dac4857b9b9029b84af282341951eb67f71f1"
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-PARSER",
+    "index": "module-coordination/rawlogs/XR-PARSER/index.json",
+    "indexBytes": 2775,
+    "indexSHA256": "c765c9b37f46e716dc586159def41693a986f553c98dd5adea141c4ba13c3142",
+    "indexedFiles": 14,
+    "indexVerification": {
+      "path": "module-coordination/rawlogs/XR-PARSER/index-verification.json",
+      "allMatch": true,
+      "files": 14
+    }
+  }
+}

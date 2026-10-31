@@ -1,0 +1,141 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CONSUMER",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Verified the 529-member source-attested archive against 147 Git source pins; replayed archived Go native output byte-for-byte; and passed the archived offline checker for 12 captured profiles and six mutation controls. The 13-case backendqualification certificate remains a separate scope.",
+  "scope": {
+    "ownedPaths": [
+      "module-coordination/reports/E-CONSUMER.md",
+      "module-coordination/receipts/E-CONSUMER.json",
+      "module-coordination/rawlogs/E-CONSUMER/**"
+    ],
+    "productionPathsModified": [],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "sourceArchive": {
+    "producerAttempt": "attempt-20261031T213332911Z-35",
+    "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "sourceTree": "bcc71cef48f3a4e141daf181b43f8e12a2132f83",
+    "sourcePinCount": 147,
+    "sourceInventoryExactlyMatchesPins": true,
+    "allPinsByteMatchedPublishedGit": true,
+    "archive": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.tar.gz",
+      "bytes": 6373581,
+      "sha256": "039e6b8f7d074c6c4873fc4a04ebc56f6b7110250046906e222eb1d17503e20c"
+    },
+    "manifest": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.manifest.json",
+      "bytes": 125900,
+      "sha256": "ef2f332d15e306daabc290d127a42bfc2f9486fa43219785192f1674d7804fb2"
+    },
+    "expandedBytes": 67486104,
+    "memberCount": 529,
+    "producerReceipt": {
+      "path": "gondola/compiled-modules/evidence/attempts/attempt-20261031T213332911Z-35/receipt.json",
+      "bytes": 472432,
+      "sha256": "38246a62989fd77ef7f6af32752be1e23249c262f15cb8bd8f33fc29fab3093c"
+    },
+    "producerReceiptStatus": "passed",
+    "producerReceiptMatchesManifest": true
+  },
+  "verification": {
+    "archiveManifestAndGitPins": {
+      "status": "passed",
+      "commandRecord": {
+        "path": "module-coordination/rawlogs/E-CONSUMER/archive-verify-final/consume-final.command.json",
+        "bytes": 2241,
+        "sha256": "8e8fc49fee2f63b1ec428c62c3e109c5bde3b783468beadf2a106274f87db2ad"
+      },
+      "verifiedExtraction": "/tmp/gobi-econsumer-7bd0-extraction-final-checked"
+    },
+    "archivedNativeReplay": {
+      "status": "passed",
+      "goVersion": "go version go1.24.0 linux/amd64",
+      "sourceEvents": 24,
+      "goUpdates": 16,
+      "rawBytesIdentical": true,
+      "nativeOutputSHA256": "579c8c4a17d26682fc30bfdbbc4de677ee63cda322b7bfdd00bd624c22b4ceec",
+      "summary": {
+        "path": "module-coordination/rawlogs/E-CONSUMER/archive-verify-final/archived-native-replay.json",
+        "bytes": 2258,
+        "sha256": "0cb1198a826dac295d37831602ba0491634faf417f8dcb61ef9a996b78683bce"
+      },
+      "command": {
+        "path": "module-coordination/rawlogs/E-CONSUMER/archive-verify-final/archived-native.command.json",
+        "bytes": 1090,
+        "sha256": "81f387956a2094868f3395898ad25f87c786a522c05219fb02021f9e92ca141e"
+      }
+    },
+    "offlineArchivedChecker": {
+      "status": "passed",
+      "nodeVersion": "v22.23.4",
+      "browserLaunched": false,
+      "browserProfileCount": 12,
+      "seededScenarios": [
+        20261031,
+        20261032,
+        20261033
+      ],
+      "mutationControlsDetected": [
+        "parent-state-field",
+        "child-view-tree",
+        "physical-dom-html",
+        "disabled-control",
+        "bridge-order",
+        "ABI-role-before-reject"
+      ],
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-CONSUMER/archive-verify-final/checker.stdout.bin",
+        "bytes": 1344,
+        "sha256": "72c63e54e65572a60d333461ffefd07a81cab280f4bd0e847332d43800730b43"
+      },
+      "command": {
+        "path": "module-coordination/rawlogs/E-CONSUMER/archive-verify/check-archived.command.json",
+        "bytes": 1144,
+        "sha256": "ec21cd7ed75f57b340cba1dc580ec0cf4cad2e16cab1e87b8787bda67ada45a2"
+      }
+    },
+    "helperSyntax": {
+      "path": "module-coordination/rawlogs/E-CONSUMER/final-preflight.json",
+      "bytes": 1990,
+      "sha256": "17bc02c60680a2be827f82cb799edf0a310867552a2f9742906078091569587f"
+    },
+    "preservedVerifierRedHistory": {
+      "path": "module-coordination/rawlogs/E-CONSUMER/red-history.json",
+      "bytes": 2620,
+      "sha256": "7b37e9258488467cb11660068ead238b16463589a7aa76dfe1e4517b46a9ad1e"
+    },
+    "nativeReceiptValidation": {
+      "status": "passed",
+      "stateUnchanged": true,
+      "command": {
+        "path": "module-coordination/rawlogs/E-CONSUMER/native-receipt-validation.command.json",
+        "bytes": 1022,
+        "sha256": "b8a82dea6620529ff4fe04b368c4e61dd9d38c8dacdd6f449242022e5572dec0"
+      },
+      "stateSHA256": "df9e733c274089c957f13fbea7fd74ff6b38e9f7ec1dd3c6d8b3ba2ffae088a6"
+    }
+  },
+  "certificateBoundary": "Archived module-pair semantic replay only; the separate 13-case backendqualification certificate was not consumed, extended, or claimed.",
+  "limits": [
+    "Evidence applies to this exact archive, source commit, finite parent/child fixture, fixed scenario, three recorded seeds, and captured browser profiles.",
+    "Git blob matching establishes byte equality with the local published commit, not signer authenticity or malicious-code isolation.",
+    "The offline checker replays archived browser captures and does not launch a browser."
+  ],
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-CONSUMER",
+    "index": {
+      "path": "module-coordination/rawlogs/E-CONSUMER/index.json",
+      "bytes": 8074,
+      "sha256": "b165279a097dfbf1695454f73c6c27a5448b23af2074028f6ee65935c23012ad"
+    },
+    "indexedFiles": 38
+  },
+  "report": {
+    "path": "module-coordination/reports/E-CONSUMER.md",
+    "bytes": 6102,
+    "sha256": "b37278d6de0853d6a3fe68ac4230d4f6097dee651e69393f8cf126c41d253374"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-DIGEST",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Aligned JavaScript ABI canonical JSON and string ordering with Go encoding/json. Go golden vectors and actual moduleabi.Describe pair witnesses now match in Node for <, >, &, U+2028, and U+2029. The preserved XR-ABI AMEND failure is reproduced before the fix and closed by this parity repair.",
+  "scope": {
+    "ownedPaths": [
+      "gondola/compiled-modules/abi/validate.mjs",
+      "gondola/compiled-modules/abi/validate.test.mjs",
+      "gondola/compiled-modules/abi/test-fixtures.mjs",
+      "module-coordination/reports/E-DIGEST.md",
+      "module-coordination/receipts/E-DIGEST.json",
+      "module-coordination/rawlogs/E-DIGEST/**"
+    ],
+    "productionPathsModified": [
+      "compiled-modules/abi/validate.mjs",
+      "compiled-modules/abi/validate.test.mjs",
+      "compiled-modules/abi/test-fixtures.mjs"
+    ],
+    "gitOrNativeSchedulerChanged": false
+  },
+  "contract": {
+    "path": "module-coordination/CONTRACT.md",
+    "bytes": 5478,
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "sourcePins": [
+    {
+      "path": "compiled-modules/abi/validate.mjs",
+      "bytes": 35025,
+      "sha256": "2a8f0c4cfb2a60c08a71f2596b5e06563b663c1aa60d07384d488a8268bc95b0"
+    },
+    {
+      "path": "compiled-modules/abi/validate.test.mjs",
+      "bytes": 10376,
+      "sha256": "9bbcc79d988aa109330ddae93c5ffb86778c62946cc147256431e93237ddf4a9"
+    },
+    {
+      "path": "compiled-modules/abi/test-fixtures.mjs",
+      "bytes": 9176,
+      "sha256": "c037f5d6e3355a198f6ac1b7d8b7aa1dee3c27557fe9a333c1e5965c6d5602dc"
+    }
+  ],
+  "preservedXRABIAMEND": {
+    "report": {
+      "path": "module-coordination/reports/XR-ABI.md",
+      "bytes": 4475,
+      "sha256": "ffa85941d530cb8aabd50a7e90ac2881a8ddb7558a0f03ca007d832df06246ef"
+    },
+    "receipt": {
+      "path": "module-coordination/receipts/XR-ABI.json",
+      "bytes": 3928,
+      "sha256": "78560d36c713481a22af869b70d9dbc1d45c76ac8603abc66c36ce61a7c1b2d8"
+    },
+    "decision": "amend; original packet preserved unchanged"
+  },
+  "regression": {
+    "preFixValidatorSHA256": "a392febf57509bc61c0f221e74429c0f6e268540ac2b675e931e5dc6396a16bd",
+    "redCommand": [
+      "/tmp/gondola-node22/node_modules/node/bin/node",
+      "--test",
+      "validate.test.mjs"
+    ],
+    "nodeVersion": "v22.23.4",
+    "exitCode": 1,
+    "passed": 6,
+    "failed": 1,
+    "firstFailure": "canonical descriptor digests match Go-generated path escaping vectors; artifact inventory digest mismatch for < U+003C",
+    "logPath": "module-coordination/rawlogs/E-DIGEST/pre-fix-red.json",
+    "logSHA256": "d58db101f9b482f544813009a076005298757f8183d5a73e9cffd98d5de9411e"
+  },
+  "verification": {
+    "nodeVersion": "v22.23.4",
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "nodeSyntaxChecksPassed": 3,
+    "nodeTestsPassed": 7,
+    "nodeTestsFailed": 0,
+    "goModuleABITestsExitCode": 0,
+    "goGoldenVectorsMatched": 5,
+    "actualGoAndNodePairWitnessesMatched": 5,
+    "actualWitnessCompare": {
+      "path": "module-coordination/rawlogs/E-DIGEST/actual-artifact-witness-compare.json",
+      "sha256": "1000ca6f73bf6cd8a7bbd57deb7a1aa8c8110c54986bdc1db20b6d250beea2bc",
+      "ampersandGoArtifactSHA256": "5b06301c98ba13f13fe2d32505877634d5da523b407304c1265a3487d8767112"
+    },
+    "historicalActualArtifactPins": {
+      "path": "module-coordination/rawlogs/E-DIGEST/actual-artifact-pins.json",
+      "sha256": "9d41626b449a0b0f27871ca21f8303df0801a44e03fd9b5d78f9d5ec002465fa",
+      "buildIndexSHA256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022",
+      "fileCount": 20,
+      "builds": 4,
+      "freshness": "prior React/DOM artifacts; predates the separate UTF-8 compiler repair"
+    },
+    "commandsAndLogs": {
+      "path": "module-coordination/rawlogs/E-DIGEST/verification.json",
+      "bytes": 12142,
+      "sha256": "21e8738d80a33cddd1035c0ba81cc59194b6ab020e20113d764e910805104b60"
+    },
+    "nativeReceiptValidation": {
+      "commandPath": "module-coordination/rawlogs/E-DIGEST/native-receipt-validation.command.txt",
+      "stdoutPath": "module-coordination/rawlogs/E-DIGEST/native-receipt-validation.stdout.json",
+      "stdoutSHA256": "3bf34363624c5e1abab641688d0c76ba1083ab689862369717f1726a363afc82",
+      "stateBeforeAfterEqual": true
+    }
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-DIGEST",
+    "index": "module-coordination/rawlogs/E-DIGEST/index.json",
+    "indexBytes": 9897,
+    "indexSHA256": "40c74bb754bd929c8c0e6a3bc46db2d1d3cb3ef5da8713b874633d1170b8bb46",
+    "indexedFiles": 48
+  },
+  "report": {
+    "path": "module-coordination/reports/E-DIGEST.md",
+    "bytes": 4408,
+    "sha256": "01271435450278a6b44fd3207d7719002ca6a2bd8a555f44c1f37c1672def758"
+  },
+  "limits": [
+    "No Go ABI API, descriptor schema, build, or semantic logic changed.",
+    "The actual-artifact witnesses establish digest compatibility on historical artifacts only; they do not establish refreshed producer acceptance, provenance authenticity, or malicious-code isolation."
+  ]
+}

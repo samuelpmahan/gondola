@@ -1,0 +1,77 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Implemented typed parent/child Go fixtures with the frozen Input/Publication bridge API, Go-owned Add/Reset/step/lock/revision rules, literal reducer tests, and a deterministic native CLI replay. Targeted Go tests and native replay passed; independent N2 React/DOM builds emitted the exact bridge roles and ABI descriptors.",
+  "scope": {
+    "owned_paths": [
+      "fixtures/compiled/modulewire/**",
+      "fixtures/compiled/moduleparent/**",
+      "fixtures/compiled/modulechild/**",
+      "cmd/compiled-modules-native/**",
+      "module-coordination/reports/E-GO.md",
+      "module-coordination/receipts/E-GO.json",
+      "module-coordination/rawlogs/E-GO/**"
+    ],
+    "shared_production_paths_changed": [],
+    "git_or_native_scheduler_changed": false
+  },
+  "sourcePins": {
+    "fixtures/compiled/modulewire/modulewire.go": "9d29a10bdf9069852d861a38ede52f11b40a650da057dbd85070bb7da5c4561f",
+    "fixtures/compiled/modulewire/modulewire_test.go": "948dbfe7022d3896a91a40d844b1e1a1db3f1fc9f9862abc9773df014f7bd42f",
+    "fixtures/compiled/moduleparent/app.go": "1da626a1e56e34c9b08bb9d56e6d99f4cbf783439c25053cd61d83eca1830c37",
+    "fixtures/compiled/moduleparent/app_test.go": "bb9c372618dc1684fd0661befffb2f80e8cec7148aa5c3afe4d56f11971b8c7a",
+    "fixtures/compiled/moduleparent/scenario.json": "9b99a2d7ac7f9d044bcc590414787ea4a9d934f180503a45aac7684778f94539",
+    "fixtures/compiled/modulechild/app.go": "1a0906fa3d6efdaefe5f580f6783901c6243c8403108b0b9423d35a2b815a246",
+    "fixtures/compiled/modulechild/app_test.go": "0dc8dac0473adecab7c3e9d5f82e0a2ab3147ac0d50fca2bc142d11ce8cbab3b",
+    "fixtures/compiled/modulechild/view.go": "0a860eae91c70fc86535deb56754410a89c20186d658c68642a5476e6f1f7407",
+    "cmd/compiled-modules-native/main.go": "a94ab417cdc8699b59bba5998a31012e9881f744840a1c79eaba484a2808a056",
+    "cmd/compiled-modules-native/main_test.go": "1d262d376d219f88f8f0886c69b347bbe205bf7d9e03a91050474180f95ea6d7"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-GO.md",
+    "bytes": 5839,
+    "sha256": "8615a4e96d02f6265222fc67473b3ed97004fa3f158f49fdade44d94eb39fb24"
+  },
+  "verification": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "goTest": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./fixtures/compiled/modulewire ./fixtures/compiled/moduleparent ./fixtures/compiled/modulechild ./cmd/compiled-modules-native",
+      "exit": 0,
+      "stdoutPath": "module-coordination/rawlogs/E-GO/tests.stdout.log",
+      "stdoutBytes": 294,
+      "stdoutSHA256": "81ed7152fb485ff42ba1f889f92ee8f98225ece977a811849155f5989647b636",
+      "stderrSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nativeReplay": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/compiled-modules-native --script fixtures/compiled/moduleparent/scenario.json",
+      "exit": 0,
+      "path": "module-coordination/rawlogs/E-GO/native-trace.json",
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a",
+      "sourceEvents": 24,
+      "goUpdates": 16
+    },
+    "compilerEvidence": {
+      "worker": "N2",
+      "reactDomSeparateParentChildBuilds": true,
+      "stableBuildIndex": "module-coordination/rawlogs/E-COMPILER/stable-builds/index.json",
+      "stableBuildIndexSHA256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022",
+      "validationIndex": "module-coordination/rawlogs/E-COMPILER/validation/index.json",
+      "validationIndexSHA256": "d6140a3653336a81644f3175cf30e6ec5438c8eb90a4ca778624570cb741f7de",
+      "testCommand": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go test ./build -run TestBuildEmitsSeparateTypedModuleBridgeABIForParentAndChild -count=1"
+    },
+    "abiPreflight": {
+      "witnessDirectory": "module-coordination/rawlogs/E-GO/preflight-unsafe-artifact-bytes",
+      "originalDescriptorSHA256": "f77db058aacb19f115c073a97daaa61dd88003cb57cb3bb0b4c15887d9b46d70",
+      "originalAcceptedOutputSHA256": "8efbd8592ec6cf0bc14245926ca0427ce3bd88ea2d63fd2965f0992fb593cf57",
+      "reproducerSHA256": "fe62f0141c163c474507c5144b25b409be802222f1aff3c78e30e5aa52555b3a",
+      "postFixDescriptorSourceSHA256": "d255480f6a10792e1f7f4e6d2204014f128fbb764cd98be8bd23797016b51ced",
+      "postFixRerun": "rejected unsafe Artifact.Bytes; see repaired-source.stdout.log",
+      "preFixDescriptorSourceSHA256": "unavailable; N5 changed descriptor.go before the source hash was captured"
+    }
+  },
+  "testsRun": true,
+  "productionChanges": true
+}

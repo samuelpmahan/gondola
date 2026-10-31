@@ -1,0 +1,225 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-SNAPSHOT",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "Independent review confirms the two-line attempt-root snapshot path change and the later full 7bd producer archive, but finds the sealed E-SNAPSHOT report small-fixture archive SHA differs from its receipt and captured stdout. The finding is a report-metadata correction; the source and final archive-path behavior pass.",
+  "reviewed_job": "E-SNAPSHOT",
+  "reviewed_worker": "N4",
+  "reviewedArtifacts": {
+    "authorReport": {
+      "path": "module-coordination/reports/E-SNAPSHOT.md",
+      "bytes": 1693,
+      "sha256": "208630e9da696c2898c8c7d3cc7fda94c14e34d0b8c77dcbd53df159b2df7f08"
+    },
+    "authorReceipt": {
+      "path": "module-coordination/receipts/E-SNAPSHOT.json",
+      "bytes": 5087,
+      "sha256": "6fc389fb560d7dc72ab4d671b00df701811e2a90649a7c779db182c5a6fb4f8a"
+    },
+    "sealedReport": {
+      "path": "module-coordination/seals/E-SNAPSHOT/E-SNAPSHOT.md",
+      "bytes": 1693,
+      "sha256": "208630e9da696c2898c8c7d3cc7fda94c14e34d0b8c77dcbd53df159b2df7f08"
+    },
+    "sealedReceipt": {
+      "path": "module-coordination/seals/E-SNAPSHOT/E-SNAPSHOT.json",
+      "bytes": 5087,
+      "sha256": "6fc389fb560d7dc72ab4d671b00df701811e2a90649a7c779db182c5a6fb4f8a"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-SNAPSHOT/seal.json",
+      "bytes": 179,
+      "sha256": "52630ae9120757567dc69f67e916d623cf2bb2a4e3de329d8866f8a8fc781a4f"
+    },
+    "sourceInventory": {
+      "path": "module-coordination/seals/E-SNAPSHOT/SOURCE-INVENTORY.json",
+      "bytes": 153,
+      "sha256": "1a775454a4e3359faf5e26de1700e580b5780717656b05e685cedcfc61c6996c"
+    },
+    "contract": {
+      "path": "module-coordination/CONTRACT.md",
+      "bytes": 5478,
+      "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+    }
+  },
+  "sourcePin": {
+    "path": "gondola/compiled-modules/run.mjs",
+    "bytes": 46750,
+    "sha256": "7c46f2bb16acfefb9a2beaaea63dac750b9bb4022ab192d4c452ff9db485b12c",
+    "matchesSealed": true,
+    "baselinePath": "module-coordination/seals/E-TEMP/source/compiled-modules/run.mjs",
+    "baseline": {
+      "bytes": 46726,
+      "sha256": "b0286a398073eb6e7fa01d965714628457d1ee0a6c1a83565629580cc644ca42"
+    },
+    "diffSummary": "Exactly two single-line replacements: snapshot destination metadata/execution-before-archive.json to execution-before-archive.json; includePaths adds execution-before-archive.json."
+  },
+  "unchangedInputs": [
+    {
+      "path": "gondola/compiled-capabilities/archive-helper.mjs",
+      "bytes": 3691,
+      "sha256": "df6c99a645d9164461889b8f0585fc79d3c486fc399a84ff7016e8648d2e7e5f"
+    },
+    {
+      "path": "gondola/compiled-capabilities/archive-helper.test.mjs",
+      "bytes": 17475,
+      "sha256": "1697da7cbbe9927d75a6907feaba9dc0e4212e8f3e714dca2131715ad23466db"
+    }
+  ],
+  "finding": {
+    "type": "author-report-hash-mismatch",
+    "authorReportClaim": "9cae8f7b11fb88db2bdee4c15f3feeea96ab2132fa0f8a63aa0af113ba9bc40f",
+    "receiptAndObserved": "c059b138df643500fb1092624ddc1840b38ff41bdffa3ab900a2bbb43c41685b",
+    "stdout": {
+      "path": "module-coordination/rawlogs/E-SNAPSHOT/archive-root-roundtrip.stdout.log",
+      "bytes": 294,
+      "sha256": "ff22ff750b5b6d41cb37a2ae4afc37c47cfbcadd8c90142f607a2c4dbf1cd631"
+    },
+    "authorRawIndex": {
+      "path": "module-coordination/rawlogs/E-SNAPSHOT/index.json",
+      "bytes": 3225,
+      "sha256": "81cbb92486b0b025a53c521a7191e6c71534bfd15bcf8d4ed8709a4b3bbb0a4b"
+    },
+    "effect": "The sealed author report needs an additive erratum. E-SNAPSHOT source and receipt are preserved."
+  },
+  "verification": {
+    "readOnlyProductionReview": true,
+    "producerRerun": false,
+    "authorTestsRerun": false,
+    "auditCommand": "python3 module-coordination/rawlogs/XR-SNAPSHOT/independent-audit.py",
+    "auditExitCode": 2,
+    "auditDecision": "amend",
+    "auditChecks": {
+      "sealed_author_packet_matches_seal": true,
+      "current_source_matches_sealed_pin": true,
+      "source_change_is_two_single_line_path_edits": true,
+      "shared_archive_helper_unchanged": true,
+      "focused_syntax_exit_zero": true,
+      "focused_helper_tests_7_pass": true,
+      "two_member_root_roundtrip_succeeded": true,
+      "author_report_roundtrip_hash_agrees": false,
+      "final_producer_exit_zero": true,
+      "final_producer_source_and_head": true,
+      "final_producer_attempt_artifacts_match_summary": true,
+      "all_archive_members_match_manifest": true,
+      "snapshot_archived_at_documented_root": true,
+      "all_147_source_pins_agree": true,
+      "all_profiles_conformance_and_demo": true,
+      "clean_git_before_and_after": true
+    },
+    "independentAudit": {
+      "path": "module-coordination/rawlogs/XR-SNAPSHOT/independent-audit.json",
+      "bytes": 8722,
+      "sha256": "89f6e184fc7c8658a72bdd09acf6b12895467d40bf09c7f652709e75e4c3ed2c"
+    },
+    "reviewRawIndex": {
+      "path": "module-coordination/rawlogs/XR-SNAPSHOT/index.json",
+      "bytes": 819,
+      "sha256": "66633f5dcc03afe63e4756066cbbf0d6bfb3f9a77338c55afa0ae73c83c4fdfd"
+    },
+    "capturedHelperSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/run.mjs",
+      "exitCode": 0
+    },
+    "capturedHelperTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0
+    },
+    "smallRoundTrip": {
+      "members": 2,
+      "snapshotPath": "execution-before-archive.json",
+      "exitCode": 0,
+      "reportedSHA256": "9cae8f7b11fb88db2bdee4c15f3feeea96ab2132fa0f8a63aa0af113ba9bc40f",
+      "receiptSHA256": "c059b138df643500fb1092624ddc1840b38ff41bdffa3ab900a2bbb43c41685b",
+      "observedSHA256": "c059b138df643500fb1092624ddc1840b38ff41bdffa3ab900a2bbb43c41685b"
+    }
+  },
+  "finalProducerEvidence": {
+    "sourceCommit": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+    "attempt": "attempt-20261031T213332911Z-35",
+    "command": {
+      "path": "module-coordination/final-producer-command.json",
+      "bytes": 363,
+      "sha256": "cb6eabf6ffe07a5faefbeb010edf26bdb60ceee7db5f5fc2e0a97fa5f259cde1"
+    },
+    "summary": {
+      "path": "module-coordination/final-producer-summary.json",
+      "bytes": 1688,
+      "sha256": "61c0224d30b76e5f955bded9d2f4295b5d5a11db8810fa41795c0ba1f6d6decf"
+    },
+    "log": {
+      "path": "module-coordination/final-producer.log",
+      "bytes": 1844,
+      "sha256": "0dbc7e8e9dee28165ec1c703bc25f36635e8b916de75638bfe08dcfbeb0b486f"
+    },
+    "attemptContext": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35/metadata/runner-context.json",
+      "bytes": 724,
+      "sha256": "560d8d4f9206cc89909ce6d763ad782d1ee37c68b7bf56ea87816599bf86cc23"
+    },
+    "archive": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.tar.gz",
+      "bytes": 6373581,
+      "sha256": "039e6b8f7d074c6c4873fc4a04ebc56f6b7110250046906e222eb1d17503e20c"
+    },
+    "manifest": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35.manifest.json",
+      "bytes": 125900,
+      "sha256": "ef2f332d15e306daabc290d127a42bfc2f9486fa43219785192f1674d7804fb2"
+    },
+    "deliveryReceipt": {
+      "path": "gondola/compiled-modules/evidence/attempts/attempt-20261031T213332911Z-35/receipt.json",
+      "bytes": 472432,
+      "sha256": "38246a62989fd77ef7f6af32752be1e23249c262f15cb8bd8f33fc29fab3093c"
+    },
+    "archiveMembers": 529,
+    "allArchiveEntriesStreamCheckedAgainstManifest": true,
+    "snapshotPath": "execution-before-archive.json",
+    "snapshotPin": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35/execution-before-archive.json",
+      "bytes": 42639,
+      "sha256": "5c243ad503e214709cebc96c2a83d6b990cf40245a1631346a562e18a3ec01c5"
+    },
+    "sourcePins": 147,
+    "sourcePinsBeforeAfterSnapshotManifestEqual": true,
+    "conformance": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35/conformance/summary.json",
+      "bytes": 4025,
+      "sha256": "82601f2de69c66be1e89e7cbc912328ecaa218e5c9b30dc32d12c546932fff43",
+      "status": "matched",
+      "browserProfiles": 12,
+      "mutationControlsDetected": 6
+    },
+    "demo": {
+      "path": "gondola/compiled-modules/output/attempts/attempt-20261031T213332911Z-35/demo/http-smoke.json",
+      "bytes": 301225,
+      "sha256": "dbf259e289112e77bcb9ea3c832a56ed1e3a1072a73f3ade9031879c79e8a615",
+      "status": "passed",
+      "httpStatus": 200
+    },
+    "gitBefore": {
+      "head": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+      "dirty": false,
+      "status": "",
+      "sourcePinsMatch": true,
+      "sourcePinMismatches": []
+    },
+    "gitAfter": {
+      "head": "7bd0da2b1211cc639176b86b70c1cbc2b5fc10e0",
+      "dirty": false,
+      "status": ""
+    }
+  },
+  "limits": [
+    "Point-in-time verification of the sealed E-SNAPSHOT packet and cited final producer attempt.",
+    "AMEND is confined to the incorrect small-fixture hash in the author report; no source or archive-path defect was observed."
+  ],
+  "reviewReport": {
+    "path": "module-coordination/reports/XR-SNAPSHOT.md",
+    "bytes": 2481,
+    "sha256": "407b0e423458769f6c2ea522ae7029485660fcfc5034bf13c2f5d2c43618e839"
+  }
+}

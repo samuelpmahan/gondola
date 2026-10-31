@@ -1,0 +1,260 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-GO",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "Independent review confirms the sealed Go source inventory, typed bridge/reducer behavior, counter reuse, tests, and native trace, but a boundary witness shows an enabled Add at MAX_SAFE_INTEGER emits a publication above the ABI limit that parent.Receive rejects.",
+  "reviewed_job": "E-GO",
+  "reviewed_worker": "N1",
+  "report": {
+    "path": "module-coordination/reports/XR-GO.md",
+    "bytes": 6016,
+    "sha256": "ed38ec74f2bb1dc6872d1178d223d4b2af7abfd419ca9fffaeaba6905acf3fb7"
+  },
+  "reviewed_artifacts": {
+    "authorReport": {
+      "path": "module-coordination/reports/E-GO.md",
+      "bytes": 5839,
+      "sha256": "8615a4e96d02f6265222fc67473b3ed97004fa3f158f49fdade44d94eb39fb24"
+    },
+    "sealedReport": {
+      "path": "module-coordination/seals/E-GO/E-GO.md",
+      "bytes": 5839,
+      "sha256": "8615a4e96d02f6265222fc67473b3ed97004fa3f158f49fdade44d94eb39fb24"
+    },
+    "authorReceipt": {
+      "path": "module-coordination/receipts/E-GO.json",
+      "bytes": 4807,
+      "sha256": "f1b2cb8df5d69acd36c61061061e2110a1343c6ba8d229db0c95f555f567b5aa"
+    },
+    "sealedReceipt": {
+      "path": "module-coordination/seals/E-GO/E-GO.json",
+      "bytes": 4807,
+      "sha256": "f1b2cb8df5d69acd36c61061061e2110a1343c6ba8d229db0c95f555f567b5aa"
+    },
+    "sourceInventory": {
+      "path": "module-coordination/seals/E-GO/SOURCE-INVENTORY.json",
+      "bytes": 1652,
+      "sha256": "a37fbc65661d3a65a458e4d843c1716627ecca0be96c61da04bdab67e63418a8"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-GO/seal.json",
+      "bytes": 167,
+      "sha256": "d6c8c60c64d6e40ff78f4600e4f76644a32a3846ebcd83da817358c4522256ef"
+    },
+    "contract": {
+      "path": "module-coordination/CONTRACT.md",
+      "bytes": 5478,
+      "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+    },
+    "rulings": {
+      "path": "module-coordination/RULINGS.md",
+      "bytes": 1823,
+      "sha256": "d511895dddae81392d3bab6ebb34970019f7ea2556818142070d38327620b0c0"
+    },
+    "acceptance": {
+      "path": "module-coordination/ACCEPTANCE.md",
+      "bytes": 1985,
+      "sha256": "2449f2eb33dea9b38d9f1151472b6c4a492b8be2b42f9bfc38e1e889d7d60ea8"
+    },
+    "compilerEvidence": {
+      "worker": "N2 author evidence, not independent Go semantics review",
+      "stableBuildIndexSHA256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022"
+    }
+  },
+  "sourcePins": {
+    "fixtures/compiled/modulewire/modulewire.go": "9d29a10bdf9069852d861a38ede52f11b40a650da057dbd85070bb7da5c4561f",
+    "fixtures/compiled/modulewire/modulewire_test.go": "948dbfe7022d3896a91a40d844b1e1a1db3f1fc9f9862abc9773df014f7bd42f",
+    "fixtures/compiled/moduleparent/app.go": "1da626a1e56e34c9b08bb9d56e6d99f4cbf783439c25053cd61d83eca1830c37",
+    "fixtures/compiled/moduleparent/app_test.go": "bb9c372618dc1684fd0661befffb2f80e8cec7148aa5c3afe4d56f11971b8c7a",
+    "fixtures/compiled/moduleparent/scenario.json": "9b99a2d7ac7f9d044bcc590414787ea4a9d934f180503a45aac7684778f94539",
+    "fixtures/compiled/modulechild/app.go": "1a0906fa3d6efdaefe5f580f6783901c6243c8403108b0b9423d35a2b815a246",
+    "fixtures/compiled/modulechild/app_test.go": "0dc8dac0473adecab7c3e9d5f82e0a2ab3147ac0d50fca2bc142d11ce8cbab3b",
+    "fixtures/compiled/modulechild/view.go": "0a860eae91c70fc86535deb56754410a89c20186d658c68642a5476e6f1f7407",
+    "cmd/compiled-modules-native/main.go": "a94ab417cdc8699b59bba5998a31012e9881f744840a1c79eaba484a2808a056",
+    "cmd/compiled-modules-native/main_test.go": "1d262d376d219f88f8f0886c69b347bbe205bf7d9e03a91050474180f95ea6d7"
+  },
+  "findings": {
+    "authorReportAndReceiptMatchSealedCopies": true,
+    "allAuthorSourcePinsMatchCurrentBytes": true,
+    "parentImportsChildImplementation": false,
+    "childReusesCounterInitUpdateView": true,
+    "typedInputAndPublicationSemanticsMatchContract": true,
+    "disabledActionsProduceNoNativeUpdateTick": true,
+    "independentGoTestsPassed": true,
+    "independentNativeReplayByteIdentical": true,
+    "overRangeGeneratedPublicationIsRejectedByParent": true,
+    "decisionBlockingFinding": "An enabled child add at a permitted MAX_SAFE_INTEGER count emits 9007199254740992; parent.Receive rejects the publication and the two snapshots diverge."
+  },
+  "verification": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "goTest": {
+      "argv": [
+        "/tmp/gondola-go/go/bin/go",
+        "test",
+        "-count=1",
+        "./fixtures/compiled/modulewire",
+        "./fixtures/compiled/moduleparent",
+        "./fixtures/compiled/modulechild",
+        "./cmd/compiled-modules-native"
+      ],
+      "exit": 0,
+      "stdoutSHA256": "81ed7152fb485ff42ba1f889f92ee8f98225ece977a811849155f5989647b636",
+      "log": "module-coordination/rawlogs/XR-GO/tests.stdout.log"
+    },
+    "nativeReplay": {
+      "argv": [
+        "/tmp/gondola-go/go/bin/go",
+        "run",
+        "./cmd/compiled-modules-native",
+        "--script",
+        "fixtures/compiled/moduleparent/scenario.json"
+      ],
+      "exit": 0,
+      "sourceEvents": 24,
+      "goUpdates": 16,
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a",
+      "byteIdenticalToSealedTrace": true,
+      "log": "module-coordination/rawlogs/XR-GO/native-trace.json"
+    },
+    "boundaryWitness": {
+      "argv": [
+        "/tmp/gondola-go/go/bin/go",
+        "run",
+        "/workspace/scratch/39a56936f173/module-coordination/rawlogs/XR-GO/maxsafe-publication-witness.go"
+      ],
+      "exit": 0,
+      "stdout": "{\"childCount\":9007199254740992,\"parentPublishedCount\":0,\"parentPublishedRevision\":0,\"publicationCount\":9007199254740992,\"publicationRevision\":1}\n",
+      "finding": "An enabled Add crosses the accepted count bound; parent.Receive leaves the snapshot unchanged."
+    }
+  },
+  "tests_or_builds_run": true,
+  "evidence": [
+    {
+      "path": "module-coordination/CONTRACT.md",
+      "bytes": 5478,
+      "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+    },
+    {
+      "path": "module-coordination/RULINGS.md",
+      "bytes": 1823,
+      "sha256": "d511895dddae81392d3bab6ebb34970019f7ea2556818142070d38327620b0c0"
+    },
+    {
+      "path": "module-coordination/ACCEPTANCE.md",
+      "bytes": 1985,
+      "sha256": "2449f2eb33dea9b38d9f1151472b6c4a492b8be2b42f9bfc38e1e889d7d60ea8"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/E-GO.md",
+      "bytes": 5839,
+      "sha256": "8615a4e96d02f6265222fc67473b3ed97004fa3f158f49fdade44d94eb39fb24"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/E-GO.json",
+      "bytes": 4807,
+      "sha256": "f1b2cb8df5d69acd36c61061061e2110a1343c6ba8d229db0c95f555f567b5aa"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/SOURCE-INVENTORY.json",
+      "bytes": 1652,
+      "sha256": "a37fbc65661d3a65a458e4d843c1716627ecca0be96c61da04bdab67e63418a8"
+    },
+    {
+      "path": "module-coordination/seals/E-GO/seal.json",
+      "bytes": 167,
+      "sha256": "d6c8c60c64d6e40ff78f4600e4f76644a32a3846ebcd83da817358c4522256ef"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-GO/tests.stdout.log",
+      "bytes": 294,
+      "sha256": "81ed7152fb485ff42ba1f889f92ee8f98225ece977a811849155f5989647b636"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-GO/native-trace.json",
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a"
+    },
+    {
+      "path": "module-coordination/rawlogs/E-COMPILER/stable-builds/index.json",
+      "bytes": 9243,
+      "sha256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/go-version.stdout.log",
+      "bytes": 32,
+      "sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/go-version.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/tests.stdout.log",
+      "bytes": 294,
+      "sha256": "81ed7152fb485ff42ba1f889f92ee8f98225ece977a811849155f5989647b636"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/tests.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/native-replay.stdout.log",
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/native-replay.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/native-trace.json",
+      "bytes": 208651,
+      "sha256": "169b1e20faa959d0c964dc943910e59a33be599287c8e6fbddfae77d39e37a7a"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/maxsafe-publication-witness.go",
+      "bytes": 1017,
+      "sha256": "05e3bef9845339010ecd9d6ef919460b3e8585795ed28bf2626b6f016a7c1e4b"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/maxsafe-publication-witness.stdout.log",
+      "bytes": 145,
+      "sha256": "a93acd89541530e545cca29c1eea6fb13babbed6bb21a825308ff4908330dd80"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/maxsafe-publication-witness.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/maxsafe-publication-witness.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/maxsafe-witness-initial-compile.log",
+      "bytes": 481,
+      "sha256": "ed0698c717871cf97e71d9abd20e6957e986872abacb20f25320e00d3416273d"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/review-commands.txt",
+      "bytes": 1074,
+      "sha256": "faac0050ca769347e43909f1d850c8ad35a5d5d3adc8180edaeb60429036c07c"
+    },
+    {
+      "path": "module-coordination/rawlogs/XR-GO/index.json",
+      "bytes": 6555,
+      "sha256": "a58f92f9339558c45e0a44a908265f5735449396c940ad4ebcc980f6087b690d"
+    }
+  ],
+  "limits": [
+    "No production source, sealed E-GO report/receipt, source inventory, or seal was changed.",
+    "The packet does not claim browser-mounted pair acceptance or host runtime behavior; E-COMPILER build evidence is attributed to N2 as author evidence.",
+    "The review finding concerns the actual Go publication boundary and requires a separate author repair/review before E-GO can be accepted."
+  ]
+}

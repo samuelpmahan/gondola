@@ -1,0 +1,144 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-REGRESSIONS",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Independent review verified the sealed historical M0 5,000-case run and counter browser/native trace (107 scripts, 4,473 ticks, 8 tests), including their exact source/runtime pins. E-REGRESSIONS remains a valid historical checkpoint; later source changes mean it is not a current all-source validation.",
+  "reviewed_job": "E-REGRESSIONS",
+  "reviewed_worker": "N1",
+  "report": {
+    "path": "module-coordination/reports/XR-REGRESSIONS.md",
+    "bytes": 4569,
+    "sha256": "ac16b0fbcd6e8f3172f627ab8ef7df7dc4523f04e3a9b1194d9e8bb39e0ac1fa"
+  },
+  "reviewed_artifacts": {
+    "sealedReport": {
+      "path": "module-coordination/seals/E-REGRESSIONS/E-REGRESSIONS.md",
+      "bytes": 2968,
+      "sha256": "92de247ab658e43fc0655b848e3c097d3145dd1b248a03ee32ec6e5374d95146"
+    },
+    "sealedReceipt": {
+      "path": "module-coordination/seals/E-REGRESSIONS/E-REGRESSIONS.json",
+      "bytes": 3483,
+      "sha256": "054e9b7f18291dcd1d3f928582bd7a9b8812040b068a1c0cef8c6b1bcdf051e4"
+    },
+    "seal": {
+      "path": "module-coordination/seals/E-REGRESSIONS/seal.json",
+      "bytes": 185,
+      "sha256": "b6e14eed32eecb6d17c43d37ebd35a6014e02d4d1a9fac9d0b0cab8d7e27edb4"
+    },
+    "authorReport": {
+      "path": "module-coordination/reports/E-REGRESSIONS.md",
+      "bytes": 2968,
+      "sha256": "92de247ab658e43fc0655b848e3c097d3145dd1b248a03ee32ec6e5374d95146"
+    },
+    "authorReceipt": {
+      "path": "module-coordination/receipts/E-REGRESSIONS.json",
+      "bytes": 3483,
+      "sha256": "054e9b7f18291dcd1d3f928582bd7a9b8812040b068a1c0cef8c6b1bcdf051e4"
+    },
+    "authorRawIndex": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/index.json",
+      "bytes": 3418,
+      "sha256": "ff344d86f87236899f0b205cea26de50e43270c6fa2c8da4c496e5779234e9a8"
+    }
+  },
+  "findings": {
+    "authorReportAndReceiptMatchSealedCopies": true,
+    "sealPinsMatch": true,
+    "m0ExitZero": true,
+    "m0GoVetAndGoTestPassed": true,
+    "m0Cases": 5000,
+    "m0Seed": 20261030,
+    "m0GoSourceFiles": 309,
+    "m0BeforeAfterSourceManifestsIdentical": true,
+    "m0SourceManifestSHA256": "5241013f75ca23f65505e91864f2cb30ff1c451d0ef3d7cf47008fa08c972376",
+    "counterExitZero": true,
+    "counterScenarioCount": 107,
+    "counterGeneratedCases": 100,
+    "counterTicks": 4473,
+    "counterMismatches": 0,
+    "counterNativeAllMatched": true,
+    "counterNodeTests": "8/8 passed",
+    "counterTraceSHA256": "bc647b4a36311d2d19e32afa9686df74bfed46bc408a4d17c108c7c74a0bd934",
+    "counterTraceBytes": 49491627,
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "nodeVersion": "v22.23.4",
+    "reactVersion": "19.3.1",
+    "chromiumVersion": "153.0.8010.0",
+    "preservationManifestEntriesVerified": 68,
+    "preservationVerificationExit": 0,
+    "currentSourceComparison": {
+      "historicalGoEntries": 309,
+      "identical": 298,
+      "changed": 8,
+      "absentTemporaryProbeFiles": 3
+    },
+    "postCheckpointChangesAreNotE_REGRESSIONSIntegrityFailures": true
+  },
+  "commands": {
+    "m0": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false bash run.sh",
+    "counter": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false CHROMIUM_EXECUTABLE_PATH=/tmp/chromium-portable GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 bash run-interaction.sh"
+  },
+  "evidence": {
+    "m0RunLog": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/M0/run.log",
+      "bytes": 3940,
+      "sha256": "7f168240ed62dd69c5770f08f4ae696b08f9f6e0177dc49c0daef69c19325366"
+    },
+    "m0SourceBefore": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/M0/go-source-before.sha256",
+      "bytes": 42878,
+      "sha256": "5241013f75ca23f65505e91864f2cb30ff1c451d0ef3d7cf47008fa08c972376"
+    },
+    "m0SourceAfter": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/M0/go-source-after.sha256",
+      "bytes": 42878,
+      "sha256": "5241013f75ca23f65505e91864f2cb30ff1c451d0ef3d7cf47008fa08c972376"
+    },
+    "counterTrace": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/counter/interaction-traces-seed-20261030.json",
+      "bytes": 49491627,
+      "sha256": "bc647b4a36311d2d19e32afa9686df74bfed46bc408a4d17c108c7c74a0bd934"
+    },
+    "counterRunLog": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/counter/run.log",
+      "bytes": 2526,
+      "sha256": "4360ac1dd944331b3b8d9c30ef27b0602210408ef2ee4443da8462b1f2c1b848"
+    },
+    "counterPinnedVersions": {
+      "path": "module-coordination/rawlogs/E-REGRESSIONS/counter/pinned-versions.txt",
+      "bytes": 178,
+      "sha256": "7f609f8438bf624b67e8c1314370e0b8f33d69c43dd7f99960b35f8b46296889"
+    },
+    "historicalPreservationCheck": {
+      "path": "module-coordination/rawlogs/XR-REGRESSIONS/prior-coordination-verify-current.log",
+      "bytes": 6355,
+      "sha256": "31562728d5726af20f0759bff7fbb7f19dbedf2696d4ab135418451de27da4a9"
+    },
+    "independentAudit": {
+      "path": "module-coordination/rawlogs/XR-REGRESSIONS/independent-audit.json",
+      "bytes": 5061,
+      "sha256": "9ddfec26a393dbfdfd3120a32070e9724faf7f6d07c6d1d93fa3cd9d46e80111"
+    },
+    "rawIndex": {
+      "path": "module-coordination/rawlogs/XR-REGRESSIONS/index.json",
+      "bytes": 6085,
+      "sha256": "4cbc43b9cdcac91be0623924372bfdf666cacaecd6cad208e8f517e1546eaf62"
+    }
+  },
+  "limits": [
+    "No large test suite was rerun.",
+    "The report validates only the sealed historical M0 and counter checkpoint.",
+    "It does not assert that later E-UTF8, E-NUMERIC, or E-NATIVECLICK source was covered by that historical run, nor claim current full-chain acceptance.",
+    "No production source, Git state, E-REGRESSIONS packet, or seal was modified."
+  ],
+  "tests_or_builds_run": false,
+  "sourceCommit": "a275d646b0d8ceed956b27b6b8f3099e17106857",
+  "scope": {
+    "reviewed": "sealed historical M0 and counter regression checkpoint",
+    "productionChanges": false,
+    "authorPacketModified": false,
+    "largeSuiteRerun": false
+  }
+}

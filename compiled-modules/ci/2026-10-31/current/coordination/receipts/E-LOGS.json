@@ -1,0 +1,124 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-LOGS",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Assigned unique before/after Git command log names to prevent final source-check EEXIST, and narrowed focused test discovery to the existing compiled-modules roots plus the explicitly pinned archive-helper test. Actual two-phase Git logging, five-test discovery, seven helper tests and Node syntax check passed. Full producer was not rerun.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-modules/run.mjs",
+      "module-coordination/reports/E-LOGS.md",
+      "module-coordination/receipts/E-LOGS.json",
+      "module-coordination/rawlogs/E-LOGS/**"
+    ],
+    "productionPathsModified": [
+      "compiled-modules/run.mjs"
+    ],
+    "gitMutations": false
+  },
+  "sourcePin": {
+    "path": "gondola/compiled-modules/run.mjs",
+    "bytes": 42541,
+    "sha256": "707226121e9baf65fd092d8a574dbc7df9e9c88904e3f1b97bdf7fd25ac2f668",
+    "baselinePath": "E-PARSER source",
+    "baselineBytes": 42348,
+    "baselineSHA256": "caa3c2493b33764d91aea7902a5710015c6c8f32af70ec200a446a2b13c3a5b0",
+    "diffPath": "module-coordination/rawlogs/E-LOGS/attempt-001/source-diff-from-e-parser.patch",
+    "diffBytes": 2951,
+    "diffSHA256": "96a2d35a31067a7f0d9b846bfb9f46d3582661f98a8b67be925cf586d7f6fc2e"
+  },
+  "preservedFailure": {
+    "commandRecord": {
+      "path": "module-coordination/sourcef984-failed-final-producer-command.json",
+      "bytes": 363,
+      "sha256": "6508728d507854664c13d084c2a714c0d5e9a5bb5157b5bd8907ac028a359828"
+    },
+    "log": {
+      "path": "module-coordination/sourcef984-failed-final-producer.log",
+      "bytes": 1192,
+      "sha256": "e906872d4eec84b68cd3a64431f3e85818eefccaa697333c39399ca5d68ed5db"
+    },
+    "stage": "final-source-pin-comparison",
+    "error": "EEXIST while opening second Git snapshot output at logs/git-head.stdout.bin",
+    "priorStagesPassed": [
+      "focused tests",
+      "native trace",
+      "four builds",
+      "12 browser profiles",
+      "demo HTTP smoke"
+    ]
+  },
+  "verification": {
+    "gitMetadataRegression": {
+      "path": "module-coordination/rawlogs/E-LOGS/git-metadata-and-discovery-regression.json",
+      "bytes": 3142,
+      "sha256": "53ff1e0ce2891d3932741118949f1291a694092196e891f615302eeaed2836a9",
+      "status": "passed",
+      "phases": [
+        "before",
+        "after"
+      ],
+      "commands": [
+        "git-before-head",
+        "git-before-status",
+        "git-after-head",
+        "git-after-status"
+      ],
+      "commandCount": 4,
+      "artifactCount": 12,
+      "temporaryLogDirectory": "/tmp/gobi-e-logs-git-metadata-lhbIzW"
+    },
+    "testDiscovery": {
+      "tests": [
+        "compiled-capabilities/archive-helper.test.mjs",
+        "compiled-modules/abi/validate.test.mjs",
+        "compiled-modules/conformance/check.test.mjs",
+        "compiled-modules/conformance/seeded.test.mjs",
+        "compiled-modules/runtime/runtime.test.mjs"
+      ],
+      "count": 5,
+      "compiledCapabilitiesTests": [
+        "compiled-capabilities/archive-helper.test.mjs"
+      ],
+      "explicitArchiveHelperExactlyOnce": true
+    },
+    "archiveHelperTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "stdout": {
+        "path": "module-coordination/rawlogs/E-LOGS/archive-helper-tests.stdout.log",
+        "bytes": 1919,
+        "sha256": "bf50a60ce1a2a83fc35c1355d483cad7d531afd75597539e4a6155b6d9d5778f"
+      },
+      "stderr": {
+        "path": "module-coordination/rawlogs/E-LOGS/archive-helper-tests.stderr.log",
+        "bytes": 175,
+        "sha256": "202a87a00ef76091d8a32984349b989f52b738f07047864bf3713d162d3dcc74"
+      }
+    },
+    "nodeSyntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-modules/run.mjs",
+      "exitCode": 0,
+      "stderrSHA256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    },
+    "profileCountsAndSchemasChanged": false,
+    "fullProducerRun": false
+  },
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/E-LOGS",
+    "index": "module-coordination/rawlogs/E-LOGS/index.json",
+    "indexBytes": 4756,
+    "indexSHA256": "7d2330acdfd46e92247770fb4b6655dc4830546ca6f6e95d0c7b0d5c5c515f9b"
+  },
+  "report": {
+    "path": "module-coordination/reports/E-LOGS.md",
+    "bytes": 2571,
+    "sha256": "0445a2783ae2e7b71f2f7f33b3601b8101be3086175fbd798e9781f275cdc368"
+  },
+  "limits": [
+    "No full producer/profile rerun in this worker task.",
+    "Git commands in the regression are read-only; no Git state was changed."
+  ]
+}

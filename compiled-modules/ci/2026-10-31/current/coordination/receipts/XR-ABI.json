@@ -1,0 +1,84 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-ABI",
+  "worker": "N3",
+  "decision": "amend",
+  "summary": "The sealed ABI packet and its five owned sources match and focused Go, Node, and actual React/DOM artifact admission checks pass. A reproducible counterexample shows Go and JavaScript compute different canonical artifact digests for a path the ABI currently permits (apps/module&parent-...); fix canonical JSON parity or narrow the accepted path grammar and add a regression test.",
+  "reviewedPacket": {
+    "job_id": "E-ABI",
+    "worker": "N5",
+    "report": {
+      "path": "module-coordination/reports/E-ABI.md",
+      "bytes": 7277,
+      "sha256": "626ed9badff450064ca60aaa30ea4b8fa733d09c8d4bf49d29985bd6aeb5f827"
+    },
+    "receipt": {
+      "path": "module-coordination/receipts/E-ABI.json",
+      "bytes": 5407,
+      "sha256": "17a17865658206a94d3c2fad84cbca496d0e6f9d61251a07ca1c4f288603d8e3"
+    },
+    "reportAndReceiptMatchSeal": true,
+    "ownedSourceFilesMatched": 5,
+    "ownedSourceFileCount": 5
+  },
+  "currentContract": {
+    "path": "module-coordination/CONTRACT.md",
+    "sha256": "ba6dbd37c15c83068216702f5c864af5e423d0871490a890a65052bd66710020"
+  },
+  "authorInputDrift": {
+    "path": "compiled-frontend/build/pipeline.go",
+    "authorSHA256": "78463101a450aec88cf2ecf8b7182fe2da432aab99885edd6304aeccab264c16",
+    "currentSHA256": "5bc9207fbeb58f406bca9fc40ddf86269aab9667f8af798b3e40fd3a95889ba4",
+    "assessment": "post-E-ABI N2 UTF-8/compiler integration change; historical output evidence remains explicitly pinned"
+  },
+  "checks": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "nodeVersion": "v22.23.4",
+    "goABItests": {
+      "exitCode": 0,
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./moduleabi"
+    },
+    "jsABItests": {
+      "passed": 6,
+      "failed": 0,
+      "exitCode": 0,
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-modules/abi/validate.test.mjs"
+    },
+    "actualOldBuildPairChecks": {
+      "goExitCode": 0,
+      "nodeExitCode": 0,
+      "pairProfiles": [
+        "react",
+        "dom"
+      ],
+      "artifactFilesPinned": 20,
+      "sourceBuildIndexSHA256": "445e2207c1660a43cdcd91aebc1c26964a9fceba36ca238b9fd86de1d964d022"
+    },
+    "canonicalPathWitness": {
+      "GoDescribeExitCode": 0,
+      "goArtifactSHA256": "5b06301c98ba13f13fe2d32505877634d5da523b407304c1265a3487d8767112",
+      "JSValidateModuleABIExitCode": 0,
+      "jsResult": "rejected Go descriptor: artifact inventory digest mismatch",
+      "acceptedPath": "apps/module&parent-462c3bad7b95/<artifact>",
+      "finding": "Go encoding/json escapes ampersand in canonical string output while JS JSON.stringify does not; both path validators permit the path"
+    },
+    "bomRepairLineage": "Preserved before witness accepted BOM; after witness and current Node test reject BOM sidecar.",
+    "unsafeIntegerRepairLineage": "Preserved pre-fix rehashed Artifact.Bytes=9007199254740992 acceptance; current Go rehashed regression rejects it as invalid artifact record. Original pre-fix source SHA unavailable per preserved rawlog note."
+  },
+  "limits": [
+    "No code, Git, or native scheduler state changed during review.",
+    "SHA-256 consistency is not publisher authenticity or malicious-code isolation.",
+    "Actual React/DOM pair evidence uses earlier stable artifacts, before the separate UTF-8 compiler repair; it is not current producer acceptance."
+  ],
+  "rawlogs": {
+    "path": "module-coordination/rawlogs/XR-ABI",
+    "index": "module-coordination/rawlogs/XR-ABI/index.json",
+    "indexBytes": 1199,
+    "indexSHA256": "00243a1d7b6af1252043e5a6bd9cd7bddd3353217acbd656ba1a037187ab4d54"
+  },
+  "report": {
+    "path": "module-coordination/reports/XR-ABI.md",
+    "bytes": 4475,
+    "sha256": "ffa85941d530cb8aabd50a7e90ac2881a8ddb7558a0f03ca007d832df06246ef"
+  }
+}
