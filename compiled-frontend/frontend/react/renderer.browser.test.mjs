@@ -6,17 +6,14 @@ import { fileURLToPath } from "node:url";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { chromium } from "../../../interaction/node_modules/playwright/index.mjs";
 import { build } from "../../../interaction/node_modules/esbuild/lib/main.js";
+import { chromiumLaunchOptions } from "../../conformance/browser.mjs";
 
 let browser;
 let page;
 let temporary;
 
 before(async () => {
-  browser = await chromium.launch({
-    headless: true,
-    executablePath: process.env.CHROMIUM_PATH || "/tmp/chromium",
-    args: ["--no-sandbox", "--disable-dev-shm-usage"],
-  });
+  browser = await chromium.launch(chromiumLaunchOptions(process.env.CHROMIUM_PATH));
   page = await browser.newPage();
   await page.setContent("<!doctype html><main id=host></main>");
   temporary = await mkdtemp(join(tmpdir(), "gobi-react-checked-"));

@@ -1,5 +1,7 @@
 # Executed local acceptance
 
+This is the initial milestone local record at published source `832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb`. Its archived receipts and DELIVERY manifest retain those exact historical bytes. See [PORTABLE-BROWSER-REPAIR.md](PORTABLE-BROWSER-REPAIR.md) for the subsequent test-launcher correction and fresh-CI acceptance boundary.
+
 Source baseline: PR11 head `184ccdaabe9e6e46e1052ee79cd7e0be26fe3281`. The branch and open-PR inventory was checked again before publication: PR1–11 remain open and no overlapping compiled-backends branch exists. Toolkit PR1 remains at `989c295717511c812b69beda5d125817ffc054c9`; `coordination/probe.py` is its unmodified native probe, dependency Rebalancer1.0.4. Six actual Luna6 XHigh child workers occupied the six available child slots (seven total including root). Root supervised integration and Git; implementation and cross-review have separate authors.
 
 ## Current-source runs

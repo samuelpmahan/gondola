@@ -6,17 +6,14 @@ import { fileURLToPath } from "node:url";
 import { mkdtemp, rm } from "node:fs/promises";
 import { chromium } from "../../../interaction/node_modules/playwright/index.mjs";
 import { build } from "../../../interaction/node_modules/esbuild/lib/main.js";
+import { chromiumLaunchOptions } from "../../conformance/browser.mjs";
 import { createDOMRenderer } from "./renderer.mjs";
 
 let browser;
 let page;
 
 before(async () => {
-  browser = await chromium.launch({
-    headless: true,
-    executablePath: process.env.CHROMIUM_PATH || "/tmp/chromium",
-    args: ["--no-sandbox", "--disable-dev-shm-usage"],
-  });
+  browser = await chromium.launch(chromiumLaunchOptions(process.env.CHROMIUM_PATH));
   page = await browser.newPage();
   await page.setContent("<!doctype html><main id=host></main>");
   const temporary = await mkdtemp(join(tmpdir(), "gobi-dom-renderer-"));
