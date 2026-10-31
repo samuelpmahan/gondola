@@ -1,0 +1,74 @@
+{
+  "schema": "gobi.xr-ci-go-review/v1",
+  "job_id": "XR-CI-GO",
+  "worker": "N2",
+  "decision": "amend",
+  "source": {
+    "commit": "6b49cc0bd4c9512a041f723c86b632ec506afd9d",
+    "tree": "b28b10ccefd78f7a90d6d66f2b6769b426ed6a81"
+  },
+  "source_provenance": {
+    "primary_push_run_id": 41169518187,
+    "job_id": 124444234335,
+    "artifact_id": 13030848292,
+    "artifact_sha256": "95757192e15b6d7da97fd10da7db47747b29bc7b4ae52e265ab42f7d2a543d1a",
+    "artifact_member_count": 968,
+    "zip_crc": "passed",
+    "all_archive_and_extracted_members_match_retention": true
+  },
+  "author_packets": {
+    "report_sha256": "5ec5ac56d4ceaeb6733e53850308ac5dde8a454dd6582a3536dc559c2f4cd256",
+    "receipt_sha256": "5f518e33bfc3e93b0a697c4b3d0e222385c49155e628efd552e97086ce85e37c",
+    "audit_script_sha256": "259b173aefb9a8e0459644e7614ce4a97e27435a9636c24c1f7445e309b82346",
+    "audit_result_sha256": "7094b22776f354047af95fc54c8189a6af83210f02c308e295031a2c57320fc2"
+  },
+  "primary_execution": {
+    "mode": "full",
+    "status": "passed",
+    "command_count": 17,
+    "all_command_logs_match_recorded_hashes": true,
+    "source_pin_count": 188,
+    "all_source_and_output_pins_match": true,
+    "method_appir_symbols": 15,
+    "typed_signatures_and_call_edges_match_contract": true
+  },
+  "native_direct_trace": {
+    "equal": true,
+    "ticks": 19,
+    "fixture_action_checks": 18,
+    "trace_sha256": "d2c26643dbabeb2f434e51c8b0032e4aa4fe720043d3e5bce2a54871def5cc12",
+    "typed_state_message_dispatch_effect_checks_pass": true,
+    "view_traces_equal_between_native_and_direct": true,
+    "fixture_contains_literal_view_expectations": false
+  },
+  "value_semantics": {
+    "enabled_update_input_preservation_checks": 14,
+    "publish_saved_original_state_witnesses": 2,
+    "readonly_guard_probes": 2,
+    "all_passed": true
+  },
+  "independent_replay": {
+    "native": {
+      "exit_code": 0,
+      "trace_matches_artifact": true,
+      "binary_sha256": "10c8fa3afcfbf7b1ffbfed076ecd6b95f3e85e57bac435335a4d4a062ac35ebc",
+      "replay_stdout_sha256": "2e9e620a788fbc6e1973e62b2d9775fdf1c03f8ab72a28f5c61aea8f16dfc4f2",
+      "replay_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "direct": {
+      "exit_code": 0,
+      "trace_matches_artifact": true,
+      "node_version": "v22.23.4",
+      "replay_stdout_sha256": "0a8da95c47e6fb45ac9e2a83397ddeea54ae9a8f23cdd0f6a68bee9b60f52c08",
+      "replay_stderr_sha256": "790bfbbaceb894cc92ed5cbf51888ba8386d9e1fbadd14813ce55f01655ff2f1",
+      "experimental_proxy_warning": true
+    }
+  },
+  "scope_limits": [
+    "Accepts only the primary push artifact Go/native/direct-method lane; PR and overall workflow acceptance remain outside this review.",
+    "Replay uses a byte-identical temporary native executable with mode 0755; the archived ZIP and published source were read-only."
+  ],
+  "findings": [
+    "The E-CI-GO report says the traces match fixture expectations for views, but the frozen fixture contains no expected view field. The native/direct traces are equal, and E-CI-DOM independently verifies the expected view tree; narrow the E-CI-GO sentence to those facts."
+  ]
+}

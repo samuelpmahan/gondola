@@ -1,0 +1,185 @@
+{
+  "artifact": {
+    "artifact_id": 13030848292,
+    "audit_all_zip_and_extracted_member_checks_passed": true,
+    "manifest_member_count": 968,
+    "provider_zip_bytes": 11460089,
+    "provider_zip_sha256": "95757192e15b6d7da97fd10da7db47747b29bc7b4ae52e265ab42f7d2a543d1a"
+  },
+  "decision_basis": {
+    "finding": "The report sentence says the screenshot shows disabled zero reset controls (plural), but this final screenshot shows only Parent Reset disabled; Child Reset is enabled at child=2. Smoke assertions do verify Child Reset is disabled when child=0 and Parent Reset is disabled when parent=0 at separate points. Narrow screenshot-specific wording.",
+    "substantive_http_demo_evidence_supported": true
+  },
+  "http_demo": {
+    "accepted_dispatches": 14,
+    "browser_errors": [],
+    "browser_version": "156.0.8078.4",
+    "checks": [
+      "HTTP route loaded the actual compiled GoScript module and mounted its Go View with the React renderer",
+      "Go value methods captured Child=2 before a later Child=3 edit and published the saved value into Parent",
+      "locked child actions stayed disabled while parent, capture, and publish actions remained available",
+      "React/DOM swaps retained the Go snapshot without allocating an application tick",
+      "zero-valued Parent Reset and Child Reset controls were disabled"
+    ],
+    "environment_chromium_executable_path": null,
+    "environment_chromium_path": null,
+    "final_backend": "dom",
+    "final_state": {
+      "child": 2,
+      "parent": 0,
+      "readOnly": false,
+      "savedChild": 1
+    },
+    "renderer_swaps": 3,
+    "resources": [
+      {
+        "actual_bytes": 4346,
+        "actual_sha256": "9551977e3b6899a868bf5cda8d1acdf81461f74e83a9cf09578280c05acb3704",
+        "bytes_match": true,
+        "path": "/",
+        "recorded_bytes": 4346,
+        "status": 200
+      },
+      {
+        "actual_bytes": 8097,
+        "actual_sha256": "1513ffe54275bc970a3910d1cd51891b23cd76aa57495290cffc30f16d9275e0",
+        "bytes_match": true,
+        "path": "/demo.css",
+        "recorded_bytes": 8097,
+        "status": 200
+      },
+      {
+        "actual_bytes": 1800935,
+        "actual_sha256": "ba7db6f481b9a8fc67959b4febacc63ef4b0c2feed2d92c3c7c26a34d4e9f0c5",
+        "bytes_match": true,
+        "path": "/demo.bundle.mjs",
+        "recorded_bytes": 1800935,
+        "status": 200
+      }
+    ],
+    "smoke_bytes": 1308,
+    "smoke_command_args": [
+      "/home/runner/work/gondola/gondola/compiled-methods/demo/smoke.mjs",
+      "--demo",
+      "/home/runner/work/gondola/gondola/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/site",
+      "--output",
+      "/home/runner/work/gondola/gondola/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/demo-smoke.json",
+      "--screenshot",
+      "/home/runner/work/gondola/gondola/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/demo.png"
+    ],
+    "smoke_command_exit": 0,
+    "smoke_path": "compiled-methods/ci/2026-10-31/extracted/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/demo-smoke.json",
+    "smoke_sha256": "412f3c341dfdf67a521defef21965e0a2c993cb9cefb89fd6aabbf58060fe80d",
+    "status": "passed",
+    "wasm_api_attempts": [],
+    "wasm_requests": []
+  },
+  "independent_audit_replay": {
+    "check_count": 164,
+    "failures": [],
+    "python": "3.12.14",
+    "result_path": "compiled-methods/ci/2026-10-31/lanes/build/review-demo/replayed-audit.json",
+    "result_sha256": "b1a43514f2b943d38caad7ea9cd03136baddd163df3eff571c2285f0fc25ac5c",
+    "status": "passed"
+  },
+  "module_binding": {
+    "app_ir": {
+      "actual_sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+      "path": "apps/methods-0cac42b0a982/app-ir.json",
+      "sha256": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b"
+    },
+    "backend": "react",
+    "demo_build_record_path": "compiled-methods/ci/2026-10-31/extracted/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/site/demo-build.json",
+    "demo_build_record_sha256": "4c80a8acf26dbde64e6f09968d8bca49332c165de9859e5292871004e31ba17f",
+    "encoder": {
+      "actual_sha256": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4",
+      "path": "apps/methods-0cac42b0a982/encoder.mjs",
+      "sha256": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4"
+    },
+    "http_site_module": {
+      "bytes": 1800935,
+      "path": "compiled-methods/ci/2026-10-31/extracted/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/site/demo.bundle.mjs",
+      "sha256": "ba7db6f481b9a8fc67959b4febacc63ef4b0c2feed2d92c3c7c26a34d4e9f0c5"
+    },
+    "matches": {
+      "app_ir": true,
+      "encoder": true,
+      "module": true
+    },
+    "package_path": "github.com/samuelpmahan/gondola/fixtures/compiled/methods",
+    "react_build_record_hashes": {
+      "app_ir": "07d0d25ede9993e1f58e108f4cc153717ff62061ff519b50619615cd4faccd3b",
+      "encoder": "60302ad92de2fba828a8babdafeafa66f04a05c166ac0d5854019ba9f1ea19e4",
+      "module": "2cdfb64e7232627bbd7fe3f7470990a09e36f3f6e09808d950ceeeb1369c8337"
+    },
+    "source_module": {
+      "actual_sha256": "2cdfb64e7232627bbd7fe3f7470990a09e36f3f6e09808d950ceeeb1369c8337",
+      "bytes": 510646,
+      "path": "apps/methods-0cac42b0a982/gobi-compiled.mjs",
+      "sha256": "2cdfb64e7232627bbd7fe3f7470990a09e36f3f6e09808d950ceeeb1369c8337"
+    }
+  },
+  "primary_audit": {
+    "check_count": 164,
+    "failures": [],
+    "path": "compiled-methods/ci/2026-10-31/lanes/demo/primary-demo-audit.json",
+    "sha256": "b1a43514f2b943d38caad7ea9cd03136baddd163df3eff571c2285f0fc25ac5c",
+    "status": "passed"
+  },
+  "primary_source": {
+    "commit": "6b49cc0bd4c9512a041f723c86b632ec506afd9d",
+    "job_conclusion": "success",
+    "job_id": 124444234335,
+    "job_status": "completed",
+    "run_id": 41169518187,
+    "snapshot_sha256": "408aca6aec71391933281fdf078ad23f62665844f01d0125461d642571b87172",
+    "steps": {
+      "Complete job": "success",
+      "Install Playwright managed Chromium": "success",
+      "Install locked JavaScript dependencies": "success",
+      "Post Run actions/checkout@v4": "success",
+      "Post Run actions/setup-go@v5": "success",
+      "Post Run actions/setup-node@v4": "success",
+      "Preserve method and inherited compiler evidence": "success",
+      "Run actions/checkout@v4": "success",
+      "Run actions/setup-go@v5": "success",
+      "Run actions/setup-node@v4": "success",
+      "Run inherited gates and compiled method demo": "success",
+      "Set up job": "success"
+    },
+    "tree": "b28b10ccefd78f7a90d6d66f2b6769b426ed6a81"
+  },
+  "reviewed_packet": {
+    "receipt_path": "compiled-methods/ci/2026-10-31/coordination/receipts/E-CI-DEMO.json",
+    "receipt_sha256": "e02d5fad69f211e096291e4bf1499459073cda0bf97fc03dd825debf7edb6b50",
+    "report_path": "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-DEMO.md",
+    "report_sha256": "9560e6f73314d002bf9ec9710035857c32b445d950233426f498e7a74cc45d05"
+  },
+  "runtime_versions": {
+    "compiledGo": "go version go1.27.3 linux/amd64",
+    "esbuild": "0.28.2",
+    "node": "v22.23.4",
+    "packageLocks": {
+      "compiled-frontend/package-lock.json": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079",
+      "interaction/package-lock.json": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0",
+      "package-lock.json": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b"
+    },
+    "playwright": "1.64.1",
+    "react": "19.3.1",
+    "reactDOM": "19.3.1",
+    "rootGo": "go version go1.24.13 linux/amd64"
+  },
+  "schema": "gobi.compiled-methods-ci-demo-review-evidence/v1",
+  "screenshot": {
+    "bytes": 244666,
+    "path": "compiled-methods/ci/2026-10-31/extracted/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/demo.png",
+    "png_signature_valid": true,
+    "sha256": "623f8f010d87c0c2c2f1e709ce2daec64c11a1bfca508a1071352682ec7ba55b",
+    "visible_observation": "final state parent=0 child=2 savedChild=1; DOM selected; Parent Reset disabled; Child Reset enabled",
+    "visually_inspected_by_reviewer": true
+  },
+  "workflow_snapshot": {
+    "path": "compiled-methods/ci/2026-10-31/lanes/evidence/snapshots/jobs-2026-10-31T050732-682Z-6b49cc0-terminal.json",
+    "sha256": "408aca6aec71391933281fdf078ad23f62665844f01d0125461d642571b87172"
+  }
+}

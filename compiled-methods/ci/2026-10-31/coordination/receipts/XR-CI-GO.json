@@ -1,0 +1,75 @@
+{
+  "schema": "gobi.compiled-methods-ci-go-review/v1",
+  "job_id": "XR-CI-GO",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "The successful 6b49 primary artifact, native/direct trace checks, retained pins, and independent native and GoScript reruns are verified. Amend E-CI-GO's one overbroad view claim: the frozen fixture has no literal view expectation, though native/direct views are equal and E-CI-DOM independently checks the expected tree.",
+  "source": {
+    "commit": "6b49cc0bd4c9512a041f723c86b632ec506afd9d",
+    "tree": "b28b10ccefd78f7a90d6d66f2b6769b426ed6a81"
+  },
+  "reviewed_author_packet": {
+    "report_path": "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-GO.md",
+    "report_sha256": "5ec5ac56d4ceaeb6733e53850308ac5dde8a454dd6582a3536dc559c2f4cd256",
+    "receipt_path": "compiled-methods/ci/2026-10-31/coordination/receipts/E-CI-GO.json",
+    "receipt_sha256": "5f518e33bfc3e93b0a697c4b3d0e222385c49155e628efd552e97086ce85e37c",
+    "audit_script_path": "compiled-methods/ci/2026-10-31/lanes/go/audit_current_ci.py",
+    "audit_script_sha256": "259b173aefb9a8e0459644e7614ce4a97e27435a9636c24c1f7445e309b82346",
+    "audit_result_path": "compiled-methods/ci/2026-10-31/lanes/go/current-ci-audit.json",
+    "audit_result_sha256": "7094b22776f354047af95fc54c8189a6af83210f02c308e295031a2c57320fc2"
+  },
+  "artifact_provenance": {
+    "run_id": 41169518187,
+    "job_id": 124444234335,
+    "artifact_id": 13030848292,
+    "provider_zip_sha256": "95757192e15b6d7da97fd10da7db47747b29bc7b4ae52e265ab42f7d2a543d1a",
+    "provider_zip_bytes": 11460089,
+    "member_count": 968,
+    "zip_crc_passed": true,
+    "all_zip_and_extracted_members_match_retention": true
+  },
+  "independent_review": {
+    "script_path": "compiled-methods/ci/2026-10-31/lanes/dom/review-go/review_current_go.py",
+    "script_sha256": "f1bdbbc35c76989c3b50d91001400c8ac9afeb49a7b65840f69e5eff1a53e12e",
+    "result_path": "compiled-methods/ci/2026-10-31/lanes/dom/review-go/review-audit.json",
+    "result_sha256": "7f0f79c6305d4b3361b67cc0019da54a5640145716a77693d816dcbd1d71623a",
+    "independent_replay": {
+      "native": {
+        "exit_code": 0,
+        "trace_matches_artifact": true,
+        "stdout_sha256": "2e9e620a788fbc6e1973e62b2d9775fdf1c03f8ab72a28f5c61aea8f16dfc4f2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "direct": {
+        "exit_code": 0,
+        "trace_matches_artifact": true,
+        "node_version": "v22.23.4",
+        "stdout_sha256": "0a8da95c47e6fb45ac9e2a83397ddeea54ae9a8f23cdd0f6a68bee9b60f52c08",
+        "stderr_sha256": "790bfbbaceb894cc92ed5cbf51888ba8386d9e1fbadd14813ce55f01655ff2f1"
+      }
+    },
+    "source_pin_sets_verified": 188,
+    "output_pins_verified": 149,
+    "fixture_actions_checked": 18,
+    "native_direct_ticks": 19,
+    "fixture_has_expected_view_field": false,
+    "native_direct_view_records_equal": true
+  },
+  "finding": {
+    "classification": "bounded_report_wording_amendment",
+    "report_location": "E-CI-GO / Native Go and direct-module evidence",
+    "claim": "all 18 fixture expectations include views",
+    "evidence": "The frozen methods fixture expectations contain message, dispatch ID, typed state, requested effects, and completed effects; no view field is present. Native/direct View records are identical because the traces match, but that is not an independent fixture view expectation.",
+    "required_change": "State that native/direct traces are equal and match fixture expectations for typed state, messages, dispatch IDs, and effects; describe View records as equal across traces and refer to E-CI-DOM for independent expected tree checks.",
+    "does_not_invalidate_primary_go_native_direct_results": true
+  },
+  "scope_limits": [
+    "Review accepts bounded primary push Go/native/direct artifact and replay evidence only after the report wording amendment.",
+    "Separate PR run and global 26-job acceptance remain outside this review.",
+    "No source, artifact, or Git state was changed."
+  ],
+  "report": {
+    "path": "compiled-methods/ci/2026-10-31/coordination/reports/XR-CI-GO.md",
+    "sha256": "55e3a085e4b323ef4e154668190aa9e1892b8a43166a894ae740580c08396a5e"
+  }
+}

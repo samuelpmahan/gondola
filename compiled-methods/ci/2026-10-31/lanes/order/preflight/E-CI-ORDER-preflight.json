@@ -1,0 +1,128 @@
+{
+  "schema": "gobi.ci-order-audit/v1",
+  "job_id": "E-CI-ORDER",
+  "worker": "N6",
+  "outcome": "insufficient_evidence",
+  "status": "preflight_complete_current_primary_pending",
+  "source": {
+    "commit": "6b49cc0bd4c9512a041f723c86b632ec506afd9d",
+    "tree": "b28b10ccefd78f7a90d6d66f2b6769b426ed6a81",
+    "pull_request": "https://github.com/samuelpmahan/gondola/pull/13",
+    "current_primary_run_ids": {
+      "push": 41169518187,
+      "pull_request": 41169522175
+    }
+  },
+  "audit_program": {
+    "path": "compiled-methods/ci/2026-10-31/lanes/order/audit_order.py",
+    "sha256": "c56b222b220288ee75aa497ddfe36cde50e7b721eb340e99b1e366e1330b038f",
+    "runtime": "Python 3.12.14",
+    "purpose": "Read-only audit of event intents, message and dispatch order, disabled suppression, renderer swaps, retired callback fences, teardown, WebAssembly records, and page errors."
+  },
+  "report": {
+    "path": "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-ORDER.md",
+    "sha256": "0fb649ab69d90b9076c90697fb248473db241652b509e8153ab65636b670416d"
+  },
+  "preflight": {
+    "local_methods_only": {
+      "classification": "structural_preflight_only_not_CI_acceptance",
+      "archive": "compiled-methods/evidence/builds/final-local-methods-only.tar.gz",
+      "archive_sha256": "e9ee3f8917bb65e4956ef4fcc620a627c5decdad9d6ffc4b2cf9a1252d4e4b8f",
+      "attempt": "attempt-20261031T042646625Z",
+      "execution_status": "passed",
+      "method_matrix_status": "matched",
+      "execution_sha256": "c4dc1db9e9a22c8548f4b7a656e7e1dbef6289e61f0703a2ec81f1ba37df97f7",
+      "browser_capture_sha256": "e46650f8b06c47c352661ea8b49c0d49d8846fb6d915bda264cadbdb5271606b",
+      "audit_receipt": "compiled-methods/ci/2026-10-31/lanes/order/preflight/local-order-audit.json",
+      "audit_receipt_sha256": "f45cdc6336f0643f37ab656c7aa29c9a5a3eb360a5f69ca519894b89c05cd65b",
+      "audit_status": "passed",
+      "audit_checks": {
+        "passed": 677,
+        "failed": 0
+      },
+      "profile_counts": {
+        "react": {
+          "click_intents": 18,
+          "enabled_dispatch_callbacks": 14,
+          "disabled_suppressed_intents": 4
+        },
+        "dom": {
+          "click_intents": 18,
+          "enabled_dispatch_callbacks": 14,
+          "disabled_suppressed_intents": 4
+        },
+        "swap": {
+          "click_intents": 18,
+          "enabled_dispatch_callbacks": 14,
+          "disabled_suppressed_intents": 4,
+          "renderer_swaps": 18,
+          "retired_callback_attempts": 18
+        }
+      },
+      "page_errors": 0,
+      "wasm_requests_and_api_attempts": 0,
+      "teardown": "all profiles end with empty physical and renderer snapshots; pre-unmount view has seven controls",
+      "tool_versions": {
+        "node": "v22.23.4",
+        "react": "19.3.1",
+        "reactDOM": "19.3.1",
+        "playwright": "1.64.1",
+        "esbuild": "0.28.2",
+        "root_go": "go version go1.24.0 linux/amd64",
+        "compiled_go": "go version go1.27.3 linux/amd64",
+        "chromium": "153.0.8010.0"
+      },
+      "command": "python3 compiled-methods/ci/2026-10-31/lanes/order/audit_order.py compiled-methods/ci/2026-10-31/lanes/order/preflight/local/compiled-methods/artifacts/attempts/attempt-20261031T042646625Z --output compiled-methods/ci/2026-10-31/lanes/order/preflight/local-order-audit.json",
+      "exit_code": 0,
+      "ci_provenance": "unverified"
+    },
+    "initial_source8ed_primary": {
+      "classification": "rejected_failed_old_head_not_current_acceptance",
+      "source_commit": "8ed5b66a223de1992756516f8d3895c6e096f842",
+      "source_tree": "759461302d9fd0d4aef69eaff908f22f31b8c6f0",
+      "workflow_run_id": 41167228825,
+      "job_id": 124437302522,
+      "artifact_id": 13029828865,
+      "archive": "compiled-methods/ci/2026-10-31/initial-source8ed/original.zip",
+      "archive_bytes": 10841763,
+      "archive_sha256": "56ad778c1e76803734ae9b38620ae0afe57220273be4143ecc59a48525d3424a",
+      "browser_capture_has_raw_order_records": true,
+      "execution_status": "failed",
+      "method_matrix_status": null,
+      "rejection_reason": "Checker withheld acceptance because expected builds/request.json and builds/result.json provenance records were absent; React and DOM provenance files were stored at backend-specific paths.",
+      "audit_receipt": "compiled-methods/ci/2026-10-31/lanes/order/preflight/old-head-order-audit.json",
+      "audit_receipt_sha256": "2c1106826bb37dff15b53b43de0ea9f769342c8d8b17180d4dfd40630591cebc",
+      "audit_status": "failed",
+      "audit_checks": {
+        "passed": 674,
+        "failed": 3,
+        "failed_names": [
+          "execution.status_passed",
+          "execution.matrix_matched",
+          "execution.fixture_counts"
+        ]
+      },
+      "command": "python3 compiled-methods/ci/2026-10-31/lanes/order/audit_order.py compiled-methods/ci/2026-10-31/initial-source8ed/original.zip --output compiled-methods/ci/2026-10-31/lanes/order/preflight/old-head-order-audit.json",
+      "exit_code": 1
+    }
+  },
+  "current_primary_ci": {
+    "status": "pending_fresh_artifact_and_workflow_proof",
+    "acceptance_gate": "fresh source6b49 primary artifact with workflow identity matching push 41169518187 or pull request 41169522175",
+    "artifact": null,
+    "workflow_identity": null
+  },
+  "claim_boundaries": {
+    "focus_claim": false,
+    "effect_completion_claim": false,
+    "manager_or_session_ownership_claim": false,
+    "cancellation_claim": false
+  },
+  "owned_outputs": [
+    "compiled-methods/ci/2026-10-31/lanes/order/audit_order.py",
+    "compiled-methods/ci/2026-10-31/lanes/order/preflight/local-order-audit.json",
+    "compiled-methods/ci/2026-10-31/lanes/order/preflight/old-head-order-audit.json",
+    "compiled-methods/coordination/reports/E-CI-ORDER.md",
+    "compiled-methods/coordination/receipts/E-CI-ORDER.json"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-CI-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "lanes/go/**",
+      "summary": "Audit native/direct typed state, method call graph, value isolation and actual CI toolchains; final proof gated on primary artifact."
+    },
+    {
+      "id": "E-CI-DOM",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "lanes/dom/**",
+      "summary": "Independently audit physical DOM/control/event order/swap lifetime observations against Go states and literal oracle; final proof gated on primary artifact."
+    },
+    {
+      "id": "E-CI-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "lanes/build/**",
+      "summary": "Audit actual GoScript build inventories, source identities, ABI provenance and complete artifact retention; final proof gated on primary artifact."
+    },
+    {
+      "id": "E-CI-EVIDENCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "lanes/evidence/**",
+      "summary": "Collect and audit current-head workflow/job logs and exact source/merge tree identity; final proof waits on all current-head workflows and primary artifact."
+    }
+  ],
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

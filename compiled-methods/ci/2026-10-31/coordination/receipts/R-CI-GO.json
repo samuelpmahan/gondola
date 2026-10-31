@@ -1,0 +1,68 @@
+{
+  "schema": "gobi.ci-go-report-repair/v1",
+  "job_id": "R-CI-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "status": "completed",
+  "summary": "Corrected the E-CI-GO fixture expectation claim and removed stale global-pending wording: fixture expectations cover typed state, messages, dispatch IDs, and effects; native/direct View equality is separate; expected View trees are supported by E-CI-DOM. Original packet bytes are preserved and the substantive Go audit is unchanged.",
+  "finding": {
+    "kind": "report_claim_scope_overstatement",
+    "original_claim": "18 fixture expectations matched typed state, messages, dispatch IDs, effects, and views",
+    "issue": "The frozen methods fixture expectations have no View field; trace parity alone is not an independent expected-tree check.",
+    "original_fixture_path": "compiled-methods/conformance/fixtures/methods.json",
+    "original_fixture_sha256": "fb8a0d6bb1bb82df318450bd819e9c56114625a03324725e9bedd04846f70cc7"
+  },
+  "preserved_before": {
+    "report_path": "compiled-methods/ci/2026-10-31/lanes/go/repair-view-claim/before/E-CI-GO.md",
+    "report_sha256": "5ec5ac56d4ceaeb6733e53850308ac5dde8a454dd6582a3536dc559c2f4cd256",
+    "receipt_path": "compiled-methods/ci/2026-10-31/lanes/go/repair-view-claim/before/E-CI-GO.json",
+    "receipt_sha256": "5f518e33bfc3e93b0a697c4b3d0e222385c49155e628efd552e97086ce85e37c",
+    "byte_identical_to_canonical_before_edit": true
+  },
+  "corrected_after": {
+    "report_path": "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-GO.md",
+    "report_sha256": "5ca16a93e4d9ce3b4ac5b06a85cb8795e34bba2d9f3bbf839d1b981bea4b11d1",
+    "receipt_path": "compiled-methods/ci/2026-10-31/coordination/receipts/E-CI-GO.json",
+    "receipt_sha256": "7cbeb3fb41323aeee29a6a6074b9f7325718b74c8eeab995d883c06ed41f414f",
+    "receipt_fixture_expectations_field": "fixture_state_message_dispatch_effect_expectations_matched",
+    "native_direct_view_records_equal": true,
+    "expected_view_oracle_job": "E-CI-DOM",
+    "global_status_wording": "scope only; separately tracked in cross-workflow packet"
+  },
+  "independent_view_evidence": {
+    "job_id": "E-CI-DOM",
+    "report_path": "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+    "report_sha256": "c90ee5efed77ba2cc1e1d5c86571e4e979d727a0b446046920f0b907f4d41df0",
+    "oracle_path": "compiled-methods/ci/2026-10-31/lanes/dom/dom-oracle.mjs",
+    "oracle_sha256": "77dbc9c2a4481a4eeb7c88966da83c9b28204e39b7b92b84874bb2f99fe074d8",
+    "audit_path": "compiled-methods/ci/2026-10-31/lanes/dom/final/primary-dom-audit.json",
+    "audit_sha256": "5daff9df36feac4ebff9a0df485926d86e4c6888f9e04d3cd20a56aab7f92eed",
+    "status": "passed",
+    "view_expectations_claimed_by_E_CI_GO": false
+  },
+  "substantive_audit_unchanged": {
+    "audit_program_path": "compiled-methods/ci/2026-10-31/lanes/go/audit_current_ci.py",
+    "audit_program_sha256": "259b173aefb9a8e0459644e7614ce4a97e27435a9636c24c1f7445e309b82346",
+    "audit_result_path": "compiled-methods/ci/2026-10-31/lanes/go/current-ci-audit.json",
+    "audit_result_sha256": "7094b22776f354047af95fc54c8189a6af83210f02c308e295031a2c57320fc2",
+    "rerun": false
+  },
+  "report": {
+    "path": "compiled-methods/ci/2026-10-31/coordination/reports/R-CI-GO.md",
+    "sha256": "69ea67c001d7e492427ce0904d6528d6c7382fa0c6117f4c5cf49419ad525a54"
+  },
+  "claim_boundaries": {
+    "fixture_expectations_cover_expected_views": false,
+    "native_direct_view_records_equal": true,
+    "expected_view_tree_checked_by_E_CI_DOM": true,
+    "new_execution_claim": false
+  },
+  "owned_outputs": [
+    "compiled-methods/ci/2026-10-31/lanes/go/repair-view-claim/before/E-CI-GO.md",
+    "compiled-methods/ci/2026-10-31/lanes/go/repair-view-claim/before/E-CI-GO.json",
+    "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-GO.md",
+    "compiled-methods/ci/2026-10-31/coordination/receipts/E-CI-GO.json",
+    "compiled-methods/ci/2026-10-31/coordination/reports/R-CI-GO.md",
+    "compiled-methods/ci/2026-10-31/coordination/receipts/R-CI-GO.json"
+  ]
+}

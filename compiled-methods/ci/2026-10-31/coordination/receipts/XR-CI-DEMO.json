@@ -1,0 +1,110 @@
+{
+  "artifact_provenance": {
+    "artifact_id": 13030848292,
+    "job_id": 124444234335,
+    "member_count": 968,
+    "provider_zip_bytes": 11460089,
+    "provider_zip_sha256": "95757192e15b6d7da97fd10da7db47747b29bc7b4ae52e265ab42f7d2a543d1a",
+    "run_id": 41169518187,
+    "zip_crc_and_all_member_pins_verified": true
+  },
+  "decision": "amend",
+  "finding": {
+    "claim": "The screenshot shows disabled zero reset controls (plural).",
+    "classification": "bounded_screenshot_description_amendment",
+    "invalidates_demo_result": false,
+    "location": "E-CI-DEMO / Actual HTTP demo smoke",
+    "observation": "The retained final screenshot shows Parent Reset disabled at parent=0 and Child Reset enabled at child=2.",
+    "required_change": "Describe only the reset control shown disabled in the screenshot; retain the separate smoke behavior assertion.",
+    "supporting_behavior": "The smoke script separately asserts Child Reset disabled when child=0 and Parent Reset disabled when parent=0."
+  },
+  "independent_review": {
+    "accepted_dispatches": 14,
+    "audit_replay_check_count": 164,
+    "audit_replay_failures": [],
+    "audit_replay_path": "compiled-methods/ci/2026-10-31/lanes/build/review-demo/replayed-audit.json",
+    "audit_replay_sha256": "b1a43514f2b943d38caad7ea9cd03136baddd163df3eff571c2285f0fc25ac5c",
+    "audit_replay_status": "passed",
+    "browser_errors": 0,
+    "browser_version": "156.0.8078.4",
+    "evidence_path": "compiled-methods/ci/2026-10-31/lanes/build/review-demo/evidence.json",
+    "evidence_sha256": "ac4f80252c1cb28cf5c65d83a8e9e0012f61d5c8fc9b365ed7a8eb8c002fdedc",
+    "final_state": {
+      "child": 2,
+      "parent": 0,
+      "readOnly": false,
+      "savedChild": 1
+    },
+    "http_resources": [
+      {
+        "actual_bytes": 4346,
+        "actual_sha256": "9551977e3b6899a868bf5cda8d1acdf81461f74e83a9cf09578280c05acb3704",
+        "bytes_match": true,
+        "path": "/",
+        "recorded_bytes": 4346,
+        "status": 200
+      },
+      {
+        "actual_bytes": 8097,
+        "actual_sha256": "1513ffe54275bc970a3910d1cd51891b23cd76aa57495290cffc30f16d9275e0",
+        "bytes_match": true,
+        "path": "/demo.css",
+        "recorded_bytes": 8097,
+        "status": 200
+      },
+      {
+        "actual_bytes": 1800935,
+        "actual_sha256": "ba7db6f481b9a8fc67959b4febacc63ef4b0c2feed2d92c3c7c26a34d4e9f0c5",
+        "bytes_match": true,
+        "path": "/demo.bundle.mjs",
+        "recorded_bytes": 1800935,
+        "status": 200
+      }
+    ],
+    "http_smoke_sha256": "412f3c341dfdf67a521defef21965e0a2c993cb9cefb89fd6aabbf58060fe80d",
+    "module_appir_encoder_match": {
+      "app_ir": true,
+      "encoder": true,
+      "module": true
+    },
+    "renderer_swaps": 3,
+    "screenshot": {
+      "bytes": 244666,
+      "path": "compiled-methods/ci/2026-10-31/extracted/compiled-methods/artifacts/attempts/attempt-20261031T044100445Z/http-demo/demo.png",
+      "png_signature_valid": true,
+      "sha256": "623f8f010d87c0c2c2f1e709ce2daec64c11a1bfca508a1071352682ec7ba55b",
+      "visible_observation": "final state parent=0 child=2 savedChild=1; DOM selected; Parent Reset disabled; Child Reset enabled",
+      "visually_inspected_by_reviewer": true
+    },
+    "wasm_api_attempts": 0,
+    "wasm_requests": 0,
+    "workflow_snapshot_sha256": "408aca6aec71391933281fdf078ad23f62665844f01d0125461d642571b87172"
+  },
+  "job_id": "XR-CI-DEMO",
+  "report": {
+    "path": "compiled-methods/ci/2026-10-31/coordination/reports/XR-CI-DEMO.md",
+    "sha256": "4a13ca343cc25512d12d0912790887239867375972c5ddce8e1df6366451f22c"
+  },
+  "reviewed_author_packet": {
+    "audit_result_path": "compiled-methods/ci/2026-10-31/lanes/demo/primary-demo-audit.json",
+    "audit_result_sha256": "b1a43514f2b943d38caad7ea9cd03136baddd163df3eff571c2285f0fc25ac5c",
+    "audit_script_path": "compiled-methods/ci/2026-10-31/lanes/demo/audit.py",
+    "audit_script_sha256": "f9b2143844af0cbd19ccb72b700cde046670bd14dc5aee0700dbfd01d01a1127",
+    "receipt_path": "compiled-methods/ci/2026-10-31/coordination/receipts/E-CI-DEMO.json",
+    "receipt_sha256": "e02d5fad69f211e096291e4bf1499459073cda0bf97fc03dd825debf7edb6b50",
+    "report_path": "compiled-methods/ci/2026-10-31/coordination/reports/E-CI-DEMO.md",
+    "report_sha256": "9560e6f73314d002bf9ec9710035857c32b445d950233426f498e7a74cc45d05"
+  },
+  "schema": "gobi.compiled-methods-ci-demo-review/v1",
+  "scope_limits": [
+    "Review covers the selected successful current-head push job and its retained artifact.",
+    "Separate PR-run and aggregate workflow status are outside this review.",
+    "No production source, artifact, or Git state was changed."
+  ],
+  "source": {
+    "commit": "6b49cc0bd4c9512a041f723c86b632ec506afd9d",
+    "tree": "b28b10ccefd78f7a90d6d66f2b6769b426ed6a81"
+  },
+  "summary": "The current-primary methods artifact, managed Chromium HTTP smoke, resource and GoScript build pins, screenshot, and independent 164-check replay are verified. Amend the screenshot sentence: only Parent Reset is disabled in the final capture; Child Reset is enabled at child=2, although the smoke separately checks both zero-value reset cases.",
+  "worker": "N4"
+}

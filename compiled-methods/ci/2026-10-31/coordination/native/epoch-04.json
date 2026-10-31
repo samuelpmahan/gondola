@@ -1,0 +1,85 @@
+{
+  "epoch": 4,
+  "at": "2026-10-31T05:13:35.384369+00:00",
+  "ready_jobs": [
+    "XR-CI-BUILD",
+    "XR-CI-DEMO"
+  ],
+  "pinned_workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N6"
+  ],
+  "assignments": {
+    "N2": "XR-CI-GO",
+    "N5": "BENCH",
+    "N4": "XR-CI-DEMO",
+    "N6": "XR-CI-DOM",
+    "N3": "E-CI-EVIDENCE",
+    "N1": "XR-CI-ORDER"
+  },
+  "dispatch": {
+    "N4": "XR-CI-DEMO"
+  },
+  "native_seconds": 0.007418253997457214,
+  "native_constraints": {
+    "solved": true,
+    "brokenVal": 0,
+    "brokenCount": 0,
+    "constraints": [
+      {
+        "name": "independent_review",
+        "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+        "value": 0
+      },
+      {
+        "name": "pin_in_flight",
+        "desc": "avoidMovingSpec: Avoid moving 4 objects",
+        "value": 0
+      },
+      {
+        "name": "ready_packet_capacity",
+        "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+        "value": 0
+      }
+    ]
+  },
+  "independent_capacity_check": true,
+  "independent_eligibility_check": true,
+  "exact_score": 200,
+  "native_score": 200,
+  "caps": {
+    "E-CI-GO": 0,
+    "E-CI-DOM": 0,
+    "E-CI-BUILD": 0,
+    "E-CI-EVIDENCE": 1,
+    "XR-CI-GO": 1,
+    "XR-CI-DOM": 1,
+    "XR-CI-BUILD": 1,
+    "XR-CI-EVIDENCE": 0,
+    "E-CI-DEMO": 0,
+    "E-CI-ORDER": 0,
+    "XR-CI-DEMO": 1,
+    "XR-CI-ORDER": 1,
+    "BENCH": 6
+  },
+  "eligible": {
+    "XR-CI-BUILD": [],
+    "XR-CI-DEMO": [
+      "N4"
+    ]
+  },
+  "weights": {
+    "XR-CI-BUILD": 200,
+    "XR-CI-DEMO": 200
+  },
+  "agent_by_worker": {
+    "N1": "/root/backend_runtime",
+    "N2": "/root/backend_dom",
+    "N3": "/root/backend_harness",
+    "N4": null,
+    "N5": null,
+    "N6": "/root/ci_order"
+  }
+}
