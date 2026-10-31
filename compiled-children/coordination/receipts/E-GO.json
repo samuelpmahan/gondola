@@ -1,0 +1,38 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Added the Go-owned typed keyed child collection, lifecycle-aware update/view logic, deterministic event scenario, and native trace CLI; focused Go/native verification passed.",
+  "artifacts": [
+    "fixtures/compiled/children/app.go",
+    "fixtures/compiled/children/view.go",
+    "fixtures/compiled/children/app_test.go",
+    "fixtures/compiled/children/scenario.json",
+    "fixtures/compiled/children/evidence/commands.txt",
+    "fixtures/compiled/children/evidence/rawlogs/go-version.txt",
+    "fixtures/compiled/children/evidence/rawlogs/go-test-verbose.stdout.log",
+    "fixtures/compiled/children/evidence/rawlogs/go-test-verbose.stderr.log",
+    "fixtures/compiled/children/evidence/rawlogs/native-trace.json",
+    "fixtures/compiled/children/evidence/rawlogs/native-trace.stderr.log",
+    "cmd/compiled-children-native/main.go",
+    "cmd/compiled-children-native/main_test.go",
+    "compiled-children/coordination/reports/E-GO.md"
+  ],
+  "execution": {
+    "runtime": "go1.24.0 linux/amd64",
+    "command": "/tmp/gondola-go/bin/go test -count=1 -v ./fixtures/compiled/children ./cmd/compiled-children-native",
+    "tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "native_trace_command": "/tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script fixtures/compiled/children/scenario.json",
+    "native_trace_events": 42,
+    "native_trace_steps": 38,
+    "tick_free_event_indexes": [9, 10, 11, 12]
+  },
+  "limits": [
+    "E-GO evidence covers the Go reducer and native trace CLI, not mounted React/DOM or HTTP demo parity.",
+    "E-COMPILER React/DOM build results are peer-reported by N2; N1 did not rerun those commands.",
+    "Independent cross-review is pending; this receipt is not self-approval."
+  ]
+}

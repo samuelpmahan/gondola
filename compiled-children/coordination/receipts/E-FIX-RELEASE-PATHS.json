@@ -1,0 +1,246 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-RELEASE-PATHS",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Corrected only the README artifact-location paragraph against the current delivery runner: canonical report/receipt are under coordination, while logs, captures, builds, and demo site are in the attempt directory and the archive/manifest are siblings.",
+  "sourceSha256": {
+    "compiled-children/README.md": "fdc9ace6856e4e5446355dcdcd8734f1b90ebef413e5f01c0a8b3d41a4cf811e",
+    "compiled-children/run.mjs": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f"
+  },
+  "repair": {
+    "fileChanged": "compiled-children/README.md",
+    "changedSection": "artifact-location paragraph at line 35",
+    "priorReadmeSha256": "d599a2e235df8d60b453debc6633000dc2bf71309b96fe4caec0274ce6ca84f1",
+    "currentReadme": {
+      "path": "compiled-children/README.md",
+      "bytes": 6988,
+      "sha256": "fdc9ace6856e4e5446355dcdcd8734f1b90ebef413e5f01c0a8b3d41a4cf811e"
+    },
+    "runner": {
+      "path": "compiled-children/run.mjs",
+      "bytes": 60431,
+      "sha256": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f"
+    },
+    "locations": {
+      "attemptDirectory": "compiled-children/demo/output/attempts/attempt-<timestamp>-<pid>/",
+      "insideAttempt": [
+        "logs/",
+        "react/",
+        "dom/",
+        "harness/",
+        "oracle/",
+        "inherited/",
+        "demo/site/",
+        "demo/screenshot.png"
+      ],
+      "canonicalReport": "compiled-children/coordination/reports/E-DELIVERY.md",
+      "canonicalReceipt": "compiled-children/coordination/receipts/E-DELIVERY.json",
+      "archiveSibling": "compiled-children/demo/output/attempts/attempt-<timestamp>-<pid>.tar.gz",
+      "manifestSibling": "compiled-children/demo/output/attempts/attempt-<timestamp>-<pid>.archive-manifest.json"
+    },
+    "preservedOriginalManifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-RELEASE-PATHS/originals/manifest.json",
+      "bytes": 941,
+      "sha256": "51063dbdca24bec9f276f2bef014d0142760183d23788c8fb14306bb04d5870f"
+    },
+    "preservedOriginals": [
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-RELEASE-PATHS/originals/README.md",
+        "bytes": 6706,
+        "sha256": "d599a2e235df8d60b453debc6633000dc2bf71309b96fe4caec0274ce6ca84f1",
+        "source": "compiled-children/README.md"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-RELEASE-PATHS/originals/E-RELEASE-DOCS.json",
+        "bytes": 7951,
+        "sha256": "72df26c57064975040432d092abc54723030e97ed31bf8056179c00aa9b961db",
+        "source": "compiled-children/coordination/receipts/E-RELEASE-DOCS.json"
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-RELEASE-PATHS/originals/E-RELEASE-DOCS.md",
+        "bytes": 2139,
+        "sha256": "cc495d55d04d2f2ec608edf33f0c18a37bf2947a21f6db6a87254d45857cabef",
+        "source": "compiled-children/coordination/reports/E-RELEASE-DOCS.md"
+      }
+    ],
+    "onlyArtifactParagraphChangedAgainstPreservedREADME": true
+  },
+  "checks": [
+    {
+      "name": "read-only runner path and preservation audit",
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.py",
+      "exitCode": 0,
+      "result": "Verified outputRoot, attempt layout, canonical report/receipt paths, sibling archive/manifest paths, demo paths, exact one-paragraph README delta, and all three preserved-original hashes.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.py",
+        "bytes": 3963,
+        "sha256": "417e7f02b7adee052edbfff47a63038676a15f25bfb9ec1c5d6508a7d8cac01d"
+      },
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.log",
+        "bytes": 421,
+        "sha256": "9feff6280bef257e6df1fae8ea6c627699d33c39bfdb6000531872db70ff2b48"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "README whitespace check",
+      "command": "git diff --check -- compiled-children/README.md",
+      "exitCode": 0,
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-diff-check.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-diff-check.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-diff-check.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    {
+      "name": "read-only native receipt protocol and evidence-pin validation",
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.py",
+      "exitCode": 0,
+      "result": "Native probe accepted the active receipt identity/outcome; current source and referenced report/preservation/rawlog hashes and lengths match.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.py",
+        "bytes": 1730,
+        "sha256": "7f07af8d1ab98a42620c29de4154d5951390b4a020d70840604bb5c6e3fc879b"
+      },
+      "stdout": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.log",
+        "bytes": 234,
+        "sha256": "d35d8eadb78d2a94e0945e9efc938f19a58f5e5cad77f7d767b80ace0ab1950a"
+      },
+      "stderr": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "exitCodeFile": {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.exit.log",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    }
+  ],
+  "rawlogs": {
+    "N2-E-FIX-RELEASE-PATHS-audit.py": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.py",
+      "bytes": 3963,
+      "sha256": "417e7f02b7adee052edbfff47a63038676a15f25bfb9ec1c5d6508a7d8cac01d"
+    },
+    "N2-E-FIX-RELEASE-PATHS-audit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.log",
+      "bytes": 421,
+      "sha256": "9feff6280bef257e6df1fae8ea6c627699d33c39bfdb6000531872db70ff2b48"
+    },
+    "N2-E-FIX-RELEASE-PATHS-audit.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-RELEASE-PATHS-audit.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-RELEASE-PATHS-diff-check.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-diff-check.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-RELEASE-PATHS-diff-check.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-diff-check.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-RELEASE-PATHS-diff-check.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-diff-check.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "N2-E-FIX-RELEASE-PATHS-audit-firstpass.stdout.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit-firstpass.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-RELEASE-PATHS-audit-firstpass.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit-firstpass.stderr.log",
+      "bytes": 392,
+      "sha256": "4876c5cc667491da7810f8a46082477f3fa280e365084e731ce0028d9932e24d"
+    },
+    "N2-E-FIX-RELEASE-PATHS-audit-firstpass.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit-firstpass.exit.log",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "N2-E-FIX-RELEASE-PATHS-receipt-validation.py": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.py",
+      "bytes": 1730,
+      "sha256": "7f07af8d1ab98a42620c29de4154d5951390b4a020d70840604bb5c6e3fc879b"
+    },
+    "N2-E-FIX-RELEASE-PATHS-receipt-validation.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.log",
+      "bytes": 234,
+      "sha256": "d35d8eadb78d2a94e0945e9efc938f19a58f5e5cad77f7d767b80ace0ab1950a"
+    },
+    "N2-E-FIX-RELEASE-PATHS-receipt-validation.stderr.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "N2-E-FIX-RELEASE-PATHS-receipt-validation.exit.log": {
+      "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-receipt-validation.exit.log",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/E-FIX-RELEASE-PATHS.md",
+    "bytes": 1532,
+    "sha256": "13de65fabfd6acf95bf8d345ea08628640e774980eb0eaadb90ee8fdc5345479"
+  },
+  "limitations": [
+    "No tests, browser smoke, or full delivery runner were executed for this factual documentation correction."
+  ],
+  "integration": "Ready for root-owned full runner to pin final README after the path paragraph correction.",
+  "publication": "No Git commit, merge, deployment, or scheduler-state edit.",
+  "reviewerIncident": {
+    "status": "resolved",
+    "firstPassLogs": [
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit-firstpass.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit-firstpass.stderr.log",
+        "bytes": 392,
+        "sha256": "4876c5cc667491da7810f8a46082477f3fa280e365084e731ce0028d9932e24d"
+      },
+      {
+        "path": "compiled-children/coordination/rawlogs/N2-E-FIX-RELEASE-PATHS-audit-firstpass.exit.log",
+        "bytes": 2,
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      }
+    ],
+    "summary": "Initial audit witness expected a generic <attempt-id> archive placeholder, while the README correctly spells out the runner’s attempt-<timestamp>-<pid> filename; the read-only audit assertion was aligned with the actual names and then passed. No production file changed in that first pass."
+  }
+}

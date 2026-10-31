@@ -1,0 +1,228 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-RELEASE-DOCS",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Updated the compiled-children reproduction/backend guide and results boundary. Historical author captures are explicitly distinguished from pending exact-source acceptance; documentation checks passed and no full pipeline was run.",
+  "capturedAt": "2026-10-31T12:54:36Z",
+  "documentation": {
+    "changed": [
+      "compiled-children/README.md",
+      "compiled-children/RESULTS.md"
+    ],
+    "originalsPreserved": true,
+    "sourceFreeze": true
+  },
+  "acceptance": {
+    "exactSourceFullRun": "pending",
+    "authorEvidenceIsHistorical": true,
+    "fullRunnerExecutedByThisTask": false,
+    "activeRepairSnapshot": "compiled-children/coordination/rawlogs/E-RELEASE-DOCS-20261031/state-snapshot.json",
+    "activeRepairsAtSnapshot": {
+      "E-FIX-INHERITED-GATE": "running",
+      "E-FIX-WASM-OBSERVABILITY": "running",
+      "E-FIX-SEEDED-ASSERTIONS": "done; XR review pending",
+      "E-FIX-HARNESS-LIVENESS": "running"
+    }
+  },
+  "checks": [
+    {
+      "name": "markdown-relative-links",
+      "result": "passed"
+    },
+    {
+      "name": "git-diff-check-owned-docs",
+      "result": "passed"
+    },
+    {
+      "name": "bash-syntax-runner-entrypoint",
+      "command": "bash -n run-compiled-children.sh",
+      "exit_code": 0
+    },
+    {
+      "name": "native-go-replay",
+      "result": "not-run"
+    },
+    {
+      "name": "node-tests",
+      "result": "not-run"
+    },
+    {
+      "name": "browser-demo-smoke",
+      "result": "not-run"
+    },
+    {
+      "name": "full-delivery-runner-and-ci",
+      "result": "not-run"
+    }
+  ],
+  "sources": [
+    {
+      "path": "compiled-children/README.md",
+      "bytes": 6706,
+      "sha256": "d599a2e235df8d60b453debc6633000dc2bf71309b96fe4caec0274ce6ca84f1"
+    },
+    {
+      "path": "compiled-children/RESULTS.md",
+      "bytes": 7147,
+      "sha256": "9361f41000071ea4302a116d533a8635a619e4b8ae8749168133c4c97af22cf0"
+    },
+    {
+      "path": "compiled-children/CONTRACT.md",
+      "bytes": 4056,
+      "sha256": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902"
+    },
+    {
+      "path": "compiled-children/run.mjs",
+      "bytes": 56894,
+      "sha256": "a279e6b28f5ed0166b0d5264e587c0f01abcd550ea1a9c7d7866a8c568f0333d"
+    },
+    {
+      "path": "run-compiled-children.sh",
+      "bytes": 1145,
+      "sha256": "3216c11142b0600caac9258a13258353eda229911046db6a2371f50ab605a7d6"
+    },
+    {
+      "path": "fixtures/compiled/children/scenario.json",
+      "bytes": 4632,
+      "sha256": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407"
+    },
+    {
+      "path": "fixtures/compiled/children/app.go",
+      "bytes": 8346,
+      "sha256": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99"
+    },
+    {
+      "path": "fixtures/compiled/children/view.go",
+      "bytes": 2934,
+      "sha256": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185"
+    },
+    {
+      "path": "cmd/compiled-children-native/main.go",
+      "bytes": 13242,
+      "sha256": "2d87f25ff5bb7125cb8265ac310ffcd98cce9a81f001f5197b2ac2ba09c77ca9"
+    },
+    {
+      "path": "compiled-children/runtime/runtime.mjs",
+      "bytes": 12303,
+      "sha256": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b"
+    },
+    {
+      "path": "compiled-frontend/frontend/runtime/runtime.mjs",
+      "bytes": 62312,
+      "sha256": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f"
+    },
+    {
+      "path": "compiled-frontend/frontend/react/renderer.mjs",
+      "bytes": 14863,
+      "sha256": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4"
+    },
+    {
+      "path": "compiled-frontend/frontend/dom/renderer.mjs",
+      "bytes": 16327,
+      "sha256": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54"
+    },
+    {
+      "path": "compiled-children/demo/build.mjs",
+      "bytes": 5047,
+      "sha256": "7f21650f221f91a3eeddf4c151b0729068f606fb6ac7a6297668f7bf14514ff8"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-HARNESS.md",
+      "bytes": 4553,
+      "sha256": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-HARNESS.json",
+      "bytes": 16513,
+      "sha256": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-DELIVERY.md",
+      "bytes": 6150,
+      "sha256": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-DELIVERY.json",
+      "bytes": 10856,
+      "sha256": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d"
+    },
+    {
+      "path": "compiled-children/coordination/reports/XR-DELIVERY.md",
+      "bytes": 7313,
+      "sha256": "5492636a52831341ab09e2d61067c30b166784488f788f1197ec5cfd23df3e15"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-COMPILER.md",
+      "bytes": 6656,
+      "sha256": "28e271c19584ef89ba5ff1f1cc64f54e9f6e842d7800b02c16ceb8f7f796a67d"
+    },
+    {
+      "path": "compiled-children/coordination/reports/XR-FIX-ORACLE-CUSTODY.md",
+      "bytes": 3915,
+      "sha256": "a71b4e3a2c0ed49d6e6fe131669b131983677c92365392235c2ab7d7742d4e1b"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/XR-FIX-ORACLE-CUSTODY.json",
+      "bytes": 20412,
+      "sha256": "5b0a3001d1c94f86415d15dfd7047cecd0c04c24d401bdbb5b16efd091da4323"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/README.md",
+      "bytes": 3009,
+      "sha256": "4eaf45dafbd59ca4ed8058a578e9f4105fc4d1d129274e7252474f92df013f28"
+    },
+    {
+      "path": "compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/RESULTS.md",
+      "bytes": 4595,
+      "sha256": "dbe475a81b94e3ed37cf0e161df95f9ff0e2f31b584c772e3fcb93b0e38ce67d"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-RELEASE-DOCS-20261031/state-snapshot.json",
+      "bytes": 50442,
+      "sha256": "8268eae883f49f67766aec6e89977c19d891e0e96dcdb1a05135ff2c00e3bf53"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 2478,
+      "sha256": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b"
+    },
+    {
+      "path": "interaction/package-lock.json",
+      "bytes": 16564,
+      "sha256": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0"
+    },
+    {
+      "path": "compiled-frontend/package-lock.json",
+      "bytes": 14526,
+      "sha256": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079"
+    },
+    {
+      "path": ".github/workflows/gobi-compiled-children.yml",
+      "bytes": 2404,
+      "sha256": "a407f2c31562d2ae08c623811595b530037809484ca3cdfd56b89aec62492b8e"
+    }
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-RELEASE-DOCS-20261031/static-review.log",
+      "bytes": 780,
+      "sha256": "a156afdbc443b2822d9f6efea1e95d2ab127450fd505c74dbd6d47370a8f8beb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-RELEASE-DOCS-20261031/state-snapshot.json",
+      "bytes": 50442,
+      "sha256": "8268eae883f49f67766aec6e89977c19d891e0e96dcdb1a05135ff2c00e3bf53"
+    }
+  ],
+  "limitations": [
+    "Historical fixed/seed/browser and HTTP smoke numbers are author captures from pre-repair source, not fresh acceptance.",
+    "Original E-ORACLE audit helper bytes pinned to 7b124f1f… are unrecovered; the preserved f814c0ae… reconstruction is not represented as the original.",
+    "Historical R15 local archive corruption is unresolved and excluded from this evidence."
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/E-RELEASE-DOCS.md",
+    "bytes": 2139,
+    "sha256": "cc495d55d04d2f2ec608edf33f0c18a37bf2947a21f6db6a87254d45857cabef"
+  }
+}

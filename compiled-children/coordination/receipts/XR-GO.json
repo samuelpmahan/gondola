@@ -1,0 +1,124 @@
+{
+  "job_id": "XR-GO",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independently reviewed the Go-owned keyed collection and native trace against the frozen contract. Go tests, native trace replay, safe-ID and slice-history probes, cancelled-reply rejection, and read-only E-GO receipt validation passed; no must-fix findings.",
+  "contract": "compiled-children/CONTRACT.md",
+  "reviewed_scope": [
+    "fixtures/compiled/children/app.go",
+    "fixtures/compiled/children/view.go",
+    "fixtures/compiled/children/app_test.go",
+    "fixtures/compiled/children/scenario.json",
+    "cmd/compiled-children-native/main.go",
+    "cmd/compiled-children-native/main_test.go",
+    "fixtures/compiled/children/evidence/rawlogs/native-trace.json",
+    "compiled-children/coordination/reports/E-GO.md",
+    "compiled-children/coordination/receipts/E-GO.json"
+  ],
+  "findings": [],
+  "non_blocking_observations": [
+    "TestInvalidKeysUnknownActionsAndSafeIntegerLimitsAreNoOps does not send an unknown message name; Update's default branch is an explicit no-op.",
+    "Native CLI renderer-swap, disabled-action, and stale-callback records are no-step metadata/preflight records; mounted renderer behavior belongs to N4 and root integration."
+  ],
+  "runtime": {
+    "go": "go1.24.0 linux/amd64",
+    "python": "3.12.14",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-next"
+  },
+  "checks": [
+    {
+      "command": "set -o pipefail\nGOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 -v ./fixtures/compiled/children ./cmd/compiled-children-native 2>&1 | tee compiled-children/coordination/rawlogs/XR-GO-review-go-test.log",
+      "exit_code": 0,
+      "result": "Passed 13 cases: 8 fixture tests, 3 CLI top-level tests, including both correlation subtests.",
+      "rawlog": "compiled-children/coordination/rawlogs/XR-GO-review-go-test.log",
+      "sha256": "fa0a48bd38af4c807e78b86c6b0bb9a1a8e2706eb69df7da89c65ad1fc4b1b33"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script fixtures/compiled/children/scenario.json > compiled-children/coordination/rawlogs/XR-GO-review-native-trace.json 2> compiled-children/coordination/rawlogs/XR-GO-review-native-trace.stderr.log",
+      "exit_code": 0,
+      "result": "Fresh 42-event, 38-step native trace; stderr empty.",
+      "stdout": "compiled-children/coordination/rawlogs/XR-GO-review-native-trace.json",
+      "stdout_sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+      "stderr": "compiled-children/coordination/rawlogs/XR-GO-review-native-trace.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "set -o pipefail\npython3 compiled-children/coordination/rawlogs/XR-GO-review-trace-audit.py 2>&1 | tee compiled-children/coordination/rawlogs/XR-GO-review-trace-audit.txt",
+      "exit_code": 0,
+      "result": "Fresh trace is byte-identical to N1's saved trace; confirmed event/step counts, tick-free indexes, stale-generation state, and child-first reverse-order cancellation including parent last.",
+      "script": "compiled-children/coordination/rawlogs/XR-GO-review-trace-audit.py",
+      "script_sha256": "2141bcedb3e07f634ea01b1369bad2ea83193a6ef38e3225af0ef0fdacd82bcf",
+      "rawlog": "compiled-children/coordination/rawlogs/XR-GO-review-trace-audit.txt",
+      "rawlog_sha256": "b7c268dbb99efb52886e76686e325222d629b13d288a87441a38773c4e888e20"
+    },
+    {
+      "command": "set -o pipefail\nGOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./compiled-children/coordination/rawlogs/XR-GO-review-slice-history.go 2>&1 | tee compiled-children/coordination/rawlogs/XR-GO-review-slice-history.log",
+      "exit_code": 0,
+      "result": "Passed value-history checks across append, counter update, reorder, remove, and key reuse; maximum safe child/parent IDs were admitted once, and add/remount/request increments did not exceed the ceiling.",
+      "script": "compiled-children/coordination/rawlogs/XR-GO-review-slice-history.go",
+      "script_sha256": "c14d747b6d417112cfe3ed990e84c74f510dcd664d2fe102af68d78d2fe79c3d",
+      "rawlog": "compiled-children/coordination/rawlogs/XR-GO-review-slice-history.log",
+      "rawlog_sha256": "4b0a227ee519c5de9c5a78d8a8b8f5643dfba38af545dff3a5efa337116c3263"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/compiled-children-native --script compiled-children/coordination/rawlogs/XR-GO-review-cancelled-reply.json > compiled-children/coordination/rawlogs/XR-GO-review-cancelled-reply.stdout.json 2> compiled-children/coordination/rawlogs/XR-GO-review-cancelled-reply.stderr.log",
+      "exit_code": 1,
+      "expected_failure": true,
+      "result": "Expected rejection after oak cancellation: event 2 effect-reply token is not pending; stdout was empty and the reply was rejected before children.Update.",
+      "scenario": "compiled-children/coordination/rawlogs/XR-GO-review-cancelled-reply.json",
+      "scenario_sha256": "a02cefe2a7354e7d734a5fa0eee862dc76e82a3a9fd86ec207938b20fafdab26",
+      "stdout": "compiled-children/coordination/rawlogs/XR-GO-review-cancelled-reply.stdout.json",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "compiled-children/coordination/rawlogs/XR-GO-review-cancelled-reply.stderr.log",
+      "stderr_sha256": "0769271c4a33611a92a88f88071e1b1f3a9b7dd8811a10e5fa5d8c1ea66e0001"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/XR-GO-review-receipt-validation.py 2>&1 | tee compiled-children/coordination/rawlogs/XR-GO-review-receipt-validation.log",
+      "exit_code": 0,
+      "result": "The native read-only validate_receipt accepted E-GO identity, extraction outcome, and nonempty summary; E-GO state is closed.",
+      "script": "compiled-children/coordination/rawlogs/XR-GO-review-receipt-validation.py",
+      "script_sha256": "0e94854bd1b00bc6cf9e5dc99f86432d31f88bcbc19154923039e1bb8b2455d7",
+      "rawlog": "compiled-children/coordination/rawlogs/XR-GO-review-receipt-validation.log",
+      "rawlog_sha256": "f2a751c6cd1a09fea9f439fddf8c1e470d00ee92c029eb0b4b1bd9f8e07ec8d8"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go version 2>&1 | tee compiled-children/coordination/rawlogs/XR-GO-review-go-version.log",
+      "exit_code": 0,
+      "result": "go version go1.24.0 linux/amd64",
+      "rawlog": "compiled-children/coordination/rawlogs/XR-GO-review-go-version.log",
+      "rawlog_sha256": "a25c9afbc0b5cef0771a799565082fe511d668065f83bd54750592f8102aa9f3"
+    }
+  ],
+  "corrected_review_attempt": {
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./compiled-children/coordination/rawlogs/XR-GO-review-slice-history-firstpass.go",
+    "exit_code": 1,
+    "result": "Reviewer-only assertion incorrectly expected a re-added key at index 1; append semantics correctly put it last. The verifier assertion was corrected and its final run passed.",
+    "preserved_log": "compiled-children/coordination/rawlogs/XR-GO-review-slice-history-firstpass.log",
+    "sha256": "4529525b6bb99735acff1e07d94b8f6bb0f3853267e1b279625d8a2eef044610"
+  },
+  "reviewed_source_sha256": {
+    "compiled-children/CONTRACT.md": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902",
+    "fixtures/compiled/children/app.go": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+    "fixtures/compiled/children/view.go": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185",
+    "fixtures/compiled/children/app_test.go": "0def0cc80e63017e4712e0fe5f8b15a13531798e31a595a50c15e892cb65a628",
+    "cmd/compiled-children-native/main.go": "2d87f25ff5bb7125cb8265ac310ffcd98cce9a81f001f5197b2ac2ba09c77ca9",
+    "cmd/compiled-children-native/main_test.go": "1d81ddb843c2aed17df35f89d89d80f06ea6d2070cb1165111059f1278748b19",
+    "fixtures/compiled/children/scenario.json": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407"
+  },
+  "author_evidence_sha256": {
+    "fixtures/compiled/children/evidence/rawlogs/native-trace.json": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+    "compiled-children/coordination/reports/E-GO.md": "b391368ac7c0253c6447fdfd5567a5a3c702f03240fa30f5ddb8b6391c57e497",
+    "compiled-children/coordination/receipts/E-GO.json": "68e04d07077ba3464deccd5ecbc8f2e2c2f8bda6ae820ed583ce2601a394caa7"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-GO.md",
+    "bytes": 6395,
+    "sha256": "058b286bb6c447d025f0e73e0adda19b5b61e6d3591f40ad28aa618a27d1d0b7"
+  },
+  "limitations": [
+    "This review covers Go reducer/native CLI behavior, not actual compiled React/DOM execution or mounted renderer callback behavior.",
+    "N2 compiler build results are peer-reported and were not rerun in this Go review.",
+    "No production files or native scheduler state were modified."
+  ],
+  "publication": "No production edits, Git mutation, merge, or deployment."
+}

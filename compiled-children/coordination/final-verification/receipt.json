@@ -1,0 +1,55 @@
+{
+  "schema": "gobi.compiled-children-precommit-verification/v1",
+  "recordedAt": "2026-10-31T13:20:32.673586+00:00",
+  "scope": "Final working runtime/compiler/test source before Git commit; NOT full inherited acceptance or CI.",
+  "go": "go1.24.0 linux/amd64",
+  "node": "v22.23.4",
+  "chromium": "153.0.8010.0",
+  "environment": {
+    "GOTOOLCHAIN": "local",
+    "GOFLAGS": "-buildvcs=false",
+    "CHROMIUM_PATH": "/tmp/chromium",
+    "PATH_prefix": "/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin"
+  },
+  "commands": [
+    "go vet ./...",
+    "go test ./...",
+    "node --test compiled-children/runtime/runtime.test.mjs compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs compiled-children/conformance/swap-contract.test.mjs compiled-children/inherited-acceptance.test.mjs compiled-frontend/conformance/no-wasm.test.mjs",
+    "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+    "sha256sum -c --quiet SHA256SUMS"
+  ],
+  "exitCode": 0,
+  "nodeTests": 44,
+  "nodePassed": 44,
+  "nodeFailed": 0,
+  "staticCases": 5000,
+  "staticSeed": 20261030,
+  "m0ChecksumEntries": 24,
+  "logs": [
+    {
+      "path": "compiled-children/coordination/final-verification/go-test.log",
+      "bytes": 2617,
+      "sha256": "76afa7932d206ca9bad72159b7fe3fa904dfdb7edf0b1f831b6ff93271538077"
+    },
+    {
+      "path": "compiled-children/coordination/final-verification/go-vet.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/final-verification/m0-hashes.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/final-verification/node-test.log",
+      "bytes": 10560,
+      "sha256": "98596f1954e930a9f7daa0998cdae830bfa134dc9608cbc5435fe39289e25a78"
+    },
+    {
+      "path": "compiled-children/coordination/final-verification/static.log",
+      "bytes": 38,
+      "sha256": "4e683a05c5a4d2b13396f3a27332261da4e2de359e7b9119f00ab3246ecf1d16"
+    }
+  ]
+}

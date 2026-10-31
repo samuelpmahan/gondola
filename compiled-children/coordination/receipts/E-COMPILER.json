@@ -1,0 +1,185 @@
+{
+  "schema": "gobi.compiled-children-evidence/v1",
+  "job_id": "E-COMPILER",
+  "worker": "N2",
+  "outcome": "confirmed_reuse",
+  "summary": "The pinned GoScript CLI built the frozen typed Children value slice for React and DOM. The generated encoder accepted actual compiled GoScript State values through growth, reorder, pending work, reuse, clear, parent removal, and remount. No compiler production repair was needed.",
+  "scope": {
+    "owned_paths": [
+      "compiled-frontend/analyze/**",
+      "compiled-frontend/build/**",
+      "compiled-frontend/emit/**",
+      "compilercontract/**"
+    ],
+    "production_paths_changed": [],
+    "evidence_paths": [
+      "compiled-children/compiler-evidence/report.md",
+      "compiled-children/compiler-evidence/receipt.json",
+      "compiled-children/compiler-evidence/encoder-probe.mjs",
+      "compiled-children/compiler-evidence/build/**"
+    ]
+  },
+  "source": {
+    "package": "github.com/samuelpmahan/gondola/fixtures/compiled/children",
+    "app": {
+      "path": "fixtures/compiled/children/app.go",
+      "sha256": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99"
+    },
+    "view": {
+      "path": "fixtures/compiled/children/view.go",
+      "sha256": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185"
+    },
+    "source_hashes_unchanged_during_both_accepted_builds": true
+  },
+  "toolchain": {
+    "goscript": "github.com/s4wave/goscript v0.6.2",
+    "go": "go1.27.3 linux/amd64",
+    "node": "v22.23.4",
+    "version_logs": [
+      "compiled-children/compiler-evidence/build/go-version.stdout.log",
+      "compiled-children/compiler-evidence/build/node-version.stdout.log"
+    ]
+  },
+  "builds": [
+    {
+      "backend": "react",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-next/compiled-frontend",
+      "command": "GOTOOLCHAIN=go1.27.3 GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-children/compiler-evidence/build/react-repeat-request.json > ../compiled-children/compiler-evidence/build/react-repeat.stdout.json 2> ../compiled-children/compiler-evidence/build/react-repeat.stderr.log",
+      "request": "compiled-children/compiler-evidence/build/react-repeat-request.json",
+      "exit_code": 0,
+      "result": "ok=true, 67 output files, no diagnostics",
+      "stdout": "compiled-children/compiler-evidence/build/react-repeat.stdout.json",
+      "stdout_sha256": "5953b0f6f49bbc9249bc674de57f8faf4efb2547667a195125bdaad7814ad6d8",
+      "stderr": "compiled-children/compiler-evidence/build/react-repeat.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_file": "compiled-children/compiler-evidence/build/react-repeat.exit-code"
+    },
+    {
+      "backend": "dom",
+      "working_directory": "/workspace/scratch/39a56936f173/gondola-next/compiled-frontend",
+      "command": "GOTOOLCHAIN=go1.27.3 GOBI_NODE=/tmp/gondola-node22/node_modules/node/bin/node /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-children/compiler-evidence/build/dom-request.json > ../compiled-children/compiler-evidence/build/dom-attempt3.stdout.json 2> ../compiled-children/compiler-evidence/build/dom-attempt3.stderr.log",
+      "request": "compiled-children/compiler-evidence/build/dom-request.json",
+      "exit_code": 0,
+      "result": "ok=true, 67 output files, no diagnostics",
+      "stdout": "compiled-children/compiler-evidence/build/dom-attempt3.stdout.json",
+      "stdout_sha256": "36f22cb4b7da714a2b962b92bad4789eac7425fbcf5b15d7f3ebd0bb4f44dc58",
+      "stderr": "compiled-children/compiler-evidence/build/dom-attempt3.stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_file": "compiled-children/compiler-evidence/build/dom-attempt3.exit-code"
+    }
+  ],
+  "artifacts": {
+    "app_directory": "apps/children-cdeeb3bd6f70",
+    "react_output_root": "compiled-children/compiler-evidence/build/react-repeat",
+    "dom_output_root": "compiled-children/compiler-evidence/build/dom",
+    "manifest": "buildmanifest.json",
+    "app_ir": {
+      "path": "apps/children-cdeeb3bd6f70/app-ir.json",
+      "sha256_both_backends": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f"
+    },
+    "encoder": {
+      "path": "apps/children-cdeeb3bd6f70/encoder.mjs",
+      "sha256_both_backends": "48422999f8d9a251fe51eb5b55372efd8f4aea954ce09523133093a6eae753e7"
+    },
+    "components": {
+      "path": "apps/children-cdeeb3bd6f70/components.gen.mjs",
+      "sha256_both_backends": "f395e6c54b9d550f6fb0a1e7f61179451ad7369dfe75e06f1babfaa7059cfb56"
+    },
+    "module": {
+      "path": "apps/children-cdeeb3bd6f70/gobi-compiled.mjs",
+      "react_sha256": "32d4592f0d1d93bafe482297dc64bc2becd9eb2f1f3c3ef4143dfbe3b14bf694",
+      "dom_sha256": "a20ff53f736993b5cc255fee1a5229a8282589e424dec2904e5bba06768ed885",
+      "raw_bytes_differ_due_to_random_temporary_path_comments": true,
+      "normalized_temporary_path_bundles_identical": true
+    },
+    "forwarder_package": "gobi.generated/compiled/facades/children-cdeeb3bd6f70",
+    "forwarder_go": "forwarders/facades/children-cdeeb3bd6f70/forwarder.go",
+    "emitted_typescript": [
+      "emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/children/app.gs.ts",
+      "emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/children/view.gs.ts",
+      "emitted-ts/@goscript/gobi.generated/compiled/facades/children-cdeeb3bd6f70/forwarder.gs.ts"
+    ],
+    "output_inventory": {
+      "verified_file_count_each_backend": 67,
+      "byte_or_hash_mismatches": 0,
+      "audit": "compiled-children/compiler-evidence/build/build-output-audit.json",
+      "audit_sha256": "9ec1bbcc23ef59a380d2dd55c6c4e6793708f0ca48d2b17cd27a4f39d0e6e235"
+    }
+  },
+  "supported_profile": {
+    "state_type": "github.com/samuelpmahan/gondola/fixtures/compiled/children.State",
+    "state_kind": "struct",
+    "children_type": "[]github.com/samuelpmahan/gondola/fixtures/compiled/children.ChildState",
+    "children_kind": "slice",
+    "children_js_representation": "array-or-goscript-slice",
+    "element_kind": "struct",
+    "element_js_representation": "class",
+    "nested_counter_type": "github.com/samuelpmahan/gondola/counter.State",
+    "uint64_js_representation": "bigint",
+    "app_ir_sha256": "f546e2ff771dd497aebfc2f75ae269f422d0422879dd86b881d4aa911a0e228f"
+  },
+  "encoder_probe": {
+    "script": "compiled-children/compiler-evidence/encoder-probe.mjs",
+    "script_sha256": "0d0e88f4ca58dca917838bfe133d07167de1cef47155f539805865b92c629de6",
+    "react_command": "NODE_NO_WARNINGS=1 /tmp/gondola-node22/node_modules/node/bin/node compiled-children/compiler-evidence/encoder-probe.mjs react compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/gobi-compiled.mjs compiled-children/compiler-evidence/build/react-repeat/apps/children-cdeeb3bd6f70/encoder.mjs > compiled-children/compiler-evidence/build/react-encoder-probe-final.stdout.json 2> compiled-children/compiler-evidence/build/react-encoder-probe-final.stderr.log",
+    "dom_command": "NODE_NO_WARNINGS=1 /tmp/gondola-node22/node_modules/node/bin/node compiled-children/compiler-evidence/encoder-probe.mjs dom compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/gobi-compiled.mjs compiled-children/compiler-evidence/build/dom/apps/children-cdeeb3bd6f70/encoder.mjs > compiled-children/compiler-evidence/build/dom-encoder-probe-final.stdout.json 2> compiled-children/compiler-evidence/build/dom-encoder-probe-final.stderr.log",
+    "react_exit_code": 0,
+    "react_stdout_sha256": "c5c70b872d6e2c12abc5d58ceaf358ed75c87e7814447f487c1ab9d89b89149f",
+    "dom_exit_code": 0,
+    "dom_stdout_sha256": "06bb9e72b62508c26046046542894472c2623bc11a1af7358928a498e8123d60",
+    "snapshot_count_each": 14,
+    "canonical_encoded_states_identical": true,
+    "slice_descriptors_identical": true,
+    "observed_representations": [
+      "array",
+      "goscript-slice"
+    ],
+    "capacity_samples": [
+      { "length": 3, "capacity": 4, "holes": [3] },
+      { "length": 4, "capacity": 6, "holes": [4, 5] },
+      { "length": 5, "capacity": 8, "holes": [5, 6, 7] }
+    ],
+    "spare_zero_marker": {
+      "description": "goscript.spareZero",
+      "global_key": null,
+      "symbol_descriptor": "enumerable=true, writable=true, configurable=true, data value function",
+      "function_own_keys": ["length", "name"],
+      "length_property": { "value": 0, "enumerable": false, "writable": false, "configurable": true },
+      "name_property": { "value": "", "enumerable": false, "writable": false, "configurable": true }
+    },
+    "parity_audit": "compiled-children/compiler-evidence/build/probe-cross-backend-final.json",
+    "parity_audit_sha256": "ce3bf97ac726cdb54261f6a0b5b1cbc506171f36ddee13a6684bd2d55f7d95ac"
+  },
+  "failed_attempts": [
+    {
+      "attempt": "react.stdout.json",
+      "exit_code": 1,
+      "reason": "source.package-global: mutable package-level addKeys slice in N1 view.go",
+      "raw_prefix": "compiled-children/compiler-evidence/build/react"
+    },
+    {
+      "attempt": "react-green.stdout.json",
+      "exit_code": 1,
+      "reason": "conservative numeric-profile and unsupported address-of diagnostics in N1 source",
+      "raw_prefix": "compiled-children/compiler-evidence/build/react-green"
+    },
+    {
+      "attempt": "react-attempt2.stdout.json",
+      "exit_code": 1,
+      "reason": "unsupported strings.IndexByte and unproven dynamic make capacity in N1 source",
+      "raw_prefix": "compiled-children/compiler-evidence/build/react-attempt2"
+    },
+    {
+      "attempt": "react-encoder-probe.stdout.json",
+      "exit_code": 1,
+      "reason": "evidence script initially assumed the actual Init slice was a GoSlice wrapper; corrected to record both accepted array and GoSlice forms",
+      "raw_prefix": "compiled-children/compiler-evidence/build/react-encoder-probe"
+    }
+  ],
+  "limits": [
+    "No compiler production change was required.",
+    "The accepted probe confirms generated encoder compatibility for this frozen fixture and these observed GoScript v0.6.2 shapes; it does not establish universal slice/struct support.",
+    "No native/direct/browser parity or full inherited runner result is claimed in this lane."
+  ],
+  "report": "compiled-children/compiler-evidence/report.md"
+}

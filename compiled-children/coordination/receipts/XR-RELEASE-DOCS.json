@@ -1,0 +1,193 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-RELEASE-DOCS",
+  "worker": "N3",
+  "decision": "amend",
+  "summary": "README and RESULTS correctly bound historical evidence, pending full acceptance, custody, and finite scope. One factual output-path error remains: README line 35 locates the canonical report/receipt and archive inside the attempt directory, while code writes them elsewhere.",
+  "reviewed_job": {
+    "job_id": "E-RELEASE-DOCS",
+    "worker": "N4",
+    "outcome": "mixed_change"
+  },
+  "findings": [
+    {
+      "id": "XR-RELEASE-DOCS-01",
+      "severity": "must-fix-factual-path",
+      "path": "compiled-children/README.md:35",
+      "description": "The sentence places the canonical E-DELIVERY report/receipt and byte-checked archive beneath attempt-<id>/. The report/receipt are written to compiled-children/coordination/reports and receipts; the .tar.gz archive and .archive-manifest.json are written beside, as siblings of, attempt-<id>/.",
+      "actual_paths": {
+        "report": "compiled-children/coordination/reports/E-DELIVERY.md",
+        "receipt": "compiled-children/coordination/receipts/E-DELIVERY.json",
+        "archive": "compiled-children/demo/output/attempts/attempt-<id>.tar.gz",
+        "manifest": "compiled-children/demo/output/attempts/attempt-<id>.archive-manifest.json",
+        "demo_site": "compiled-children/demo/output/attempts/attempt-<id>/demo/site"
+      },
+      "recommendation": "Separate the attempt-directory contents from canonical report/receipt and sibling archive/manifest paths."
+    }
+  ],
+  "review_summary": {
+    "docsSourcePinsMatchE_RELEASE_DOCS": true,
+    "releaseReportAndRawlogPinsMatch": true,
+    "toolchainAndCICommandsMatchCurrentRunner": true,
+    "demoRestorePathMatches": true,
+    "historicalEvidenceSeparatesFromPendingAcceptance": true,
+    "originalOracle7bUnavailableAndCustodyAccepted": true,
+    "R15ArchiveCorruptionExcluded": true,
+    "fullRunOrCILaunchedByReview": false
+  },
+  "historical_evidence": {
+    "attempt12": {
+      "path": "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/run.json.gz",
+      "source_sha256": "2851743764da36a86aefc3f05dd5529d6e1b479494137a8d1a46a92f650ae38a",
+      "events": 42,
+      "go_updates": 38,
+      "checkpoints": 39,
+      "mutation_controls_detected": 6
+    },
+    "seededMountedBrowserProfiles": [
+      {
+        "seed": 20261031,
+        "mounted": true
+      },
+      {
+        "seed": 20261032,
+        "mounted": false
+      },
+      {
+        "seed": 20261033,
+        "mounted": false
+      }
+    ],
+    "authorSmoke": {
+      "passed": 31,
+      "failed": 0,
+      "browser": "Chromium 153.0.8010.0",
+      "smokeJson": {
+        "path": "compiled-children/demo/output/author-smoke-20261031-rerun1/smoke.json",
+        "bytes": 18210,
+        "sha256": "6d5170a5fccbdd8210218fcc3b366f36b84ccdbd16c37348b5e2fcf25385f3cd"
+      }
+    },
+    "docSnapshotRepairStatus": {
+      "E-FIX-INHERITED-GATE": "running",
+      "E-FIX-WASM-OBSERVABILITY": "running",
+      "E-FIX-SEEDED-ASSERTIONS": "done; XR review pending",
+      "E-FIX-HARNESS-LIVENESS": "running"
+    },
+    "custodyBoundary": {
+      "expected_sha256": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+      "original_bytes_available": false,
+      "custody_review": "accepted"
+    }
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.py",
+      "exit_code": 0,
+      "result": "Release doc pins and rawlog/report hashes verified; historical attempt/smoke and repair snapshot claims checked against receipts; current runner paths/toolchains checked; one factual path finding recorded.",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.log",
+        "bytes": 1571,
+        "sha256": "08971ee1f68c7cdda78261d98cde29507f15e83911123c44cb1872a25b20ed2a"
+      },
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.py",
+        "bytes": 6378,
+        "sha256": "2ab6e6ba7e01ce3c224f3ec9552c33312e6becb79b8d6e57317fe578aacfe490"
+      }
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.py",
+      "exit_code": 0,
+      "result": "Native validate_receipt accepted XR-RELEASE-DOCS/N3; all pinned sources, report and check evidence matched.",
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.py",
+        "bytes": 1522,
+        "sha256": "336dd2d0794aeb0b7f97e3c7bd2f9c75c99442e3d288de36990d095d086b44c6"
+      },
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.log",
+        "bytes": 84,
+        "sha256": "d459990622bca19289a08b54b5b7cbbd7a9ea8e2ead4fed3595a122a1435f41e"
+      }
+    }
+  ],
+  "sourceSha256": {
+    ".github/workflows/gobi-compiled-children.yml": "a407f2c31562d2ae08c623811595b530037809484ca3cdfd56b89aec62492b8e",
+    "compiled-children/CONTRACT.md": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902",
+    "compiled-children/README.md": "d599a2e235df8d60b453debc6633000dc2bf71309b96fe4caec0274ce6ca84f1",
+    "compiled-children/RESULTS.md": "9361f41000071ea4302a116d533a8635a619e4b8ae8749168133c4c97af22cf0",
+    "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/run.json.gz": "2851743764da36a86aefc3f05dd5529d6e1b479494137a8d1a46a92f650ae38a",
+    "compiled-children/coordination/rawlogs/E-HARNESS-20261031T123850.820Z-2/trace-index.json": "679af0e463b61f117deef3a3ef3473289abae8fd853144a81a7b452eda47acb6",
+    "compiled-children/coordination/rawlogs/E-RELEASE-DOCS-20261031/state-snapshot.json": "8268eae883f49f67766aec6e89977c19d891e0e96dcdb1a05135ff2c00e3bf53",
+    "compiled-children/coordination/rawlogs/E-RELEASE-DOCS-20261031/static-review.log": "a156afdbc443b2822d9f6efea1e95d2ab127450fd505c74dbd6d47370a8f8beb",
+    "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.log": "08971ee1f68c7cdda78261d98cde29507f15e83911123c44cb1872a25b20ed2a",
+    "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.py": "2ab6e6ba7e01ce3c224f3ec9552c33312e6becb79b8d6e57317fe578aacfe490",
+    "compiled-children/coordination/receipts/E-DELIVERY.json": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d",
+    "compiled-children/coordination/receipts/E-HARNESS.json": "79694227b67a2be6c6858cef659c1698d2dbf69d54a4c4784889227293359782",
+    "compiled-children/coordination/receipts/E-RELEASE-DOCS.json": "72df26c57064975040432d092abc54723030e97ed31bf8056179c00aa9b961db",
+    "compiled-children/coordination/receipts/XR-DELIVERY.json": "b4607f04dc2e13b42a15dceb47fd9ec7e5284f8f0c9069ce6063f06210c8d469",
+    "compiled-children/coordination/receipts/XR-FIX-ORACLE-CUSTODY.json": "5b0a3001d1c94f86415d15dfd7047cecd0c04c24d401bdbb5b16efd091da4323",
+    "compiled-children/coordination/receipts/XR-HARNESS.json": "240218ddfc24da525bb7187e69796a93170b5fb004c931195a9313d31b3de7c4",
+    "compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/README.md": "4eaf45dafbd59ca4ed8058a578e9f4105fc4d1d129274e7252474f92df013f28",
+    "compiled-children/coordination/repairs/E-RELEASE-DOCS/originals/RESULTS.md": "dbe475a81b94e3ed37cf0e161df95f9ff0e2f31b584c772e3fcb93b0e38ce67d",
+    "compiled-children/coordination/reports/E-DELIVERY.md": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706",
+    "compiled-children/coordination/reports/E-HARNESS.md": "5e3f75356b88f0e2a5857e0c611ee2eca0581ec2f0f94ffdead7f132550e5021",
+    "compiled-children/coordination/reports/E-RELEASE-DOCS.md": "cc495d55d04d2f2ec608edf33f0c18a37bf2947a21f6db6a87254d45857cabef",
+    "compiled-children/coordination/reports/XR-DELIVERY.md": "5492636a52831341ab09e2d61067c30b166784488f788f1197ec5cfd23df3e15",
+    "compiled-children/coordination/reports/XR-FIX-ORACLE-CUSTODY.md": "a71b4e3a2c0ed49d6e6fe131669b131983677c92365392235c2ab7d7742d4e1b",
+    "compiled-children/coordination/reports/XR-HARNESS.md": "98a2a4d9507dbcfc08412bd31871ba4241ac82520d54514462f0e3624cbf671f",
+    "compiled-children/demo/app.mjs": "1c0e51b8cc99c3dbde9ea7b4121d40853823647159adb3efd06035bdb37cd97d",
+    "compiled-children/demo/build.mjs": "7f21650f221f91a3eeddf4c151b0729068f606fb6ac7a6297668f7bf14514ff8",
+    "compiled-children/demo/index.html": "2012c9568559512b61b7ac67054d2e6f8f49773810a72197e4fb23d30f7b969d",
+    "compiled-children/demo/output/author-smoke-20261031-rerun1/site/demo-build.json": "d3d0cb74be56cb06e035b65f410df47d0654e5aa7b501c84e39a637224428d0e",
+    "compiled-children/demo/output/author-smoke-20261031-rerun1/smoke.json": "6d5170a5fccbdd8210218fcc3b366f36b84ccdbd16c37348b5e2fcf25385f3cd",
+    "compiled-children/demo/smoke.mjs": "5aa132962925b5c9c1a95ac6f81e4767648ff4e5c87984a5eab79ea5118fc8b0",
+    "compiled-children/run.mjs": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f",
+    "compiled-children/runtime/runtime.mjs": "7ed7bfa6f567658a0fc283cfce4e76c4dd28fa2646eeea2d8519b2bf4746777b",
+    "compiled-frontend/frontend/dom/renderer.mjs": "14d6d12e1360cb1668ce5b901604c1d7d71415aca52fc45f80b34f2a24bbed54",
+    "compiled-frontend/frontend/react/renderer.mjs": "14644a6b2545b2dbf52854779fcf4187d8b1e221636d97178647d64259e04ce4",
+    "compiled-frontend/frontend/runtime/runtime.mjs": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+    "compiled-frontend/package-lock.json": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079",
+    "fixtures/compiled/children/app.go": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+    "fixtures/compiled/children/view.go": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185",
+    "interaction/package-lock.json": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0",
+    "package-lock.json": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b",
+    "run-compiled-children.sh": "3216c11142b0600caac9258a13258353eda229911046db6a2371f50ab605a7d6",
+    "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.py": "336dd2d0794aeb0b7f97e3c7bd2f9c75c99442e3d288de36990d095d086b44c6",
+    "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.log": "d459990622bca19289a08b54b5b7cbbd7a9ea8e2ead4fed3595a122a1435f41e"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-RELEASE-DOCS.md",
+    "bytes": 4846,
+    "sha256": "b2e6560871311db5d7e8c86b6bd2516b9dde08ee127b2debc22b6a376bbf89d3"
+  },
+  "limitations": [
+    "This was a read-only documentation review; no full runner, CI, browser replay, Go build, or Node test was launched.",
+    "No README/RESULTS, source, Git, or native scheduler state was changed."
+  ],
+  "integration": "README path amendment required before final docs acceptance; other reviewed status/history/boundary claims match the pinned evidence.",
+  "publication": "No deploy or publication was performed.",
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.py",
+      "bytes": 6378,
+      "sha256": "2ab6e6ba7e01ce3c224f3ec9552c33312e6becb79b8d6e57317fe578aacfe490"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-audit.log",
+      "bytes": 1571,
+      "sha256": "08971ee1f68c7cdda78261d98cde29507f15e83911123c44cb1872a25b20ed2a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.py",
+      "bytes": 1522,
+      "sha256": "336dd2d0794aeb0b7f97e3c7bd2f9c75c99442e3d288de36990d095d086b44c6"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-DOCS-receipt-validation.log",
+      "bytes": 84,
+      "sha256": "d459990622bca19289a08b54b5b7cbbd7a9ea8e2ead4fed3595a122a1435f41e"
+    }
+  ]
+}

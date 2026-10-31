@@ -1,0 +1,271 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-FIX-INHERITED-GATE",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "Amend the inherited gate: the attempt path timestamp is only checked against producer startedAt, so a pre-invocation attempt passes despite invocation-relative startedAt. Actual byte/source verification, producer field compatibility, module pinning, 11 validator tests, root Go suite, and the recorded proof go-run check passed.",
+  "reviewed_job": {
+    "job_id": "E-FIX-INHERITED-GATE",
+    "worker": "N1",
+    "outcome": "mixed_change"
+  },
+  "findings": [
+    {
+      "id": "XR-FIX-INHERITED-GATE-01",
+      "severity": "must-fix-invocation-freshness",
+      "path": "compiled-children/inherited-acceptance.mjs:25-36,139-144",
+      "description": "parseAttemptTime receives only receipt.attempt and receipt.startedAt. The validator separately requires startedAt >= invocationStartedAt, but does not require the timestamp embedded in attempt >= invocationStartedAt. A timestamped attempt can therefore predate the current invocation and still pass.",
+      "reproduction": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-invocation-freshness-witness.mjs",
+        "attemptTimestamp": "2026-10-31T12:00:01.000Z",
+        "invocationStartedAt": "2026-10-31T12:00:01.001Z",
+        "producerStartedAt": "2026-10-31T12:00:01.002Z",
+        "observed": "validator returned status passed although attempt timestamp precedes invocation by 1 ms"
+      },
+      "recommendation": "Pass invocationStartedAt into attempt-time validation and reject attempt timestamps earlier than that invocation, while retaining the startedAt bounds."
+    }
+  ],
+  "producerCompatibility": {
+    "source": "compiled-capabilities/run.mjs",
+    "actualAttemptFormat": "new Date().toISOString().replace(/[-:.]/g, \"\")",
+    "pathsMatch": [
+      "receipt",
+      "report",
+      "capabilities-artifacts.tar.gz",
+      "archive-manifest.json",
+      "execution-before-archive.json"
+    ],
+    "fieldsMatch": [
+      "schema/job/worker/mode/status/timestamps/attempt",
+      "sourceBefore/sourceAfter",
+      "archive members and memberCount",
+      "manifest schema and members",
+      "immutable pending snapshot fields",
+      "successful inherited-full-lifecycle command"
+    ],
+    "reportBytesField": "omitted by actual producer; validator permits omitted declared bytes but hashes and counts supplied report bytes",
+    "fullProducerAttemptAvailable": false,
+    "limitation": "The current E-BUILD packet is an author checkpoint without a passed full-run schema or attempt directory. Compatibility was checked against producer source; no real full E-BUILD acceptance was run."
+  },
+  "moduleBoundary": {
+    "explicitSourcePinsIn": "compiled-children/run.mjs:77-107",
+    "requiredInputsIn": "compiled-children/run.mjs:286-295",
+    "modules": [
+      {
+        "path": "compiled-children/coordination/rawlogs/go.mod",
+        "bytes": 89,
+        "sha256": "0211d8a701a476a64da53627e42835c4de1475b5faf7ce029803288df6530964"
+      },
+      {
+        "path": "compiled-children/evidence-preflight/go.mod",
+        "bytes": 85,
+        "sha256": "4fcd5b92e2ac509a4a3b99d776adef5df5d5003c199075d1e43060f55e1c6b90"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/inherited-acceptance.test.mjs",
+      "exit_code": 0,
+      "result": "11 passed, 0 failed",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-node-tests.log",
+        "bytes": 2528,
+        "sha256": "f13fd4c1bbec09900efc8e26b105131c8a21f6735bbb5c5f017226aa050d3cf8"
+      }
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test ./...",
+      "exit_code": 0,
+      "result": "root Go suite passed with preserved proof files present and isolated by nested module boundaries",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-root-go-test.log",
+        "bytes": 2702,
+        "sha256": "6a487e4febef5749c37a3d007264e0c35d2ecd8da8aaa2960e1c5123e206070f"
+      }
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./compiled-children/coordination/rawlogs/XR-GO-review-slice-history.go",
+      "exit_code": 0,
+      "result": "recorded individual proof program completed successfully",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-go-proof.log",
+        "bytes": 332,
+        "sha256": "360beced2430b364390756d1f923c7b64b1075431d13a985f05f0000b2b9699f"
+      }
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-invocation-freshness-witness.mjs",
+      "exit_code": 0,
+      "result": "reproduced pre-invocation attempt acceptance; finding confirmed",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-invocation-freshness-witness.log",
+        "bytes": 549,
+        "sha256": "848cbb1788ebf112951e41e24e1ecd0f2388c799d20c47a2e2cbd92e7b79efe5"
+      }
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-receipt-validation.py",
+      "exit_code": 0,
+      "result": "native protocol identity and all source, rawlog, and report hash/byte pins validated",
+      "rawlog": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-receipt-validation.log",
+        "bytes": 230,
+        "sha256": "a08f44b934f687a877a181a0afd36cf54d5c08140601eceb0f7a0353df320563"
+      },
+      "script": {
+        "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-receipt-validation.py",
+        "bytes": 1030,
+        "sha256": "dc13b50a3f0d9bdf06c0f00d7339ce075b43026615586944aae3b48910a47bbf"
+      }
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "path": "compiled-children/inherited-acceptance.mjs",
+      "bytes": 12687,
+      "sha256": "476757c84f2a793aa2af1561be3e5156b7ee28538428a5ccae0f82d498e566af"
+    },
+    {
+      "path": "compiled-children/inherited-acceptance.test.mjs",
+      "bytes": 7634,
+      "sha256": "c4576f4a5f28298d45cea3fd00f6c42604b4ed65c0443e19559ee891f5b2cabb"
+    },
+    {
+      "path": "compiled-children/run.mjs",
+      "bytes": 60431,
+      "sha256": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f"
+    },
+    {
+      "path": "compiled-capabilities/run.mjs",
+      "bytes": 64379,
+      "sha256": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b"
+    },
+    {
+      "path": "compiled-capabilities/archive-helper.mjs",
+      "bytes": 1835,
+      "sha256": "87cb9acd18fe7b9cb22a5c0d68019a4374b019c74717ce7e84b5729a849037eb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/go.mod",
+      "bytes": 89,
+      "sha256": "0211d8a701a476a64da53627e42835c4de1475b5faf7ce029803288df6530964"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/go.mod",
+      "bytes": 85,
+      "sha256": "4fcd5b92e2ac509a4a3b99d776adef5df5d5003c199075d1e43060f55e1c6b90"
+    },
+    {
+      "path": "compiled-capabilities/coordination/receipts/E-BUILD.json",
+      "bytes": 10509,
+      "sha256": "65aaece092033ee46ae74812b4b16a538bce5f79d1c0d3c86482f54f7a487d71"
+    },
+    {
+      "path": "compiled-capabilities/coordination/reports/E-BUILD.md",
+      "bytes": 3218,
+      "sha256": "cb433943bbac3cf92c8ea5c8c8535a99e864c1b4a2829c47917d6554584fc914"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-FIX-INHERITED-GATE.json",
+      "bytes": 10000,
+      "sha256": "1275b0759439fa4528fc795454d3c5dd72627e6416d9f96573fa6e1b6ff47c50"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-INHERITED-GATE.md",
+      "bytes": 4176,
+      "sha256": "1a1c2c4c377812d15aabde43756ae52362febd61c2f9b689db8c7ffae9ef8565"
+    }
+  ],
+  "sourceSha256": {
+    "compiled-children/inherited-acceptance.mjs": "476757c84f2a793aa2af1561be3e5156b7ee28538428a5ccae0f82d498e566af",
+    "compiled-children/inherited-acceptance.test.mjs": "c4576f4a5f28298d45cea3fd00f6c42604b4ed65c0443e19559ee891f5b2cabb",
+    "compiled-children/run.mjs": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f",
+    "compiled-capabilities/run.mjs": "794fbdc26e22b7522de20b0e94e6070f8d7bb87eba888e7d8f0c34141fb77b0b",
+    "compiled-capabilities/archive-helper.mjs": "87cb9acd18fe7b9cb22a5c0d68019a4374b019c74717ce7e84b5729a849037eb",
+    "compiled-children/coordination/rawlogs/go.mod": "0211d8a701a476a64da53627e42835c4de1475b5faf7ce029803288df6530964",
+    "compiled-children/evidence-preflight/go.mod": "4fcd5b92e2ac509a4a3b99d776adef5df5d5003c199075d1e43060f55e1c6b90",
+    "compiled-capabilities/coordination/receipts/E-BUILD.json": "65aaece092033ee46ae74812b4b16a538bce5f79d1c0d3c86482f54f7a487d71",
+    "compiled-capabilities/coordination/reports/E-BUILD.md": "cb433943bbac3cf92c8ea5c8c8535a99e864c1b4a2829c47917d6554584fc914",
+    "compiled-children/coordination/receipts/E-FIX-INHERITED-GATE.json": "1275b0759439fa4528fc795454d3c5dd72627e6416d9f96573fa6e1b6ff47c50",
+    "compiled-children/coordination/reports/E-FIX-INHERITED-GATE.md": "1a1c2c4c377812d15aabde43756ae52362febd61c2f9b689db8c7ffae9ef8565"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-FIX-INHERITED-GATE.md",
+    "bytes": 4699,
+    "sha256": "002ef77291a30df4447d02d11b9f17388c06e8b245133b01f94800267ecca38a"
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-node22-version.log",
+      "bytes": 9,
+      "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-node-tests.log",
+      "bytes": 2528,
+      "sha256": "f13fd4c1bbec09900efc8e26b105131c8a21f6735bbb5c5f017226aa050d3cf8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-node-tests.exit",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-root-go-test.log",
+      "bytes": 2702,
+      "sha256": "6a487e4febef5749c37a3d007264e0c35d2ecd8da8aaa2960e1c5123e206070f"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-root-go-test.exit",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-go-proof.log",
+      "bytes": 332,
+      "sha256": "360beced2430b364390756d1f923c7b64b1075431d13a985f05f0000b2b9699f"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-go-proof.exit",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-invocation-freshness-witness.mjs",
+      "bytes": 3658,
+      "sha256": "8a7309b49d223f4be4d466f40a48ce96706b322232b03ded62822a812dc7788e"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-invocation-freshness-witness.log",
+      "bytes": 549,
+      "sha256": "848cbb1788ebf112951e41e24e1ecd0f2388c799d20c47a2e2cbd92e7b79efe5"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-invocation-freshness-witness.exit",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-receipt-validation.py",
+      "bytes": 1030,
+      "sha256": "dc13b50a3f0d9bdf06c0f00d7339ce075b43026615586944aae3b48910a47bbf"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-receipt-validation.log",
+      "bytes": 230,
+      "sha256": "a08f44b934f687a877a181a0afd36cf54d5c08140601eceb0f7a0353df320563"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-XR-FIX-INHERITED-GATE-receipt-validation.exit",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    }
+  ],
+  "limitations": [
+    "No full inherited run was launched.",
+    "No production, Git, or native scheduler state was modified."
+  ],
+  "integration": "One must-fix attempt timestamp invocation bound remains; other reviewed byte and source boundaries align with the legacy producer.",
+  "publication": "No commit, merge, or deploy."
+}

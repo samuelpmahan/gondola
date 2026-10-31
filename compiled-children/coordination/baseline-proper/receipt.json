@@ -1,0 +1,13 @@
+{
+  "schema": "gobi.compiled-children-baseline/v1",
+  "source_base": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+  "go": "go1.24.0 linux/amd64",
+  "node": "v22.23.4",
+  "environment": {"GOTOOLCHAIN":"local", "GOFLAGS":"-buildvcs=false", "PATH_prefix":"/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin"},
+  "commands": ["go run ./cmd/gobi emit react", "go vet ./...", "go test ./...", "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json", "sha256sum -c --quiet SHA256SUMS"],
+  "exit": 0,
+  "static": {"cases":5000, "seed":20261030, "result":"same over 5000 inputs; receipt matches"},
+  "preserved_m0_checksums": true,
+  "earlier_attempt": "The first standalone go test returned 1 with an incomplete log. A targeted diagnostic invocation used default Node24 and demonstrated missing generated react-map.gen.mjs; two guessed package paths render/ssr were absent. No source repair was made. This proper baseline emits the mapping and uses explicit Node22 before all checks. Earlier incomplete log is retained and is not accepted pass evidence.",
+  "scope": "Executed before new fixture production files appeared; not final integrated milestone acceptance."
+}

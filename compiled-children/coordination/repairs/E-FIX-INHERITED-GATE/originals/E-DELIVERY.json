@@ -1,0 +1,207 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-DELIVERY",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Implemented the full-only compiled-children delivery runner, CI workflow, GoScript-backed HTTP demo, browser smoke, and archive consumer. The local demo passed 31 browser and endpoint checks against N2's actual compiled React output. The full source-bound acceptance chain remains pending root freeze and execution.",
+  "authorSmoke": {
+    "status": "passed",
+    "attemptDirectory": "compiled-children/demo/output/author-smoke-20261031-rerun1"
+  },
+  "toolchains": {
+    "node": "v22.23.4",
+    "rootGo": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go version go1.27.3 linux/amd64",
+    "chromium": "Chromium 153.0.8010.0",
+    "react": "19.3.1",
+    "reactDom": "19.3.1",
+    "playwright": "1.64.1",
+    "esbuild": "0.28.2"
+  },
+  "dependencyLocks": {
+    "installCommands": [
+      "npm ci --no-audit --no-fund",
+      "npm ci --prefix interaction --no-audit --no-fund",
+      "npm ci --prefix compiled-frontend --no-audit --no-fund"
+    ],
+    "unchanged": true,
+    "sha256": {
+      "package-lock.json": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b",
+      "interaction/package-lock.json": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0",
+      "compiled-frontend/package-lock.json": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079"
+    }
+  },
+  "authorValidation": {
+    "status": "passed",
+    "backend": "react GoScript build, live React/DOM renderer swaps",
+    "compiledBuild": {
+      "path": "compiled-children/compiler-evidence/build/react-repeat",
+      "buildResult": {
+        "path": "compiled-children/compiler-evidence/build/react-repeat.stdout.json",
+        "bytes": 27651,
+        "sha256": "5953b0f6f49bbc9249bc674de57f8faf4efb2547667a195125bdaad7814ad6d8"
+      },
+      "manifest": {
+        "path": "compiled-children/compiler-evidence/build/react-repeat/buildmanifest.json",
+        "bytes": 4642,
+        "sha256": "2266dbb1d21072e0d829fb6695615471b30ba37b75fb4e93aac5d9412b59797c"
+      },
+      "outputFilesVerified": 67,
+      "sourcePins": {
+        "fixtures/compiled/children/app.go": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+        "fixtures/compiled/children/view.go": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185"
+      }
+    },
+    "commands": [
+      "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node compiled-children/demo/build.mjs --compiled compiled-children/compiler-evidence/build/react-repeat --output compiled-children/demo/output/author-smoke-20261031-rerun1/site --backend react",
+      "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH CHROMIUM_PATH=/tmp/chromium node compiled-children/demo/smoke.mjs --demo compiled-children/demo/output/author-smoke-20261031-rerun1/site --output compiled-children/demo/output/author-smoke-20261031-rerun1/smoke.json --screenshot compiled-children/demo/output/author-smoke-20261031-rerun1/screenshot.png --chromium /tmp/chromium --port 0"
+    ],
+    "demoBuild": {
+      "status": "passed",
+      "bundleBytes": 1853920,
+      "bundleSha256": "c2d5723c7c15a3bba3a59687a4f610682fe5d8cb387ed465118df79471a84ac9",
+      "record": {
+        "path": "compiled-children/demo/output/author-smoke-20261031-rerun1/site/demo-build.json",
+        "bytes": 2715,
+        "sha256": "d3d0cb74be56cb06e035b65f410df47d0654e5aa7b501c84e39a637224428d0e"
+      }
+    },
+    "httpSmoke": {
+      "status": "passed",
+      "browser": "Chromium 153.0.8010.0",
+      "port": 40899,
+      "passed": 31,
+      "failed": 0,
+      "checkIds": [
+        "http-root",
+        "http-css",
+        "http-bundle",
+        "go-init-state",
+        "initial-view",
+        "initial-renderer",
+        "request-token-shapes",
+        "pending-buttons-disabled",
+        "initial-counter",
+        "reorder-preserves-request",
+        "compatible-swap-preserves-work",
+        "incompatible-swap-rejected",
+        "rejected-swap-preserves-work",
+        "swap-recovery",
+        "remove-cancels-child",
+        "key-reuse-fresh-generation",
+        "stale-reply-rejected",
+        "reused-generation-token",
+        "clear-child-first-order",
+        "clear-preserves-parent",
+        "parent-reply-after-clear",
+        "parent-remove-child-first",
+        "parent-removal-disables-child-actions",
+        "parent-remount-fresh-empty",
+        "react-dom-versions",
+        "no-wasm-request",
+        "no-wasm-api",
+        "no-browser-errors",
+        "no-console-errors",
+        "no-failed-http-requests",
+        "all-http-responses-ok"
+      ],
+      "http": [
+        { "path": "/", "status": 200, "bytes": 4548 },
+        { "path": "/demo.css", "status": 200, "bytes": 4757 },
+        { "path": "/demo.bundle.mjs", "status": 200, "bytes": 1853920 }
+      ],
+      "browserErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "webAssemblyRequests": 0,
+      "webAssemblyApiCalls": 0,
+      "smokeJson": {
+        "path": "compiled-children/demo/output/author-smoke-20261031-rerun1/smoke.json",
+        "bytes": 18210,
+        "sha256": "6d5170a5fccbdd8210218fcc3b366f36b84ccdbd16c37348b5e2fcf25385f3cd"
+      },
+      "screenshot": {
+        "path": "compiled-children/demo/output/author-smoke-20261031-rerun1/screenshot.png",
+        "bytes": 219022,
+        "sha256": "c9ee6fd06a30f5a353d9e1d46aeceda40149e3148040bffe4bc6bd1e0b8614b9"
+      }
+    },
+    "failedAttempt": {
+      "path": "compiled-children/demo/output/author-smoke-20261031/smoke.json",
+      "status": "failed",
+      "check": "go-init-state",
+      "error": "AssertionError: go-init-state; false !== true",
+      "cause": "The test read canonical AppValue snapshot fields as direct Go struct properties; the smoke now decodes typed fields.",
+      "bytes": 1514,
+      "sha256": "593d4676bbb2beeb146e5f2a9cbacc549641dabd8e444100c668632ae80d984e",
+      "browserErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "webAssemblyRequests": 0,
+      "webAssemblyApiCalls": 0
+    },
+    "archiveConsumerProbe": {
+      "status": "passed",
+      "purpose": "standalone one-member tar validation of the independent post-command consumer",
+      "archive": {
+        "path": "compiled-children/demo/output/author-archive-probe-20261031/probe.tar.gz",
+        "bytes": 146,
+        "sha256": "66399c192f9f2bc9825a9a54749fd5097f7b07d68ac4c9214d392501978506e8"
+      },
+      "manifest": {
+        "path": "compiled-children/demo/output/author-archive-probe-20261031/manifest.json",
+        "bytes": 334,
+        "sha256": "7381ba88b9b2620f9b947ad5769aa7ca8a5905cdfffbede32897cd2ce920c092"
+      },
+      "memberCount": 1,
+      "verification": {
+        "path": "compiled-children/demo/output/author-archive-probe-20261031/verification.json",
+        "bytes": 832,
+        "sha256": "cb5335aaf03537ecd380936a341d743473f26088087884f9026c7a4163c3b207"
+      }
+    }
+  },
+  "staticChecks": {
+    "status": "passed",
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/demo/app.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/demo/build.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/demo/smoke.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/demo/verify-archive.mjs && /tmp/gondola-node22/node_modules/node/bin/node --input-type=module -e \"import { chromium } from './interaction/node_modules/playwright/index.mjs'; console.log(chromium.executablePath())\" && bash -n run-compiled-children.sh && git diff --check",
+    "result": "Passed. Node emitted only the environment's experimental EnvHttpProxyAgent warning. The Playwright executable-path probe resolved /root/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome."
+  },
+  "sourceSha256": {
+    "run-compiled-children.sh": "3216c11142b0600caac9258a13258353eda229911046db6a2371f50ab605a7d6",
+    ".github/workflows/gobi-compiled-children.yml": "a407f2c31562d2ae08c623811595b530037809484ca3cdfd56b89aec62492b8e",
+    "compiled-children/run.mjs": "a279e6b28f5ed0166b0d5264e587c0f01abcd550ea1a9c7d7866a8c568f0333d",
+    "compiled-children/README.md": "4eaf45dafbd59ca4ed8058a578e9f4105fc4d1d129274e7252474f92df013f28",
+    "compiled-children/RESULTS.md": "dbe475a81b94e3ed37cf0e161df95f9ff0e2f31b584c772e3fcb93b0e38ce67d",
+    "compiled-children/.gitignore": "c97cec1d4575b65ef4e812a545276e048600396fd6790cbee5166972b1be6e03",
+    "compiled-children/CONTRACT.md": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902",
+    "compiled-children/demo/app.mjs": "1c0e51b8cc99c3dbde9ea7b4121d40853823647159adb3efd06035bdb37cd97d",
+    "compiled-children/demo/build.mjs": "7f21650f221f91a3eeddf4c151b0729068f606fb6ac7a6297668f7bf14514ff8",
+    "compiled-children/demo/smoke.mjs": "607aac6378610c425de5aeeb0925deb10d8643306a5b6e017a86f3edc4c5bab1",
+    "compiled-children/demo/verify-archive.mjs": "a6a9495b05028fb5f899c3cdd4bed667dc150f3aa3020396cd4043901cbf6913",
+    "compiled-children/demo/index.html": "2012c9568559512b61b7ac67054d2e6f8f49773810a72197e4fb23d30f7b969d",
+    "compiled-children/demo/demo.css": "9f2ec7fde3e0704ebedce07a69709e446b5b343ad31152d2fb23d2d59913f0fb"
+  },
+  "report": {
+    "path": "compiled-children/coordination/reports/E-DELIVERY.md",
+    "bytes": 6150,
+    "sha256": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706"
+  },
+  "integration": {
+    "status": "insufficient_evidence",
+    "reason": "Root-owned full source-bound run has not started; author validation used N2's pinned peer React output.",
+    "pending": [
+      "fresh full run-compiled-capabilities.sh chain and inherited receipt/archive validation",
+      "new N3 runtime plus N5 checker/seeded test files",
+      "fresh React and DOM GoScript CLI builds with identical AppIR/encoder/output inventory",
+      "N5 independent literal oracle and N4 native/direct/React/DOM browser harness with exact seeds",
+      "integrated HTTP demo smoke from the fresh build",
+      "immutable pre-archive snapshot, complete tar/member hashes, independent consumer, and post-command delivery/source boundary checks"
+    ]
+  },
+  "limitations": [
+    "The earlier accepted evidence identifier is 978eaea98831154f8152baa1a64f1d1356916596; known prior local-container archive corruption remains excluded and untouched.",
+    "The author demo pass is not full collection acceptance. It used a peer-reported complete React build; the full runner must create fresh React and DOM builds and replay the independent oracle/harness.",
+    "No Git commit, merge, deployment, or scheduler edit was performed."
+  ],
+  "publication": "No Git commit, merge, or deployment."
+}

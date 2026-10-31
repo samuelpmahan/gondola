@@ -1,0 +1,209 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-INHERITED-GATE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Strengthened inherited E-BUILD acceptance with invocation-window, actual artifact/source, immutable snapshot, and lifecycle-command verification; added focused adversarial tests and nested module boundaries; targeted verification passed without running the full inherited pipeline.",
+  "source_sha256": {
+    "compiled-children/run.mjs": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f",
+    "compiled-children/inherited-acceptance.mjs": "476757c84f2a793aa2af1561be3e5156b7ee28538428a5ccae0f82d498e566af",
+    "compiled-children/inherited-acceptance.test.mjs": "c4576f4a5f28298d45cea3fd00f6c42604b4ed65c0443e19559ee891f5b2cabb",
+    "compiled-children/coordination/rawlogs/go.mod": "0211d8a701a476a64da53627e42835c4de1475b5faf7ce029803288df6530964",
+    "compiled-children/evidence-preflight/go.mod": "4fcd5b92e2ac509a4a3b99d776adef5df5d5003c199075d1e43060f55e1c6b90",
+    "compiled-frontend/conformance/no-wasm.test.mjs": "529149d9856254bacb049032716e9c978d18dd62de4dec77005495790f49ad5e",
+    "compiled-children/conformance/swap-contract.test.mjs": "1dd0772388e37f220462e1d11e47251c9d497f3cbb9e360e22e67c79543f180f",
+    "compiled-children/runtime/runtime.test.mjs": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47",
+    "compiled-children/conformance/check.test.mjs": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833",
+    "compiled-children/conformance/seeded.test.mjs": "404a94cb93f4c0f1646062b1ddcb283084b7f6e00a776f687ec513659542ec83"
+  },
+  "verification": {
+    "unit_gate": {
+      "command": "CHROMIUM_PATH=/tmp/chromium NODE_NO_WARNINGS=1 /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs compiled-children/conformance/swap-contract.test.mjs compiled-children/inherited-acceptance.test.mjs compiled-children/runtime/runtime.test.mjs compiled-frontend/conformance/no-wasm.test.mjs",
+      "exit_code": 0,
+      "tests": 42,
+      "passed": 42,
+      "failed": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-unit-gate-final2.log",
+        "bytes": 9210,
+        "sha256": "447d483dd202497bd6cbba93a1d6e3225c1f05da7be6f44f8d101004d43b6031"
+      },
+      "exit_file": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-unit-gate-final2.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "runner_syntax": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/run.mjs",
+      "exit_code": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-syntax-final2.log",
+        "bytes": 272,
+        "sha256": "84c989b366cc0182f4ac2edd01b1eeb696a4c52bb1944f5c9325fb79f99736c4"
+      },
+      "exit_file": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-syntax-final2.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "root_go_test": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test ./...",
+      "exit_code": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-final2.log",
+        "bytes": 2668,
+        "sha256": "fcef56327bfeb60c864139fe5f3948795a60c69f8973363366717a31cf1133af"
+      },
+      "exit_file": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-final2.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    },
+    "preserved_go_proof": {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./compiled-children/coordination/rawlogs/XR-GO-review-slice-history.go",
+      "exit_code": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-go-proof-final2.log",
+        "bytes": 298,
+        "sha256": "313da7dd836c039f79c9726aefd7b57fd85453eecf619bbfa7350503cc26b4c0"
+      },
+      "exit_file": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-go-proof-final2.exit-code",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      }
+    }
+  },
+  "preserved_proof_sha256": {
+    "compiled-children/coordination/rawlogs/XR-GO-review-slice-history-firstpass.go": "10989155c72127ec67a54ba9be1c1603994a686d657ce71309d9da0607bf8b36",
+    "compiled-children/coordination/rawlogs/XR-GO-review-slice-history.go": "c14d747b6d417112cfe3ed990e84c74f510dcd664d2fe102af68d78d2fe79c3d"
+  },
+  "limitations": [
+    "The inherited full runner was intentionally not launched.",
+    "The browser guard gate and HTTP smoke guard gate were verified by source review and the shared guard unit tests; no new N4 browser run or HTTP smoke was performed in this repair packet."
+  ],
+  "artifacts": [
+    {
+      "path": "compiled-children/run.mjs",
+      "bytes": 60431,
+      "sha256": "deb687ae94cb58d7dab574c973a05d52b3adcb6bf68e70b0c49cdefd77a8eb4f"
+    },
+    {
+      "path": "compiled-children/inherited-acceptance.mjs",
+      "bytes": 12687,
+      "sha256": "476757c84f2a793aa2af1561be3e5156b7ee28538428a5ccae0f82d498e566af"
+    },
+    {
+      "path": "compiled-children/inherited-acceptance.test.mjs",
+      "bytes": 7634,
+      "sha256": "c4576f4a5f28298d45cea3fd00f6c42604b4ed65c0443e19559ee891f5b2cabb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/go.mod",
+      "bytes": 89,
+      "sha256": "0211d8a701a476a64da53627e42835c4de1475b5faf7ce029803288df6530964"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/go.mod",
+      "bytes": 85,
+      "sha256": "4fcd5b92e2ac509a4a3b99d776adef5df5d5003c199075d1e43060f55e1c6b90"
+    },
+    {
+      "path": "compiled-frontend/conformance/no-wasm.test.mjs",
+      "bytes": 6941,
+      "sha256": "529149d9856254bacb049032716e9c978d18dd62de4dec77005495790f49ad5e"
+    },
+    {
+      "path": "compiled-children/conformance/swap-contract.test.mjs",
+      "bytes": 5073,
+      "sha256": "1dd0772388e37f220462e1d11e47251c9d497f3cbb9e360e22e67c79543f180f"
+    },
+    {
+      "path": "compiled-children/runtime/runtime.test.mjs",
+      "bytes": 11265,
+      "sha256": "13b4558399c07ad6337b466b0df8465b1beeb6a83057a6f6253a2071f8eedc47"
+    },
+    {
+      "path": "compiled-children/conformance/check.test.mjs",
+      "bytes": 3159,
+      "sha256": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833"
+    },
+    {
+      "path": "compiled-children/conformance/seeded.test.mjs",
+      "bytes": 9456,
+      "sha256": "404a94cb93f4c0f1646062b1ddcb283084b7f6e00a776f687ec513659542ec83"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-FIX-INHERITED-GATE.md",
+      "bytes": 4176,
+      "sha256": "1a1c2c4c377812d15aabde43756ae52362febd61c2f9b689db8c7ffae9ef8565"
+    }
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-unit-gate-final2.log",
+      "bytes": 9210,
+      "sha256": "447d483dd202497bd6cbba93a1d6e3225c1f05da7be6f44f8d101004d43b6031"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-unit-gate-final2.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-syntax-final2.log",
+      "bytes": 272,
+      "sha256": "84c989b366cc0182f4ac2edd01b1eeb696a4c52bb1944f5c9325fb79f99736c4"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-syntax-final2.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-final2.log",
+      "bytes": 2668,
+      "sha256": "fcef56327bfeb60c864139fe5f3948795a60c69f8973363366717a31cf1133af"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-final2.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-go-proof-final2.log",
+      "bytes": 298,
+      "sha256": "313da7dd836c039f79c9726aefd7b57fd85453eecf619bbfa7350503cc26b4c0"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-go-proof-final2.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-before-corrected.log",
+      "bytes": 3240,
+      "sha256": "5047ad2d46fa7b7bb7987651bb43dce95084497782b56ee8ea4919d4f7b09718"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-before-corrected.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-after.log",
+      "bytes": 3719,
+      "sha256": "26bc0d965c3262be2d5ab551c4bdab8abd987382c042c81157a3dd4ea9fc7510"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-INHERITED-GATE-root-go-test-after.exit-code",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    }
+  ],
+  "integration": "Ready for independent review; source files frozen after targeted verification.",
+  "publication": "No commit, merge, deployment, or scheduler-state edit."
+}

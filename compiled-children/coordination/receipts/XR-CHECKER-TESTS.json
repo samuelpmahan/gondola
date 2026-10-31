@@ -1,0 +1,275 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-CHECKER-TESTS",
+  "worker": "N6",
+  "decision": "amend",
+  "summary": "Fresh Node 22 verification passed all nine N5 checker/seed tests, and five isolated mutations of the actual pinned Go trace were rejected at the intended fields. The tests are input-only and fabricate no browser evidence. Amend the seeded assertions to verify message names and the effective live-child schedule bound, not only argument order and declared metadata.",
+  "reviewed_job": {
+    "job_id": "E-CHECKER-TESTS",
+    "worker": "N5",
+    "authorOutcome": "mixed_change",
+    "authorSummary": "Added actual-native checker mutation tests and deterministic bounded input schedule tests."
+  },
+  "reviewed_scope": [
+    "compiled-children/conformance/check.test.mjs",
+    "compiled-children/conformance/seeded.test.mjs",
+    "compiled-children/conformance/check.mjs",
+    "compiled-children/conformance/seeded.mjs",
+    "compiled-children/coordination/reports/E-CHECKER-TESTS.md",
+    "compiled-children/coordination/receipts/E-CHECKER-TESTS.json",
+    "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-*"
+  ],
+  "reviewedSourceSha256": {
+    "compiled-children/conformance/check.test.mjs": "7413a08b34eb3a1bb9c360942729c0793edf73de00a869c28e28efd10a333833",
+    "compiled-children/conformance/seeded.test.mjs": "0432bd947e3c3bcf7363e334bf6e267a32b4d57f68b012467626150de6997559",
+    "compiled-children/conformance/check.mjs": "518778418a7e9be880e4e48ee792dd784c7676ddadaf489a12485c2589d39f68",
+    "compiled-children/conformance/seeded.mjs": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52",
+    "fixtures/compiled/children/scenario.json": "ad9bc4659114075f2ec2b7e1e619f01fc1827e39db2cb5131c60479b31a4f407",
+    "fixtures/compiled/children/evidence/rawlogs/native-trace.json": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+    "compiled-children/oracle/expectations.json": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774"
+  },
+  "execution": {
+    "node": "v22.23.4",
+    "freshTestCommand": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/conformance/check.test.mjs compiled-children/conformance/seeded.test.mjs",
+    "freshTestStatus": "passed",
+    "tests": 9,
+    "passed": 9,
+    "failed": 0,
+    "freshTestLog": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/node-test.log",
+      "bytes": 2454,
+      "sha256": "d0c97ea213c1c3ef2d29fad7e25e44aff78f052e4eb1f2ae37e19bcac08fb678"
+    },
+    "syntaxChecks": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/check.test.mjs",
+        "status": "passed",
+        "rawlog": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/check-test-node-check.log",
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-children/conformance/seeded.test.mjs",
+        "status": "passed",
+        "rawlog": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/seeded-test-node-check.log",
+        "sha256": "202a87a00ef76091d8a32984349b989f52b738f07047864bf3713d162d3dcc74"
+      }
+    ]
+  },
+  "nativeReceiptValidation": {
+    "validator": "/tmp/gondola-rebalancer-env/bin/python using compiled-children/coordination/probe.py validate_receipt",
+    "decisionAccepted": true,
+    "validatedFrom": "coordination/state.json in-flight XR-CHECKER-TESTS state job",
+    "stateSha256BeforeAndAfter": "8be7cb7e0c2cffb1ed4eeedf7fa1a2bd5c851be05f2420d000b00b7e8709a3d9",
+    "readOnlyBoundaryUnchanged": true,
+    "finalLog": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/native-receipt-validation-final.log",
+      "bytes": 174,
+      "sha256": "9e60bc209c9a00f4da2d55367f0f1da6545ae4550e48161f65f956103e15bfeb"
+    },
+    "postFreezeValidationLog": {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/receipt-validation.py",
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/native-receipt-validation-after-freeze.log",
+      "bytes": 174,
+      "sha256": "9e60bc209c9a00f4da2d55367f0f1da6545ae4550e48161f65f956103e15bfeb"
+    },
+    "initialHelperLookup": {
+      "status": "expected failure",
+      "reason": "Raw extraction spec omits review packets; make_state derives XR packets from review_policy. The first helper looked for XR-CHECKER-TESTS directly in spec.jobs and raised StopIteration before writing state.",
+      "log": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/native-receipt-validation.log",
+      "bytes": 379,
+      "sha256": "ce785e56ce4d2827b62a249ea5721c4ae2a0ca1f14c6036a74f3c511ecdd3b71"
+    },
+    "stateBoundaryLog": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/native-state-boundary.log",
+      "bytes": 52,
+      "sha256": "b8a81a6522999b0dfcc36f242a16441b6fbeeb9e2a0c215130cf88cf420f129f"
+    }
+  },
+  "nativeMutationReview": {
+    "actualTrace": {
+      "path": "fixtures/compiled/children/evidence/rawlogs/native-trace.json",
+      "bytes": 653879,
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    },
+    "positiveControl": "Actual pinned native trace passed assertNative against the fixture and independent literal expectations.",
+    "mutationCount": 5,
+    "rejectedCount": 5,
+    "cases": [
+      {
+        "field": "child counter count",
+        "sourceEventIndex": 0,
+        "mismatchPath": "$.review-mutated-count.steps[0].state.Children[0].Counter.Count",
+        "expected": 1,
+        "actual": 2
+      },
+      {
+        "field": "reused child generation",
+        "sourceEventIndex": 15,
+        "mismatchPath": "$.review-mutated-reusedGeneration.steps[11].state.Children[2].Generation",
+        "expected": 5,
+        "actual": 2
+      },
+      {
+        "field": "child request sequence",
+        "sourceEventIndex": 4,
+        "mismatchPath": "$.review-mutated-requestSeq.steps[4].state.Children[0].RequestSeq",
+        "expected": 1,
+        "actual": 2
+      },
+      {
+        "field": "children.clear effect order",
+        "sourceEventIndex": 24,
+        "mismatchPath": "$.review-mutated-clearCancellationOrder.steps[20].effects[0].arg",
+        "expected": "child:oak:g5:r2",
+        "actual": "child:elm:g3:r2"
+      },
+      {
+        "field": "Gobi node key after pending reorder",
+        "sourceEventIndex": 8,
+        "mismatchPath": "$.review-mutated-nodeKey.steps[8].view.kids[1].kids[1].key",
+        "expected": "child-oak",
+        "actual": "child-ash"
+      }
+    ],
+    "audit": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/mutation-audit.json",
+      "bytes": 2832,
+      "sha256": "356523dcf781917f39f8c5f49ad51c715dc7520dab78e38589dfd87772861d93"
+    },
+    "auditLog": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/mutation-audit.log",
+      "bytes": 3006,
+      "sha256": "f026fbad386b5800aaa97a626c5f8249012a7d6e21e4ddafd146df164cfd668e"
+    }
+  },
+  "seededInputReview": {
+    "classification": "input-only; no application reducer or positive browser data",
+    "defaultSeeds": [20261031, 20261032, 20261033],
+    "eventCountEach": 60,
+    "eventMaximum": 64,
+    "declaredMaximumChildren": 6,
+    "distinctKeyOrders": 3,
+    "firstEvent": "physical counter click on oak/elm with the matching keyed child path",
+    "acceptedUint32Boundaries": [0, 4294967295],
+    "rejectedSeeds": [-1, 4294967296, 1.5, "NaN", "Infinity", "20261031", null, "1n", "Symbol(seed)"],
+    "generatorResultKeys": ["scenario", "metadata"],
+    "seededTestImports": ["node:assert/strict", "node:test", "./seeded.mjs"],
+    "browserCaptureReferenceInSeededTest": false,
+    "audit": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/seed-audit.json",
+      "bytes": 3049,
+      "sha256": "3e1a6548d459b3e5bf1dcbaf5f1f0df0a433f413f301dc92d2c03dfdc4eeb443"
+    },
+    "auditLog": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/seed-audit.log",
+      "bytes": 3223,
+      "sha256": "f1a16f851d1d33cbdd569810f38aa2e208a14eecd2ba541ed245c986696fd6e2"
+    }
+  },
+  "findings": [
+    {
+      "id": "XR-CHECKER-TESTS-01",
+      "severity": "medium",
+      "path": "compiled-children/conformance/seeded.test.mjs",
+      "lines": [42, 76],
+      "description": "The seed test asserts a declared max-child metadata value and event-count cap, but the add/counter/request batches compare only message arguments, not complete operation names/kinds, and do not compute the maximum active child count from generated inputs.",
+      "recommendedAmendment": "Assert full operation tuples for each generated message batch and validate the declared six-child schedule bound from the input sequence without generating native/direct/browser output.",
+      "currentGeneratorObservedValid": true
+    }
+  ],
+  "reviewedEvidence": {
+    "authorReport": {
+      "path": "compiled-children/coordination/reports/E-CHECKER-TESTS.md",
+      "bytes": 3981,
+      "sha256": "cf7d65497001815257056d7fb9379975049d6fa8cb03b45d1c3e153a3d30d39a"
+    },
+    "authorReceipt": {
+      "path": "compiled-children/coordination/receipts/E-CHECKER-TESTS.json",
+      "bytes": 7114,
+      "sha256": "d5da3f8602e531b775a4b410762661b7a6110d8b8a901567120a0dec83eb2c8c"
+    },
+    "authorFinalTestLog": {
+      "path": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-node-test.log",
+      "bytes": 2454,
+      "sha256": "4318a62c171d1d07aeb4026244ae7e8592340c5035b0514ee836ab5f031179a2"
+    },
+    "preservedInitialFailureLog": {
+      "path": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-initial-seeded-assertion-failure.log",
+      "bytes": 3488,
+      "sha256": "0b853ec1ef0cdcd28d1108df09cfd15aba0b3eb31f6535d4a58d71d90b8b323a"
+    },
+    "custodyAnnotation": {
+      "path": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-oracle-audit-custody.txt",
+      "bytes": 1637,
+      "sha256": "c852818bbf2e2c94d04c37b314d77a834826c4cc18fc6fdc1c360f51ecb5c484"
+    },
+    "custodyCopy": {
+      "path": "compiled-children/coordination/rawlogs/E-CHECKER-TESTS-audit-current-custody-copy.mjs",
+      "bytes": 7470,
+      "sha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853"
+    }
+  },
+  "custodyIncident": {
+    "closedEOracleExpectedAuditSha256": "7b124f1f2a3c5ac4d36e2f0d255b7b1548b4d095bb8e2c9b0b82bfa846a2466e",
+    "currentAuditCandidateSha256": "f814c0aea342736b9227b85614d87285110912898e55f92f60a1b38412cd8853",
+    "originalReceiptPinnedBytesAvailable": false,
+    "claimsExactRestoration": false,
+    "changedByThisReview": false,
+    "closedEOracleReportSha256": "f9583a4d9a5e6faa23a8ddeeb5bee5b0209f910912736b403d423456f7e74556",
+    "closedEOracleReceiptSha256": "17ccb1bf8f8e6fbe288e24826f4dea5b830faf1d0052c27fd2f8c07dde034b2d"
+  },
+  "deliverySourceFreeze": {
+    "custodyBefore": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/custody-before.json",
+      "bytes": 5782,
+      "sha256": "7c56a0a9d81ed9fdb0b5049bd6ace88c96bc5fdbf113e5ecf81f6c64279c0b47"
+    },
+    "custodyAfter": {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/custody-after.json",
+      "bytes": 5819,
+      "sha256": "7d69580391db366cea78f1a86dc416506fe9c8a481f7fa327e50289a21377644"
+    },
+    "unchanged": true,
+    "entryCount": 31,
+    "eDeliveryReportSha256": "fc4ea07c5c8982b68a0e19de9571d527b6a69c2c0a86413fb614d6110d24a706",
+    "eDeliveryReceiptSha256": "1825bbe4ae81d1626036f16db276dab22d16cdd4dd008b28a96fc4b925a1b02d",
+    "runnerSha256": "a279e6b28f5ed0166b0d5264e587c0f01abcd550ea1a9c7d7866a8c568f0333d",
+    "readmeSha256": "4eaf45dafbd59ca4ed8058a578e9f4105fc4d1d129274e7252474f92df013f28",
+    "resultsSha256": "dbe475a81b94e3ed37cf0e161df95f9ff0e2f31b584c772e3fcb93b0e38ce67d",
+    "wrapperSha256": "3216c11142b0600caac9258a13258353eda229911046db6a2371f50ab605a7d6",
+    "workflowSha256": "a407f2c31562d2ae08c623811595b530037809484ca3cdfd56b89aec62492b8e"
+  },
+  "reviewFiles": {
+    "report": "compiled-children/coordination/reports/XR-CHECKER-TESTS.md",
+    "rawlogs": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/"
+  },
+  "reviewScripts": [
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/mutation-audit.mjs",
+      "bytes": 4192,
+      "sha256": "4b13e8d7d731876dca9aee787b98d5f09a30b91db451c6797c90acc0e4cc9495"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/seed-audit.mjs",
+      "bytes": 2953,
+      "sha256": "0e0643a5c29b1707a4a699b00e7254a830156576cb43b799c04862d2bc12ab71"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/custody-boundary.mjs",
+      "bytes": 3477,
+      "sha256": "6b32ca2691c98a71bf167f437c6056bca58fddcd7483a17497a8a1b142d8db16"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-CHECKER-TESTS-20261031-01/receipt-validation.py",
+      "bytes": 820,
+      "sha256": "9e7f68208efdb6089e440dc8f204378dce78e699fb4fd9f44ed6989ee49e4588"
+    }
+  ],
+  "reviewReport": {
+    "path": "compiled-children/coordination/reports/XR-CHECKER-TESTS.md",
+    "bytes": 5809,
+    "sha256": "0c8afe595f9eb19b5bb3f43eae88c0bbd13fa50711adab31763f49b7c0752e64"
+  },
+  "integration": "Full source-bound delivery acceptance remains root-owned and pending; this review did not run it.",
+  "publication": "No Git, native scheduler state, source implementation, or publication artifact was changed."
+}

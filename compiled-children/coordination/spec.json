@@ -1,0 +1,168 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/children/**, cmd/compiled-children-native/**",
+      "summary": "Go-owned typed keyed child collection, native trace executable and tests. Propose/freeze the contract first; add/remove/reorder/reuse keys with generation-correlated pending requests and child-first clear cancellation, reuse counter/Gobi."
+    },
+    {
+      "id": "E-COMPILER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-frontend/analyze/**, compiled-frontend/build/**, compiled-frontend/emit/**, compilercontract/**",
+      "summary": "Compile the new Go slice/value collection through existing GoScript CLI and encoder; diagnose actual unsupported shape and minimally repair only if needed, preserving old profiles. Implementation gated on Go contract freeze."
+    },
+    {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-children/runtime/**, compiled-frontend/frontend/runtime/**",
+      "summary": "Reuse shared host and explicit capabilities, add closed collection effect token policy/driver; no JS domain reducer. Implementation gated on Go contract freeze."
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-children/conformance/** EXCEPT check.test.mjs and seeded.test.mjs (N5 ownership after explicit handoff)",
+      "summary": "Deterministic native/direct/React/DOM replay, real mounted events/swaps/stale callbacks, state/tree/DOM/disabled/event ordering and mutation controls. Gated on frozen Go/runtime/compiler interfaces."
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-children/oracle/**",
+      "summary": "Independent literal scenario/expectations and negative checker controls, review Go invariants without copying implementation. First propose scenario to Go owner; implementation gated on contract freeze."
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-children/demo/**, compiled-children/run.mjs, run-compiled-children.sh, .github/workflows/gobi-compiled-children.yml, compiled-children/README.md, compiled-children/RESULTS.md",
+      "summary": "Executable HTTP demo plus full inherited capability regression and new two-backend build/replay runner, immutable provenance/archive checks, scoped CI. Gated on frozen interfaces."
+    },
+    {
+      "id": "E-CHECKER-TESTS",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-children/conformance/check.test.mjs, compiled-children/conformance/seeded.test.mjs",
+      "summary": "Independent adversarial checker and deterministic seed tests, actual native trace plus literal oracle; no fabricated positive browser evidence. N4 explicitly handed off these not-yet-created files to free N5; checker implementation and full integration remain N4-owned."
+    },
+    {
+      "id": "E-FIX-ORACLE-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "repair_of": "XR-ORACLE",
+      "owner": "compiled-children/oracle/audit-native-protocol.mjs, compiled-children/oracle/custody/** plus own repair reports/receipts/rawlogs",
+      "summary": "Preserve unrecoverable old hash mismatch explicitly. Freshly validate current/new read-only audit helper and create hash-consistent superseding oracle evidence packet without rewriting original E-ORACLE report/receipt or core oracle data."
+    },
+    {
+      "id": "E-FIX-INHERITED-GATE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "repair_of": "XR-DELIVERY",
+      "owner": "compiled-children/run.mjs, compiled-children/inherited-acceptance.mjs, compiled-children/inherited-acceptance.test.mjs, compiled-children/coordination/rawlogs/go.mod",
+      "summary": "Bind inherited evidence to invocation freshness, actual source/report/archive/manifest bytes; meaningful rejection tests; isolate preserved Go proof files from root package discovery. Coordinate new unit paths with other repair owners."
+    },
+    {
+      "id": "E-FIX-WASM-OBSERVABILITY",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "XR-DELIVERY",
+      "owner": "compiled-frontend/conformance/no-wasm.mjs, compiled-frontend/conformance/no-wasm.test.mjs, compiled-children/demo/smoke.mjs, compiled-children/conformance/browser.mjs",
+      "summary": "Fail closed if WebAssembly observation cannot install; record explicit coverage and precise guarantees; test missing/locked hooks and normal installation. No application or checker source ownership."
+    },
+    {
+      "id": "E-FIX-SEEDED-ASSERTIONS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "repair_of": "XR-CHECKER-TESTS",
+      "owner": "compiled-children/conformance/seeded.test.mjs",
+      "summary": "Assert complete input operation tuples and derive six-child input schedule bound, plus meaningful corruption rejection; no Go app reducer/browser fixture generation."
+    },
+    {
+      "id": "E-FIX-HARNESS-LIVENESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "repair_of": "XR-HARNESS",
+      "owner": "compiled-children/conformance/check.mjs, compiled-children/conformance/run.mjs, compiled-children/conformance/swap-contract.test.mjs",
+      "summary": "Bind compatible swap candidate/backend and live post-rejection click to actual active renderer identities; reject reviewer witness via meaningful new controls; coordinate WASM guard coverage assertion with N2."
+    },
+    {
+      "id": "E-RELEASE-DOCS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-children/README.md, compiled-children/RESULTS.md",
+      "summary": "Stable executable reproduction/backend-contract guide with precise author versus final acceptance boundaries, current finite Go keyed collection scope and another backend requirements. Final exact-source acceptance remains pending separate immutable evidence."
+    },
+    {
+      "id": "E-AUTHOR-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-children/evidence-preflight/**",
+      "summary": "Prepare streaming hash-bound immutable archive/inventory of frozen pre-repair author/review raw evidence, preserving rejected attempts and historical gaps explicitly; no claim of final acceptance and no live repair file capture."
+    },
+    {
+      "id": "E-FIX-RELEASE-PATHS",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "XR-RELEASE-DOCS",
+      "owner": "compiled-children/README.md",
+      "summary": "Correct factual artifact locations: attempt logs/builds/rawcaptures/demo inside attempt; canonical report/receipt incoordination; archive/manifest siblings. No cosmetic edits or successclaims."
+    },
+    {
+      "id": "E-FIX-ATTEMPT-FRESHNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "repair_of": "XR-FIX-INHERITED-GATE",
+      "owner": "compiled-children/inherited-acceptance.mjs, compiled-children/inherited-acceptance.test.mjs",
+      "summary": "Close reproduced one-millisecond pre-invocation attempt timestamp gap: both attempt time and receipt startedAt must be >= invocationStartedAt. Preserve previous version, add boundary witness regression, no broader sourcechanges."
+    }
+  ]
+}

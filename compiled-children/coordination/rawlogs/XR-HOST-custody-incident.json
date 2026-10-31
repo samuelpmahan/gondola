@@ -1,0 +1,47 @@
+{
+  "schema": "gobi.evidence-custody-incident/v1",
+  "incident": "XR-HOST read-only receipt-validation log was overwritten by its own redirected recheck",
+  "sequence": [
+    {
+      "action": "Before the second check, the accepted success log was present.",
+      "path": "compiled-children/coordination/rawlogs/XR-HOST-review-receipt-validation-final.log",
+      "sha256": "d00f20c8f7aab7bce810f5b33c6f9daaf5425e2eb33d945653d2595277c02980",
+      "bytes": 138
+    },
+    {
+      "action": "The validator command redirected stdout to the same path it then verified, truncating that success log before the read-only check. The run exited 1.",
+      "command_shape": "/tmp/gondola-rebalancer-env/bin/python - <<'PY' > compiled-children/coordination/rawlogs/XR-HOST-review-receipt-validation-final.log 2>&1",
+      "overwritten_error_artifact_retained": false,
+      "overwritten_error_raw_bytes": "unavailable; no separate copy was retained",
+      "overwritten_error_observed_bytes": 113,
+      "overwritten_error_observed_sha256": "2ecf06b06edba2ebd6937af46b374d9db13f7d708330f3e80d9c30ce9dcfe9e3",
+      "note": "The byte count and SHA256 were captured from immediate cat/sha256sum output before restoration. The overwritten error bytes are not reconstructed here."
+    },
+    {
+      "action": "Restored the accepted success-log text captured during the first successful read-only validation run. This restored the prior text and hash; it did not recover the original file bytes from a backup.",
+      "restoration_method": "Python pathlib.Path.write_text with the two previously observed success-output lines and a final newline.",
+      "restored_sha256": "d00f20c8f7aab7bce810f5b33c6f9daaf5425e2eb33d945653d2595277c02980",
+      "restored_bytes": 138
+    },
+    {
+      "action": "Reran the native receipt and evidence checks with stdout directed only to the terminal; no evidence file was overwritten.",
+      "command": "/tmp/gondola-rebalancer-env/bin/python - <<'PY' [read-only probe.validate_receipt for E-HOST/N3 and XR-HOST/N1; verify source, report, receipt, and listed rawlog hashes/bytes; print results to terminal] PY",
+      "exit_code": 0,
+      "result": "read-only validate_receipt: E-HOST/N3 and XR-HOST/N1 accepted; reviewed source, report, receipt, raw-log hashes and byte counts all match",
+      "stdout_redirected_to_file": false
+    }
+  ],
+  "unchanged_accepted_artifacts": {
+    "report": {
+      "path": "compiled-children/coordination/reports/XR-HOST.md",
+      "sha256": "3461dbe530b7d957d16ababdfa6050895d691144890922759168d26d4e1a7e0b",
+      "bytes": 4223
+    },
+    "receipt": {
+      "path": "compiled-children/coordination/receipts/XR-HOST.json",
+      "sha256": "f4fda2c2aeb4e5ef0acba658a4f115c1a690f85f9e9790228facf276973dda0a",
+      "bytes": 5893
+    }
+  },
+  "source_or_native_state_changed": false
+}
