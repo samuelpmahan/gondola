@@ -1,0 +1,88 @@
+name: Gobi portable qualification verification
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/gobi-portable-qualification.yml'
+      - 'portable-qualification/**'
+      - 'qualificationarchive/**'
+      - 'cmd/verify-qualification/**'
+      - 'backendqualification/**'
+      - 'backend-qualification/**'
+      - 'cmd/backend-qualification/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'run-portable-qualification.sh'
+      - 'run.sh'
+      - 'EXPECTED.json'
+      - 'SHA256SUMS'
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact commit to check out and record for this run
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  portable-go-verification:
+    runs-on: ubuntu-latest
+    env:
+      GOBI_PORTABLE_REPOSITORY_COMMIT: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+      GOFLAGS: -buildvcs=false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify requested checkout
+        run: test "$(git rev-parse HEAD)" = "$GOBI_PORTABLE_REPOSITORY_COMMIT"
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - name: Verify the published archive with Go
+        env:
+          GOBI_PORTABLE_OUTPUT_DIR: ${{ runner.temp }}/gobi-portable-qualification-${{ github.run_id }}-${{ github.run_attempt }}
+        run: bash run-portable-qualification.sh
+
+      - name: Preserve portable verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-portable-qualification-${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/gobi-portable-qualification-${{ github.run_id }}-${{ github.run_attempt }}/**
+          if-no-files-found: warn
+
+  milestone-zero-regression:
+    runs-on: ubuntu-latest
+    env:
+      GOBI_PORTABLE_REPOSITORY_COMMIT: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify requested checkout
+        run: test "$(git rev-parse HEAD)" = "$GOBI_PORTABLE_REPOSITORY_COMMIT"
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Test the portable producer inventory helper
+        run: node --test backend-qualification/archive-source-inventory.test.mjs
+
+      - name: Run the existing Milestone 0 check
+        env:
+          GOFLAGS: -buildvcs=false
+        run: bash run.sh

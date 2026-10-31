@@ -96,6 +96,11 @@ type caseEvidence struct {
 	PageErrors           *[]string             `json:"pageErrors"`
 	EventsObserved       *int                  `json:"eventsObserved"`
 	TraceTicks           *int                  `json:"traceTicks"`
+	Baseline             json.RawMessage       `json:"baseline"`
+	PolicyPassed         json.RawMessage       `json:"policyPassed"`
+	BaselineCheck        json.RawMessage       `json:"baselineCheck"`
+	BrowserVersion       json.RawMessage       `json:"browserVersion"`
+	Profile              json.RawMessage       `json:"profile"`
 }
 
 type activationEvidence struct {
@@ -108,12 +113,23 @@ type activationEvidence struct {
 }
 
 type activationRecord struct {
-	Fault      *string         `json:"fault"`
-	Backend    *string         `json:"backend"`
-	EventIndex json.RawMessage `json:"eventIndex"`
-	Target     *struct {
-		Path *string `json:"path"`
-	} `json:"target"`
+	Fault                     *string           `json:"fault"`
+	Backend                   *string           `json:"backend"`
+	EventIndex                json.RawMessage   `json:"eventIndex"`
+	Target                    *activationTarget `json:"target"`
+	CallbackInvocationsBefore json.RawMessage   `json:"callbackInvocationsBefore"`
+	CallbackInvocationsAfter  json.RawMessage   `json:"callbackInvocationsAfter"`
+}
+
+type activationTarget struct {
+	Path      *string         `json:"path"`
+	Tag       json.RawMessage `json:"tag"`
+	Connected json.RawMessage `json:"connected"`
+	Disabled  json.RawMessage `json:"disabled"`
+	Text      json.RawMessage `json:"text"`
+	OuterHTML json.RawMessage `json:"outerHTML"`
+	Before    json.RawMessage `json:"before"`
+	After     json.RawMessage `json:"after"`
 }
 
 type expectedEvidence struct {
@@ -146,17 +162,26 @@ type observedEvidence struct {
 }
 
 type callbackCounts struct {
-	Dispatch *int `json:"dispatch"`
+	Dispatch *int            `json:"dispatch"`
+	Stale    json.RawMessage `json:"stale"`
 }
 
 type domSnapshot struct {
-	HTML     *string      `json:"html"`
-	Controls []domControl `json:"controls"`
+	Normalization json.RawMessage `json:"normalization"`
+	HTML          *string         `json:"html"`
+	Controls      []domControl    `json:"controls"`
 }
 
 type domControl struct {
-	Path     *string `json:"path"`
-	Disabled *bool   `json:"disabled"`
+	Path      *string         `json:"path"`
+	Key       json.RawMessage `json:"key"`
+	Tag       json.RawMessage `json:"tag"`
+	Type      json.RawMessage `json:"type"`
+	Value     json.RawMessage `json:"value"`
+	Checked   json.RawMessage `json:"checked"`
+	Disabled  *bool           `json:"disabled"`
+	Text      json.RawMessage `json:"text"`
+	OuterHTML json.RawMessage `json:"outerHTML"`
 }
 
 type comparison struct {
@@ -339,7 +364,7 @@ func certifyCase(evidenceRoot string, spec registryCase, row inputResult) (Certi
 		return CertificateResult{}, fmt.Errorf("evidence SHA-256 mismatch: report has %s, file has %s", *row.EvidenceSHA256, actualHash)
 	}
 	var evidence caseEvidence
-	if err := json.Unmarshal(evidenceBytes, &evidence); err != nil {
+	if err := decodeStrict(evidenceBytes, &evidence); err != nil {
 		return CertificateResult{}, fmt.Errorf("decode evidence file: %w", err)
 	}
 	channels, activation, err := validateEvidence(spec, row, evidence)
@@ -466,7 +491,7 @@ func validateActivation(spec registryCase, row inputResult, evidence caseEvidenc
 	if spec.fault == "none" {
 		if len(evidence.Activation) != 0 && !isNull(evidence.Activation) {
 			var activation activationEvidence
-			if err := json.Unmarshal(evidence.Activation, &activation); err != nil {
+			if err := decodeStrict(evidence.Activation, &activation); err != nil {
 				return fmt.Errorf("decode healthy activation: %w", err)
 			}
 			if activation.Activated == nil || *activation.Activated || activation.ActivationCount == nil || *activation.ActivationCount != 0 {
@@ -482,7 +507,7 @@ func validateActivation(spec registryCase, row inputResult, evidence caseEvidenc
 		return errors.New("fault evidence has no activation record")
 	}
 	var activation activationEvidence
-	if err := json.Unmarshal(evidence.Activation, &activation); err != nil {
+	if err := decodeStrict(evidence.Activation, &activation); err != nil {
 		return fmt.Errorf("decode activation evidence: %w", err)
 	}
 	if activation.Activated == nil || !*activation.Activated || activation.ActivationCount == nil || *activation.ActivationCount != 1 || activation.Records == nil || len(*activation.Records) != 1 || len(activation.CallbackInvocations) == 0 {
@@ -503,7 +528,7 @@ func validateActivation(spec registryCase, row inputResult, evidence caseEvidenc
 		return errors.New("fault activation target path differs from registry")
 	}
 	var record activationRecord
-	if err := json.Unmarshal((*activation.Records)[0], &record); err != nil {
+	if err := decodeStrict((*activation.Records)[0], &record); err != nil {
 		return fmt.Errorf("decode activation record: %w", err)
 	}
 	if record.Fault == nil || *record.Fault != spec.fault || record.Backend == nil || *record.Backend != spec.backend || record.Target == nil || record.Target.Path == nil || *record.Target.Path != *spec.activationTarget {
@@ -534,10 +559,10 @@ func validateChannelPairs(spec registryCase, evidence caseEvidence) error {
 		}
 	}
 	var expectedDOM, observedDOM domSnapshot
-	if err := json.Unmarshal(evidence.Expected.DOM, &expectedDOM); err != nil {
+	if err := decodeStrict(evidence.Expected.DOM, &expectedDOM); err != nil {
 		return fmt.Errorf("decode expected DOM projection: %w", err)
 	}
-	if err := json.Unmarshal(evidence.Observed.DOM, &observedDOM); err != nil {
+	if err := decodeStrict(evidence.Observed.DOM, &observedDOM); err != nil {
 		return fmt.Errorf("decode observed DOM projection: %w", err)
 	}
 	if expectedDOM.HTML == nil || observedDOM.HTML == nil {
@@ -668,6 +693,12 @@ func resolveEvidencePath(root, value string) (string, error) {
 }
 
 func decodeStrict(data []byte, target any) error {
+	if err := rejectDuplicateJSONKeys(data); err != nil {
+		return err
+	}
+	if err := rejectNoncanonicalStructFieldNames(data, target); err != nil {
+		return err
+	}
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(target); err != nil {
@@ -679,6 +710,148 @@ func decodeStrict(data []byte, target any) error {
 			return errors.New("multiple JSON values are not allowed")
 		}
 		return err
+	}
+	return nil
+}
+
+func rejectDuplicateJSONKeys(data []byte) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := consumeJSONValue(decoder); err != nil {
+		return err
+	}
+	if _, err := decoder.Token(); !errors.Is(err, io.EOF) {
+		if err == nil {
+			return errors.New("multiple JSON values are not allowed")
+		}
+		return err
+	}
+	return nil
+}
+
+func consumeJSONValue(decoder *json.Decoder) error {
+	token, err := decoder.Token()
+	if err != nil {
+		return err
+	}
+	delim, isDelim := token.(json.Delim)
+	if !isDelim {
+		return nil
+	}
+	switch delim {
+	case '{':
+		seen := make(map[string]struct{})
+		for decoder.More() {
+			keyToken, err := decoder.Token()
+			if err != nil {
+				return err
+			}
+			key, ok := keyToken.(string)
+			if !ok {
+				return errors.New("JSON object key is not a string")
+			}
+			if _, duplicate := seen[key]; duplicate {
+				return fmt.Errorf("duplicate JSON object key %q", key)
+			}
+			seen[key] = struct{}{}
+			if err := consumeJSONValue(decoder); err != nil {
+				return err
+			}
+		}
+		end, err := decoder.Token()
+		if err != nil || end != json.Delim('}') {
+			return errors.New("unterminated JSON object")
+		}
+	case '[':
+		for decoder.More() {
+			if err := consumeJSONValue(decoder); err != nil {
+				return err
+			}
+		}
+		end, err := decoder.Token()
+		if err != nil || end != json.Delim(']') {
+			return errors.New("unterminated JSON array")
+		}
+	default:
+		return errors.New("unexpected JSON delimiter")
+	}
+	return nil
+}
+
+var rawMessageType = reflect.TypeOf(json.RawMessage{})
+
+func rejectNoncanonicalStructFieldNames(data []byte, target any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	var value any
+	if err := decoder.Decode(&value); err != nil {
+		return err
+	}
+	return checkCanonicalStructFieldNames(value, reflect.TypeOf(target))
+}
+
+func checkCanonicalStructFieldNames(value any, typ reflect.Type) error {
+	for typ != nil && typ.Kind() == reflect.Pointer {
+		typ = typ.Elem()
+	}
+	if typ == nil || typ == rawMessageType || value == nil {
+		return nil
+	}
+	switch typ.Kind() {
+	case reflect.Struct:
+		object, ok := value.(map[string]any)
+		if !ok {
+			return nil
+		}
+		fields := make(map[string]reflect.Type)
+		for i := 0; i < typ.NumField(); i++ {
+			field := typ.Field(i)
+			if field.PkgPath != "" {
+				continue
+			}
+			tag := field.Tag.Get("json")
+			name := strings.Split(tag, ",")[0]
+			if name == "-" {
+				continue
+			}
+			if name == "" {
+				name = field.Name
+			}
+			fields[name] = field.Type
+		}
+		for key, child := range object {
+			fieldType, found := fields[key]
+			if !found {
+				for canonical := range fields {
+					if strings.EqualFold(key, canonical) {
+						return fmt.Errorf("noncanonical JSON field spelling %q; use %q", key, canonical)
+					}
+				}
+				continue
+			}
+			if err := checkCanonicalStructFieldNames(child, fieldType); err != nil {
+				return err
+			}
+		}
+	case reflect.Slice, reflect.Array:
+		if typ.Elem() == reflect.TypeOf(byte(0)) {
+			return nil
+		}
+		if values, ok := value.([]any); ok {
+			for _, child := range values {
+				if err := checkCanonicalStructFieldNames(child, typ.Elem()); err != nil {
+					return err
+				}
+			}
+		}
+	case reflect.Map:
+		if object, ok := value.(map[string]any); ok {
+			for _, child := range object {
+				if err := checkCanonicalStructFieldNames(child, typ.Elem()); err != nil {
+					return err
+				}
+			}
+		}
 	}
 	return nil
 }

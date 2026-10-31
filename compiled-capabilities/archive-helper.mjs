@@ -1,6 +1,7 @@
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { link, mkdir, mkdtemp, open, rm, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 
 export async function createExclusiveAttemptDirectory(attemptPath) {
   await mkdir(dirname(attemptPath), { recursive: true });
@@ -39,34 +40,45 @@ export async function archiveAndVerify({
   expected.sort();
   const listRoot = await mkdtemp(join(tmpdir(), "gobi-capability-archive-list-"));
   const listPath = join(listRoot, "members.nul");
+  const stagingPath = join(dirname(archivePath), `.${basename(archivePath)}.stage-${randomUUID()}`);
+  let stagingCreated = false;
   try {
     await writeFile(listPath, Buffer.from(`${expected.join("\0")}\0`));
+    const stagingFile = await open(stagingPath, "wx", 0o600);
+    stagingCreated = true;
+    await stagingFile.close();
     await execute("archive-capability-artifacts", "tar", [
-      "-czf", archivePath,
+      "-czf", stagingPath,
       "-C", attemptRoot,
       "--no-recursion",
       "--null",
       "--files-from", listPath,
     ]);
-  } finally {
-    await rm(listRoot, { recursive: true, force: true });
-  }
-  const archive = await hashPath(archivePath);
-  const listed = (await execute("list-capability-archive", "tar", ["-tzf", archivePath]))
-    .trim().split("\n").filter((line) => line && !line.endsWith("/"));
-  if (JSON.stringify(listed.sort()) !== JSON.stringify(expected)) {
-    throw new Error("capability archive members differ from its pinned inventory");
-  }
-  await mkdir(verifyRoot, { recursive: true });
-  await execute("extract-capability-archive", "tar", ["-xzf", archivePath, "-C", verifyRoot]);
-  for (const member of members) {
-    const extracted = join(verifyRoot, member.path);
-    const actual = await hashPath(extracted);
-    if (actual.bytes !== member.bytes || actual.sha256 !== member.sha256) {
-      throw new Error(`archive round-trip mismatch: ${member.path}`);
+    const archive = await hashPath(stagingPath);
+    const listed = (await execute("list-capability-archive", "tar", ["-tzf", stagingPath]))
+      .trim().split("\n").filter((line) => line && !line.endsWith("/"));
+    if (JSON.stringify(listed.sort()) !== JSON.stringify(expected)) {
+      throw new Error("capability archive members differ from its pinned inventory");
     }
+    await mkdir(verifyRoot, { recursive: true });
+    await execute("extract-capability-archive", "tar", ["-xzf", stagingPath, "-C", verifyRoot]);
+    for (const member of members) {
+      const extracted = join(verifyRoot, member.path);
+      const actual = await hashPath(extracted);
+      if (actual.bytes !== member.bytes || actual.sha256 !== member.sha256) {
+        throw new Error(`archive round-trip mismatch: ${member.path}`);
+      }
+    }
+    const archivedSnapshot = await readJSON(join(verifyRoot, "execution-before-archive.json"));
+    await rm(verifyRoot, { recursive: true, force: true });
+
+    // Hard-link publication is atomic and fails if archivePath already exists.
+    // Staging in the final directory keeps both paths on the same filesystem.
+    await link(stagingPath, archivePath);
+    return { archive, archivedSnapshot };
+  } finally {
+    const cleanup = [rm(listRoot, { recursive: true, force: true })];
+    if (stagingCreated) cleanup.push(rm(stagingPath, { force: true }));
+    await Promise.all(cleanup);
   }
-  const archivedSnapshot = await readJSON(join(verifyRoot, "execution-before-archive.json"));
-  await rm(verifyRoot, { recursive: true, force: true });
-  return { archive, archivedSnapshot };
 }

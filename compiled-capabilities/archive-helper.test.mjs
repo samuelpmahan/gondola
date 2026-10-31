@@ -5,7 +5,7 @@ import { existsSync, unlinkSync, writeFileSync } from "node:fs";
 import { mkdtemp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import { tmpdir } from "node:os";
-import { join, relative, sep } from "node:path";
+import { basename, dirname, join, relative, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { archiveAndVerify, createExclusiveAttemptDirectory, writeImmutableSnapshot } from "./archive-helper.mjs";
@@ -167,12 +167,20 @@ test("real tar archives only the frozen inventory while an unlisted hidden file 
     const verifyRoot = join(workspace, "verify");
     const unlistedPath = join(harnessRoot, ".run.browser.json.temporary");
     let churnCount = 0;
+    let finalVisibleDuringArchive = false;
+    let stagingArchivePath = null;
     const execute = async (name, command, args) => {
       if (name === "archive-capability-artifacts") {
+        assert.equal(existsSync(archivePath), false, "final archive exists before tar starts");
+        stagingArchivePath = args[1];
+        assert.notEqual(stagingArchivePath, archivePath, "tar must write to a unique staging path");
+        assert.equal(dirname(stagingArchivePath), dirname(archivePath), "tar staging must share the final directory");
+        assert(basename(stagingArchivePath).startsWith(`.${basename(archivePath)}.stage-`));
         writeFileSync(unlistedPath, "temp entry before tar\n");
         const childPromise = runChild(command, args, attemptRoot);
         const timer = setInterval(() => {
           try {
+            if (existsSync(archivePath)) finalVisibleDuringArchive = true;
             if (existsSync(unlistedPath)) unlinkSync(unlistedPath);
             else writeFileSync(unlistedPath, "temp entry during tar\n");
             churnCount += 1;
@@ -182,9 +190,11 @@ test("real tar archives only the frozen inventory while an unlisted hidden file 
         clearInterval(timer);
         if (existsSync(unlistedPath)) unlinkSync(unlistedPath);
         assert(churnCount > 0, "unlisted temporary entry did not change while tar was running");
+        assert.equal(existsSync(archivePath), false, "final archive must remain absent after tar writes the stage");
         assert.equal(result.status, 0, result.stderr);
         return result.stdout;
       }
+      assert.equal(existsSync(archivePath), false, `final archive must remain absent during ${name}`);
       const result = spawnSync(command, args, { cwd: attemptRoot, encoding: "utf8" });
       assert.equal(result.status, 0, result.stderr);
       return result.stdout ?? "";
@@ -202,10 +212,105 @@ test("real tar archives only the frozen inventory while an unlisted hidden file 
     });
 
     assert.equal(archived.archivedSnapshot.archivePending, true);
+    assert.equal(finalVisibleDuringArchive, false, "final archive was visible while tar was writing");
+    assert(stagingArchivePath);
+    assert.equal(existsSync(stagingArchivePath), false, "archive staging file remained after publication");
+    assert((await stat(archivePath)).isFile(), "completed archive was not published after round-trip verification");
     const archiveMembers = (await runChild("tar", ["-tzf", archivePath], workspace)).stdout
       .trim().split("\n").filter(Boolean).sort();
     assert.deepEqual(archiveMembers, members.map((item) => item.path).sort());
     assert.equal(archiveMembers.includes("harness/.run.browser.json.temporary"), false);
+  } finally {
+    await rm(workspace, { recursive: true, force: true });
+  }
+});
+
+test("tar failure leaves no final archive and cleans only its same-directory staging file", async () => {
+  const workspace = await mkdtemp(join(tmpdir(), "gobi-cap-archive-tar-failure-"));
+  const attemptRoot = join(workspace, "attempt");
+  try {
+    await mkdir(attemptRoot, { recursive: true });
+    const snapshot = { schema: "gobi.compiled-capabilities-execution-before-archive/v1", archivePending: true };
+    const written = await writeImmutableSnapshot(join(attemptRoot, "execution-before-archive.json"), snapshot);
+    const members = [
+      { path: "execution-before-archive.json", bytes: written.byteLength, sha256: sha256(written.bytes) },
+    ];
+    const archivePath = join(workspace, "artifacts.tar.gz");
+    const unrelatedStage = join(workspace, ".artifacts.tar.gz.stage-preserve-me");
+    writeFileSync(unrelatedStage, "not owned by this call");
+    let stagingArchivePath = null;
+
+    await assert.rejects(archiveAndVerify({
+      attemptRoot,
+      archivePath,
+      verifyRoot: join(workspace, "verify"),
+      includePaths: ["execution-before-archive.json"],
+      members,
+      execute: async (name, _command, args) => {
+        assert.equal(name, "archive-capability-artifacts");
+        assert.equal(existsSync(archivePath), false, "final archive became visible before tar completion");
+        stagingArchivePath = args[1];
+        assert.equal(dirname(stagingArchivePath), dirname(archivePath));
+        assert.notEqual(stagingArchivePath, archivePath);
+        assert(basename(stagingArchivePath).startsWith(`.${basename(archivePath)}.stage-`));
+        writeFileSync(stagingArchivePath, "partial tar output");
+        assert.equal(existsSync(archivePath), false, "partial tar output leaked to the final path");
+        throw new Error("simulated tar failure");
+      },
+      hashPath,
+      readJSON: async (path) => JSON.parse(await readFile(path, "utf8")),
+    }), /simulated tar failure/);
+
+    assert.equal(existsSync(archivePath), false, "failed tar left a final archive");
+    assert(stagingArchivePath);
+    assert.equal(existsSync(stagingArchivePath), false, "failed tar left its own staging file");
+    assert.equal(await readFile(unrelatedStage, "utf8"), "not owned by this call");
+  } finally {
+    await rm(workspace, { recursive: true, force: true });
+  }
+});
+
+test("publishing refuses to replace an existing final archive and removes its stage", async () => {
+  const workspace = await mkdtemp(join(tmpdir(), "gobi-cap-archive-no-clobber-"));
+  const attemptRoot = join(workspace, "attempt");
+  try {
+    await mkdir(attemptRoot, { recursive: true });
+    const snapshot = { schema: "gobi.compiled-capabilities-execution-before-archive/v1", archivePending: true };
+    const written = await writeImmutableSnapshot(join(attemptRoot, "execution-before-archive.json"), snapshot);
+    const members = [
+      { path: "execution-before-archive.json", bytes: written.byteLength, sha256: sha256(written.bytes) },
+    ];
+    const archivePath = join(workspace, "artifacts.tar.gz");
+    const original = Buffer.from("preexisting final archive bytes");
+    await writeFile(archivePath, original, { flag: "wx" });
+    let stagingArchivePath = null;
+    const execute = async (name, command, args) => {
+      assert.deepEqual(await readFile(archivePath), original, "existing final archive changed before no-clobber publication");
+      if (name === "archive-capability-artifacts") {
+        stagingArchivePath = args[1];
+        assert.notEqual(stagingArchivePath, archivePath);
+        assert.equal(dirname(stagingArchivePath), dirname(archivePath));
+        assert(basename(stagingArchivePath).startsWith(`.${basename(archivePath)}.stage-`));
+      }
+      const result = await runChild(command, args, attemptRoot);
+      assert.equal(result.status, 0, result.stderr);
+      return result.stdout;
+    };
+
+    await assert.rejects(archiveAndVerify({
+      attemptRoot,
+      archivePath,
+      verifyRoot: join(workspace, "verify"),
+      includePaths: ["execution-before-archive.json"],
+      members,
+      execute,
+      hashPath,
+      readJSON: async (path) => JSON.parse(await readFile(path, "utf8")),
+    }), { code: "EEXIST" });
+
+    assert.deepEqual(await readFile(archivePath), original, "no-clobber publication replaced existing archive bytes");
+    assert(stagingArchivePath);
+    assert.equal(existsSync(stagingArchivePath), false, "no-clobber failure left its staging file");
   } finally {
     await rm(workspace, { recursive: true, force: true });
   }

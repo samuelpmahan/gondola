@@ -1,6 +1,7 @@
 package backendqualification
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -289,6 +290,111 @@ func TestCertifyFileAcceptsThirteenEvidenceBackedCases(t *testing.T) {
 			t.Errorf("case %s did not pass: %+v", result.ID, result)
 		}
 	}
+}
+
+func TestDecodeStrictRejectsDuplicateAndNoncanonicalStructKeys(t *testing.T) {
+	tests := []struct {
+		name string
+		body string
+	}{
+		{"duplicate-top-level-key", `{"schema":"one","schema":"one"}`},
+		{"conflicting-duplicate-top-level-key", `{"schema":"one","schema":"two"}`},
+		{"case-insensitive-field-alias", `{"Schema":"gobi.backend-qualification-run/v1"}`},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			var target inputRun
+			if err := decodeStrict([]byte(tc.body), &target); err == nil {
+				t.Fatal("strict decoder accepted duplicate or noncanonical Go struct field")
+			}
+		})
+	}
+
+	// Raw JSON fields and map keys are intentionally opaque/case-sensitive.
+	var target struct {
+		Probe json.RawMessage       `json:"probe"`
+		Pairs map[string]comparison `json:"pairs"`
+	}
+	if err := decodeStrict([]byte(`{"probe":{"Schema":"opaque"},"pairs":{"Schema":{"expected":1,"observed":1}}}`), &target); err != nil {
+		t.Fatalf("strict decoder rejected opaque JSON or a case-sensitive map key: %v", err)
+	}
+	if err := decodeStrict([]byte(`{"probe":{"Schema":"one","Schema":"two"}}`), &target); err == nil {
+		t.Fatal("strict decoder accepted duplicate keys inside an opaque JSON field")
+	}
+	var activation activationEvidence
+	if err := decodeStrict([]byte(`{"Activated":true,"activationCount":1}`), &activation); err == nil {
+		t.Fatal("strict decoder accepted a noncanonical nested Go field alias")
+	}
+}
+
+func TestCertifyFileRejectsUnknownOrAliasedCaseEnvelopeAndDuplicateEvidenceKeys(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, *runFixture)
+	}{
+		{"unknown-case-field", func(t *testing.T, f *runFixture) {
+			f.evidence["healthy-react"]["reviewerUnknownField"] = map[string]any{"marker": "ignored before"}
+			f.write(t)
+		}},
+		{"aliased-case-field", func(t *testing.T, f *runFixture) {
+			f.write(t)
+			path := filepath.Join(f.root, "cases", "healthy-react.json")
+			body, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			body = bytes.Replace(body, []byte(`"backend":`), []byte(`"Backend":`), 1)
+			if !bytes.Contains(body, []byte(`"Backend":`)) {
+				t.Fatal("test fixture did not contain backend field")
+			}
+			if err := os.WriteFile(path, body, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			updateEvidenceHash(t, f, "healthy-react", body)
+		}},
+		{"duplicate-case-field", func(t *testing.T, f *runFixture) {
+			f.write(t)
+			path := filepath.Join(f.root, "cases", "healthy-react.json")
+			body, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			marker := []byte(`"schema":"gobi.backend-qualification-case-evidence/v1"`)
+			body = bytes.Replace(body, marker, append(marker, []byte(`,"schema":"gobi.backend-qualification-case-evidence/v1"`)...), 1)
+			updateEvidenceHash(t, f, "healthy-react", body)
+			if err := os.WriteFile(path, body, 0o644); err != nil {
+				t.Fatal(err)
+			}
+		}},
+		{"duplicate-raw-run-field", func(t *testing.T, f *runFixture) {
+			f.write(t)
+			body, err := os.ReadFile(f.inputPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			marker := []byte(`"sourceCommit":"0123456789abcdef0123456789abcdef01234567"`)
+			body = bytes.Replace(body, marker, append(marker, []byte(`,"sourceCommit":"0123456789abcdef0123456789abcdef01234567"`)...), 1)
+			if err := os.WriteFile(f.inputPath, body, 0o644); err != nil {
+				t.Fatal(err)
+			}
+		}},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			f := newRunFixture(t)
+			tc.mutate(t, f)
+			if _, err := CertifyFile(f.inputPath); err == nil {
+				t.Fatal("CertifyFile accepted invalid case/raw JSON envelope")
+			}
+		})
+	}
+}
+
+func updateEvidenceHash(t *testing.T, f *runFixture, id string, body []byte) {
+	t.Helper()
+	digest := sha256.Sum256(body)
+	resultByID(t, f, id)["evidenceSHA256"] = hex.EncodeToString(digest[:])
+	f.writeRaw(t)
 }
 
 func TestCertifyFileRejectsIncompleteOrMisidentifiedCaseRegistry(t *testing.T) {
