@@ -1,0 +1,33 @@
+{
+  "job_id": "E-GO",
+  "worker": "N1",
+  "summary": "Added effect.cancel to the Go contract and inferred it from reachable, exact typed lifecycle cancellation descriptors.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH go test ./compilercontract",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test ./analyze",
+      "workdir": "compiled-frontend/",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH go test ./compilercontract ./compiled-frontend/analyze",
+      "workdir": "repository root",
+      "result": "partial failure: compilercontract passed; analyze is in a nested Go module and is not addressable from this module root"
+    }
+  ],
+  "limitations": [
+    "Non-literal protocol fields, positional effect composites, and opaque external effect constructors are not recognized and may emit cancellation without declaring effect.cancel."
+  ],
+  "integration": "pending: the full capability milestone runner was not run by E-GO; only focused owned Go suites were run",
+  "publication": "No commit, merge, or deploy."
+}

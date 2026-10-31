@@ -1,0 +1,81 @@
+{
+  "job_id": "XR-DEMO",
+  "worker": "N4",
+  "summary": "Independently reviewed and reran the capability demo against the actual feasibility React build; verified capability profiles, incompatible rejection preservation, Go event order, and pending reply delivery.",
+  "decision": "accepted",
+  "base": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+  "versions": {
+    "node": "v22.23.4",
+    "chromium": "153.0.8010.0",
+    "react": "19.3.1",
+    "react_dom": "19.3.1"
+  },
+  "checks": [
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/demo/build.mjs --compiled compiled-capabilities/builds/feasibility/react/output --output compiled-capabilities/coordination/reviews/XR-DEMO/site --backend react 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/build.log",
+      "workdir": "repository root",
+      "result": "passed; package github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle; requirements view.node, numeric.safe-integer, numeric.float64, effect.request-reply, effect.cancel; bundle 1,846,155 bytes; SHA-256 b395ae7366fa39c1654bb96600660d883482c1bb7af20c30dd5bd6cd4cf009fe"
+    },
+    {
+      "command": "set -o pipefail\nCHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/demo/smoke.mjs --demo compiled-capabilities/coordination/reviews/XR-DEMO/site --output compiled-capabilities/coordination/reviews/XR-DEMO/smoke.json --screenshot compiled-capabilities/coordination/reviews/XR-DEMO/demo.png --port 0 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/smoke.log",
+      "workdir": "repository root",
+      "result": "passed; 8 checks; ephemeral HTTP port 41025; event order addParent/requestParent/addParent/complete; browser and console errors, failed requests, and WebAssembly requests all empty"
+    },
+    {
+      "command": "set -o pipefail\nCHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/XR-DEMO/profile-probe.mjs compiled-capabilities/coordination/reviews/XR-DEMO/site compiled-capabilities/coordination/reviews/XR-DEMO/profiles.json 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/profile-probe.log",
+      "workdir": "repository root",
+      "result": "passed; 2 checks; host capability export frozen and exact; actual DOM/React profiles frozen, exact, and displayed"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/demo/app.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/check-app.mjs.log",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/demo/build.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/check-build.mjs.log",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/demo/smoke.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/check-smoke.mjs.log",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "set -o pipefail\n/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/reviews/XR-DEMO/profile-probe.mjs 2>&1 | tee compiled-capabilities/coordination/reviews/XR-DEMO/logs/check-profile-probe.log",
+      "workdir": "repository root",
+      "result": "passed"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'for (const path of [\"compiled-capabilities/coordination/receipts/XR-DEMO.json\", \"compiled-capabilities/coordination/reviews/XR-DEMO/site/demo-build.json\", \"compiled-capabilities/coordination/reviews/XR-DEMO/smoke.json\", \"compiled-capabilities/coordination/reviews/XR-DEMO/profiles.json\"]) JSON.parse(require(\"node:fs\").readFileSync(path, \"utf8\")); process.stdout.write(\"XR-DEMO receipt and output JSON parse\\n\")'",
+      "workdir": "repository root",
+      "result": "passed"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/demo/app.mjs": "f34d9deafdac14e6c7d24ff73a8926ca3035db1313e9ed8ea135a4ddae1b1092",
+    "compiled-capabilities/demo/build.mjs": "b6f5f49048418e20e59c6f09e9fea753610015fef8ceecb611d9da8c01912326",
+    "compiled-capabilities/demo/demo.css": "3c36b27dc9297f363e3a7e1dd770101c2433e830b0deca337b5801a8d58b26e0",
+    "compiled-capabilities/demo/index.html": "68ebf6373b4a666ab49fa2f618aad9fce96ccb8be9281b4c8e5692c4e2155b11",
+    "compiled-capabilities/demo/smoke.mjs": "a801bd23e4b209a082c01abebe8157282a3d2ae75f4a01e8de72f29ad6254cc8"
+  },
+  "review_artifact_sha256": {
+    "reviews/XR-DEMO/site/demo.bundle.mjs": "b395ae7366fa39c1654bb96600660d883482c1bb7af20c30dd5bd6cd4cf009fe",
+    "reviews/XR-DEMO/site/demo-build.json": "1c666b958ea1e4a5a2796489f84dbe190663f4c49ba5db461db7bf885fda2fe7",
+    "reviews/XR-DEMO/smoke.json": "019480702575e39ee24055e055a0bc861e9c0db51e065d66274baa7584b3b787",
+    "reviews/XR-DEMO/demo.png": "ea9d67e7ecc650b2b3b529695cd092f8bf70a67c893c56ffc2e51a5c1c0c09c7",
+    "reviews/XR-DEMO/profiles.json": "3fa5735e0df443f6f0bb529cf67274e88a629a85734807bc372c8c9a019f90b5",
+    "reviews/XR-DEMO/profile-probe.mjs": "f47d08ef62948df478e4623b94ac923fd8f8c3599c25cc12c6c90d615bace394",
+    "reviews/XR-DEMO/logs/build.log": "63e0947db3ada7290f199af46fce96f2082958220b25d91162468f4098907805",
+    "reviews/XR-DEMO/logs/smoke.log": "b58cf0fd2ac39ab43ebe2d94eb62bc4bb1ec79d1b28ca9fd92b8c7f2cc75597d",
+    "reviews/XR-DEMO/logs/profile-probe.log": "aa89006310770108656aaf4a7cfa1a509e0d060f496c443f1a571c3abba812a3"
+  },
+  "author_first_attempt": {
+    "captured_log": false,
+    "source": "compiled-capabilities/coordination/receipts/E-DEMO.json",
+    "observed_failure": "clickGoAction selector matched 3 nested buttons rather than the one intended Parent add button",
+    "review_note": "This author-reported failure is acknowledged as uncaptured. A fresh review rerun on the corrected direct-child selector passed; no claim is made that no earlier failure occurred."
+  },
+  "integration": "pending: the full integrated N1-N6 capability runner was not run by XR-DEMO",
+  "publication": "No production files were modified; no commit, merge, or deploy."
+}

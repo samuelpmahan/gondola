@@ -2,6 +2,7 @@ import { createViewTools, ELEMENT, TEXT, FRAGMENT } from "../shared/view.mjs";
 import { booleanAttributes, eventNames } from "../react/react-map.gen.mjs";
 
 const FORM_CONTROLS = new Set(["button", "input", "select", "textarea"]);
+const VIEW_CAPABILITIES = Object.freeze(["view.node", "binding.value", "binding.checked"]);
 const viewTools = createViewTools({ rendererName: "compiled DOM renderer", eventNames, booleanAttributes });
 const {
   fail, isRecord, exactKeys, normalizeAndValidate, emptyArrays,
@@ -369,6 +370,7 @@ export function createDOMRenderer({ container, onFailure = null } = {}) {
   }
 
   return {
+    viewCapabilities: VIEW_CAPABILITIES,
     update,
     snapshot: viewRecord,
     viewRecord,

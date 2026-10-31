@@ -1,0 +1,37 @@
+{
+  "job_id": "E-FIX-GO",
+  "worker": "N1",
+  "summary": "Removed the nonempty cancellation Arg inference condition; present string Args now infer effect.cancel consistently for direct and parenthesized empty literals.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH go test -count=1 ./compilercontract",
+      "workdir": "repository root",
+      "toolchain": "go1.24.0",
+      "result": "passed"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test ./analyze",
+      "workdir": "compiled-frontend/",
+      "toolchain": "go1.27.3",
+      "result": "passed"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 go test ./analyze -run 'TestEffectCancelCapabilityRequiresReachableTypedDescriptor|TestLoadAndAnalyzeCompiledFixtures' -v",
+      "workdir": "compiled-frontend/",
+      "toolchain": "go1.27.3",
+      "result": "passed: lifecycle fixture and descriptor controls passed, including direct and parenthesized empty Arg"
+    },
+    {
+      "command": "git diff --check",
+      "workdir": "repository root",
+      "result": "passed"
+    }
+  ],
+  "source_sha256": {
+    "compiled-frontend/analyze/analyze.go": "a637078d1b2ade9bf237ad015d53fff2191027fcd67f8956e55483cba8b48c2a",
+    "compiled-frontend/analyze/analyze_test.go": "1ff4aba8abba102b2d4399940586fb6c1f3f98a4842203be63474d887a87313b"
+  },
+  "integration": "pending: only the owned Go contract and analyzer suites were run",
+  "publication": "No commit, merge, or deploy. Original E-GO and XR-GO reports and raw logs were preserved."
+}

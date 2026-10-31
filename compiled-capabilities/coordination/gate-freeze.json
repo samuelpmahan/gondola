@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-31T09:10:58.236124+00:00",
+  "gate": "wire-contract-frozen",
+  "contract": "compiled-capabilities/PLAN.md",
+  "base_source": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+  "dependent_lanes_released": [
+    "E-HOST",
+    "E-HARNESS",
+    "E-ORACLE",
+    "E-DEMO",
+    "E-BUILD"
+  ],
+  "shared_ownership_extension": "E-HOST also owns react/bindings.mjs and associated binding tests; E-BUILD owns new compiled-capabilities/.gitignore",
+  "original_m0_receipts_preserved_by_no_edits": true,
+  "ownership_extensions": [
+    {
+      "worker": "N2",
+      "paths": [
+        "compiled-frontend/frontend/react/bindings.mjs",
+        "compiled-frontend/frontend/react/bindings.test.mjs",
+        "compiled-lifecycle/runtime/runtime.test.mjs"
+      ],
+      "reason": "known-capability validator and explicit-profile test doubles"
+    },
+    {
+      "worker": "N6",
+      "paths": [
+        "compiled-capabilities/.gitignore",
+        "compiled-capabilities/builds/feasibility/**"
+      ],
+      "reason": "ignore generated outputs and prepare fresh shared compiler inputs"
+    },
+    {
+      "worker": "N3",
+      "paths": [
+        "compiled-lifecycle/conformance/browser-entry.mjs"
+      ],
+      "reason": "forward core renderer profile through existing inherited wrapper; necessary full regression compatibility, no duplicate adapter"
+    }
+  ],
+  "review_backfill": {
+    "native_epoch": 2,
+    "assignments": {
+      "N1": "XR-ORACLE",
+      "N4": "XR-GO"
+    }
+  }
+}

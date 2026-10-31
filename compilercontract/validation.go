@@ -98,7 +98,8 @@ func ValidateAppIR(app AppIR) []Diagnostic {
 	roleIDs := map[SymbolID]bool{}
 	validCapabilities := map[Capability]bool{
 		CapabilityViewNode: true, CapabilityBindingValue: true, CapabilityBindingChecked: true,
-		CapabilityEffectRequest: true, CapabilitySafeInteger: true, CapabilityFloat64: true,
+		CapabilityEffectRequest: true, CapabilityEffectCancel: true,
+		CapabilitySafeInteger: true, CapabilityFloat64: true,
 	}
 	for _, component := range app.Components {
 		span := Span{}

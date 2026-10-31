@@ -256,6 +256,194 @@ function setup({ update, effectHost = null } = {}) {
   return { app, renderer, runtime, failures };
 }
 
+test("effect.cancel requires explicit host support before Init or renderer update", () => {
+  const app = makeApp();
+  app.compiled.appIR.components[0].capabilities.push("effect.cancel");
+  const renderer = makeRenderer();
+  renderer.viewCapabilities = ["view.node", "binding.value", "binding.checked"];
+  let policyCalls = 0;
+
+  assert.throws(() => mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer,
+    effectPolicy() { policyCalls += 1; return undefined; },
+  }), /effect.cancel/);
+  assert.deepEqual(app.calls(), { initCalls: 0, updateCalls: 0, viewCalls: 0 });
+  assert.deepEqual(renderer.commitLog, []);
+  assert.equal(policyCalls, 0);
+
+  assert.throws(() => mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer,
+    hostCapabilities: ["effect.cancel"],
+  }), /effect.request-reply/);
+  assert.deepEqual(app.calls(), { initCalls: 0, updateCalls: 0, viewCalls: 0 });
+});
+
+test("mount rejects a hostCapabilities accessor without invoking it", () => {
+  const app = makeApp();
+  const renderer = makeRenderer();
+  let getterCalls = 0;
+  const options = {
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer,
+  };
+  Object.defineProperty(options, "hostCapabilities", {
+    enumerable: true,
+    get() { getterCalls += 1; return ["effect.request-reply"]; },
+  });
+
+  assert.throws(() => mountCompiledApp(options), /hostCapabilities/);
+  assert.equal(getterCalls, 0);
+  assert.equal(app.calls().initCalls, 0);
+});
+
+test("effect.cancel app requires an explicit renderer profile before Init", () => {
+  const app = makeApp();
+  app.compiled.appIR.components[0].capabilities.push("effect.cancel");
+  const renderer = makeRenderer();
+
+  assert.throws(() => mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer,
+    hostCapabilities: ["effect.request-reply", "effect.cancel"],
+  }), /renderer.*viewCapabilities/);
+  assert.deepEqual(app.calls(), { initCalls: 0, updateCalls: 0, viewCalls: 0 });
+  assert.deepEqual(renderer.commitLog, []);
+});
+
+test("mount rejects a renderer viewCapabilities accessor without invoking it", () => {
+  const app = makeApp();
+  app.compiled.appIR.components[0].capabilities.push("effect.cancel");
+  const renderer = makeRenderer();
+  let getterCalls = 0;
+  Object.defineProperty(renderer, "viewCapabilities", {
+    enumerable: true,
+    get() { getterCalls += 1; return ["view.node"]; },
+  });
+
+  assert.throws(() => mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer,
+    hostCapabilities: ["effect.request-reply", "effect.cancel"],
+  }), /viewCapabilities/);
+  assert.equal(getterCalls, 0);
+  assert.equal(app.calls().initCalls, 0);
+});
+
+test("effectPolicy cannot authorize lifecycle.cancel without the app capability", () => {
+  const app = makeApp({
+    update(state, message, countCall) {
+      countCall();
+      return [state, [makeGoEffect({
+        Kind: "lifecycle.cancel", Name: "cancel", Arg: "parent:g1:r1", Reply: "",
+      })]];
+    },
+  });
+  const hostRequests = [];
+  let policyCalls = 0;
+  const runtime = mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer: makeRenderer(),
+    effectHost: { request(request) { hostRequests.push(request); } },
+    effectPolicy() { policyCalls += 1; return undefined; },
+  });
+
+  const result = runtime.dispatch(makeAction("1"), makeMessage("cancel"));
+  assert.equal(result.accepted, false);
+  assert.equal(policyCalls, 0);
+  assert.deepEqual(hostRequests, []);
+});
+
+test("replacement rejects a missing view profile before retiring the live renderer", () => {
+  const app = makeApp();
+  app.compiled.appIR.components[0].capabilities.push("effect.cancel");
+  let deliver;
+  const effectHost = { request(_request, callback) { deliver = callback; } };
+  const renderer = makeRenderer();
+  renderer.viewCapabilities = ["view.node", "binding.value", "binding.checked"];
+  const runtime = mountCompiledApp({
+    module: app.compiled,
+    componentId: COMPONENT_ID,
+    encoder: makeHelpers(),
+    renderer,
+    effectHost,
+    hostCapabilities: ["effect.request-reply", "effect.cancel"],
+  });
+  assert.equal(runtime.dispatch(makeAction("1"), makeMessage("load", "pending")).accepted, true);
+  const traceBefore = runtime.trace();
+  const candidate = makeRenderer();
+  candidate.viewCapabilities = [];
+
+  assert.throws(() => runtime.replaceRenderer(candidate), /viewCapabilities/);
+  assert.equal(renderer.unmounted, undefined);
+  assert.deepEqual(candidate.commitLog, []);
+  assert.deepEqual(runtime.trace(), traceBefore);
+  assert.deepEqual(runtime.effectDiagnostics().pending, [{ dispatchId: "dispatch-0001", effectIndex: 0, queued: false }]);
+  assert.deepEqual(runtime.rendererDiagnostics().replacements, [{
+    attempt: 1,
+    fromGeneration: 1,
+    toGeneration: null,
+    outcome: "rejected",
+    phase: "admission",
+    oldUnmounted: false,
+    focusCaptured: false,
+    focusRestored: false,
+  }]);
+
+  const callbackResult = renderer.callbacks.dispatch(makeAction("1"), makeMessage("add"));
+  assert.equal(callbackResult.accepted, true);
+  assert.equal(renderer.currentView.Text, "count=1;pending=true");
+  assert.equal(deliver({
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    message: { name: "complete", arg: "still-live" },
+  }).accepted, true);
+});
+
+test("candidate profile traps cannot mutate the host or replace the active renderer", () => {
+  const { renderer: oldRenderer, runtime } = setup();
+  const traceBefore = runtime.trace();
+  let callbackAttempt;
+  let nestedReplacementError;
+  const candidate = new Proxy(makeRenderer(), {
+    getOwnPropertyDescriptor(target, key) {
+      if (key === "viewCapabilities") {
+        callbackAttempt = oldRenderer.callbacks.dispatch(makeAction("1"), makeMessage("add"));
+        try {
+          runtime.replaceRenderer(makeRenderer());
+        } catch (error) {
+          nestedReplacementError = error.message;
+        }
+        return { value: [], writable: true, enumerable: true, configurable: true };
+      }
+      return Reflect.getOwnPropertyDescriptor(target, key);
+    },
+  });
+
+  assert.throws(() => runtime.replaceRenderer(candidate), /viewCapabilities/);
+  assert.equal(callbackAttempt.accepted, false);
+  assert.match(nestedReplacementError, /reentrant/i);
+  assert.equal(oldRenderer.unmounted, undefined);
+  assert.deepEqual(runtime.trace(), traceBefore);
+  assert.equal(runtime.rendererDiagnostics().currentGeneration, 1);
+  assert.deepEqual(oldRenderer.currentView.Text, "count=0;pending=false");
+  assert.equal(oldRenderer.callbacks.dispatch(makeAction("1"), makeMessage("add")).accepted, true);
+  assert.equal(oldRenderer.currentView.Text, "count=1;pending=false");
+});
+
 function stateField(tick, name) {
   return tick.state.fields.find((field) => field.name === name).value;
 }
@@ -472,22 +660,30 @@ test("an effect-host failure is explicit and does not duplicate the committed tr
 });
 
 test("compiled effects require the exact marked GoScript struct ABI", () => {
-  const makeRuntimeWithEffect = (rawEffect, effectPolicy = null) => {
+  const makeRuntimeWithEffect = (rawEffect, effectPolicy = null, {
+    capabilities = [],
+    hostCapabilities = undefined,
+    viewCapabilities = null,
+  } = {}) => {
     const app = makeApp({
       update(state, message, countCall) {
         countCall();
         return [{ ...state, Pending: true }, [rawEffect]];
       },
     });
+    app.compiled.appIR.components[0].capabilities.push(...capabilities);
+    const renderer = makeRenderer();
+    if (viewCapabilities !== null) renderer.viewCapabilities = viewCapabilities;
     const hostRequests = [];
     const runtime = mountCompiledApp({
       module: app.compiled,
       componentId: COMPONENT_ID,
       appId: APP_ID,
       encoder: makeHelpers(),
-      renderer: makeRenderer(),
+      renderer,
       effectHost: { request(request) { hostRequests.push(request); } },
       effectPolicy,
+      hostCapabilities,
     });
     return { app, hostRequests, runtime };
   };
@@ -574,6 +770,10 @@ test("compiled effects require the exact marked GoScript struct ABI", () => {
     if (effect.kind !== "lifecycle.request") {
       throw new TypeError("lifecycle effect is outside the closed request policy");
     }
+  }, {
+    capabilities: ["effect.cancel"],
+    hostCapabilities: ["effect.request-reply", "effect.cancel"],
+    viewCapabilities: ["view.node", "binding.value", "binding.checked"],
   });
   const closedResult = closed.runtime.dispatch(makeAction("1"), makeMessage("load", "parent:g1:r1"));
   assert.equal(closedResult.accepted, false);
@@ -941,12 +1141,12 @@ test("replacement rejects invalid, async, and reentrant admissions before old re
   let enteredGetter = false;
   const target = makeRenderer();
   const reentrantRenderer = new Proxy(target, {
-    get(object, key, receiver) {
+    getOwnPropertyDescriptor(object, key) {
       if (key === "update" && !enteredGetter) {
         enteredGetter = true;
         assert.throws(() => runtime.replaceRenderer(makeRenderer()), /reentrant/i);
       }
-      return Reflect.get(object, key, receiver);
+      return Reflect.getOwnPropertyDescriptor(object, key);
     },
   });
   assert.doesNotThrow(() => runtime.replaceRenderer(reentrantRenderer));

@@ -1,0 +1,137 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compilercontract/**, compiled-frontend/analyze/**",
+      "summary": "Go contract and analyzer capability discovery; freeze additive wire contract; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now."
+    },
+    {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-frontend/frontend/runtime/**, compiled-frontend/frontend/react/renderer.mjs, compiled-frontend/frontend/dom/renderer.mjs, compiled-lifecycle/runtime/runtime.mjs, compiled-frontend/frontend/react/bindings.mjs and associated binding tests",
+      "summary": "Host and renderer admission, atomic rejected swaps, focused runtime tests; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now."
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-capabilities/conformance/**",
+      "summary": "Actual compiled React/DOM mounted conformance and rejection replay; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now."
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/oracle/**",
+      "summary": "Independent literal expectations, hostile descriptors, mutation controls; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now."
+    },
+    {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/demo/**",
+      "summary": "Executable compatible/incompatible backend demonstration and smoke check; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now."
+    },
+    {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/run.mjs, run-compiled-capabilities.sh, .github/workflows/gobi-compiled-capabilities.yml, compiled-capabilities/README.md, compiled-capabilities/RESULTS.md",
+      "summary": "End-to-end runner, inherited regressions, CI, documentation; dependent implementation gated on root contract freeze; read-only recon/scaffolding authorized now."
+    },
+    {
+      "id": "E-FIX-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compilercontract/**, compiled-frontend/analyze/**",
+      "summary": "Repair XR-GO empty-token static capability inconsistency; present typed string payload is sufficient. Preserve original AMEND and tests.",
+      "repair_of": "XR-GO"
+    },
+    {
+      "id": "E-FIX-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/run.mjs, compiled-capabilities/README.md, RESULTS.md and narrow archive helper/tests if needed",
+      "repair_of": "XR-BUILD",
+      "summary": "Include immutable full-run execution/source-pin/command/version provenance snapshot in raw replay archive, with explicit archive-pending status and noncyclic final external receipt."
+    },
+    {
+      "id": "E-FIX-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-capabilities/conformance/**",
+      "repair_of": "XR-HARNESS",
+      "summary": "Construct real host option accessor, recompute raw rejected and compatible state/view/DOM/pending preservation, remove synthetic active-profile passthrough, and detect nine independent capture mutations."
+    },
+    {
+      "id": "E-PREP-PROVENANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/provenance/**",
+      "summary": "Prepare independent source-tree/full-receipt provenance audit; current/future execution distinguished, no unexecuted pass."
+    },
+    {
+      "id": "E-PREP-SCHEDULER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/scheduler/**",
+      "summary": "Prepare independent native state/epoch/dispatch/receipt/capacity auditor including superseded AMENDs and rejected solver recommendations."
+    },
+    {
+      "id": "E-PREP-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/custody/**",
+      "summary": "Freeze and hash immutable pre-repair author/review raw traces and failures into reconstructible archival chunks; no rewrite of originals."
+    },
+    {
+      "id": "E-PREP-ARCHIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/archive/**",
+      "summary": "Prepare independent replay archive/provenance/command/version/source-pin verifier for repaired noncyclic archive protocol."
+    }
+  ]
+}

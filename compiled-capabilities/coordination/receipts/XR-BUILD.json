@@ -1,0 +1,93 @@
+{
+  "job_id": "XR-BUILD",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "Reviewed N6's full-mode runner, shell entrypoint, CI workflow, ignore rules, documentation, author receipt, and N3/N4/N5 interfaces. The runner's source-set and output checks are sound, but the archive omits the full-run source-pin, versions, and command ledger needed for an inner replay payload.",
+  "findings": [
+    {
+      "id": "XR-BUILD-1",
+      "severity": "blocking",
+      "title": "Archive does not contain the full-run replay provenance",
+      "locations": [
+        "compiled-capabilities/run.mjs:871-925",
+        "compiled-capabilities/run.mjs:1053-1095"
+      ],
+      "detail": "makeArchive() only enumerates react, dom, demo, matrix, and logs, plus inherited lifecycle files. The complete runner receipt (including sourceBefore, versions, and commands) is written to compiled-capabilities/coordination/receipts/E-BUILD.json and attemptRoot/execution.json, but neither is included in the tar. sourceAfter is captured only after archive creation. The archive manifest is likewise kept outside the tar; its hash is correctly referenced by the final outer receipt, but the archive itself cannot replay the complete run's source provenance.",
+      "requested_repair": "Before archiving, write an immutable execution-before-archive.json snapshot containing sourceBefore, toolchain/dependency versions, command ledger, and an explicit archive-pending state; include that payload in the tar. Keep sourceAfter in the final outer receipt after archive creation, which also binds the archive hash. Either include the archive manifest under an explicit self-excluded hash policy or leave it outside and bind its exact hash in the final receipt. Preserve the final canonical receipt outside the immutable tar to avoid a self-hash cycle.",
+      "acceptance_effect": "A successful round-trip currently proves only the listed artifact directories, not the required full-run sourceBefore and execution provenance payload."
+    }
+  ],
+  "verified_properties": [
+    "The runner rejects every nonempty argument list and exposes only full mode; there is no partial mode.",
+    "M0 regeneration and all 24 SHA256SUMS checks occur before sourceBefore is captured; the inherited full lifecycle run is invoked before fresh React/DOM capability builds.",
+    "Fresh React and DOM profiles are built through the real GoScript CLI and the runner checks 67 output pins plus the exact five AppIR capabilities. AppIR and encoder equality are checked while raw generated module hashes remain separate; no cross-output bundle equality is claimed.",
+    "N3's 13 required flags match N6's invocation. `--native-go` receives the Go command path and the inherited lifecycle runner executes `go run ./cmd/compiled-lifecycle-native --script <fixture>`; it is not passed a compiled native binary.",
+    "N3's actual capture filename `<prefix>.capability.browser.capture.json` matches the N6 copy and required suffix `capability.browser.capture.json` (dots); the raw capture, summaries, native/direct/browser traces, and failure artifact are included in the attempt matrix when produced.",
+    "N4 is invoked with Node's `--test` runner on its independent literal-oracle test, which reads the checked-in expectations JSON. N5 builder/smoke flags and result schema match the runner's invocations and assertions.",
+    "A failed stage remains in receipt.failures and the final status cannot become passed; a source-pin mismatch also forces failure. The full-run author report and receipt correctly remain pending and do not claim acceptance."
+  ],
+  "checks": [
+    {
+      "command": "set -euo pipefail\nnodebin=/tmp/gondola-node22/node_modules/node/bin/node\nfor file in compiled-capabilities/run.mjs compiled-capabilities/conformance/run.mjs compiled-capabilities/oracle/literal-oracle.test.mjs compiled-capabilities/demo/build.mjs compiled-capabilities/demo/smoke.mjs compiled-lifecycle/conformance/run.mjs compiled-lifecycle/conformance/browser-entry.mjs compiled-capabilities/coordination/reviews/XR-BUILD/interface-probe.mjs; do\n  printf '%s\\n' \"node --check $file\"\n  \"$nodebin\" --check \"$file\"\ndone 2>&1 | tee compiled-capabilities/coordination/reviews/XR-BUILD/logs/node-syntax.log",
+      "workdir": "repository root",
+      "result": "passed; all eight JavaScript files parsed under Node v22.23.4; Node emitted only its experimental EnvHttpProxyAgent warning",
+      "log": "compiled-capabilities/coordination/reviews/XR-BUILD/logs/node-syntax.log"
+    },
+    {
+      "command": "bash -n run-compiled-capabilities.sh",
+      "workdir": "repository root",
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/reviews/XR-BUILD/logs/bash-syntax.log"
+    },
+    {
+      "command": "python -c 'import yaml; yaml.safe_load(open(\".github/workflows/gobi-compiled-capabilities.yml\", encoding=\"utf-8\")); print(\"workflow YAML parsed\")'",
+      "workdir": "repository root",
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/reviews/XR-BUILD/logs/workflow-yaml.log"
+    },
+    {
+      "command": "python -c 'import json; json.load(open(\"compiled-capabilities/coordination/receipts/E-BUILD.json\", encoding=\"utf-8\")); print(\"E-BUILD receipt JSON parsed\")'",
+      "workdir": "repository root",
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/reviews/XR-BUILD/logs/receipt-json.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/reviews/XR-BUILD/interface-probe.mjs",
+      "workdir": "repository root",
+      "result": "passed; all 13 N3 flags parsed, the Go executable path was preserved, native replay source confirmed `go run`, N4 `--test`/expectations and N5 build/smoke flags matched, and N3/N6 browser-capture suffixes matched",
+      "log": "compiled-capabilities/coordination/reviews/XR-BUILD/logs/interface-probe-passed.log"
+    }
+  ],
+  "reviewed_source_sha256": {
+    ".github/workflows/gobi-compiled-capabilities.yml": "b3f12e7ff8f3bc4ce3f125588a2a00b5b8025e3dc262db28e11a98b225997965",
+    "run-compiled-capabilities.sh": "41189de39f6c29ba01729442ba4b3b7f22aa79dbd81d5220ea56456a6e9f5bd5",
+    "compiled-capabilities/run.mjs": "b4990e1212ef743c2762c946662e18f813c94c3b54d739e3f5b62224cac9d7b3",
+    "compiled-capabilities/.gitignore": "27da7c86d9ee7741fa60420934d97760c6a63b08f4f11a895d22168bd3031872",
+    "compiled-capabilities/README.md": "7bb177e2b20d4bb96fdb445d60424f551804333c94479d9980fc23d5ede391f8",
+    "compiled-capabilities/RESULTS.md": "03befd55df89b7bd43bdc57ef4c646b38cd1e5876536be13a537ed7514fdc2ab",
+    "compiled-capabilities/coordination/receipts/E-BUILD.json": "65aaece092033ee46ae74812b4b16a538bce5f79d1c0d3c86482f54f7a487d71",
+    "compiled-capabilities/coordination/reports/E-BUILD.md": "cb433943bbac3cf92c8ea5c8c8535a99e864c1b4a2829c47917d6554584fc914",
+    "compiled-capabilities/conformance/run.mjs": "e23d6e4139977aafd134ef936d6e6c5cc351df928efa7c2ae91f45542052d183",
+    "compiled-capabilities/oracle/literal-oracle.test.mjs": "6ff34cd37ae9cbc7e8e63eb31972fb009793493551122c497e8e0c98d51bbe57",
+    "compiled-capabilities/oracle/expectations.json": "bce92447403c8afe81d23aedc67d4c6751e8c77a5bec18ecce9cc0df262855a4",
+    "compiled-capabilities/demo/build.mjs": "b6f5f49048418e20e59c6f09e9fea753610015fef8ceecb611d9da8c01912326",
+    "compiled-capabilities/demo/smoke.mjs": "a801bd23e4b209a082c01abebe8157282a3d2ae75f4a01e8de72f29ad6254cc8",
+    "compiled-lifecycle/conformance/run.mjs": "751d04d6aa73662d63295bc09cc74875011700c096c2749ae5196e3e116d753f",
+    "compiled-lifecycle/conformance/browser-entry.mjs": "56ba9f2b2f6119b341360e78d0893572ea53a089bb4ebc0d83357166e86491f6",
+    "compiled-capabilities/coordination/reviews/XR-BUILD/interface-probe.mjs": "70226060d0f370291955f200d191137e2b104ffd9187a5df3ef8215d37c1749a"
+  },
+  "log_sha256": {
+    "compiled-capabilities/coordination/reviews/XR-BUILD/logs/node-syntax.log": "8c6fc6df0289bbd77ecc9bd2f65c58a7ca4a0ce5bbab47f17eb582b117812630",
+    "compiled-capabilities/coordination/reviews/XR-BUILD/logs/bash-syntax.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-BUILD/logs/workflow-yaml.log": "55f5d0210da4c1f8d08bc76a4133a810979ddd34e94bb30c324ad52926614399",
+    "compiled-capabilities/coordination/reviews/XR-BUILD/logs/receipt-json.log": "24a234163ad1175a2b7706e5a7f7389ce1776d00f07a48b289daf3d7cd478d6f",
+    "compiled-capabilities/coordination/reviews/XR-BUILD/logs/interface-probe-final.log": "019eab3a402bac0f794cca66b24b6076b5f9afc37f15a8471b17050b119e4cda",
+    "compiled-capabilities/coordination/reviews/XR-BUILD/logs/reviewer-probe-syntax-typo.log": "eb46e778fb827b2cc15db7924b522759c120f11779bee2506a2b5d4f87c72a81"
+  },
+  "limitations": [
+    "The full inherited run and capability runner were not executed; this review did not create acceptance evidence or alter M0 receipts. The N3 profile-forward adapter change was inspected and syntax-checked, but the N3 focused runtime pass remains pending.",
+    "An initial reviewer-authored read-only probe command had a JavaScript quoting typo. Its failed output is preserved in reviewer-probe-syntax-typo.log; the corrected interface probe passed. No product command was run by the failed probe."
+  ],
+  "integration": "E-BUILD remains pending root's full integrated run. Requested repair is limited to replay-provenance archive payload completeness.",
+  "publication": "This review made no production edits. No Git commit, merge, or deploy was performed."
+}

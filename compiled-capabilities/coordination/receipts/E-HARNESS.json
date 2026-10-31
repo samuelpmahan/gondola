@@ -1,0 +1,144 @@
+{
+  "job_id": "E-HARNESS",
+  "worker": "N3",
+  "summary": "Added an actual compiled GoScript capability admission and atomic React/DOM swap conformance driver. The focused native/direct/browser lifecycle replay and the N4-driven capability checks matched.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/capability-browser-entry.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/capability-browser.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/conformance/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/browser-entry.mjs",
+      "workdir": "repository root",
+      "result": "passed; Node v22.23.4; all five modules parsed (Node emitted the environment's UNDICI-EHPA experimental warning)"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/conformance/run.mjs --react-app-ir compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/app-ir.json --react-compiled compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --react-helpers compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/encoder.mjs --react-manifest compiled-capabilities/builds/feasibility/react/output/buildmanifest.json --dom-app-ir compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/app-ir.json --dom-compiled compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --dom-helpers compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/encoder.mjs --dom-manifest compiled-capabilities/builds/feasibility/dom/output/buildmanifest.json --native-go /tmp/gondola-go/bin/go --fixture fixtures/compiled/lifecycle/scenario.json --expectations compiled-capabilities/oracle/expectations.json --chromium /tmp/chromium --output /tmp/gobi-capability-focused-N3-20261031-03/conformance",
+      "workdir": "repository root",
+      "result": "passed; exit 0; Node v22.23.4; Go go1.24.0; Chromium 153.0.8010.0; Playwright 1.64.1; run status matched; 19 admission cases; 26 lifecycle ticks; 16 clicks; 7 requests; 3 cancellations; 8 mutation controls detected; source/build pins stable; no WebAssembly API attempts or requests. Full invocation argv, stdout/stderr, traces, and checks are retained in compiled-capabilities/conformance/evidence/attempt-03/."
+    },
+    {
+      "command": "/tmp/gondola-go/bin/go run ./cmd/compiled-lifecycle-native --script /workspace/scratch/39a56936f173/gondola-capabilities/fixtures/compiled/lifecycle/scenario.json",
+      "workdir": "repository root (launched by conformance/run.mjs)",
+      "result": "passed; native Go State and Gobi tree projection matched the frozen lifecycle fixture and direct/browser traces"
+    }
+  ],
+  "focusedRun": {
+    "status": "matched",
+    "attempt": "compiled-capabilities/conformance/evidence/attempt-03",
+    "fixture": "compiled-lifecycle-parent-child-grandchild-remount-fence",
+    "removeRemountResetAndSecondAddEvents": [
+      9,
+      10,
+      16,
+      17,
+      18
+    ],
+    "browserProfiles": [
+      "react",
+      "dom",
+      "swap"
+    ],
+    "capabilityAdmissionCases": 19,
+    "allAdmissionCasesRejectedBeforeInitOrRender": true,
+    "strictHostDeclarations": 6,
+    "strictRendererDeclarations": 6,
+    "expectedAndObservedRejectedSwapPreservation": [
+      "state",
+      "view",
+      "dom",
+      "pendingEffect",
+      "oldRendererLease",
+      "oldRendererCallbacks"
+    ],
+    "expectedAndObservedCompatibleSwapPreservation": [
+      "state",
+      "view",
+      "dom",
+      "pendingEffect"
+    ],
+    "rejectedSwapDiagnostic": {
+      "phase": "admission",
+      "oldUnmounted": false,
+      "toGeneration": null
+    },
+    "oldPhysicalClickContinuedAfterRejectedSwap": true,
+    "oldCallbackFencedAfterCompatibleCommit": true,
+    "pendingReplyAcceptedAfterCompatibleCommit": true,
+    "disabledRequestClickSuppressed": true,
+    "activeProbeTraceMessages": [
+      null,
+      { "name": "addParent", "arg": "" },
+      { "name": "requestParent", "arg": "" },
+      { "name": "addParent", "arg": "" },
+      { "name": "complete", "arg": "parent:g1:r1" }
+    ],
+    "nativeDirectBrowserLiteralParity": true,
+    "sourceStableThroughCheck": true,
+    "buildOutputsStableThroughCheck": true
+  },
+  "versions": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "playwright": "1.64.1"
+  },
+  "inputs": {
+    "fixture": {
+      "path": "fixtures/compiled/lifecycle/scenario.json",
+      "sha256": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650"
+    },
+    "expectations": {
+      "path": "compiled-capabilities/oracle/expectations.json",
+      "sha256": "bce92447403c8afe81d23aedc67d4c6751e8c77a5bec18ecce9cc0df262855a4"
+    },
+    "react": {
+      "manifestSha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+      "appIrSha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+      "compiledModuleSha256": "6b2eddfdfe5cdfa9e4929f4ac1cd7c3ee56d6b8e733dc2028a1ca99c3f6753e7",
+      "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    },
+    "dom": {
+      "manifestSha256": "220ce759d04093c95185088a91ae8a6556be44a3aeebb6f327dc7281a473e4e4",
+      "appIrSha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+      "compiledModuleSha256": "097b7e36da40f2aff6359e80d12c2d9439be945eb26b250923212dab5a847ba5",
+      "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    },
+    "componentCapabilities": [
+      "view.node",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ]
+  },
+  "sourceCheckpoint": {
+    "conformanceRunSha256": "e23d6e4139977aafd134ef936d6e6c5cc351df928efa7c2ae91f45542052d183",
+    "capabilityBrowserEntrySha256": "894161f4a3f6f7e123c2ed165007e06705527a2d2d51116f249c3efaa340c7e3",
+    "lifecycleBrowserEntrySha256": "56ba9f2b2f6119b341360e78d0893572ea53a089bb4ebc0d83357166e86491f6",
+    "frontendRuntimeSha256": "52c44ead9f79f75ef7b211168d4cdb1260544846e8735f67cad93ff470240c5f",
+    "lifecycleRuntimeSha256": "a433ae736c33ac4df68a1e17db708db48161f601f84f5bc441ce6e6f21b1f4df",
+    "pinnedSources": 15
+  },
+  "attemptHistory": [
+    {
+      "attempt": "compiled-capabilities/conformance/evidence/attempt-01",
+      "status": "rejected",
+      "reason": "conformance composition omitted the inherited frozen contract, schedule, and browser-adapter arguments before native replay"
+    },
+    {
+      "attempt": "compiled-capabilities/conformance/evidence/attempt-02",
+      "status": "rejected",
+      "reason": "inherited lifecycle renderer wrapper did not forward core.viewCapabilities; native and direct stages passed and the capability browser probe completed"
+    },
+    {
+      "attempt": "compiled-capabilities/conformance/evidence/attempt-03",
+      "status": "matched",
+      "runJsonSha256": "fa867ca149d4d70f338691bab2de31f71502b32f01d92400bdcaa8b41164afbf",
+      "capabilityCheckSha256": "ba38359c2ef44fa9009459b28d64c9e036112dddeabced0ba0c31b30de7b45e5"
+    }
+  ],
+  "limitations": [
+    "The focused run used the N6 feasibility builds. Root still owns the full fresh-build chain, inherited regressions, and final source-pin/archive decision; this author result is not the complete milestone acceptance run.",
+    "No commit, merge, deploy, or Git operation was performed by N3."
+  ],
+  "integration": "Focused actual GoScript/native/direct/React/DOM/swap conformance passed. Awaiting the root-owned full runner and independent review.",
+  "publication": "No commit, merge, or deploy."
+}

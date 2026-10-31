@@ -1,0 +1,143 @@
+{
+  "job_id": "E-BUILD",
+  "worker": "N6",
+  "summary": "Implemented the full capability milestone runner, M0/source pinning, CI workflow, and documentation. Focused GoScript build and static interface preflights passed; root owns the full integrated run after reviews. No end-to-end acceptance result is claimed in this author checkpoint.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "GOTOOLCHAIN=local /tmp/gondola-go/bin/go version",
+      "workdir": "repository root",
+      "result": "passed; go version go1.24.0 linux/amd64"
+    },
+    {
+      "command": "GOTOOLCHAIN=go1.27.3 /tmp/gondola-go/bin/go version",
+      "workdir": "repository root",
+      "result": "passed; go version go1.27.3 linux/amd64"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go run ./cmd/gobi emit react > compiled-capabilities/builds/feasibility/m0-emit.stdout.log 2> compiled-capabilities/builds/feasibility/m0-emit.stderr.log",
+      "workdir": "repository root",
+      "result": "passed; regenerated the ignored react-map.gen.mjs in the clean worktree with Go 1.24 before verifying the original M0 source pins"
+    },
+    {
+      "command": "sha256sum -c SHA256SUMS",
+      "workdir": "repository root",
+      "result": "passed; all 24 original entries were OK, including the freshly regenerated react-map.gen.mjs"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build < ../compiled-capabilities/builds/feasibility/react/request.json > ../compiled-capabilities/builds/feasibility/react/result.json 2> ../compiled-capabilities/builds/feasibility/react/stderr.log",
+      "workdir": "compiled-frontend/",
+      "result": "passed; React gobi.build-result/v1 returned ok=true and 67 output pins; AppIR declared view.node, numeric.safe-integer, numeric.float64, effect.request-reply, effect.cancel"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build < ../compiled-capabilities/builds/feasibility/dom/request.json > ../compiled-capabilities/builds/feasibility/dom/result.json 2> ../compiled-capabilities/builds/feasibility/dom/stderr.log",
+      "workdir": "compiled-frontend/",
+      "result": "passed; DOM gobi.build-result/v1 returned ok=true and 67 output pins; AppIR declared view.node, numeric.safe-integer, numeric.float64, effect.request-reply, effect.cancel"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/run.mjs",
+      "workdir": "repository root",
+      "result": "passed; exit 0 (Node emitted an experimental EnvHttpProxyAgent warning)"
+    },
+    {
+      "command": "bash -n run-compiled-capabilities.sh",
+      "workdir": "repository root",
+      "result": "passed; shell syntax parsed"
+    },
+    {
+      "command": "python -c 'import yaml; yaml.safe_load(open(\".github/workflows/gobi-compiled-capabilities.yml\", encoding=\"utf-8\")); print(\"workflow YAML parsed\")'",
+      "workdir": "repository root",
+      "result": "passed; workflow YAML parsed"
+    },
+    {
+      "command": "python -c 'import json, yaml; json.load(open(\"compiled-capabilities/coordination/receipts/E-BUILD.json\", encoding=\"utf-8\")); yaml.safe_load(open(\".github/workflows/gobi-compiled-capabilities.yml\", encoding=\"utf-8\")); print(\"E-BUILD receipt JSON and workflow YAML parsed\")'",
+      "workdir": "repository root",
+      "result": "passed; E-BUILD author receipt JSON and workflow YAML parsed"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'const fs=require(\"node:fs\"),assert=require(\"node:assert/strict\"); const n=fs.readFileSync(\"compiled-capabilities/conformance/run.mjs\",\"utf8\"); for(const x of [\"--react-app-ir\",\"--react-compiled\",\"--react-helpers\",\"--react-manifest\",\"--dom-app-ir\",\"--dom-compiled\",\"--dom-helpers\",\"--dom-manifest\",\"--native-go\",\"--fixture\",\"--expectations\",\"--chromium\",\"--output\"]) assert(n.includes(JSON.stringify(x)),x); for(const x of [\"native: `${lifecycleStem}.native.json`\",\"direct: `${lifecycleStem}.direct.json`\",\"capabilityBrowser: `${capabilityBrowserStem}.browser.capture.json`\",\"capabilityCheck: `${outputStem}.capability-check.json`\"]) assert(n.includes(x),x); const e=JSON.parse(fs.readFileSync(\"compiled-capabilities/oracle/expectations.json\",\"utf8\")); assert.equal(e.schema,\"gobi.capability-oracle/v1\"); assert(fs.readFileSync(\"compiled-capabilities/oracle/literal-oracle.test.mjs\",\"utf8\").includes(\"./expectations.json\")); for(const [p,xs] of [[\"compiled-capabilities/demo/build.mjs\",[\"--compiled\",\"--output\",\"--backend\"]],[\"compiled-capabilities/demo/smoke.mjs\",[\"--demo\",\"--output\",\"--screenshot\",\"--port\"]]]) { const s=fs.readFileSync(p,\"utf8\"); for(const x of xs) assert(s.includes(JSON.stringify(x)),x); } console.log(\"N3/N4/N5 CLI paths and required flags align\")'",
+      "workdir": "repository root",
+      "result": "passed; all 13 N3 flags and output path templates matched; N4 expectations.json parsed and was imported by its test; N5 builder/smoke flags matched the runner"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --version",
+      "workdir": "repository root",
+      "result": "passed; v22.23.4"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node -e 'const fs=require(\"node:fs\"); for (const [name,lock,pkg] of [[\"react\",\"interaction/package-lock.json\",\"interaction/node_modules/react/package.json\"],[\"reactDOM\",\"interaction/package-lock.json\",\"interaction/node_modules/react-dom/package.json\"],[\"playwright\",\"interaction/package-lock.json\",\"interaction/node_modules/playwright/package.json\"],[\"esbuild\",\"interaction/package-lock.json\",\"interaction/node_modules/esbuild/package.json\"],[\"frontendEsbuild\",\"compiled-frontend/package-lock.json\",\"compiled-frontend/node_modules/esbuild/package.json\"]]) { const locked=JSON.parse(fs.readFileSync(lock,\"utf8\")).packages[`node_modules/${name === \"reactDOM\" ? \"react-dom\" : name === \"frontendEsbuild\" ? \"esbuild\" : name}`].version; const actual=JSON.parse(fs.readFileSync(pkg,\"utf8\")).version; if (locked !== actual) throw new Error(`${name}: installed ${actual}, locked ${locked}`); console.log(`${name}: ${actual} (matches lock)`); }'",
+      "workdir": "repository root",
+      "result": "passed; react 19.3.1, react-dom 19.3.1, playwright 1.64.1, and esbuild 0.28.2 matched their existing lockfiles; compiled-frontend esbuild 0.28.2 also matched"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go build -o compiled-capabilities/builds/feasibility/native/compiled-lifecycle-native ./cmd/compiled-lifecycle-native",
+      "workdir": "repository root",
+      "result": "passed; built an ignored feasibility binary; N3 consumes the Go executable and performs its own native go run projection"
+    }
+  ],
+  "preflightBuilds": {
+    "acceptanceEvidence": false,
+    "fixture": "fixtures/compiled/lifecycle/scenario.json",
+    "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+    "capabilities": [
+      "view.node",
+      "numeric.safe-integer",
+      "numeric.float64",
+      "effect.request-reply",
+      "effect.cancel"
+    ],
+    "react": {
+      "output": "compiled-capabilities/builds/feasibility/react/output",
+      "request": "compiled-capabilities/builds/feasibility/react/request.json",
+      "result": {
+        "path": "compiled-capabilities/builds/feasibility/react/result.json",
+        "sha256": "1fd69da655db15d6ed6c731143ed1e21e450b69c85f1fb8f438e55b4d0fafe94"
+      },
+      "manifest": {
+        "path": "compiled-capabilities/builds/feasibility/react/output/buildmanifest.json",
+        "sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603"
+      },
+      "appIR": {
+        "path": "compiled-capabilities/builds/feasibility/react/output/apps/lifecycle-7e6575d90707/app-ir.json",
+        "sha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a"
+      },
+      "moduleSha256": "6b2eddfdfe5cdfa9e4929f4ac1cd7c3ee56d6b8e733dc2028a1ca99c3f6753e7",
+      "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    },
+    "dom": {
+      "output": "compiled-capabilities/builds/feasibility/dom/output",
+      "request": "compiled-capabilities/builds/feasibility/dom/request.json",
+      "result": {
+        "path": "compiled-capabilities/builds/feasibility/dom/result.json",
+        "sha256": "851e32fcab3d28a6bae339df044cfc3501c939cad5c4126ebb023e19929184d5"
+      },
+      "manifest": {
+        "path": "compiled-capabilities/builds/feasibility/dom/output/buildmanifest.json",
+        "sha256": "220ce759d04093c95185088a91ae8a6556be44a3aeebb6f327dc7281a473e4e4"
+      },
+      "appIR": {
+        "path": "compiled-capabilities/builds/feasibility/dom/output/apps/lifecycle-7e6575d90707/app-ir.json",
+        "sha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a"
+      },
+      "moduleSha256": "097b7e36da40f2aff6359e80d12c2d9439be945eb26b250923212dab5a847ba5",
+      "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    }
+  },
+  "dependencyInstall": {
+    "source": ".github/workflows/gobi-compiled-capabilities.yml",
+    "commands": [
+      "npm ci --no-audit --no-fund",
+      "npm ci --prefix interaction --no-audit --no-fund",
+      "npm ci --prefix compiled-frontend --no-audit --no-fund",
+      "interaction/node_modules/.bin/playwright install --with-deps chromium"
+    ],
+    "execution": "The CI workflow runs these before the full runner; N6 checked installed versions against lock entries without reinstalling."
+  },
+  "limitations": [
+    "The full runner, inherited run-compiled-lifecycle.sh chain, N3 replay/browser suite, N4 oracle invocation by N6, N5 smoke invocation by N6, full source-pin round trip, and archive have not been run by N6.",
+    "N4 and N5 author receipts contain their separate focused test results; these are not the full milestone acceptance run.",
+    "The focused React/DOM outputs live under ignored builds/feasibility and are inputs for agent preflights only, never full-run acceptance evidence."
+  ],
+  "integration": "pending root full-run after author and independent review lanes",
+  "publication": "No commit, merge, or deploy."
+}

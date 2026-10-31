@@ -1,0 +1,112 @@
+{
+  "epoch": 10,
+  "at": "2026-10-31T09:34:01.228486+00:00",
+  "ready_jobs": [
+    "E-PREP-PROVENANCE",
+    "E-PREP-SCHEDULER",
+    "E-PREP-CUSTODY",
+    "E-PREP-ARCHIVE"
+  ],
+  "pinned_workers": [
+    "N3",
+    "N6"
+  ],
+  "assignments": {
+    "N5": "E-PREP-ARCHIVE",
+    "N6": "E-FIX-BUILD",
+    "N3": "E-FIX-HARNESS",
+    "N2": "E-PREP-SCHEDULER",
+    "N1": "E-PREP-PROVENANCE",
+    "N4": "E-PREP-CUSTODY"
+  },
+  "dispatch": {
+    "N5": "E-PREP-ARCHIVE",
+    "N2": "E-PREP-SCHEDULER",
+    "N1": "E-PREP-PROVENANCE",
+    "N4": "E-PREP-CUSTODY"
+  },
+  "native_seconds": 0.005976671003736556,
+  "native_constraints": {
+    "solved": true,
+    "brokenVal": 0,
+    "brokenCount": 0,
+    "constraints": [
+      {
+        "name": "independent_review",
+        "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+        "value": 0
+      },
+      {
+        "name": "pin_in_flight",
+        "desc": "avoidMovingSpec: Avoid moving 2 objects",
+        "value": 0
+      },
+      {
+        "name": "ready_packet_capacity",
+        "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+        "value": 0
+      }
+    ]
+  },
+  "independent_capacity_check": true,
+  "independent_eligibility_check": true,
+  "exact_score": 400,
+  "native_score": 400,
+  "caps": {
+    "E-GO": 0,
+    "E-HOST": 0,
+    "E-HARNESS": 0,
+    "E-ORACLE": 0,
+    "E-DEMO": 0,
+    "E-BUILD": 0,
+    "XR-GO": 0,
+    "XR-HOST": 0,
+    "XR-HARNESS": 0,
+    "XR-ORACLE": 0,
+    "XR-DEMO": 0,
+    "XR-BUILD": 0,
+    "E-FIX-GO": 0,
+    "XR-FIX-GO": 0,
+    "E-FIX-BUILD": 1,
+    "XR-FIX-BUILD": 0,
+    "E-FIX-HARNESS": 1,
+    "XR-FIX-HARNESS": 0,
+    "E-PREP-PROVENANCE": 1,
+    "XR-PREP-PROVENANCE": 0,
+    "E-PREP-SCHEDULER": 1,
+    "XR-PREP-SCHEDULER": 0,
+    "E-PREP-CUSTODY": 1,
+    "XR-PREP-CUSTODY": 0,
+    "E-PREP-ARCHIVE": 1,
+    "XR-PREP-ARCHIVE": 0,
+    "BENCH": 6
+  },
+  "eligible": {
+    "E-PREP-PROVENANCE": [
+      "N1"
+    ],
+    "E-PREP-SCHEDULER": [
+      "N2"
+    ],
+    "E-PREP-CUSTODY": [
+      "N4"
+    ],
+    "E-PREP-ARCHIVE": [
+      "N5"
+    ]
+  },
+  "weights": {
+    "E-PREP-PROVENANCE": 100,
+    "E-PREP-SCHEDULER": 100,
+    "E-PREP-CUSTODY": 100,
+    "E-PREP-ARCHIVE": 100
+  },
+  "agent_by_worker": {
+    "N1": null,
+    "N2": null,
+    "N3": "/root/cap_harness",
+    "N4": null,
+    "N5": null,
+    "N6": "/root/cap_build"
+  }
+}
