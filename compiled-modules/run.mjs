@@ -2,11 +2,14 @@ import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import {
   mkdir,
+  lstat,
   mkdtemp,
   readFile,
   readdir,
   realpath,
   rm,
+  rmdir,
+  unlink,
   writeFile,
 } from "node:fs/promises";
 import { createServer } from "node:http";
@@ -406,6 +409,9 @@ async function discoverTests() {
 
 async function runFocusedTests() {
   currentStage = "focused-node-unit-tests";
+  const utf8BoundaryRoot = join(root, "fixtures/compiled");
+  const utf8AppBytes = await readFile(join(compilerDir, "build/testdata/utf8app/app.go"));
+  const utf8BoundaryNamesBefore = await captureUTF8BoundaryTestDirectories(utf8BoundaryRoot);
   const files = await discoverTests();
   if (files.length === 0) throw new Error("no ABI/runtime/conformance/oracle Node tests were found");
   const args = ["--test", ...files];
@@ -424,20 +430,112 @@ async function runFocusedTests() {
   await writeJSON(join(attemptRoot, "tests/focused-node-tests.json"), record);
   currentStage = "focused-go-tests";
   const goArgs = ["test", "-count=1", "./cmd/compiled-modules-native", "./fixtures/compiled/modulewire", "./fixtures/compiled/moduleparent", "./fixtures/compiled/modulechild", "./moduleabi"];
-  const goOutput = await execute("focused-go-tests", goExecutable, goArgs, {
-    cwd: root,
-    env: ROOT_GO_ENV,
-    maxBuffer: 128 * 1024 * 1024,
-  });
+  let goOutput;
+  let compilerOutput;
+  let utf8BoundaryCleanup;
   const compilerArgs = ["test", "-count=1", "./analyze", "./build", "./emit"];
-  const compilerOutput = await execute("focused-compiler-go-tests", goExecutable, compilerArgs, {
-    cwd: compilerDir,
-    env: COMPILER_GO_ENV,
-    maxBuffer: 128 * 1024 * 1024,
-  });
+  try {
+    goOutput = await execute("focused-go-tests", goExecutable, goArgs, {
+      cwd: root,
+      env: ROOT_GO_ENV,
+      maxBuffer: 128 * 1024 * 1024,
+    });
+    compilerOutput = await execute("focused-compiler-go-tests", goExecutable, compilerArgs, {
+      cwd: compilerDir,
+      env: COMPILER_GO_ENV,
+      maxBuffer: 128 * 1024 * 1024,
+    });
+  } finally {
+    utf8BoundaryCleanup = await cleanupGeneratedUTF8BoundaryTestDirectories({
+      fixturesRoot: utf8BoundaryRoot,
+      existingNames: utf8BoundaryNamesBefore,
+      expectedAppBytes: utf8AppBytes,
+    });
+  }
   testSummary.push({ command: goExecutable, args: goArgs, result: goOutput.trim().split(/\r?\n/).slice(-10) });
-  testSummary.push({ command: goExecutable, args: compilerArgs, cwd: compilerDir, result: compilerOutput.trim().split(/\r?\n/).slice(-10) });
+  testSummary.push({
+    command: goExecutable,
+    args: compilerArgs,
+    cwd: compilerDir,
+    result: compilerOutput.trim().split(/\r?\n/).slice(-10),
+    utf8BoundaryCleanup,
+  });
   await writeJSON(join(attemptRoot, "tests/focused-go-tests.json"), testSummary.slice(1));
+}
+
+async function captureUTF8BoundaryTestDirectories(fixturesRoot) {
+  const entries = await readdir(fixturesRoot, { withFileTypes: true });
+  return entries.filter((entry) => entry.name.startsWith("utf8boundary-")).map((entry) => entry.name).sort();
+}
+
+async function cleanupGeneratedUTF8BoundaryTestDirectories({ fixturesRoot, existingNames, expectedAppBytes }) {
+  const existing = new Set(existingNames);
+  const entries = await readdir(fixturesRoot, { withFileTypes: true });
+  const generated = entries.filter((entry) => entry.name.startsWith("utf8boundary-") && !existing.has(entry.name));
+  const safe = [];
+  const unsafe = [];
+
+  for (const entry of generated) {
+    const directoryPath = join(fixturesRoot, entry.name);
+    if (!entry.isDirectory()) {
+      unsafe.push({ name: entry.name, reason: entry.isSymbolicLink() ? "entry is a symlink" : "entry is not a directory" });
+      continue;
+    }
+    const directoryInfo = await lstat(directoryPath);
+    if (!directoryInfo.isDirectory() || directoryInfo.isSymbolicLink()) {
+      unsafe.push({ name: entry.name, reason: "directory path is not an ordinary directory" });
+      continue;
+    }
+    const contents = await readdir(directoryPath, { withFileTypes: true });
+    if (contents.length !== 1 || contents[0].name !== "app.go" || !contents[0].isFile()) {
+      unsafe.push({ name: entry.name, reason: "directory must contain only one ordinary app.go file" });
+      continue;
+    }
+    const appPath = join(directoryPath, "app.go");
+    const appInfo = await lstat(appPath);
+    if (!appInfo.isFile() || appInfo.isSymbolicLink()) {
+      unsafe.push({ name: entry.name, reason: "app.go is not an ordinary file" });
+      continue;
+    }
+    const appBytes = await readFile(appPath);
+    if (!appBytes.equals(expectedAppBytes)) {
+      unsafe.push({ name: entry.name, reason: "app.go bytes differ from the tracked UTF-8 fixture" });
+      continue;
+    }
+    safe.push({
+      name: entry.name,
+      directoryPath,
+      appPath,
+      directoryIdentity: { dev: directoryInfo.dev, ino: directoryInfo.ino },
+      appIdentity: { dev: appInfo.dev, ino: appInfo.ino },
+      appBytes,
+    });
+  }
+
+  if (unsafe.length !== 0) {
+    throw new Error(`refusing to clean unsafe generated UTF-8 fixture directories: ${JSON.stringify(unsafe)}`);
+  }
+
+  const removed = [];
+  for (const candidate of safe) {
+    const directoryInfo = await lstat(candidate.directoryPath);
+    const contents = await readdir(candidate.directoryPath, { withFileTypes: true });
+    const appInfo = await lstat(candidate.appPath);
+    const appBytes = await readFile(candidate.appPath);
+    if (!directoryInfo.isDirectory() || directoryInfo.isSymbolicLink() ||
+        directoryInfo.dev !== candidate.directoryIdentity.dev || directoryInfo.ino !== candidate.directoryIdentity.ino ||
+        contents.length !== 1 || contents[0].name !== "app.go" || !contents[0].isFile() ||
+        !appInfo.isFile() || appInfo.isSymbolicLink() ||
+        appInfo.dev !== candidate.appIdentity.dev || appInfo.ino !== candidate.appIdentity.ino ||
+        !appBytes.equals(expectedAppBytes)) {
+      throw new Error(`generated UTF-8 fixture directory changed before cleanup: ${candidate.name}`);
+    }
+    await unlink(candidate.appPath);
+    await rmdir(candidate.directoryPath);
+    removed.push({ name: candidate.name, appBytes: candidate.appBytes.length, appSHA256: sha256(candidate.appBytes) });
+  }
+
+  return { prefix: "utf8boundary-", existingNames: [...existingNames], observedNewNames: generated.map((entry) => entry.name), removed };
 }
 
 async function runConformance() {
