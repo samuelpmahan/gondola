@@ -1,0 +1,29 @@
+XR-FINAL-ACCEPTANCE independent review command record
+Interpreter/source identity sampled at 2026-10-31 15:39:11 UTC
+Reviewer workspace: /workspace/scratch/39a56936f173/gondola-next (scheduler/evidence only)
+Physical source462 checkout: /workspace/scratch/39a56936f173/gondola-children-archive
+Physical source commit: 462a9827bfe1980600456b00d0a67843eaa9756d
+Pinned review interpreter: /tmp/gondola-rebalancer-env/bin/python (Python 3.12.14)
+
+Final local/hosted evidence verification:
+PYTHONDONTWRITEBYTECODE=1 /tmp/gondola-rebalancer-env/bin/python -B compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/review.py > compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/verification.stdout.json 2> compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/verification.stderr.log
+Result: exit 0; verification.stderr.log is empty; verification.stdout.json has decision=accepted.
+
+Closed N6 receipt protocol validation:
+PYTHONDONTWRITEBYTECODE=1 /tmp/gondola-rebalancer-env/bin/python -B compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/validate-completed-receipt.py > compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/receipt-validation.stdout.json 2> compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/receipt-validation.stderr.log
+Result: exit 0; receipt-validation.stderr.log is empty; pinned probe.py::validate_receipt accepted the completed N6 receipt and confirmed scheduler state unchanged.
+
+Prepare and validate this review receipt:
+PYTHONDONTWRITEBYTECODE=1 /tmp/gondola-rebalancer-env/bin/python -B compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/seal-review.py
+PYTHONDONTWRITEBYTECODE=1 /tmp/gondola-rebalancer-env/bin/python -B compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/validate-own-receipt.py
+Result: after sealing, final probe.py validation exited 0 and confirmed the final receipt/rawlog pins plus unchanged scheduler bytes.
+
+Independent checks performed by review.py:
+- hashed all 147 sourceBefore/sourceAfter paths against the physical source462 checkout;
+- streamed all local archive members and payload hashes against the external manifest without extraction or copy;
+- verified hosted child ZIP CRCs and streamed its inner archive against its manifest without extraction or copy;
+- checked hosted Counter ZIP CRCs and the archived trace hash;
+- checked previous packet/rawlog pins and historical selected/retry1 archive hashes and member counts;
+- checked the current 32-run source462 matrix as a separate later snapshot.
+
+No full pipeline, unit suite, npm command, source edit, Git write, or scheduler write was performed by this review.

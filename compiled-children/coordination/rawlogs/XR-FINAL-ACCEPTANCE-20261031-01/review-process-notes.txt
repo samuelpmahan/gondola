@@ -1,0 +1,7 @@
+Review-tool development notes
+
+The first review.py executions did not complete: the reviewer script initially assumed a top-level E-DELIVERY manifest, applied physical-checkout-relative paths to primary coordination files, treated the seeded replay's results array as runs, compared manifest records including metadata fields, expected a line-delimited Counter JSON trace, and expected unitTests to be a summary string. These were reviewer-script assumptions. The source evidence did not emit a conflicting hash or member result in those attempts. The script was adjusted to the actual frozen schemas and path boundary, then completed with exit 0. Its final stdout and stderr are preserved separately.
+
+The final Counter trace is formatted as a JSON object, not JSONL. This review streamed and hashed the complete archived trace and validated the pinned trace-header sidecar; it did not parse all 49,490,981 trace bytes into an in-memory object.
+
+The frozen N6 validation helper contains an active-job assertion (status=running). After N6's packet closed, this review invoked the same pinned probe.py::validate_receipt function against the immutable done/N6 job record, checked report/rawlog pins, and verified state.json byte-for-byte unchanged. The frozen helper was left untouched.

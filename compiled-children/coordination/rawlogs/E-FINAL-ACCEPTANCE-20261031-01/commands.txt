@@ -1,0 +1,24 @@
+E-FINAL-ACCEPTANCE verification commands. No full pipeline rerun was launched in this packet.
+
+Root-run local source462 pipeline (recorded in current-full-source-462/full-console.log):
+  bash run-compiled-children.sh
+
+The actual local post-command archive-consumer command copied from the source462 E-DELIVERY command record (exit 0):
+  /tmp/gondola-node22/node_modules/node/bin/node /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/verify-archive.mjs --archive /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/output/attempts/attempt-20261031T144222262Z-7.tar.gz --manifest /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/output/attempts/attempt-20261031T144222262Z-7.archive-manifest.json --output /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/output/attempts/attempt-20261031T144222262Z-7/provenance/post-command-archive-consumer.json --expected-archive-sha256 5c70c112bd8e9e1366ff572ebde718192236409739059246a422fff52c6c1b01 --expected-manifest-sha256 ba2e35fc2841aaf250e5d21fdfd6b84fba02dd4f5853bd84b6e562d3f0f17f5a
+
+Read-only local correction check:
+  python3 compiled-children/coordination/rawlogs/E-FINAL-ACCEPTANCE-20261031-01/verify-local-corrections.py
+
+Read-only hosted ZIP, Git pin, embedded archive, 417-member, and Counter artifact validation (streaming; no extraction/copy):
+  python3 compiled-children/coordination/rawlogs/E-FINAL-ACCEPTANCE-20261031-01/verify-hosted-artifacts.py
+
+Hosted fixed-trace count validation from the listed tar member:
+  python3 compiled-children/coordination/rawlogs/E-FINAL-ACCEPTANCE-20261031-01/verify-hosted-fixed-trace.py
+
+Historical custody pin recheck (streaming hashes only; no extraction):
+  python3 compiled-children/coordination/rawlogs/E-FINAL-ACCEPTANCE-20261031-01/verify-historical-custody-pins.py
+
+Pinned native receipt validation, read-only:
+  /tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/E-FINAL-ACCEPTANCE-20261031-01/validate-receipt-readonly.py
+
+The expected local manifest hash in the executed command is `ba2e35fc2841aaf250e5d21fdfd6b84fba02dd4f5853bd84b6e562d3f0f17f5a`. This is the value in the actual E-DELIVERY command record and the standalone consumer evidence.

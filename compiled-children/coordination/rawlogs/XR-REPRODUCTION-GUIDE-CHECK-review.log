@@ -1,0 +1,25 @@
+XR-REPRODUCTION-GUIDE-CHECK read-only review log
+Date: 2026-10-31 UTC
+Reviewer: N3
+
+Scope boundary
+- Read only source 462 in /workspace/scratch/39a56936f173/gondola-children-archive and the frozen 978 evidence copied into the primary coordination tree.
+- Did not open the active source-462 attempt/receipt.
+- Did not run tests, npm, Go, the full runner, Git, native state operations, or archive extraction; did not edit source or documentation.
+- Read-only tar listing/hash check on the existing 978 archive; no archive copy created.
+
+Commands/checks
+- Read N5 E-REPRODUCTION-GUIDE-CHECK report and receipt; verified report and receipt paths, source pins, and its two referenced rawlog pins.
+- Read source README, runner wrapper, full runner source, seeded replay routing, archive verifier, and package-lock files; computed source hashes and lock versions into XR-REPRODUCTION-GUIDE-CHECK-audit.json.
+- Parsed only the preserved 978 E-DELIVERY and inherited E-BUILD receipts, plus the attempt's demo/smoke.json; checked delivery status, failed stage, inherited TAP, and HTTP smoke checks.
+- Python read-only tarfile listing and manifest path comparison: 239 archive files; 239 manifest members; exact set match; 5 demo/site members. The tar contains multiple top-level roots; demo site restores to restore_root/demo/site.
+- Read archived receipt metadata for archive and external manifest size/SHA-256 and compared with current file bytes.
+
+Result summary
+- All five N5-pinned source files match frozen source 462.
+- Toolchain, three npm lockfiles, fresh native oracle capture binding, seed routing, and archive-restore path facts match source/evidence.
+- Historical source 978 E-DELIVERY is failed; inherited startup gate reports 5 tests / 5 pass where it required exactly 3; its HTTP smoke has 32/32 checks and its 239-member archive passes independent consumer validation.
+- Source 462 acceptance remains pending per assignment; the live attempt was not inspected.
+
+Audit-helper correction
+- One preliminary in-memory audit probe failed before recording results with `TypeError: unhashable type: 'dict'` because manifest entries are objects, not strings. The probe was corrected to compare each entry's `path`; the final audit JSON records the matching 239 paths. This was a local review-script error, not a source/test/runner failure.

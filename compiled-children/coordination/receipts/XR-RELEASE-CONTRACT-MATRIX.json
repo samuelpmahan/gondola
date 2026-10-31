@@ -1,0 +1,169 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-RELEASE-CONTRACT-MATRIX",
+  "worker": "N4",
+  "outcome": null,
+  "decision": "amend",
+  "summary": "The finite keyed-children guarantee matrix is otherwise supported by the frozen source and pinned source978 capture. Amend one stage-count sentence: eight stages follow the failed inherited stage; nine non-inherited stages passed only when including the preflight stage that preceded it. Source978 remains failed overall, and source462 full/CI acceptance remains pending.",
+  "reviewedJob": {
+    "job_id": "E-RELEASE-CONTRACT-MATRIX",
+    "worker": "N1",
+    "outcome": "confirmed_reuse",
+    "report": {
+      "path": "compiled-children/coordination/reports/E-RELEASE-CONTRACT-MATRIX.md",
+      "bytes": 6643,
+      "sha256": "0f7cd4ff4f7ee79e6552775e8fadac24c2dcab99031b2784ff456fa2f89bd1d4"
+    },
+    "receipt": {
+      "path": "compiled-children/coordination/receipts/E-RELEASE-CONTRACT-MATRIX.json",
+      "bytes": 12534,
+      "sha256": "c790aec5543d9b8d13759cec368e18575dcedd215dcfc75c55986f5a7e0d830c"
+    }
+  },
+  "finding": {
+    "id": "XR-RELEASE-CONTRACT-MATRIX-1",
+    "severity": "must-fix",
+    "path": "compiled-children/coordination/reports/E-RELEASE-CONTRACT-MATRIX.md",
+    "line": 21,
+    "summary": "The report says nine stages passed after the inherited stage. The pinned source978 E-DELIVERY stage list has eight stages after it. The ninth non-inherited stage is preflight, which ran before the inherited stage.",
+    "evidence": {
+      "source978OuterReceipt": {
+        "path": "compiled-children/coordination/failed-full-source-978/E-DELIVERY.json",
+        "bytes": 214129,
+        "sha256": "a308b5cabc727ca0e44a9a44efc3d5bbed3d938cb23a72cd3fa594fd3af38962"
+      },
+      "actualStageOrder": [
+        { "name": "preflight-and-toolchain", "status": "passed", "position": "before inherited stage" },
+        { "name": "fresh-full-inherited-capabilities-chain", "status": "failed", "position": "inherited stage" },
+        { "count": 8, "status": "all passed", "position": "after inherited stage" }
+      ],
+      "source978InheritedReceipt": {
+        "path": "compiled-children/coordination/failed-full-source-978/inherited-E-BUILD.json",
+        "bytes": 103249,
+        "sha256": "4c89a8a23a7db52280a37ccc475f9a21632f963e4d686a353cbe60444521a486"
+      },
+      "stageGate": "expected three archive-helper TAP passes; observed five passing tests; inherited source-pin boundary also failed"
+    },
+    "requestedCorrection": "State that all nine non-inherited stages passed (preflight plus the eight stages after the inherited stage), or state separately that the eight stages after the inherited stage passed."
+  },
+  "reviewedSource": {
+    "worktree": "/workspace/scratch/39a56936f173/gondola-children-archive",
+    "branch": "codex/gobi-children-archive-20261031",
+    "commit": "462a9827bfe1980600456b00d0a67843eaa9756d",
+    "currentFullAndCI": "pending per root; no acceptance claim"
+  },
+  "verifiedClaims": {
+    "source978OverallFailed": true,
+    "source978FullModeHasTwoFailures": true,
+    "source978MismatchListEmpty": true,
+    "source978FixedReplay": { "events": 42, "goUpdates": 38, "checkpoints": 39 },
+    "swapEvents": { "total": 2, "compatibleAccepted": 1, "incompatibleRejected": 1 },
+    "mutationControlsDetected": 12,
+    "seededRuns": [
+      { "seed": 20261031, "events": 60, "goUpdates": 59, "mountedBrowser": true },
+      { "seed": 20261032, "events": 60, "goUpdates": 59, "mountedBrowser": false },
+      { "seed": 20261033, "events": 60, "goUpdates": 59, "mountedBrowser": false }
+    ],
+    "httpSmokeChecks": 32,
+    "archiveMembers": 239,
+    "disabledBoundary": {
+      "probes": 1,
+      "targetWasDisabled": true,
+      "stepIndex": null,
+      "traceTicksBeforeAndAfter": 10
+    },
+    "goOwnedDynamicChildStateAndLifecycle": true,
+    "sharedRendererHostCapabilitiesAndClosedEffects": true,
+    "typedInputsAndPublicationRemainFutureDynamicKeyedWork": true,
+    "scopeLimitsExcludeGeneralGoOtherEnginesPixelsFocusHydrationIMEConcurrentReactAndProductionTransport": true
+  },
+  "validatedSourceSha256": {
+    "compiled-children/CONTRACT.md": "5ee2115113a53b1d07e3d9d1f477eef61b9437c08f8413f7bf63b4ed00ed1902",
+    "fixtures/compiled/children/app.go": "d265bbac54017ab366bdf86aa646fdad808f464c5d35cd106259c6943fc32c99",
+    "fixtures/compiled/children/view.go": "6d0ecf88dfc521ed197213e8922ec12f553505a37f88f5e8e63a1ec8cfda8185",
+    "compiled-capabilities/run.mjs": "fc579d692f558f64d40983cebef8a229ba079156dd24b7dc40994117314fce1b",
+    "typed-composition/DESIGN.md": "d409049fcfbea76aa4b7e0d9e7cd42b2f30e1d1f27d11683d77dd62cf5a28d98"
+  },
+  "validatedEvidenceSha256": [
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/harness/run.check.json",
+      "bytes": 2089,
+      "sha256": "5841997caa300160f432234282ea74d77466d8d6de84c0bbec5efb0938ad75ff"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/harness/run.native.json",
+      "bytes": 653879,
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/harness/run.direct.react.json",
+      "bytes": 3214325,
+      "sha256": "42ae37417e617751d7edbb4487000906d92d72afdb5155bd1470a9c7a2125c93"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/harness/run.direct.dom.json",
+      "bytes": 3214323,
+      "sha256": "4bb00d300e035a87422ac08bb31de64cdd4b699a93197e0176b70509b8c8d5c7"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/harness/run.browser.json",
+      "bytes": 70126682,
+      "sha256": "058d5976be5c8abdea0c2bb57e3f7673062fabc6098b1569719f30cd6f7aee09"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/harness/run.seeded.json",
+      "bytes": 6830,
+      "sha256": "7e987e738d5b846d9ee0c0697ed349eba0d43d496db827dfed436b8dace3df63"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7/demo/smoke.json",
+      "bytes": 20557,
+      "sha256": "cde92dff5cf5145e9e8b8e18404679b637a7e3d39b1b82a3201a49c2113c997e"
+    },
+    {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7.tar.gz",
+      "bytes": 16625595,
+      "sha256": "a11817d20da1a167a016dba08cedd4ea2baf2aa75232d8fe0110e9193fde5c9f"
+    }
+  ],
+  "reviewRawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-CONTRACT-MATRIX-20261031-01/audit.mjs",
+      "bytes": 11488,
+      "sha256": "66604000ea476634df417be9494daa457898989e3b250be9fc3c1a8915b21f7a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-CONTRACT-MATRIX-20261031-01/audit.stdout.json",
+      "bytes": 13236,
+      "sha256": "ff6065381a6887c3675540f125d387b6807117714b971acb620e7779f226f46a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-CONTRACT-MATRIX-20261031-01/audit.stderr.log",
+      "bytes": 174,
+      "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-CONTRACT-MATRIX-20261031-01/audit-attempt01.stderr.log",
+      "bytes": 657,
+      "sha256": "a46964873ea101d911cd6adf910a1a1ff9f970a3904d1f559894d2043be28fcd"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-RELEASE-CONTRACT-MATRIX-20261031-01/audit-attempt01.stdout.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-RELEASE-CONTRACT-MATRIX.md",
+    "bytes": 4114,
+    "sha256": "4f5601c1ca8ff8620502ca0c28e7709c6d8d36d5d9f1884dd33d0c887a78eb6e"
+  },
+  "audit": {
+    "receiptHashPinsValidated": 38,
+    "attempt": "attempt-20261031T143022891Z-7",
+    "testsRerun": false,
+    "fullPipelineRerun": false,
+    "sourceEdits": false,
+    "gitOrNativeWrites": false
+  }
+}

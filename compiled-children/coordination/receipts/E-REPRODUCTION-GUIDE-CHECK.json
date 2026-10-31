@@ -1,0 +1,112 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-REPRODUCTION-GUIDE-CHECK",
+  "worker": "N5",
+  "outcome": "confirmed_reuse",
+  "summary": "Verified the full reproduction command, dependency and toolchain facts, output paths, seed/browser coverage, and archive restore root against frozen source 462. The 978 artifact confirms only layout: its overall E-DELIVERY status is failed, and current 462 acceptance remains pending.",
+  "snapshot_at": "2026-10-31T14:43:09.631797Z",
+  "source_context": {
+    "repository": "/workspace/scratch/39a56936f173/gondola-children-archive",
+    "commit": "462a9827bfe1980600456b00d0a67843eaa9756d",
+    "pinned_files": {
+      "compiled-children/README.md": "0e54b5e0c14fd9049bcc5c18fb3ad705fda9a2a504aaac4aaaa5461cabb90da0",
+      "compiled-children/run.mjs": "c86427aacdbfd9344861481664f88f4ce1f10ba6fba38c01a6642eaca3d7f229",
+      "run-compiled-children.sh": "3216c11142b0600caac9258a13258353eda229911046db6a2371f50ab605a7d6",
+      "compiled-capabilities/run.mjs": "fc579d692f558f64d40983cebef8a229ba079156dd24b7dc40994117314fce1b",
+      "compiled-children/conformance/seeded.mjs": "9419f47ee8250c8d404968c59f9c1778061be8feaa13e4f12951c720c76dbb52"
+    },
+    "README_is_source_pinned": true
+  },
+  "reproduction_facts": {
+    "install_commands": [
+      "npm ci --no-audit --no-fund",
+      "npm ci --prefix interaction --no-audit --no-fund",
+      "npm ci --prefix compiled-frontend --no-audit --no-fund",
+      "interaction/node_modules/.bin/playwright install --with-deps chromium"
+    ],
+    "local_environment": {
+      "PATH": "/tmp/gondola-go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH",
+      "CHROMIUM_PATH": "/tmp/chromium"
+    },
+    "full_command": "bash run-compiled-children.sh",
+    "runner_mode": "full-only; rejects arguments",
+    "toolchains": {
+      "native_and_root": "Go 1.24 with GOTOOLCHAIN=local",
+      "compiler": "Go 1.27.3 with GOTOOLCHAIN=go1.27.3",
+      "node": "Node 22"
+    },
+    "locked_dependencies": {
+      "react": "19.3.1",
+      "react_dom": "19.3.1",
+      "playwright": "1.64.1",
+      "interaction_esbuild": "0.28.2",
+      "compiled_frontend_esbuild": "0.28.2"
+    },
+    "seeded_coverage": {
+      "seeds": [20261031, 20261032, 20261033],
+      "all_seeds": "native plus direct React and DOM replay",
+      "mounted_seeded_browser": "first seed only (20261031), swap profile",
+      "fixed_browser_profiles": ["react", "dom", "swap"]
+    },
+    "fresh_native_oracle_capture": "attempt/oracle/native.json; recorded and pinned in receipt.oracle.nativeCapture and receipt.oracle.archivedInputs",
+    "react_map_regeneration_note": "go run ./cmd/gobi emit react writes react-map.gen.mjs itself; do not redirect stdout to that file"
+  },
+  "prior_978_artifact": {
+    "attempt": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7",
+    "delivery_status": "failed",
+    "failure": "Inherited startup-regression required three TAP tests but received five passing tests; source 462 now requires at least five clean passes.",
+    "archive": {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7.tar.gz",
+      "bytes": 16625595,
+      "sha256": "a11817d20da1a167a016dba08cedd4ea2baf2aa75232d8fe0110e9193fde5c9f"
+    },
+    "manifest": {
+      "path": "compiled-children/demo/output/attempts/attempt-20261031T143022891Z-7.archive-manifest.json",
+      "bytes": 44510,
+      "sha256": "ddecfc97e4f2cf21684a6d0148333883e4a155a3ebd31e0fe7fda21dc7fb1738"
+    },
+    "member_count": 239,
+    "independent_archive_consumer": "passed",
+    "http_browser_smoke": "passed; 32 checks",
+    "member_root": "demo/... relative to attempt root; no attempt-id directory prefix",
+    "demo_site_members": [
+      "demo/site/demo-build.json",
+      "demo/site/demo.bundle.mjs",
+      "demo/site/demo.css",
+      "demo/site/entry.mjs",
+      "demo/site/index.html"
+    ],
+    "chunk_inventory": "none; the local artifact is a single tar.gz. Do not invent chunk names/order for a separately published split artifact."
+  },
+  "restore_recipe": {
+    "attempt_and_hash_source": "Use the root-owned final acceptance receipt and dedicated E-ACCEPTANCE packet from the designated third worktree, not the primary author E-DELIVERY packet.",
+    "verify_command": "node compiled-children/demo/verify-archive.mjs --archive $archive --manifest $manifest --output $restore_root/archive-verification.json --expected-archive-sha256 <final acceptance hash> --expected-manifest-sha256 <final acceptance hash>",
+    "extract_command": "tar -xzf $archive -C $restore_root",
+    "serve_command": "python3 -m http.server 8000 --directory $restore_root/demo/site",
+    "url": "http://localhost:8000/",
+    "current_462_status": "pending at handoff; current attempt was not inspected"
+  },
+  "review_limits": [
+    "No README or source file was modified.",
+    "No tests, npm installation, full runner, archive extraction, Git operation, or native state write was performed.",
+    "The 978 receipt and archive were used to verify artifact layout only; they are not full acceptance evidence.",
+    "The current 462 attempt and receipt were intentionally not read."
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/E-REPRODUCTION-GUIDE-CHECK.md",
+    "bytes": 6178,
+    "sha256": "a5398c0016a83358cecb9ece7be82eecc948fb265d82b4c12a8769ef953749ac"
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-REPRODUCTION-GUIDE-CHECK-readonly-audit.log",
+      "bytes": 86109,
+      "sha256": "0a8f34356d0845017ea61e01b3afe98ca4183970346bc23f3da85afec63d43cc"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-REPRODUCTION-GUIDE-CHECK-978-archive-layout.log",
+      "bytes": 1199,
+      "sha256": "9d1bb9a54cf55afed4d48e0a03d6d761bc3aa98a1b7b717457a1f4ac7ebbed58"
+    }
+  ]
+}

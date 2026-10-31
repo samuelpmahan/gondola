@@ -1,0 +1,96 @@
+{
+  "schema": "gobi.final-review-seal-reconciliation/v1",
+  "observedAt": "2026-10-31T15:45:25.283090+00:00",
+  "source": "462a9827bfe1980600456b00d0a67843eaa9756d",
+  "scope": "Operator evidence finalization only; no source/runtime/CI result changes.",
+  "initialFinishReceiptSHA256": "001224afe348337f823edf038337eac22c811395e8f041f02d2a44434e2e07fe",
+  "publisherSnapshotReceiptSHA256": "d460f1e9546d06462c8ecbd897cf87615b1a7b0bae4f85efe980910359f687aa",
+  "finalReceiptSHA256": "285ae9f1bed45fc6f2e523fd6d87a12f54d578425c34e4b71d6f439496197ec3",
+  "initialBytesStatus": "Author confirmed exact001224 receipt bytes were not retained after post-seal finalization. Only the digest remains in the original closure audit; no reconstruction or byte-preservation claim.",
+  "preserved": "Exact intermediate d460 receipt and publisher rawlog snapshot; initial closure audit; final canonical285ae receipt/report/rawlogs.",
+  "reportSHA256": "29b26847f4c57522801501c7aabc892f8c84eeefece0992826bb1ae2bcd198f6",
+  "reportStableAcrossPublisherAndFinal": true,
+  "finalRevalidation": {
+    "file": "compiled-children/coordination/final-publication-closure-audit.json",
+    "status": "passed",
+    "packets": 52,
+    "epochs": 35,
+    "workers": 6,
+    "errors": []
+  },
+  "reason": "Root completed native finish on author first sealed acknowledgement; author continued receipt finalization before final exact-hash acknowledgement. Publication halted on hash discrepancy; final current receipt revalidated against completed immutable job.",
+  "limitations": "This metadata-custody incident does not invalidate independently verified runtime artifacts. It does not justify claiming all initial sealed receipt bytes retained.",
+  "authorExplanation": "After the first sealed acknowledgement the author edited commands.txt and seal-review.py, deleted four temporary validator output files, regenerated the rawlog manifest, and resealed the receipt from14 to10rawlogs. Report29b268 remained byte-identical. Final285ae canonical files are now frozen; no source/runtime edits.",
+  "intermediateRawlogSnapshotCheck": [
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/commands.txt",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/own-receipt-validation-final.stderr.log",
+      "snapshotExists": false,
+      "matchesPin": false
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/own-receipt-validation-final.stdout.json",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/own-receipt-validation.stderr.log",
+      "snapshotExists": false,
+      "matchesPin": false
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/own-receipt-validation.stdout.json",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/receipt-validation.stderr.log",
+      "snapshotExists": false,
+      "matchesPin": false
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/receipt-validation.stdout.json",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/review-process-notes.txt",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/review.py",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/seal-review.py",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/validate-completed-receipt.py",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/validate-own-receipt.py",
+      "snapshotExists": true,
+      "matchesPin": true
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/verification.stderr.log",
+      "snapshotExists": false,
+      "matchesPin": false
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-FINAL-ACCEPTANCE-20261031-01/verification.stdout.json",
+      "snapshotExists": true,
+      "matchesPin": true
+    }
+  ]
+}

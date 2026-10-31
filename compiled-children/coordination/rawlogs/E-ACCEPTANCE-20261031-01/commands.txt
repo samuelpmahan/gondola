@@ -1,0 +1,19 @@
+Read-only verification commands recorded for E-ACCEPTANCE.
+
+Full source462 run (performed by root, not rerun by N6):
+  bash run-compiled-children.sh
+
+Independent post-command archive consumer (executed by N6 after outer command exit):
+  /tmp/gondola-node22/node_modules/node/bin/node /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/verify-archive.mjs --archive /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/output/attempts/attempt-20261031T144222262Z-7.tar.gz --manifest /workspace/scratch/39a56936f173/gondola-children-archive/compiled-children/demo/output/attempts/attempt-20261031T144222262Z-7.archive-manifest.json --output /workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/rawlogs/E-ACCEPTANCE-20261031-01/independent-archive-consumer.json --expected-archive-sha256 5c70c112bd8e9e1366ff572ebde718192236409739059246a422fff52c6c1b01 --expected-manifest-sha256 ba2e35fc2841aaf250e5d21fdfd1b6d84fba02dd4f5853bd84b6e562d3f0f17f5a
+
+Physical source pin check:
+  python3 compiled-children/coordination/rawlogs/E-ACCEPTANCE-20261031-01/verify-source-pins.py
+
+M0 and historical baseline checks:
+  python3 compiled-children/coordination/rawlogs/E-ACCEPTANCE-20261031-01/verify-static-history-v3.py
+
+Outer delivery and acceptance cross-check:
+  python3 compiled-children/coordination/rawlogs/E-ACCEPTANCE-20261031-01/verify-acceptance-summary.py
+
+Source identity read-only check:
+  git -C /workspace/scratch/39a56936f173/gondola-children-archive rev-parse HEAD

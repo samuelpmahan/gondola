@@ -1,0 +1,349 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-HISTORICAL-CUSTODY-BOUNDARY",
+  "worker": "N2",
+  "outcome": "confirmed_reuse",
+  "summary": "Independently streamed superseded retry1 and matched all 902 archive members to their inventory. Cleanup records confirm 874 v2 deletion rows map to preserved retry1 members and 875 v3 rows match the final selected inventory. The earlier 903-file staging cleanup had one un-inventoried extra; a retained 29,884,416-byte candidate matches aggregate size, but its identity/equality to the deleted extra is unproven. No all-903 recoverability claim.",
+  "retry1": {
+    "path": "compiled-children/evidence-preflight/pre-repair-author-review-history.retry1.tar.gz",
+    "bytes": 167917858,
+    "sha256": "954bad6b31df16f92c8297d64a53029c26159c3aeede1694d53a626a90c4f1a7",
+    "mode": "0o444",
+    "inventory_path": "compiled-children/evidence-preflight/archive-inventory.retry1.json",
+    "inventory_sha256": "cec1e261e9ac5da9adb00b32b4e06c72852f371122053df2708a50085d47567a",
+    "members": 902,
+    "uncompressed_bytes": 2252949830,
+    "every_member_matches_inventory": true,
+    "superseded_not_runtime_acceptance": true
+  },
+  "cleanup_boundary": {
+    "mistaken_root_cleanup": {
+      "record_path": "compiled-children/coordination/cleanup-verified-staging.json",
+      "recorded_removed_files": 903,
+      "recorded_removed_bytes": 2282834246,
+      "retry1_inventory_known_files": 902,
+      "retry1_inventory_known_bytes": 2252949830,
+      "aggregate_file_count_difference": 1,
+      "aggregate_byte_difference": 29884416,
+      "remaining_stage_candidate": {
+        "path": "/tmp/gobi-author-custody-final-stage-20261031-cut-125230/external-tmp/.gobi-children-n4-attempt04.browser.json.K7Jswf.eYJDeh",
+        "bytes": 29884416,
+        "sha256": "5893d3aea92f4513b911cdfd08dcf41018720dd556a85a2be604d5ea172ee296",
+        "exists": true
+      },
+      "candidate_matches_aggregate_size": true,
+      "candidate_identity_or_equality_to_deleted_extra_proven": false,
+      "every_deleted_archive_root_extra_identity_proven": false,
+      "interpretation": "902 retry1 members remain independently verified in the preserved archive. The removed staging directory had one extra file and 29,884,416 extra bytes by aggregate record. The matching-size candidate remains in another stage but is not proven identical to that deleted extra."
+    },
+    "v2_superseded_stage_cleanup": {
+      "record_path": "compiled-children/coordination/cleanup-verified-superseded-stage.json",
+      "removed_rows": 874,
+      "removed_source_bytes": 2252623803,
+      "each_removed_row_matches_preserved_retry1_member": true,
+      "unique_retry1_members_covered": 456,
+      "inventory_members_not_referenced_by_v2_rows": 446,
+      "unverified_retained_entries": 0
+    },
+    "v3_final_stage_cleanup": {
+      "record_path": "compiled-children/coordination/cleanup-verified-final-stage.json",
+      "removed_files": 875,
+      "bytes": 2206776977,
+      "matches_final_inventory_count_and_total": true
+    },
+    "all_903_deleted_files_recoverable_claim": false,
+    "known_902_retry1_members_recoverable_from_preserved_archive": true,
+    "candidate_identity_proven": false
+  },
+  "retainedCandidate": {
+    "path": "/tmp/gobi-author-custody-final-stage-20261031-cut-125230/external-tmp/.gobi-children-n4-attempt04.browser.json.K7Jswf.eYJDeh",
+    "bytes": 29884416,
+    "sha256": "5893d3aea92f4513b911cdfd08dcf41018720dd556a85a2be604d5ea172ee296"
+  },
+  "selected_875_boundary": {
+    "prior_accepted_publication_packets": [
+      {
+        "job_id": "E-PUBLISHED-HISTORY-CUSTODY",
+        "decision_or_outcome": "confirmed_reuse",
+        "receipt_path": "compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json",
+        "receipt_bytes": 40071,
+        "receipt_sha256": "33bf39394f250c04df3082877851af11d8102ce67d87a190528662d03851165a",
+        "report_path": "compiled-children/coordination/reports/E-PUBLISHED-HISTORY-CUSTODY.md",
+        "report_bytes": 4801,
+        "report_sha256": "85cc5578ad55402fc6249a3dc3ffcd04609496ed5f9b3daef116fd6eaaa9a061",
+        "archive_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0",
+        "archive_bytes": 164464000
+      },
+      {
+        "job_id": "XR-PUBLISHED-HISTORY-CUSTODY",
+        "decision_or_outcome": "accepted",
+        "receipt_path": "compiled-children/coordination/receipts/XR-PUBLISHED-HISTORY-CUSTODY.json",
+        "receipt_bytes": 6302,
+        "receipt_sha256": "eb8f4138fc1c1ab0c40abede04bc5c4d48a7c192e3b460c36a317a66f9041214",
+        "report_path": "compiled-children/coordination/reports/XR-PUBLISHED-HISTORY-CUSTODY.md",
+        "report_bytes": 2251,
+        "report_sha256": "16286f50a66870a79236e9c155d1b34617d93d6aed3b1eb195eb121fb94429c6",
+        "archive_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0",
+        "archive_bytes": 164464000
+      }
+    ],
+    "selected_archive_rehashed_by_this_job": false,
+    "selected_archive_or_remote_chunks_copied": false,
+    "selected_archive_remains_preserved": true
+  },
+  "known_history_exceptions": {
+    "retry1_is_superseded": true,
+    "missing_7b_audit_bytes_restored": false,
+    "partial_and_temp_completion_cause_assigned": false,
+    "cutoff_and_exception_ledger_changed": false,
+    "prior_63_character_XR_AUTHOR_hash_typo_already_superseded_by_E_XR_PUBLISHED": true
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.py",
+      "exit_code": 0,
+      "result": "Stream-verified retry1 outer bytes/SHA and all 902 tar members against retry1 inventory; checked every v2 removal mapping and cleanup totals.",
+      "output": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.json",
+      "exit_file": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.exit-code"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation.py",
+      "exit_code": 0,
+      "result": "Native validate_receipt and all source, cleanup, candidate, log, and report pins passed.",
+      "script": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation.py",
+      "output": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation-success.log"
+    },
+    {
+      "command": "/tmp/gondola-rebalancer-env/bin/python compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.py",
+      "exit_code": 1,
+      "preserved_checker_failure": true,
+      "reason": "Initial assertion used the wrong exact phrase for cleanup correction; final checker passed.",
+      "stderr": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.stderr.log"
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "path": "compiled-children/evidence-preflight/pre-repair-author-review-history.retry1.tar.gz",
+      "bytes": 167917858,
+      "sha256": "954bad6b31df16f92c8297d64a53029c26159c3aeede1694d53a626a90c4f1a7"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-inventory.retry1.json",
+      "bytes": 195810,
+      "sha256": "cec1e261e9ac5da9adb00b32b4e06c72852f371122053df2708a50085d47567a"
+    },
+    {
+      "path": "compiled-children/coordination/superseded-retry1-integrity.json",
+      "bytes": 454,
+      "sha256": "dde4be777a353095fc5cbe4aaa8551d37b5c725ff1631902d9ab678842b43bcd"
+    },
+    {
+      "path": "compiled-children/evidence-preflight/archive-inventory.final.json",
+      "bytes": 189820,
+      "sha256": "e48e7cd189dc1038dc3f964937b07edaa73459d104554b5a2f619877ae960470"
+    },
+    {
+      "path": "compiled-children/coordination/cleanup-verified-staging.json",
+      "bytes": 2529,
+      "sha256": "282b87e5cd7bfbf7f3413a26e85e0b1eace29ae77ac1688c41ba3d1b7e2ae817"
+    },
+    {
+      "path": "compiled-children/coordination/cleanup-verified-superseded-stage.json",
+      "bytes": 399656,
+      "sha256": "b92247a41da6837c29abc5e89b15b483c1b8ec27db8e65bf26c2281ed059928a"
+    },
+    {
+      "path": "compiled-children/coordination/cleanup-verified-final-stage.json",
+      "bytes": 604,
+      "sha256": "e6e0c91cffa3d9a5bec51e9b2afc2f8f85d8416a26da7868b990da72fd6fde2a"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-AUTHOR-CUSTODY.json",
+      "bytes": 23826,
+      "sha256": "32820e5b23f721b435606e8a16d45367ce701c7f76829c194cc7f3148f22cc4f"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-AUTHOR-CUSTODY.md",
+      "bytes": 7344,
+      "sha256": "23b31314ba22bea550d1a787d60191745038dbffcd3fb139175fc04d9e60a5ed"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json",
+      "bytes": 40071,
+      "sha256": "33bf39394f250c04df3082877851af11d8102ce67d87a190528662d03851165a"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-PUBLISHED-HISTORY-CUSTODY.md",
+      "bytes": 4801,
+      "sha256": "85cc5578ad55402fc6249a3dc3ffcd04609496ed5f9b3daef116fd6eaaa9a061"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/XR-PUBLISHED-HISTORY-CUSTODY.json",
+      "bytes": 6302,
+      "sha256": "eb8f4138fc1c1ab0c40abede04bc5c4d48a7c192e3b460c36a317a66f9041214"
+    },
+    {
+      "path": "compiled-children/coordination/reports/XR-PUBLISHED-HISTORY-CUSTODY.md",
+      "bytes": 2251,
+      "sha256": "16286f50a66870a79236e9c155d1b34617d93d6aed3b1eb195eb121fb94429c6"
+    }
+  ],
+  "sourceSha256": {
+    "compiled-children/evidence-preflight/pre-repair-author-review-history.retry1.tar.gz": "954bad6b31df16f92c8297d64a53029c26159c3aeede1694d53a626a90c4f1a7",
+    "compiled-children/evidence-preflight/archive-inventory.retry1.json": "cec1e261e9ac5da9adb00b32b4e06c72852f371122053df2708a50085d47567a",
+    "compiled-children/coordination/superseded-retry1-integrity.json": "dde4be777a353095fc5cbe4aaa8551d37b5c725ff1631902d9ab678842b43bcd",
+    "compiled-children/evidence-preflight/archive-inventory.final.json": "e48e7cd189dc1038dc3f964937b07edaa73459d104554b5a2f619877ae960470",
+    "compiled-children/coordination/cleanup-verified-staging.json": "282b87e5cd7bfbf7f3413a26e85e0b1eace29ae77ac1688c41ba3d1b7e2ae817",
+    "compiled-children/coordination/cleanup-verified-superseded-stage.json": "b92247a41da6837c29abc5e89b15b483c1b8ec27db8e65bf26c2281ed059928a",
+    "compiled-children/coordination/cleanup-verified-final-stage.json": "e6e0c91cffa3d9a5bec51e9b2afc2f8f85d8416a26da7868b990da72fd6fde2a",
+    "compiled-children/coordination/receipts/E-AUTHOR-CUSTODY.json": "32820e5b23f721b435606e8a16d45367ce701c7f76829c194cc7f3148f22cc4f",
+    "compiled-children/coordination/reports/E-AUTHOR-CUSTODY.md": "23b31314ba22bea550d1a787d60191745038dbffcd3fb139175fc04d9e60a5ed",
+    "compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json": "33bf39394f250c04df3082877851af11d8102ce67d87a190528662d03851165a",
+    "compiled-children/coordination/reports/E-PUBLISHED-HISTORY-CUSTODY.md": "85cc5578ad55402fc6249a3dc3ffcd04609496ed5f9b3daef116fd6eaaa9a061",
+    "compiled-children/coordination/receipts/XR-PUBLISHED-HISTORY-CUSTODY.json": "eb8f4138fc1c1ab0c40abede04bc5c4d48a7c192e3b460c36a317a66f9041214",
+    "compiled-children/coordination/reports/XR-PUBLISHED-HISTORY-CUSTODY.md": "16286f50a66870a79236e9c155d1b34617d93d6aed3b1eb195eb121fb94429c6"
+  },
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-build-initial-path-failure.command.txt",
+      "bytes": 369,
+      "sha256": "f36fa29f251f515e1498a5317aa1dd4c0d787d420b4579b5f229b2a4a52d50e0"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-build-initial-path-failure.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-build-initial-path-failure.stderr.log",
+      "bytes": 934,
+      "sha256": "0c74fce2551d2bc8e8cb037fc6aefbc2a81ca448f2bdf394a896536c3c058003"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-build-initial-path-failure.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-build.command.txt",
+      "bytes": 128,
+      "sha256": "0dfa6e4ebbdbac9decf2ac09b43e9cc5225d3e19294df6c4f116f771a2eb0ccc"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-build.py",
+      "bytes": 6612,
+      "sha256": "ded75b7f41684e85f5ff95abadf7f88e7a3feecb50a2d887a8518fc526cf8153"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation-initial.command.txt",
+      "bytes": 243,
+      "sha256": "eba33cca1c7af1147183191fda2694a6542389d2a84ae880aa31ca3242fe248c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation-success.log",
+      "bytes": 119,
+      "sha256": "0ce1acd15d9beac7c1af7c023beb76a10ef5c24c5baa164dad8b5b5835843526"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation.command.txt",
+      "bytes": 133,
+      "sha256": "9dc2641874bddc342a0335942b4e4ba9229c047c40bff04d4e153d01dd4ecc4c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation.exit-code",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-receipt-validation.py",
+      "bytes": 1747,
+      "sha256": "b3eec85de26d08f945d5c7071caf04e5168515d41fbcf44f3b509e3a1377f760"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.command.txt",
+      "bytes": 318,
+      "sha256": "ba22247a85e61a12a0ccbdd4e4130608f958380b36406fe1447fc45a24c4d090"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.exit-code",
+      "bytes": 7,
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.json",
+      "bytes": 4017,
+      "sha256": "94b93d3c97be1318fc5f58ba28b75ea44f354fb1fea0c2b5a295d550aa82632b"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.py",
+      "bytes": 11391,
+      "sha256": "5fabb5ebb50f1da3ed4a2f815b029aaea3dc653d507c4e2f0c2295b7760f4ed5"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-final.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.command.txt",
+      "bytes": 300,
+      "sha256": "392950f5594e30c38fa6fca0bc0d05c74c1decfe52f28d10f43c730f69ecd150"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.py",
+      "bytes": 11440,
+      "sha256": "ec3230514e097729171968f1c2709d9fe80492763ab8aebb346b76e614438876"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify-initial-cleanup-phrase-failure.stderr.log",
+      "bytes": 367,
+      "sha256": "64bee0584d7618b9cd9edf6d863c88e6c137e6d09e6ee9a3585f70530a49a3b9"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify.command.txt",
+      "bytes": 300,
+      "sha256": "392950f5594e30c38fa6fca0bc0d05c74c1decfe52f28d10f43c730f69ecd150"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify.exit-code",
+      "bytes": 7,
+      "sha256": "cf205dbb8cea84897b488abcc281bf96698d5e94b1096b16657b4caba9082a22"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify.py",
+      "bytes": 11440,
+      "sha256": "ec3230514e097729171968f1c2709d9fe80492763ab8aebb346b76e614438876"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-HISTORICAL-CUSTODY-BOUNDARY-verify.stderr.log",
+      "bytes": 367,
+      "sha256": "64bee0584d7618b9cd9edf6d863c88e6c137e6d09e6ee9a3585f70530a49a3b9"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/E-HISTORICAL-CUSTODY-BOUNDARY.md",
+    "bytes": 4709,
+    "sha256": "5cfa21ecf47ab385dac8748040f0fd518cec5d17b35f9f28175ff69e6b6bb9cd"
+  },
+  "limitations": [
+    "The v1 staging cleanup occurred before per-entry inventory. Aggregate counts and a retained matching-size candidate do not prove identity/equality to the deleted extra.",
+    "No statement is made that all 903 deleted staging files are recoverable. This task verifies the preserved 902-member retry1 archive and the recorded 874/875 cleanup boundaries.",
+    "This is historical custody only and makes no current source, full runtime, browser, or CI acceptance claim."
+  ],
+  "publication": "No source/README edits, Git commands, native scheduler writes, npm, runtime, CI, or archive-copy/materialization."
+}
