@@ -1,0 +1,203 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-FIX-ORACLE-FRESH-CHECKOUT",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Removed the oracle's dependency on ignored native evidence. Each run now checks a fresh native Go CLI capture; the delivery runner writes that exact trace under attempt/oracle/native.json and pins it in the oracle receipt and archivedInputs.",
+  "repository": {
+    "path": "/workspace/scratch/39a56936f173/gondola-children-archive",
+    "head": "935cb00ce92d4a28f346ac431db302c9f580ea44",
+    "git_operations": "none"
+  },
+  "tool_versions": {
+    "node": "v22.23.4",
+    "go": "go1.24.0 linux/amd64",
+    "log": {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-tool-versions.log",
+      "bytes": 82,
+      "sha256": "d054cf479e4d8fd2153c1df2580569767f048a6ebc3e3a6636fd59c27e3bc8a2"
+    }
+  },
+  "originals_manifest": {
+    "path": "compiled-children/coordination/repairs/E-FIX-ORACLE-FRESH-CHECKOUT/originals/manifest.json",
+    "bytes": 954,
+    "sha256": "58f7022fc8ee693ee107f90510ef0915894c62cbebc078da403b85522885e7b9"
+  },
+  "originals": [
+    {
+      "path": "compiled-children/oracle/oracle.test.mjs",
+      "backup": "compiled-children/coordination/repairs/E-FIX-ORACLE-FRESH-CHECKOUT/originals/oracle.test.mjs",
+      "bytes": 4860,
+      "sha256": "18f778de875fa838b4e565224b08ac1e21473b4838e1b2ca437d36d0bae77f22"
+    },
+    {
+      "path": "compiled-children/run.mjs",
+      "backup": "compiled-children/coordination/repairs/E-FIX-ORACLE-FRESH-CHECKOUT/originals/run.mjs",
+      "bytes": 60808,
+      "sha256": "22f4915c6aa0b300a23ed8a5ffe3a2d8a710c50d7f08c33e1d9e5d82c45e44ac"
+    }
+  ],
+  "source_changes": [
+    {
+      "path": "compiled-children/oracle/oracle.test.mjs",
+      "bytes": 6101,
+      "sha256": "0811d45cdd9b1fe252a7961efdaccba7133d2e82d95222c1fff302a00f6c9208",
+      "change": "Runs the native Go CLI from the checkout root, parses and checks fresh stdout, and optionally writes the exact stdout bytes to the runner-supplied capture path."
+    },
+    {
+      "path": "compiled-children/run.mjs",
+      "bytes": 61617,
+      "sha256": "c86427aacdbfd9344861481664f88f4ce1f10ba6fba38c01a6642eaca3d7f229",
+      "change": "Supplies attempt/oracle/native.json and records the generated trace's hash, CLI, arguments, working directory, environment, and archivedInputs entry."
+    }
+  ],
+  "unchanged_oracle_pins": [
+    {
+      "path": "compiled-children/oracle/oracle.mjs",
+      "bytes": 22093,
+      "sha256": "c5cebcbbca6dcfb4ebb5110722bfd3b48dd6b7ad7d9e9d380aa78812f6e70388"
+    },
+    {
+      "path": "compiled-children/oracle/expectations.json",
+      "bytes": 515314,
+      "sha256": "d7aa53d48e9cc0e7a462b8fb324e0b52cd9ab4f4038febb12d3c5255878f6774"
+    },
+    {
+      "path": "compiled-children/oracle/scenario.json",
+      "bytes": 6460,
+      "sha256": "8860dbd7ef32c04506d0e8672061235debf6316b02a72b10a5314d59b33b405d"
+    }
+  ],
+  "verification": [
+    {
+      "name": "oracle-clean-checkout-absent-ignored-capture",
+      "command": "GOBI_GO_EXECUTABLE=/tmp/gondola-go/bin/go GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "conditions": "The ignored compiled-children/oracle/evidence/native.json was absent.",
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-clean-absent-final.log",
+        "bytes": 2375,
+        "sha256": "7dd0983d73bdccdbea328a77108db1e86faab537d96188d890d29758ca5eda08"
+      }
+    },
+    {
+      "name": "oracle-poisoned-ignored-capture",
+      "command": "GOBI_GO_EXECUTABLE=/tmp/gondola-go/bin/go GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "conditions": "A temporary invalid ignored evidence/native.json was present during the run, then removed; final absence was verified.",
+      "poison_sha256": "e48b8bb10ef3b9b02afd9f32274521a66e1eedd2d90048a164cecc2e46af4a37",
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-poisoned-ambient-final.log",
+        "bytes": 2374,
+        "sha256": "416ed1245865b9a614e9658412df7f9475069f21ac2bb73a56be7293a5b70c0c"
+      }
+    },
+    {
+      "name": "oracle-runner-capture-path-simulation",
+      "command": "GOBI_GO_EXECUTABLE=/tmp/gondola-go/bin/go GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE=<primary-rawlogs>/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-node22/node_modules/node/bin/node --test compiled-children/oracle/oracle.test.mjs",
+      "exit_code": 0,
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path.log",
+        "bytes": 2374,
+        "sha256": "f9fa4ee67c38074491adade859c5f90157db06cea9382166ce46db1a65a8b92d"
+      },
+      "capture": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json",
+        "bytes": 653879,
+        "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb",
+        "schema": "gobi.compiled-children-native/v1",
+        "events": 42,
+        "update_steps": 38
+      }
+    },
+    {
+      "name": "syntax-and-diff-check",
+      "command": "node --check compiled-children/oracle/oracle.test.mjs; node --check compiled-children/run.mjs; git diff --check -- compiled-children/oracle/oracle.test.mjs compiled-children/run.mjs",
+      "exit_code": 0,
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-syntax-diffcheck-final.log",
+        "bytes": 452,
+        "sha256": "0ced93bde41250890ec7fd08d8fea04998f21da80fef6d3c451630d29d0c3777"
+      }
+    }
+  ],
+  "review_probe": {
+    "name": "native-capture-structure-count-operator-miss",
+    "exit_code": 1,
+    "reason": "The auxiliary probe expected 39 update steps, confusing the 39 literal snapshots (including init) with the 38 native update steps. A corrected 42-event/38-update check passed.",
+    "failed_probe_log": {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path-structure-check-initial-miss.log",
+      "bytes": 579,
+      "sha256": "78db7c0df5fb59209be49460e12e54e55a06638f678d094a55c5102a7b0338c1"
+    },
+    "corrected_probe_log": {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path-structure-check.log",
+      "bytes": 249,
+      "sha256": "3789f84cd05fd0c9310a4b90ab3b461a26ffdfd021c706168cdac58c4d84d952"
+    },
+    "receipt_integrity_path_miss": {
+      "exit_code": 1,
+      "reason": "The first receipt integrity script incorrectly stripped compiled-children/ from backup paths and stopped before checking any bytes; it changed no files. The corrected path handling validated all recorded source, original, manifest, and rawlog pins.",
+      "log": {
+        "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-path-probe-miss.log",
+        "bytes": 414,
+        "sha256": "be54434edcb7fc14671f4cb800b1f78764ca6f5dfc6ce63bbe84d72606e0ee41"
+      }
+    }
+  },
+  "limitations": [
+    "No full delivery runner or full capability chain was executed. Runner archive retention and receipt pinning were source-reviewed and its capture-path behavior was exercised in a focused test simulation.",
+    "No Git operation or native state write was performed."
+  ],
+  "rawlogs": [
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-clean-absent-final.log",
+      "bytes": 2375,
+      "sha256": "7dd0983d73bdccdbea328a77108db1e86faab537d96188d890d29758ca5eda08"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-poisoned-ambient-final.log",
+      "bytes": 2374,
+      "sha256": "416ed1245865b9a614e9658412df7f9475069f21ac2bb73a56be7293a5b70c0c"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path.log",
+      "bytes": 2374,
+      "sha256": "f9fa4ee67c38074491adade859c5f90157db06cea9382166ce46db1a65a8b92d"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-runner-path/oracle/native.json",
+      "bytes": 653879,
+      "sha256": "8ad3a28bd1a5e03a3c324dcecb1b5c55d97ffae257b1011103e7730573baefbb"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-syntax-diffcheck-final.log",
+      "bytes": 452,
+      "sha256": "0ced93bde41250890ec7fd08d8fea04998f21da80fef6d3c451630d29d0c3777"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-path-probe-miss.log",
+      "bytes": 414,
+      "sha256": "be54434edcb7fc14671f4cb800b1f78764ca6f5dfc6ce63bbe84d72606e0ee41"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/E-FIX-ORACLE-FRESH-CHECKOUT-receipt-integrity-final.log",
+      "bytes": 575,
+      "sha256": "1951a86ffea0bb4fbb8360dc268767e945d107e26c5a9026007b31d50bdc3457"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/E-FIX-ORACLE-FRESH-CHECKOUT.md",
+    "bytes": 3646,
+    "sha256": "be012821da993372c255be00c9e9af7800ed0e9c8cc60e8770eddaa67dc058a1"
+  }
+}

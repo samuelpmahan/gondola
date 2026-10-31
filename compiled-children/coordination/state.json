@@ -448,6 +448,78 @@
       "started_at": "2026-10-31T13:44:09.952240+00:00",
       "finished_at": "2026-10-31T13:47:59.033480+00:00",
       "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/XR-FIX-CI-BROWSER-ID.json"
+    },
+    "E-PUBLISHED-HISTORY-CUSTODY": {
+      "id": "E-PUBLISHED-HISTORY-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "own coordination E-PUBLISHED-HISTORY-CUSTODY report/receipt/rawlogs only; published Git objects READ ONLY",
+      "summary": "Verify immutable published history commit45317abb8d6f7c1153ea9999927727fa43203710 against 40 locally fetched remote Git blobs; check parent/tree, every chunk size/SHA256/Git blob SHA, total reconstructed archive hash/bytes and published restoration command. Already independently audited875 member hashes need not be repeated. No current runtime/CI acceptance claim.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T13:49:12.719725+00:00",
+      "finished_at": "2026-10-31T13:55:18.235040+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json"
+    },
+    "XR-PUBLISHED-HISTORY-CUSTODY": {
+      "id": "XR-PUBLISHED-HISTORY-CUSTODY",
+      "kind": "review",
+      "depends_on": "E-PUBLISHED-HISTORY-CUSTODY",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T13:55:26.061024+00:00",
+      "finished_at": "2026-10-31T13:57:42.420908+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/XR-PUBLISHED-HISTORY-CUSTODY.json"
+    },
+    "E-FIX-ARCHIVE-INVENTORY": {
+      "id": "E-FIX-ARCHIVE-INVENTORY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "ISOLATED /workspace/scratch/39a56936f173/gondola-children-archive compiled-capabilities/archive-helper.mjs and tests; compiled-children archive invocation only if needed; primary own repair receipt/report/rawlogs",
+      "summary": "Diagnose executed source9bd6 full attempt archive failure tar:harness:file changed as we read it. Native/direct/browser/HTTP and inherited suites passed with zero mismatches. Preserve actual failure and identify manifest enumeration vs recursive tar mismatch; implement bounded archive contract fix with real tar regression and rejection of listed-file mutation, retaining fail-closed byte/source/post-command consumer gates. Source935 active elsewhere must remain untouched.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T14:03:02.304956+00:00",
+      "finished_at": "2026-10-31T14:14:53.380064+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/E-FIX-ARCHIVE-INVENTORY.json"
+    },
+    "XR-FIX-ARCHIVE-INVENTORY": {
+      "id": "XR-FIX-ARCHIVE-INVENTORY",
+      "kind": "review",
+      "depends_on": "E-FIX-ARCHIVE-INVENTORY",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T14:15:03.631797+00:00",
+      "finished_at": "2026-10-31T14:18:08.684281+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/XR-FIX-ARCHIVE-INVENTORY.json"
+    },
+    "E-FIX-ORACLE-FRESH-CHECKOUT": {
+      "id": "E-FIX-ORACLE-FRESH-CHECKOUT",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "ISOLATED gondola-children-archive compiled-children/oracle/oracle.test.mjs and run.mjs only; primary own receipt/report/rawlogs/history",
+      "summary": "Executed source935 freshworktree fullrun passesinherited46units+2builds butoracle aborts ENOENT ignored oracle/evidence/native.json. Remove ambient dependency by generating fresh native Go capture and archivingattempt-local trace; retainliteraloracle andnegativecontrols, demonstrate9testsworkwithabsent/poisoned ignoredfolder. NoJSdomainreducer/reusedauthorcapture. Other pending archivehelperreview disjoint.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T14:17:25.097234+00:00",
+      "finished_at": "2026-10-31T14:24:06.344279+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/E-FIX-ORACLE-FRESH-CHECKOUT.json"
+    },
+    "XR-FIX-ORACLE-FRESH-CHECKOUT": {
+      "id": "XR-FIX-ORACLE-FRESH-CHECKOUT",
+      "kind": "review",
+      "depends_on": "E-FIX-ORACLE-FRESH-CHECKOUT",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T14:24:26.587840+00:00",
+      "finished_at": "2026-10-31T14:28:20.996521+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-next/compiled-children/coordination/receipts/XR-FIX-ORACLE-FRESH-CHECKOUT.json"
     }
   },
   "events": [
@@ -2948,9 +3020,755 @@
       "at": "2026-10-31T13:47:59.033480+00:00",
       "worker": "N3",
       "job": "XR-FIX-CI-BROWSER-ID"
+    },
+    {
+      "type": "extend-after-immutable-publication",
+      "at": "2026-10-31T13:49:04.241260+00:00",
+      "jobs": [
+        "E-PUBLISHED-HISTORY-CUSTODY",
+        "XR-PUBLISHED-HISTORY-CUSTODY"
+      ],
+      "evidence_commit": "45317abb8d6f7c1153ea9999927727fa43203710"
+    },
+    {
+      "type": "solve",
+      "epoch": 20,
+      "at": "2026-10-31T13:49:04.385830+00:00",
+      "ready_jobs": [
+        "E-PUBLISHED-HISTORY-CUSTODY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH",
+        "N2": "E-PUBLISHED-HISTORY-CUSTODY"
+      },
+      "dispatch": {
+        "N2": "E-PUBLISHED-HISTORY-CUSTODY"
+      },
+      "native_seconds": 0.005849690001923591,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 1,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-PUBLISHED-HISTORY-CUSTODY": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "E-PUBLISHED-HISTORY-CUSTODY": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T13:49:12.719725+00:00",
+      "worker": "N2",
+      "job": "E-PUBLISHED-HISTORY-CUSTODY",
+      "agent": "/root/children_compiler"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T13:55:18.235040+00:00",
+      "worker": "N2",
+      "job": "E-PUBLISHED-HISTORY-CUSTODY"
+    },
+    {
+      "type": "solve",
+      "epoch": 21,
+      "at": "2026-10-31T13:55:18.341918+00:00",
+      "ready_jobs": [
+        "XR-PUBLISHED-HISTORY-CUSTODY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "XR-PUBLISHED-HISTORY-CUSTODY"
+      },
+      "dispatch": {
+        "N3": "XR-PUBLISHED-HISTORY-CUSTODY"
+      },
+      "native_seconds": 0.005046086997026578,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-PUBLISHED-HISTORY-CUSTODY": [
+          "N1",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-PUBLISHED-HISTORY-CUSTODY": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T13:55:26.061024+00:00",
+      "worker": "N3",
+      "job": "XR-PUBLISHED-HISTORY-CUSTODY",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T13:57:42.420908+00:00",
+      "worker": "N3",
+      "job": "XR-PUBLISHED-HISTORY-CUSTODY"
+    },
+    {
+      "type": "extend-after-executed-full-run-failure",
+      "at": "2026-10-31T14:02:53.858721+00:00",
+      "jobs": [
+        "E-FIX-ARCHIVE-INVENTORY",
+        "XR-FIX-ARCHIVE-INVENTORY"
+      ],
+      "source": "9bd6c88a577f519d80b7be860f698363adcd1c05",
+      "attempt": "attempt-20261031T133620538Z-6",
+      "error": "tar: harness: file changed as we read it"
+    },
+    {
+      "type": "solve",
+      "epoch": 22,
+      "at": "2026-10-31T14:02:53.962254+00:00",
+      "ready_jobs": [
+        "E-FIX-ARCHIVE-INVENTORY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "BENCH",
+        "N6": "E-FIX-ARCHIVE-INVENTORY"
+      },
+      "dispatch": {
+        "N6": "E-FIX-ARCHIVE-INVENTORY"
+      },
+      "native_seconds": 0.003968325007008389,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "E-FIX-ARCHIVE-INVENTORY": 1,
+        "XR-FIX-ARCHIVE-INVENTORY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIX-ARCHIVE-INVENTORY": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-FIX-ARCHIVE-INVENTORY": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T14:03:02.304956+00:00",
+      "worker": "N6",
+      "job": "E-FIX-ARCHIVE-INVENTORY",
+      "agent": "/root/children_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T14:14:53.380064+00:00",
+      "worker": "N6",
+      "job": "E-FIX-ARCHIVE-INVENTORY"
+    },
+    {
+      "type": "solve",
+      "epoch": 23,
+      "at": "2026-10-31T14:14:53.499820+00:00",
+      "ready_jobs": [
+        "XR-FIX-ARCHIVE-INVENTORY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "XR-FIX-ARCHIVE-INVENTORY"
+      },
+      "dispatch": {
+        "N3": "XR-FIX-ARCHIVE-INVENTORY"
+      },
+      "native_seconds": 0.008501114003593102,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "E-FIX-ARCHIVE-INVENTORY": 0,
+        "XR-FIX-ARCHIVE-INVENTORY": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-ARCHIVE-INVENTORY": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-FIX-ARCHIVE-INVENTORY": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T14:15:03.631797+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-ARCHIVE-INVENTORY",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "extend-after-executed-clean-checkout-failure",
+      "at": "2026-10-31T14:17:12.029247+00:00",
+      "jobs": [
+        "E-FIX-ORACLE-FRESH-CHECKOUT",
+        "XR-FIX-ORACLE-FRESH-CHECKOUT"
+      ],
+      "source": "935cb00ce92d4a28f346ac431db302c9f580ea44",
+      "error": "oracle.test.mjs reads ignored oracle/evidence/native.json ENOENT"
+    },
+    {
+      "type": "solve",
+      "epoch": 24,
+      "at": "2026-10-31T14:17:12.139498+00:00",
+      "ready_jobs": [
+        "E-FIX-ORACLE-FRESH-CHECKOUT"
+      ],
+      "pinned_workers": [
+        "N3"
+      ],
+      "assignments": {
+        "N4": "BENCH",
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N2": "BENCH",
+        "N3": "XR-FIX-ARCHIVE-INVENTORY",
+        "N5": "E-FIX-ORACLE-FRESH-CHECKOUT"
+      },
+      "dispatch": {
+        "N5": "E-FIX-ORACLE-FRESH-CHECKOUT"
+      },
+      "native_seconds": 0.007433154998579994,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "E-FIX-ARCHIVE-INVENTORY": 0,
+        "XR-FIX-ARCHIVE-INVENTORY": 1,
+        "E-FIX-ORACLE-FRESH-CHECKOUT": 1,
+        "XR-FIX-ORACLE-FRESH-CHECKOUT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIX-ORACLE-FRESH-CHECKOUT": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "E-FIX-ORACLE-FRESH-CHECKOUT": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": "/root/children_host",
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T14:17:25.097234+00:00",
+      "worker": "N5",
+      "job": "E-FIX-ORACLE-FRESH-CHECKOUT",
+      "agent": "/root/children_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T14:18:08.684281+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-ARCHIVE-INVENTORY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T14:24:06.344279+00:00",
+      "worker": "N5",
+      "job": "E-FIX-ORACLE-FRESH-CHECKOUT"
+    },
+    {
+      "type": "solve",
+      "epoch": 25,
+      "at": "2026-10-31T14:24:06.442105+00:00",
+      "ready_jobs": [
+        "XR-FIX-ORACLE-FRESH-CHECKOUT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N5": "BENCH",
+        "N3": "XR-FIX-ORACLE-FRESH-CHECKOUT"
+      },
+      "dispatch": {
+        "N3": "XR-FIX-ORACLE-FRESH-CHECKOUT"
+      },
+      "native_seconds": 0.005089629004942253,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-COMPILER": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 0,
+        "XR-GO": 0,
+        "XR-COMPILER": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-CHECKER-TESTS": 0,
+        "XR-CHECKER-TESTS": 0,
+        "E-FIX-ORACLE-CUSTODY": 0,
+        "XR-FIX-ORACLE-CUSTODY": 0,
+        "E-FIX-INHERITED-GATE": 0,
+        "XR-FIX-INHERITED-GATE": 0,
+        "E-FIX-WASM-OBSERVABILITY": 0,
+        "XR-FIX-WASM-OBSERVABILITY": 0,
+        "E-FIX-SEEDED-ASSERTIONS": 0,
+        "XR-FIX-SEEDED-ASSERTIONS": 0,
+        "E-FIX-HARNESS-LIVENESS": 0,
+        "XR-FIX-HARNESS-LIVENESS": 0,
+        "E-RELEASE-DOCS": 0,
+        "XR-RELEASE-DOCS": 0,
+        "E-AUTHOR-CUSTODY": 0,
+        "XR-AUTHOR-CUSTODY": 0,
+        "E-FIX-RELEASE-PATHS": 0,
+        "XR-FIX-RELEASE-PATHS": 0,
+        "E-FIX-ATTEMPT-FRESHNESS": 0,
+        "XR-FIX-ATTEMPT-FRESHNESS": 0,
+        "E-FIX-CI-BROWSER-ID": 0,
+        "XR-FIX-CI-BROWSER-ID": 0,
+        "E-PUBLISHED-HISTORY-CUSTODY": 0,
+        "XR-PUBLISHED-HISTORY-CUSTODY": 0,
+        "E-FIX-ARCHIVE-INVENTORY": 0,
+        "XR-FIX-ARCHIVE-INVENTORY": 0,
+        "E-FIX-ORACLE-FRESH-CHECKOUT": 0,
+        "XR-FIX-ORACLE-FRESH-CHECKOUT": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-ORACLE-FRESH-CHECKOUT": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-FIX-ORACLE-FRESH-CHECKOUT": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T14:24:26.587840+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-ORACLE-FRESH-CHECKOUT",
+      "agent": "/root/children_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T14:28:20.996521+00:00",
+      "worker": "N3",
+      "job": "XR-FIX-ORACLE-FRESH-CHECKOUT"
     }
   ],
-  "epoch": 20,
+  "epoch": 26,
   "policy": {
     "extract_priority": 100,
     "review_priority": 200,

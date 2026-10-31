@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import test from "node:test";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import {
   ORACLE_EXPECTATIONS,
   ORACLE_SCENARIO,
@@ -13,7 +16,32 @@ import {
 
 const fixtureScenario = JSON.parse(readFileSync(new URL("../../fixtures/compiled/children/scenario.json", import.meta.url), "utf8"));
 const expectationsJSON = JSON.parse(readFileSync(new URL("./expectations.json", import.meta.url), "utf8"));
-const nativeCapture = JSON.parse(readFileSync(new URL("./evidence/native.json", import.meta.url), "utf8"));
+const repositoryRoot = fileURLToPath(new URL("../../", import.meta.url));
+
+function captureFreshNativeTrace() {
+  const command = process.env.GOBI_GO_EXECUTABLE || "go";
+  const result = spawnSync(command, ["run", "./cmd/compiled-children-native", "--script", "fixtures/compiled/children/scenario.json"], {
+    cwd: repositoryRoot,
+    maxBuffer: 512 * 1024 * 1024,
+    env: { ...process.env, GOTOOLCHAIN: "local", GOFLAGS: "-buildvcs=false" },
+  });
+  if (result.error || result.status !== 0) {
+    const stderr = result.stderr?.toString("utf8").trim();
+    throw new Error(`fresh native Go trace failed (${command}): ${result.error?.message ?? (stderr || `exit ${result.status}`)}`);
+  }
+  if (process.env.GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE) {
+    const capturePath = process.env.GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE;
+    mkdirSync(dirname(capturePath), { recursive: true });
+    writeFileSync(capturePath, result.stdout);
+  }
+  try {
+    return JSON.parse(result.stdout.toString("utf8"));
+  } catch (error) {
+    throw new Error(`fresh native Go trace was not valid JSON: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+const nativeCapture = captureFreshNativeTrace();
 
 test("literal schedule covers keyed moves, key reuse, clear, remove, and renderer probes", () => {
   assert.equal(ORACLE_SCENARIO.events.length, 42);

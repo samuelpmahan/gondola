@@ -116,6 +116,7 @@ const stamp = () => new Date().toISOString();
 const rel = (path) => relative(root, path).split(sep).join("/");
 const attemptId = new Date().toISOString().replace(/[-:.]/g, "") + `-${process.pid}`;
 const attemptRoot = join(outputRoot, `attempt-${attemptId}`);
+const oracleNativeCapture = join(attemptRoot, "oracle/native.json");
 const logRoot = join(attemptRoot, "logs");
 const args = process.argv.slice(2);
 const rootGoEnv = { GOTOOLCHAIN: "local", GOFLAGS: "-buildvcs=false" };
@@ -746,11 +747,18 @@ function hasObservableClearGuardCoverage(coverage) {
 }
 
 async function runOracle() {
-  const output = await execute("n5-independent-literal-oracle", process.execPath, ["--test", oracleTest]);
+  await mkdir(join(attemptRoot, "oracle"), { recursive: true });
+  const output = await execute("n5-independent-literal-oracle", process.execPath, ["--test", oracleTest], {
+    env: {
+      GOBI_COMPILED_CHILDREN_NATIVE_CAPTURE: oracleNativeCapture,
+      GOBI_GO_EXECUTABLE: process.env.GOBI_GO_EXECUTABLE || "go",
+    },
+  });
   const tap = tapSummary(output);
   if (tap.tests === null || tap.pass === null || tap.pass < 1 || tap.fail !== 0 || tap.cancelled !== 0 || tap.skipped !== 0 || tap.todo !== 0) {
     throw new Error(`N5 literal oracle did not report a clean Node TAP summary: ${JSON.stringify(tap)}`);
   }
+  if (!await exists(oracleNativeCapture)) throw new Error("N5 literal oracle did not retain its fresh native Go trace");
   const expectations = await readJSON(oracleExpectations);
   for (const [source, name] of [
     [oracleTest, "oracle.test.mjs"],
@@ -762,13 +770,21 @@ async function runOracle() {
   receipt.oracle = {
     test: { path: rel(oracleTest), ...await hashPath(oracleTest) },
     expectations: { path: rel(oracleExpectations), ...await hashPath(oracleExpectations) },
+    nativeCapture: {
+      path: rel(oracleNativeCapture),
+      ...await hashPath(oracleNativeCapture),
+      command: process.env.GOBI_GO_EXECUTABLE || "go",
+      args: ["run", "./cmd/compiled-children-native", "--script", "fixtures/compiled/children/scenario.json"],
+      cwd: rel(root),
+      environmentOverrides: { GOTOOLCHAIN: "local", GOFLAGS: "-buildvcs=false" },
+    },
     stdoutPath: rel(join(logRoot, "n5-independent-literal-oracle.stdout.log")),
     stderrPath: rel(join(logRoot, "n5-independent-literal-oracle.stderr.log")),
     summary: `Node test runner: ${tap.pass}/${tap.tests} passed`,
     tap,
     schema: expectations.schema ?? null,
     seed: expectations.seed ?? expectations.sequence?.seed ?? null,
-    archivedInputs: await Promise.all(["oracle.test.mjs", "expectations.json", "scenario.json", "oracle.mjs", "native-fixture.json"].map(async (name) => ({
+    archivedInputs: await Promise.all(["oracle.test.mjs", "expectations.json", "scenario.json", "oracle.mjs", "native-fixture.json", "native.json"].map(async (name) => ({
       path: rel(join(attemptRoot, "oracle", name)),
       ...await hashPath(join(attemptRoot, "oracle", name)),
     }))),

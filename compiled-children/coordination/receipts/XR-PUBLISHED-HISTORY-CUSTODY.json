@@ -1,0 +1,128 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-PUBLISHED-HISTORY-CUSTODY",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Accepted N2\u2019s published-history custody packet. Independent read-only Git verification confirmed commit/tree/parent and the 43 history-only paths; all 40 chunk objects reconstruct the manifest and E-AUTHOR 164,464,000-byte SHA-256. The closed XR-AUTHOR receipt remains byte-identical with its 63-character missing-zero metadata typo, which is superseded by the correct full digest and does not indicate archive corruption.",
+  "reviewed_job": {
+    "job_id": "E-PUBLISHED-HISTORY-CUSTODY",
+    "worker": "N2",
+    "outcome": "confirmed_reuse"
+  },
+  "source_sha256": {
+    "compiled-children/coordination/reports/E-PUBLISHED-HISTORY-CUSTODY.md": "85cc5578ad55402fc6249a3dc3ffcd04609496ed5f9b3daef116fd6eaaa9a061",
+    "compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json": "33bf39394f250c04df3082877851af11d8102ce67d87a190528662d03851165a",
+    "compiled-children/coordination/rawlogs/N2-E-PUBLISHED-HISTORY-CUSTODY-verify-final.py": "2d0ba1abad42e16f2bc4a72e424ee14c6e404e2187d09ee50e28fe25c6000780",
+    "compiled-children/coordination/receipts/XR-AUTHOR-CUSTODY.json": "fee129ad46c531f5e5005b4607a0e54edb2df2d64bc56e007bf3550cf4230c77",
+    "compiled-children/coordination/receipts/E-AUTHOR-CUSTODY.json": "32820e5b23f721b435606e8a16d45367ce701c7f76829c194cc7f3148f22cc4f"
+  },
+  "published_history": {
+    "commit": "45317abb8d6f7c1153ea9999927727fa43203710",
+    "tree": "375dda6c5ac7d3973a5b37d1e0deb6275a0c183d",
+    "parent": "9bd6c88a577f519d80b7be860f698363adcd1c05",
+    "local_head_at_review": "9bd6c88a577f519d80b7be860f698363adcd1c05",
+    "changed_paths": 43,
+    "scope": "compiled-children/ci/2026-10-31/history/ only",
+    "chunk_count": 40,
+    "archive_bytes": 164464000,
+    "archive_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0"
+  },
+  "custody_correction": {
+    "closed_receipt": "compiled-children/coordination/receipts/XR-AUTHOR-CUSTODY.json",
+    "preserved_sha256": "fee129ad46c531f5e5005b4607a0e54edb2df2d64bc56e007bf3550cf4230c77",
+    "malformed_archive_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e",
+    "malformed_field_characters": 63,
+    "expected_archive_sha256": "a044fd9bab3af502002aeba54513d8f33a263a32aca6023cbf510f87905606e0",
+    "interpretation": "Receipt metadata typo missing final zero; archive stream/manifest/E-AUTHOR record agree on the 64-character full digest."
+  },
+  "review_summary": {
+    "commitTreeParentVerified": true,
+    "all43PathsHistoryOnly": true,
+    "all40ChunkGitObjectsLengthsAndSha256Verified": true,
+    "orderedArchiveStreamMatchesManifestAndEAuthor": true,
+    "closedXrReceiptExactHashPreserved": true,
+    "reportAndRawlogPinsMatch": true,
+    "historicalOnlyNoRuntimeAcceptanceClaim": true,
+    "fullRunnerCiOrRestoreNotRun": true
+  },
+  "execution": {
+    "runtime": "Python 3.12 and Git with GIT_NO_LAZY_FETCH=1",
+    "command": "GIT_NO_LAZY_FETCH=1 python3 compiled-children/coordination/rawlogs/N2-E-PUBLISHED-HISTORY-CUSTODY-verify-final.py",
+    "exit_code": 0,
+    "stderr_empty": true,
+    "output_matchesN2ByteForByte": true,
+    "archive_materialized": false,
+    "git_or_native_state_written": false
+  },
+  "reviewed_evidence": [
+    {
+      "path": "compiled-children/coordination/reports/E-PUBLISHED-HISTORY-CUSTODY.md",
+      "bytes": 4801,
+      "sha256": "85cc5578ad55402fc6249a3dc3ffcd04609496ed5f9b3daef116fd6eaaa9a061"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-PUBLISHED-HISTORY-CUSTODY.json",
+      "bytes": 40071,
+      "sha256": "33bf39394f250c04df3082877851af11d8102ce67d87a190528662d03851165a"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-PUBLISHED-HISTORY-CUSTODY-verify-final.py",
+      "bytes": 11267,
+      "sha256": "2d0ba1abad42e16f2bc4a72e424ee14c6e404e2187d09ee50e28fe25c6000780"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/N2-E-PUBLISHED-HISTORY-CUSTODY-verify-final.json",
+      "bytes": 39013,
+      "sha256": "49f54d2012542fad2c358361da036432f9d91a06ae7104029387f379fa59aae9"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-PUBLISHED-HISTORY-CUSTODY-verifier-output.json",
+      "bytes": 39013,
+      "sha256": "49f54d2012542fad2c358361da036432f9d91a06ae7104029387f379fa59aae9"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-PUBLISHED-HISTORY-CUSTODY-verifier.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-PUBLISHED-HISTORY-CUSTODY-verifier.exit-code",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "compiled-children/coordination/rawlogs/XR-PUBLISHED-HISTORY-CUSTODY-review-audit.json",
+      "bytes": 3780,
+      "sha256": "b370db9dfb436c931964b48e47c6c6ae87e15bdbcf634e3ce4f5227d803e70a1"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/XR-AUTHOR-CUSTODY.json",
+      "bytes": 56959,
+      "sha256": "fee129ad46c531f5e5005b4607a0e54edb2df2d64bc56e007bf3550cf4230c77"
+    },
+    {
+      "path": "compiled-children/coordination/reports/XR-AUTHOR-CUSTODY.md",
+      "bytes": 5972,
+      "sha256": "6247b8ded788846cdb21a0fbd98cf90a0cb31072a4e50386abb6b184d7be9843"
+    },
+    {
+      "path": "compiled-children/coordination/receipts/E-AUTHOR-CUSTODY.json",
+      "bytes": 23826,
+      "sha256": "32820e5b23f721b435606e8a16d45367ce701c7f76829c194cc7f3148f22cc4f"
+    },
+    {
+      "path": "compiled-children/coordination/reports/E-AUTHOR-CUSTODY.md",
+      "bytes": 7344,
+      "sha256": "23b31314ba22bea550d1a787d60191745038dbffcd3fb139175fc04d9e60a5ed"
+    }
+  ],
+  "report": {
+    "path": "compiled-children/coordination/reports/XR-PUBLISHED-HISTORY-CUSTODY.md",
+    "bytes": 2251,
+    "sha256": "16286f50a66870a79236e9c155d1b34617d93d6aed3b1eb195eb121fb94429c6"
+  },
+  "limitations": [
+    "Verifies publication of historical evidence only; no current runtime or CI acceptance claim.",
+    "Verifier reads Git blobs and hashes the ordered chunk stream without writing a duplicate archive."
+  ]
+}

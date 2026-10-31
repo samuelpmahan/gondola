@@ -1,0 +1,135 @@
+{
+  "review": "XR-FIX-ARCHIVE-INVENTORY",
+  "reviewer": "N3",
+  "decision": "accepted",
+  "reviewed_packet": {
+    "job_id": "E-FIX-ARCHIVE-INVENTORY",
+    "worker": "N6",
+    "outcome": "mixed_change",
+    "report": {
+      "path": "compiled-children/coordination/reports/E-FIX-ARCHIVE-INVENTORY.md",
+      "bytes": 5081,
+      "sha256": "d26ad8e6809ad77e83e1e2ea532d2e2e87f2010911da0f6e541d2a44a3d777f5"
+    },
+    "receipt": {
+      "path": "compiled-children/coordination/receipts/E-FIX-ARCHIVE-INVENTORY.json",
+      "bytes": 19019,
+      "sha256": "b03aee27190dd73e3cfd870ccaa811086ceb88550c192456a5c9ba41c022254c"
+    }
+  },
+  "reviewed_sources": {
+    "compiled-capabilities/archive-helper.mjs": {
+      "bytes": 3022,
+      "sha256": "ad424b1fa1b92368f29fea12b8ff78d49d4ee2348b78962ec420e0585080682d"
+    },
+    "compiled-capabilities/archive-helper.test.mjs": {
+      "bytes": 11768,
+      "sha256": "2dd1d91f8f9fd73054c5bb9bd46b2c4c0fb758f77f5f077090e6321777125cff"
+    }
+  },
+  "preserved_originals": {
+    "manifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-INVENTORY/originals/manifest.json",
+      "bytes": 1159,
+      "sha256": "8bb8a76fd3ecaf1cf87341b5900f12e690b80b9863b25556bd991c7bfd7632ad"
+    },
+    "files": [
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-INVENTORY/originals/archive-helper.mjs",
+        "bytes": 1835,
+        "sha256": "87cb9acd18fe7b9cb22a5c0d68019a4374b019c74717ce7e84b5729a849037eb",
+        "matches": true
+      },
+      {
+        "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-INVENTORY/originals/archive-helper.test.mjs",
+        "bytes": 6322,
+        "sha256": "066811b13a96e6958bbaa2770d433ceee6a9b5a96bf37d9f0f46b70fae6a7f52",
+        "matches": true
+      }
+    ]
+  },
+  "preserved_history": {
+    "manifest": {
+      "path": "compiled-children/coordination/repairs/E-FIX-ARCHIVE-INVENTORY/history/pre-behavioral-old-helper-check/manifest.json",
+      "bytes": 7073,
+      "sha256": "d4a04a55df4cf26202962fb6b05d51f3910d1b84369947f330ad344491f00d8b"
+    },
+    "files_count": 12,
+    "all_file_hashes_match": true,
+    "weak_initial_witness_is_not_behavioral": true,
+    "final_witness_records_real_tar_file_changed_error": true
+  },
+  "repair_rawlog_manifest": {
+    "path": "compiled-children/coordination/rawlogs/E-FIX-ARCHIVE-INVENTORY/manifest.json",
+    "bytes": 12990,
+    "sha256": "4c9cb69e40fec62fe259030dcf1da51aca193be9d29a2a3e23df551f99d9f529",
+    "log_count": 36,
+    "mismatch_count": 0
+  },
+  "old_helper_behavior_control": {
+    "working_directory": "/tmp/gobi-archive-old-helper-final-10pxkn5p",
+    "old_helper_and_test": {
+      "compiled-capabilities/archive-helper.mjs": {
+        "bytes": 1835,
+        "sha256": "87cb9acd18fe7b9cb22a5c0d68019a4374b019c74717ce7e84b5729a849037eb"
+      },
+      "compiled-capabilities/archive-helper.test.mjs": {
+        "bytes": 11768,
+        "sha256": "2dd1d91f8f9fd73054c5bb9bd46b2c4c0fb758f77f5f077090e6321777125cff"
+      }
+    },
+    "red_exit": 1,
+    "failure": "tar: harness: file changed as we read it",
+    "precondition_only_assertion_in_red_output": false
+  },
+  "green_suite": {
+    "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/archive-helper.test.mjs",
+    "working_directory": "/workspace/scratch/39a56936f173/gondola-children-archive",
+    "node": "v22.23.4",
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "exit": 0
+  },
+  "syntax_checks": {
+    "helper_exit": "0",
+    "test_exit": "0"
+  },
+  "listed_payload_gate": {
+    "helper_contains_bytes_and_sha256_roundtrip_check": true,
+    "test_mutates_listed_file_after_inventory_and_expects_roundtrip_mismatch": true
+  },
+  "primary_failed_attempt_context": {
+    "attempt": "compiled-children/demo/output/attempts/attempt-20261031T133620538Z-6",
+    "tar_diagnostic": "tar: harness: file changed as we read it",
+    "immutable_bundle_id": "17a52c292f1a4b367f280c3ae043ad65fc09e858",
+    "separate_container_check": "Root reported a separate read-only container check matched all 426/426 manifest members and observed no content/hash mismatch; all 426 loose member pins matched at that later check.",
+    "artifact_boundary_status": "matched",
+    "writer_identity": "unknown",
+    "archive_sha256_recorded_in_N6_packet": "57b2b63e5549e6e2a944c1f9658f165606847e701f809782c8d64f1759bcef4d",
+    "archive_rehashed_by_this_review": false
+  },
+  "checks": {
+    "secondarySourcePinsMatchReceipt": true,
+    "originalManifestAndTwoCopiesMatch": true,
+    "all12HistoryPinsMatch": true,
+    "allRepairRawlogPinsMatch": true,
+    "oldHelperBehaviorWorkspaceUsesPreservedHelperAndFinalTest": true,
+    "independentOldHelperRedRunsRealTarAndFailsForDirectoryChurn": true,
+    "newHelperSuitePasses5of5": true,
+    "listedByteHashGateRemainsInHelperAndTest": true,
+    "initialWeakWitnessIsClearlyFlagPreconditionOnly": true,
+    "laterBehavioralWitnessExplicitlySeparate": true,
+    "failedArchiveContextClaimsUnknownWriterAnd426ConsumerCheck": true,
+    "noArchiveOrOtherSourceInScope": true,
+    "EfixReportPinMatches": true,
+    "publicApiSignatureMatchesOriginal": true,
+    "newHelperUsesNulFileListAndNoRecursion": true,
+    "finalBehaviorTestHasNoFlagOrListPreconditions": true
+  },
+  "limits": [
+    "No full runner, npm, Git operation, or native-state write was performed.",
+    "The failed 9bd6 archive and its 426-member container check were not rerun or independently re-audited here.",
+    "No writer identity or cause for the prior tar diagnostic is attributed; no earlier archive corruption was changed."
+  ]
+}
