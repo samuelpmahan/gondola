@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s compiled-capabilities/coordination/acceptance/scheduler -v",
+      "exitCode": 0,
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/unittest-current.log",
+      "result": "14 tests passed; includes exact reordered-AMEND mutation and startup pinned-log hash mutation."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/independent-probes.py",
+      "exitCode": 0,
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/independent-probes-current.json",
+      "result": "17 exhaustive epoch score comparisons match; exact reordered-extension mutation returns FAIL with amend_extension_before_review."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --json",
+      "exitCode": 0,
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/audit-partial-current.json",
+      "result": "INCOMPLETE, 17 accepted epochs, 32 packets, zero structural errors."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --require-complete --json",
+      "exitCode": 2,
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/audit-require-complete-current.json",
+      "result": "Failed closed while XR-FIX-SCHEDULER and XR-FIX-ARCHIVE-AUDIT remained running."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/check-startup-failure.py",
+      "exitCode": 0,
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/startup-failure-verification.json",
+      "result": "Source, exact failed command, explicit failure, new packet IDs, contained log SHA/content, and repair/review links verified; branch requires no AMEND review."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/verify-source-pins.py",
+      "exitCode": 0,
+      "log": "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/source-pin-verification.json",
+      "result": "All E-FIX-SCHEDULER source pins and preserved original report/receipt hashes match current bytes."
+    }
+  ],
+  "decision": "accepted",
+  "findingClosure": {
+    "exactMutation": "Move E-FIX-BUILD/XR-FIX-BUILD extension immediately before XR-BUILD completion and remove original later extension.",
+    "independentResult": "FAIL with amend_extension_before_review",
+    "original_finding": "An extend-after-review-amend event could expose repair packets before its matching review completed with decision=amend.",
+    "regression_test": "test_amend_extension_before_completed_review_is_rejected",
+    "repairMechanism": "Replay requires the matching review to be visible and done with an amend receipt before the extension, and validates the repair_of and XR-FIX dependency links."
+  },
+  "job_id": "XR-FIX-SCHEDULER",
+  "limitations": [
+    "Scheduler is still in flight; this review accepts only the E-FIX-SCHEDULER repair and does not claim complete scheduler acceptance.",
+    "The require-complete failure was captured while XR-FIX-SCHEDULER was running."
+  ],
+  "liveAudit": {
+    "acceptedEpochs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "donePackets": 30,
+    "nativeScoresMatchIndependentExhaustiveDP": true,
+    "packetCount": 32,
+    "partialAuditExitCode": 0,
+    "rejectedEpoch03Dispatched": false,
+    "requireCompleteExitCode": 2,
+    "requireCompleteReason": "Open review packets and their AMEND closure gates remain pending while this review is running.",
+    "runningPackets": [
+      "XR-FIX-SCHEDULER",
+      "XR-FIX-ARCHIVE-AUDIT"
+    ],
+    "status": "INCOMPLETE",
+    "structuralErrors": 0
+  },
+  "publication": "No scheduler state, spec, event, native epoch, pre-existing receipt, production file, or Git state was modified.",
+  "review_artifact_sha256": {
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER.md": "463c8d13ddb4f63861d2f6c142d5b097ca379af3ea38e69d8c44dd1f1d0d4195",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/audit-partial-current.json": "45189a60a0cfae959918e4aab1f812527886419ecc95a283b2cb00d45f897bcd",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/audit-partial-current.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/audit-require-complete-current.json": "035818978e3b632f44fe98f65e5a98555e0e8c226e0acacac76a5b8e8697de72",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/audit-require-complete-current.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/check-startup-failure.py": "fb37b63b7ede746848018bd1db26aa145b2c6ba67aa524b80a65bfd69a7b7a31",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/independent-probes-current.json": "c8ded24bcfc89826504c6da49d10153e7565118ec9f1ff5e4f2d7139d54d2229",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/source-pin-verification.json": "39bfe1a276e209b66bba798b25b8a42636a6649759fb32a3da15033929f1156a",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/startup-failure-current.json": "3a25b12b071cc590aa8bbb1e7811561b0a7fe9f2a999d07577d90872bfafbf43",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/startup-failure-verification.json": "387ac5ff95ee8b7ff0f28f4a41434cecdeaffcd3b8b5306b332fa55f06a3ec1c",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/unittest-current.log": "a3f79ee6e53922cf53a9edf8a615ea9d6d8b765584caf8aef2a4e5c1f4848dd4",
+    "compiled-capabilities/coordination/reviews/XR-FIX-SCHEDULER/logs/verify-source-pins.py": "70606c0fc093c5fcc21637c5deed9fe84d984b133212dc2d1516472b61c9022c"
+  },
+  "reviewed_job": {
+    "decision": "accepted",
+    "job_id": "E-FIX-SCHEDULER",
+    "repair_of": "XR-PREP-SCHEDULER",
+    "worker": "N2"
+  },
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/scheduler/audit.py": "b32059aa5aa595ab8d3e6ab7d11216b5d5ca88e8b672b5bc2e3c04d85add12ee",
+    "compiled-capabilities/coordination/acceptance/scheduler/test_audit.py": "af71501e47fc65c13b712a0b3194739584895759c2e262421e5c9df21de7faed",
+    "compiled-capabilities/coordination/receipts/E-FIX-SCHEDULER.json": "60292b7016220a0437d774411a24fd16ad1028519be52936ce81de6a69d89845",
+    "compiled-capabilities/coordination/receipts/E-PREP-SCHEDULER.json": "0f613a570a1a16841d5b377489d2eecf2892dd7a8b3e6d8b4e99d80577084764",
+    "compiled-capabilities/coordination/receipts/XR-PREP-SCHEDULER.json": "a4527ba3ee4d219b89d9795ef1ba7f6bc47761f4d2d2f8e6a45df12e9566796c",
+    "compiled-capabilities/coordination/reports/E-FIX-SCHEDULER.md": "08c665080679f03a0615811204499528d37246caeedbfe784e96395d2f995bb9",
+    "compiled-capabilities/coordination/reports/E-PREP-SCHEDULER.md": "1830b57e65a9831bc8c8f637a09d98959e85b7efd72854b2a2cc437740f73727",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER.md": "b61ea32a6c1c1ba16dc9e2c6a85427fe940e6f0a5d5989de36ccaea83b3242e4",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/independent-probes.py": "184daa5f197f3e4d1a2166e86a4aac33dd9b23360fc60ab9e0971856dff27f0b",
+    "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db"
+  },
+  "startupFailureExtension": {
+    "amendReviewPrecondition": false,
+    "failedCommand": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+    "failure": "ENOENT creating attemptRoot before its parent; no test stage executed",
+    "log": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log",
+    "newJobs": [
+      "E-FIX-STARTUP",
+      "XR-FIX-STARTUP"
+    ],
+    "pathContainedAndContentVerified": true,
+    "sha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+    "source": "232406843678f46c569e1c54b34b268c84e7764e",
+    "startupRepairAndReviewDone": true,
+    "type": "extend-after-executed-failure"
+  },
+  "summary": "Accepted E-FIX-SCHEDULER: the exact early-AMEND extension mutation is now rejected and covered by a regression test; the independent startup-failure extension validates its exact recorded fields and pinned contained log without an AMEND review precondition.",
+  "worker": "N5"
+}

@@ -1,0 +1,136 @@
+{
+  "checks": [
+    {
+      "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/demo/smoke.mjs --demo compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/site --output compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/smoke-rerun.json --screenshot compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/smoke-rerun.png --port 0",
+      "exitCode": 0,
+      "result": "passed all 8 checks; Node v22.23.4, Chromium 153.0.8010.0, React/ReactDOM 19.3.1; three requested HTTP assets were 200 and nonempty; no browser/console/request/WebAssembly errors."
+    },
+    {
+      "command": "Inspect pinned compiled-capabilities/demo/smoke.mjs assertions and rerun output",
+      "result": "confirmed injected disabled pending click leaves trace and request token unchanged; compatible swap preserves state/view/trace/pending; incompatible admission preserves old backend/state/trace/pending/physical DOM and node identity; post-rejection click remains live; recovery and correlated reply pass."
+    },
+    {
+      "command": "Hash original local assets and compare demo members against archive-manifest.json and tar member bytes",
+      "result": "six demo members matched exact bytes and SHA-256 in filesystem, manifest, and archive; screenshot visually inspected."
+    },
+    {
+      "command": "Read local execution.json, E-BUILD receipt, and root-observed runner log",
+      "result": "full E-BUILD failed at inherited-static-and-interaction-lifecycle; 161 source pins match; all 16 recorded subprocess commands exited 0; root-observed outer process exit 0; log ends compiled-capabilities: failed (full)."
+    }
+  ],
+  "decision": "accepted",
+  "evidence": {
+    "archive": {
+      "bytes": 14976273,
+      "demoMembersExact": true,
+      "manifestSha256": "f51970414a096529361b283733be90f7ebf8bd72ebf686b333bc590aba623c7c",
+      "sha256": "adabec770f19f985e5ad499b87b1a2f8c0e3890822a905346432cd69133c7040"
+    },
+    "fullRun": {
+      "exitCodeSource": "root-observed; not stored in the E-BUILD receipt",
+      "failedStage": "inherited-static-and-interaction-lifecycle",
+      "outerProcessExitCode": 0,
+      "status": "failed"
+    },
+    "screenshot": {
+      "bytes": 317879,
+      "sha256": "ea9d67e7ecc650b2b3b529695cd092f8bf70a67c893c56ffc2e51a5c1c0c09c7",
+      "visuallyInspected": true
+    },
+    "smoke": {
+      "checkCount": 8,
+      "dispatchIds": [
+        "dispatch-0001",
+        "dispatch-0002",
+        "dispatch-0003",
+        "dispatch-0004"
+      ],
+      "finalParentCount": 2,
+      "finalPending": false,
+      "goEventOrder": [
+        "addParent",
+        "requestParent",
+        "addParent",
+        "complete"
+      ],
+      "http": {
+        "/": {
+          "bytes": 4505,
+          "status": 200
+        },
+        "/demo.bundle.mjs": {
+          "bytes": 1846171,
+          "status": 200
+        },
+        "/demo.css": {
+          "bytes": 6194,
+          "status": 200
+        }
+      },
+      "pendingRequests": [],
+      "replyToken": "parent:g1:r1",
+      "status": "passed"
+    }
+  },
+  "job_id": "XR-RESULT-DEMO",
+  "outcome": "accepted_local_failed_cohort_packet_only",
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/XR-RESULT-DEMO.md",
+    "sha256": "847690733adf2cd3906300ea8cccf059671e38323d603d870c308f962b4a7cfe"
+  },
+  "review_artifact_sha256": {
+    "compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/audit.json": "3cce06a551db7c933c672f311f3f8f78b6bb3a64d0833c109b1dfd311966292d",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/cohort-screenshot.png": "ea9d67e7ecc650b2b3b529695cd092f8bf70a67c893c56ffc2e51a5c1c0c09c7",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/logs/smoke-rerun.stderr.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/logs/smoke-rerun.stdout.log": "56661744c3d0c05ef20583e97d7f47ac83c70ee408668868fb01e8e1c7aae67b",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/smoke-rerun.json": "cd8d6fdeba7ce8eec5d681487ab9229f9e19d36d2b53090382db46b08649556f",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-DEMO/smoke-rerun.png": "d9ac96ab3ef1164a0bee7a2fce5046910a8d9f7b9a35dfea753d3aad8c9936ad"
+  },
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "scope": "Local failed-cohort demo evidence only. No source-publication, hosted artifact, integrated run, or milestone acceptance.",
+  "sourceIdentity": {
+    "baseCommit": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+    "bindingRecordsSameTreeAndParent": true,
+    "localCommit": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+    "publicationBinding": "compiled-capabilities/coordination/publication-binding.json",
+    "publishedCommit": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "tree": "d22b75e18c7bea70a743cc79d53461b287c7d045"
+  },
+  "source_sha256": {
+    "/tmp/gondola-capabilities-full-031c462.log": "bf66825486126f9ee1bfa6438a4c0f939efcec5356eec9e136c51e3f2ef0468d",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/archive-manifest.json": "f51970414a096529361b283733be90f7ebf8bd72ebf686b333bc590aba623c7c",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/capabilities-artifacts.tar.gz": "adabec770f19f985e5ad499b87b1a2f8c0e3890822a905346432cd69133c7040",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/demo-smoke.json": "58dabce8d2b4551341edf548964870e37b755d18bdec854aa26a3c2537c96338",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/demo.png": "ea9d67e7ecc650b2b3b529695cd092f8bf70a67c893c56ffc2e51a5c1c0c09c7",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/site/demo-build.json": "b22b2e2b269fb464bd269a11f6de7dd51f1d6a1277b59f950a6019c05de7dfb8",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/site/demo.bundle.mjs": "0b024fb34bb7f1a0f98eff2f99a16c2f9cdd423fd77ddd8e0614042e86cfe535",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/site/demo.css": "3c36b27dc9297f363e3a7e1dd770101c2433e830b0deca337b5801a8d58b26e0",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/demo/site/index.html": "68ebf6373b4a666ab49fa2f618aad9fce96ccb8be9281b4c8e5692c4e2155b11",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/execution.json": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/logs/n5-build-http-demo.stdout.log": "693291660affea987499c37b0f1ade61625ddb7693e6ae48e39f4d49f2a75323",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/logs/n5-http-demo-smoke.stdout.log": "7c5401ca75d782f978e7a7deba02ffc0187bbc1843e273c008cde6b71f302c5d",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/react/output/apps/lifecycle-7e6575d90707/app-ir.json": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/react/output/apps/lifecycle-7e6575d90707/encoder.mjs": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs": "f2fa10211b86b94c340897631cffea7c65f8eba4938966bb0436b548d37c879b",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/react/output/buildmanifest.json": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+    "compiled-capabilities/ci/2026-10-31/lanes/demo/audit-local-cohort.py": "6a06afa4fe8150c9a4d1489f7fac810088bfbfd3959651dcffd54b37a9d0ff3d",
+    "compiled-capabilities/ci/2026-10-31/lanes/demo/local-cohort-031c462-audit.json": "f1ffdc9e1c91ab513581e1c37d5ad27b499915fccbacf2a1625cb338a84c7ae3",
+    "compiled-capabilities/ci/2026-10-31/lanes/demo/preflight.md": "3827ec62f346dc99ae195effc8a8533f2c755ec136760111d161e5062b01583a",
+    "compiled-capabilities/ci/2026-10-31/lanes/demo/source-preflight.json": "6f75bb8a4ee3640b444ed7451d450a5c8405e0b1a6d8261b761dec6dcb35eef2",
+    "compiled-capabilities/coordination/publication-binding.json": "3ef9f4bd3ae606dda6c4e06f30e1df40c03de697bbeda17449783e29bfaf87a8",
+    "compiled-capabilities/coordination/receipts/E-BUILD.json": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "compiled-capabilities/coordination/receipts/E-RESULT-DEMO.json": "b7141258d84c68c95d44db20cd9b90469c9544ea2ce6ac8615deb25dd2e16ad5",
+    "compiled-capabilities/coordination/receipts/E-RESULT-PROVENANCE.json": "2b8865a07ed2657233ff99cb1ae679c43fee1f9e27d2b2bf5ff4bf0d8730661c",
+    "compiled-capabilities/coordination/reports/E-BUILD.md": "ba1a400e6cdaed55c0e0d35c6561d860a0e162291caff0332f49f1536128a66b",
+    "compiled-capabilities/coordination/reports/E-RESULT-DEMO.md": "d37a374a0d8ecf45bb407d493e9fdadc585be789f47fe52f73f7dc4215364798",
+    "compiled-capabilities/coordination/reports/E-RESULT-PROVENANCE.md": "7a4f23db4fd7d8bea86e26db3ee3c161fc12e89370764f64812ec5f8fdf68f9b",
+    "compiled-capabilities/demo/app.mjs": "f34d9deafdac14e6c7d24ff73a8926ca3035db1313e9ed8ea135a4ddae1b1092",
+    "compiled-capabilities/demo/build.mjs": "b6f5f49048418e20e59c6f09e9fea753610015fef8ceecb611d9da8c01912326",
+    "compiled-capabilities/demo/demo.css": "3c36b27dc9297f363e3a7e1dd770101c2433e830b0deca337b5801a8d58b26e0",
+    "compiled-capabilities/demo/index.html": "68ebf6373b4a666ab49fa2f618aad9fce96ccb8be9281b4c8e5692c4e2155b11",
+    "compiled-capabilities/demo/smoke.mjs": "a801bd23e4b209a082c01abebe8157282a3d2ae75f4a01e8de72f29ad6254cc8"
+  },
+  "status": "closed_reviewed_failed_source",
+  "summary": "Independently confirmed the local 031c462 demo smoke, eight HTTP/browser checks, screenshot and archived asset bytes; N5 accurately reports the full E-BUILD gate failed despite outer runner exit 0. Acceptance is limited to this failed-cohort demo corroboration.",
+  "worker": "N2"
+}

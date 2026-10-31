@@ -1,0 +1,182 @@
+{
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "job_id": "XR-ACCEPT-DEMO",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently reviewed N5's current-source demo evidence. The eight browser assertions, actual HTTP responses, compiler/build pins, disabled action, rejection and recovery behavior, correlated reply, current-source catalog, and complete hosted archive evidence are supported by pinned outputs. The local archive remains rejected with cause unknown; this review accepts only the scoped demo evidence.",
+  "authorPacket": {
+    "reportPath": "compiled-capabilities/coordination/reports/E-ACCEPT-DEMO.md",
+    "reportSha256": "7bd5f59f1bae9fa662538efd137ad0bb908d42351f0a1c486064e3053c6fdb9c",
+    "receiptPath": "compiled-capabilities/coordination/receipts/E-ACCEPT-DEMO.json",
+    "receiptSha256": "02ab3ed7a8c081837dea35d87a75ad296d5d2571107d1e29d58e21d3eed6d02a",
+    "decision": "accepted",
+    "outcome": "mixed_change",
+    "sourceCommit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "sourceTree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f"
+  },
+  "sourceIdentity": {
+    "commit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "tree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f",
+    "parent": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae"
+  },
+  "reviewAudit": {
+    "command": "python3 compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify_packet.py",
+    "script": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify_packet.py",
+    "scriptSha256": "14fd5346000bf3c19262d249c051e9802b48ebff0f14f4ffedac4544bc6b87c8",
+    "output": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify.stdout.log",
+    "outputSha256": "3af873daf7a17e9efba478b5112d1b948b90a0be45ecb64572a3c12bc0c87ead",
+    "stderr": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify.stderr.log",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exitCode": 0,
+    "authorSourcePinsChecked": 104,
+    "correctedAttemptDisclosure": {
+      "firstAttemptStatus": "failed due to reviewer verifier using an incorrect JSON nesting path",
+      "firstStdout": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify-attempt01.stdout.log",
+      "firstStdoutSha256": "95504536f69e731247f43e5076afc9d6a98dc8148a6758d4a04128549dcec723",
+      "firstStderr": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify-attempt01.stderr.log",
+      "firstStderrSha256": "8c21459a900ddb03e8772a6b458d4ef5bdcc33e2328d2740d646326d1bc530f9",
+      "firstCorrectedOutput": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO/verify-attempt02.stdout.log",
+      "firstCorrectedOutputSha256": "5b21cc6af11904526345cb3c5ff79fdc58ec3735b04392280c2a8c4b907855ce"
+    }
+  },
+  "nativeReceiptValidation": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 /tmp/gondola-rebalancer-env/bin/python; load read-only state/receipt and call probe.validate_receipt(receipt, job, 'N1')",
+    "helper": "compiled-capabilities/coordination/probe.py:validate_receipt",
+    "result": "passed",
+    "jobId": "XR-ACCEPT-DEMO",
+    "jobKind": "review",
+    "worker": "N1",
+    "decision": "accepted",
+    "readOnly": true
+  },
+  "demo": {
+    "local": {
+      "auditPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-demo-audit.json",
+      "auditSha256": "5eeb480dce86835bef5d2d957d69cc042d9262020a23c252f5b4f51ffcad9346",
+      "checks": 8,
+      "status": "passed"
+    },
+    "primary": {
+      "auditPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-demo-audit.json",
+      "auditSha256": "3ad0297a215fa80bd877fb7f4b4019bb69dce22ab19979fee7eff9c6047898e8",
+      "checks": 8,
+      "status": "passed",
+      "httpStatuses": [200, 200, 200],
+      "requirements": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply",
+        "effect.cancel"
+      ],
+      "buildPins": {
+        "appIR": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+        "encoder": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+        "compiledModule": "e6768a43d409664c3a573520f548344c9d13502a8dc0c5100f2dd88d9d6c86c1",
+        "browserBundle": "62d0e2cec181850aec5f1b081d7a4cc711355db200cd44be0cbfee05e30e1454"
+      },
+      "dispatchIds": [
+        null,
+        "dispatch-0001",
+        "dispatch-0002",
+        "dispatch-0003",
+        "dispatch-0004"
+      ],
+      "eventMessages": [
+        null,
+        "addParent",
+        "requestParent",
+        "addParent",
+        "complete"
+      ],
+      "finalState": {
+        "parentCount": 2,
+        "pending": false,
+        "reply": "parent:g1:r1"
+      },
+      "screenshot": {
+        "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/demo.png",
+        "sha256": "21a70e023b2206a6c424e973c06e320e9abdfed4fb49d09034878ef2771e3d37",
+        "visuallyInspectedByReviewer": true
+      }
+    }
+  },
+  "terminalCatalog": {
+    "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aeff-terminal-runs-jobs-20261031T111444Z-v2.json",
+    "sha256": "b69f432f53e8d4ff85ae0d855bbfabec35f76febb4830853d313cb0a8b2d9bfc",
+    "runs": 30,
+    "jobs": 30,
+    "push": 15,
+    "pullRequest": 15,
+    "allTerminalSuccess": true,
+    "auditPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/terminal-catalog-audit.json",
+    "auditSha256": "910ca23d5b83c4280bea4c731bb2825be1461d85ac3d94a510e251b93cf9e4ad"
+  },
+  "providerArtifact": {
+    "runId": 41193504188,
+    "jobId": 124514913013,
+    "artifactId": 13040129310,
+    "outerZipBytes": 76786265,
+    "outerZipSha256": "3a54a53c81ac93ad1c5a8231b17ac289875ed57ad7bb12d7ae2b3609ff267de1",
+    "outerMemberCount": 1476,
+    "outerVerificationPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-outer-verification.json",
+    "outerVerificationSha256": "4de2e094846511deaa165be290505e10ab874c07206fb0c0b0a64870f33d82af",
+    "innerReceiptSha256": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "innerArchiveBytes": 14960460,
+    "innerArchiveSha256": "ba17805387c8204ef2624caec0af35641771bc8af48d4f03b82c1a6609586d8f",
+    "manifestSha256": "ccf0bb8fb460d72febd3f96ab7476f3f29588b80fba38c974cf4ab95066ebac5",
+    "innerMemberCount": 189,
+    "gzipEofAndTrailerValid": true,
+    "completeArchiveVerificationOutput": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-archive-verification/stdout.json",
+    "completeArchiveVerificationSha256": "d5d29fd4d320398adfacc0bee126ae59d5bad612277d4e43f79b83022dee8bbd"
+  },
+  "localArchive": {
+    "actualBytes": 12845056,
+    "actualSha256": "91e3d977e8efd7ef42a37d43029997a9e2ab8db7266a88cf54d5f7cc90a64b5f",
+    "receiptBytes": 14983690,
+    "receiptSha256": "1a4fd17fd4f8c2aef16aaa1ed268d253b13dd77396e6cb6da3108e2b2c3921ab",
+    "verifierExitCode": 2,
+    "status": "rejected",
+    "cause": "unknown",
+    "originalsUnchanged": true,
+    "rootDecisionPath": "compiled-capabilities/ci/2026-10-31/ACCEPTANCE-SCOPE.json",
+    "rootDecisionSha256": "2e23397e2a0e22a45d72a5038f563bd0ba8ae2edd4b6d766284317aa215c8589"
+  },
+  "checks": [
+    {
+      "id": "author-packet-hashes",
+      "result": "passed",
+      "detail": "Report and receipt hashes match; all 104 author source pins match current bytes."
+    },
+    {
+      "id": "current-ci-demo",
+      "result": "passed",
+      "detail": "All eight recorded browser assertions match the local capture; HTTP assets are all 200 and state/dispatch evidence agrees with the correlated reply."
+    },
+    {
+      "id": "build-inputs-and-screenshot",
+      "result": "passed",
+      "detail": "Primary AppIR, encoder, compiled module, bundle, and screenshot pins match; primary screenshot visually inspected."
+    },
+    {
+      "id": "terminal-catalog-and-archive",
+      "result": "passed",
+      "detail": "Current-source catalog is 30/30 terminal successful; authoritative CI outer ZIP and complete inner archive are independently verified."
+    },
+    {
+      "id": "local-archive-limitation",
+      "result": "passed",
+      "detail": "Local archive is explicitly rejected due to receipt binding mismatch; underlying cause remains unknown and original bytes are unchanged."
+    },
+    {
+      "id": "overall-milestone",
+      "result": "not_claimed",
+      "detail": "Other independent reviews, root-owned native scheduling audit, and published delivery-chunk verification remain separate gates."
+    }
+  ],
+  "reviewReport": {
+    "path": "compiled-capabilities/coordination/reviews/XR-ACCEPT-DEMO.md",
+    "sha256": "c64d80287e8c0f1f3b79c7ff910f5d21f7bf3ae45ef2eb89aa874f521f53701d"
+  },
+  "publication": "No author files, production source, native state, Git refs, or N4-owned artifacts were changed."
+}

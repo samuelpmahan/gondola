@@ -1,0 +1,49 @@
+{
+  "job_id": "E-RESULT-GO",
+  "worker": "N1",
+  "summary": "Recorded completed source-bound counter/M0 hosted Go CI and reviewed the final local full capability run; current evidence is insufficient for capability acceptance.",
+  "outcome": "insufficient_evidence",
+  "checks": [
+    {
+      "command": "Read-only GitHub Actions job metadata/log review: run 41190743798 job 124506858263",
+      "workdir": "repository root",
+      "result": "passed; completed push job conclusion success; go vet and go test succeeded by set -e script progression; 5,000 static cases seed 20261030, receipt and SHA256SUMS passed; counter matched 107 scripts / 4,473 ticks"
+    },
+    {
+      "command": "Read-only GitHub Actions job metadata/log review: run 41190759554 job 124506904642",
+      "workdir": "repository root",
+      "result": "passed; completed PR job conclusion success; same inherited checks and interaction parity; PR head a2e1164d68abaaa7d028bdaf6a20bea842a131ae, tested merge commit b717449a8844ee695a8f1facd20d41a6b4bcf097"
+    },
+    {
+      "command": "python3 inspect compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/execution.json",
+      "workdir": "repository root",
+      "result": "reviewed existing root-run receipt; full E-BUILD status failed at inherited-static-and-interaction-lifecycle wording gate despite runner CLI exit code 0; sourcePinsMatch true, 161/161 source pins; M0 24/24 passed"
+    },
+    {
+      "command": "python3 inspect nested lifecycle and methods execution.json receipts",
+      "workdir": "repository root",
+      "result": "reviewed existing receipts; nested lifecycle and methods both status passed; lifecycle inheritedRun.status passed"
+    },
+    {
+      "command": "GET https://api.github.com/repos/samuelpmahan/gondola/actions/runs/41190743932 and /41190759391",
+      "workdir": "read-only GitHub API",
+      "result": "both primary hosted capability runs were in_progress at 2026-10-31T10:19:46Z; no hosted capability result established"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/ci/2026-10-31/lanes/go/completed-inherited-ci.json": "74d3fae7a1d01f63988f5e6b716a3ec86dd93e961fde2352566cf180b1e991b1",
+    "compiled-capabilities/coordination/reports/E-RESULT-GO.md": "5209dbc425cb2c9f9d035009c9f60f84716a2ef1b9b07a890a4f02e1140e9aee"
+  },
+  "log_sha256": {
+    "compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-push-run-41190743798-job-124506858263.log": "d6dc8b2201d79eeab1f21cbfe62a93235c9740889b511cdfee55493766ec3692",
+    "compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-pr-run-41190759554-job-124506904642.log": "7f76b8b7dd79bf68bed24295db2bc40760bed241e080c91daddf1241c4bd7bcd"
+  },
+  "limitations": [
+    "No final capability acceptance: the local full E-BUILD attempt failed its literal inherited-lifecycle check wording even though the nested lifecycle and methods receipts passed.",
+    "Primary hosted capability push/PR jobs were still in progress at the status refresh; N4 owns hosted artifact download and verification.",
+    "The 59 compatibility-rule count is a static source-table count; hosted logs show successful package tests but do not print the number of table rows.",
+    "No duplicate suites were run by this worker."
+  ],
+  "integration": "pending: hosted capability runs and an overall passing source-bound full E-BUILD result",
+  "publication": "No commit, merge, deploy, or Git mutation."
+}

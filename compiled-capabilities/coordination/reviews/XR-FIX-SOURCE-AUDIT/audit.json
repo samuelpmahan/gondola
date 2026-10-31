@@ -1,0 +1,108 @@
+{
+  "authorReceipt": {
+    "allPinsMatch": true,
+    "path": "compiled-capabilities/coordination/receipts/E-FIX-SOURCE-AUDIT.json",
+    "reportSha256": "f11d35dcf20c8bffbee28ab58c2534ddc3fc825cdf6066f397b626c8b0dca31a",
+    "sha256": "4aa73c491f97452eac101c051f132d9fbb3f790f54191c09a46dcbae883aed05",
+    "sourceAndAuthorLogPins": 17
+  },
+  "provenance": {
+    "actualHistoricalReceiptSha256": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "actualSetSourceAuditRegressionIncluded": true,
+    "afterPins": 161,
+    "beforePins": 161,
+    "failedStage": "inherited-static-and-interaction-lifecycle",
+    "followupCommitsParentedByPublishedA2eCovered": true,
+    "generatedMapSha256": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54",
+    "onlyMissingGitCandidateOptional": "go.sum",
+    "rootGoSumCandidateDeclared": true,
+    "rootGoSumMissingFromPinnedGitTreeAndWorktree": true,
+    "sameLocalRemoteShaCovered": true,
+    "sameOrderedParentsAndBaseAncestryCovered": true,
+    "signedM0Rows": 24,
+    "sourcePinsMatch": true,
+    "status": "failed",
+    "trackedM0Rows": 23
+  },
+  "reviewTests": {
+    "node": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "exitCode": 0,
+      "failures": 0,
+      "ranAgainstFinalTestSourceSha256": "c004a92acccdd8f3ff2feff5aa79ef7928c7eb45fa5dacf5add86bb8ba58fe52",
+      "tests": 7
+    },
+    "python": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v test_audit.py",
+      "exitCode": 0,
+      "failures": 0,
+      "tests": 16,
+      "workdir": "compiled-capabilities/coordination/acceptance/scheduler"
+    }
+  },
+  "scheduler": {
+    "acceptedEpochCount": 28,
+    "errors": [],
+    "incomplete": [
+      "open_jobs: 13 of 60 packets remain pending or running: XR-FIX-SOURCE-AUDIT, E-ACCEPT-GO, XR-ACCEPT-GO, E-ACCEPT-NATIVE, XR-ACCEPT-NATIVE, E-ACCEPT-BROWSER, XR-ACCEPT-BROWSER, E-ACCEPT-CUSTODY, XR-ACCEPT-CUSTODY, E-ACCEPT-DEMO, XR-ACCEPT-DEMO, E-ACCEPT-PROVENANCE, XR-ACCEPT-PROVENANCE"
+    ],
+    "initialSpawnCount": 6,
+    "mutationControls": [
+      "follow-up log SHA-256 mutation rejected",
+      "follow-up remote source mutation rejected",
+      "source-audit review dependency mutation rejected",
+      "AMEND extension before completed review rejected"
+    ],
+    "openJobIDs": [
+      "XR-FIX-SOURCE-AUDIT",
+      "E-ACCEPT-GO",
+      "XR-ACCEPT-GO",
+      "E-ACCEPT-NATIVE",
+      "XR-ACCEPT-NATIVE",
+      "E-ACCEPT-BROWSER",
+      "XR-ACCEPT-BROWSER",
+      "E-ACCEPT-CUSTODY",
+      "XR-ACCEPT-CUSTODY",
+      "E-ACCEPT-DEMO",
+      "XR-ACCEPT-DEMO",
+      "E-ACCEPT-PROVENANCE",
+      "XR-ACCEPT-PROVENANCE"
+    ],
+    "originalStartupEventStillPinned": true,
+    "packetCount": 60,
+    "secondFailureEvent": {
+      "at": "2026-10-31T10:24:48.897556+00:00",
+      "failed_command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+      "failure": "failed inherited prose gate despite passed full nested receipt; failed final receipt returned CLI exit 0",
+      "log": "compiled-capabilities/ci/2026-10-31/failed-local-031c/command.log",
+      "log_sha256": "bf66825486126f9ee1bfa6438a4c0f939efcec5356eec9e136c51e3f2ef0468d",
+      "new_jobs": [
+        "E-FIX-RUNNER-ACCEPTANCE",
+        "XR-FIX-RUNNER-ACCEPTANCE",
+        "E-FIX-SOURCE-AUDIT",
+        "XR-FIX-SOURCE-AUDIT"
+      ],
+      "observed_cli_exit_code": 0,
+      "source": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+      "source_remote": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+      "type": "extend-after-executed-failure"
+    },
+    "secondFailureLogSha256": "bf66825486126f9ee1bfa6438a4c0f939efcec5356eec9e136c51e3f2ef0468d",
+    "secondFailurePairs": [
+      [
+        "E-FIX-RUNNER-ACCEPTANCE",
+        "XR-FIX-RUNNER-ACCEPTANCE",
+        "E-BUILD"
+      ],
+      [
+        "E-FIX-SOURCE-AUDIT",
+        "XR-FIX-SOURCE-AUDIT",
+        "E-PREP-PROVENANCE"
+      ]
+    ],
+    "status": "INCOMPLETE",
+    "workerCount": 6
+  },
+  "schema": "gobi.source-audit-independent-review/v1",
+  "scope": "Bounded review of N1 source/provenance and scheduler audit fix only. Historical full E-BUILD remains failed; live scheduler is structurally valid but incomplete while XR-FIX-SOURCE-AUDIT is running."
+}

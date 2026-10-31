@@ -1,0 +1,106 @@
+{
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "job_id": "XR-PREP-SCHEDULER",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "The current live scheduler trace is internally consistent and complete mode fails closed, but the auditor accepts an amendment-extension event moved before its review's completed AMEND decision. Require and test that transition precondition before acceptance.",
+  "findings": [
+    {
+      "id": "XR-PREP-SCHEDULER-1",
+      "severity": "blocking",
+      "summary": "extend-after-review-amend does not validate a completed matching review receipt with decision amend",
+      "evidence": "An in-memory mutation moved the E-FIX-BUILD/XR-FIX-BUILD extension event immediately before XR-BUILD completion and removed the original later extension. audit() still returned INCOMPLETE with an empty errors array.",
+      "location": "compiled-capabilities/coordination/acceptance/scheduler/audit.py:349-357",
+      "repair": "Before exposing repair jobs, require the linked original review to be replayed as done with receipt decision amend; validate repair_of and generated XR-FIX dependency links; add a mutation test that rejects an extension before the AMEND completion."
+    }
+  ],
+  "reviewedRequirements": {
+    "capacity": {
+      "slotsIncludingRoot": 7,
+      "actualWorkers": 6,
+      "initialSpawnReceipts": 6,
+      "allModel": "gpt-6-luna",
+      "allReasoningEffort": "xhigh",
+      "epochZeroMatchesSpawnMap": true
+    },
+    "nativeReplay": {
+      "capturedAcceptedEpochs": 14,
+      "nativeJsonRecords": 14,
+      "savedBundles": 14,
+      "dpMatchesAllEpochs": true,
+      "independentExhaustiveCrossCheckMatchesAllEpochs": true,
+      "currentStructuralErrors": 0
+    },
+    "rejectedEpoch03": {
+      "eventIndex": 17,
+      "reason": "nonoptimal_native_score",
+      "dispatchPerformed": false,
+      "nextAcceptedEpoch": 3,
+      "interveningDispatches": 0,
+      "diagnosticLogPresent": true
+    },
+    "reviewGates": {
+      "selfReviewAndDependencyChecksPassCurrentTrace": true,
+      "workerPinsAndPacketCapacitiesPassCurrentTrace": true,
+      "closedAmends": [
+        {"original": "XR-GO", "repair": "E-FIX-GO", "acceptedReview": "XR-FIX-GO"},
+        {"original": "XR-BUILD", "repair": "E-FIX-BUILD", "acceptedReview": "XR-FIX-BUILD"}
+      ],
+      "openAmend": "XR-HARNESS",
+      "openRepairReview": "XR-FIX-HARNESS"
+    },
+    "testCoverage": {
+      "totalTestMethods": 12,
+      "evidenceMutationCases": 10,
+      "baselineOrModeCases": 2,
+      "requiredEleventhMutationMissing": true,
+      "missingMutation": "amendment extension before matching completed AMEND"
+    }
+  },
+  "liveAudit": {
+    "status": "INCOMPLETE",
+    "acceptedEpochs": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    "packetCount": 26,
+    "openPackets": 6,
+    "requireCompleteExitCode": 2,
+    "finalAcceptanceClaimed": false
+  },
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s compiled-capabilities/coordination/acceptance/scheduler -v",
+      "exitCode": 0,
+      "result": "12 test methods passed; see review log"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --json",
+      "exitCode": 0,
+      "result": "INCOMPLETE; 14 accepted epochs; no structural errors; six packets open"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --require-complete --json",
+      "exitCode": 2,
+      "result": "failed closed while packets and XR-HARNESS AMEND closure remain open"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/independent-probes.py",
+      "exitCode": 0,
+      "result": "14 exhaustive weighted assignment cross-checks matched native_score, exact_score, and dispatch score; early extension mutation was not detected"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/scheduler/audit.py": "983a842cbcb9f3444babd03f5d70bbc9f4941c041d93903fae4daba010479a6a",
+    "compiled-capabilities/coordination/acceptance/scheduler/test_audit.py": "de30ac7607ff6a20e5cc48908c561a6ecef33804c9e37a3c709d5bc5293d4332",
+    "compiled-capabilities/coordination/reports/E-PREP-SCHEDULER.md": "1830b57e65a9831bc8c8f637a09d98959e85b7efd72854b2a2cc437740f73727",
+    "compiled-capabilities/coordination/receipts/E-PREP-SCHEDULER.json": "0f613a570a1a16841d5b377489d2eecf2892dd7a8b3e6d8b4e99d80577084764",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER.md": "b61ea32a6c1c1ba16dc9e2c6a85427fe940e6f0a5d5989de36ccaea83b3242e4",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/independent-probes.py": "184daa5f197f3e4d1a2166e86a4aac33dd9b23360fc60ab9e0971856dff27f0b",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/independent-probes.json": "b8df8bffa790636f6588e260d8674364c1c605a4c78752c0eb75ef32aa9de412",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/reviewed-input-hashes.json": "08c83cea41f72b586c9f2de186895263aca524064cffbb212e8fae3955fc15d7"
+  },
+  "limitations": [
+    "The 61-file input hash manifest is a point-in-time capture at 2026-10-31T09:44:59.767583+00:00; the native scheduler state can continue to advance.",
+    "Native bundle contents are not decoded or authenticated by the reviewed auditor; it checks bundle presence and JSON/event agreement.",
+    "The current `XR-FIX-HARNESS` receipt was still in progress during the captured live audit; no closure or final acceptance is claimed."
+  ],
+  "publication": "No scheduler state, spec, native epoch, other job receipt, production file, or Git state was changed."
+}

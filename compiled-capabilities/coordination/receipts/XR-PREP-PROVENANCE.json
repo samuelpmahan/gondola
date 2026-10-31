@@ -1,0 +1,185 @@
+{
+  "auditorReview": {
+    "m0": {
+      "baseSourceAndWorktreeBytesMatch": true,
+      "expectedJsonChecked": true,
+      "generatedMap": "react-map.gen.mjs",
+      "generatedMapSha256": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54",
+      "manifestRows": 24,
+      "trackedInputs": 23
+    },
+    "publicationBinding": {
+      "actualBindingAvailable": false,
+      "bothMustDirectlyParentFrozenBase": true,
+      "distinctLocalRemoteCommitIdsPermitted": true,
+      "orderedDirectParentListsMustMatch": true,
+      "sameTreeRequired": true,
+      "unitEnvelopeTestPassed": true
+    },
+    "sourcePins": {
+      "actualFullRunPinsAvailable": false,
+      "comparedToSourceTreeAndWorktree": true,
+      "pathsDerivedFromPinnedRunnerListsAndSignedManifest": true,
+      "publishedBlobsCheckedWhenBindingProvided": true,
+      "sourceBeforeAfterExactSetRequired": true,
+      "workingAndLocalGitBlobBytesChecked": true
+    }
+  },
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/acceptance/provenance/audit.mjs",
+      "exitCode": 0,
+      "result": "passed; warning-only proxy experimental notice",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/audit-syntax.stderr.log",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/audit-syntax.stdout.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "exitCode": 0,
+      "result": "passed; warning-only proxy experimental notice",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/test-syntax.stderr.log",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/test-syntax.stdout.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "exitCode": 0,
+      "result": "3 tests passed, 0 failed",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-test.stderr.log",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-test.stdout.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/acceptance/provenance/audit.mjs --repo-root \"$PWD\" --receipt compiled-capabilities/coordination/acceptance/provenance/fixtures/missing-full-run.json --source-commit 232406843678f46c569e1c54b34b268c84e7764e --expected-tree 4cf0a6bf06f5aac29788ddd77fc61ed79a34e3a1",
+      "exitCode": 2,
+      "result": "status incomplete; finalAcceptance false; M0 verified",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-input.stderr.log",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-input.json"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/acceptance/provenance/audit.mjs --repo-root \"$PWD\" --receipt compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/synthetic-complete-shape-missing-binding.json --source-commit 232406843678f46c569e1c54b34b268c84e7764e --expected-tree 4cf0a6bf06f5aac29788ddd77fc61ed79a34e3a1",
+      "exitCode": 1,
+      "result": "status failed; finalAcceptance false; classification mismatch preserved",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-binding-probe.stderr.log",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-binding-probe.json"
+    }
+  ],
+  "closedVsRefreshedSourceSha256": {
+    "audit.mjs": {
+      "closed": "1a8bc1b215c52c1922d18f4a1940600a77e63d886a8e7b8d166ab266e1e83671",
+      "refreshed": "c121b32bfb6874f7e5480096e1ea309b4c8eead04408556b8465f912cfd4dd9e"
+    },
+    "audit.test.mjs": {
+      "closed": "c532ec1e33f31ffcfa544127774716e58abf774dbfad6be7d70c535c3f7f3419",
+      "refreshed": "9b09726dca8f29f3a73f9a135efc138007396d79dbb18d98dff77ee5375b6a36"
+    }
+  },
+  "decision": "accepted",
+  "job_id": "XR-PREP-PROVENANCE",
+  "limitations": [
+    "No completed E-BUILD full-run sourceBefore/sourceAfter pin arrays or publication binding were available; actual source-pin set and local/remote binding validation remain pending.",
+    "The current source checkpoint 232406843678f46c569e1c54b34b268c84e7764e must not be treated as the eventual full-run source checkpoint; rerun after root finalizes it.",
+    "The missing-binding path classifies a null remote dereference as failed instead of incomplete, but remains nonzero and finalAcceptance=false.",
+    "Archive and build validation are outside this review."
+  ],
+  "missingBindingProbe": {
+    "blocking": false,
+    "classificationMismatch": "The full-shaped receipt with arrays but no binding reaches verifySourcePins and dereferences remoteInfo.commit while remoteInfo is null. It fails closed, but reports failed rather than incomplete and skips M0 in that caught path.",
+    "exitCode": 1,
+    "finalAcceptance": false,
+    "receipt": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/synthetic-complete-shape-missing-binding.json",
+    "status": "failed",
+    "syntheticOnly": true
+  },
+  "missingEvidenceRun": {
+    "checks": [
+      "EXPECTED.json original base bytes unchanged",
+      "23 tracked M0 inputs plus signed generated map match original manifest"
+    ],
+    "exitCode": 2,
+    "finalAcceptance": false,
+    "fixture": "compiled-capabilities/coordination/acceptance/provenance/fixtures/missing-full-run.json",
+    "missing": [
+      "--binding",
+      "full-run status=passed",
+      "full-run failure ledger",
+      "mode=full",
+      "execution receipt schema",
+      "sourceAfter pins",
+      "sourceBefore pins",
+      "sourcePinsMatch=true"
+    ],
+    "status": "incomplete"
+  },
+  "overwrittenLogDisclosure": {
+    "closedReceiptHashes": {
+      "audit-syntax.log": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+      "missing-input-exercise.json": "eb05ca9b4a6ab4c61167826590e98da26dfbc55b0309266824a09b31f93fa4bd",
+      "missing-input-exercise.stderr.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "node-test.log": "8cfd5ea1620453ffc8e47b21063b82cc9eae6cc463639d41e4efab10562aec04",
+      "node-version.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "test-syntax.log": "202a87a00ef76091d8a32984349b989f52b738f07047864bf3713d162d3dcc74"
+    },
+    "currentReplacementHashes": {
+      "audit-syntax.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "missing-input-exercise.json": "27c373367ed3b58ebeec9e2747a834a066aaf9a2f3c4c60b749a7e6e87925f71",
+      "missing-input-exercise.stderr.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "node-test.log": "3e15a0b62fdb2d0e1f67c9b3ee098b316e240bc7c1d1ddea898e27530d7333d3",
+      "node-version.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "test-syntax.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "independentCurrentRunIsEvidenceForSyntaxTestsAndMissingInput": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE",
+    "oldBytesRecreated": false,
+    "oldBytesRetained": false
+  },
+  "publication": "No source/production changes, Git mutations, commits, merges, or deployments were made.",
+  "restoredClosedPacketSha256": {
+    "compiled-capabilities/coordination/receipts/E-PREP-PROVENANCE.json": "07605b2872369ba866a57ae54730f007383f3771a5e281295944056dfe73ce96",
+    "compiled-capabilities/coordination/reports/E-PREP-PROVENANCE.md": "4faf7d74621659d562930bd83854e319fd4fe1e740217f891ec97d3ceac21ef2"
+  },
+  "reviewLogsSha256": {
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/audit-syntax.exit-code": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/audit-syntax.stderr.log": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/audit-syntax.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/git-status.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/git-status.stdout.log": "589b27325d1ae0cc7ffdb5c44f35e76ea70d83e00b0de997954676e4eb4eeabe",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/head-tree.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/head-tree.stdout.log": "633b6c058ee059f75873fabb93aa0e3bf812f1366dc90d7a6e52b4a49da77d11",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-binding-probe.exit-code": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-binding-probe.json": "0f752090198bb8f578cf56c5e894cbc89691bc6e15a6ee95ca871b7880e6e125",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-binding-probe.stderr.log": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-input.exit-code": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-input.json": "29364a7e903c577f77a071feb11ca1772ca2f9bfd01dbce218e6277e81fa803d",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/missing-input.stderr.log": "25bae4e49cbf07de7239f37b7c5082d2afb089be9b8e30d8323e89d14f360eee",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-test.exit-code": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-test.stderr.log": "3a55bee2309810197bd8422071bdebee2c7b395309f4be263e38e9a2330048ac",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-test.stdout.log": "9e666ec1d14c3a289cce81a239d3c882218f2265b2938b233153d5e23738786c",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-version.exit-code": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-version.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/node-version.stdout.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/synthetic-complete-shape-missing-binding.json": "4eebf8da3861fc433654f429d2c8f046f93dcb1bea7b24a846eeb1e620012e63",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/test-syntax.exit-code": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/test-syntax.stderr.log": "202a87a00ef76091d8a32984349b989f52b738f07047864bf3713d162d3dcc74",
+    "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/test-syntax.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reviewReport": {
+    "path": "compiled-capabilities/coordination/reviews/XR-PREP-PROVENANCE/REPORT.md",
+    "sha256": "af59de40d4e9b59fbb65e0288d2a6b318ac7b61cfc73c8f61e2bb3da6d4d24e6"
+  },
+  "reviewedCheckpoint": {
+    "baseCommit": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+    "commit": "232406843678f46c569e1c54b34b268c84e7764e",
+    "directParent": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+    "kind": "pre-full-run preparation checkpoint",
+    "tree": "4cf0a6bf06f5aac29788ddd77fc61ed79a34e3a1"
+  },
+  "reviewedSourceSha256": {
+    "compiled-capabilities/coordination/acceptance/provenance/HEAD-refresh-supplement.md": "15bdc0364c5b16411f98316f9f3a7b8be009db2e5207ef1f2287f523ed6037ed",
+    "compiled-capabilities/coordination/acceptance/provenance/audit.mjs": "c121b32bfb6874f7e5480096e1ea309b4c8eead04408556b8465f912cfd4dd9e",
+    "compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs": "9b09726dca8f29f3a73f9a135efc138007396d79dbb18d98dff77ee5375b6a36",
+    "compiled-capabilities/coordination/acceptance/provenance/fixtures/missing-full-run.json": "1928fbe874a8a23372d9ea5a200be03de2277c8afccc8d71cab079473fa1f4ce",
+    "compiled-capabilities/coordination/receipts/E-PREP-PROVENANCE.json": "07605b2872369ba866a57ae54730f007383f3771a5e281295944056dfe73ce96",
+    "compiled-capabilities/coordination/reports/E-PREP-PROVENANCE.md": "4faf7d74621659d562930bd83854e319fd4fe1e740217f891ec97d3ceac21ef2"
+  },
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "summary": "Accepted the provenance auditor for preparation only: focused tests pass, missing evidence stays non-accepting, and original M0 inputs verify. A missing-binding branch has a nonblocking failed-vs-incomplete classification mismatch; actual full-run pins and publication binding remain unreviewed.",
+  "worker": "N3"
+}

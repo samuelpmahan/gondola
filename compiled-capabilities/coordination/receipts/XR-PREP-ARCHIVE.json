@@ -1,0 +1,112 @@
+{
+  "job_id": "XR-PREP-ARCHIVE",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "N5's verifier correctly hashes archive members and rejects traversal, link types, inventory mismatches, tampering, inconsistent source pins, and missing archive metadata; adversarial consistent fixtures exposed complete-acceptance gaps in command outcomes, pending-state consistency, toolchain/lock validation, and file-directory collisions.",
+  "review_basis": {
+    "original_job": "E-PREP-ARCHIVE",
+    "protocol_source_job": "E-FIX-BUILD",
+    "n5_source_pins_match_current": true,
+    "full_run_archive_present": false
+  },
+  "findings": [
+    {
+      "id": "XRPA-1",
+      "severity": "high",
+      "file": "compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "lines": [155, 168, 390, 398],
+      "detail": "Complete acceptance does not require command exitCode 0 or reject signals/errors. Internally consistent pre-archive exitCode 23 and final archive exitCode 17 still return completeAcceptance=true."
+    },
+    {
+      "id": "XRPA-2",
+      "severity": "high",
+      "file": "compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "lines": [299, 304, 368, 375],
+      "detail": "The verifier checks several pending flags but ignores snapshot.status and outer archive.executionSnapshot.status; each can be changed to passed while completeAcceptance remains true. The embedded pre-archive receipt's expected running status/schema/mode are also not validated."
+    },
+    {
+      "id": "XRPA-3",
+      "severity": "medium",
+      "file": "compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "lines": [334, 344, 405, 407],
+      "detail": "Toolchain copies must agree, but complete mode does not enforce the runner's Node 22 requirement or compare installed dependency versions with lockedDependencies. Consistent Node v18 and an inconsistent lockedDependencies.react v18 claim each still return completeAcceptance=true."
+    },
+    {
+      "id": "XRPA-4",
+      "severity": "medium",
+      "file": "compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "lines": [188, 250],
+      "detail": "Regular files and directory entries are checked in separate sets, with no rejection for a path in both. A tar containing directory react/, regular file react, and regular child react/build-result.json is accepted."
+    }
+  ],
+  "verified_properties": [
+    "The current E-BUILD author receipt has no archive metadata; the verifier failed closed with exit 2 before making any acceptance claim.",
+    "The self-test passed one valid fixture and rejected five mutations: wrong source pins, missing provenance member, tampered member, inconsistent fake version, and traversal path.",
+    "The verifier streams every regular tar member, checks byte counts and SHA-256 against the manifest, enforces exact file inventories, validates inferred directory inventory, and rejects symlink and hardlink members.",
+    "Consistent external manifest/receipt/tar fixtures with extra members, missing listed members, changed React version, and changed post-run source pins were rejected.",
+    "The three source pins in N5's E-PREP-ARCHIVE receipt matched current byte counts and SHA-256 values."
+  ],
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --self-test",
+      "workdir": "repository root",
+      "result": "passed; selfTests=6 (one valid fixture and five rejected mutations)",
+      "log": "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/self-test.stdout.log",
+      "sha256": "bddc1fd0aca1784622f5876a57f00545ac8da6151d57ca70c70edfdbf5ba1dbe"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --receipt compiled-capabilities/coordination/receipts/E-BUILD.json --root . --require-complete",
+      "workdir": "repository root",
+      "result": "expected fail-closed exit 2: outer receipt is missing archive metadata; no full-run archive was present",
+      "stdout_log": "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/no-full-archive.stdout.log",
+      "stderr_log": "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/no-full-archive.stderr.log",
+      "stderr_sha256": "de825409f133e54b76fea180f874c3ec19ba0e452f1e0fcbb1d2c7b66657a70a"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.py",
+      "workdir": "repository root",
+      "result": "passed expected rejection probes and reproduced seven accepted complete-acceptance gaps using hash-consistent in-memory fixtures",
+      "script_sha256": "a9fb33eefc49bbde128184228713ef6807c2d3fa084de8ba095e490ecb1fcd26",
+      "log": "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.log",
+      "log_sha256": "d325e79eec157e26f8dd62d792066dc7a940ab1c1c09d8b9065ba15a9a603e65"
+    },
+    {
+      "command": "Verify each declared sourcePins row from E-PREP-ARCHIVE.json against the current file byte count and SHA-256",
+      "workdir": "repository root",
+      "result": "passed for verifier, README, and E-PREP-ARCHIVE report",
+      "log": "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/source-pin-check.log",
+      "log_sha256": "f4a65ebae2d0b49b5e337d975304f0d268c4f9fe78a77748aae5c43d6bb03fd8"
+    }
+  ],
+  "reviewed_source_sha256": {
+    "compiled-capabilities/coordination/acceptance/archive/verify_archive.py": "48ccc783d2ebb9a348565d1153e462c9ff7ec9c7381a4d70004df2e9a00b42c7",
+    "compiled-capabilities/coordination/acceptance/archive/README.md": "ac97b8c82583a123406b203d40f5a92c02abbb90dd4577dc66f719c456bc588f",
+    "compiled-capabilities/coordination/reports/E-PREP-ARCHIVE.md": "4fa5ec8963ff1c15271e202690c69f0e4202622e77ba980223dbb5f7273b703e",
+    "compiled-capabilities/coordination/receipts/E-PREP-ARCHIVE.json": "89f63ca62885e2702558693549f73bc7fbb74c93e6fa94998eb5cb18ea460edf",
+    "compiled-capabilities/run.mjs": "e506d0cf1ae26574d4229f02ed4486cdbbdd2bf8c6f9b0d836559827f4a5f29d",
+    "compiled-capabilities/archive-helper.mjs": "ad7b29dbd07c23a2e92a3774b4af4656366a3327490b2f32f3e9e8ce1d503b46",
+    "compiled-capabilities/archive-helper.test.mjs": "501929d72caf26f92228eab79aef788aca19a7a3bc3ee3c97c69bacd1223d924",
+    "compiled-capabilities/coordination/reports/E-FIX-BUILD.md": "3de49fb8bd57511910254c5eced559dc295153c4459d46635759ce93ee3c09dc",
+    "compiled-capabilities/coordination/receipts/E-FIX-BUILD.json": "886afeffe74362b9aee518f0ee740a9a04ac05de5e58f1faf74eed15cf6b237f",
+    "compiled-capabilities/coordination/receipts/E-BUILD.json": "65aaece092033ee46ae74812b4b16a538bce5f79d1c0d3c86482f54f7a487d71"
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/review.md",
+    "sha256": "117d87b91f5a401d8a982383c39003b6df95dd7f27ac66c6ec65fd1377b3ad3e"
+  },
+  "log_sha256": {
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/self-test.stdout.log": "bddc1fd0aca1784622f5876a57f00545ac8da6151d57ca70c70edfdbf5ba1dbe",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/self-test.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/no-full-archive.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/no-full-archive.stderr.log": "de825409f133e54b76fea180f874c3ec19ba0e452f1e0fcbb1d2c7b66657a70a",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.py": "a9fb33eefc49bbde128184228713ef6807c2d3fa084de8ba095e490ecb1fcd26",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.log": "d325e79eec157e26f8dd62d792066dc7a940ab1c1c09d8b9065ba15a9a603e65",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/source-pin-check.log": "f4a65ebae2d0b49b5e337d975304f0d268c4f9fe78a77748aae5c43d6bb03fd8"
+  },
+  "limitations": [
+    "No actual full E-BUILD archive, external manifest, or final receipt was present, so archive acceptance remains pending after any verifier amendment.",
+    "The review did not edit N5's verifier, N6's runner/helper, or scheduler/native records."
+  ],
+  "integration": "Amend N5's verifier before accepting its complete-mode claim; after repair, root must run it against the actual full-run archive, bound manifest, and final E-BUILD receipt.",
+  "publication": "No production edits, scheduler/native mutation, Git operation, commit, merge, or deployment."
+}

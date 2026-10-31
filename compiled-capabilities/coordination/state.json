@@ -3,24 +3,24 @@
   "service": {},
   "workers": {
     "N1": {
-      "job": "E-PREP-PROVENANCE",
-      "agent": "/root/cap_go"
+      "job": null,
+      "agent": null
     },
     "N2": {
-      "job": "XR-PREP-ARCHIVE",
-      "agent": "/root/cap_host"
+      "job": null,
+      "agent": null
     },
     "N3": {
-      "job": "XR-PREP-CUSTODY",
-      "agent": "/root/cap_harness"
+      "job": null,
+      "agent": null
     },
     "N4": {
       "job": null,
       "agent": null
     },
     "N5": {
-      "job": "XR-PREP-SCHEDULER",
-      "agent": "/root/cap_demo"
+      "job": null,
+      "agent": null
     },
     "N6": {
       "job": null,
@@ -255,19 +255,21 @@
       ],
       "owner": "compiled-capabilities/coordination/acceptance/provenance/**",
       "summary": "Prepare independent source-tree/full-receipt provenance audit; current/future execution distinguished, no unexecuted pass.",
-      "status": "running",
+      "status": "done",
       "worker": "N1",
       "started_at": "2026-10-31T09:34:04.386142+00:00",
-      "finished_at": null
+      "finished_at": "2026-10-31T09:46:51.596166+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-PREP-PROVENANCE.json"
     },
     "XR-PREP-PROVENANCE": {
       "id": "XR-PREP-PROVENANCE",
       "kind": "review",
       "depends_on": "E-PREP-PROVENANCE",
-      "status": "pending",
-      "worker": null,
-      "started_at": null,
-      "finished_at": null
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T09:47:44.857294+00:00",
+      "finished_at": "2026-10-31T09:58:22.364277+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-PREP-PROVENANCE.json"
     },
     "E-PREP-SCHEDULER": {
       "id": "E-PREP-SCHEDULER",
@@ -287,10 +289,11 @@
       "id": "XR-PREP-SCHEDULER",
       "kind": "review",
       "depends_on": "E-PREP-SCHEDULER",
-      "status": "running",
+      "status": "done",
       "worker": "N5",
       "started_at": "2026-10-31T09:40:05.769224+00:00",
-      "finished_at": null
+      "finished_at": "2026-10-31T09:46:51.803738+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-PREP-SCHEDULER.json"
     },
     "E-PREP-CUSTODY": {
       "id": "E-PREP-CUSTODY",
@@ -310,10 +313,11 @@
       "id": "XR-PREP-CUSTODY",
       "kind": "review",
       "depends_on": "E-PREP-CUSTODY",
-      "status": "running",
+      "status": "done",
       "worker": "N3",
       "started_at": "2026-10-31T09:42:06.227713+00:00",
-      "finished_at": null
+      "finished_at": "2026-10-31T09:47:40.039958+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-PREP-CUSTODY.json"
     },
     "E-PREP-ARCHIVE": {
       "id": "E-PREP-ARCHIVE",
@@ -333,10 +337,461 @@
       "id": "XR-PREP-ARCHIVE",
       "kind": "review",
       "depends_on": "E-PREP-ARCHIVE",
-      "status": "running",
+      "status": "done",
       "worker": "N2",
       "started_at": "2026-10-31T09:40:05.676697+00:00",
-      "finished_at": null
+      "finished_at": "2026-10-31T09:46:51.703359+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-PREP-ARCHIVE.json"
+    },
+    "E-FIX-STARTUP": {
+      "id": "E-FIX-STARTUP",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/run.mjs, archive-helper.mjs, archive-helper.test.mjs",
+      "repair_of": "E-BUILD",
+      "summary": "Create missing attempt-parent directories before exclusive per-attempt creation; fresh-parent and duplicate-collision regression.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T09:47:44.562963+00:00",
+      "finished_at": "2026-10-31T09:51:20.876534+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-STARTUP.json"
+    },
+    "XR-FIX-STARTUP": {
+      "id": "XR-FIX-STARTUP",
+      "kind": "review",
+      "depends_on": "E-FIX-STARTUP",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T09:51:23.812057+00:00",
+      "finished_at": "2026-10-31T09:53:52.920547+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-STARTUP.json"
+    },
+    "E-FIX-SCHEDULER": {
+      "id": "E-FIX-SCHEDULER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/scheduler/**",
+      "repair_of": "XR-PREP-SCHEDULER",
+      "summary": "Require completed AMEND review before exposing repair jobs; add timeline-order mutation regression.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T09:47:44.664316+00:00",
+      "finished_at": "2026-10-31T09:58:22.457547+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-SCHEDULER.json"
+    },
+    "XR-FIX-SCHEDULER": {
+      "id": "XR-FIX-SCHEDULER",
+      "kind": "review",
+      "depends_on": "E-FIX-SCHEDULER",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:58:25.501356+00:00",
+      "finished_at": "2026-10-31T10:02:49.089261+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-SCHEDULER.json"
+    },
+    "E-FIX-ARCHIVE-AUDIT": {
+      "id": "E-FIX-ARCHIVE-AUDIT",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/archive/**",
+      "repair_of": "XR-PREP-ARCHIVE",
+      "summary": "Tighten archive auditor command exits, pending statuses, pinned toolchain/lock consistency, and file/directory collisions.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T09:47:44.759900+00:00",
+      "finished_at": "2026-10-31T09:58:22.558633+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-ARCHIVE-AUDIT.json"
+    },
+    "XR-FIX-ARCHIVE-AUDIT": {
+      "id": "XR-FIX-ARCHIVE-AUDIT",
+      "kind": "review",
+      "depends_on": "E-FIX-ARCHIVE-AUDIT",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T09:58:25.408323+00:00",
+      "finished_at": "2026-10-31T10:02:48.979700+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-ARCHIVE-AUDIT.json"
+    },
+    "E-RESULT-GO": {
+      "id": "E-RESULT-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/lanes/go/**",
+      "summary": "Audit fresh source-bound Go/static/counter CI logs, exact versions/seeds/rules/M0 receipts and tested scope. Read-only preparation/current logs may begin now; final acceptance is gated on completed current-source full execution and authoritative artifacts.",
+      "gate": "full/source-a2e completion and artifact bytes before acceptance",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T10:05:10.042963+00:00",
+      "finished_at": "2026-10-31T10:24:41.051024+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-RESULT-GO.json"
+    },
+    "XR-RESULT-GO": {
+      "id": "XR-RESULT-GO",
+      "kind": "review",
+      "depends_on": "E-RESULT-GO",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T10:27:22.715806+00:00",
+      "finished_at": "2026-10-31T10:31:29.358037+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-RESULT-GO.json"
+    },
+    "E-RESULT-NATIVE": {
+      "id": "E-RESULT-NATIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/lanes/native/**",
+      "summary": "Audit actual native/direct compiled lifecycle states, Gobi trees, effects, cancellations, and build identity from current full artifacts. Read-only preparation/current logs may begin now; final acceptance is gated on completed current-source full execution and authoritative artifacts.",
+      "gate": "full/source-a2e completion and artifact bytes before acceptance",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T10:05:10.138106+00:00",
+      "finished_at": "2026-10-31T10:27:30.860832+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-RESULT-NATIVE.json"
+    },
+    "XR-RESULT-NATIVE": {
+      "id": "XR-RESULT-NATIVE",
+      "kind": "review",
+      "depends_on": "E-RESULT-NATIVE",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T10:31:31.570031+00:00",
+      "finished_at": "2026-10-31T10:35:43.136924+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-RESULT-NATIVE.json"
+    },
+    "E-RESULT-BROWSER": {
+      "id": "E-RESULT-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/lanes/browser/**",
+      "summary": "Audit actual nineteen admission cases, five-tick swap trace, raw DOM/state/pending preservation and nine capture controls. Read-only preparation/current logs may begin now; final acceptance is gated on completed current-source full execution and authoritative artifacts.",
+      "gate": "full/source-a2e completion and artifact bytes before acceptance",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T10:05:10.252255+00:00",
+      "finished_at": "2026-10-31T10:26:56.277120+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-RESULT-BROWSER.json"
+    },
+    "XR-RESULT-BROWSER": {
+      "id": "XR-RESULT-BROWSER",
+      "kind": "review",
+      "depends_on": "E-RESULT-BROWSER",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T10:30:33.143107+00:00",
+      "finished_at": "2026-10-31T10:33:31.841496+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-RESULT-BROWSER.json"
+    },
+    "E-RESULT-CUSTODY": {
+      "id": "E-RESULT-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/lanes/custody/**",
+      "summary": "Collect the authoritative primary current-source CI artifact once, catalog/verify ZIP and inner replay archive, retain immutable bytes and hashes. Read-only preparation/current logs may begin now; final acceptance is gated on completed current-source full execution and authoritative artifacts.",
+      "gate": "full/source-a2e completion and artifact bytes before acceptance",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T10:05:10.350383+00:00",
+      "finished_at": "2026-10-31T10:32:02.557370+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-RESULT-CUSTODY.json"
+    },
+    "XR-RESULT-CUSTODY": {
+      "id": "XR-RESULT-CUSTODY",
+      "kind": "review",
+      "depends_on": "E-RESULT-CUSTODY",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T10:32:50.877200+00:00",
+      "finished_at": "2026-10-31T10:35:40.624323+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-RESULT-CUSTODY.json"
+    },
+    "E-RESULT-DEMO": {
+      "id": "E-RESULT-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/lanes/demo/**",
+      "summary": "Audit actual current full-run HTTP demo assets, locked React versions, disabled behavior, rejection/recovery/reply trace and screenshot. Read-only preparation/current logs may begin now; final acceptance is gated on completed current-source full execution and authoritative artifacts.",
+      "gate": "full/source-a2e completion and artifact bytes before acceptance",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T10:05:10.459320+00:00",
+      "finished_at": "2026-10-31T10:27:20.525640+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-RESULT-DEMO.json"
+    },
+    "XR-RESULT-DEMO": {
+      "id": "XR-RESULT-DEMO",
+      "kind": "review",
+      "depends_on": "E-RESULT-DEMO",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T10:27:33.953977+00:00",
+      "finished_at": "2026-10-31T10:30:31.079732+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-RESULT-DEMO.json"
+    },
+    "E-RESULT-PROVENANCE": {
+      "id": "E-RESULT-PROVENANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/lanes/provenance/**",
+      "summary": "Audit current source/PR/merge tree binding, complete CI statuses, actual full execution commands/source/output pins and independent archive verification. Read-only preparation/current logs may begin now; final acceptance is gated on completed current-source full execution and authoritative artifacts.",
+      "gate": "full/source-a2e completion and artifact bytes before acceptance",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T10:05:10.562073+00:00",
+      "finished_at": "2026-10-31T10:24:41.157996+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-RESULT-PROVENANCE.json"
+    },
+    "XR-RESULT-PROVENANCE": {
+      "id": "XR-RESULT-PROVENANCE",
+      "kind": "review",
+      "depends_on": "E-RESULT-PROVENANCE",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T10:26:59.138648+00:00",
+      "finished_at": "2026-10-31T10:32:48.513983+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-RESULT-PROVENANCE.json"
+    },
+    "E-FIX-RUNNER-ACCEPTANCE": {
+      "id": "E-FIX-RUNNER-ACCEPTANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/run.mjs, narrow acceptance helper/tests, README.md, RESULTS.md",
+      "repair_of": "E-BUILD",
+      "summary": "Repair observed failed receipt/exit-zero and prose-based inherited gate using structured hash-bound nested evidence; preserve failed source cohort; execute real exit and nested receipt regressions.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T10:24:52.197604+00:00",
+      "finished_at": "2026-10-31T10:33:31.948735+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-RUNNER-ACCEPTANCE.json"
+    },
+    "XR-FIX-RUNNER-ACCEPTANCE": {
+      "id": "XR-FIX-RUNNER-ACCEPTANCE",
+      "kind": "review",
+      "depends_on": "E-FIX-RUNNER-ACCEPTANCE",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T10:33:34.256450+00:00",
+      "finished_at": "2026-10-31T10:36:52.124225+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-RUNNER-ACCEPTANCE.json"
+    },
+    "E-FIX-SOURCE-AUDIT": {
+      "id": "E-FIX-SOURCE-AUDIT",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-capabilities/coordination/acceptance/provenance/** and acceptance/scheduler/**",
+      "repair_of": "E-PREP-PROVENANCE",
+      "summary": "Repair actual current-source Set array parser and normal follow-up commit ancestry binding; extend scheduler executed-failure validation to this exact pinned second failure, preserving original strict startup event; run real and negative regressions.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T10:24:52.093340+00:00",
+      "finished_at": "2026-10-31T10:35:40.528806+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-SOURCE-AUDIT.json"
+    },
+    "XR-FIX-SOURCE-AUDIT": {
+      "id": "XR-FIX-SOURCE-AUDIT",
+      "kind": "review",
+      "depends_on": "E-FIX-SOURCE-AUDIT",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T10:35:43.044868+00:00",
+      "finished_at": "2026-10-31T10:41:27.222708+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-SOURCE-AUDIT.json"
+    },
+    "E-ACCEPT-GO": {
+      "id": "E-ACCEPT-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/**",
+      "summary": "Audit fresh hosted M0/static/counter Go evidence, versions/seeds/counts and unchanged original receipts. Read-only preparation may start now; preserve failed-cohort files unchanged. Final acceptance is gated.",
+      "gate": "Exact source60b5aeff3172837ad7831c2b78b210454a3d81a2 fresh full passed local receipt and observed CLI exit0, terminal current CI source catalog and verified primary full-passed artifact; no acceptance on status badge alone.",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T10:38:25.644418+00:00",
+      "finished_at": "2026-10-31T11:19:20.057357+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ACCEPT-GO.json"
+    },
+    "XR-ACCEPT-GO": {
+      "id": "XR-ACCEPT-GO",
+      "kind": "review",
+      "depends_on": "E-ACCEPT-GO",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T11:19:59.177284+00:00",
+      "finished_at": "2026-10-31T11:27:02.118139+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ACCEPT-GO.json"
+    },
+    "E-ACCEPT-NATIVE": {
+      "id": "E-ACCEPT-NATIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/native/**",
+      "summary": "Audit fresh actual native/direct state/view/effect ordering and 67-file backend identities. Read-only preparation may start now; preserve failed-cohort files unchanged. Final acceptance is gated.",
+      "gate": "Exact source60b5aeff3172837ad7831c2b78b210454a3d81a2 fresh full passed local receipt and observed CLI exit0, terminal current CI source catalog and verified primary full-passed artifact; no acceptance on status badge alone.",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T10:41:27.443439+00:00",
+      "finished_at": "2026-10-31T11:22:37.132604+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ACCEPT-NATIVE.json"
+    },
+    "XR-ACCEPT-NATIVE": {
+      "id": "XR-ACCEPT-NATIVE",
+      "kind": "review",
+      "depends_on": "E-ACCEPT-NATIVE",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T11:25:19.604528+00:00",
+      "finished_at": "2026-10-31T11:31:10.194568+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ACCEPT-NATIVE.json"
+    },
+    "E-ACCEPT-BROWSER": {
+      "id": "E-ACCEPT-BROWSER",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/browser/**",
+      "summary": "Audit fresh actual nineteen admissions, five-tick swap raw preservation and nine plus eight mutation controls. Read-only preparation may start now; preserve failed-cohort files unchanged. Final acceptance is gated.",
+      "gate": "Exact source60b5aeff3172837ad7831c2b78b210454a3d81a2 fresh full passed local receipt and observed CLI exit0, terminal current CI source catalog and verified primary full-passed artifact; no acceptance on status badge alone.",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T10:38:25.738614+00:00",
+      "finished_at": "2026-10-31T11:20:57.492109+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ACCEPT-BROWSER.json"
+    },
+    "XR-ACCEPT-BROWSER": {
+      "id": "XR-ACCEPT-BROWSER",
+      "kind": "review",
+      "depends_on": "E-ACCEPT-BROWSER",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T11:21:00.568356+00:00",
+      "finished_at": "2026-10-31T11:28:55.230336+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ACCEPT-BROWSER.json"
+    },
+    "E-ACCEPT-CUSTODY": {
+      "id": "E-ACCEPT-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/**",
+      "summary": "Collect sole authoritative primary current-source CI artifact, verify provider digest, ZIP, inner replay tar, full receipt and source catalog; no duplicate downloads. Read-only preparation may start now; preserve failed-cohort files unchanged. Final acceptance is gated.",
+      "gate": "Exact source60b5aeff3172837ad7831c2b78b210454a3d81a2 fresh full passed local receipt and observed CLI exit0, terminal current CI source catalog and verified primary full-passed artifact; no acceptance on status badge alone.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T10:38:25.830467+00:00",
+      "finished_at": "2026-10-31T11:19:55.396032+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ACCEPT-CUSTODY.json"
+    },
+    "XR-ACCEPT-CUSTODY": {
+      "id": "XR-ACCEPT-CUSTODY",
+      "kind": "review",
+      "depends_on": "E-ACCEPT-CUSTODY",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T11:19:59.276303+00:00",
+      "finished_at": "2026-10-31T11:25:15.348259+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ACCEPT-CUSTODY.json"
+    },
+    "E-ACCEPT-DEMO": {
+      "id": "E-ACCEPT-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/**",
+      "summary": "Audit fresh actual HTTP eight-check demo, screenshot, disabled actions, rejection/recovery and reply ordering. Read-only preparation may start now; preserve failed-cohort files unchanged. Final acceptance is gated.",
+      "gate": "Exact source60b5aeff3172837ad7831c2b78b210454a3d81a2 fresh full passed local receipt and observed CLI exit0, terminal current CI source catalog and verified primary full-passed artifact; no acceptance on status badge alone.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T10:38:25.930361+00:00",
+      "finished_at": "2026-10-31T11:19:55.489932+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ACCEPT-DEMO.json"
+    },
+    "XR-ACCEPT-DEMO": {
+      "id": "XR-ACCEPT-DEMO",
+      "kind": "review",
+      "depends_on": "E-ACCEPT-DEMO",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-10-31T11:19:59.366507+00:00",
+      "finished_at": "2026-10-31T11:25:55.549286+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ACCEPT-DEMO.json"
+    },
+    "E-ACCEPT-PROVENANCE": {
+      "id": "E-ACCEPT-PROVENANCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/provenance/**",
+      "summary": "Audit exact current Git source/binding/merge tree, 163 source pins, complete commands/receipts/archive and tested versus untested guarantees. Read-only preparation may start now; preserve failed-cohort files unchanged. Final acceptance is gated.",
+      "gate": "Exact source60b5aeff3172837ad7831c2b78b210454a3d81a2 fresh full passed local receipt and observed CLI exit0, terminal current CI source catalog and verified primary full-passed artifact; no acceptance on status badge alone.",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T10:38:26.024660+00:00",
+      "finished_at": "2026-10-31T11:20:57.603214+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-ACCEPT-PROVENANCE.json"
+    },
+    "XR-ACCEPT-PROVENANCE": {
+      "id": "XR-ACCEPT-PROVENANCE",
+      "kind": "review",
+      "depends_on": "E-ACCEPT-PROVENANCE",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-10-31T11:21:00.465696+00:00",
+      "finished_at": "2026-10-31T11:25:15.247883+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-ACCEPT-PROVENANCE.json"
+    },
+    "E-FIX-ACCEPT-CUSTODY": {
+      "id": "E-FIX-ACCEPT-CUSTODY",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/citation-correction/** and own E-FIX-ACCEPT-CUSTODY report/receipt",
+      "repair_of": "XR-ACCEPT-CUSTODY",
+      "summary": "Correct only the extra-f typo in the preserved zero-byte writer-failure path by publishing a new corrected copy of E-ACCEPT-CUSTODY receipt; preserve original canonical closed receipt unchanged and record sole-field diff/hashes. No source or artifact changes.",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-10-31T11:27:02.347542+00:00",
+      "finished_at": "2026-10-31T11:29:26.843677+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-ACCEPT-CUSTODY.json"
+    },
+    "XR-FIX-ACCEPT-CUSTODY": {
+      "id": "XR-FIX-ACCEPT-CUSTODY",
+      "kind": "review",
+      "depends_on": "E-FIX-ACCEPT-CUSTODY",
+      "status": "done",
+      "worker": "N6",
+      "started_at": "2026-10-31T11:29:29.253341+00:00",
+      "finished_at": "2026-10-31T11:32:15.659606+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-ACCEPT-CUSTODY.json"
     }
   },
   "events": [
@@ -1982,9 +2437,3418 @@
       "at": "2026-10-31T09:45:10.490205+00:00",
       "worker": "N6",
       "job": "XR-FIX-HARNESS"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:46:51.596166+00:00",
+      "worker": "N1",
+      "job": "E-PREP-PROVENANCE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:46:51.703359+00:00",
+      "worker": "N2",
+      "job": "XR-PREP-ARCHIVE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:46:51.803738+00:00",
+      "worker": "N5",
+      "job": "XR-PREP-SCHEDULER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:47:40.039958+00:00",
+      "worker": "N3",
+      "job": "XR-PREP-CUSTODY"
+    },
+    {
+      "type": "extend-after-executed-failure",
+      "at": "2026-10-31T09:47:40.086260+00:00",
+      "source": "232406843678f46c569e1c54b34b268c84e7764e",
+      "failed_command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+      "failure": "ENOENT creating attemptRoot before its parent; no test stage executed",
+      "log": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log",
+      "log_sha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+      "new_jobs": [
+        "E-FIX-STARTUP",
+        "XR-FIX-STARTUP"
+      ]
+    },
+    {
+      "type": "extend-after-review-amend",
+      "at": "2026-10-31T09:47:40.086260+00:00",
+      "review": "XR-PREP-SCHEDULER",
+      "decision": "amend",
+      "new_jobs": [
+        "E-FIX-SCHEDULER",
+        "XR-FIX-SCHEDULER"
+      ],
+      "probe_modified": false
+    },
+    {
+      "type": "extend-after-review-amend",
+      "at": "2026-10-31T09:47:40.086260+00:00",
+      "review": "XR-PREP-ARCHIVE",
+      "decision": "amend",
+      "new_jobs": [
+        "E-FIX-ARCHIVE-AUDIT",
+        "XR-FIX-ARCHIVE-AUDIT"
+      ],
+      "probe_modified": false
+    },
+    {
+      "type": "solve",
+      "epoch": 14,
+      "at": "2026-10-31T09:47:40.190062+00:00",
+      "ready_jobs": [
+        "XR-PREP-PROVENANCE",
+        "E-FIX-STARTUP",
+        "E-FIX-SCHEDULER",
+        "E-FIX-ARCHIVE-AUDIT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N1": "BENCH",
+        "N4": "BENCH",
+        "N3": "XR-PREP-PROVENANCE",
+        "N2": "E-FIX-SCHEDULER",
+        "N5": "E-FIX-ARCHIVE-AUDIT",
+        "N6": "E-FIX-STARTUP"
+      },
+      "dispatch": {
+        "N3": "XR-PREP-PROVENANCE",
+        "N2": "E-FIX-SCHEDULER",
+        "N5": "E-FIX-ARCHIVE-AUDIT",
+        "N6": "E-FIX-STARTUP"
+      },
+      "native_seconds": 0.006955917997402139,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 1100,
+      "native_score": 1100,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 1,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 1,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 1,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 1,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-PREP-PROVENANCE": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "E-FIX-STARTUP": [
+          "N6"
+        ],
+        "E-FIX-SCHEDULER": [
+          "N2"
+        ],
+        "E-FIX-ARCHIVE-AUDIT": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-PREP-PROVENANCE": 200,
+        "E-FIX-STARTUP": 300,
+        "E-FIX-SCHEDULER": 300,
+        "E-FIX-ARCHIVE-AUDIT": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:47:44.562963+00:00",
+      "worker": "N6",
+      "job": "E-FIX-STARTUP",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:47:44.664316+00:00",
+      "worker": "N2",
+      "job": "E-FIX-SCHEDULER",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:47:44.759900+00:00",
+      "worker": "N5",
+      "job": "E-FIX-ARCHIVE-AUDIT",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:47:44.857294+00:00",
+      "worker": "N3",
+      "job": "XR-PREP-PROVENANCE",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:51:20.876534+00:00",
+      "worker": "N6",
+      "job": "E-FIX-STARTUP"
+    },
+    {
+      "type": "solve",
+      "epoch": 15,
+      "at": "2026-10-31T09:51:21.054311+00:00",
+      "ready_jobs": [
+        "XR-FIX-STARTUP"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N5": "E-FIX-ARCHIVE-AUDIT",
+        "N2": "E-FIX-SCHEDULER",
+        "N4": "XR-FIX-STARTUP",
+        "N3": "XR-PREP-PROVENANCE"
+      },
+      "dispatch": {
+        "N4": "XR-FIX-STARTUP"
+      },
+      "native_seconds": 0.004938065001624636,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 1,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 1,
+        "E-FIX-SCHEDULER": 1,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 1,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-STARTUP": [
+          "N1",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-FIX-STARTUP": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:51:23.812057+00:00",
+      "worker": "N4",
+      "job": "XR-FIX-STARTUP",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:53:52.920547+00:00",
+      "worker": "N4",
+      "job": "XR-FIX-STARTUP"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:58:22.364277+00:00",
+      "worker": "N3",
+      "job": "XR-PREP-PROVENANCE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:58:22.457547+00:00",
+      "worker": "N2",
+      "job": "E-FIX-SCHEDULER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T09:58:22.558633+00:00",
+      "worker": "N5",
+      "job": "E-FIX-ARCHIVE-AUDIT"
+    },
+    {
+      "type": "solve",
+      "epoch": 16,
+      "at": "2026-10-31T09:58:22.668033+00:00",
+      "ready_jobs": [
+        "XR-FIX-SCHEDULER",
+        "XR-FIX-ARCHIVE-AUDIT"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N1": "BENCH",
+        "N6": "BENCH",
+        "N4": "BENCH",
+        "N3": "BENCH",
+        "N2": "XR-FIX-ARCHIVE-AUDIT",
+        "N5": "XR-FIX-SCHEDULER"
+      },
+      "dispatch": {
+        "N2": "XR-FIX-ARCHIVE-AUDIT",
+        "N5": "XR-FIX-SCHEDULER"
+      },
+      "native_seconds": 0.006936593999853358,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 1,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-SCHEDULER": [
+          "N1",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "XR-FIX-ARCHIVE-AUDIT": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-FIX-SCHEDULER": 200,
+        "XR-FIX-ARCHIVE-AUDIT": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:58:25.408323+00:00",
+      "worker": "N2",
+      "job": "XR-FIX-ARCHIVE-AUDIT",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T09:58:25.501356+00:00",
+      "worker": "N5",
+      "job": "XR-FIX-SCHEDULER",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:02:48.979700+00:00",
+      "worker": "N2",
+      "job": "XR-FIX-ARCHIVE-AUDIT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:02:49.089261+00:00",
+      "worker": "N5",
+      "job": "XR-FIX-SCHEDULER"
+    },
+    {
+      "type": "extend-independent-evidence-preparation",
+      "at": "2026-10-31T10:05:05.097594+00:00",
+      "jobs": [
+        "E-RESULT-GO",
+        "E-RESULT-NATIVE",
+        "E-RESULT-BROWSER",
+        "E-RESULT-CUSTODY",
+        "E-RESULT-DEMO",
+        "E-RESULT-PROVENANCE"
+      ],
+      "gate": "Only inspect available source/logs now. Do not accept final packets until current-source full artifacts exist. Root full session45031 is running; primary push41190743932/PR41190759391.",
+      "probe_modified": false
+    },
+    {
+      "type": "solve",
+      "epoch": 17,
+      "at": "2026-10-31T10:05:05.217286+00:00",
+      "ready_jobs": [
+        "E-RESULT-GO",
+        "E-RESULT-NATIVE",
+        "E-RESULT-BROWSER",
+        "E-RESULT-CUSTODY",
+        "E-RESULT-DEMO",
+        "E-RESULT-PROVENANCE"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N4": "E-RESULT-CUSTODY",
+        "N1": "E-RESULT-GO",
+        "N3": "E-RESULT-BROWSER",
+        "N2": "E-RESULT-NATIVE",
+        "N6": "E-RESULT-PROVENANCE",
+        "N5": "E-RESULT-DEMO"
+      },
+      "dispatch": {
+        "N4": "E-RESULT-CUSTODY",
+        "N1": "E-RESULT-GO",
+        "N3": "E-RESULT-BROWSER",
+        "N2": "E-RESULT-NATIVE",
+        "N6": "E-RESULT-PROVENANCE",
+        "N5": "E-RESULT-DEMO"
+      },
+      "native_seconds": 0.01570271499804221,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 1,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 1,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 1,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 1,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 1,
+        "XR-RESULT-PROVENANCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-RESULT-GO": [
+          "N1"
+        ],
+        "E-RESULT-NATIVE": [
+          "N2"
+        ],
+        "E-RESULT-BROWSER": [
+          "N3"
+        ],
+        "E-RESULT-CUSTODY": [
+          "N4"
+        ],
+        "E-RESULT-DEMO": [
+          "N5"
+        ],
+        "E-RESULT-PROVENANCE": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-RESULT-GO": 100,
+        "E-RESULT-NATIVE": 100,
+        "E-RESULT-BROWSER": 100,
+        "E-RESULT-CUSTODY": 100,
+        "E-RESULT-DEMO": 100,
+        "E-RESULT-PROVENANCE": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:05:10.042963+00:00",
+      "worker": "N1",
+      "job": "E-RESULT-GO",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:05:10.138106+00:00",
+      "worker": "N2",
+      "job": "E-RESULT-NATIVE",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:05:10.252255+00:00",
+      "worker": "N3",
+      "job": "E-RESULT-BROWSER",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:05:10.350383+00:00",
+      "worker": "N4",
+      "job": "E-RESULT-CUSTODY",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:05:10.459320+00:00",
+      "worker": "N5",
+      "job": "E-RESULT-DEMO",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:05:10.562073+00:00",
+      "worker": "N6",
+      "job": "E-RESULT-PROVENANCE",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:24:41.051024+00:00",
+      "worker": "N1",
+      "job": "E-RESULT-GO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:24:41.157996+00:00",
+      "worker": "N6",
+      "job": "E-RESULT-PROVENANCE"
+    },
+    {
+      "type": "extend-after-executed-failure",
+      "at": "2026-10-31T10:24:48.897556+00:00",
+      "source": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+      "source_remote": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+      "failed_command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+      "failure": "failed inherited prose gate despite passed full nested receipt; failed final receipt returned CLI exit 0",
+      "log": "compiled-capabilities/ci/2026-10-31/failed-local-031c/command.log",
+      "log_sha256": "bf66825486126f9ee1bfa6438a4c0f939efcec5356eec9e136c51e3f2ef0468d",
+      "observed_cli_exit_code": 0,
+      "new_jobs": [
+        "E-FIX-RUNNER-ACCEPTANCE",
+        "XR-FIX-RUNNER-ACCEPTANCE",
+        "E-FIX-SOURCE-AUDIT",
+        "XR-FIX-SOURCE-AUDIT"
+      ]
+    },
+    {
+      "type": "solve",
+      "epoch": 18,
+      "at": "2026-10-31T10:24:48.983720+00:00",
+      "ready_jobs": [
+        "XR-RESULT-GO",
+        "XR-RESULT-PROVENANCE",
+        "E-FIX-RUNNER-ACCEPTANCE",
+        "E-FIX-SOURCE-AUDIT"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N5": "E-RESULT-DEMO",
+        "N2": "E-RESULT-NATIVE",
+        "N4": "E-RESULT-CUSTODY",
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N3": "E-RESULT-BROWSER",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "dispatch": {
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "native_seconds": 0.007866230997024104,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 1,
+        "E-RESULT-NATIVE": 1,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 1,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 1,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 1,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-GO": [
+          "N6"
+        ],
+        "XR-RESULT-PROVENANCE": [
+          "N1"
+        ],
+        "E-FIX-RUNNER-ACCEPTANCE": [
+          "N6"
+        ],
+        "E-FIX-SOURCE-AUDIT": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-RESULT-GO": 200,
+        "XR-RESULT-PROVENANCE": 200,
+        "E-FIX-RUNNER-ACCEPTANCE": 300,
+        "E-FIX-SOURCE-AUDIT": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:24:52.093340+00:00",
+      "worker": "N1",
+      "job": "E-FIX-SOURCE-AUDIT",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:24:52.197604+00:00",
+      "worker": "N6",
+      "job": "E-FIX-RUNNER-ACCEPTANCE",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:26:56.277120+00:00",
+      "worker": "N3",
+      "job": "E-RESULT-BROWSER"
+    },
+    {
+      "type": "solve",
+      "epoch": 19,
+      "at": "2026-10-31T10:26:56.382287+00:00",
+      "ready_jobs": [
+        "XR-RESULT-GO",
+        "XR-RESULT-BROWSER",
+        "XR-RESULT-PROVENANCE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "E-RESULT-DEMO",
+        "N2": "E-RESULT-NATIVE",
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N4": "E-RESULT-CUSTODY",
+        "N3": "XR-RESULT-PROVENANCE",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "dispatch": {
+        "N3": "XR-RESULT-PROVENANCE"
+      },
+      "native_seconds": 0.005657114990754053,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 1,
+        "E-RESULT-NATIVE": 1,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 1,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 1,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 1,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-GO": [
+          "N3"
+        ],
+        "XR-RESULT-BROWSER": [],
+        "XR-RESULT-PROVENANCE": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-RESULT-GO": 200,
+        "XR-RESULT-BROWSER": 200,
+        "XR-RESULT-PROVENANCE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": null,
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:26:59.138648+00:00",
+      "worker": "N3",
+      "job": "XR-RESULT-PROVENANCE",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:27:20.525640+00:00",
+      "worker": "N5",
+      "job": "E-RESULT-DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 20,
+      "at": "2026-10-31T10:27:20.650747+00:00",
+      "ready_jobs": [
+        "XR-RESULT-GO",
+        "XR-RESULT-BROWSER",
+        "XR-RESULT-DEMO"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N2": "E-RESULT-NATIVE",
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N5": "XR-RESULT-GO",
+        "N4": "E-RESULT-CUSTODY",
+        "N3": "XR-RESULT-PROVENANCE",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "dispatch": {
+        "N5": "XR-RESULT-GO"
+      },
+      "native_seconds": 0.004703415994299576,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 1,
+        "E-RESULT-NATIVE": 1,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 1,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 1,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 1,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-GO": [
+          "N5"
+        ],
+        "XR-RESULT-BROWSER": [
+          "N5"
+        ],
+        "XR-RESULT-DEMO": []
+      },
+      "weights": {
+        "XR-RESULT-GO": 200,
+        "XR-RESULT-BROWSER": 200,
+        "XR-RESULT-DEMO": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:27:22.715806+00:00",
+      "worker": "N5",
+      "job": "XR-RESULT-GO",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:27:30.860832+00:00",
+      "worker": "N2",
+      "job": "E-RESULT-NATIVE"
+    },
+    {
+      "type": "solve",
+      "epoch": 21,
+      "at": "2026-10-31T10:27:30.957823+00:00",
+      "ready_jobs": [
+        "XR-RESULT-NATIVE",
+        "XR-RESULT-BROWSER",
+        "XR-RESULT-DEMO"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N5": "XR-RESULT-GO",
+        "N2": "XR-RESULT-DEMO",
+        "N4": "E-RESULT-CUSTODY",
+        "N3": "XR-RESULT-PROVENANCE",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "dispatch": {
+        "N2": "XR-RESULT-DEMO"
+      },
+      "native_seconds": 0.004431112000020221,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 1,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 1,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 1,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 1,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 1,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-NATIVE": [],
+        "XR-RESULT-BROWSER": [
+          "N2"
+        ],
+        "XR-RESULT-DEMO": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-RESULT-NATIVE": 200,
+        "XR-RESULT-BROWSER": 200,
+        "XR-RESULT-DEMO": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:27:33.953977+00:00",
+      "worker": "N2",
+      "job": "XR-RESULT-DEMO",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:30:31.079732+00:00",
+      "worker": "N2",
+      "job": "XR-RESULT-DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 22,
+      "at": "2026-10-31T10:30:31.175238+00:00",
+      "ready_jobs": [
+        "XR-RESULT-NATIVE",
+        "XR-RESULT-BROWSER"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N5": "XR-RESULT-GO",
+        "N2": "XR-RESULT-BROWSER",
+        "N4": "E-RESULT-CUSTODY",
+        "N3": "XR-RESULT-PROVENANCE",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "dispatch": {
+        "N2": "XR-RESULT-BROWSER"
+      },
+      "native_seconds": 0.0047314979892689735,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 1,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 1,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 1,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 1,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-NATIVE": [],
+        "XR-RESULT-BROWSER": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-RESULT-NATIVE": 200,
+        "XR-RESULT-BROWSER": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:30:33.143107+00:00",
+      "worker": "N2",
+      "job": "XR-RESULT-BROWSER",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:31:29.358037+00:00",
+      "worker": "N5",
+      "job": "XR-RESULT-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 23,
+      "at": "2026-10-31T10:31:29.467002+00:00",
+      "ready_jobs": [
+        "XR-RESULT-NATIVE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N2": "XR-RESULT-BROWSER",
+        "N4": "E-RESULT-CUSTODY",
+        "N5": "XR-RESULT-NATIVE",
+        "N3": "XR-RESULT-PROVENANCE",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE"
+      },
+      "dispatch": {
+        "N5": "XR-RESULT-NATIVE"
+      },
+      "native_seconds": 0.004350097005954012,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 1,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 1,
+        "E-RESULT-CUSTODY": 1,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 1,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-NATIVE": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-RESULT-NATIVE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:31:31.570031+00:00",
+      "worker": "N5",
+      "job": "XR-RESULT-NATIVE",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:32:02.557370+00:00",
+      "worker": "N4",
+      "job": "E-RESULT-CUSTODY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:32:48.513983+00:00",
+      "worker": "N3",
+      "job": "XR-RESULT-PROVENANCE"
+    },
+    {
+      "type": "solve",
+      "epoch": 24,
+      "at": "2026-10-31T10:32:48.608081+00:00",
+      "ready_jobs": [
+        "XR-RESULT-CUSTODY"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-RESULT-CUSTODY",
+        "N4": "BENCH",
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N2": "XR-RESULT-BROWSER",
+        "N6": "E-FIX-RUNNER-ACCEPTANCE",
+        "N5": "XR-RESULT-NATIVE"
+      },
+      "dispatch": {
+        "N3": "XR-RESULT-CUSTODY"
+      },
+      "native_seconds": 0.004905077992589213,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 1,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 1,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 1,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 1,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-RESULT-CUSTODY": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-RESULT-CUSTODY": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": null,
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:32:50.877200+00:00",
+      "worker": "N3",
+      "job": "XR-RESULT-CUSTODY",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:33:31.841496+00:00",
+      "worker": "N2",
+      "job": "XR-RESULT-BROWSER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:33:31.948735+00:00",
+      "worker": "N6",
+      "job": "E-FIX-RUNNER-ACCEPTANCE"
+    },
+    {
+      "type": "solve",
+      "epoch": 25,
+      "at": "2026-10-31T10:33:32.058619+00:00",
+      "ready_jobs": [
+        "XR-FIX-RUNNER-ACCEPTANCE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N5"
+      ],
+      "assignments": {
+        "N2": "BENCH",
+        "N6": "BENCH",
+        "N3": "XR-RESULT-CUSTODY",
+        "N1": "E-FIX-SOURCE-AUDIT",
+        "N4": "XR-FIX-RUNNER-ACCEPTANCE",
+        "N5": "XR-RESULT-NATIVE"
+      },
+      "dispatch": {
+        "N4": "XR-FIX-RUNNER-ACCEPTANCE"
+      },
+      "native_seconds": 0.004882413006271236,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 1,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 1,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 1,
+        "E-FIX-SOURCE-AUDIT": 1,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-RUNNER-ACCEPTANCE": [
+          "N2",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-FIX-RUNNER-ACCEPTANCE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:33:34.256450+00:00",
+      "worker": "N4",
+      "job": "XR-FIX-RUNNER-ACCEPTANCE",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:35:40.528806+00:00",
+      "worker": "N1",
+      "job": "E-FIX-SOURCE-AUDIT"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:35:40.624323+00:00",
+      "worker": "N3",
+      "job": "XR-RESULT-CUSTODY"
+    },
+    {
+      "type": "solve",
+      "epoch": 26,
+      "at": "2026-10-31T10:35:40.740812+00:00",
+      "ready_jobs": [
+        "XR-FIX-SOURCE-AUDIT"
+      ],
+      "pinned_workers": [
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N6": "BENCH",
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N4": "XR-FIX-RUNNER-ACCEPTANCE",
+        "N2": "XR-FIX-SOURCE-AUDIT",
+        "N5": "XR-RESULT-NATIVE"
+      },
+      "dispatch": {
+        "N2": "XR-FIX-SOURCE-AUDIT"
+      },
+      "native_seconds": 0.0064977090078173205,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 1,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 1,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-SOURCE-AUDIT": [
+          "N2",
+          "N3",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-FIX-SOURCE-AUDIT": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:35:43.044868+00:00",
+      "worker": "N2",
+      "job": "XR-FIX-SOURCE-AUDIT",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:35:43.136924+00:00",
+      "worker": "N5",
+      "job": "XR-RESULT-NATIVE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:36:52.124225+00:00",
+      "worker": "N4",
+      "job": "XR-FIX-RUNNER-ACCEPTANCE"
+    },
+    {
+      "type": "extend-independent-evidence-preparation",
+      "at": "2026-10-31T10:38:21.607838+00:00",
+      "jobs": [
+        "E-ACCEPT-GO",
+        "E-ACCEPT-NATIVE",
+        "E-ACCEPT-BROWSER",
+        "E-ACCEPT-CUSTODY",
+        "E-ACCEPT-DEMO",
+        "E-ACCEPT-PROVENANCE"
+      ],
+      "reason": "Fresh acceptance for normal follow-up source after independently reviewed runner repair; source a2e failed cohort remains excluded.",
+      "source": "60b5aeff3172837ad7831c2b78b210454a3d81a2"
+    },
+    {
+      "type": "solve",
+      "epoch": 27,
+      "at": "2026-10-31T10:38:21.724541+00:00",
+      "ready_jobs": [
+        "E-ACCEPT-GO",
+        "E-ACCEPT-NATIVE",
+        "E-ACCEPT-BROWSER",
+        "E-ACCEPT-CUSTODY",
+        "E-ACCEPT-DEMO",
+        "E-ACCEPT-PROVENANCE"
+      ],
+      "pinned_workers": [
+        "N2"
+      ],
+      "assignments": {
+        "N5": "E-ACCEPT-DEMO",
+        "N6": "E-ACCEPT-PROVENANCE",
+        "N2": "XR-FIX-SOURCE-AUDIT",
+        "N3": "E-ACCEPT-BROWSER",
+        "N1": "E-ACCEPT-GO",
+        "N4": "E-ACCEPT-CUSTODY"
+      },
+      "dispatch": {
+        "N5": "E-ACCEPT-DEMO",
+        "N6": "E-ACCEPT-PROVENANCE",
+        "N3": "E-ACCEPT-BROWSER",
+        "N1": "E-ACCEPT-GO",
+        "N4": "E-ACCEPT-CUSTODY"
+      },
+      "native_seconds": 0.008643745008157566,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 500,
+      "native_score": 500,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 1,
+        "E-ACCEPT-GO": 1,
+        "XR-ACCEPT-GO": 0,
+        "E-ACCEPT-NATIVE": 1,
+        "XR-ACCEPT-NATIVE": 0,
+        "E-ACCEPT-BROWSER": 1,
+        "XR-ACCEPT-BROWSER": 0,
+        "E-ACCEPT-CUSTODY": 1,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 1,
+        "XR-ACCEPT-DEMO": 0,
+        "E-ACCEPT-PROVENANCE": 1,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-ACCEPT-GO": [
+          "N1"
+        ],
+        "E-ACCEPT-NATIVE": [],
+        "E-ACCEPT-BROWSER": [
+          "N3"
+        ],
+        "E-ACCEPT-CUSTODY": [
+          "N4"
+        ],
+        "E-ACCEPT-DEMO": [
+          "N5"
+        ],
+        "E-ACCEPT-PROVENANCE": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-ACCEPT-GO": 100,
+        "E-ACCEPT-NATIVE": 100,
+        "E-ACCEPT-BROWSER": 100,
+        "E-ACCEPT-CUSTODY": 100,
+        "E-ACCEPT-DEMO": 100,
+        "E-ACCEPT-PROVENANCE": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:38:25.644418+00:00",
+      "worker": "N1",
+      "job": "E-ACCEPT-GO",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:38:25.738614+00:00",
+      "worker": "N3",
+      "job": "E-ACCEPT-BROWSER",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:38:25.830467+00:00",
+      "worker": "N4",
+      "job": "E-ACCEPT-CUSTODY",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:38:25.930361+00:00",
+      "worker": "N5",
+      "job": "E-ACCEPT-DEMO",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:38:26.024660+00:00",
+      "worker": "N6",
+      "job": "E-ACCEPT-PROVENANCE",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T10:41:27.222708+00:00",
+      "worker": "N2",
+      "job": "XR-FIX-SOURCE-AUDIT"
+    },
+    {
+      "type": "solve",
+      "epoch": 28,
+      "at": "2026-10-31T10:41:27.330844+00:00",
+      "ready_jobs": [
+        "E-ACCEPT-NATIVE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-ACCEPT-GO",
+        "N2": "E-ACCEPT-NATIVE",
+        "N4": "E-ACCEPT-CUSTODY",
+        "N5": "E-ACCEPT-DEMO",
+        "N3": "E-ACCEPT-BROWSER",
+        "N6": "E-ACCEPT-PROVENANCE"
+      },
+      "dispatch": {
+        "N2": "E-ACCEPT-NATIVE"
+      },
+      "native_seconds": 0.004905035995761864,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 1,
+        "XR-ACCEPT-GO": 0,
+        "E-ACCEPT-NATIVE": 1,
+        "XR-ACCEPT-NATIVE": 0,
+        "E-ACCEPT-BROWSER": 1,
+        "XR-ACCEPT-BROWSER": 0,
+        "E-ACCEPT-CUSTODY": 1,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 1,
+        "XR-ACCEPT-DEMO": 0,
+        "E-ACCEPT-PROVENANCE": 1,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-ACCEPT-NATIVE": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "E-ACCEPT-NATIVE": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": null,
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T10:41:27.443439+00:00",
+      "worker": "N2",
+      "job": "E-ACCEPT-NATIVE",
+      "agent": "/root/cap_host"
+    },
+    {
+      "type": "solve",
+      "epoch": 29,
+      "at": "2026-10-31T11:18:09.812496+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-ACCEPT-GO",
+        "N2": "E-ACCEPT-NATIVE",
+        "N4": "E-ACCEPT-CUSTODY",
+        "N5": "E-ACCEPT-DEMO",
+        "N3": "E-ACCEPT-BROWSER",
+        "N6": "E-ACCEPT-PROVENANCE"
+      },
+      "dispatch": {},
+      "native_seconds": 0.003041448988369666,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 6 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 1,
+        "XR-ACCEPT-GO": 0,
+        "E-ACCEPT-NATIVE": 1,
+        "XR-ACCEPT-NATIVE": 0,
+        "E-ACCEPT-BROWSER": 1,
+        "XR-ACCEPT-BROWSER": 0,
+        "E-ACCEPT-CUSTODY": 1,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 1,
+        "XR-ACCEPT-DEMO": 0,
+        "E-ACCEPT-PROVENANCE": 1,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:19:20.057357+00:00",
+      "worker": "N1",
+      "job": "E-ACCEPT-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 30,
+      "at": "2026-10-31T11:19:20.256317+00:00",
+      "ready_jobs": [
+        "XR-ACCEPT-GO"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N2": "E-ACCEPT-NATIVE",
+        "N1": "BENCH",
+        "N4": "E-ACCEPT-CUSTODY",
+        "N5": "E-ACCEPT-DEMO",
+        "N3": "E-ACCEPT-BROWSER",
+        "N6": "E-ACCEPT-PROVENANCE"
+      },
+      "dispatch": {},
+      "native_seconds": 0.0040723580023040995,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 0,
+        "XR-ACCEPT-GO": 1,
+        "E-ACCEPT-NATIVE": 1,
+        "XR-ACCEPT-NATIVE": 0,
+        "E-ACCEPT-BROWSER": 1,
+        "XR-ACCEPT-BROWSER": 0,
+        "E-ACCEPT-CUSTODY": 1,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 1,
+        "XR-ACCEPT-DEMO": 0,
+        "E-ACCEPT-PROVENANCE": 1,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ACCEPT-GO": []
+      },
+      "weights": {
+        "XR-ACCEPT-GO": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:19:55.396032+00:00",
+      "worker": "N4",
+      "job": "E-ACCEPT-CUSTODY"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:19:55.489932+00:00",
+      "worker": "N5",
+      "job": "E-ACCEPT-DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 31,
+      "at": "2026-10-31T11:19:55.603149+00:00",
+      "ready_jobs": [
+        "XR-ACCEPT-GO",
+        "XR-ACCEPT-CUSTODY",
+        "XR-ACCEPT-DEMO"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "XR-ACCEPT-GO",
+        "N5": "XR-ACCEPT-CUSTODY",
+        "N3": "E-ACCEPT-BROWSER",
+        "N2": "E-ACCEPT-NATIVE",
+        "N1": "XR-ACCEPT-DEMO",
+        "N6": "E-ACCEPT-PROVENANCE"
+      },
+      "dispatch": {
+        "N4": "XR-ACCEPT-GO",
+        "N5": "XR-ACCEPT-CUSTODY",
+        "N1": "XR-ACCEPT-DEMO"
+      },
+      "native_seconds": 0.008060324005782604,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 0,
+        "XR-ACCEPT-GO": 1,
+        "E-ACCEPT-NATIVE": 1,
+        "XR-ACCEPT-NATIVE": 0,
+        "E-ACCEPT-BROWSER": 1,
+        "XR-ACCEPT-BROWSER": 0,
+        "E-ACCEPT-CUSTODY": 0,
+        "XR-ACCEPT-CUSTODY": 1,
+        "E-ACCEPT-DEMO": 0,
+        "XR-ACCEPT-DEMO": 1,
+        "E-ACCEPT-PROVENANCE": 1,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ACCEPT-GO": [
+          "N4",
+          "N5"
+        ],
+        "XR-ACCEPT-CUSTODY": [
+          "N1",
+          "N5"
+        ],
+        "XR-ACCEPT-DEMO": [
+          "N1",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-ACCEPT-GO": 200,
+        "XR-ACCEPT-CUSTODY": 200,
+        "XR-ACCEPT-DEMO": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/cap_host",
+        "N3": "/root/cap_harness",
+        "N4": null,
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:19:59.177284+00:00",
+      "worker": "N4",
+      "job": "XR-ACCEPT-GO",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:19:59.276303+00:00",
+      "worker": "N5",
+      "job": "XR-ACCEPT-CUSTODY",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:19:59.366507+00:00",
+      "worker": "N1",
+      "job": "XR-ACCEPT-DEMO",
+      "agent": "/root/cap_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:20:57.492109+00:00",
+      "worker": "N3",
+      "job": "E-ACCEPT-BROWSER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:20:57.603214+00:00",
+      "worker": "N6",
+      "job": "E-ACCEPT-PROVENANCE"
+    },
+    {
+      "type": "solve",
+      "epoch": 32,
+      "at": "2026-10-31T11:20:57.715002+00:00",
+      "ready_jobs": [
+        "XR-ACCEPT-BROWSER",
+        "XR-ACCEPT-PROVENANCE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5"
+      ],
+      "assignments": {
+        "N3": "XR-ACCEPT-PROVENANCE",
+        "N5": "XR-ACCEPT-CUSTODY",
+        "N2": "E-ACCEPT-NATIVE",
+        "N1": "XR-ACCEPT-DEMO",
+        "N6": "XR-ACCEPT-BROWSER",
+        "N4": "XR-ACCEPT-GO"
+      },
+      "dispatch": {
+        "N3": "XR-ACCEPT-PROVENANCE",
+        "N6": "XR-ACCEPT-BROWSER"
+      },
+      "native_seconds": 0.017929352005012333,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 0,
+        "XR-ACCEPT-GO": 1,
+        "E-ACCEPT-NATIVE": 1,
+        "XR-ACCEPT-NATIVE": 0,
+        "E-ACCEPT-BROWSER": 0,
+        "XR-ACCEPT-BROWSER": 1,
+        "E-ACCEPT-CUSTODY": 0,
+        "XR-ACCEPT-CUSTODY": 1,
+        "E-ACCEPT-DEMO": 0,
+        "XR-ACCEPT-DEMO": 1,
+        "E-ACCEPT-PROVENANCE": 0,
+        "XR-ACCEPT-PROVENANCE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ACCEPT-BROWSER": [
+          "N6"
+        ],
+        "XR-ACCEPT-PROVENANCE": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-ACCEPT-BROWSER": 200,
+        "XR-ACCEPT-PROVENANCE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": "/root/cap_host",
+        "N3": null,
+        "N4": "/root/cap_oracle",
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:21:00.465696+00:00",
+      "worker": "N3",
+      "job": "XR-ACCEPT-PROVENANCE",
+      "agent": "/root/cap_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:21:00.568356+00:00",
+      "worker": "N6",
+      "job": "XR-ACCEPT-BROWSER",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:22:37.132604+00:00",
+      "worker": "N2",
+      "job": "E-ACCEPT-NATIVE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:25:15.247883+00:00",
+      "worker": "N3",
+      "job": "XR-ACCEPT-PROVENANCE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:25:15.348259+00:00",
+      "worker": "N5",
+      "job": "XR-ACCEPT-CUSTODY"
+    },
+    {
+      "type": "extend-after-review-amend",
+      "at": "2026-10-31T11:25:15.365611+00:00",
+      "review": "XR-ACCEPT-CUSTODY",
+      "decision": "amend",
+      "new_jobs": [
+        "E-FIX-ACCEPT-CUSTODY",
+        "XR-FIX-ACCEPT-CUSTODY"
+      ]
+    },
+    {
+      "type": "solve",
+      "epoch": 33,
+      "at": "2026-10-31T11:25:15.462055+00:00",
+      "ready_jobs": [
+        "XR-ACCEPT-NATIVE",
+        "E-FIX-ACCEPT-CUSTODY"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N5": "XR-ACCEPT-NATIVE",
+        "N1": "XR-ACCEPT-DEMO",
+        "N3": "BENCH",
+        "N2": "BENCH",
+        "N6": "XR-ACCEPT-BROWSER",
+        "N4": "XR-ACCEPT-GO"
+      },
+      "dispatch": {
+        "N5": "XR-ACCEPT-NATIVE"
+      },
+      "native_seconds": 0.0058947669895133,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 3 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 0,
+        "XR-ACCEPT-GO": 1,
+        "E-ACCEPT-NATIVE": 0,
+        "XR-ACCEPT-NATIVE": 1,
+        "E-ACCEPT-BROWSER": 0,
+        "XR-ACCEPT-BROWSER": 1,
+        "E-ACCEPT-CUSTODY": 0,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 0,
+        "XR-ACCEPT-DEMO": 1,
+        "E-ACCEPT-PROVENANCE": 0,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "E-FIX-ACCEPT-CUSTODY": 1,
+        "XR-FIX-ACCEPT-CUSTODY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ACCEPT-NATIVE": [
+          "N3",
+          "N5"
+        ],
+        "E-FIX-ACCEPT-CUSTODY": []
+      },
+      "weights": {
+        "XR-ACCEPT-NATIVE": 200,
+        "E-FIX-ACCEPT-CUSTODY": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/cap_go",
+        "N2": null,
+        "N3": null,
+        "N4": "/root/cap_oracle",
+        "N5": null,
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:25:19.604528+00:00",
+      "worker": "N5",
+      "job": "XR-ACCEPT-NATIVE",
+      "agent": "/root/cap_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:25:55.549286+00:00",
+      "worker": "N1",
+      "job": "XR-ACCEPT-DEMO"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:27:02.118139+00:00",
+      "worker": "N4",
+      "job": "XR-ACCEPT-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 34,
+      "at": "2026-10-31T11:27:02.231694+00:00",
+      "ready_jobs": [
+        "E-FIX-ACCEPT-CUSTODY"
+      ],
+      "pinned_workers": [
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "E-FIX-ACCEPT-CUSTODY",
+        "N6": "XR-ACCEPT-BROWSER",
+        "N3": "BENCH",
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N5": "XR-ACCEPT-NATIVE"
+      },
+      "dispatch": {
+        "N4": "E-FIX-ACCEPT-CUSTODY"
+      },
+      "native_seconds": 0.006292901001870632,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 2 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 0,
+        "XR-ACCEPT-GO": 0,
+        "E-ACCEPT-NATIVE": 0,
+        "XR-ACCEPT-NATIVE": 1,
+        "E-ACCEPT-BROWSER": 0,
+        "XR-ACCEPT-BROWSER": 1,
+        "E-ACCEPT-CUSTODY": 0,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 0,
+        "XR-ACCEPT-DEMO": 0,
+        "E-ACCEPT-PROVENANCE": 0,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "E-FIX-ACCEPT-CUSTODY": 1,
+        "XR-FIX-ACCEPT-CUSTODY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-FIX-ACCEPT-CUSTODY": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "E-FIX-ACCEPT-CUSTODY": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": "/root/cap_build"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:27:02.347542+00:00",
+      "worker": "N4",
+      "job": "E-FIX-ACCEPT-CUSTODY",
+      "agent": "/root/cap_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:28:55.230336+00:00",
+      "worker": "N6",
+      "job": "XR-ACCEPT-BROWSER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:29:26.843677+00:00",
+      "worker": "N4",
+      "job": "E-FIX-ACCEPT-CUSTODY"
+    },
+    {
+      "type": "solve",
+      "epoch": 35,
+      "at": "2026-10-31T11:29:26.951855+00:00",
+      "ready_jobs": [
+        "XR-FIX-ACCEPT-CUSTODY"
+      ],
+      "pinned_workers": [
+        "N5"
+      ],
+      "assignments": {
+        "N4": "BENCH",
+        "N2": "BENCH",
+        "N3": "BENCH",
+        "N1": "BENCH",
+        "N5": "XR-ACCEPT-NATIVE",
+        "N6": "XR-FIX-ACCEPT-CUSTODY"
+      },
+      "dispatch": {
+        "N6": "XR-FIX-ACCEPT-CUSTODY"
+      },
+      "native_seconds": 0.005016947005060501,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 1 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DEMO": 0,
+        "E-BUILD": 0,
+        "XR-GO": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DEMO": 0,
+        "XR-BUILD": 0,
+        "E-FIX-GO": 0,
+        "XR-FIX-GO": 0,
+        "E-FIX-BUILD": 0,
+        "XR-FIX-BUILD": 0,
+        "E-FIX-HARNESS": 0,
+        "XR-FIX-HARNESS": 0,
+        "E-PREP-PROVENANCE": 0,
+        "XR-PREP-PROVENANCE": 0,
+        "E-PREP-SCHEDULER": 0,
+        "XR-PREP-SCHEDULER": 0,
+        "E-PREP-CUSTODY": 0,
+        "XR-PREP-CUSTODY": 0,
+        "E-PREP-ARCHIVE": 0,
+        "XR-PREP-ARCHIVE": 0,
+        "E-FIX-STARTUP": 0,
+        "XR-FIX-STARTUP": 0,
+        "E-FIX-SCHEDULER": 0,
+        "XR-FIX-SCHEDULER": 0,
+        "E-FIX-ARCHIVE-AUDIT": 0,
+        "XR-FIX-ARCHIVE-AUDIT": 0,
+        "E-RESULT-GO": 0,
+        "XR-RESULT-GO": 0,
+        "E-RESULT-NATIVE": 0,
+        "XR-RESULT-NATIVE": 0,
+        "E-RESULT-BROWSER": 0,
+        "XR-RESULT-BROWSER": 0,
+        "E-RESULT-CUSTODY": 0,
+        "XR-RESULT-CUSTODY": 0,
+        "E-RESULT-DEMO": 0,
+        "XR-RESULT-DEMO": 0,
+        "E-RESULT-PROVENANCE": 0,
+        "XR-RESULT-PROVENANCE": 0,
+        "E-FIX-RUNNER-ACCEPTANCE": 0,
+        "XR-FIX-RUNNER-ACCEPTANCE": 0,
+        "E-FIX-SOURCE-AUDIT": 0,
+        "XR-FIX-SOURCE-AUDIT": 0,
+        "E-ACCEPT-GO": 0,
+        "XR-ACCEPT-GO": 0,
+        "E-ACCEPT-NATIVE": 0,
+        "XR-ACCEPT-NATIVE": 1,
+        "E-ACCEPT-BROWSER": 0,
+        "XR-ACCEPT-BROWSER": 0,
+        "E-ACCEPT-CUSTODY": 0,
+        "XR-ACCEPT-CUSTODY": 0,
+        "E-ACCEPT-DEMO": 0,
+        "XR-ACCEPT-DEMO": 0,
+        "E-ACCEPT-PROVENANCE": 0,
+        "XR-ACCEPT-PROVENANCE": 0,
+        "E-FIX-ACCEPT-CUSTODY": 0,
+        "XR-FIX-ACCEPT-CUSTODY": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-FIX-ACCEPT-CUSTODY": [
+          "N1",
+          "N2",
+          "N3",
+          "N6"
+        ]
+      },
+      "weights": {
+        "XR-FIX-ACCEPT-CUSTODY": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": "/root/cap_demo",
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T11:29:29.253341+00:00",
+      "worker": "N6",
+      "job": "XR-FIX-ACCEPT-CUSTODY",
+      "agent": "/root/cap_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:31:10.194568+00:00",
+      "worker": "N5",
+      "job": "XR-ACCEPT-NATIVE"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T11:32:15.659606+00:00",
+      "worker": "N6",
+      "job": "XR-FIX-ACCEPT-CUSTODY"
     }
   ],
-  "epoch": 14,
+  "epoch": 36,
   "policy": {
     "extract_priority": 100,
     "review_priority": 200,

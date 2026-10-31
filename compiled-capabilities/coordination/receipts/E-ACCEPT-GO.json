@@ -1,0 +1,183 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-ACCEPT-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "status": "closed_source_evidence_verified_local_archive_rejected",
+  "summary": "Verified the terminal 30-run exact-source CI catalog, fresh hosted full capability artifact, and current-source Go/static/M0 counter evidence. The hosted artifact is authoritative per ACCEPTANCE-SCOPE; the local archive remains explicitly rejected with cause unknown.",
+  "sourceIdentity": {
+    "repository": "samuelpmahan/gondola",
+    "pullRequest": 15,
+    "branch": "codex/gobi-backend-capabilities-20261031",
+    "commit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "tree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f",
+    "parent": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae"
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-ACCEPT-GO.md",
+    "sha256": "51ca25f0b3967f653fab8df015c9e292cfeb1c65d697b2bb6b3ca0359a8c0d6f"
+  },
+  "terminalCatalog": {
+    "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aeff-terminal-runs-jobs-20261031T111444Z-v2.json",
+    "bytes": 135588,
+    "sha256": "b69f432f53e8d4ff85ae0d855bbfabec35f76febb4830853d313cb0a8b2d9bfc",
+    "runCount": 30,
+    "jobCount": 30,
+    "pushCount": 15,
+    "pullRequestCount": 15,
+    "allRunsSuccess": true,
+    "allJobsSuccess": true,
+    "allHeadsMatchSource": true,
+    "parseCheckLog": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/terminal-catalog-parse-check-attempt02.log",
+    "parseCheckLogSha256": "45279727712005d6819891323ab9256b5c577d186ccaecb251c72b919f3f52ce"
+  },
+  "primaryCapabilityArtifact": {
+    "runId": 41193504188,
+    "jobId": 124514913013,
+    "artifactId": 13040129310,
+    "jobConclusion": "success",
+    "outerVerification": {
+      "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-outer-verification.json",
+      "sha256": "4de2e094846511deaa165be290505e10ab874c07206fb0c0b0a64870f33d82af",
+      "artifactBytes": 76786265,
+      "artifactSha256": "3a54a53c81ac93ad1c5a8231b17ac289875ed57ad7bb12d7ae2b3609ff267de1",
+      "zipMemberCount": 1476,
+      "allMemberChecksPassed": true
+    },
+    "innerVerification": {
+      "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-inner-verification.json",
+      "sha256": "2d1b7d44636543db65d6f32457563fceda888168a1ce9b7e9201655db91cea04",
+      "receiptSha256": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+      "receiptStatus": "passed",
+      "receiptMode": "full",
+      "receiptFailures": 0,
+      "sourcePinsMatch": true,
+      "archiveBytes": 14960460,
+      "archiveSha256": "ba17805387c8204ef2624caec0af35641771bc8af48d4f03b82c1a6609586d8f",
+      "manifestMemberCount": 189,
+      "tarMembersMatchManifest": true,
+      "gzipReachedValidEof": true,
+      "snapshotSha256": "f94ba435ad901882485ce0e8e00d36aba183a6e80097957b353f59c0e760170d",
+      "manifestSha256": "ccf0bb8fb460d72febd3f96ab7476f3f29588b80fba38c974cf4ab95066ebac5"
+    }
+  },
+  "goStaticAndCounter": {
+    "jobs": [
+      {
+        "event": "push",
+        "runId": 41193504118,
+        "jobId": 124514912770,
+        "conclusion": "success",
+        "log": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-push-run-41193504118-job-124514912770.log",
+        "logSha256": "3a2679ee9fad51952babd8c9eab8a7c91557a6871538e4abad5103fe171a075f"
+      },
+      {
+        "event": "pull_request",
+        "runId": 41193506615,
+        "jobId": 124514920058,
+        "conclusion": "success",
+        "mergeCommit": "07fc827212889af17524eadfe8c5c9da75d26850",
+        "log": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-pr-run-41193506615-job-124514920058.log",
+        "logSha256": "3450c65ee49d1e80cae8a99b18585fd79f7348438c5acfffbf2c9ab7f02214c8"
+      }
+    ],
+    "versions": {
+      "go": "go1.24.13 linux/amd64",
+      "node": "v22.23.4",
+      "npm": "10.9.9"
+    },
+    "commands": [
+      "go vet ./...",
+      "go test ./...",
+      "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "sha256sum -c --quiet SHA256SUMS"
+    ],
+    "staticComparison": {
+      "cases": 5000,
+      "seed": 20261030,
+      "result": "same over 5000 inputs; receipt matches"
+    },
+    "ruleTable": {
+      "count": 59,
+      "countMethod": "static source literal count; logs confirm package tests passed but do not print the row count",
+      "sourceSha256": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a"
+    },
+    "m0": {
+      "sumRows": 24,
+      "trackedRows": 23,
+      "generatedRows": 1,
+      "sha256sumsSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "expectedJsonSha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "result": "both current-source logs state SHA256SUMS ok and receipt matches"
+    },
+    "counterInteractions": {
+      "matched": true,
+      "scripts": 107,
+      "initialAndActionTicks": 4473,
+      "seed": 20261030,
+      "nativeComparator": "matched"
+    }
+  },
+  "localAttempt": {
+    "attempt": "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z",
+    "cliExitCodeObservedByRoot": 0,
+    "receiptPath": "compiled-capabilities/coordination/receipts/E-BUILD.json",
+    "receiptSha256": "a04c312c50f6bc4099003045c2e421f0577243d1eff82d106ce1febc2c0e5398",
+    "receiptStatus": "passed",
+    "receiptMode": "full",
+    "receiptFailures": 0,
+    "archiveStatus": "rejected_per_acceptance_scope",
+    "archiveActualBytes": 12845056,
+    "archiveActualSha256": "91e3d977e8efd7ef42a37d43029997a9e2ab8db7266a88cf54d5f7cc90a64b5f",
+    "archiveReceiptBytes": 14983690,
+    "archiveReceiptSha256": "1a4fd17fd4f8c2aef16aaa1ed268d253b13dd77396e6cb6da3108e2b2c3921ab",
+    "archiveCause": "unknown",
+    "integrityLog": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/local-archive-integrity-check.log",
+    "integrityLogSha256": "b3d38538e0313fc9a904b4c07cad3e1ab1a3fa635925c32865419993cb018320"
+  },
+  "acceptanceScope": {
+    "path": "compiled-capabilities/ci/2026-10-31/ACCEPTANCE-SCOPE.json",
+    "sha256": "2e23397e2a0e22a45d72a5038f563bd0ba8ae2edd4b6d766284317aa215c8589",
+    "decision": "The exact-source independently verified hosted full CI archive is authoritative; the corrupt local archive container is rejected with cause unknown."
+  },
+  "checks": [
+    {
+      "id": "terminal-current-source-catalog",
+      "result": "passed",
+      "detail": "All 30 unique runs and 30 unique jobs are completed-success on the exact source head; 15 push and 15 pull-request events."
+    },
+    {
+      "id": "primary-hosted-full-artifact",
+      "result": "passed",
+      "detail": "Outer ZIP and all members verified; embedded full E-BUILD receipt, 189-member tar, manifest, gzip EOF, and 163 source-pin set equality independently verified by N4."
+    },
+    {
+      "id": "go-static-counter-m0",
+      "result": "passed",
+      "detail": "Both current-source counter jobs pass; Go package tests, static comparison, M0 checksum receipt, and native interaction comparator match."
+    },
+    {
+      "id": "local-container-integrity",
+      "result": "rejected",
+      "detail": "The local archive differs from its receipt-bound size/hash and fails gzip integrity; cause unknown. This is not represented as passing and is superseded only for source acceptance by the independently verified same-source hosted artifact per ACCEPTANCE-SCOPE.json."
+    }
+  ],
+  "limitations": [
+    "The root's local archive integrity failed; the cause remains unknown, and this packet does not claim local archive integrity passed.",
+    "The static rule count of 59 is a literal source count; the hosted log confirms package tests but does not print the rule-row count.",
+    "Overall milestone closure remains pending the six independent acceptance reviews, root's independent native scheduling audit, and exact-hash delivery-chunk reconstruction."
+  ],
+  "source_sha256": {
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/full-run-gate.json": "b9b1df295669c3b2461ddcd5f528c6a0c1d36a692c73328333a78a7840ad9ffa",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/source-preflight.json": "aeb301f3c450694dd9694909763f18904beadc7b1cd468f51606520955589d60",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/counter-ci-pair-evidence.json": "94a60c4adde3c818834184abb9c5e6219e0d2c8f7b0fb5cfc9ba22a563667a7c"
+  },
+  "log_sha256": {
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-push-run-41193504118-job-124514912770.log": "3a2679ee9fad51952babd8c9eab8a7c91557a6871538e4abad5103fe171a075f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-pr-run-41193506615-job-124514920058.log": "3450c65ee49d1e80cae8a99b18585fd79f7348438c5acfffbf2c9ab7f02214c8",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/local-archive-integrity-check.log": "b3d38538e0313fc9a904b4c07cad3e1ab1a3fa635925c32865419993cb018320",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/terminal-catalog-parse-check-attempt02.log": "45279727712005d6819891323ab9256b5c577d186ccaecb251c72b919f3f52ce"
+  },
+  "integration": "This Go evidence packet is complete. Overall milestone acceptance awaits the remaining independent reviews, native scheduling audit, and exact-hash delivery-chunk reconstruction.",
+  "publication": "No commit, merge, deploy, or Git mutation."
+}

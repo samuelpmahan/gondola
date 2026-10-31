@@ -1,0 +1,118 @@
+{
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "job_id": "XR-RESULT-CUSTODY",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independently verified the source-bound primary push ZIP digest and size, the cataloged canonical failed E-BUILD receipt, the embedded pre-archive state, and every regular inner archive member against its manifest. The Actions workflow/job is green, but the canonical E-BUILD receipt is failed; this packet is failed-cohort evidence only.",
+  "authorPacket": {
+    "reportPath": "compiled-capabilities/coordination/reports/E-RESULT-CUSTODY.md",
+    "reportSha256": "43a8b3a2c2bc954b11b3fa903bce9bd6ac97ae437d2fc26c3518846591e59dd5",
+    "receiptPath": "compiled-capabilities/coordination/receipts/E-RESULT-CUSTODY.json",
+    "receiptSha256": "aac8af79d1f790a195c96ae56e6730ac039fe8a3aa2c0fd8d3905a4167015fee",
+    "outcome": "insufficient_evidence",
+    "status": "failed_cohort_preserved",
+    "sourceCommit": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "sourceTree": "d22b75e18c7bea70a743cc79d53461b287c7d045"
+  },
+  "providerArtifact": {
+    "runId": 41190743932,
+    "jobId": 124506858858,
+    "workflowStatus": "completed",
+    "workflowConclusion": "success",
+    "jobStatus": "completed",
+    "jobConclusion": "success",
+    "artifactId": 13039351554,
+    "artifactBytes": 76821513,
+    "artifactSha256": "40dd8c6fea08e9d7fec280e1a31b448ced0d56a2245834c074cb05bfba4353a8",
+    "providerDigestMatches": true,
+    "outerMemberCatalogCount": 1474,
+    "canonicalReceiptPathInZip": "compiled-capabilities/coordination/receipts/E-BUILD.json",
+    "canonicalReceiptBytes": 548783,
+    "canonicalReceiptSha256": "4430b2bdc89d496c695465f6477b010f131fbaaf7ae4f005e2b5d8258c16cc4f",
+    "canonicalReceiptMatchesCatalogZipAndExtraction": true
+  },
+  "embeddedBuild": {
+    "canonicalCompiledLifecycleReceiptBytes": 1138413,
+    "canonicalCompiledLifecycleReceiptPath": "compiled-lifecycle/coordination/receipts/E-BUILD.json",
+    "canonicalCompiledLifecycleReceiptSha256": "e3432447274276fe8aedf91b657e9adc74c5963cc7af1d64c783529bc3d70ec5",
+    "canonicalCompiledLifecycleStatus": "passed",
+    "executionCopyByteIdentical": true,
+    "failureStage": "stage:inherited-static-and-interaction-lifecycle",
+    "failureText": "fresh lifecycle receipt does not confirm the inherited full compiled-methods regression chain",
+    "innerArchiveBytes": 14970737,
+    "innerArchiveSha256": "ef85a89bc45eefc561d55bd01e45acdd8735379926d5084f597a9edddb4f1cb1",
+    "innerDirectoryEntries": 61,
+    "innerManifestHashMatchesEveryFile": true,
+    "innerRegularFilesIndependentlyCompared": 187,
+    "manifestMemberCount": 187,
+    "nestedLifecycleStatus": "passed",
+    "outcome": "mixed_change",
+    "preArchiveAcceptanceStatus": "NOT_FINAL",
+    "preArchiveFinalAcceptance": false,
+    "preArchiveSnapshotStatus": "PENDING",
+    "status": "failed"
+  },
+  "temporalStatus": {
+    "catalogJobs": 30,
+    "catalogRetrievedAt": "2026-10-31T10:08Z",
+    "catalogRuns": 30,
+    "catalogStatuses": {
+      "completed_success": 11,
+      "in_progress": 19
+    },
+    "prJobStatusAtLatestPoll": "in_progress",
+    "prLatestPollAt": "2026-10-31T10:30:01Z",
+    "prStatusAtLatestPoll": "in_progress"
+  },
+  "hashAudit": {
+    "citedImmutableFilesVerified": 22,
+    "allCitedImmutableHashesMatch": true,
+    "auditPath": "compiled-capabilities/coordination/reviews/XR-RESULT-CUSTODY/audit.stdout.json",
+    "auditSha256": "42af5f14f9714eea98d3289779abc20311b9856e546d1a2f486c24a634bb0691",
+    "auditScript": "compiled-capabilities/coordination/reviews/XR-RESULT-CUSTODY/audit_result_custody.py",
+    "auditScriptSha256": "3bccdd024723f84d588b4e6e557188336dc64a002f1ba4f0ea9364412836c056",
+    "stdout": "compiled-capabilities/coordination/reviews/XR-RESULT-CUSTODY/audit.stdout.json",
+    "stdoutSha256": "42af5f14f9714eea98d3289779abc20311b9856e546d1a2f486c24a634bb0691",
+    "stderr": "compiled-capabilities/coordination/reviews/XR-RESULT-CUSTODY/audit.stderr.log",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "command": "python3 compiled-capabilities/coordination/reviews/XR-RESULT-CUSTODY/audit_result_custody.py",
+    "exitCode": 0
+  },
+  "checks": [
+    {
+      "id": "provider-zip",
+      "result": "passed",
+      "detail": "Saved ZIP byte count and SHA-256 match provider artifact metadata."
+    },
+    {
+      "id": "canonical-receipt",
+      "result": "passed",
+      "detail": "Canonical E-BUILD bytes match between ZIP, extracted file, and unique member-catalog row; status is failed/mixed_change."
+    },
+    {
+      "id": "embedded-archive",
+      "result": "passed",
+      "detail": "Inner archive hash/size and manifest hashes match; all 187 regular files independently compared and gzip trailer consumed."
+    },
+    {
+      "id": "pre-archive-state",
+      "result": "passed",
+      "detail": "Snapshot explicitly remains PENDING/NOT_FINAL/finalAcceptance=false; execution.json is byte-identical to canonical receipt."
+    },
+    {
+      "id": "green-ci-failed-receipt",
+      "result": "passed",
+      "detail": "Provider workflow/job conclusion success coexists with the embedded canonical E-BUILD failure."
+    },
+    {
+      "id": "milestone-acceptance",
+      "result": "not_claimed",
+      "detail": "This is a closed failed-cohort custody review, not acceptance of the milestone."
+    }
+  ],
+  "reviewReport": {
+    "path": "compiled-capabilities/coordination/reviews/XR-RESULT-CUSTODY.md",
+    "sha256": "c711c846de02fbf7e5459388f6bd798c8d33334aeddf5a0bf2a4477588de8a90"
+  },
+  "publication": "No provider download, author-file rewrite, source/Git/PR mutation, or milestone acceptance claim."
+}

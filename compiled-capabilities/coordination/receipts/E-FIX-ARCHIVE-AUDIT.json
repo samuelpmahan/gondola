@@ -1,0 +1,78 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-FIX-ARCHIVE-AUDIT",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "status": "repair_prepared_pending_actual_archive",
+  "summary": "Repaired the four XR-PREP-ARCHIVE findings in the read-only verifier and added explicit in-memory tests for the exact counterexamples. Self-tests pass; no actual full-run archive was available for acceptance.",
+  "repairedFindings": [
+    {
+      "id": "XRPA-1",
+      "repair": "Complete mode requires zero exit codes and rejects signal or error fields for the immutable pre-archive ledger, embedded ledger, and final outer command ledger.",
+      "tests": ["nonzero pre-archive command exit", "nonzero final archive command exit", "pre-archive command signal", "final archive command error"]
+    },
+    {
+      "id": "XRPA-2",
+      "repair": "Enforces snapshot status archive_pending, outer snapshot metadata status equality, and embedded pre-archive E-BUILD schema/job/full-mode/running-status identity.",
+      "tests": ["snapshot status contradicts pending archive", "outer snapshot status contradicts pending archive", "embedded receipt status contradicts pre-archive boundary", "embedded receipt mode contradicts full runner", "embedded receipt schema is invalid"]
+    },
+    {
+      "id": "XRPA-3",
+      "repair": "Complete mode enforces Node 22, root Go 1.24.x, compiler Go 1.27.3, React/ReactDOM 19.3.1, Playwright 1.64.1, esbuild 0.28.2, installed-to-locked equality, and package-lock hash equality with sourceBefore. fast-check is checked at 4.10.2 if runner version metadata declares it.",
+      "tests": ["consistent Node 18 metadata", "locked React version differs from installed metadata", "locked Playwright version differs from runner contract", "package-lock hash differs from source pins", "fast-check differs from its declared version", "fast-check recorded at the expected version"]
+    },
+    {
+      "id": "XRPA-4",
+      "repair": "Rejects files whose paths collide with a directory or a required parent directory.",
+      "tests": ["regular-file/directory prefix collision"]
+    }
+  ],
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c 'import ast,pathlib; ast.parse(pathlib.Path(\"compiled-capabilities/coordination/acceptance/archive/verify_archive.py\").read_text()); print(\"syntax parsed\")'",
+      "exitCode": 0,
+      "result": "passed; syntax parsed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --self-test",
+      "exitCode": 0,
+      "result": "passed; 22 self-tests: 2 valid fixtures and 20 mutation cases, each asserting its expected failure reason",
+      "log": "compiled-capabilities/coordination/acceptance/archive/repair-logs/self-test.log",
+      "sha256": "d4e011c1c0f99b82b2bbb96ef55166f0aa58d9b7e5580f1b356814a8d96eed74"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --receipt compiled-capabilities/coordination/receipts/E-BUILD.json --root . --require-complete",
+      "exitCode": 2,
+      "result": "failed closed as expected; outer receipt is missing archive metadata",
+      "stdoutLog": "compiled-capabilities/coordination/acceptance/archive/repair-logs/no-full-archive.stdout.log",
+      "stderrLog": "compiled-capabilities/coordination/acceptance/archive/repair-logs/no-full-archive.stderr.log",
+      "stderrSha256": "61fcc8f17ad34cb59fb3bde21da6fae792759f9caff03115f5c88cfbc036d14b"
+    },
+    {
+      "command": "Read-only inspection of compiled-capabilities/run.mjs, package.json, interaction/package.json, compiled-frontend/package.json, and the three lockfiles",
+      "result": "runner guards and declared versions recorded; runner does not inventory installed fast-check, so no installed fast-check claim is made",
+      "log": "compiled-capabilities/coordination/acceptance/archive/repair-logs/runner-contract-values.json",
+      "sha256": "afe43d544fc2d5b414928e2eeb6b233bf1df6215cc147f8dcc28e80306d0f824"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/archive/verify_archive.py": "33d510d6f8652663381cc9eaca91e2a319b32c677e1dc60a9ff325c98a2d83e6",
+    "compiled-capabilities/coordination/acceptance/archive/README.md": "62fded28d39820a82fc287d0e2e173d2edb6f2066994f6825e0fb0d0acef1317",
+    "compiled-capabilities/coordination/acceptance/archive/repair-logs/syntax.log": "7fe215c84a8a51cb03136093a470b864773bd0296f79db8dbea26c95e1a17a6b",
+    "compiled-capabilities/coordination/acceptance/archive/repair-logs/runner-contract-values.json": "afe43d544fc2d5b414928e2eeb6b233bf1df6215cc147f8dcc28e80306d0f824",
+    "compiled-capabilities/coordination/acceptance/archive/repair-logs/self-test.log": "d4e011c1c0f99b82b2bbb96ef55166f0aa58d9b7e5580f1b356814a8d96eed74",
+    "compiled-capabilities/coordination/acceptance/archive/repair-logs/no-full-archive.stderr.log": "61fcc8f17ad34cb59fb3bde21da6fae792759f9caff03115f5c88cfbc036d14b",
+    "compiled-capabilities/coordination/reports/E-PREP-ARCHIVE.md": "4fa5ec8963ff1c15271e202690c69f0e4202622e77ba980223dbb5f7273b703e",
+    "compiled-capabilities/coordination/receipts/E-PREP-ARCHIVE.json": "89f63ca62885e2702558693549f73bc7fbb74c93e6fa94998eb5cb18ea460edf",
+    "compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/review.md": "117d87b91f5a401d8a982383c39003b6df95dd7f27ac66c6ec65fd1377b3ad3e",
+    "compiled-capabilities/coordination/receipts/XR-PREP-ARCHIVE.json": "4746e2b57fb194c3e172afc5d37ceda24d8e911ab96bf0e2af09212a389a1e72",
+    "compiled-capabilities/coordination/reports/E-FIX-ARCHIVE-AUDIT.md": "53ed6bff0b8f1a5164288c5167563eb2c60efe9c73a77fecc8fa0666a5d3c590"
+  },
+  "limitations": [
+    "No actual E-BUILD archive or final manifest was available; this receipt does not claim archive acceptance.",
+    "fast-check 4.10.2 is declared and source-pinned by the root package lock, but the current runner does not record its installed version.",
+    "Toolchain checks establish consistency among recorded values and source pins; they do not independently authenticate arbitrary forged records.",
+    "E-PREP-ARCHIVE and XR-PREP-ARCHIVE reports and receipts were preserved; their original verifier source pin refers to the pre-repair verifier."
+  ],
+  "publication": "No runner, M0 input, scheduler state, dependency lockfile, Git operation, commit, merge, or deployment was changed."
+}

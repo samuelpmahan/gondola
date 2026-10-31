@@ -1,0 +1,34 @@
+{
+  "job_id": "E-PREP-SCHEDULER",
+  "worker": "N2",
+  "summary": "Prepared a read-only native scheduling evidence auditor with event replay, independent DP scoring, receipt and AMEND closure gates, and mutation tests.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s compiled-capabilities/coordination/acceptance/scheduler -v",
+      "workdir": "repository root",
+      "result": "passed: 12 mutation tests; raw output in compiled-capabilities/coordination/acceptance/scheduler/logs/unittest.log; SHA-256 ce6bef1c8dea7d170eca37096881872b7ae30213444d242971419c32ff37452f"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py",
+      "workdir": "repository root",
+      "result": "exit 0: INCOMPLETE with no structural errors; 12 accepted epochs, six initial actual spawns, six workers, 26 packets; raw output at compiled-capabilities/coordination/acceptance/scheduler/logs/audit-inflight.log; SHA-256 4f522eb89f54752eb4aa2a7495e3075efb619f5af2ea8c99935ad81ba26a3304"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --require-complete",
+      "workdir": "repository root",
+      "result": "expected exit 2: XR-FIX-BUILD and XR-FIX-HARNESS had not yet accepted the original AMENDs, and nine packets remained open; raw output at compiled-capabilities/coordination/acceptance/scheduler/logs/audit-require-complete.log; SHA-256 2f52b1630acb5fb4f45a3d88e728dd8d1694f2ff5992bccd879f315697384561"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/scheduler/audit.py": "983a842cbcb9f3444babd03f5d70bbc9f4941c041d93903fae4daba010479a6a",
+    "compiled-capabilities/coordination/acceptance/scheduler/test_audit.py": "de30ac7607ff6a20e5cc48908c561a6ecef33804c9e37a3c709d5bc5293d4332"
+  },
+  "limitations": [
+    "The auditor validates recorded native JSON, event replay, and native bundle presence, but does not decode or authenticate binary native bundles or independently establish receipt authorship.",
+    "The exact model/reasoning evidence is limited to the six initial actual spawn rows in dispatch.json; later reuse and cross-review do not imply extra worker capacity.",
+    "The live scheduler snapshot was in flight. The default run reports this explicitly, and final acceptance remains pending accepted XR-FIX-BUILD and XR-FIX-HARNESS reviews and completion of open packets."
+  ],
+  "integration": "Preparation only. The CLI supports a later --require-complete run against updated read-only records; no final acceptance is claimed.",
+  "publication": "No scheduler record, native epoch, shared probe, other job receipt, or Git state was changed. No commit, merge, or deployment was performed."
+}

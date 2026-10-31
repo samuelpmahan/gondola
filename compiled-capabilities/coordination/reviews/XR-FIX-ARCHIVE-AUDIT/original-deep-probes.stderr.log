@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.py", line 106, in expect
+    result = verifier.verify_objects(*fixture, require_complete=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/acceptance/archive/verify_archive.py", line 485, in verify_objects
+    toolchain_consistency = validate_toolchain_contract(versions, source_before)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/acceptance/archive/verify_archive.py", line 206, in validate_toolchain_contract
+    fail(f"complete receipt must record Node 22.x; got {node!r}")
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/acceptance/archive/verify_archive.py", line 65, in fail
+    raise VerificationError(message)
+verify_archive.VerificationError: complete receipt must record Node 22.x; got 'v18.0.0'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.py", line 169, in <module>
+    main()
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.py", line 125, in main
+    expect("consistent Node 18", build_fixture(
+  File "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/reviews/XR-PREP-ARCHIVE/deep-probes.py", line 109, in expect
+    raise AssertionError(f"{name} was rejected unexpectedly: {exc}") from exc
+AssertionError: consistent Node 18 was rejected unexpectedly: complete receipt must record Node 22.x; got 'v18.0.0'

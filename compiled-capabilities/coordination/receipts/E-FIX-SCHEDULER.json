@@ -1,0 +1,105 @@
+{
+  "job_id": "E-FIX-SCHEDULER",
+  "worker": "N2",
+  "summary": "Repaired AMEND-extension chronology checks, added the exact reordered-event regression, and independently validated the separate root startup-failure extension evidence.",
+  "outcome": "mixed_change",
+  "repair": {
+    "original_review": "XR-PREP-SCHEDULER",
+    "finding": "An extend-after-review-amend event could make repair packets visible before the matching review completed with decision=amend.",
+    "implemented": [
+      "Replay requires the linked review to be visible and complete with a matching amend receipt before its repairs become visible.",
+      "AMEND extension rows must add one extraction repair whose repair_of names the source review and one XR-FIX review depending on that repair.",
+      "The exact N5 in-memory mutation moves the E-FIX-BUILD/XR-FIX-BUILD extension immediately before XR-BUILD completion and removes the original later event; it now fails with amend_extension_before_review."
+    ]
+  },
+  "startupFailureExtension": {
+    "type": "extend-after-executed-failure",
+    "treatedAsAmendExtension": false,
+    "source": "232406843678f46c569e1c54b34b268c84e7764e",
+    "failedCommand": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+    "failure": "ENOENT creating attemptRoot before its parent; no test stage executed",
+    "log": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log",
+    "recordedLogSha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+    "actualLogSha256Matches": true,
+    "newJobs": ["E-FIX-STARTUP", "XR-FIX-STARTUP"],
+    "repairLink": "E-FIX-STARTUP.repair_of=E-BUILD",
+    "reviewLink": "XR-FIX-STARTUP.depends_on=E-FIX-STARTUP",
+    "noPriorAmendReviewRequired": true
+  },
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s compiled-capabilities/coordination/acceptance/scheduler -v",
+      "workdir": "repository root",
+      "result": "passed: 14 tests, including exact AMEND reorder and startup log hash mutations",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/extension-gate-green.log",
+      "sha256": "8759cf67dca2555fb6bb26c9d2bebcf8d589f8f8e7f0b860c4bbc1cc2442b650"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s compiled-capabilities/coordination/acceptance/scheduler -v",
+      "workdir": "repository root; before repair",
+      "result": "expected red: the exact AMEND reorder assertion failed because no extension chronology error was emitted; the then-live trace also showed the newly added execution-failure event as unmodeled",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/extension-gate-red.log",
+      "sha256": "d0960bda84c6a515ca33a79656a81daf945ace9767efec5d8c84b2ef0b6663dd"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER/logs/independent-probes.py",
+      "workdir": "repository root",
+      "result": "passed: independent exhaustive scores matched all 16 accepted epochs; N5's exact moved-extension mutation now returns FAIL with amend_extension_before_review",
+      "script_sha256": "184daa5f197f3e4d1a2166e86a4aac33dd9b23360fc60ab9e0971856dff27f0b",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/extension-gate-independent-after-repair.json",
+      "sha256": "8fc127cc22b293a2f07c853fe53665e74b0ae577001ba8f34ed1ba686463d8f1"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --json",
+      "workdir": "repository root",
+      "result": "exit 0: INCOMPLETE; 16 accepted epochs, 32 packets, zero structural errors; six packets remain pending/running",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/audit-repair.json",
+      "sha256": "7e6dd4ac28b7c75404948730dae65610ff5ce867bdb93b7c747f0d528d8c48e8"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/acceptance/scheduler/audit.py --require-complete --json",
+      "workdir": "repository root",
+      "result": "expected exit 2 while packets and the XR-PREP-SCHEDULER/XR-PREP-ARCHIVE AMEND closures remain open",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/audit-repair-complete.json",
+      "sha256": "a9dd4db3df5210b1a040daa229bceee237ffad3ab438c9091c31a01cf05fdea9"
+    },
+    {
+      "command": "Verify the recorded startup-failure event against its root-relative log path, exact source/command fields, and SHA-256",
+      "workdir": "repository root",
+      "result": "passed; the command log hash matches and its contents show ENOENT at the pre-main attemptRoot mkdir in run.mjs",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/startup-failure-evidence.log",
+      "sha256": "e11c39f72a31fb40bbf73415fcbe85644947bc1bd86dfed390c9312535911a82"
+    },
+    {
+      "command": "Compare preserved E-PREP-SCHEDULER and XR-PREP-SCHEDULER reports/receipts with their recorded source hashes",
+      "workdir": "repository root",
+      "result": "passed; all four original reports and receipts remain byte-identical",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/original-review-evidence-check.log",
+      "sha256": "5ba22d9dccc71a78824c41d0cadb44c2fef607384de4b96e94c432439c2844f9"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/scheduler/audit.py": "b32059aa5aa595ab8d3e6ab7d11216b5d5ca88e8b672b5bc2e3c04d85add12ee",
+    "compiled-capabilities/coordination/acceptance/scheduler/test_audit.py": "af71501e47fc65c13b712a0b3194739584895759c2e262421e5c9df21de7faed"
+  },
+  "preserved_original_sha256": {
+    "compiled-capabilities/coordination/reports/E-PREP-SCHEDULER.md": "1830b57e65a9831bc8c8f637a09d98959e85b7efd72854b2a2cc437740f73727",
+    "compiled-capabilities/coordination/receipts/E-PREP-SCHEDULER.json": "0f613a570a1a16841d5b377489d2eecf2892dd7a8b3e6d8b4e99d80577084764",
+    "compiled-capabilities/coordination/reviews/XR-PREP-SCHEDULER.md": "b61ea32a6c1c1ba16dc9e2c6a85427fe940e6f0a5d5989de36ccaea83b3242e4",
+    "compiled-capabilities/coordination/receipts/XR-PREP-SCHEDULER.json": "a4527ba3ee4d219b89d9795ef1ba7f6bc47761f4d2d2f8e6a45df12e9566796c"
+  },
+  "prior_reviewed_source_sha256": {
+    "compiled-capabilities/coordination/acceptance/scheduler/audit.py": "983a842cbcb9f3444babd03f5d70bbc9f4941c041d93903fae4daba010479a6a",
+    "compiled-capabilities/coordination/acceptance/scheduler/test_audit.py": "de30ac7607ff6a20e5cc48908c561a6ecef33804c9e37a3c709d5bc5293d4332"
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-FIX-SCHEDULER.md",
+    "sha256": "08c665080679f03a0615811204499528d37246caeedbfe784e96395d2f995bb9"
+  },
+  "limitations": [
+    "The current trace remains in flight. Missing receipts for running/pending packets are reported as incomplete, not as structural failures.",
+    "No final acceptance or publication is claimed."
+  ],
+  "integration": "The repaired audit is prepared for independent review; the root must rerun it after remaining scheduled jobs and their reviews finish.",
+  "publication": "No real scheduler state, spec, native epoch, shared probe, production file, or Git state was changed. No commit, merge, or deployment was performed."
+}

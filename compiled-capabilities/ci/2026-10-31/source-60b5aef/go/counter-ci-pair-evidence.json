@@ -1,0 +1,103 @@
+{
+  "schema": "gobi.compiled-capabilities-counter-ci-pair/v1",
+  "recordedAt": "2026-10-31T10:52:00Z",
+  "source": {
+    "commit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "tree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f",
+    "parent": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "pr": 15
+  },
+  "workflowCatalogSnapshot": {
+    "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/runs-catalog-20261031T105124Z.json",
+    "observedAt": "2026-10-31T10:51:24Z",
+    "sourceRunCount": 30,
+    "pushRuns": 15,
+    "pullRequestRuns": 15,
+    "completed": 11,
+    "running": 19,
+    "queued": 0,
+    "state": "incomplete; remaining source runs are in progress"
+  },
+  "jobs": [
+    {
+      "event": "push",
+      "runId": 41193504118,
+      "runNumber": 47,
+      "jobId": 124514912770,
+      "jobName": "interaction",
+      "status": "completed",
+      "conclusion": "success",
+      "testedCommit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+      "testedMergeCommit": null,
+      "url": "https://github.com/samuelpmahan/gondola/actions/runs/41193504118",
+      "log": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-push-run-41193504118-job-124514912770.log",
+      "logSha256": "3a2679ee9fad51952babd8c9eab8a7c91557a6871538e4abad5103fe171a075f"
+    },
+    {
+      "event": "pull_request",
+      "runId": 41193506615,
+      "runNumber": 48,
+      "jobId": 124514920058,
+      "jobName": "interaction",
+      "status": "completed",
+      "conclusion": "success",
+      "pullRequestHead": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+      "pullRequestBase": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+      "testedMergeCommit": "07fc827212889af17524eadfe8c5c9da75d26850",
+      "url": "https://github.com/samuelpmahan/gondola/actions/runs/41193506615",
+      "log": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-pr-run-41193506615-job-124514920058.log",
+      "logSha256": "3450c65ee49d1e80cae8a99b18585fd79f7348438c5acfffbf2c9ab7f02214c8"
+    }
+  ],
+  "versions": {
+    "go": "go1.24.13 linux/amd64",
+    "node": "v22.23.4",
+    "npm": "10.9.9"
+  },
+  "sharedResults": {
+    "runScript": {
+      "path": "run.sh",
+      "sha256": "e2b3fe3101d50e509daae6d0feb630b7becbd01b286bef63cc53493f9e62f2f6",
+      "staticCommands": ["go vet ./...", "go test ./..."],
+      "shellOptions": "set -euo pipefail"
+    },
+    "goTests": "passed; both logs include compilercontract and gobi package success",
+    "ruleTable": {
+      "source": "gobi/rules_test.go",
+      "count": 59,
+      "sha256": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+      "countMethod": "static source literal count; logs confirm package test success but do not print row count"
+    },
+    "staticComparison": {
+      "command": "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "cases": 5000,
+      "seed": 20261030,
+      "result": "same over 5000 inputs; receipt matches"
+    },
+    "m0": {
+      "command": "sha256sum -c --quiet SHA256SUMS",
+      "rows": 24,
+      "trackedRows": 23,
+      "generatedRows": 1,
+      "sha256sumsSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "expectedJsonSha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "result": "both logs state SHA256SUMS ok and receipt matches"
+    },
+    "counterInteractions": {
+      "matched": true,
+      "scripts": 107,
+      "initialAndActionTicks": 4473,
+      "seed": 20261030,
+      "nativeComparator": "matched"
+    }
+  },
+  "warnings": [
+    "Both logs report a non-fatal setup-go cache warning because root go.sum is absent from the cache pattern.",
+    "Both logs report a GitHub Actions Node.js 20 deprecation notice while running those actions on Node.js 24.",
+    "Both logs include non-fatal punycode and url.parse dependency deprecation notices."
+  ],
+  "acceptance": {
+    "state": "pending",
+    "reason": "Counter push and PR jobs passed, but the 30-run current-source catalog is only 11/30 complete, and the root full run plus verified primary capability artifact are not yet terminal/available."
+  }
+}

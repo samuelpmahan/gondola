@@ -1,0 +1,370 @@
+{
+  "authoritativeCI": {
+    "archive": {
+      "bytes": 14960460,
+      "completeAcceptance": true,
+      "completeVerifierExitCode": 0,
+      "gzipEofAndTrailerValid": true,
+      "memberBytes": 90254161,
+      "members": 189,
+      "sha256": "ba17805387c8204ef2624caec0af35641771bc8af48d4f03b82c1a6609586d8f",
+      "verifierOutput": {
+        "archive": {
+          "bytes": 14960460,
+          "path": "compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/capabilities-artifacts.tar.gz",
+          "sha256": "ba17805387c8204ef2624caec0af35641771bc8af48d4f03b82c1a6609586d8f"
+        },
+        "commandLedgerPrefixLength": 14,
+        "completeAcceptance": true,
+        "finalCommandCount": 17,
+        "manifest": {
+          "bytes": 35229,
+          "path": "compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/archive-manifest.json",
+          "sha256": "ccf0bb8fb460d72febd3f96ab7476f3f29588b80fba38c974cf4ab95066ebac5"
+        },
+        "memberBytes": 90254161,
+        "memberCount": 189,
+        "provenanceMember": "execution-before-archive.json",
+        "requireComplete": true,
+        "sourcePinCount": 163,
+        "stages": 12,
+        "status": "verified",
+        "toolchainConsistency": {
+          "attestation": "metadata consistency only; does not independently authenticate toolchain execution or arbitrary forged source evidence",
+          "compiledGo": "1.27.3",
+          "fastCheckVersionRecorded": false,
+          "nodeMajor": 22,
+          "packageLockPinsMatchSourceBefore": true,
+          "requiredDependencies": {
+            "esbuild": "0.28.2",
+            "frontendEsbuild": "0.28.2",
+            "playwright": "1.64.1",
+            "react": "19.3.1",
+            "reactDOM": "19.3.1"
+          },
+          "rootGoMinor": "1.24"
+        }
+      }
+    },
+    "artifact": 13040129310,
+    "conclusion": "success",
+    "eBuildReceiptSha256": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "eBuildStatus": "passed",
+    "event": "push",
+    "failures": 0,
+    "job": 124514913013,
+    "mode": "full",
+    "outerZipVerification": {
+      "allCrcAndShaVerified": true,
+      "memberCount": 1476,
+      "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-outer-verification.json",
+      "safeRegularMembersOnly": true,
+      "sha256": "4de2e094846511deaa165be290505e10ab874c07206fb0c0b0a64870f33d82af"
+    },
+    "run": 41193504188,
+    "sourceCommit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "sourcePinCount": 163,
+    "sourceTree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f",
+    "status": "completed",
+    "zipBytes": 76786265,
+    "zipSha256": "3a54a53c81ac93ad1c5a8231b17ac289875ed57ad7bb12d7ae2b3609ff267de1"
+  },
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/audit_demo.py --evidence-root . --attempt-root compiled-capabilities/builds/attempts/attempt-20261031T103735751Z --source-root . --outer-receipt compiled-capabilities/coordination/receipts/E-BUILD.json --runner-exit-code 0 --screenshot-inspected --out compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-demo-audit.json",
+      "exitCode": 0,
+      "result": "all eight browser assertions, source/build/module/encoder/AppIR/bundle pins and smoke logs matched; local archive binding mismatch recorded separately"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/audit_demo.py --evidence-root <primary-extracted> --attempt-root <primary-extracted>/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z --source-root . --outer-receipt <primary-extracted>/compiled-capabilities/coordination/receipts/E-BUILD.json --screenshot-inspected --out compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-demo-audit.json",
+      "exitCode": 0,
+      "result": "eight assertions and all current-source demo build/archive pins matched"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/audit_terminal_catalog.py",
+      "exitCode": 0,
+      "result": "30 source-bound runs and jobs, primary ZIP metadata, N4 outer/inner verification, and complete archive output validated"
+    },
+    {
+      "command": "python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --receipt compiled-capabilities/coordination/receipts/E-BUILD.json --root . --require-complete",
+      "exitCode": 2,
+      "result": "local archive rejected: archive bytes do not match the final receipt binding"
+    },
+    {
+      "command": "python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --receipt <primary-extracted>/compiled-capabilities/coordination/receipts/E-BUILD.json --root <primary-extracted> --require-complete",
+      "exitCode": 0,
+      "result": "authoritative primary CI archive verified completeAcceptance=true"
+    }
+  ],
+  "decision": "accepted",
+  "decisionBasis": {
+    "policy": "same-source fresh full CI artifact is authoritative; local archive is rejected and left unchanged",
+    "scopePath": "compiled-capabilities/ci/2026-10-31/ACCEPTANCE-SCOPE.json",
+    "scopeSha256": "2e23397e2a0e22a45d72a5038f563bd0ba8ae2edd4b6d766284317aa215c8589"
+  },
+  "demo": {
+    "local": {
+      "checks": 8,
+      "screenshotSha256": "d9ac96ab3ef1164a0bee7a2fce5046910a8d9f7b9a35dfea753d3aad8c9936ad",
+      "status": "passed"
+    },
+    "primary": {
+      "buildInputs": {
+        "appIR": {
+          "bytes": 14196,
+          "path": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/apps/lifecycle-7e6575d90707/app-ir.json",
+          "sha256": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a"
+        },
+        "encoder": {
+          "bytes": 15625,
+          "path": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/apps/lifecycle-7e6575d90707/encoder.mjs",
+          "sha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+        },
+        "manifest": {
+          "bytes": 4658,
+          "path": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/buildmanifest.json",
+          "sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603"
+        },
+        "module": {
+          "bytes": 521218,
+          "path": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs",
+          "sha256": "e6768a43d409664c3a573520f548344c9d13502a8dc0c5100f2dd88d9d6c86c1"
+        }
+      },
+      "bundle": {
+        "bytes": 1846171,
+        "path": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/demo/site/demo.bundle.mjs",
+        "sha256": "62d0e2cec181850aec5f1b081d7a4cc711355db200cd44be0cbfee05e30e1454"
+      },
+      "checks": 8,
+      "dispatchIds": [
+        null,
+        "dispatch-0001",
+        "dispatch-0002",
+        "dispatch-0003",
+        "dispatch-0004"
+      ],
+      "errors": {
+        "console": [],
+        "failedRequests": [],
+        "page": [],
+        "wasmAPIAttempts": [],
+        "wasmRequests": []
+      },
+      "eventMessages": [
+        null,
+        "addParent",
+        "requestParent",
+        "addParent",
+        "complete"
+      ],
+      "finalState": {
+        "parentCount": 2.0,
+        "pending": false,
+        "pendingRequests": [],
+        "reply": "parent:g1:r1"
+      },
+      "httpAssets": [
+        {
+          "bytes": 4505,
+          "path": "/",
+          "status": 200
+        },
+        {
+          "bytes": 6194,
+          "path": "/demo.css",
+          "status": 200
+        },
+        {
+          "bytes": 1846171,
+          "path": "/demo.bundle.mjs",
+          "status": 200
+        }
+      ],
+      "reactVersions": {
+        "react": "19.3.1",
+        "reactDOM": "19.3.1"
+      },
+      "requirements": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply",
+        "effect.cancel"
+      ],
+      "screenshotSha256": "21a70e023b2206a6c424e973c06e320e9abdfed4fb49d09034878ef2771e3d37",
+      "screenshotVisuallyInspected": true,
+      "status": "passed"
+    }
+  },
+  "job_id": "E-ACCEPT-DEMO",
+  "limitations": [
+    "The local full-run archive is rejected; its truncation cause is unknown. The passing local receipt is not used to claim local archive integrity.",
+    "Scoped acceptance relies on root-authorized source-equivalence policy and a fresh same-source primary CI full execution; no regression run was skipped or reused.",
+    "Overall capability milestone remains pending other bounded reviews, the root-owned native scheduling audit, and the published CI delivery-chunk hash gate.",
+    "No build, browser smoke, or full suite was rerun by this reviewer."
+  ],
+  "local": {
+    "archiveActual": {
+      "bytes": 12845056,
+      "path": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/capabilities-artifacts.tar.gz",
+      "sha256": "91e3d977e8efd7ef42a37d43029997a9e2ab8db7266a88cf54d5f7cc90a64b5f"
+    },
+    "archiveIntegrity": "rejected",
+    "archiveReceiptBinding": {
+      "bytes": 14983690,
+      "path": "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/capabilities-artifacts.tar.gz",
+      "sha256": "1a4fd17fd4f8c2aef16aaa1ed268d253b13dd77396e6cb6da3108e2b2c3921ab"
+    },
+    "archiveVerifierExitCode": 2,
+    "attempt": "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z",
+    "cause": "unknown",
+    "meaningfulSmokeChecks": 8,
+    "missingManifestMember": "inherited-lifecycle-artifacts.tar.gz",
+    "receiptAndArchiveUnchanged": true,
+    "receiptStatus": "passed",
+    "runnerExitCode": 0,
+    "screenshotVisuallyInspected": true,
+    "smokeStatus": "passed",
+    "sourcePinsMatch": true
+  },
+  "outcome": "mixed_change",
+  "publication": "No production source, local run receipt/archive, Git ref, native state, or N4-owned artifact was changed.",
+  "reviewArtifacts": {
+    "localAudit": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-demo-audit.json",
+    "primaryAudit": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-demo-audit.json",
+    "rawLocal": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/inventory.json",
+    "rawPrimary": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/inventory.json",
+    "report": {
+      "path": "compiled-capabilities/coordination/reports/E-ACCEPT-DEMO.md",
+      "sha256": "7bd5f59f1bae9fa662538efd137ad0bb908d42351f0a1c486064e3053c6fdb9c"
+    },
+    "terminalCatalogAudit": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/terminal-catalog-audit.json"
+  },
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "sourceIdentity": {
+    "commit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "parent": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "publicationAudit": "compiled-capabilities/ci/2026-10-31/source-60b5aef/provenance/publication-audit.json",
+    "pullRequest": 15,
+    "tree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f"
+  },
+  "source_sha256": {
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/archive-manifest.json": "321858a24246f421f2e390bfe01c311f701856975bdb5c1e2b85e0cefdf51cd3",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/capabilities-artifacts.tar.gz": "91e3d977e8efd7ef42a37d43029997a9e2ab8db7266a88cf54d5f7cc90a64b5f",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/demo/demo-smoke.json": "8da44fe365f8432ed52150f536fe8629f7870bfc99f0d0a0ffe948b7a8992454",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/demo/demo.png": "d9ac96ab3ef1164a0bee7a2fce5046910a8d9f7b9a35dfea753d3aad8c9936ad",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/demo/site/demo-build.json": "53cbc3e83dc4aaa9c81577ae998fb06a863a30681be346ce2ed9ac8be939c775",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/demo/site/demo.bundle.mjs": "b8eeffb47d8d438a2c48d2d571c722a4b4d74c012fae2fd6f9cbc0b6d463fc9c",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/execution.json": "a04c312c50f6bc4099003045c2e421f0577243d1eff82d106ce1febc2c0e5398",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/react/output/apps/lifecycle-7e6575d90707/app-ir.json": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/react/output/apps/lifecycle-7e6575d90707/encoder.mjs": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+    "compiled-capabilities/builds/attempts/attempt-20261031T103735751Z/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs": "9229f4da86e91aa5c057981856c532b245d0d29f8a094f9ac237802de45d9ce3",
+    "compiled-capabilities/ci/2026-10-31/ACCEPTANCE-SCOPE.json": "2e23397e2a0e22a45d72a5038f563bd0ba8ae2edd4b6d766284317aa215c8589",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/focused-push-run-41193504188-20261031T110338Z.jobs.json": "d55f38065f80ac6b511db013aa8855f98695d536c87dfc508fff9b78e522d0cc",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/focused-push-run-41193504188-20261031T110338Z.raw.json": "f63585fc9ea7100c5e61e737e76625aafd611f393354627a5037ca19f0556701",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504060-jobs-20261031T111010Z.raw.json": "971afcb8601942651e97a39e963d044c38c9394d8265867e7f6ffb0f5359246d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504070-jobs-20261031T111010Z.raw.json": "22873e1c4c25d0d1d844c346e09ec67d87376aae0cdc9951af8275ec2e2e8687",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504072-jobs-20261031T111010Z.raw.json": "4e4350908a72af89264df83e885e5792c31be9159eb04a2386ac92270b15ec87",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504087-jobs-20261031T111010Z.raw.json": "1ff8a6bb396d86353e3216751195ba98dbdf57bfe92aabb921955446c1aff7be",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504093-jobs-20261031T111010Z.raw.json": "03e442e1de77bdbe096ddac09bbbe625bfe38cb8e709654d240fac4b1a97777e",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504095-jobs-20261031T111010Z.raw.json": "87dafcd75476b10f99d3a3dfe3fb057b9e9c6d1354bd0f5733c95896d87287aa",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504105-jobs-20261031T111010Z.raw.json": "9e1c1bee67a7a37a50627e61131d38eae33e021fa2c6e3a2284aeebcb4c90c42",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504118-jobs-20261031T111010Z.raw.json": "f4e42e4de7e1bfa28d17d5c943a1fe68de2b15df4c8141587c06d6ae898d6f99",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504153-jobs-20261031T111010Z.raw.json": "2572ede4b580602f834650bd948d909fd825907650a557b986330db546f93328",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504167-jobs-20261031T111010Z.raw.json": "f8337c07589ad16f684ae4d324d3c53b304c9cc4428c1ac416b82488904b6271",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504169-jobs-20261031T111010Z.raw.json": "90ac3e927553b43d3f3afa60de5f0b5626f6eadad87f94ece23d6991282c5121",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504172-jobs-20261031T111010Z.raw.json": "d12f83bb5753ec9be340c08a87839739f25f0814aba49c760ea9d5a742e9655d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504176-jobs-20261031T111010Z.raw.json": "5e5b0ba035746897e5b4de769dede35c95ce80a17894c757fb8e9a211f76bd32",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504188-jobs-20261031T111010Z.raw.json": "cb1c1d787c1bff8b23ff804494f39d4ce71af82c92daacf7deed2db8cdec5a5d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193504216-jobs-20261031T111010Z.raw.json": "d2553cd28ae9e0894fb16b2810a010dd17adf7f0242edc20af11573caaa9a11b",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506502-jobs-20261031T111010Z.raw.json": "de22493cba91e8c916823e8ed70a02f4c1f244a9454eef9a7ee58f5ced306bf8",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506513-jobs-20261031T111444Z.raw.json": "aefcf298e5cd12e493c9eaa27b8d8ef0df86cb25f943a6d238a35befddcdea8f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506525-jobs-20261031T111010Z.raw.json": "7893c6771625df4b105266bc827f6c52d86365299e0e2068b1f95d491da42e7d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506530-jobs-20261031T111010Z.raw.json": "951ec18a54231ee0b7f8b47c311c401db0c95dc46370f90ae581602e4367299a",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506535-jobs-20261031T111010Z.raw.json": "0a5535f44ce0e8695a8d7bab467d23b6a78751ed407da0ab434a02813167b8ae",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506559-jobs-20261031T111010Z.raw.json": "cd66cec70a2c6dc8f874b471b30ff95573d70d4ec26b695a6e5164bd767ebb18",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506570-jobs-20261031T111010Z.raw.json": "6c8122b2582aedd513bb69b6112d8b4e337e7f3de79298b8cdeec9c163b5046d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506575-jobs-20261031T111010Z.raw.json": "b60d8f977c3da1c34a1657c328e23b734701e378027e35ad0b1b29644092c18d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506576-jobs-20261031T111010Z.raw.json": "0074ecf0e9eeeb1fba2520cb97bbb8c1b5e91606d5e0b0b098c2d314c19903ee",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506584-jobs-20261031T111428Z.raw.json": "9e89125faa40739dad6bd597e3b6d51c1a04921dc44a3db507fca96a09623648",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506587-jobs-20261031T111010Z.raw.json": "3d7fd149e31b080ce8042f8dd5d4b4d880330b3f2e3d4af415c55c1a90c7f58f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506592-jobs-20261031T111010Z.raw.json": "86e3b72730b28023f0e485a3b115e36fc85bb92e58031c31a8005d40fb0bd707",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506594-jobs-20261031T111010Z.raw.json": "c99e216452d9dd1a3e7ce30d977ee8ccd655f11b30bd2d841cfdb1ff84fc2a56",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506615-jobs-20261031T111010Z.raw.json": "60a73180479db166a0d579669f7957862b2bfe35508b1026ebf748f6249a64dc",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/jobs/run-41193506679-jobs-20261031T111010Z.raw.json": "a6b5836bc807fd89c8ba374d64a5c452d84c511853f8e3de7dbbd6d3b6b032c4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-ci-delivery-verification.json": "59923cf7e9d7a92a31a4133e62b676aaefd69aa8db9aba612e166b9da85ffa3b",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-archive-manifest.json": "ccf0bb8fb460d72febd3f96ab7476f3f29588b80fba38c974cf4ab95066ebac5",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-artifact.zip": "3a54a53c81ac93ad1c5a8231b17ac289875ed57ad7bb12d7ae2b3609ff267de1",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-artifacts-20261031T110351Z.json": "33cd70aea510009a0df95a4e9a6b36e172a1dc2a8c240b7419db58125c955d9e",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-e-build-receipt.json": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-execution-before-archive.json": "f94ba435ad901882485ce0e8e00d36aba183a6e80097957b353f59c0e760170d",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/archive-manifest.json": "ccf0bb8fb460d72febd3f96ab7476f3f29588b80fba38c974cf4ab95066ebac5",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/capabilities-artifacts.tar.gz": "ba17805387c8204ef2624caec0af35641771bc8af48d4f03b82c1a6609586d8f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/demo/demo-smoke.json": "09d7aa982b8f1e1f79fcc858e88e05ff45c5d9031313dd682571f04c597a158f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/demo/demo.png": "21a70e023b2206a6c424e973c06e320e9abdfed4fb49d09034878ef2771e3d37",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/demo/site/demo-build.json": "64c893da1b7c41d3ddeeea0001251cf9ef5488f62d698f9cd49427d45b5c67f8",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/demo/site/demo.bundle.mjs": "62d0e2cec181850aec5f1b081d7a4cc711355db200cd44be0cbfee05e30e1454",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/execution.json": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/apps/lifecycle-7e6575d90707/app-ir.json": "ed93e9ae6f9be20c306669d63b676ed466e65fee8dc7fd0a1a4c8a6b38f0a68a",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/apps/lifecycle-7e6575d90707/encoder.mjs": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/builds/attempts/attempt-20261031T103752934Z/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs": "e6768a43d409664c3a573520f548344c9d13502a8dc0c5100f2dd88d9d6c86c1",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-extracted/compiled-capabilities/coordination/receipts/E-BUILD.json": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-inner-verification.json": "2d1b7d44636543db65d6f32457563fceda888168a1ce9b7e9201655db91cea04",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-job-steps-20261031T110757Z.json": "3ce64bebefe8458029ded1ccf2dff2447a69ec295c17bde5c96085def264fdfb",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-member-inventory.json": "3f6861eede33961ca6b2d6ba8ced029a307b6595ee0b313d714976b05022c385",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/primary-push-run-41193504188-outer-verification.json": "4de2e094846511deaa165be290505e10ab874c07206fb0c0b0a64870f33d82af",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/run-list-20261031T111437Z.raw.json": "a1bb382c54be6b6a77fcee93e39db76221735983587dec970c7e22b000ecc54b",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aeff-terminal-runs-jobs-20261031T111444Z-v2.json": "b69f432f53e8d4ff85ae0d855bbfabec35f76febb4830853d313cb0a8b2d9bfc",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/audit_demo.py": "a3a76caf8a9a07a66d8598b0eefd5b9221bb0ee0c740d304d56d7e0f517af782",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/audit_terminal_catalog.py": "b60aade9cac2df70bd4f1a5d5073bf8778d0a9ad6b2198e9ddcffc56c0378094",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-archive-byte-diagnostic.json": "6f97f2b04e767db27c7d4e0317ebdca4d0c21ff4e70a2a48b7ca5a1b816c0d6f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-archive-verification/exit-code.txt": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-archive-verification/stderr.log": "eb6c4caa0b438d52053f8f9db0c1eae38df948f7f17aedc29de6fac4c826e58f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-archive-verification/stdout.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/local-demo-audit.json": "5eeb480dce86835bef5d2d957d69cc042d9262020a23c252f5b4f51ffcad9346",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-archive-verification/exit-code.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-archive-verification/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-archive-verification/stdout.json": "d5d29fd4d320398adfacc0bee126ae59d5bad612277d4e43f79b83022dee8bbd",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/primary-demo-audit.json": "3ad0297a215fa80bd877fb7f4b4019bb69dce22ab19979fee7eff9c6047898e8",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/archive-manifest.json": "321858a24246f421f2e390bfe01c311f701856975bdb5c1e2b85e0cefdf51cd3",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/capabilities-artifacts.tar.gz": "91e3d977e8efd7ef42a37d43029997a9e2ab8db7266a88cf54d5f7cc90a64b5f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/demo-build.json": "53cbc3e83dc4aaa9c81577ae998fb06a863a30681be346ce2ed9ac8be939c775",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/demo-smoke.json": "8da44fe365f8432ed52150f536fe8629f7870bfc99f0d0a0ffe948b7a8992454",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/demo.bundle.mjs": "b8eeffb47d8d438a2c48d2d571c722a4b4d74c012fae2fd6f9cbc0b6d463fc9c",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/demo.png": "d9ac96ab3ef1164a0bee7a2fce5046910a8d9f7b9a35dfea753d3aad8c9936ad",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-local/inventory.json": "ef6945c0ca829561de6436deb4ec3d70fc40ce44f7e33e2d481de13120e2a887",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/E-BUILD.json": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/archive-manifest.json": "ccf0bb8fb460d72febd3f96ab7476f3f29588b80fba38c974cf4ab95066ebac5",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/capabilities-artifacts.tar.gz": "ba17805387c8204ef2624caec0af35641771bc8af48d4f03b82c1a6609586d8f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/demo-build.json": "64c893da1b7c41d3ddeeea0001251cf9ef5488f62d698f9cd49427d45b5c67f8",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/demo-smoke.json": "09d7aa982b8f1e1f79fcc858e88e05ff45c5d9031313dd682571f04c597a158f",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/demo.bundle.mjs": "62d0e2cec181850aec5f1b081d7a4cc711355db200cd44be0cbfee05e30e1454",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/demo.png": "21a70e023b2206a6c424e973c06e320e9abdfed4fb49d09034878ef2771e3d37",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/execution.json": "f091b4814b377210bafd54ca1922bf7f129c160b5393f6ef0957e3018efb59c4",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/raw-primary/inventory.json": "c92a6f97545901e65985901950095a675a228fd1391f8576c2d62c05a4b71a39",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/terminal-catalog-audit.json": "910ca23d5b83c4280bea4c731bb2825be1461d85ac3d94a510e251b93cf9e4ad",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/source-preflight.json": "aeb301f3c450694dd9694909763f18904beadc7b1cd468f51606520955589d60",
+    "compiled-capabilities/ci/2026-10-31/source-60b5aef/provenance/publication-audit.json": "d5be9910dd55d36534369f15f99ceab12e1ba95904ea85c2ab8e71321d999371",
+    "compiled-capabilities/coordination/acceptance/archive/verify_archive.py": "33d510d6f8652663381cc9eaca91e2a319b32c677e1dc60a9ff325c98a2d83e6",
+    "compiled-capabilities/coordination/publication-binding-followup.json": "18e502e12e886c99a641a4a02e0c39d690806644362ede3dc3aed92b5c49869d",
+    "compiled-capabilities/coordination/receipts/E-BUILD.json": "a04c312c50f6bc4099003045c2e421f0577243d1eff82d106ce1febc2c0e5398",
+    "compiled-capabilities/demo/app.mjs": "f34d9deafdac14e6c7d24ff73a8926ca3035db1313e9ed8ea135a4ddae1b1092",
+    "compiled-capabilities/demo/build.mjs": "b6f5f49048418e20e59c6f09e9fea753610015fef8ceecb611d9da8c01912326",
+    "compiled-capabilities/demo/demo.css": "3c36b27dc9297f363e3a7e1dd770101c2433e830b0deca337b5801a8d58b26e0",
+    "compiled-capabilities/demo/index.html": "68ebf6373b4a666ab49fa2f618aad9fce96ccb8be9281b4c8e5692c4e2155b11",
+    "compiled-capabilities/demo/smoke.mjs": "a801bd23e4b209a082c01abebe8157282a3d2ae75f4a01e8de72f29ad6254cc8"
+  },
+  "summary": "Accepted the demo evidence for exact source 60b5aeff...81a2 using the fresh authoritative primary CI full run. Local Playwright evidence passed, but local archive integrity failed and is explicitly rejected; the CI artifact archive passed complete verification. This packet does not accept the overall milestone.",
+  "terminalCatalog": {
+    "allTerminalSuccess": true,
+    "auditorOutput": "compiled-capabilities/ci/2026-10-31/source-60b5aef/demo/terminal-catalog-audit.json",
+    "jobs": 30,
+    "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aeff-terminal-runs-jobs-20261031T111444Z-v2.json",
+    "pullRequest": 15,
+    "push": 15,
+    "runs": 30,
+    "sha256": "b69f432f53e8d4ff85ae0d855bbfabec35f76febb4830853d313cb0a8b2d9bfc"
+  },
+  "worker": "N5"
+}

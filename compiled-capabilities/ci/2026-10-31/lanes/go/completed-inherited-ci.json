@@ -1,0 +1,226 @@
+{
+  "schema": "gobi.compiled-capabilities-go-lane/v1",
+  "recordedAt": "2026-10-31T10:19:46Z",
+  "worker": "N1",
+  "state": "partial_completed_inherited_ci",
+  "source": {
+    "repository": "samuelpmahan/gondola",
+    "pr": 15,
+    "branch": "codex/gobi-backend-capabilities-20261031",
+    "base": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+    "publishedHead": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "sourceTree": "d22b75e18c7bea70a743cc79d53461b287c7d045",
+    "localTestedHead": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+    "localTree": "d22b75e18c7bea70a743cc79d53461b287c7d045",
+    "bindingPath": "compiled-capabilities/coordination/publication-binding.json",
+    "bindingVerifiedByRoot": true
+  },
+  "workflow": {
+    "name": "Counter interaction parity",
+    "workflowId": 401435005,
+    "jobs": [
+      {
+        "event": "push",
+        "runId": 41190743798,
+        "runNumber": 45,
+        "jobId": 124506858263,
+        "status": "completed",
+        "conclusion": "success",
+        "runUrl": "https://github.com/samuelpmahan/gondola/actions/runs/41190743798",
+        "testedCommit": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+        "log": "compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-push-run-41190743798-job-124506858263.log",
+        "logSha256": "d6dc8b2201d79eeab1f21cbfe62a93235c9740889b511cdfee55493766ec3692"
+      },
+      {
+        "event": "pull_request",
+        "runId": 41190759554,
+        "runNumber": 46,
+        "jobId": 124506904642,
+        "status": "completed",
+        "conclusion": "success",
+        "runUrl": "https://github.com/samuelpmahan/gondola/actions/runs/41190759554",
+        "pullRequestHead": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+        "testedMergeCommit": "b717449a8844ee695a8f1facd20d41a6b4bcf097",
+        "log": "compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-pr-run-41190759554-job-124506904642.log",
+        "logSha256": "7f76b8b7dd79bf68bed24295db2bc40760bed241e080c91daddf1241c4bd7bcd"
+      }
+    ],
+    "steps": [
+      "Set up job",
+      "Run actions/checkout@v4",
+      "Run actions/setup-go@v5",
+      "Run actions/setup-node@v4",
+      "Run the signed Milestone 0 check",
+      "Install interaction dependencies",
+      "Install Chromium for Playwright",
+      "Run Go WebAssembly and React interaction parity",
+      "Upload interaction artifacts"
+    ],
+    "allStepsConcludedSuccess": true,
+    "primaryCapabilityRuns": [
+      {
+        "event": "push",
+        "runId": 41190743932,
+        "status": "in_progress",
+        "conclusion": null,
+        "headCommit": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+        "sourceTree": "d22b75e18c7bea70a743cc79d53461b287c7d045",
+        "url": "https://github.com/samuelpmahan/gondola/actions/runs/41190743932",
+        "statusCheckedAt": "2026-10-31T10:19:46Z"
+      },
+      {
+        "event": "pull_request",
+        "runId": 41190759391,
+        "status": "in_progress",
+        "conclusion": null,
+        "headCommit": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+        "sourceTree": "d22b75e18c7bea70a743cc79d53461b287c7d045",
+        "url": "https://github.com/samuelpmahan/gondola/actions/runs/41190759391",
+        "statusCheckedAt": "2026-10-31T10:19:46Z"
+      }
+    ]
+  },
+  "versions": {
+    "go": "go1.24.13 linux/amd64",
+    "node": "v22.23.4",
+    "npm": "10.9.9"
+  },
+  "checks": {
+    "staticGo": {
+      "command": "go vet ./...",
+      "result": "passed by set -e workflow progression: the runner proceeded through the following go test, static comparison, receipt check, checksum check, interaction test, and parity stages and completed successfully"
+    },
+    "goTests": {
+      "command": "go test ./...",
+      "result": "passed; package output includes gobi and compilercontract; `gobi/rules_test.go`'s 59 table entries are exercised by TestRulesGo and TestRulesAgainstReact"
+    },
+    "compatibilityRules": {
+      "count": 59,
+      "sourcePath": "gobi/rules_test.go",
+      "sourceSha256": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+      "countMethod": "static count of 59 rule literals in the source table; the CI log reports the package test passed but does not print the row count"
+    },
+    "staticComparison": {
+      "command": "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "cases": 5000,
+      "seed": 20261030,
+      "result": "same over 5000 inputs; receipt matches"
+    },
+    "m0Checks": {
+      "command": "sha256sum -c --quiet SHA256SUMS",
+      "checksumEntryCount": 24,
+      "checksumManifestSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "expectedJsonSha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "result": "SHA256SUMS ok; EXPECTED.json receipt matches"
+    },
+    "counterInteraction": {
+      "matched": true,
+      "scripts": 107,
+      "initialAndActionTicks": 4473,
+      "seed": 20261030,
+      "nativeComparator": "matched"
+    }
+  },
+  "sourceFiles": {
+    "run.sh": "e2b3fe3101d50e509daae6d0feb630b7becbd01b286bef63cc53493f9e62f2f6"
+  },
+  "warnings": [
+    "Both hosted jobs log a non-fatal setup-go cache warning because no root go.sum matches the cache pattern.",
+    "Both hosted jobs log the GitHub Actions Node.js 20 deprecation warning for checkout/setup/upload actions; all steps still concluded success."
+  ],
+  "limitations": [
+    "This record covers completed inherited counter/M0 CI push and PR jobs only, plus the final local full-run receipt status; it is not a final capability acceptance result.",
+    "Primary capability push run 41190743932 and PR run 41190759391 were still in_progress at 2026-10-31T10:19:46Z; hosted artifacts and tests remain pending.",
+    "The local full E-BUILD run completed with status failed due to its inherited lifecycle wording gate, although all 161 source pins matched and the nested lifecycle/methods executions passed. A replacement full run is not evidenced here.",
+    "The 59 compatibility rules count is a static source-table count; CI logs show the package tests passed but do not print the row count."
+  ],
+  "localFullRunInitialSnapshot": {
+    "attempt": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z",
+    "mode": "full",
+    "overallStatusAtSnapshot": "running",
+    "completedStagesAtSnapshot": [
+      "toolchain-and-dependency-inventory: passed",
+      "archive-helper-startup-regressions: passed",
+      "m0-receipt-and-source-preservation: passed"
+    ],
+    "m0Preservation": {
+      "status": "passed",
+      "sha256sumPath": "SHA256SUMS",
+      "sha256sumSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "entries": 24,
+      "allEntriesMatch": true,
+      "sourceBeforePinCount": 161,
+      "sourceAfterPinCountAtSnapshot": 0,
+      "versionsAtSnapshot": {
+        "rootGo": "go version go1.24.0 linux/amd64",
+        "compiledGo": "go version go1.27.3 linux/amd64",
+        "node": "v22.23.4",
+        "npm": "11.9.0",
+        "chromium": "Chromium 153.0.8010.0"
+      }
+    },
+    "limitation": "This snapshot records only completed initial stages; the overall source-pinned run was still in progress and has no final sourceAfter or sourcePinsMatch value.",
+    "label": "initial-stage snapshot recorded while source-pinned full run was still running"
+  },
+  "localFullRunFinal": {
+    "attempt": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z",
+    "execution": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/execution.json",
+    "executionSha256": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "status": "failed",
+    "mode": "full",
+    "startedAt": "2026-10-31T09:53:56.051Z",
+    "finishedAt": "2026-10-31T10:16:59.067Z",
+    "sourcePinsMatch": true,
+    "sourceBeforeCount": 161,
+    "sourceAfterCount": 161,
+    "canonicalSourceBeforeSha256": "92ae97820e54af47526ba1773dbbe49aa6f23b2d6ad81cda391bf2c342baafca",
+    "canonicalSourceAfterSha256": "92ae97820e54af47526ba1773dbbe49aa6f23b2d6ad81cda391bf2c342baafca",
+    "failedStage": {
+      "name": "inherited-static-and-interaction-lifecycle",
+      "error": "fresh lifecycle receipt does not confirm the inherited full compiled-methods regression chain",
+      "classification": "false-negative wording gate: runner requires a check containing literal `inherited compiled-methods`; fresh lifecycle receipt status is passed but its corresponding check says `fresh full run-compiled-methods.sh completed before lifecycle-specific tests and matrix`"
+    },
+    "allOtherCapabilityStagesPassed": [
+      "toolchain-and-dependency-inventory",
+      "archive-helper-startup-regressions",
+      "m0-receipt-and-source-preservation",
+      "react-goscript-build",
+      "dom-goscript-build",
+      "backend-build-comparison",
+      "n4-independent-literal-oracle",
+      "n3-compiled-conformance",
+      "n5-http-demo",
+      "compiled-output-stability"
+    ],
+    "m0Preservation": {
+      "status": "passed",
+      "entries": 24,
+      "allEntriesMatch": true,
+      "sha256sumSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0"
+    },
+    "nestedLifecycle": {
+      "execution": "compiled-lifecycle/builds/attempts/attempt-20261031T095356593Z/execution.json",
+      "executionSha256": "3279277688f3bd8d475a2b6cd91291bfa4cc71dc579c5883ff747cf48673cccd",
+      "status": "passed",
+      "sourcePinsMatch": true,
+      "inheritedMethodsStatus": "passed",
+      "contradictoryCheckText": "fresh full run-compiled-methods.sh completed before lifecycle-specific tests and matrix"
+    },
+    "nestedMethods": {
+      "execution": "compiled-methods/artifacts/attempts/attempt-20261031T095356677Z/execution.json",
+      "executionSha256": "b83a55b7130700310d67b01689b4d63e7aa495b669a88f23ad3be7226812e671",
+      "status": "passed",
+      "sourcePinsMatch": true
+    },
+    "versions": {
+      "rootGo": "go version go1.24.0 linux/amd64",
+      "compiledGo": "go version go1.27.3 linux/amd64",
+      "node": "v22.23.4",
+      "npm": "11.9.0",
+      "chromium": "Chromium 153.0.8010.0"
+    },
+    "acceptance": "not accepted: local full E-BUILD status failed at the inherited lifecycle wording gate; hosted primary push/PR capability workflows are still in progress and their artifacts/tests remain pending",
+    "cliExitCode": 0,
+    "cliExitCodeEvidence": "root-confirmed; the runner process exited 0 although the execution receipt status is failed"
+  }
+}

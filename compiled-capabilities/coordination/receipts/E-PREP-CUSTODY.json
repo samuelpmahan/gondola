@@ -1,0 +1,215 @@
+{
+  "job_id": "E-PREP-CUSTODY",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Frozen the selected immutable pre-repair raw evidence and closed author/review packets into a deterministic compressed tar with a per-member SHA-256 catalog and 1 MiB reconstruction chunks; verified all archive members and chunk hashes.",
+  "selection": {
+    "focusedAttempts": [
+      "compiled-capabilities/conformance/evidence/attempt-01",
+      "compiled-capabilities/conformance/evidence/attempt-02",
+      "compiled-capabilities/conformance/evidence/attempt-03",
+      "compiled-capabilities/demo/evidence/attempt-00"
+    ],
+    "closedAuthorPacketIds": [
+      "E-BUILD",
+      "E-DEMO",
+      "E-FIX-GO",
+      "E-GO",
+      "E-HARNESS",
+      "E-HOST",
+      "E-ORACLE"
+    ],
+    "closedReviewPacketIds": [
+      "XR-BUILD",
+      "XR-DEMO",
+      "XR-FIX-GO",
+      "XR-GO",
+      "XR-HARNESS",
+      "XR-HOST",
+      "XR-ORACLE"
+    ],
+    "preservedNativeFailureLog": "compiled-capabilities/coordination/epoch-03-failed-nonoptimal.log",
+    "reviewDirectoriesIncludeAllFiles": true
+  },
+  "scope": "immutable pre-repair focused evidence, closed author/review packets, and the failed native epoch-03 log",
+  "excluded": [
+    "compiled-capabilities/coordination/state.json and current mutable coordination scheduler/native state",
+    "ongoing E-FIX-HARNESS and E-FIX-BUILD author packets and all PREP reports/receipts",
+    "newer conformance/demo evidence attempts beyond the explicitly selected attempts 01-03 and demo attempt-00",
+    "the custody output itself, preventing recursive inclusion",
+    "uncaptured failures: custody includes only surviving raw files and does not reconstruct missing output"
+  ],
+  "knownUncapturedFailureNotes": [
+    "E-DEMO reports an initial selector failure whose raw invocation output was not captured; only the surviving attempt-00 files are archived.",
+    "E-HOST reports initial environment-missing invocations and an intermediate replacement regression whose raw output was not captured."
+  ],
+  "commands": [
+    {
+      "command": "python compiled-capabilities/coordination/acceptance/custody/build_custody.py",
+      "workdir": "/workspace/scratch/39a56936f173/gondola-capabilities",
+      "result": "passed; 127 files, 295193643 source bytes, 13252799 archive bytes, 13 chunks; all members round-tripped; source hashes unchanged"
+    },
+    {
+      "command": "python compiled-capabilities/coordination/acceptance/custody/verify_custody.py",
+      "workdir": "/workspace/scratch/39a56936f173/gondola-capabilities",
+      "result": "passed; individually verified all 13 chunks, reconstructed archive hash, verified/extracted 127 members, rechecked 127 source inputs and exclusion rules"
+    }
+  ],
+  "verified": {
+    "tarMembers": 127,
+    "restoredMembers": 127,
+    "gzipMtime": 0,
+    "reassembledArchiveSha256": "c40e8a0c2fecef574c118992dc85ba4ca1e2f5b1785a9b29fc588ff49f034324",
+    "reassembledArchiveBytes": 13252799,
+    "verifiedChunkCount": 13,
+    "sourceHashesUnchangedAfterBuild": true,
+    "previousArchiveSha256": "c40e8a0c2fecef574c118992dc85ba4ca1e2f5b1785a9b29fc588ff49f034324",
+    "reproducibleRebuildFromPreviousManifest": true
+  },
+  "archive": {
+    "path": "compiled-capabilities/coordination/acceptance/custody/evidence.tar.gz",
+    "bytes": 13252799,
+    "sha256": "c40e8a0c2fecef574c118992dc85ba4ca1e2f5b1785a9b29fc588ff49f034324",
+    "format": "PAX tar inside gzip",
+    "reproducibility": {
+      "gzipMtime": 0,
+      "gzipFilenameHeader": "empty",
+      "tarOwner": 0,
+      "tarGroup": 0,
+      "tarMtime": 0,
+      "order": "sorted relative member paths"
+    }
+  },
+  "manifest": {
+    "path": "compiled-capabilities/coordination/acceptance/custody/manifest.json",
+    "bytes": 36316,
+    "sha256": "6a9f3039400456141405e92fff209947b8bac08c72d464c92c2825795601a5d3"
+  },
+  "chunks": [
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0001.bin",
+      "index": 1,
+      "bytes": 1048576,
+      "sha256": "14426c518118c841248d6a52121ed0f2ec2237ea9c54cf6b49037a1ac845992e"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0002.bin",
+      "index": 2,
+      "bytes": 1048576,
+      "sha256": "81742a0da779f91852a1aebcaa6ed044a928d257fd4afc2b545200299c5713c7"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0003.bin",
+      "index": 3,
+      "bytes": 1048576,
+      "sha256": "e2ab0acc3c86e485a700aa7e3717d94ceede52443499ebc9bce6a80d70e822c3"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0004.bin",
+      "index": 4,
+      "bytes": 1048576,
+      "sha256": "ddec5d45f364c1f023cab03843678c31ad7efb6240c5685ec9fb3ce66e8c4d76"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0005.bin",
+      "index": 5,
+      "bytes": 1048576,
+      "sha256": "eab86029048fcf889fb2e674c2effdd8a26ac0bbc2bdfb22a40508a965a2873e"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0006.bin",
+      "index": 6,
+      "bytes": 1048576,
+      "sha256": "12aadcae2941fdda6f3561ea54a049cbf3c80576b07dba0d65eeeb5e1020c55b"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0007.bin",
+      "index": 7,
+      "bytes": 1048576,
+      "sha256": "d845f96a57e1b7033c91bc70afada5d60d149f0d001f9df7a2d9a88db4f75db3"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0008.bin",
+      "index": 8,
+      "bytes": 1048576,
+      "sha256": "2621b03f7b553034d4fb71ef648d43246e10fa10f509d5c74b18ea37ffc50faa"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0009.bin",
+      "index": 9,
+      "bytes": 1048576,
+      "sha256": "e28bc257359a45f7c3f4d4e02712ebbda247166461dbdf9d32651d7e4853889b"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0010.bin",
+      "index": 10,
+      "bytes": 1048576,
+      "sha256": "b0b526cf62b5489ec18fc3156daf5f8ba9021f59d0064162c371542b4b7115f4"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0011.bin",
+      "index": 11,
+      "bytes": 1048576,
+      "sha256": "245b0ea22ba8a8ee002eca61386f7a11adc2bb5da6742a28f71dae2a499f203a"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0012.bin",
+      "index": 12,
+      "bytes": 1048576,
+      "sha256": "6b12b7d17387ed33c56b584eef0b6f830f083be868c366b58442944791572fed"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/custody/chunks/part-0013.bin",
+      "index": 13,
+      "bytes": 669887,
+      "sha256": "269a209bb50404a77f5d33e08fea94f8ff0d7b6554a6f3d5cc5af12570a68d31"
+    }
+  ],
+  "memberCatalog": {
+    "memberCount": 127,
+    "totalBytes": 295193643,
+    "perMemberSha256In": "manifest.json"
+  },
+  "custodyScripts": {
+    "builder": {
+      "path": "compiled-capabilities/coordination/acceptance/custody/build_custody.py",
+      "sha256": "07d50a2e1f183ada1a361fd204f1fcfc9056576a22e6267a47ade535d3fa1206"
+    },
+    "verifier": {
+      "path": "compiled-capabilities/coordination/acceptance/custody/verify_custody.py",
+      "sha256": "06b9fcf9a0feb053735f16429c04ce510b79a54c164d94b1f93289642c261125"
+    },
+    "buildStdout": {
+      "path": "compiled-capabilities/coordination/acceptance/custody/build.stdout.log",
+      "sha256": "e1e901d16c2b96fc21bdf099842268912cfda56023511186e38aa1734603e609"
+    },
+    "buildStderr": {
+      "path": "compiled-capabilities/coordination/acceptance/custody/build.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "verifyStdout": {
+      "path": "compiled-capabilities/coordination/acceptance/custody/verify.stdout.log",
+      "sha256": "17dd9676ed321c9db57350130aa544f01febde8eb04dc252f30060939bb0a646"
+    },
+    "verifyStderr": {
+      "path": "compiled-capabilities/coordination/acceptance/custody/verify.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-PREP-CUSTODY.md",
+    "sha256": "6d674e7df3a3dfddbc0602a249339527cc6663c5822f2797c3a8dabf96c197ca"
+  },
+  "restore": {
+    "commands": [
+      "cat compiled-capabilities/coordination/acceptance/custody/chunks/part-*.bin > /tmp/capability-evidence.tar.gz",
+      "sha256sum /tmp/capability-evidence.tar.gz",
+      "tar -tzf /tmp/capability-evidence.tar.gz",
+      "mkdir -p /tmp/capability-evidence-restore",
+      "tar --no-same-owner -xzf /tmp/capability-evidence.tar.gz -C /tmp/capability-evidence-restore"
+    ],
+    "safety": "Extract only into a clean destination directory after verifying the archive hash and member catalog; member names are relative and contain no parent traversal."
+  },
+  "integration": "Evidence custody only. No full capability milestone run or acceptance claim.",
+  "publication": "No production edits, Git operations, dependency lock changes, merge, or deployment."
+}

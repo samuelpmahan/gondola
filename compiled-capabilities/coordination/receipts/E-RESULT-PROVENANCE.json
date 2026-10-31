@@ -1,0 +1,170 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-RESULT-PROVENANCE",
+  "worker": "N6",
+  "outcome": "insufficient_evidence",
+  "status": "closed_partial_failed_source",
+  "summary": "The local source binding and failed-run archive are traceable, but the full E-BUILD invocation ended with a failed inherited gate and returned process exit code 0. CI catalog/artifact finalization is pending. This packet does not claim acceptance.",
+  "sourceIdentity": {
+    "baseCommit": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+    "localCommit": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+    "publishedCommit": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "hostedPrSyntheticMergeCommit": "b717449a8844ee695a8f1facd20d41a6b4bcf097",
+    "tree": "d22b75e18c7bea70a743cc79d53461b287c7d045",
+    "localParents": ["00da54ad0f5a4006b13a5cded18ce291845978bc"],
+    "publishedParents": ["00da54ad0f5a4006b13a5cded18ce291845978bc"],
+    "hostedPrMergeParents": ["00da54ad0f5a4006b13a5cded18ce291845978bc", "a2e1164d68abaaa7d028bdaf6a20bea842a131ae"],
+    "binding": {
+      "path": "compiled-capabilities/coordination/publication-binding.json",
+      "sha256": "3ef9f4bd3ae606dda6c4e06f30e1df40c03de697bbeda17449783e29bfaf87a8"
+    },
+    "status": "passed"
+  },
+  "localExecution": {
+    "attempt": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z",
+    "startedAt": "2026-10-31T09:53:56.051Z",
+    "finishedAt": "2026-10-31T10:16:59.067Z",
+    "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+    "receiptStatus": "failed",
+    "rootObservedProcessExitCode": 0,
+    "commandCount": 16,
+    "allCommandExitCodesZero": true,
+    "failure": {
+      "stage": "inherited-static-and-interaction-lifecycle",
+      "error": "fresh lifecycle receipt does not confirm the inherited full compiled-methods regression chain",
+      "cause": "outer runner used a prose substring predicate requiring 'inherited compiled-methods'; the nested fresh passed receipt instead contains 'fresh full run-compiled-methods.sh completed'"
+    },
+    "separatelyConfirmedRunnerDefect": "collected stage failures did not set process.exitCode, so the failed full receipt returned zero and may make CI falsely green",
+    "passedNewStages": [
+      "react-goscript-build",
+      "dom-goscript-build",
+      "backend-build-comparison",
+      "n4-independent-literal-oracle",
+      "n3-compiled-conformance",
+      "n5-http-demo",
+      "compiled-output-stability"
+    ],
+    "capabilitySeed": null,
+    "seedPolicy": "frozen lifecycle scenario and literal capability expectations; no capability-runner RNG seed",
+    "toolVersions": {
+      "node": "v22.23.4",
+      "npm": "11.9.0",
+      "rootGo": "go version go1.24.0 linux/amd64",
+      "compiledGo": "go version go1.27.3 linux/amd64",
+      "chromium": "Chromium 153.0.8010.0",
+      "react": "19.3.1",
+      "reactDOM": "19.3.1",
+      "playwright": "1.64.1",
+      "esbuild": "0.28.2",
+      "frontendEsbuild": "0.28.2"
+    },
+    "sourcePinCount": 161,
+    "m0ManifestRows": 24,
+    "m0TrackedInputs": 23
+  },
+  "nestedInheritedEvidence": {
+    "path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/inherited-lifecycle-031c462-receipt.json",
+    "sha256": "3279277688f3bd8d475a2b6cd91291bfa4cc71dc579c5883ff747cf48673cccd",
+    "status": "passed",
+    "failures": 0,
+    "sourcePinsMatch": true,
+    "sourcePinCount": 123,
+    "observation": "Every listed inherited stage passed; the outer failure was the prose predicate rather than the nested receipt status."
+  },
+  "sourceAudit": {
+    "status": "passed",
+    "finalAcceptance": false,
+    "path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/source-pin-git-worktree-audit.json",
+    "sha256": "37ca855b9eeedc464edf101b369d816cd2addcfc3e06eccf8cf998db3c3ceb3a",
+    "auditor": "compiled-capabilities/ci/2026-10-31/lanes/provenance/audit-source-pins.py",
+    "auditorSha256": "058ebdac5c7cef0aff146028baec8be8e2cce5bab7188d0c426ad40b9554dd74",
+    "checks": [
+      "161 unique before/after pins are identical and match the declared Git/worktree source set",
+      "every source pin matches the worktree and local/published commit blobs; generated react-map.gen.mjs matches its signed M0 exception",
+      "all 24 original SHA256SUMS entries verify, including EXPECTED.json and 23 tracked inputs",
+      "publication binding exactly matches PR 15 and local/remote commit/tree/parent identities",
+      "hosted synthetic merge commit has the same source tree and expected base/source parents"
+    ]
+  },
+  "n1AuditorLimitation": {
+    "path": "compiled-capabilities/coordination/acceptance/provenance/audit.mjs",
+    "sha256": "c121b32bfb6874f7e5480096e1ea309b4c8eead04408556b8465f912cfd4dd9e",
+    "resultPath": "compiled-capabilities/ci/2026-10-31/lanes/provenance/source-audit-failed-run.json",
+    "resultSha256": "8c88b8c485525e539387750f2861433784f0f1e17d6c48a7413df7c786697355",
+    "issue": "extractStringArray fails to parse ignoredSourceDirectories declared as new Set([...]);const sourceDirectories=[...], stopping before N1 pin/M0 checks. N1 owns parser repair."
+  },
+  "archive": {
+    "path": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/capabilities-artifacts.tar.gz",
+    "bytes": 14976273,
+    "sha256": "adabec770f19f985e5ad499b87b1a2f8c0e3890822a905346432cd69133c7040",
+    "manifestPath": "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/archive-manifest.json",
+    "manifestBytes": 34885,
+    "manifestSha256": "f51970414a096529361b283733be90f7ebf8bd72ebf686b333bc590aba623c7c",
+    "memberCount": 187,
+    "memberBytes": 90262422,
+    "preArchiveSnapshot": {
+      "path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/full-run-031c462-execution-before-archive.json",
+      "sha256": "6e88ac72e28c5be74ec4c47c19c3cbc8d373ba21b480a52e3a9bb6c4a8a1b1ba",
+      "archiveStatus": "archive_pending",
+      "finalAcceptance": false
+    },
+    "verification": {
+      "tool": "compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "toolSha256": "33d510d6f8652663381cc9eaca91e2a319b32c677e1dc60a9ff325c98a2d83e6",
+      "resultPath": "compiled-capabilities/ci/2026-10-31/lanes/provenance/archive-verify-failed-run.json",
+      "resultSha256": "ac1fb47c1e7af4d0dad1d8342786ab06481692c920b7e5d704b2f2d56348d37c",
+      "status": "verified",
+      "completeAcceptance": false,
+      "requireCompleteExitCode": 2
+    }
+  },
+  "hostedCI": {
+    "status": "snapshot_incomplete_focus_runs_pending",
+    "sourceHead": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "runCount": 30,
+    "eventCounts": {"push": 15, "pull_request": 15},
+    "catalogSnapshot": {
+      "path": "compiled-capabilities/ci/2026-10-31/provider/source-run-catalog-snapshot-1008Z.json",
+      "sha256": "54e3bcce33ca2d17e8417407d8584b22d5031c7178480ae08364237988ef636a",
+      "retrievedAt": "2026-10-31T10:08Z",
+      "runStatusCounts": {"completed_success": 11, "in_progress": 19},
+      "allRowsHeadShaMatchesSource": true,
+      "rawApiSnapshot": {
+        "path": "compiled-capabilities/ci/2026-10-31/provider/raw-api-snapshot.json",
+        "sha256": "e76b0cf05a216648dd464416723c87f8799b523e978eeec79f6da259c972c76b",
+        "bytes": 455572
+      },
+      "rawRunListResponseSha256": "90664e7176abeb6b19c2dd0ba23ed8733ece1bd10fa5767024786517a38d4bb7",
+      "rawJobResponseCount": 30,
+      "preservedMalformedFirstCatalog": {
+        "path": "compiled-capabilities/ci/2026-10-31/provider/current-source-runs-41190743932.json",
+        "sha256": "b38b399286adcb8f4d31d67e84507bfd8203037d14d081ef2e85310f7258b167",
+        "reason": "normalizer appended a literal backslash-n after JSON; preserved without overwrite"
+      }
+    },
+    "catalogOwner": "N4",
+    "primaryPushRun": {"id": 41190743932, "jobId": 124506858858, "status": "in_progress", "conclusion": null},
+    "primaryPrRun": {"id": 41190759391, "jobId": 124506904022, "status": "in_progress", "conclusion": null},
+    "artifactStatus": "not available at catalog retrieval; focused run logs still pending",
+    "note": "Catalog snapshot is an incomplete temporal view with 19 active workflows. This packet does not claim terminal hosted CI acceptance. A later green Actions conclusion cannot supersede the local failed receipt."
+  },
+  "preservedEvidence": [
+    {"path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/full-run-031c462-failed-receipt.json", "sha256": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7"},
+    {"path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/full-run-031c462-command.log", "sha256": "bf66825486126f9ee1bfa6438a4c0f939efcec5356eec9e136c51e3f2ef0468d"},
+    {"path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/inherited-lifecycle-031c462-receipt.json", "sha256": "3279277688f3bd8d475a2b6cd91291bfa4cc71dc579c5883ff747cf48673cccd"},
+    {"path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/full-run-031c462-execution-before-archive.json", "sha256": "6e88ac72e28c5be74ec4c47c19c3cbc8d373ba21b480a52e3a9bb6c4a8a1b1ba"},
+    {"path": "compiled-capabilities/ci/2026-10-31/lanes/provenance/archive-verify-failed-run.json", "sha256": "ac1fb47c1e7af4d0dad1d8342786ab06481692c920b7e5d704b2f2d56348d37c"}
+  ],
+  "limitations": [
+    "This receipt closes the failed 031c462 cohort only; no rerun of the full source was performed.",
+    "N4's final 30-run raw job catalog and primary artifact were pending at closure; source-bound hosted CI acceptance remains for a separate packet.",
+    "The earlier 2324068 startup failure occurred before test stages and remains excluded from full-run acceptance.",
+    "The archive verifies structurally and cryptographically, but its bound execution receipt is failed; it cannot be accepted as a completed milestone.",
+    "Root's production runner fixes and the N1 auditor parser repair are separate tasks and are not included here."
+  ],
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-RESULT-PROVENANCE.md",
+    "sha256": "7a4f23db4fd7d8bea86e26db3ee3c161fc12e89370764f64812ec5f8fdf68f9b"
+  },
+  "publication": "No Git operation, source/CI mutation, PR operation, merge, or deployment was performed."
+}

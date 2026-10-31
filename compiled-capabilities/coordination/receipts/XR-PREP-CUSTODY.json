@@ -1,0 +1,104 @@
+{
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "job_id": "XR-PREP-CUSTODY",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independently reconstructed N4's historical custody archive from all 13 chunks and byte-compared its exact 127-member selection against the original repository files. The archive, manifest, and chunks remained unchanged.",
+  "archiveAudit": {
+    "manifestSchema": "gobi.compiled-capability-custody/v1",
+    "memberCount": 127,
+    "sourceBytes": 295193643,
+    "archiveBytes": 13252799,
+    "archiveSha256": "c40e8a0c2fecef574c118992dc85ba4ca1e2f5b1785a9b29fc588ff49f034324",
+    "manifestBytes": 36316,
+    "manifestSha256": "6a9f3039400456141405e92fff209947b8bac08c72d464c92c2825795601a5d3",
+    "chunkCount": 13,
+    "chunkBytesTotal": 13252799,
+    "independentReconstructionCount": 1,
+    "allChunkHashesAndOffsetsVerified": true,
+    "allMembersByteComparedToOriginalSources": true,
+    "sourceMembersCompared": 127,
+    "exactSelectedPathSetVerified": true,
+    "relativeCanonicalRegularPathsVerified": true,
+    "unsafeMemberPathFound": false,
+    "mutableStateRepairPrepAndNewerAttemptsAbsent": true,
+    "custodyArchiveManifestAndChunksUnchanged": true,
+    "attemptMemberCounts": {
+      "compiled-capabilities/conformance/evidence/attempt-01": 10,
+      "compiled-capabilities/conformance/evidence/attempt-02": 14,
+      "compiled-capabilities/conformance/evidence/attempt-03": 15,
+      "compiled-capabilities/demo/evidence/attempt-00": 3
+    },
+    "knownUncapturedFailureNotesMatchReceiptAndClosedReports": true,
+    "authorReportedFourBuildsSameHash": true,
+    "fourBuildsRepeatedByReviewer": false
+  },
+  "selection": {
+    "includedAttempts": [
+      "compiled-capabilities/conformance/evidence/attempt-01",
+      "compiled-capabilities/conformance/evidence/attempt-02",
+      "compiled-capabilities/conformance/evidence/attempt-03",
+      "compiled-capabilities/demo/evidence/attempt-00"
+    ],
+    "excludedAttempts": [
+      "compiled-capabilities/conformance/evidence/attempt-04",
+      "compiled-capabilities/conformance/evidence/attempt-05",
+      "compiled-capabilities/demo/evidence/attempts beyond attempt-00"
+    ],
+    "excludedMutableInputs": [
+      "compiled-capabilities/coordination/state.json",
+      "E-FIX-HARNESS and E-FIX-BUILD packets",
+      "all PREP packets",
+      "custody outputs"
+    ],
+    "closedAuthorPackets": ["E-BUILD", "E-DEMO", "E-FIX-GO", "E-GO", "E-HARNESS", "E-HOST", "E-ORACLE"],
+    "closedReviewPackets": ["XR-BUILD", "XR-DEMO", "XR-FIX-GO", "XR-GO", "XR-HARNESS", "XR-HOST", "XR-ORACLE"],
+    "preservedFailureLog": "compiled-capabilities/coordination/epoch-03-failed-nonoptimal.log"
+  },
+  "uncapturedOutputCaveats": [
+    "E-DEMO's initial selector failure raw output was not saved; only surviving attempt-00 files are archived.",
+    "E-HOST's early environment-missing runs and intermediate replacement regression raw output were not separately captured."
+  ],
+  "verifierScopeNote": "The N4 verifier checks archive/source integrity and named exclusions, but does not certify an arbitrary future input selection or define Windows path policies. The actual frozen archive was independently checked against the exact intended selection and safe canonical relative member paths. N5's full-run archive verifier has the stricter reusable contract.",
+  "checks": [
+    {
+      "command": "python3 compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY/audit_custody.py",
+      "workdir": "repository root",
+      "exitCode": 0,
+      "result": "passed; reconstructed from 13 chunks, exact archive hash/size, exact 127-path set, all 127 archive members byte-compared to original source files, exclusions and caveats checked, custody files unchanged",
+      "script": "compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY/audit_custody.py",
+      "scriptSha256": "a54b942c60bc9e1df38c8d3897f94b0f97fbdac8ee148d53ae65bd568e9eabd6",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY/audit.stdout.log",
+      "stdoutSha256": "3d689bfe07f3aa792148fc5e9cac9673873fe1e0b13619ae8fd6941af2697eee",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY/audit.stderr.log",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "python3 compiled-capabilities/coordination/acceptance/custody/verify_custody.py",
+      "workdir": "repository root",
+      "exitCode": 0,
+      "result": "passed; verifier reported 13/13 chunks, 127/127 restored members, sourceBytes 295193643",
+      "stdout": "compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY/author-verifier.stdout.log",
+      "stdoutSha256": "17dd9676ed321c9db57350130aa544f01febde8eb04dc252f30060939bb0a646",
+      "stderr": "compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY/author-verifier.stderr.log",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preservedSourceHashes": {
+    "compiled-capabilities/coordination/acceptance/custody/build_custody.py": "07d50a2e1f183ada1a361fd204f1fcfc9056576a22e6267a47ade535d3fa1206",
+    "compiled-capabilities/coordination/acceptance/custody/verify_custody.py": "06b9fcf9a0feb053735f16429c04ce510b79a54c164d94b1f93289642c261125",
+    "compiled-capabilities/coordination/acceptance/custody/manifest.json": "6a9f3039400456141405e92fff209947b8bac08c72d464c92c2825795601a5d3",
+    "compiled-capabilities/coordination/acceptance/custody/evidence.tar.gz": "c40e8a0c2fecef574c118992dc85ba4ca1e2f5b1785a9b29fc588ff49f034324",
+    "compiled-capabilities/coordination/receipts/E-PREP-CUSTODY.json": "7a05c84c279193ab70e2d6f64ceb9501a70a786752bdd2145cf9eba7b802469e",
+    "compiled-capabilities/coordination/reports/E-PREP-CUSTODY.md": "6d674e7df3a3dfddbc0602a249339527cc6663c5822f2797c3a8dabf96c197ca"
+  },
+  "reviewReport": {
+    "path": "compiled-capabilities/coordination/reviews/XR-PREP-CUSTODY.md",
+    "sha256": "94ed052a419b8c8926915c77822ad8b9611e398f41a576863ccad39aa79b15df"
+  },
+  "limitations": [
+    "Four identical archive builds are recorded as N4 author evidence; this reviewer performed one independent chunk reconstruction and did not regenerate the author's package.",
+    "The custody archive is historical focused evidence only, not a full capability-run archive or acceptance result."
+  ],
+  "publication": "No archive/catalog/chunk overwrite, builder rerun, production edit, full milestone run, Git operation, commit, merge, or deployment."
+}

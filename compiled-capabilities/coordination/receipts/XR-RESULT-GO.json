@@ -1,0 +1,118 @@
+{
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 compiled-capabilities/coordination/reviews/XR-RESULT-GO/logs/verify.py",
+      "exitCode": 0,
+      "result": "15 independent read-only checks passed; no suites rerun."
+    },
+    {
+      "command": "sha256sum compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-push-run-41190743798-job-124506858263.log compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-pr-run-41190759554-job-124506904642.log compiled-capabilities/ci/2026-10-31/lanes/go/completed-inherited-ci.json run.sh gobi/rules_test.go",
+      "exitCode": 0,
+      "result": "Raw log SHA-256s and the source/catalog pins match their recorded values."
+    },
+    {
+      "command": "Read-only inspect of source workflow run.sh and log progression",
+      "result": "The pinned script has set -euo pipefail, runs go vet before go test, then the 5,000-case seeded comparison/checksum; workflow logs progress through the successful counter interaction step."
+    },
+    {
+      "command": "Read-only inspect of E-BUILD and nested lifecycle/methods execution JSON",
+      "result": "Outer full E-BUILD failed at inherited-static-and-interaction-lifecycle with 161 matching before/after pins; nested lifecycle and methods receipts passed; root-observed CLI exit 0 is treated as a reporting defect."
+    }
+  ],
+  "decision": "accepted",
+  "evidence_sha256": {
+    "compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-pr-run-41190759554-job-124506904642.log": "7f76b8b7dd79bf68bed24295db2bc40760bed241e080c91daddf1241c4bd7bcd",
+    "compiled-capabilities/ci/2026-10-31/lanes/go/logs/interaction-push-run-41190743798-job-124506858263.log": "d6dc8b2201d79eeab1f21cbfe62a93235c9740889b511cdfee55493766ec3692",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-GO/logs/verification.json": "cc2b14aa1ee1ac96abe37683702c4b444677e86a75ca97447efe0643b4453f6e",
+    "compiled-capabilities/coordination/reviews/XR-RESULT-GO/logs/verify.py": "cf93004046151d5f1fd537257d63304e490fa7988ee1aaabd88ccad0a26680b6"
+  },
+  "findingClosure": {
+    "compatibilityRuleCount": {
+      "count": 59,
+      "method": "static source count; not printed in CI log",
+      "sourceSha256": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a"
+    },
+    "counterParity": {
+      "initialAndActionTicks": 4473,
+      "nativeComparator": "matched",
+      "scripts": 107,
+      "seed": 20261030
+    },
+    "goNodeNpmVersionsMatch": true,
+    "localFullRun": {
+      "cliExitCode": 0,
+      "failedStage": "inherited-static-and-interaction-lifecycle",
+      "nestedLifecycle": "passed",
+      "nestedMethods": "passed",
+      "overallAcceptance": false,
+      "sourcePinCount": 161,
+      "sourcePinsMatch": true,
+      "status": "failed"
+    },
+    "m0": {
+      "checksumManifestSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "entries": 24,
+      "expectedJsonSha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2"
+    },
+    "postCaptureUpdate": {
+      "reportedBy": "N4",
+      "summary": "Primary push artifact later cataloged; canonical E-BUILD remained failed despite Actions success. Not independently reviewed in this packet."
+    },
+    "primaryHostedStatusAtCapture": {
+      "capturedAt": "2026-10-31T10:19:46Z",
+      "pullRequest": "in_progress",
+      "push": "in_progress"
+    },
+    "rawPullRequestLogHashMatches": true,
+    "rawPushLogHashMatches": true,
+    "staticComparison": {
+      "cases": 5000,
+      "receiptMatches": true,
+      "seed": 20261030
+    }
+  },
+  "job_id": "XR-RESULT-GO",
+  "limitations": [
+    "This review accepts only E-RESULT-GO report/receipt accuracy. Inherited Go/M0 CI passing is not the same as capability milestone acceptance.",
+    "The local full E-BUILD receipt is failed, and the runner exit code 0 is not treated as success.",
+    "N4 later reported a hosted primary artifact for the same failed cohort; that artifact was not independently inspected as part of this bounded review.",
+    "No suite was rerun."
+  ],
+  "publication": "No author report/receipt, source, CI log, E-BUILD output, scheduler/native state, or Git reference was modified.",
+  "review_artifacts": {
+    "report": {
+      "path": "compiled-capabilities/coordination/reviews/XR-RESULT-GO.md",
+      "sha256": "74275fc8d1bf36281b1e6c01a7c43c4bc95e2e390d7fd2047e239fb5cdf41a3d"
+    },
+    "verification": "compiled-capabilities/coordination/reviews/XR-RESULT-GO/logs/verification.json",
+    "verifier": "compiled-capabilities/coordination/reviews/XR-RESULT-GO/logs/verify.py"
+  },
+  "reviewedJob": {
+    "job_id": "E-RESULT-GO",
+    "outcome": "insufficient_evidence",
+    "worker": "N1"
+  },
+  "schema": "gobi.compiled-capabilities-independent-review/v1",
+  "sourceBinding": {
+    "base": "00da54ad0f5a4006b13a5cded18ce291845978bc",
+    "localCommit": "031c462bcd72c0ae0bee2dc05a0972b3902ca40c",
+    "publishedHead": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae",
+    "sourceTree": "d22b75e18c7bea70a743cc79d53461b287c7d045"
+  },
+  "source_sha256": {
+    "EXPECTED.json": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+    "SHA256SUMS": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+    "compiled-capabilities/builds/attempts/attempt-20261031T095356051Z/execution.json": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "compiled-capabilities/ci/2026-10-31/lanes/go/completed-inherited-ci.json": "74d3fae7a1d01f63988f5e6b716a3ec86dd93e961fde2352566cf180b1e991b1",
+    "compiled-capabilities/coordination/publication-binding.json": "3ef9f4bd3ae606dda6c4e06f30e1df40c03de697bbeda17449783e29bfaf87a8",
+    "compiled-capabilities/coordination/receipts/E-BUILD.json": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "compiled-capabilities/coordination/receipts/E-RESULT-GO.json": "78f6571bac246a11385923c65b99010399bcf4f7aea435279a8352d1559aff7f",
+    "compiled-capabilities/coordination/reports/E-RESULT-GO.md": "5209dbc425cb2c9f9d035009c9f60f84716a2ef1b9b07a890a4f02e1140e9aee",
+    "compiled-lifecycle/builds/attempts/attempt-20261031T095356593Z/execution.json": "3279277688f3bd8d475a2b6cd91291bfa4cc71dc579c5883ff747cf48673cccd",
+    "compiled-methods/artifacts/attempts/attempt-20261031T095356677Z/execution.json": "b83a55b7130700310d67b01689b4d63e7aa495b669a88f23ad3be7226812e671",
+    "gobi/rules_test.go": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+    "run.sh": "e2b3fe3101d50e509daae6d0feb630b7becbd01b286bef63cc53493f9e62f2f6"
+  },
+  "summary": "Accepted the accuracy and provenance of N1 E-RESULT-GO as a partial-evidence record: the inherited push/PR Go and M0 jobs passed, while the local full E-BUILD receipt failed. The packet does not claim overall capability acceptance.",
+  "worker": "N5"
+}

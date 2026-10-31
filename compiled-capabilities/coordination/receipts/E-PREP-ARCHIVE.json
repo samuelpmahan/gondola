@@ -1,0 +1,53 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-PREP-ARCHIVE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "status": "prepared_pending_full_run",
+  "summary": "Prepared a read-only, fail-closed verifier for the final E-BUILD archive and provenance payload. In-memory valid and mutation fixtures passed. No full-run archive was present or accepted.",
+  "checks": [
+    {
+      "command": "python3 -m py_compile compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "result": "passed; exit 0"
+    },
+    {
+      "command": "python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --self-test",
+      "result": "passed; exit 0; one valid archive and five mutations were exercised"
+    },
+    {
+      "command": "python3 compiled-capabilities/coordination/acceptance/archive/verify_archive.py --receipt compiled-capabilities/coordination/receipts/E-BUILD.json --root . --require-complete",
+      "result": "failed closed as expected; exit 2; current author receipt has no archive metadata"
+    }
+  ],
+  "selfTests": {
+    "validFixture": "passed",
+    "wrongSourcePin": "rejected",
+    "missingProvenanceMember": "rejected",
+    "tamperedMember": "rejected",
+    "fakeVersion": "rejected",
+    "unsafeTraversalMember": "rejected"
+  },
+  "sourcePins": [
+    {
+      "path": "compiled-capabilities/coordination/acceptance/archive/verify_archive.py",
+      "bytes": 32609,
+      "sha256": "48ccc783d2ebb9a348565d1153e462c9ff7ec9c7381a4d70004df2e9a00b42c7"
+    },
+    {
+      "path": "compiled-capabilities/coordination/acceptance/archive/README.md",
+      "bytes": 1762,
+      "sha256": "ac97b8c82583a123406b203d40f5a92c02abbb90dd4577dc66f719c456bc588f"
+    },
+    {
+      "path": "compiled-capabilities/coordination/reports/E-PREP-ARCHIVE.md",
+      "bytes": 2637,
+      "sha256": "4fa5ec8963ff1c15271e202690c69f0e4202622e77ba980223dbb5f7273b703e"
+    }
+  ],
+  "limitations": [
+    "No full E-BUILD run or actual final archive was available for acceptance verification.",
+    "Root must run verify_archive.py against the final outer receipt, external manifest, and archive after integrated execution.",
+    "The verifier validates declared source pin equality across payload and receipt; it does not independently reconstruct the runner's source-selection policy."
+  ],
+  "publication": "No Git operations, commit, merge, or deployment."
+}

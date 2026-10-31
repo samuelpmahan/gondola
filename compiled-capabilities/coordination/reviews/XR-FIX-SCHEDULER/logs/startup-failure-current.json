@@ -1,0 +1,60 @@
+{
+  "actual_log_sha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+  "amend_review_dependency_check_in_startup_branch": false,
+  "assertions": {
+    "diagnostic_content": true,
+    "exact_command": true,
+    "exact_source": true,
+    "explicit_failure": true,
+    "log_sha_matches_event": true,
+    "new_jobs": true,
+    "safe_contained_log": true
+  },
+  "event": {
+    "at": "2026-10-31T09:47:40.086260+00:00",
+    "failed_command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium CHROMIUM_EXECUTABLE_PATH=/tmp/chromium bash run-compiled-capabilities.sh",
+    "failure": "ENOENT creating attemptRoot before its parent; no test stage executed",
+    "log": "compiled-capabilities/coordination/root-checks/startup-failed-2324068/command.log",
+    "log_sha256": "8d37cd1446f90513077746c8ebb309851421ae1d30ee8b7483d02170f8e285db",
+    "new_jobs": [
+      "E-FIX-STARTUP",
+      "XR-FIX-STARTUP"
+    ],
+    "source": "232406843678f46c569e1c54b34b268c84e7764e",
+    "type": "extend-after-executed-failure"
+  },
+  "event_index": 69,
+  "log_has_attemptRoot_callsite": true,
+  "log_has_enoent": true,
+  "note": "Startup extension is handled by its own extend-after-executed-failure branch; it does not read an AMEND review id/receipt.",
+  "path_contained_in_repository": true,
+  "schema": "gobi.scheduler-startup-failure-review-evidence/v1",
+  "startup_jobs": {
+    "E-FIX-STARTUP": {
+      "allow_workers": [
+        "N6"
+      ],
+      "finished_at": "2026-10-31T09:51:20.876534+00:00",
+      "id": "E-FIX-STARTUP",
+      "kind": "extract",
+      "owner": "compiled-capabilities/run.mjs, archive-helper.mjs, archive-helper.test.mjs",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/E-FIX-STARTUP.json",
+      "repair_of": "E-BUILD",
+      "started_at": "2026-10-31T09:47:44.562963+00:00",
+      "status": "done",
+      "summary": "Create missing attempt-parent directories before exclusive per-attempt creation; fresh-parent and duplicate-collision regression.",
+      "worker": "N6"
+    },
+    "XR-FIX-STARTUP": {
+      "depends_on": "E-FIX-STARTUP",
+      "finished_at": "2026-10-31T09:53:52.920547+00:00",
+      "id": "XR-FIX-STARTUP",
+      "kind": "review",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-capabilities/compiled-capabilities/coordination/receipts/XR-FIX-STARTUP.json",
+      "started_at": "2026-10-31T09:51:23.812057+00:00",
+      "status": "done",
+      "worker": "N4"
+    }
+  },
+  "state_epoch": 17
+}

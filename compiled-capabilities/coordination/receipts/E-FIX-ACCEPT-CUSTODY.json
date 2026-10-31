@@ -1,0 +1,48 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-FIX-ACCEPT-CUSTODY",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "status": "citation_only_copy_created",
+  "summary": "Created a new corrected copy of the closed E-ACCEPT-CUSTODY receipt. Its only JSON field change corrects the zero-byte first-writer-failure path citation; the original canonical receipt, report, CI source evidence, and artifacts remain unchanged.",
+  "repairOf": "E-ACCEPT-CUSTODY",
+  "citationCorrection": {
+    "originalCanonicalReceiptPath": "compiled-capabilities/coordination/receipts/E-ACCEPT-CUSTODY.json",
+    "originalCanonicalReceiptSha256": "d5368b4c74079a9af76117d60b209bda34a6ccd6d8084c288629a5949616b49a",
+    "correctedCopyPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/citation-correction/E-ACCEPT-CUSTODY-corrected.json",
+    "correctedCopySha256": "019af101381f99e1d953ccd2056d2dde3e946f4094950ab880e2e5443d7e72fa",
+    "manifestPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/citation-correction/citation-correction-manifest.json",
+    "manifestSha256": "397e4cac9ff6263fb48503adf5ddce2529dc3fc207bee1616503582a484755d1",
+    "soleFieldDiff": {
+      "jsonPointer": "/catalogWriterAndSnapshotNotes/firstWriterFailurePreserved/path",
+      "oldValue": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aeff-terminal-runs-jobs-20261031T111444Z.json",
+      "newValue": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aef-terminal-runs-jobs-20261031T111444Z.json"
+    },
+    "actualZeroByteFile": {
+      "path": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/provider/source-60b5aef-terminal-runs-jobs-20261031T111444Z.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "device": 27,
+      "inode": 1715159,
+      "mode": 420,
+      "mtimeNs": 1793445295380978847,
+      "ctimeNs": 1793445295380978847
+    },
+    "oldIncorrectPathExists": false
+  },
+  "nativeValidation": {
+    "validator": "compiled-capabilities/coordination/probe.py::validate_receipt",
+    "mode": "read_only; no finish/state write",
+    "status": "passed",
+    "logPath": "compiled-capabilities/ci/2026-10-31/source-60b5aef/custody/citation-correction/nativevalidate_receipt-final.log"
+  },
+  "report": {
+    "path": "compiled-capabilities/coordination/reports/E-FIX-ACCEPT-CUSTODY.md",
+    "sha256": "6c88bbf1e8b48eaa7944f09decaf21079516ed819493d071e7f322d932b91363"
+  },
+  "limitations": [
+    "This repair corrects one citation in a new copy; the closed original receipt and report remain unchanged.",
+    "It does not claim the local archive container is intact or that the overall milestone is closed."
+  ],
+  "publication": "No source edits, Git operations, merges, or deployments."
+}

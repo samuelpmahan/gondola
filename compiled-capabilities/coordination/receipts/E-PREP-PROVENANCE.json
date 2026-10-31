@@ -1,0 +1,58 @@
+{
+  "job_id": "E-PREP-PROVENANCE",
+  "worker": "N1",
+  "summary": "Prepared a read-only provenance auditor for E-BUILD source pin completeness and hashes, local/remote Git binding, and original M0 source preservation. Missing full-run or publication evidence remains incomplete.",
+  "outcome": "mixed_change",
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --version",
+      "workdir": "repository root",
+      "result": "passed; v22.23.4"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/acceptance/provenance/audit.mjs",
+      "workdir": "repository root",
+      "result": "passed; syntax parsed"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "workdir": "repository root",
+      "result": "passed; syntax parsed"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "workdir": "repository root",
+      "result": "passed; 3 tests, 0 failures"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-capabilities/coordination/acceptance/provenance/audit.mjs --repo-root \"$PWD\" --receipt compiled-capabilities/coordination/receipts/E-BUILD.json --source-commit 00da54ad0f5a4006b13a5cded18ce291845978bc --expected-tree 51b64a89b5f7e0edd4792becbed9adad6a27a698",
+      "workdir": "repository root",
+      "result": "expected exit 2; status=incomplete and finalAcceptance=false because binding and full-run source pins are absent; M0 check confirmed 23 tracked inputs and the signed generated map"
+    },
+    {
+      "command": "git rev-parse 00da54ad0f5a4006b13a5cded18ce291845978bc^{tree}",
+      "workdir": "repository root",
+      "result": "passed; 51b64a89b5f7e0edd4792becbed9adad6a27a698"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/provenance/audit.mjs": "1a8bc1b215c52c1922d18f4a1940600a77e63d886a8e7b8d166ab266e1e83671",
+    "compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs": "c532ec1e33f31ffcfa544127774716e58abf774dbfad6be7d70c535c3f7f3419",
+    "compiled-capabilities/coordination/reports/E-PREP-PROVENANCE.md": "4faf7d74621659d562930bd83854e319fd4fe1e740217f891ec97d3ceac21ef2"
+  },
+  "log_sha256": {
+    "compiled-capabilities/coordination/acceptance/provenance/logs/node-version.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/audit-syntax.log": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/test-syntax.log": "202a87a00ef76091d8a32984349b989f52b738f07047864bf3713d162d3dcc74",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/node-test.log": "8cfd5ea1620453ffc8e47b21063b82cc9eae6cc463639d41e4efab10562aec04",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/missing-input-exercise.json": "eb05ca9b4a6ab4c61167826590e98da26dfbc55b0309266824a09b31f93fa4bd",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/missing-input-exercise.stderr.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+  },
+  "limitations": [
+    "The current E-BUILD receipt was an author preflight without full-run sourceBefore/sourceAfter pins.",
+    "The root-owned source commit, remote publication binding, and completed full-run receipt were unavailable; full source-pin and publication-binding checks remain pending.",
+    "This auditor preparation does not validate archive or build artifacts; those checks are handled by separate acceptance work."
+  ],
+  "integration": "pending root full-run and publication binding; preparation does not claim milestone acceptance",
+  "publication": "No commit, merge, deploy, or Git mutation."
+}

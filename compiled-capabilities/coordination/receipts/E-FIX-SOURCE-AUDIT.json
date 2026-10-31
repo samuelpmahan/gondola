@@ -1,0 +1,97 @@
+{
+  "schema": "gobi.compiled-capabilities-agent-receipt/v1",
+  "job_id": "E-FIX-SOURCE-AUDIT",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "status": "repair_verified_against_historical_failed_run",
+  "summary": "Fixed provenance source-array parsing and follow-up ancestry binding, and added strict validation for the exact epoch-18 executed-failure extension. Focused regressions pass; historical E-BUILD remains failed and unaccepted.",
+  "repairedFindings": [
+    {
+      "id": "XR-PREP-PROVENANCE parser/binding",
+      "repair": "Parse literal array and Set([...]) declarations; preserve the frozen 00da M0 base while allowing equal local/remote trees and ordered direct parents at follow-up commits; verify actual Git parent identity and base ancestry.",
+      "tests": [
+        "actual source run.mjs Set array",
+        "actual E-BUILD receipt with 161 source pins",
+        "synthetic local/remote follow-ups parented by published a2e",
+        "same local/remote commit SHA",
+        "parent identity mutation",
+        "M0 base bytes and signed generated map"
+      ]
+    },
+    {
+      "id": "XR-PREP-SCHEDULER executed-failure event",
+      "repair": "Keep the original startup-failure proof and validate the exact epoch-18 031c/a2e failed-run event, pinned log, exit code, and both repair/review pairs.",
+      "tests": [
+        "live event ledger accepted with no errors",
+        "changed remote source rejected",
+        "broken source-audit review dependency rejected",
+        "original startup log hash mutation still rejected"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --version",
+      "workdir": "repository root",
+      "exitCode": 0,
+      "result": "v22.23.4",
+      "log": "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/node-version.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/acceptance/provenance/audit.mjs",
+      "workdir": "repository root",
+      "exitCode": 0,
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/audit-syntax.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "workdir": "repository root",
+      "exitCode": 0,
+      "result": "passed",
+      "log": "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/test-syntax.log"
+    },
+    {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs",
+      "workdir": "repository root",
+      "exitCode": 0,
+      "result": "passed; 7 tests, 0 failures, including actual 161-pin receipt and follow-up Git-binding regression",
+      "log": "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/node-test.log"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v test_audit.py",
+      "workdir": "compiled-capabilities/coordination/acceptance/scheduler/",
+      "exitCode": 0,
+      "result": "passed; 16 tests, 0 failures; live ledger status remains incomplete with open jobs",
+      "log": "compiled-capabilities/coordination/acceptance/scheduler/logs/E-FIX-SOURCE-AUDIT/unittest.log"
+    }
+  ],
+  "source_sha256": {
+    "compiled-capabilities/coordination/acceptance/provenance/audit.mjs": "b4050435426adb7dc71490224046c45ddaf1d1bf503db4d038199bfffb32892b",
+    "compiled-capabilities/coordination/acceptance/provenance/audit.test.mjs": "c004a92acccdd8f3ff2feff5aa79ef7928c7eb45fa5dacf5add86bb8ba58fe52",
+    "compiled-capabilities/coordination/acceptance/scheduler/audit.py": "ae67e0017167a6bc05cc3dd0f6cd66493952d3ea9dbfd40cedd314e5de41906d",
+    "compiled-capabilities/coordination/acceptance/scheduler/test_audit.py": "83e7d4a1ee95726747905604bde8288440a2e98edfbe20d552aed93974107593",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/audit-syntax.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/test-syntax.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/node-version.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/node-test.log": "dce776d633fdbdf6051a073427bad3dde1c65ccab7a153c835addb395f74af7d",
+    "compiled-capabilities/coordination/acceptance/scheduler/logs/E-FIX-SOURCE-AUDIT/unittest.log": "7e695da6202c0c03e8167320b6579af8cfb805f2c97cc2ec1cfe3b9af35db1f6",
+    "compiled-capabilities/coordination/reports/E-FIX-SOURCE-AUDIT.md": "f11d35dcf20c8bffbee28ab58c2534ddc3fc825cdf6066f397b626c8b0dca31a",
+    "compiled-capabilities/coordination/acceptance/provenance/fixtures/e-build-031c-161-pins.json": "ceb82b7e2bcbb5f42a4620c3a5076fbe2803aa637b20d622e01096b1de5c1df7",
+    "compiled-capabilities/coordination/acceptance/provenance/fixtures/react-map.gen.mjs": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54"
+  },
+  "log_sha256": {
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/audit-syntax.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/test-syntax.log": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/node-version.log": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+    "compiled-capabilities/coordination/acceptance/provenance/logs/E-FIX-SOURCE-AUDIT/node-test.log": "dce776d633fdbdf6051a073427bad3dde1c65ccab7a153c835addb395f74af7d",
+    "compiled-capabilities/coordination/acceptance/scheduler/logs/E-FIX-SOURCE-AUDIT/unittest.log": "7e695da6202c0c03e8167320b6579af8cfb805f2c97cc2ec1cfe3b9af35db1f6"
+  },
+  "limitations": [
+    "The end-to-end source audit used the actual historical 161-pin E-BUILD receipt, whose status is failed; finalAcceptance remains false by design.",
+    "Follow-up local/remote commits in the integration regression are temporary Git commits stored outside the shared repository object store and removed after the test; they validate parent/tree/ancestry handling without changing shared refs or Git state.",
+    "The root go.sum candidate is absent in the pinned source commit and is skipped only under the runner-matching ENOENT rule; all other listed files are required.",
+    "Scheduler live evidence remains incomplete while recorded work is open; this repair does not claim completion of the overall capability milestone."
+  ],
+  "publication": "No state/native/shared Git changes, commit, merge, or deployment."
+}

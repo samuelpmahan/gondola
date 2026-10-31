@@ -1,0 +1,94 @@
+{
+  "schema": "gobi.compiled-capabilities-counter-ci-evidence/v1",
+  "recordedAt": "2026-10-31T10:40:39Z",
+  "source": {
+    "commit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "tree": "cc3a129b4372d00d5168135aa2e5687dfbf6788f",
+    "parent": "a2e1164d68abaaa7d028bdaf6a20bea842a131ae"
+  },
+  "workflowCatalog": {
+    "currentSourceRuns": 30,
+    "pushRuns": 15,
+    "pullRequestRuns": 15,
+    "catalogOwner": "N4"
+  },
+  "job": {
+    "workflow": "Counter interaction parity",
+    "runId": 41193504118,
+    "runNumber": 47,
+    "event": "push",
+    "jobId": 124514912770,
+    "jobName": "interaction",
+    "status": "completed",
+    "conclusion": "success",
+    "headCommit": "60b5aeff3172837ad7831c2b78b210454a3d81a2",
+    "url": "https://github.com/samuelpmahan/gondola/actions/runs/41193504118",
+    "jobStepsAllSuccessful": true,
+    "steps": [
+      "Set up job",
+      "Run actions/checkout@v4",
+      "Run actions/setup-go@v5",
+      "Run actions/setup-node@v4",
+      "Run the signed Milestone 0 check",
+      "Install interaction dependencies",
+      "Install Chromium for Playwright",
+      "Run Go WebAssembly and React interaction parity",
+      "Upload interaction artifacts"
+    ],
+    "rawLog": "compiled-capabilities/ci/2026-10-31/source-60b5aef/go/logs/counter-push-run-41193504118-job-124514912770.log",
+    "rawLogSha256": "3a2679ee9fad51952babd8c9eab8a7c91557a6871538e4abad5103fe171a075f"
+  },
+  "versions": {
+    "go": "go1.24.13 linux/amd64",
+    "node": "v22.23.4",
+    "npm": "10.9.9"
+  },
+  "checks": {
+    "staticGo": {
+      "command": "go vet ./...",
+      "result": "passed by set -euo pipefail progression through go test, static comparison, receipt, checksum, interaction parity, and successful job conclusion"
+    },
+    "goTests": {
+      "command": "go test ./...",
+      "result": "passed; log includes compilercontract and gobi package successes"
+    },
+    "compatibilityRules": {
+      "count": 59,
+      "sourcePath": "gobi/rules_test.go",
+      "sourceSha256": "dd1b8445ef29a3f2e507acca7a4e64c27fe8d4bb7ce446cc22a54e373b11d57a",
+      "countMethod": "static count of 59 table literals; CI log confirms test package succeeded but does not print the row count"
+    },
+    "staticComparison": {
+      "command": "go run ./cmd/gobi check html --cases 5000 --seed 20261030 --expect EXPECTED.json",
+      "cases": 5000,
+      "seed": 20261030,
+      "result": "same over 5000 inputs; receipt matches"
+    },
+    "m0": {
+      "command": "sha256sum -c --quiet SHA256SUMS",
+      "manifestRows": 24,
+      "trackedRows": 23,
+      "generatedRows": 1,
+      "manifestSha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "expectedJsonSha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "result": "receipt matches; SHA256SUMS ok"
+    },
+    "counterInteraction": {
+      "matched": true,
+      "scripts": 107,
+      "initialAndActionTicks": 4473,
+      "seed": 20261030,
+      "nativeComparator": "matched"
+    }
+  },
+  "warnings": [
+    "setup-go cache restore warning: no root go.sum matched the workflow cache pattern",
+    "Node.js 20 deprecation warning for GitHub Actions checkout/setup/upload actions, running on Node.js 24",
+    "non-fatal Node dependency deprecation notices for punycode and url.parse"
+  ],
+  "limitations": [
+    "The PR counter job was still queued when this record was captured; its fresh log must be reviewed after completion.",
+    "The current-source CI catalog and capability workflow terminal status are still pending N4/root updates.",
+    "This inherited counter/M0 push job is not a substitute for the current-source full capability artifact or root full-run acceptance gates."
+  ]
+}
