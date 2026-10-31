@@ -67,6 +67,7 @@ const sourceFiles = [
   "compiled-frontend/package.json",
   "compiled-frontend/package-lock.json",
   "compiled-capabilities/archive-helper.mjs",
+  "compiled-capabilities/archive-helper.test.mjs",
   "compiled-children/browser-version.mjs",
   "compiled-children/conformance/browser-version.test.mjs",
   "run.sh",
@@ -390,7 +391,7 @@ async function runNativeTrace() {
 }
 
 async function discoverTests() {
-  const roots = [join(here, "abi"), join(here, "runtime"), join(here, "conformance"), join(here, "oracle")];
+  const roots = [join(root, "compiled-capabilities"), join(here, "abi"), join(here, "runtime"), join(here, "conformance"), join(here, "oracle")];
   const tests = [];
   for (const directory of roots) {
     let files = [];

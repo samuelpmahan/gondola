@@ -105,6 +105,13 @@ async function validateModuleSnapshot(snapshot) {
   const listed = descriptor.artifacts.map((item) => item.path);
   if (!sameJSON(supplied, listed)) throw new TypeError('artifact byte map must exactly match descriptor inventory');
 
+  const appIRPath = inventory.directory + '/app-ir.json';
+  const appIRBytes = artifactBytes.get(appIRPath);
+  const appIRText = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(appIRBytes);
+  assertNoDuplicateJSONKeys(appIRText);
+  const fileAppIR = cloneClosed(JSON.parse(appIRText), '$module.app-ir.json');
+  if (!sameJSON(fileAppIR, appIR)) throw new TypeError('app-ir.json bytes do not match the supplied AppIR');
+
   const actualArtifacts = [];
   for (const record of descriptor.artifacts) {
     const bytes = artifactBytes.get(record.path);
@@ -114,13 +121,6 @@ async function validateModuleSnapshot(snapshot) {
     actualArtifacts.push({ path: record.path, bytes: bytes.byteLength, sha256 });
   }
   if (await digestCanonical(actualArtifacts) !== descriptor.artifactSHA256) throw new TypeError('artifact inventory digest mismatch');
-
-  const appIRPath = inventory.directory + '/app-ir.json';
-  const appIRBytes = artifactBytes.get(appIRPath);
-  const appIRText = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(appIRBytes);
-  assertNoDuplicateJSONKeys(appIRText);
-  const fileAppIR = JSON.parse(appIRText);
-  if (!sameJSON(fileAppIR, appIR)) throw new TypeError('app-ir.json bytes do not match the supplied AppIR');
 
   const { abiSHA256, ...body } = descriptor;
   if (await digestCanonical(body) !== abiSHA256) throw new TypeError('ABI digest mismatch');
@@ -397,6 +397,7 @@ function copyArtifactBytes(input) {
   const result = new Map();
   for (const [name, bytes] of entries) {
     if (typeof name !== 'string' || result.has(name) || !(bytes instanceof Uint8Array)) throw new TypeError('artifact bytes must map unique string paths to Uint8Array values');
+    assertWellFormedUnicode(name, '$module.artifactBytes path');
     result.set(name, new Uint8Array(bytes));
   }
   return result;
@@ -417,7 +418,11 @@ function snapshotRecord(record, keys, label) {
 }
 
 function cloneClosed(value, label) {
-  if (value === null || typeof value === 'boolean' || typeof value === 'string') return value;
+  if (value === null || typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    assertWellFormedUnicode(value, label);
+    return value;
+  }
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new TypeError(`${label} contains a non-finite number`);
     return value;
@@ -443,6 +448,7 @@ function cloneClosed(value, label) {
     if (ownKeys.some((key) => typeof key !== 'string')) throw new TypeError(`${label} cannot contain symbol keys`);
     const copied = Object.create(null);
     for (const key of ownKeys) {
+      assertWellFormedUnicode(key, `${label} property name`);
       const descriptor = Object.getOwnPropertyDescriptor(value, key);
       if (!descriptor.enumerable || !Object.hasOwn(descriptor, 'value')) throw new TypeError(`${label}.${key} must be an enumerable data property`);
       copied[key] = cloneClosed(descriptor.value, `${label}.${key}`);
@@ -499,7 +505,10 @@ async function digestCanonical(value) {
 
 function canonicalJSON(value) {
   if (value === null || typeof value === 'boolean') return JSON.stringify(value);
-  if (typeof value === 'string') return goJSONString(value);
+  if (typeof value === 'string') {
+    assertWellFormedUnicode(value, 'canonical JSON string');
+    return goJSONString(value);
+  }
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) throw new TypeError('canonical JSON cannot contain non-finite numbers');
     return JSON.stringify(value);
@@ -507,14 +516,29 @@ function canonicalJSON(value) {
   if (Array.isArray(value)) return `[${value.map((item) => canonicalJSON(item)).join(',')}]`;
   if (typeof value === 'object') {
     const keys = Object.keys(value).sort(compareGoStrings);
+    for (const key of keys) assertWellFormedUnicode(key, 'canonical JSON property name');
     return `{${keys.map((key) => `${goJSONString(key)}:${canonicalJSON(value[key])}`).join(',')}}`;
   }
   throw new TypeError(`cannot canonicalize ${typeof value}`);
 }
 
 function goJSONString(value) {
+  assertWellFormedUnicode(value, 'JSON string');
   return JSON.stringify(value).replace(/[\u003c\u003e&\u2028\u2029]/g, (character) =>
     `\\u${character.codePointAt(0).toString(16).padStart(4, '0')}`);
+}
+
+function assertWellFormedUnicode(value, label) {
+  for (let index = 0; index < value.length; index += 1) {
+    const codeUnit = value.charCodeAt(index);
+    if (codeUnit >= 0xd800 && codeUnit <= 0xdbff) {
+      const low = value.charCodeAt(index + 1);
+      if (!(low >= 0xdc00 && low <= 0xdfff)) throw new TypeError(`${label} must contain well-formed Unicode`);
+      index += 1;
+    } else if (codeUnit >= 0xdc00 && codeUnit <= 0xdfff) {
+      throw new TypeError(`${label} must contain well-formed Unicode`);
+    }
+  }
 }
 
 // Go sorts strings by their UTF-8 bytes; JS's default sort compares UTF-16
@@ -578,7 +602,11 @@ function assertNoDuplicateJSONKeys(text) {
     index++;
     while (index < text.length) {
       const char = text[index++];
-      if (char === '"') return JSON.parse(text.slice(start, index));
+      if (char === '"') {
+        const value = JSON.parse(text.slice(start, index));
+        assertWellFormedUnicode(value, 'JSON string');
+        return value;
+      }
       if (char === '\\') index++;
       if (index > text.length) throw new TypeError('truncated JSON string');
     }

@@ -137,6 +137,139 @@ test('canonical descriptor digests match Go-generated path escaping vectors', as
   }
 });
 
+test('module metadata rejects unpaired UTF-16 values and keys before hashing', async () => {
+  const invalidModules = [];
+  const invalidPairs = [];
+  for (const surrogate of ['\ud800', '\udfff']) {
+    const descriptorValue = (await makeValidTestPair()).parent;
+    descriptorValue.descriptor.componentID += surrogate;
+    invalidModules.push(descriptorValue);
+
+    const descriptorKey = (await makeValidTestPair()).parent;
+    descriptorKey.descriptor[`extra${surrogate}`] = true;
+    invalidModules.push(descriptorKey);
+
+    const sidecarValue = (await makeValidTestPair()).parent;
+    const sidecarValueObject = JSON.parse(new TextDecoder().decode(sidecarValue.descriptorBytes));
+    sidecarValueObject.packagePath += surrogate;
+    sidecarValue.descriptorBytes = new TextEncoder().encode(JSON.stringify(sidecarValueObject));
+    invalidModules.push(sidecarValue);
+
+    const sidecarKey = (await makeValidTestPair()).parent;
+    const sidecarKeyObject = JSON.parse(new TextDecoder().decode(sidecarKey.descriptorBytes));
+    sidecarKeyObject[`extra${surrogate}`] = true;
+    sidecarKey.descriptorBytes = new TextEncoder().encode(JSON.stringify(sidecarKeyObject));
+    invalidModules.push(sidecarKey);
+
+    const appIRValue = (await makeValidTestPair()).parent;
+    appIRValue.appIR.packagePath += surrogate;
+    invalidModules.push(appIRValue);
+
+    const appIRKey = (await makeValidTestPair()).parent;
+    appIRKey.appIR[`extra${surrogate}`] = true;
+    invalidModules.push(appIRKey);
+
+    const artifactPathKey = (await makeValidTestPair()).parent;
+    const prefix = 'apps/moduleparent/';
+    artifactPathKey.artifactBytes = new Map([...artifactPathKey.artifactBytes].map(([path, bytes]) => [
+      path.startsWith(prefix) ? `apps/module${surrogate}parent/${path.slice(prefix.length)}` : path,
+      bytes,
+    ]));
+    invalidModules.push(artifactPathKey);
+
+    const pairWitness = await makeValidTestPair();
+    const pairPrefix = 'apps/moduleparent/';
+    const appDir = `module${surrogate}parent`;
+    pairWitness.parent.artifactBytes = new Map([...pairWitness.parent.artifactBytes].map(([path, bytes]) => [
+      path.startsWith(pairPrefix) ? `apps/${appDir}/${path.slice(pairPrefix.length)}` : path,
+      bytes,
+    ]));
+    for (const artifact of pairWitness.parent.descriptor.artifacts) {
+      artifact.path = `apps/${appDir}/${artifact.path.split('/').at(-1)}`;
+    }
+    await rehashTestDescriptor(pairWitness.parent.descriptor);
+    syncSidecar(pairWitness.parent);
+    invalidPairs.push(pairWitness);
+  }
+
+  const cryptoDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'crypto');
+  const realCrypto = globalThis.crypto;
+  let digestCalls = 0;
+  try {
+    Object.defineProperty(globalThis, 'crypto', {
+      configurable: true,
+      value: { subtle: { digest: async (...args) => {
+        digestCalls += 1;
+        return realCrypto.subtle.digest(...args);
+      } } },
+    });
+    for (const [index, module] of invalidModules.entries()) {
+      await assert.rejects(validateModuleABI(module), /well-formed Unicode/, `case ${index}`);
+    }
+    for (const [index, pair] of invalidPairs.entries()) {
+      await assert.rejects(validateModulePair(pair), /well-formed Unicode/, `pair case ${index}`);
+    }
+    assert.equal(digestCalls, 0, 'unpaired metadata must reject before WebCrypto hashing');
+  } finally {
+    if (cryptoDescriptor) Object.defineProperty(globalThis, 'crypto', cryptoDescriptor);
+    else delete globalThis.crypto;
+  }
+});
+
+test('app-ir.json rejects unpaired UTF-16 before artifact hashing or comparison', async () => {
+  for (const surrogate of ['\ud800', '\udfff']) {
+    const module = (await makeValidTestPair()).parent;
+    const path = 'apps/moduleparent/app-ir.json';
+    const appIRBytes = new TextEncoder().encode(JSON.stringify({
+      ...module.appIR,
+      packagePath: `${module.appIR.packagePath}${surrogate}`,
+    }));
+    module.artifactBytes.set(path, appIRBytes);
+    const artifact = module.descriptor.artifacts.find((record) => record.path === path);
+    artifact.bytes = appIRBytes.byteLength;
+    artifact.sha256 = await sha256Hex(appIRBytes);
+    await rehashTestDescriptor(module.descriptor);
+    syncSidecar(module);
+
+    const cryptoDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'crypto');
+    const realCrypto = globalThis.crypto;
+    let digestCalls = 0;
+    try {
+      Object.defineProperty(globalThis, 'crypto', {
+        configurable: true,
+        value: { subtle: { digest: async (...args) => {
+          digestCalls += 1;
+          return realCrypto.subtle.digest(...args);
+        } } },
+      });
+      await assert.rejects(validateModuleABI(module), /well-formed Unicode/);
+      assert.equal(digestCalls, 0, 'malformed app-ir.json must reject before artifact hashing');
+    } finally {
+      if (cryptoDescriptor) Object.defineProperty(globalThis, 'crypto', cryptoDescriptor);
+      else delete globalThis.crypto;
+    }
+  }
+});
+
+test('well-formed astral Unicode remains admitted in artifact metadata', async () => {
+  const pair = await makeValidTestPair();
+  const appDir = 'module🚀parent';
+  const prefix = 'apps/moduleparent/';
+  pair.parent.artifactBytes = new Map([...pair.parent.artifactBytes].map(([path, bytes]) => [
+    path.startsWith(prefix) ? `apps/${appDir}/${path.slice(prefix.length)}` : path,
+    bytes,
+  ]));
+  for (const artifact of pair.parent.descriptor.artifacts) {
+    artifact.path = `apps/${appDir}/${artifact.path.split('/').at(-1)}`;
+  }
+  await rehashTestDescriptor(pair.parent.descriptor);
+  syncSidecar(pair.parent);
+
+  const admitted = await validateModulePair(pair);
+  assert.equal(admitted.parent.abiSHA256, pair.parent.descriptor.abiSHA256);
+  assert.equal(admitted.parent.artifacts[0].path, `apps/${appDir}/app-ir.json`);
+});
+
 test('rehashed role, nominal wire, and field-order mismatches do not match AppIR', async () => {
   const changedSignature = await makeValidTestPair();
   const inputRole = changedSignature.child.descriptor.roles.find((role) => role.name === 'Input');
