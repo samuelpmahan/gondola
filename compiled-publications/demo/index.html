@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Go-owned typed inputs and publications</title>
+    <link rel="stylesheet" href="./demo.css">
+    <script type="module" src="./demo.bundle.mjs"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">Gobi · compiled Go</p>
+        <h1>Typed inputs and keyed publications</h1>
+        <p class="intro">Go owns the parent input, child state, captured values, and publication queue. The browser renders Go’s view and dispatches its messages.</p>
+        <p id="status" class="status" data-state="starting" role="status" aria-live="polite">Loading the compiled Go module…</p>
+      </header>
+
+      <section class="host-panel" aria-labelledby="host-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Shared runtime</p>
+            <h2 id="host-title">Renderer and host</h2>
+          </div>
+          <p id="active-renderer" class="renderer-badge">Renderer: loading</p>
+        </div>
+        <div class="toolbar" aria-label="Renderer controls">
+          <button type="button" data-renderer="dom" aria-pressed="true">DOM renderer</button>
+          <button type="button" data-renderer="react" aria-pressed="false">React renderer</button>
+          <button type="button" id="reject-incompatible">Try incompatible renderer</button>
+        </div>
+        <p id="swap-status" class="subtle" data-state="idle">Go view actions run through the compiled runtime.</p>
+        <div class="capability-grid">
+          <div><h3>AppIR capabilities</h3><ul id="compiled-requirements"></ul></div>
+          <div><h3>Host effects</h3><ul id="host-support"></ul></div>
+          <div><h3>Renderer view</h3><ul id="renderer-support"></ul></div>
+        </div>
+        <div class="host-replies" aria-label="Manual request replies">
+          <p id="pending-count" class="subtle">No pending replies</p>
+          <div id="pending-list" class="reply-list"></div>
+          <details>
+            <summary>Cancelled request probes</summary>
+            <div id="cancelled-list" class="reply-list"></div>
+          </details>
+          <p id="host-action-status" class="subtle" data-state="idle">No host reply attempted.</p>
+        </div>
+      </section>
+
+      <section class="view-panel" aria-labelledby="view-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Go-generated controls</p>
+            <h2 id="view-title">Parent and children</h2>
+          </div>
+        </div>
+        <div id="go-view" class="go-view" aria-live="polite"></div>
+      </section>
+
+      <section class="diagnostics" aria-label="Read-only runtime diagnostics">
+        <details open>
+          <summary>Go state and view snapshot</summary>
+          <pre id="state-snapshot">Waiting for the compiled runtime…</pre>
+        </details>
+        <details>
+          <summary>Effect host records</summary>
+          <pre id="host-events">No host events yet.</pre>
+        </details>
+      </section>
+    </main>
+  </body>
+</html>
