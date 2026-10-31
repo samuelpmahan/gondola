@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { access, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
-import { dirname, extname, relative, resolve } from "node:path";
+import { dirname, extname, isAbsolute, relative, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { pathToFileURL, fileURLToPath } from "node:url";
 
@@ -13,7 +13,7 @@ const DEFAULT_FIXTURE = resolve(ROOT, "fixtures/compiled/lifecycle/scenario.json
 const DEFAULT_CONTRACT = resolve(ROOT, "compiled-lifecycle/conformance/lifecycle-contract.json");
 const DEFAULT_SCHEDULE = resolve(ROOT, "compiled-lifecycle/conformance/swap-schedule.json");
 const DEFAULT_BROWSER_ADAPTER = resolve(ROOT, "compiled-lifecycle/conformance/browser.mjs");
-const DEFAULT_NATIVE_GO = process.env.GOBI_GO_BIN ?? "/tmp/gondola-go/bin/go";
+const DEFAULT_NATIVE_GO = process.env.GOBI_GO_BIN ?? "go";
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const serialize = (value) => `${JSON.stringify(value, null, 2)}\n`;
 
@@ -29,16 +29,25 @@ function parseArgs(argv) {
   const required = ["--react-app-ir", "--react-compiled", "--react-helpers", "--dom-app-ir", "--dom-compiled",
     "--dom-helpers", "--react-manifest", "--dom-manifest", "--output"];
   for (const key of required) if (!values.has(key)) throw new Error(`missing ${key} <path>`);
-  const args = Object.fromEntries([...values].map(([key, value]) => [
-    key.slice(2).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()), resolve(value),
-  ]));
+  const args = Object.fromEntries([...values].map(([key, value]) => {
+    const name = key.slice(2).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    return [name, name === "nativeGo" ? resolveNativeExecutable(value) : resolve(value)];
+  }));
   args.fixture ??= DEFAULT_FIXTURE;
   args.contract ??= DEFAULT_CONTRACT;
   args.schedule ??= DEFAULT_SCHEDULE;
   args.browserAdapter ??= DEFAULT_BROWSER_ADAPTER;
-  args.nativeGo ??= DEFAULT_NATIVE_GO;
+  args.nativeGo = resolveNativeExecutable(args.nativeGo ?? DEFAULT_NATIVE_GO);
   if (args.chromium) args.chromium = resolve(args.chromium);
   return args;
+}
+
+function resolveNativeExecutable(value) {
+  if (isAbsolute(value)) return resolve(value);
+  // A bare command name must stay available to PATH lookup by spawnSync.
+  // Explicit paths are resolved relative to the conformance runner's cwd.
+  if (value.includes("/") || value.includes("\\")) return resolve(value);
+  return value;
 }
 
 async function readJSON(path) {
@@ -91,6 +100,8 @@ function runNative(goPath, fixturePath) {
   try { return { value: JSON.parse(result.stdout), command, stdout: result.stdout, stderr: result.stderr }; }
   catch (cause) { throw new Error(`native Go replay did not return one JSON value: ${cause.message}`); }
 }
+
+export { parseArgs, runNative };
 
 function manifestPaths(manifest, manifestPath, backend, inputPaths) {
   if (manifest?.schema !== "gobi.build-manifest/v1" || !Array.isArray(manifest.apps) || manifest.apps.length !== 1) {
