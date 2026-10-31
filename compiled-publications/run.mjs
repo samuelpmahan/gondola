@@ -13,6 +13,7 @@ import {
   createExclusiveAttemptDirectory,
   writeImmutableSnapshot,
 } from "../compiled-capabilities/archive-helper.mjs";
+import { isChromiumVersionOutput } from "../compiled-children/browser-version.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -85,6 +86,8 @@ const sourceFiles = [
   "compiled-publications/CONTRACT.md", "compiled-publications/PLAN.md",
   "compiled-publications/README.md", "compiled-publications/RESULTS.md",
   "compiled-publications/.gitignore", "compiled-publications/run.mjs",
+  "compiled-children/browser-version.mjs",
+  "compiled-children/conformance/browser-version.test.mjs",
   "compiled-capabilities/archive-helper.mjs",
   "compiled-frontend/conformance/browser.mjs",
   "compiled-frontend/conformance/no-wasm.mjs",
@@ -356,7 +359,7 @@ try {
     if (!nodeVersion.startsWith("v22.")) throw new Error(`Node 22 required; got ${nodeVersion}`);
     if (!rootGo.includes("go1.24.")) throw new Error(`root Go 1.24 required; got ${rootGo.trim()}`);
     if (!compilerGo.includes("go1.27.3")) throw new Error(`compiler Go 1.27.3 required; got ${compilerGo.trim()}`);
-    if (!/Chromium/i.test(chromiumVersion)) throw new Error(`Chromium version output is invalid: ${chromiumVersion.trim()}`);
+    if (!isChromiumVersionOutput(chromiumVersion.trim())) throw new Error(`Chromium version output is invalid: ${chromiumVersion.trim()}`);
     const versions = {
       node: nodeVersion,
       npm: npmVersion.trim(),
@@ -379,6 +382,7 @@ try {
 
   await stage("focused-node-and-go-tests", async () => {
     const nodeTests = [
+      "compiled-children/conformance/browser-version.test.mjs",
       "compiled-publications/runtime/runtime.test.mjs",
       "compiled-publications/oracle/oracle.test.mjs",
       "compiled-publications/conformance/check.test.mjs",

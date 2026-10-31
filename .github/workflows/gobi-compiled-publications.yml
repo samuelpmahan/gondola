@@ -32,19 +32,19 @@ jobs:
       - name: Install Playwright Chromium
         run: interaction/node_modules/.bin/playwright install --with-deps chromium
 
-      - name: Run the full PR16 inherited chain
-        env:
-          GONDOLA_SKIP_NPM_CI: "1"
-          GONDOLA_SKIP_BROWSER_INSTALL: "1"
-          GOFLAGS: -buildvcs=false
-        run: bash run-compiled-children.sh
-
       - name: Run typed input and keyed publication profile
         env:
           GONDOLA_SKIP_NPM_CI: "1"
           GONDOLA_SKIP_BROWSER_INSTALL: "1"
           GOFLAGS: -buildvcs=false
         run: bash run-compiled-publications.sh
+
+      - name: Run the full PR16 inherited chain
+        env:
+          GONDOLA_SKIP_NPM_CI: "1"
+          GONDOLA_SKIP_BROWSER_INSTALL: "1"
+          GOFLAGS: -buildvcs=false
+        run: bash run-compiled-children.sh
 
       - name: Preserve typed publication attempt evidence
         if: always()
