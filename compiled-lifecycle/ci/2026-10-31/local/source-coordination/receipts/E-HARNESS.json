@@ -1,0 +1,122 @@
+{
+  "job_id": "E-HARNESS",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Implemented a deterministic lifecycle matrix runner and independent checker. The frozen 26-event Go lifecycle matched across native Go CLI, direct compiled-module replay, React, standalone DOM, and alternating swaps. The final source-pinned run passed all 8 mutation controls; 16 renderer swaps had callbacks fenced (32 fences), while the fixed pending-request swap preserved state/effects/root lifecycle but had no old user-action callback to probe.",
+  "source_scope": [
+    "compiled-lifecycle/conformance/run.mjs",
+    "compiled-lifecycle/conformance/direct.mjs",
+    "compiled-lifecycle/conformance/check.mjs",
+    "compiled-lifecycle/conformance/check.test.mjs",
+    "compiled-lifecycle/conformance/browser.mjs",
+    "compiled-lifecycle/conformance/browser-entry.mjs",
+    "compiled-lifecycle/conformance/lifecycle-contract.json",
+    "compiled-lifecycle/conformance/swap-schedule.json",
+    "compiled-lifecycle/conformance/evidence/attempt-00/",
+    "compiled-lifecycle/conformance/evidence/attempt-01/",
+    "compiled-lifecycle/conformance/evidence/attempt-02/",
+    "compiled-lifecycle/conformance/evidence/attempt-03/",
+    "compiled-lifecycle/conformance/evidence/attempt-04/",
+    "compiled-lifecycle/conformance/evidence/attempt-05/",
+    "compiled-lifecycle/coordination/reports/E-HARNESS.md",
+    "compiled-lifecycle/coordination/receipts/E-HARNESS.json"
+  ],
+  "evidence": {
+    "report_sha256": "5780154ee97181b20ccdc15d64e248e02a9a4fd36b963c8276917ea7279e30f5",
+    "final_attempt": "compiled-lifecycle/conformance/evidence/attempt-05/lifecycle",
+    "run_status": "matched",
+    "check_status": "matched",
+    "counts": {
+      "fixture_events": 26,
+      "go_ticks": 26,
+      "physical_clicks": 16,
+      "renderer_swaps": 17,
+      "callback_fence_eligible_swaps": 16,
+      "callback_fences": 32,
+      "requests": 7,
+      "cancellations": 3,
+      "retained_detached_button_probes_across_profiles": 18,
+      "mutation_controls_detected": 8,
+      "browser_profiles": ["react", "dom", "swap"]
+    },
+    "cancellation_order": [
+      "grandchild:g1:r3",
+      "child:g1:r2",
+      "parent:g1:r1"
+    ],
+    "toolchain": {
+      "node": "v22.23.4",
+      "go": "go version go1.24.0 linux/amd64",
+      "chromium": "153.0.8010.0",
+      "playwright": "1.64.1"
+    },
+    "stability": {
+      "source_pin_files": 178,
+      "source_stable_through_check": true,
+      "build_output_pin_files": 8,
+      "build_outputs_stable_through_check": true,
+      "no_wasm_api_attempts": 0,
+      "no_wasm_requests": 0
+    },
+    "artifact_sha256": {
+      "compiled-lifecycle/conformance/evidence/attempt-05/lifecycle.native.json": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+      "compiled-lifecycle/conformance/evidence/attempt-05/lifecycle.direct.json": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71",
+      "compiled-lifecycle/conformance/evidence/attempt-05/lifecycle.browser.capture.json": "78886a28fc0ac6e519a21b4765167aabea6d394bf539e05b725bb2a1aabe4763",
+      "compiled-lifecycle/conformance/evidence/attempt-05/lifecycle.check.json": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a"
+    },
+    "source_sha256": {
+      "compiled-lifecycle/conformance/run.mjs": "48767a3b4e6902493ab068331748229aac7095ef82d8744a7c0be376143e7c8e",
+      "compiled-lifecycle/conformance/check.mjs": "0a714448607d40f08719925bf3822b35bd41b58fc66a124d8b7f5f491859c8e5",
+      "compiled-lifecycle/conformance/check.test.mjs": "270d7fae54be739c9ec6e98fd9bf54aef7b03352b80896afb3194c8f9a16aa00",
+      "compiled-lifecycle/conformance/direct.mjs": "8e10939fd30687822590ab0b31efac5203bd6b5f3006aa7c37908475fcf9608d",
+      "compiled-lifecycle/conformance/browser.mjs": "ea9698851cf38ffeb1f1d03a50f369db0508debae39aa6a7e5645fbe804d2257",
+      "compiled-lifecycle/conformance/browser-entry.mjs": "afa349b57624b690700cdc751af1a0b19c2479302fbd511816a31a6f680d41f3",
+      "compiled-lifecycle/runtime/runtime.mjs": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0"
+    },
+    "checks": [
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/run.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/check.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/direct.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/browser.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/conformance/browser-entry.mjs",
+        "exit_code": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/conformance/check.test.mjs",
+        "passed": 3,
+        "failed": 0,
+        "exit_code": 0
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/conformance/run.mjs --react-app-ir compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/app-ir.json --react-compiled compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --react-helpers compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/encoder.mjs --dom-app-ir compiled-lifecycle/builds/feasibility/final/dom/output/apps/lifecycle-7e6575d90707/app-ir.json --dom-compiled compiled-lifecycle/builds/feasibility/final/dom/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs --dom-helpers compiled-lifecycle/builds/feasibility/final/dom/output/apps/lifecycle-7e6575d90707/encoder.mjs --react-manifest compiled-lifecycle/builds/feasibility/final/react/output/buildmanifest.json --dom-manifest compiled-lifecycle/builds/feasibility/final/dom/output/buildmanifest.json --native-go /tmp/gondola-go/bin/go --chromium /tmp/chromium --output compiled-lifecycle/conformance/evidence/attempt-05/lifecycle",
+        "exit_code": 0,
+        "status": "matched"
+      }
+    ],
+    "rejected_attempts_preserved": [
+      {
+        "attempt": "attempt-00",
+        "cause": "N3 direct trace helper omission and frozen probe action validation mismatch"
+      },
+      {
+        "attempt": "attempt-01",
+        "cause": "harness queried retired DOM snapshot after renderer unmount"
+      },
+      {
+        "attempt": "attempt-02",
+        "cause": "fixed renderer-swap retired a fresh renderer with no prior user callback; schedule claim was narrowed"
+      },
+      {
+        "attempt": "attempt-03",
+        "cause": "runtime pending expectation omitted sequence and typed effect fields"
+      },
+      {
+        "attempt": "attempt-04",
+        "cause": "runtime source changed during evidence capture; source-pin gate rejected the run"
+      }
+    ]
+  },
+  "limits": [
+    "The fixed event-8 swap had no old user-action callback to replay; root/state/pending-effect preservation and DOM root retirement passed, but callback-fence coverage is limited to the other 16 swaps.",
+    "The frozen renderer profile is deterministic and finite; it does not claim randomized lifecycle coverage or production transport behavior.",
+    "N4's frozen oracle test suite has one stale expected-effects assertion. The N3 harness tests pass, and the full browser capture passes the literal checker; no N4-owned source was changed."
+  ]
+}

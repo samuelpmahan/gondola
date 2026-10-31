@@ -1,0 +1,45 @@
+{
+  "job_id": "E-RUNTIME",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Added a lifecycle effect driver and mount wrapper around the existing compiled host, plus strict-by-default effectPolicy and neutral cancelEffect APIs with correlation and queue cleanup. Go uses the compiler-supported fixture.request kind for lookup and a distinct lifecycle.cancel intent. Focused shared-host and lifecycle driver suites pass 29/29 and 3/3 on Node v22.23.4.",
+  "evidence": {
+    "report_sha256": "815da2f7a05b26444e78d5cbcd20aed6742880978886d9620e3e21b22350cd7d",
+    "focused_tests": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test frontend/runtime/runtime.test.mjs",
+        "working_directory": "gondola/compiled-frontend",
+        "toolchain": "Node v22.23.4",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test runtime/runtime.test.mjs",
+        "working_directory": "gondola/compiled-lifecycle",
+        "toolchain": "Node v22.23.4",
+        "passed": 3,
+        "failed": 0,
+        "exit_code": 0,
+        "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+      }
+    ],
+    "sha256": {
+      "compiled-frontend/frontend/runtime/runtime.mjs": "4856f0a425c5893928c7708c21c39143e8a86afac115c6a979d1ab068f55a995",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+      "compiled-lifecycle/runtime/runtime.mjs": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "91766c382f4147150804781c3ce9dd554eb2ae0d1c38ac67e5e62773ef47781e"
+    },
+    "coverage": [
+      "The generic host remains strict when no effectPolicy is supplied; custom policy is synchronous and receives a frozen copy of validated effect fields.",
+      "Compiler-supported fixture.request/lookup and explicit lifecycle.cancel/cancel effects are closed to the frozen name/reply/token ABI; the effect.request-reply capability gate remains enabled.",
+      "Go cancellation removes the pending runtime correlation and any queued completion without invoking Update.",
+      "The deterministic driver preserves request/cancel order, routes normal replies, records forced retired callback rejection, and releases outstanding callback closures at unmount."
+    ]
+  },
+  "limits": [
+    "No Go emission or compiler build was run in the N2 runtime lane because a Go executable was unavailable there.",
+    "Mounted React/DOM lifecycle integration and browser oracle remain with the harness/browser lanes."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "job_id": "XR-LIVE-REPLY",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independently re-ran E-LIVE-REPLY's native Go and actual compiled GoScript host probes; both stdout captures match the frozen raw outputs byte-for-byte. Full encoded compiled State and View records are equal across each generation-1 stale direct completion tick. A reviewer-only instrumented host run also serialized exact before/after State, View, driver correlations, and core correlations around all three stale messages and all three force-delivered retired callbacks; every stale path preserved all four live generation-2 Parent/Child/Grandchild plus Sibling requests. Retired callbacks were rejected without ticks; fresh generation-2 and sibling replies succeeded. Source, generated module, and E-BUILD pins match. This is a headless finite-fixture review and makes no DOM/browser claim.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/XR-LIVE-REPLY.md",
+    "report_sha256": "583c8afc3923da837eb36ad0467f2e993d37ee3fcb9ad92f0d2e1a2e2b499008",
+    "author_packet": {
+      "job_id": "E-LIVE-REPLY",
+      "worker": "N2",
+      "report_sha256": "37b89d47871ee674963ebe986d5ad89e6541ff75db01918312a54dd3a66c77b4",
+      "receipt": "compiled-lifecycle/coordination/receipts/E-LIVE-REPLY.json"
+    },
+    "toolchains": {
+      "node": "v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+      "native_go": "go1.24.0 linux/amd64 at /tmp/gondola-go/bin/go",
+      "compiled_cli_go": "go1.27.3 linux/amd64 recorded by pinned E-BUILD"
+    },
+    "frozen_inputs": {
+      "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z",
+      "e_build_execution_sha256": "b0b181c5044b829e4e6d305f8507c447a5e6d2addb29d05c6a1b528ed496976b",
+      "react_build_record_sha256": "36c962c08bece3b14d0d4ed2742bda23f6b758675254f90b7ef2041f3ddbbbb7",
+      "manifest_sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+      "app_ir_sha256": "341693716b95fe70cb7fe0aab3bbc26db78e920266602062510b90feb87c1f6d",
+      "encoder_sha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+      "compiled_module_sha256": "dabbfaea0c8a27ec389008f0820f0b14578337acca6cb60bd491ed2394dc5c6c",
+      "fixture_app_sha256": "6b61e55c3046f58873d2774e38a7bca44769f18f6870c39e1885b78be340fe41",
+      "fixture_view_sha256": "afc4b1611c5dbd8e5264d3c124b808770bdd8579fdc1426c350f4df6689bb948",
+      "scenario_sha256": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+      "lifecycle_runtime_sha256": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+      "shared_runtime_sha256": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0"
+    },
+    "original_probe_sources": {
+      "native_helper_sha256": "0bb17bc85655ab904fba3f0fba0676e927fd3157a92a7bf9a2b86ceb14c51aa7",
+      "compiled_probe_sha256": "8924ca8a36c7d525e4571a93cb0a8774595a8bd217a7a9bdc360b425ed35b42e",
+      "capture_wrapper_sha256": "c5a652081ebd1cc16a1ce50e91aa4defe7dbc8b395586f92334b1f5de476a5e3",
+      "cross_auditor_sha256": "1c733ee555dd94a7cab7eeffc9fd18889ede8da1fa6e626fd12313e1b3bcafbd"
+    },
+    "reruns": {
+      "native_stdout": "compiled-lifecycle/coordination/reviews/xr-live-reply/native-rerun.stdout.json",
+      "native_stdout_sha256": "c5a8e19d7cf88517d416c7b0f01771585d4260393e5aed8979c764a7489f83ff",
+      "compiled_stdout": "compiled-lifecycle/coordination/reviews/xr-live-reply/compiled-rerun.stdout.json",
+      "compiled_stdout_sha256": "544e8e4067ab1f7115a8dac7d970a586a3572a4cc3dc0cd231b4a5a57a7af483",
+      "matches_original_frozen_stdout_byte_for_byte": true
+    },
+    "independent_audit": {
+      "script": "compiled-lifecycle/coordination/reviews/xr-live-reply/audit-xr-live-reply.mjs",
+      "script_sha256": "f976c72e9d5dc9cdc5ea8829cbf1b8f2e36c309ab5b37fa40ffcd9ee9717fecd",
+      "result": "compiled-lifecycle/coordination/reviews/xr-live-reply/audit-result.json",
+      "result_sha256": "5fb206d8a639bd838b3d2b9fcb3977f664c19c6428b9e53b9c3a232bb3bfef34",
+      "typed_state_view_driver_core_correlation_comparisons_passed": true,
+      "direct_stale_messages": ["parent:g1:r1", "child:g1:r2", "grandchild:g1:r3"],
+      "retired_callbacks_rejected_without_ticks": ["parent:g1:r1", "child:g1:r2", "grandchild:g1:r3"],
+      "current_pending_tokens": ["sibling:g1:r4", "parent:g2:r5", "child:g2:r6", "grandchild:g2:r7"],
+      "accepted_fresh_replies": ["grandchild:g2:r7", "child:g2:r6", "parent:g2:r5", "sibling:g1:r4"],
+      "cancellation_order": ["grandchild:g1:r3", "child:g1:r2", "parent:g1:r1"]
+    },
+    "instrumented_probe": {
+      "script": "compiled-lifecycle/coordination/reviews/xr-live-reply/compiled-probe-instrumented.mjs",
+      "script_sha256": "88ef0a9948e7edad125637449393dd7ed6ac5f2ace58eb72e6e2c0c853da0078",
+      "stdout": "compiled-lifecycle/coordination/reviews/xr-live-reply/compiled-instrumented.stdout.json",
+      "stdout_sha256": "18f4179e929289b13c04820e729090a57264ca7fc007d622cd87ef8126a93bfb",
+      "original_trace_and_effect_records_unchanged": true
+    },
+    "limits": [
+      "The compiled host probe is headless and uses a placeholder DOM field; it establishes no React, DOM, or browser behavior.",
+      "The result is limited to the fixed finite lifecycle fixture and the pinned generated module.",
+      "No product/runtime/build source, Git state, or shared state was edited; no merge or deployment was performed."
+    ]
+  }
+}

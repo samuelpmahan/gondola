@@ -1,0 +1,118 @@
+{
+  "schema": "gobi.compiled-lifecycle-independent-dom-review/v1",
+  "job_id": "XR-CI-DOM",
+  "worker": "N6",
+  "captured_at": "2026-10-31T07:31:20Z",
+  "decision": "accepted",
+  "outcome": "confirmed_reuse",
+  "subject": {
+    "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+    "report_sha256": "d937c7b803ac1928f7598046f13d6d903f9ed6af353513e1f9da1ec56514653e",
+    "receipt": "compiled-lifecycle/ci/2026-10-31/coordination/receipts/E-CI-DOM.json",
+    "receipt_sha256": "7eff89202146d8b8ecb1536654c0ae30123e20ace61dfdd16883c1a3efab2fea"
+  },
+  "provider": {
+    "artifact_id": 13034915662,
+    "run_id": 41178420647,
+    "head_sha": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "tree_sha": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "provider_conclusion": "failure",
+    "bytes": 47035803,
+    "sha256": "6fa057edf26af20b3e6ef805458c92033e2e626d625f44a88bffcc04781762c4",
+    "zip_chunks_verified": 12,
+    "zip_members_verified": 1272,
+    "selected_nested_archive_members_verified": 12,
+    "source_pins_rechecked": 14,
+    "capture_bytes": 66817124,
+    "capture_sha256": "a663d77ba16c43adfb3f4b12666845b82047b3e1b9c7ed68ffea8c98ac304ad6"
+  },
+  "profiles": {
+    "react": {
+      "go_ticks": 26,
+      "physical_snapshots": 27,
+      "enabled_clicks": 16,
+      "detached_clicks": 6,
+      "cancellations": 3,
+      "pending_at_end": 0
+    },
+    "dom": {
+      "go_ticks": 26,
+      "physical_snapshots": 27,
+      "enabled_clicks": 16,
+      "detached_clicks": 6,
+      "cancellations": 3,
+      "pending_at_end": 0
+    },
+    "swap": {
+      "go_ticks": 26,
+      "physical_snapshots": 27,
+      "enabled_clicks": 16,
+      "detached_clicks": 6,
+      "cancellations": 3,
+      "pending_at_end": 0,
+      "swaps": 17,
+      "renderer_instances": 18,
+      "eligible_callback_swaps": 16,
+      "rejected_retired_callback_probes": 32
+    }
+  },
+  "checks": {
+    "literal_typed_state_view_physical_outerhtml_and_live_disabled_properties": "matched at every raw snapshot in all three profiles",
+    "remove_remount_sibling_survival_and_generation_two": "matched",
+    "cancellation_order": [
+      "grandchild:g1:r3",
+      "child:g1:r2",
+      "parent:g1:r1"
+    ],
+    "retired_generation_one_completions": "rejected without ticks",
+    "sibling_and_fresh_generation_two_completions": "accepted",
+    "duplicate_completions": "rejected",
+    "swap_trace_state_pending_effects_preserved": "matched at all 17 swaps",
+    "old_renderer_callback_probes": "32/32 dispatch and stale probes fenced across 16 eligible swaps",
+    "detached_subtree_buttons": "six detached buttons per profile; no state/view/callback/pending/effect/HTML mutation",
+    "page_errors": 0,
+    "wasm_requests": 0,
+    "wasm_api_attempts": 0,
+    "native_equivalence_claimed": false,
+    "full_ci_claimed": false
+  },
+  "reproductions": {
+    "n4_dom_audit": {
+      "exit_code": 0,
+      "stdout_sha256": "8e33f9018264192dd36e60825d7d4555f85c4594660d02fbe8d09948ebe82049",
+      "stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "equal_to_n4_audit_json": true
+    },
+    "n4_artifact_binding_verifier": {
+      "exit_code": 0,
+      "stdout_sha256": "7659587e4ed91eb352e5ffd51dee5c2bbac8a56b91a191b43c0979b6cf8763d7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equal_to_n4_bindings_json": true
+    },
+    "independent_capture_recheck": {
+      "exit_code": 0,
+      "script": "compiled-lifecycle/ci/2026-10-31/lanes/review-dom/recheck-dom.mjs",
+      "script_sha256": "adebae88586adc9dbc2a6562a55ef8044daaca2dd9fe8ed40579b189b9eafa22",
+      "stdout_sha256": "7d4c745a1c4b8b12d4f640833a833ea464198b57cb1ae231d76fb6f6b5bdb1cd",
+      "stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+    },
+    "independent_artifact_recheck": {
+      "exit_code": 0,
+      "script": "compiled-lifecycle/ci/2026-10-31/lanes/review-dom/recheck-artifact.py",
+      "script_sha256": "e9cc232e50062ae3bb80850dd40113408ec72e811678c83825500bfb3bebcda6",
+      "stdout_sha256": "a643c2631975c01a87d25f4b02f60a9a9a3148aa3f546d17c2bdcf62cf6ee1e3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "node": "v22.23.4",
+    "python": "3.12.14"
+  },
+  "global_failure_boundary": {
+    "execution_status": "failed",
+    "native_stage": "spawnSync /home/runner/work/gondola/gondola/go ENOENT",
+    "final_matrix_check": "withheld",
+    "claim_limit": "DOM evidence is accepted only as bounded artifact reuse; this does not establish native Go equivalence or overall hosted CI success."
+  },
+  "findings": {
+    "minor_report_wording_observation": "E-CI-DOM describes the six retained detached buttons as Child/Grandchild controls; captured paths include Parent Add and Parent Request too. The raw capture and six no-op checks are accurate, so this is wording only."
+  }
+}

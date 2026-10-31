@@ -1,0 +1,94 @@
+{
+  "job_id": "R-PORTABLE-TEST",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Changed only lifecycle runtime tests to require the explicit GOBI_LIFECYCLE_APP_DIR. The missing-env regression failed against the retained old loader and passes with the new loader. The full 10-test suite passes using N6's fresh real CLI output, and also passes from an isolated mirror with the prior feasibility-cache path absent.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/R-PORTABLE-TEST.md",
+    "report_sha256": "d7958218b2e7b90697ace86201b8bd5a3912f42eb8f3782f4843f581c1225e7e",
+    "env_variable": "GOBI_LIFECYCLE_APP_DIR",
+    "app_dir_contract": "Absolute or cwd-relative directory containing app-ir.json, gobi-compiled.mjs, and encoder.mjs for github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle.",
+    "pre_fix_source": {
+      "path": "compiled-lifecycle/coordination/reviews/r-portable-test/before/runtime.test.mjs",
+      "sha256": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+      "loader_behavior": "Scanned ../builds/feasibility/final/react/output/apps relative to the test file, allowing implicit cached-build fallback."
+    },
+    "final_source": {
+      "path": "compiled-lifecycle/runtime/runtime.test.mjs",
+      "sha256": "a07ec74fe85995e7ac18fd0d03a789e3d722f3507b6a24b5d03f410bef58e59d",
+      "production_runtime_unchanged_sha256": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed"
+    },
+    "capture_runner": {
+      "path": "compiled-lifecycle/coordination/reviews/r-portable-test/capture-node.mjs",
+      "sha256": "17256cbe01cd2abaa499264d1cfca6833f5a88354c5db370da3c52955dc04f9e"
+    },
+    "red_regression": {
+      "command_record": "compiled-lifecycle/coordination/reviews/r-portable-test/captures/red/command.json",
+      "command_record_sha256": "0de2a47d0c1a8ad62f6903e278f83453b5df13fa4be471ecc50c7da793c591da",
+      "child_command": "/tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='compiled lifecycle fixture loader requires an explicit app directory' compiled-lifecycle/runtime/runtime.test.mjs",
+      "node_version": "v22.23.4",
+      "explicit_app_dir": null,
+      "exit_code": 1,
+      "failure": "Missing expected rejection: the old loader found the ignored cached fixture although GOBI_LIFECYCLE_APP_DIR was unset.",
+      "stdout": "compiled-lifecycle/coordination/reviews/r-portable-test/captures/red/stdout.log",
+      "stdout_sha256": "f54694292e14794a3a2577c739ade71b8ed95dfa0a8d2b24f060dbe22490fe55",
+      "stderr": "compiled-lifecycle/coordination/reviews/r-portable-test/captures/red/stderr.log",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666",
+      "exit_code_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "green_missing_env_regression": {
+      "command_record": "compiled-lifecycle/coordination/reviews/r-portable-test/captures/green-missing-env/command.json",
+      "command_record_sha256": "ce1e1c5ea839594cb46189110d1584a71796f1516ec3c4de7c0b47a9aeb537c1",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "stdout_sha256": "f12167bd344ee6a5df66a0d6692070dbf5b63f5691c8119d1a13c90a6091f8ae",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666"
+    },
+    "fresh_real_cli_build": {
+      "worker": "N6",
+      "build_record": "compiled-lifecycle/builds/portability/attempt-00/react/build-record.json",
+      "build_record_sha256": "94e70c541f3bc0c478dc0a3191b5dbeca02bb864a1a588277594968a4616a93d",
+      "build_command": "From compiled-frontend/: GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-lifecycle/builds/portability/attempt-00/react/request.json > ../compiled-lifecycle/builds/portability/attempt-00/react/result.json 2> ../compiled-lifecycle/builds/portability/attempt-00/react/stderr.log",
+      "go_version": "go1.27.3",
+      "exit_code": 0,
+      "ok": true,
+      "diagnostics": 0,
+      "output_count": 67,
+      "manifest_sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+      "app_dir": "/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707",
+      "app_ir_sha256": "341693716b95fe70cb7fe0aab3bbc26db78e920266602062510b90feb87c1f6d",
+      "encoder_sha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+      "compiled_module_sha256": "172c04df5a13b6963f27647fdce075a3e4df9f8cf65f3b9c8ca77d029bac975f"
+    },
+    "full_suite_fresh_app": {
+      "command_record": "compiled-lifecycle/coordination/reviews/r-portable-test/captures/fresh-cli-app/command.json",
+      "command_record_sha256": "0be7155fd06feab985a064d9be756126c7adf65bcb6caf9c59e734a8eb1479b9",
+      "command": "GOBI_LIFECYCLE_APP_DIR=/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707 /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/runtime/runtime.test.mjs",
+      "node_version": "v22.23.4",
+      "exit_code": 0,
+      "passed": 10,
+      "failed": 0,
+      "stdout_sha256": "66d0305b4be71a293daa3d68c04eb8614c9cffa42333646a9179929ab442b781",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666"
+    },
+    "isolated_no_preflight_suite": {
+      "command_record": "compiled-lifecycle/coordination/reviews/r-portable-test/captures/isolated-fresh-cli/command.json",
+      "command_record_sha256": "d8ab4a77ab2da4f779cfadf56ab225378497fb79636a71debcf7c7e08f3586e1",
+      "command": "GOBI_LIFECYCLE_APP_DIR=/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707 /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/coordination/reviews/r-portable-test/preflight-isolation/compiled-lifecycle/runtime/runtime.test.mjs",
+      "node_version": "v22.23.4",
+      "exit_code": 0,
+      "passed": 10,
+      "failed": 0,
+      "isolated_source_sha256": "a07ec74fe85995e7ac18fd0d03a789e3d722f3507b6a24b5d03f410bef58e59d",
+      "isolated_fallback_path_exists": false,
+      "stdout_sha256": "8e9d2ab5aadf533ca203c50d3eaac59f69a32221b41b534bbde32848e21b8134",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666"
+    },
+    "limits": [
+      "The source change is limited to compiled-lifecycle/runtime/runtime.test.mjs; the runtime implementation is unchanged.",
+      "Fresh CLI build artifacts were produced by N6 and consumed without writing to N6's build path.",
+      "No Git, native, merge, deployment, or publication change was made."
+    ]
+  }
+}

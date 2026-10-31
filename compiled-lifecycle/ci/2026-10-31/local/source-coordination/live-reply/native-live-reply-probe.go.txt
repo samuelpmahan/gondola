@@ -1,0 +1,133 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"reflect"
+
+	"github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle"
+	"github.com/samuelpmahan/gondola/gobi"
+)
+
+type stateView struct {
+	State lifecycle.State `json:"state"`
+	View  gobi.Node       `json:"view"`
+}
+
+type eventRecord struct {
+	Message gobi.Message `json:"message"`
+	Effects []gobi.Effect `json:"effects"`
+	State   lifecycle.State `json:"state"`
+}
+
+type staleRecord struct {
+	Token              string   `json:"token"`
+	StateUnchanged     bool     `json:"stateUnchanged"`
+	ViewUnchanged      bool     `json:"viewUnchanged"`
+	EffectsEmpty       bool     `json:"effectsEmpty"`
+	CurrentPending     []string `json:"currentPendingTokens"`
+	State              lifecycle.State `json:"state"`
+}
+
+type result struct {
+	Schema             string        `json:"schema"`
+	Execution          string        `json:"execution"`
+	Scenario           []eventRecord `json:"scenario"`
+	FreshPending       stateView     `json:"afterFreshRequests"`
+	StaleDirectMessages []staleRecord `json:"staleDirectMessages"`
+	Final              stateView     `json:"final"`
+}
+
+func must(ok bool, format string, args ...any) {
+	if !ok {
+		panic(fmt.Sprintf(format, args...))
+	}
+}
+
+func pendingTokens(state lifecycle.State) []string {
+	nodes := []lifecycle.NodeState{state.Parent, state.Child, state.Grandchild, state.Sibling}
+	var tokens []string
+	for _, node := range nodes {
+		if node.Pending {
+			tokens = append(tokens, node.Token)
+		}
+	}
+	return tokens
+}
+
+func main() {
+	state := lifecycle.Init()
+	var events []eventRecord
+	apply := func(name, arg string, wantEffects []gobi.Effect) {
+		message := gobi.Message{Name: name, Arg: arg}
+		next, effects := lifecycle.Update(state, message)
+		must(reflect.DeepEqual(effects, wantEffects), "%s effects = %#v, want %#v", name, effects, wantEffects)
+		state = next
+		events = append(events, eventRecord{Message: message, Effects: effects, State: state})
+	}
+
+	request := func(name, token string) { apply(name, "", []gobi.Effect{{Kind: "fixture.request", Name: "lookup", Arg: token, Reply: "complete"}}) }
+	request("requestParent", "parent:g1:r1")
+	request("requestChild", "child:g1:r2")
+	request("requestGrandchild", "grandchild:g1:r3")
+	request("requestSibling", "sibling:g1:r4")
+	apply("removeParent", "", []gobi.Effect{
+		{Kind: "lifecycle.cancel", Name: "cancel", Arg: "grandchild:g1:r3", Reply: ""},
+		{Kind: "lifecycle.cancel", Name: "cancel", Arg: "child:g1:r2", Reply: ""},
+		{Kind: "lifecycle.cancel", Name: "cancel", Arg: "parent:g1:r1", Reply: ""},
+	})
+	apply("remountParent", "", []gobi.Effect{})
+	request("requestParent", "parent:g2:r5")
+	request("requestChild", "child:g2:r6")
+	request("requestGrandchild", "grandchild:g2:r7")
+
+	fresh := stateView{State: state, View: lifecycle.View(state)}
+	must(reflect.DeepEqual(pendingTokens(state), []string{
+		"parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4",
+	}), "unexpected fresh pending tokens: %#v", pendingTokens(state))
+
+	var staleChecks []staleRecord
+	for _, token := range []string{"parent:g1:r1", "child:g1:r2", "grandchild:g1:r3"} {
+		beforeState := state
+		beforeView := lifecycle.View(state)
+		next, effects := lifecycle.Update(state, gobi.Message{Name: "complete", Arg: token})
+		stateUnchanged := reflect.DeepEqual(next, beforeState)
+		viewUnchanged := reflect.DeepEqual(lifecycle.View(next), beforeView)
+		effectsEmpty := len(effects) == 0
+		must(stateUnchanged && viewUnchanged && effectsEmpty,
+			"stale direct completion %s changed Go state/view or emitted effects", token)
+		state = next
+		staleChecks = append(staleChecks, staleRecord{
+			Token: token, StateUnchanged: stateUnchanged, ViewUnchanged: viewUnchanged,
+			EffectsEmpty: effectsEmpty, CurrentPending: pendingTokens(state), State: state,
+		})
+	}
+
+	for _, token := range []string{"grandchild:g2:r7", "child:g2:r6", "parent:g2:r5", "sibling:g1:r4"} {
+		before := state
+		next, effects := lifecycle.Update(state, gobi.Message{Name: "complete", Arg: token})
+		must(len(effects) == 0, "completion %s emitted effects", token)
+		var matched lifecycle.NodeState
+		for _, node := range []lifecycle.NodeState{next.Parent, next.Child, next.Grandchild, next.Sibling} {
+			if node.Token == token {
+				matched = node
+			}
+		}
+		must(matched.Pending == false && matched.Reply == token, "fresh completion %s was not accepted", token)
+		must(next.NextRequestID == before.NextRequestID, "completion changed request sequence")
+		state = next
+	}
+
+	output := result{
+		Schema: "gobi.lifecycle-live-reply-native-probe/v1",
+		Execution: "direct native Go calls to fixtures/compiled/lifecycle.Update and View; no app reducer",
+		Scenario: events,
+		FreshPending: fresh,
+		StaleDirectMessages: staleChecks,
+		Final: stateView{State: state, View: lifecycle.View(state)},
+	}
+	encoder := json.NewEncoder(os.Stdout)
+	encoder.SetEscapeHTML(false)
+	must(encoder.Encode(output) == nil, "failed to encode result")
+}

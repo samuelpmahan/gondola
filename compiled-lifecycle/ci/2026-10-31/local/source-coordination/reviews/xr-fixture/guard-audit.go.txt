@@ -1,0 +1,93 @@
+package main
+
+import (
+	"fmt"
+	"reflect"
+
+	"github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle"
+	"github.com/samuelpmahan/gondola/gobi"
+)
+
+const safeMax uint64 = 9007199254740991
+
+func must(ok bool, message string) {
+	if !ok {
+		panic(message)
+	}
+}
+
+func main() {
+	requestScopes := []struct {
+		message string
+		scope   string
+	}{
+		{"requestParent", "parent"},
+		{"requestChild", "child"},
+		{"requestGrandchild", "grandchild"},
+		{"requestSibling", "sibling"},
+	}
+	for _, item := range requestScopes {
+		state := lifecycle.Init()
+		state.NextRequestID = safeMax - 1
+		next, effects := lifecycle.Update(state, gobi.Message{Name: item.message})
+		must(next.NextRequestID == safeMax, item.message+" failed at max-1")
+		must(len(effects) == 1 && effects[0].Arg == fmt.Sprintf("%s:g1:r%d", item.scope, safeMax), item.message+" emitted a bad maximum token")
+		atLimit := next
+		atLimit.NextRequestID = safeMax
+		var target *lifecycle.NodeState
+		switch item.scope {
+		case "parent":
+			target = &atLimit.Parent
+		case "child":
+			target = &atLimit.Child
+		case "grandchild":
+			target = &atLimit.Grandchild
+		case "sibling":
+			target = &atLimit.Sibling
+		}
+		target.Requested = false
+		target.Pending = false
+		target.RequestID = 0
+		target.Token = ""
+		target.Reply = ""
+		before := atLimit
+		unchanged, blocked := lifecycle.Update(atLimit, gobi.Message{Name: item.message})
+		must(len(blocked) == 0 && reflect.DeepEqual(unchanged, before), item.message+" overflowed/exhausted request IDs")
+	}
+
+	for _, slot := range []string{"parent", "child", "grandchild"} {
+		state := lifecycle.Init()
+		state.Parent.Alive = false
+		state.Child.Alive = false
+		state.Grandchild.Alive = false
+		switch slot {
+		case "parent":
+			state.Parent.Generation = safeMax
+		case "child":
+			state.Child.Generation = safeMax
+		case "grandchild":
+			state.Grandchild.Generation = safeMax
+		}
+		before := state
+		unchanged, effects := lifecycle.Update(state, gobi.Message{Name: "remountParent"})
+		must(len(effects) == 0 && reflect.DeepEqual(unchanged, before), "remount did not fail closed at "+slot+" generation limit")
+	}
+
+	state := lifecycle.Init()
+	state.Parent.Alive = false
+	state.Child.Alive = false
+	state.Grandchild.Alive = false
+	state.Parent.Generation = safeMax - 1
+	state.Child.Generation = safeMax - 1
+	state.Grandchild.Generation = safeMax - 1
+	state, effects := lifecycle.Update(state, gobi.Message{Name: "remountParent"})
+	must(len(effects) == 0 && state.Parent.Generation == safeMax && state.Child.Generation == safeMax &&
+		state.Grandchild.Generation == safeMax && state.Parent.Alive && state.Child.Alive && state.Grandchild.Alive,
+		"remount did not allow the final safe generation")
+	state, _ = lifecycle.Update(state, gobi.Message{Name: "removeParent"})
+	before := state
+	unchanged, effects := lifecycle.Update(state, gobi.Message{Name: "remountParent"})
+	must(len(effects) == 0 && reflect.DeepEqual(unchanged, before), "remount crossed the maximum safe generation")
+
+	fmt.Println("PASS request ID max-1 allowed; all four request roles block at max; each subtree generation guard blocks at max; final safe generation allowed without overflow")
+}

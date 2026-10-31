@@ -1,0 +1,762 @@
+﻿2026-10-31T07:01:57.1591601Z Current runner version: '2.338.2'
+2026-10-31T07:01:57.1616553Z ##[group]Runner Image Provisioner
+2026-10-31T07:01:57.1617494Z Hosted Compute Agent
+2026-10-31T07:01:57.1618107Z Version: 20261021.618
+2026-10-31T07:01:57.1618880Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-31T07:01:57.1619615Z Build Date: 2026-10-21T00:45:21Z
+2026-10-31T07:01:57.1620354Z Worker ID: {572ef77c-b3d3-406a-a8b0-d60a19004955}
+2026-10-31T07:01:57.1621098Z Region: westus
+2026-10-31T07:01:57.1622008Z Cloud: Azure
+2026-10-31T07:01:57.1622873Z ##[endgroup]
+2026-10-31T07:01:57.1624821Z ##[group]Operating System
+2026-10-31T07:01:57.1625471Z Ubuntu
+2026-10-31T07:01:57.1626113Z 24.04.5
+2026-10-31T07:01:57.1626649Z LTS
+2026-10-31T07:01:57.1627249Z ##[endgroup]
+2026-10-31T07:01:57.1627875Z ##[group]Runner Image
+2026-10-31T07:01:57.1628472Z Image: ubuntu-24.04
+2026-10-31T07:01:57.1629118Z Version: 20261025.353.1
+2026-10-31T07:01:57.1630442Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-31T07:01:57.1632469Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-31T07:01:57.1633489Z ##[endgroup]
+2026-10-31T07:01:57.1634761Z ##[group]GITHUB_TOKEN Permissions
+2026-10-31T07:01:57.1636724Z Contents: read
+2026-10-31T07:01:57.1637451Z Metadata: read
+2026-10-31T07:01:57.1638025Z Packages: read
+2026-10-31T07:01:57.1638628Z ##[endgroup]
+2026-10-31T07:01:57.1640783Z Secret source: Actions
+2026-10-31T07:01:57.1642078Z Cache mode: write
+2026-10-31T07:01:57.1642828Z Prepare workflow directory
+2026-10-31T07:01:57.2035589Z Prepare all required actions
+2026-10-31T07:01:57.2094435Z Getting action download info
+2026-10-31T07:01:57.5692935Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-31T07:01:57.6734862Z Download action repository 'actions/setup-go@v5' (SHA:40f1582b2485089dde7abd97c1529aa768e1baff)
+2026-10-31T07:01:58.0614622Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-31T07:01:58.1457409Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-31T07:01:58.3551898Z Complete job name: backend-replacement
+2026-10-31T07:01:58.4452295Z ##[group]Run actions/checkout@v4
+2026-10-31T07:01:58.4453231Z with:
+2026-10-31T07:01:58.4453685Z   repository: samuelpmahan/gondola
+2026-10-31T07:01:58.4457356Z   token: ***
+2026-10-31T07:01:58.4457789Z   ssh-strict: true
+2026-10-31T07:01:58.4458232Z   ssh-user: git
+2026-10-31T07:01:58.4458689Z   persist-credentials: true
+2026-10-31T07:01:58.4459178Z   clean: true
+2026-10-31T07:01:58.4459623Z   sparse-checkout-cone-mode: true
+2026-10-31T07:01:58.4460143Z   fetch-depth: 1
+2026-10-31T07:01:58.4460572Z   fetch-tags: false
+2026-10-31T07:01:58.4461015Z   show-progress: true
+2026-10-31T07:01:58.4461465Z   lfs: false
+2026-10-31T07:01:58.4462068Z   submodules: false
+2026-10-31T07:01:58.4462527Z   set-safe-directory: true
+2026-10-31T07:01:58.4463051Z   allow-unsafe-pr-checkout: false
+2026-10-31T07:01:58.4464290Z ##[endgroup]
+2026-10-31T07:01:58.7119276Z Syncing repository: samuelpmahan/gondola
+2026-10-31T07:01:58.7121302Z ##[group]Getting Git version info
+2026-10-31T07:01:58.7122445Z Working directory is '/home/runner/work/gondola/gondola'
+2026-10-31T07:01:58.7123632Z [command]/usr/bin/git version
+2026-10-31T07:01:58.7267712Z git version 2.56.0
+2026-10-31T07:01:58.7292300Z ##[endgroup]
+2026-10-31T07:01:58.7309399Z Temporarily overriding HOME='/home/runner/work/_temp/3213a903-8bfb-4a0a-aec9-2a789a63a45e' before making global git config changes
+2026-10-31T07:01:58.7312368Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-31T07:01:58.7316606Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gondola/gondola
+2026-10-31T07:01:58.7370207Z Deleting the contents of '/home/runner/work/gondola/gondola'
+2026-10-31T07:01:58.7375748Z ##[group]Initializing the repository
+2026-10-31T07:01:58.7379635Z [command]/usr/bin/git init /home/runner/work/gondola/gondola
+2026-10-31T07:01:58.7506427Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-31T07:01:58.7508537Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-31T07:01:58.7510241Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-31T07:01:58.7511939Z hint: call:
+2026-10-31T07:01:58.7512838Z hint:
+2026-10-31T07:01:58.7513824Z hint: 	git config --global init.defaultBranch <name>
+2026-10-31T07:01:58.7514933Z hint:
+2026-10-31T07:01:58.7516095Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-31T07:01:58.7517833Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-31T07:01:58.7519184Z hint:
+2026-10-31T07:01:58.7520027Z hint: 	git branch -m <name>
+2026-10-31T07:01:58.7521051Z hint:
+2026-10-31T07:01:58.7522405Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-31T07:01:58.7524324Z Initialized empty Git repository in /home/runner/work/gondola/gondola/.git/
+2026-10-31T07:01:58.7534216Z [command]/usr/bin/git remote add origin https://github.com/samuelpmahan/gondola
+2026-10-31T07:01:58.7586857Z ##[endgroup]
+2026-10-31T07:01:58.7588365Z ##[group]Disabling automatic garbage collection
+2026-10-31T07:01:58.7590066Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-31T07:01:58.7631263Z ##[endgroup]
+2026-10-31T07:01:58.7633488Z ##[group]Setting up auth
+2026-10-31T07:01:58.7641041Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-31T07:01:58.7787780Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-31T07:01:58.8139554Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-31T07:01:58.8188635Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-31T07:01:58.8433727Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-31T07:01:58.8477403Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-31T07:01:58.8719625Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-31T07:01:58.8772260Z ##[endgroup]
+2026-10-31T07:01:58.8784049Z ##[group]Fetching the repository
+2026-10-31T07:01:58.8785952Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d6fe98cd11cb8eb5ba673a449099b170e222b3fa:refs/remotes/pull/14/merge
+2026-10-31T07:02:04.2871438Z From https://github.com/samuelpmahan/gondola
+2026-10-31T07:02:04.2872463Z  * [new ref]         d6fe98cd11cb8eb5ba673a449099b170e222b3fa -> pull/14/merge
+2026-10-31T07:02:04.2876988Z ##[endgroup]
+2026-10-31T07:02:04.2877879Z ##[group]Determining the checkout info
+2026-10-31T07:02:04.2880019Z ##[endgroup]
+2026-10-31T07:02:04.2887556Z [command]/usr/bin/git sparse-checkout disable
+2026-10-31T07:02:04.2956965Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-31T07:02:04.2998865Z ##[group]Checking out the ref
+2026-10-31T07:02:04.2999426Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/14/merge
+2026-10-31T07:02:04.6411545Z Note: switching to 'refs/remotes/pull/14/merge'.
+2026-10-31T07:02:04.6412384Z 
+2026-10-31T07:02:04.6412763Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-31T07:02:04.6413644Z changes and commit them, and you can discard any commits you make in this
+2026-10-31T07:02:04.6414500Z state without impacting any branches by switching back to a branch.
+2026-10-31T07:02:04.6415028Z 
+2026-10-31T07:02:04.6415847Z If you want to create a new branch to retain commits you create, you may
+2026-10-31T07:02:04.6416547Z do so (now or later) by using -c with the switch command. Example:
+2026-10-31T07:02:04.6416853Z 
+2026-10-31T07:02:04.6416986Z   git switch -c <new-branch-name>
+2026-10-31T07:02:04.6417170Z 
+2026-10-31T07:02:04.6417284Z Or undo this operation with:
+2026-10-31T07:02:04.6417454Z 
+2026-10-31T07:02:04.6417569Z   git switch -
+2026-10-31T07:02:04.6417720Z 
+2026-10-31T07:02:04.6417975Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-31T07:02:04.6418295Z 
+2026-10-31T07:02:04.6418655Z HEAD is now at d6fe98c Merge 49cc2b96c8817a47319d5b7bd484184a22fa984b into 6b49cc0bd4c9512a041f723c86b632ec506afd9d
+2026-10-31T07:02:04.6449282Z ##[endgroup]
+2026-10-31T07:02:04.6509876Z [command]/usr/bin/git log -1 --format=%H
+2026-10-31T07:02:04.6544063Z d6fe98cd11cb8eb5ba673a449099b170e222b3fa
+2026-10-31T07:02:04.6827450Z ##[group]Run actions/setup-go@v5
+2026-10-31T07:02:04.6827757Z with:
+2026-10-31T07:02:04.6828003Z   go-version: 1.24.x
+2026-10-31T07:02:04.6828235Z   check-latest: false
+2026-10-31T07:02:04.6830611Z   token: ***
+2026-10-31T07:02:04.6830823Z   cache: true
+2026-10-31T07:02:04.6831031Z ##[endgroup]
+2026-10-31T07:02:04.8203912Z Setup go version spec 1.24.x
+2026-10-31T07:02:04.8395677Z Found in cache @ /opt/hostedtoolcache/go/1.24.13/x64
+2026-10-31T07:02:04.8397645Z (node:2325) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-31T07:02:04.8398997Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-31T07:02:04.8402038Z Added go to the path
+2026-10-31T07:02:04.8406249Z Successfully set up Go version 1.24.x
+2026-10-31T07:02:05.5351162Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOMODCACHE
+2026-10-31T07:02:05.5406045Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOCACHE
+2026-10-31T07:02:05.5461097Z /home/runner/go/pkg/mod
+2026-10-31T07:02:05.5482954Z /home/runner/.cache/go-build
+2026-10-31T07:02:05.5509498Z ##[warning]Restore cache failed: Dependencies file is not found in /home/runner/work/gondola/gondola. Supported file pattern: go.sum
+2026-10-31T07:02:05.5537201Z go version go1.24.13 linux/amd64
+2026-10-31T07:02:05.5537415Z 
+2026-10-31T07:02:05.5537711Z ##[group]go env
+2026-10-31T07:02:05.7039842Z AR='ar'
+2026-10-31T07:02:05.7040429Z CC='gcc'
+2026-10-31T07:02:05.7040934Z CGO_CFLAGS='-O2 -g'
+2026-10-31T07:02:05.7041427Z CGO_CPPFLAGS=''
+2026-10-31T07:02:05.7042159Z CGO_CXXFLAGS='-O2 -g'
+2026-10-31T07:02:05.7042627Z CGO_ENABLED='1'
+2026-10-31T07:02:05.7043131Z CGO_FFLAGS='-O2 -g'
+2026-10-31T07:02:05.7043571Z CGO_LDFLAGS='-O2 -g'
+2026-10-31T07:02:05.7044060Z CXX='g++'
+2026-10-31T07:02:05.7044534Z GCCGO='gccgo'
+2026-10-31T07:02:05.7045013Z GO111MODULE=''
+2026-10-31T07:02:05.7045449Z GOAMD64='v1'
+2026-10-31T07:02:05.7046062Z GOARCH='amd64'
+2026-10-31T07:02:05.7046501Z GOAUTH='netrc'
+2026-10-31T07:02:05.7046888Z GOBIN=''
+2026-10-31T07:02:05.7047311Z GOCACHE='/home/runner/.cache/go-build'
+2026-10-31T07:02:05.7047983Z GOCACHEPROG=''
+2026-10-31T07:02:05.7048508Z GODEBUG=''
+2026-10-31T07:02:05.7048972Z GOENV='/home/runner/.config/go/env'
+2026-10-31T07:02:05.7049471Z GOEXE=''
+2026-10-31T07:02:05.7049852Z GOEXPERIMENT=''
+2026-10-31T07:02:05.7050315Z GOFIPS140='off'
+2026-10-31T07:02:05.7050767Z GOFLAGS=''
+2026-10-31T07:02:05.7053133Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build1837713762=/tmp/go-build -gno-record-gcc-switches'
+2026-10-31T07:02:05.7054531Z GOHOSTARCH='amd64'
+2026-10-31T07:02:05.7054940Z GOHOSTOS='linux'
+2026-10-31T07:02:05.7055322Z GOINSECURE=''
+2026-10-31T07:02:05.7055821Z GOMOD='/home/runner/work/gondola/gondola/go.mod'
+2026-10-31T07:02:05.7056420Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-10-31T07:02:05.7056855Z GONOPROXY=''
+2026-10-31T07:02:05.7057169Z GONOSUMDB=''
+2026-10-31T07:02:05.7057484Z GOOS='linux'
+2026-10-31T07:02:05.7057830Z GOPATH='/home/runner/go'
+2026-10-31T07:02:05.7058214Z GOPRIVATE=''
+2026-10-31T07:02:05.7058936Z GOPROXY='https://proxy.golang.org,direct'
+2026-10-31T07:02:05.7059500Z GOROOT='/opt/hostedtoolcache/go/1.24.13/x64'
+2026-10-31T07:02:05.7060059Z GOSUMDB='sum.golang.org'
+2026-10-31T07:02:05.7060457Z GOTELEMETRY='local'
+2026-10-31T07:02:05.7060917Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-10-31T07:02:05.7061440Z GOTMPDIR=''
+2026-10-31T07:02:05.7062060Z GOTOOLCHAIN='auto'
+2026-10-31T07:02:05.7062629Z GOTOOLDIR='/opt/hostedtoolcache/go/1.24.13/x64/pkg/tool/linux_amd64'
+2026-10-31T07:02:05.7063258Z GOVCS=''
+2026-10-31T07:02:05.7063588Z GOVERSION='go1.24.13'
+2026-10-31T07:02:05.7063947Z GOWORK=''
+2026-10-31T07:02:05.7064297Z PKG_CONFIG='pkg-config'
+2026-10-31T07:02:05.7064547Z 
+2026-10-31T07:02:05.7065095Z ##[endgroup]
+2026-10-31T07:02:05.7245666Z ##[group]Run actions/setup-node@v4
+2026-10-31T07:02:05.7245955Z with:
+2026-10-31T07:02:05.7246153Z   node-version: 22
+2026-10-31T07:02:05.7246356Z   cache: npm
+2026-10-31T07:02:05.7246690Z   cache-dependency-path: package-lock.json
+interaction/package-lock.json
+
+2026-10-31T07:02:05.7247100Z   always-auth: false
+2026-10-31T07:02:05.7247309Z   check-latest: false
+2026-10-31T07:02:05.7249693Z   token: ***
+2026-10-31T07:02:05.7249889Z ##[endgroup]
+2026-10-31T07:02:05.8750149Z Found in cache @ /opt/hostedtoolcache/node/22.23.4/x64
+2026-10-31T07:02:05.8752393Z (node:2391) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-31T07:02:05.8753697Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-31T07:02:05.8755450Z ##[group]Environment details
+2026-10-31T07:02:06.2922294Z node: v22.23.4
+2026-10-31T07:02:06.2922798Z npm: 10.9.9
+2026-10-31T07:02:06.2923201Z yarn: 1.22.22
+2026-10-31T07:02:06.2924230Z ##[endgroup]
+2026-10-31T07:02:06.2944649Z [command]/opt/hostedtoolcache/node/22.23.4/x64/bin/npm config get cache
+2026-10-31T07:02:06.4064707Z /home/runner/.npm
+2026-10-31T07:02:06.6732379Z Cache hit for: node-cache-Linux-x64-npm-90b127dcd6765ca2c051251bef17731da37759a93403a4f6db400a1efee489c1
+2026-10-31T07:02:06.6837923Z (node:2391) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-31T07:02:07.8662039Z Received 10662935 of 10662935 (100.0%), 11.0 MBs/sec
+2026-10-31T07:02:07.8662813Z Cache Size: ~10 MB (10662935 B)
+2026-10-31T07:02:07.8692285Z [command]/usr/bin/tar -xf /home/runner/work/_temp/f3416327-b46c-4a9a-ac57-b7d6aafa46d8/cache.tzst -P -C /home/runner/work/gondola/gondola --use-compress-program unzstd
+2026-10-31T07:02:07.8919306Z Cache restored successfully
+2026-10-31T07:02:07.8928539Z Cache restored from key: node-cache-Linux-x64-npm-90b127dcd6765ca2c051251bef17731da37759a93403a4f6db400a1efee489c1
+2026-10-31T07:02:07.9116328Z ##[group]Run bash run.sh
+2026-10-31T07:02:07.9116665Z [36;1mbash run.sh[0m
+2026-10-31T07:02:07.9147124Z shell: /usr/bin/bash -e {0}
+2026-10-31T07:02:07.9147404Z ##[endgroup]
+2026-10-31T07:02:08.5966576Z 
+2026-10-31T07:02:08.5977815Z added 5 packages in 620ms
+2026-10-31T07:02:17.4765612Z wrote react-map.gen.mjs
+2026-10-31T07:02:31.7061551Z ok  	github.com/samuelpmahan/gondola/asyncsave	0.005s
+2026-10-31T07:02:31.7071402Z ?   	github.com/samuelpmahan/gondola/cmd/async-save-wasm	[no test files]
+2026-10-31T07:02:31.7073882Z ?   	github.com/samuelpmahan/gondola/cmd/collection-wasm	[no test files]
+2026-10-31T07:02:31.7090895Z ?   	github.com/samuelpmahan/gondola/cmd/compare-interaction	[no test files]
+2026-10-31T07:02:31.9725374Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-lifecycle-native	0.017s
+2026-10-31T07:02:32.0354814Z ok  	github.com/samuelpmahan/gondola/cmd/compiled-native	0.020s
+2026-10-31T07:02:32.0649698Z ok  	github.com/samuelpmahan/gondola/cmd/composition-replay	0.005s
+2026-10-31T07:02:32.1715868Z ok  	github.com/samuelpmahan/gondola/cmd/composition-wasm	0.003s
+2026-10-31T07:02:32.5441671Z ok  	github.com/samuelpmahan/gondola/cmd/conformance-fixtures	0.371s
+2026-10-31T07:02:32.5452933Z ?   	github.com/samuelpmahan/gondola/cmd/counter-wasm	[no test files]
+2026-10-31T07:02:32.5460138Z ?   	github.com/samuelpmahan/gondola/cmd/editor-wasm	[no test files]
+2026-10-31T07:02:32.5484499Z ok  	github.com/samuelpmahan/gondola/cmd/gobi	0.004s
+2026-10-31T07:02:32.5504956Z ?   	github.com/samuelpmahan/gondola/cmd/godom-wasm	[no test files]
+2026-10-31T07:02:33.8043955Z ?   	github.com/samuelpmahan/gondola/cmd/http-lab	[no test files]
+2026-10-31T07:02:33.8045096Z ?   	github.com/samuelpmahan/gondola/cmd/http-save-wasm	[no test files]
+2026-10-31T07:02:33.8108276Z ok  	github.com/samuelpmahan/gondola/cmd/multi-root-wasm	0.004s
+2026-10-31T07:02:33.8123575Z ok  	github.com/samuelpmahan/gondola/cmd/render-contract	0.003s
+2026-10-31T07:02:34.1781968Z ok  	github.com/samuelpmahan/gondola/collection	0.005s
+2026-10-31T07:02:34.4464212Z ok  	github.com/samuelpmahan/gondola/compilercontract	0.074s
+2026-10-31T07:02:34.4505282Z ok  	github.com/samuelpmahan/gondola/composition	0.015s
+2026-10-31T07:02:34.4506969Z ?   	github.com/samuelpmahan/gondola/counter	[no test files]
+2026-10-31T07:02:34.5755894Z ok  	github.com/samuelpmahan/gondola/editor	0.005s
+2026-10-31T07:02:34.6824178Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/effect	0.003s
+2026-10-31T07:02:34.7228498Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/form	0.002s
+2026-10-31T07:02:34.7799551Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle	0.007s
+2026-10-31T07:02:34.8668270Z ok  	github.com/samuelpmahan/gondola/fixtures/compiled/list	0.004s
+2026-10-31T07:02:34.8669924Z ?   	github.com/samuelpmahan/gondola/fixtures/compiled/methods	[no test files]
+2026-10-31T07:02:35.3696996Z ok  	github.com/samuelpmahan/gondola/gobi	0.160s
+2026-10-31T07:02:35.3698593Z ?   	github.com/samuelpmahan/gondola/godom	[no test files]
+2026-10-31T07:02:35.5077367Z ok  	github.com/samuelpmahan/gondola/httplab	0.052s
+2026-10-31T07:02:35.5078783Z ok  	github.com/samuelpmahan/gondola/httpwire	0.007s
+2026-10-31T07:02:35.5109914Z ok  	github.com/samuelpmahan/gondola/inputbinding	0.006s
+2026-10-31T07:02:35.7156077Z ok  	github.com/samuelpmahan/gondola/interaction	0.004s
+2026-10-31T07:02:35.9223805Z ok  	github.com/samuelpmahan/gondola/multisession	0.012s
+2026-10-31T07:02:35.9234314Z ok  	github.com/samuelpmahan/gondola/reactmap	0.005s
+2026-10-31T07:02:35.9478573Z ok  	github.com/samuelpmahan/gondola/rendercontract	0.009s
+2026-10-31T07:02:35.9480137Z ?   	github.com/samuelpmahan/gondola/renderer-conformance/coordination/reports	[no test files]
+2026-10-31T07:02:36.1461146Z ok  	github.com/samuelpmahan/gondola/wire	0.003s
+2026-10-31T07:02:37.4054398Z same over 5000 inputs
+2026-10-31T07:02:37.4970474Z receipt matches
+2026-10-31T07:02:37.5076118Z SHA256SUMS ok
+2026-10-31T07:02:37.5145950Z ##[group]Run npm ci --prefix interaction --no-audit --no-fund
+2026-10-31T07:02:37.5146462Z [36;1mnpm ci --prefix interaction --no-audit --no-fund[0m
+2026-10-31T07:02:37.5169103Z shell: /usr/bin/bash -e {0}
+2026-10-31T07:02:37.5169376Z ##[endgroup]
+2026-10-31T07:02:38.2432601Z 
+2026-10-31T07:02:38.2433444Z added 7 packages in 666ms
+2026-10-31T07:02:38.2645259Z ##[group]Run interaction/node_modules/.bin/playwright install --with-deps chromium
+2026-10-31T07:02:38.2645915Z [36;1minteraction/node_modules/.bin/playwright install --with-deps chromium[0m
+2026-10-31T07:02:38.2667361Z shell: /usr/bin/bash -e {0}
+2026-10-31T07:02:38.2667632Z ##[endgroup]
+2026-10-31T07:02:38.8155117Z Installing dependencies...
+2026-10-31T07:02:38.8278908Z Switching to root user to install dependencies...
+2026-10-31T07:02:38.9285231Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-31T07:02:38.9584017Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-31T07:02:38.9727531Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-31T07:02:38.9757894Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-31T07:02:38.9787320Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-31T07:02:38.9822169Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-31T07:02:39.0564106Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [617 kB]
+2026-10-31T07:02:39.0773794Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [682 kB]
+2026-10-31T07:02:39.1883838Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1408 kB]
+2026-10-31T07:02:39.1979449Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [311 kB]
+2026-10-31T07:02:39.1985136Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1708 kB]
+2026-10-31T07:02:39.2075406Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [343 kB]
+2026-10-31T07:02:39.2095152Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1813 kB]
+2026-10-31T07:02:39.2175892Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [412 kB]
+2026-10-31T07:02:39.2195604Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-10-31T07:02:39.3226956Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1146 kB]
+2026-10-31T07:02:39.3283698Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-31T07:02:39.3299602Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1223 kB]
+2026-10-31T07:02:39.3824535Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-31T07:02:43.1511150Z Fetched 10.5 MB in 1s (9200 kB/s)
+2026-10-31T07:02:44.4272625Z Reading package lists...
+2026-10-31T07:02:44.4652401Z Reading package lists...
+2026-10-31T07:02:44.7683598Z Building dependency tree...
+2026-10-31T07:02:44.7691333Z Reading state information...
+2026-10-31T07:02:45.0929798Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-31T07:02:45.0930622Z libasound2t64 set to manually installed.
+2026-10-31T07:02:45.0931361Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-31T07:02:45.0932527Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-31T07:02:45.0933239Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-31T07:02:45.0933990Z libatk1.0-0t64 set to manually installed.
+2026-10-31T07:02:45.0934689Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-31T07:02:45.0935362Z libatspi2.0-0t64 set to manually installed.
+2026-10-31T07:02:45.0936019Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-31T07:02:45.0936635Z libcairo2 set to manually installed.
+2026-10-31T07:02:45.0937319Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-31T07:02:45.0937973Z libcups2t64 set to manually installed.
+2026-10-31T07:02:45.0938636Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-31T07:02:45.0939299Z libdbus-1-3 set to manually installed.
+2026-10-31T07:02:45.0940426Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-31T07:02:45.0940952Z libdrm2 set to manually installed.
+2026-10-31T07:02:45.0941476Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-31T07:02:45.0942106Z libgbm1 set to manually installed.
+2026-10-31T07:02:45.0942639Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.10).
+2026-10-31T07:02:45.0943382Z libglib2.0-0t64 set to manually installed.
+2026-10-31T07:02:45.0944230Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-31T07:02:45.0944949Z libnspr4 set to manually installed.
+2026-10-31T07:02:45.0945453Z libnss3 is already the newest version (2:3.98-1ubuntu0.3).
+2026-10-31T07:02:45.0945921Z libnss3 set to manually installed.
+2026-10-31T07:02:45.0946446Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-31T07:02:45.0946976Z libpango-1.0-0 set to manually installed.
+2026-10-31T07:02:45.0947707Z libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+2026-10-31T07:02:45.0948193Z libx11-6 set to manually installed.
+2026-10-31T07:02:45.0948664Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-31T07:02:45.0949118Z libxcb1 set to manually installed.
+2026-10-31T07:02:45.0949647Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-31T07:02:45.0950155Z libxcomposite1 set to manually installed.
+2026-10-31T07:02:45.0950606Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-31T07:02:45.0951040Z libxdamage1 set to manually installed.
+2026-10-31T07:02:45.0951456Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-31T07:02:45.0952166Z libxext6 set to manually installed.
+2026-10-31T07:02:45.0952581Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-31T07:02:45.0952982Z libxfixes3 set to manually installed.
+2026-10-31T07:02:45.0953401Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-31T07:02:45.0953810Z libxkbcommon0 set to manually installed.
+2026-10-31T07:02:45.0954228Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-31T07:02:45.0954626Z libxrandr2 set to manually installed.
+2026-10-31T07:02:45.0955030Z xvfb is already the newest version (2:21.1.12-1ubuntu1.9).
+2026-10-31T07:02:45.0955587Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-31T07:02:45.0956177Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-31T07:02:45.0956611Z libfontconfig1 set to manually installed.
+2026-10-31T07:02:45.0957072Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+2026-10-31T07:02:45.0957516Z libfreetype6 set to manually installed.
+2026-10-31T07:02:45.0957947Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-31T07:02:45.0958372Z fonts-liberation set to manually installed.
+2026-10-31T07:02:45.0958798Z The following additional packages will be installed:
+2026-10-31T07:02:45.0959184Z   xfonts-encodings xfonts-utils
+2026-10-31T07:02:45.0959493Z Recommended packages:
+2026-10-31T07:02:45.0959817Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-10-31T07:02:45.1210103Z The following NEW packages will be installed:
+2026-10-31T07:02:45.1210919Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-31T07:02:45.1226938Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-31T07:02:45.1227787Z   xfonts-utils
+2026-10-31T07:02:45.1535806Z 0 upgraded, 9 newly installed, 0 to remove and 6 not upgraded.
+2026-10-31T07:02:45.1536513Z Need to get 21.1 MB of archives.
+2026-10-31T07:02:45.1537344Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-31T07:02:45.1538157Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-31T07:02:45.3049335Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-31T07:02:45.8809933Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-31T07:02:46.0334073Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-31T07:02:46.0933842Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-31T07:02:46.1751616Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-31T07:02:46.3611096Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-31T07:02:46.4240871Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-31T07:02:46.4839932Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-31T07:02:46.5498330Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-31T07:02:46.8690094Z Fetched 21.1 MB in 1s (14.9 MB/s)
+2026-10-31T07:02:46.8965943Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-31T07:02:46.9263196Z (Reading database ... 
+2026-10-31T07:02:46.9263809Z (Reading database ... 5%
+2026-10-31T07:02:46.9264311Z (Reading database ... 10%
+2026-10-31T07:02:46.9264765Z (Reading database ... 15%
+2026-10-31T07:02:46.9265389Z (Reading database ... 20%
+2026-10-31T07:02:46.9265877Z (Reading database ... 25%
+2026-10-31T07:02:46.9266310Z (Reading database ... 30%
+2026-10-31T07:02:46.9266589Z (Reading database ... 35%
+2026-10-31T07:02:46.9266858Z (Reading database ... 40%
+2026-10-31T07:02:46.9267130Z (Reading database ... 45%
+2026-10-31T07:02:46.9267765Z (Reading database ... 50%
+2026-10-31T07:02:46.9336294Z (Reading database ... 55%
+2026-10-31T07:02:47.1083093Z (Reading database ... 60%
+2026-10-31T07:02:47.2625354Z (Reading database ... 65%
+2026-10-31T07:02:47.5060382Z (Reading database ... 70%
+2026-10-31T07:02:47.7130338Z (Reading database ... 75%
+2026-10-31T07:02:47.8566901Z (Reading database ... 80%
+2026-10-31T07:02:48.0144049Z (Reading database ... 85%
+2026-10-31T07:02:48.1614225Z (Reading database ... 90%
+2026-10-31T07:02:48.3778546Z (Reading database ... 95%
+2026-10-31T07:02:48.3779262Z (Reading database ... 100%
+2026-10-31T07:02:48.3779978Z (Reading database ... 215504 files and directories currently installed.)
+2026-10-31T07:02:48.3827014Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-31T07:02:48.3949874Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-31T07:02:48.6447846Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-31T07:02:48.6598221Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-31T07:02:48.6606951Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-31T07:02:48.7576790Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-31T07:02:48.7728724Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-31T07:02:48.7737739Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-31T07:02:48.8022903Z Selecting previously unselected package fonts-unifont.
+2026-10-31T07:02:48.8171248Z Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-31T07:02:48.8180573Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-31T07:02:48.9409918Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-31T07:02:48.9562571Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-31T07:02:48.9694700Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-31T07:02:49.4867811Z Selecting previously unselected package xfonts-encodings.
+2026-10-31T07:02:49.5022822Z Preparing to unpack .../5-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-31T07:02:49.5031046Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-31T07:02:49.5413496Z Selecting previously unselected package xfonts-utils.
+2026-10-31T07:02:49.5576043Z Preparing to unpack .../6-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-31T07:02:49.5585060Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-31T07:02:49.6243853Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-31T07:02:49.6399260Z Preparing to unpack .../7-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-31T07:02:49.6409493Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-31T07:02:49.6865296Z Selecting previously unselected package xfonts-scalable.
+2026-10-31T07:02:49.7027595Z Preparing to unpack .../8-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-31T07:02:49.7038729Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-31T07:02:49.7597363Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-31T07:02:49.7741957Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-31T07:02:49.7764090Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-31T07:02:49.7786650Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-31T07:02:49.7807808Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-31T07:02:49.7885600Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-31T07:02:49.7905392Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-31T07:02:49.7927381Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-31T07:02:49.7980596Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-31T07:02:49.8318076Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-31T07:02:49.8648092Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-31T07:02:49.8674389Z Not building database; man-db/auto-update is not 'true'.
+2026-10-31T07:02:49.8691293Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-31T07:02:50.6758294Z 
+2026-10-31T07:02:50.6759093Z Running kernel seems to be up-to-date.
+2026-10-31T07:02:50.6759463Z 
+2026-10-31T07:02:50.6759688Z No services need to be restarted.
+2026-10-31T07:02:50.6760138Z 
+2026-10-31T07:02:50.6760503Z No containers need to be restarted.
+2026-10-31T07:02:50.6761022Z 
+2026-10-31T07:02:50.6761336Z No user sessions are running outdated binaries.
+2026-10-31T07:02:50.6762057Z 
+2026-10-31T07:02:50.6762832Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-31T07:02:52.1089260Z Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-linux64.zip
+2026-10-31T07:02:52.5803263Z |                                                                                |   0% of 191.1 MiB
+2026-10-31T07:02:52.7505697Z |■■■■■■■■                                                                        |  10% of 191.1 MiB
+2026-10-31T07:02:52.8510458Z |■■■■■■■■■■■■■■■■                                                                |  20% of 191.1 MiB
+2026-10-31T07:02:52.9385375Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 191.1 MiB
+2026-10-31T07:02:53.0479369Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 191.1 MiB
+2026-10-31T07:02:53.1493473Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 191.1 MiB
+2026-10-31T07:02:53.2487014Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 191.1 MiB
+2026-10-31T07:02:53.3389318Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 191.1 MiB
+2026-10-31T07:02:53.4407144Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 191.1 MiB
+2026-10-31T07:02:53.5450406Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 191.1 MiB
+2026-10-31T07:02:53.6544060Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 191.1 MiB
+2026-10-31T07:02:56.3732942Z Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to /home/runner/.cache/ms-playwright/chromium-1248
+2026-10-31T07:02:56.3738011Z Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-linux.zip
+2026-10-31T07:02:56.7713305Z |                                                                                |   0% of 2.2 MiB
+2026-10-31T07:02:56.7784680Z |■■■■■■■■                                                                        |  10% of 2.2 MiB
+2026-10-31T07:02:56.7800101Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.2 MiB
+2026-10-31T07:02:56.7826853Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.2 MiB
+2026-10-31T07:02:56.7837081Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.2 MiB
+2026-10-31T07:02:56.7853845Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.2 MiB
+2026-10-31T07:02:56.7870668Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.2 MiB
+2026-10-31T07:02:56.7885003Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.2 MiB
+2026-10-31T07:02:56.7897024Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.2 MiB
+2026-10-31T07:02:56.7913558Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.2 MiB
+2026-10-31T07:02:56.7921608Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.2 MiB
+2026-10-31T07:02:56.8669184Z FFmpeg (playwright ffmpeg v1013) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1013
+2026-10-31T07:02:56.8673371Z Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-headless-shell-linux64.zip
+2026-10-31T07:02:57.3416689Z |                                                                                |   0% of 120 MiB
+2026-10-31T07:02:57.4896137Z |■■■■■■■■                                                                        |  10% of 120 MiB
+2026-10-31T07:02:57.5620415Z |■■■■■■■■■■■■■■■■                                                                |  20% of 120 MiB
+2026-10-31T07:02:57.6269462Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 120 MiB
+2026-10-31T07:02:57.6825119Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 120 MiB
+2026-10-31T07:02:57.7450178Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 120 MiB
+2026-10-31T07:02:57.8068087Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 120 MiB
+2026-10-31T07:02:57.8888377Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 120 MiB
+2026-10-31T07:02:57.9504429Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+2026-10-31T07:02:58.0238204Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+2026-10-31T07:02:58.0912066Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+2026-10-31T07:03:00.0325257Z Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1248
+2026-10-31T07:03:00.0534104Z ##[group]Run bash run-backend-replacement.sh
+2026-10-31T07:03:00.0534531Z [36;1mbash run-backend-replacement.sh[0m
+2026-10-31T07:03:00.0557115Z shell: /usr/bin/bash -e {0}
+2026-10-31T07:03:00.0557373Z env:
+2026-10-31T07:03:00.0557580Z   GONDOLA_SKIP_NPM_CI: 1
+2026-10-31T07:03:00.0557825Z   GONDOLA_SKIP_BROWSER_INSTALL: 1
+2026-10-31T07:03:00.0558083Z ##[endgroup]
+2026-10-31T07:03:05.3422497Z 
+2026-10-31T07:03:05.3423447Z   interaction/build/react-reference.bundle.mjs  1.1mb ⚠️
+2026-10-31T07:03:05.3423800Z 
+2026-10-31T07:03:05.3423953Z ⚡ Done in 57ms
+2026-10-31T07:03:05.3963211Z TAP version 13
+2026-10-31T07:03:05.8490097Z # Subtest: matching snapshots have no differences
+2026-10-31T07:03:05.8494712Z ok 1 - matching snapshots have no differences
+2026-10-31T07:03:05.8497292Z   ---
+2026-10-31T07:03:05.8497746Z   duration_ms: 1.82782
+2026-10-31T07:03:05.8498208Z   type: 'test'
+2026-10-31T07:03:05.8498576Z   ...
+2026-10-31T07:03:05.8499237Z # Subtest: the comparator catches state drift
+2026-10-31T07:03:05.8500282Z ok 2 - the comparator catches state drift
+2026-10-31T07:03:05.8520766Z   ---
+2026-10-31T07:03:05.8526483Z   duration_ms: 0.268199
+2026-10-31T07:03:05.8527895Z   type: 'test'
+2026-10-31T07:03:05.8528450Z   ...
+2026-10-31T07:03:05.8529165Z # Subtest: the comparator catches full Node tree drift
+2026-10-31T07:03:05.8530115Z ok 3 - the comparator catches full Node tree drift
+2026-10-31T07:03:05.8530809Z   ---
+2026-10-31T07:03:05.8531199Z   duration_ms: 0.25811
+2026-10-31T07:03:05.8531891Z   type: 'test'
+2026-10-31T07:03:05.8532244Z   ...
+2026-10-31T07:03:05.8532623Z # Subtest: the comparator catches ordered message-log drift
+2026-10-31T07:03:05.8533278Z ok 4 - the comparator catches ordered message-log drift
+2026-10-31T07:03:05.8533677Z   ---
+2026-10-31T07:03:05.8533899Z   duration_ms: 0.334202
+2026-10-31T07:03:05.8534136Z   type: 'test'
+2026-10-31T07:03:05.8534426Z   ...
+2026-10-31T07:03:05.8534951Z # Subtest: the comparator checks serialized DOM and disabled state separately
+2026-10-31T07:03:05.8535661Z ok 5 - the comparator checks serialized DOM and disabled state separately
+2026-10-31T07:03:05.8536204Z   ---
+2026-10-31T07:03:05.8536420Z   duration_ms: 0.272176
+2026-10-31T07:03:05.8536658Z   type: 'test'
+2026-10-31T07:03:05.8537044Z   ...
+2026-10-31T07:03:05.8777608Z # Subtest: fixed scripts cover disabled reset, interleaving, and burst clicks
+2026-10-31T07:03:05.8778927Z ok 6 - fixed scripts cover disabled reset, interleaving, and burst clicks
+2026-10-31T07:03:05.8779710Z   ---
+2026-10-31T07:03:05.8780124Z   duration_ms: 1.587043
+2026-10-31T07:03:05.8780651Z   type: 'test'
+2026-10-31T07:03:05.8781148Z   ...
+2026-10-31T07:03:05.8782195Z # Subtest: seeded scripts are stable and retain enough context to reproduce failures
+2026-10-31T07:03:05.8783397Z ok 7 - seeded scripts are stable and retain enough context to reproduce failures
+2026-10-31T07:03:05.8784112Z   ---
+2026-10-31T07:03:05.8784492Z   duration_ms: 0.992888
+2026-10-31T07:03:05.8784918Z   type: 'test'
+2026-10-31T07:03:05.8785292Z   ...
+2026-10-31T07:03:05.8785886Z # Subtest: seed and size arguments reject invalid values
+2026-10-31T07:03:05.8786676Z ok 8 - seed and size arguments reject invalid values
+2026-10-31T07:03:05.8787214Z   ---
+2026-10-31T07:03:05.8787586Z   duration_ms: 3.48245
+2026-10-31T07:03:05.8787999Z   type: 'test'
+2026-10-31T07:03:05.8788345Z   ...
+2026-10-31T07:03:05.8788668Z 1..8
+2026-10-31T07:03:05.8788992Z # tests 8
+2026-10-31T07:03:05.8789323Z # suites 0
+2026-10-31T07:03:05.8789676Z # pass 8
+2026-10-31T07:03:05.8790004Z # fail 0
+2026-10-31T07:03:05.8790335Z # cancelled 0
+2026-10-31T07:03:05.8790692Z # skipped 0
+2026-10-31T07:03:05.8791484Z # todo 0
+2026-10-31T07:03:05.8792110Z # duration_ms 500.571599
+2026-10-31T07:03:27.4730924Z interaction parity matched 107 scripts over 4473 initial/action ticks (seed 20261030)
+2026-10-31T07:03:27.4732831Z native comparator: matched
+2026-10-31T07:03:27.4733973Z full traces: /home/runner/work/gondola/gondola/interaction/build/interaction-traces-seed-20261030.json
+2026-10-31T07:03:27.6754224Z 
+2026-10-31T07:03:27.6763682Z   backend-replacement/build/react-backend.bundle.mjs  1.1mb ⚠️
+2026-10-31T07:03:27.6764286Z 
+2026-10-31T07:03:27.6764538Z ⚡ Done in 59ms
+2026-10-31T07:03:27.7293148Z TAP version 13
+2026-10-31T07:03:28.1033298Z # Subtest: three matching snapshot channels have no differences
+2026-10-31T07:03:28.1042105Z ok 1 - three matching snapshot channels have no differences
+2026-10-31T07:03:28.1043717Z   ---
+2026-10-31T07:03:28.1044025Z   duration_ms: 1.931157
+2026-10-31T07:03:28.1044353Z   type: 'test'
+2026-10-31T07:03:28.1044618Z   ...
+2026-10-31T07:03:28.1049209Z # Subtest: comparison is strict for state, full Node tree, and ordered messages
+2026-10-31T07:03:28.1051116Z ok 2 - comparison is strict for state, full Node tree, and ordered messages
+2026-10-31T07:03:28.1062440Z   ---
+2026-10-31T07:03:28.1062895Z   duration_ms: 0.248167
+2026-10-31T07:03:28.1063361Z   type: 'test'
+2026-10-31T07:03:28.1063728Z   ...
+2026-10-31T07:03:28.1064687Z # Subtest: comparison checks actual HTML, disabled paths, and root outerHTML independently
+2026-10-31T07:03:28.1066063Z ok 3 - comparison checks actual HTML, disabled paths, and root outerHTML independently
+2026-10-31T07:03:28.1066690Z   ---
+2026-10-31T07:03:28.1066948Z   duration_ms: 0.343422
+2026-10-31T07:03:28.1067234Z   type: 'test'
+2026-10-31T07:03:28.1067476Z   ...
+2026-10-31T07:03:28.1074395Z # Subtest: fixed scripts include clicks, repeated mid-session swaps, and unknown backend failures
+2026-10-31T07:03:28.1075697Z ok 4 - fixed scripts include clicks, repeated mid-session swaps, and unknown backend failures
+2026-10-31T07:03:28.1076437Z   ---
+2026-10-31T07:03:28.1076991Z   duration_ms: 0.29664
+2026-10-31T07:03:28.1077516Z   type: 'test'
+2026-10-31T07:03:28.1077976Z   ...
+2026-10-31T07:03:28.1078970Z # Subtest: seeded scripts are deterministic, bounded, and exercise both hosts when budget permits
+2026-10-31T07:03:28.1080452Z ok 5 - seeded scripts are deterministic, bounded, and exercise both hosts when budget permits
+2026-10-31T07:03:28.1081271Z   ---
+2026-10-31T07:03:28.1081929Z   duration_ms: 0.94618
+2026-10-31T07:03:28.1082390Z   type: 'test'
+2026-10-31T07:03:28.1082740Z   ...
+2026-10-31T07:03:28.1083618Z # Subtest: short generated scripts respect maxActions and retain at least one replacement
+2026-10-31T07:03:28.1084903Z ok 6 - short generated scripts respect maxActions and retain at least one replacement
+2026-10-31T07:03:28.1085650Z   ---
+2026-10-31T07:03:28.1086026Z   duration_ms: 0.197019
+2026-10-31T07:03:28.1086449Z   type: 'test'
+2026-10-31T07:03:28.1086792Z   ...
+2026-10-31T07:03:28.1092596Z # Subtest: native steps distinguish backend swaps and preserve real click input
+2026-10-31T07:03:28.1093963Z ok 7 - native steps distinguish backend swaps and preserve real click input
+2026-10-31T07:03:28.1094649Z   ---
+2026-10-31T07:03:28.1104791Z   duration_ms: 0.320171
+2026-10-31T07:03:28.1122929Z   type: 'test'
+2026-10-31T07:03:28.1123786Z   ...
+2026-10-31T07:03:28.1125341Z # Subtest: scoped expected runtime failure passes only with an exact manifest and no global browser errors
+2026-10-31T07:03:28.1127353Z ok 8 - scoped expected runtime failure passes only with an exact manifest and no global browser errors
+2026-10-31T07:03:28.1128524Z   ---
+2026-10-31T07:03:28.1129079Z   duration_ms: 0.24366
+2026-10-31T07:03:28.1129933Z   type: 'test'
+2026-10-31T07:03:28.1130457Z   ...
+2026-10-31T07:03:28.1131688Z # Subtest: unrelated browser errors remain fatal when the expected error was scoped
+2026-10-31T07:03:28.1133466Z ok 9 - unrelated browser errors remain fatal when the expected error was scoped
+2026-10-31T07:03:28.1134590Z   ---
+2026-10-31T07:03:28.1136175Z   duration_ms: 0.378251
+2026-10-31T07:03:28.1136923Z   type: 'test'
+2026-10-31T07:03:28.1137603Z   ...
+2026-10-31T07:03:28.1138621Z # Subtest: a duplicate sentinel in global errors remains fatal
+2026-10-31T07:03:28.1139744Z ok 10 - a duplicate sentinel in global errors remains fatal
+2026-10-31T07:03:28.1140523Z   ---
+2026-10-31T07:03:28.1141109Z   duration_ms: 0.419052
+2026-10-31T07:03:28.1142192Z   type: 'test'
+2026-10-31T07:03:28.1142799Z   ...
+2026-10-31T07:03:28.1143777Z # Subtest: CLI options default to the required seed and generated trace size
+2026-10-31T07:03:28.1145121Z ok 11 - CLI options default to the required seed and generated trace size
+2026-10-31T07:03:28.1145966Z   ---
+2026-10-31T07:03:28.1146583Z   duration_ms: 0.343171
+2026-10-31T07:03:28.1147243Z   type: 'test'
+2026-10-31T07:03:28.1147672Z   ...
+2026-10-31T07:03:28.1148402Z # Subtest: CLI rejects malformed ranges and unknown flags
+2026-10-31T07:03:28.1149295Z ok 12 - CLI rejects malformed ranges and unknown flags
+2026-10-31T07:03:28.1149892Z   ---
+2026-10-31T07:03:28.1150277Z   duration_ms: 0.358277
+2026-10-31T07:03:28.1163714Z   type: 'test'
+2026-10-31T07:03:28.1164052Z   ...
+2026-10-31T07:03:28.1337979Z # Subtest: switches renderers around one runtime while preserving snapshots and dispatch order
+2026-10-31T07:03:28.1339471Z ok 13 - switches renderers around one runtime while preserving snapshots and dispatch order
+2026-10-31T07:03:28.1340334Z   ---
+2026-10-31T07:03:28.1340713Z   duration_ms: 3.857516
+2026-10-31T07:03:28.1341137Z   type: 'test'
+2026-10-31T07:03:28.1341476Z   ...
+2026-10-31T07:03:28.1347856Z # Subtest: stale renderer facades cannot dispatch and same-backend replacement is idempotent
+2026-10-31T07:03:28.1349231Z ok 14 - stale renderer facades cannot dispatch and same-backend replacement is idempotent
+2026-10-31T07:03:28.1350060Z   ---
+2026-10-31T07:03:28.1350433Z   duration_ms: 0.672759
+2026-10-31T07:03:28.1350858Z   type: 'test'
+2026-10-31T07:03:28.1351189Z   ...
+2026-10-31T07:03:28.1353018Z # Subtest: unknown backend names fail before changing the current renderer
+2026-10-31T07:03:28.1354143Z ok 15 - unknown backend names fail before changing the current renderer
+2026-10-31T07:03:28.1354799Z   ---
+2026-10-31T07:03:28.1355174Z   duration_ms: 0.325451
+2026-10-31T07:03:28.1355602Z   type: 'test'
+2026-10-31T07:03:28.1355943Z   ...
+2026-10-31T07:03:28.1356786Z # Subtest: failed replacement remounts the old backend from the latest cached snapshot
+2026-10-31T07:03:28.1357995Z ok 16 - failed replacement remounts the old backend from the latest cached snapshot
+2026-10-31T07:03:28.1358731Z   ---
+2026-10-31T07:03:28.1359100Z   duration_ms: 0.507283
+2026-10-31T07:03:28.1359506Z   type: 'test'
+2026-10-31T07:03:28.1359852Z   ...
+2026-10-31T07:03:28.1360608Z # Subtest: a backend cannot mutate runtime state during a mount that later fails
+2026-10-31T07:03:28.1362278Z ok 17 - a backend cannot mutate runtime state during a mount that later fails
+2026-10-31T07:03:28.1362962Z   ---
+2026-10-31T07:03:28.1363310Z   duration_ms: 0.600886
+2026-10-31T07:03:28.1363724Z   type: 'test'
+2026-10-31T07:03:28.1364064Z   ...
+2026-10-31T07:03:28.1364940Z # Subtest: renderer click failure fences dispatch without resetting an accepted runtime snapshot
+2026-10-31T07:03:28.1366311Z ok 18 - renderer click failure fences dispatch without resetting an accepted runtime snapshot
+2026-10-31T07:03:28.1367118Z   ---
+2026-10-31T07:03:28.1367485Z   duration_ms: 0.74322
+2026-10-31T07:03:28.1367974Z   type: 'test'
+2026-10-31T07:03:28.1368346Z   ...
+2026-10-31T07:03:28.1368928Z # Subtest: host operations reject use after unmount
+2026-10-31T07:03:28.1369718Z ok 19 - host operations reject use after unmount
+2026-10-31T07:03:28.1370261Z   ---
+2026-10-31T07:03:28.1370667Z   duration_ms: 0.330289
+2026-10-31T07:03:28.1371115Z   type: 'test'
+2026-10-31T07:03:28.1371452Z   ...
+2026-10-31T07:03:28.1372479Z # Subtest: runtime errors do not replace the last successful cached snapshot
+2026-10-31T07:03:28.1373576Z ok 20 - runtime errors do not replace the last successful cached snapshot
+2026-10-31T07:03:28.1374418Z   ---
+2026-10-31T07:03:28.1374676Z   duration_ms: 0.30232
+2026-10-31T07:03:28.1374959Z   type: 'test'
+2026-10-31T07:03:28.1375832Z   ...
+2026-10-31T07:03:28.1376378Z 1..20
+2026-10-31T07:03:28.1376803Z # tests 20
+2026-10-31T07:03:28.1377165Z # suites 0
+2026-10-31T07:03:28.1377517Z # pass 20
+2026-10-31T07:03:28.1377902Z # fail 0
+2026-10-31T07:03:28.1378264Z # cancelled 0
+2026-10-31T07:03:28.1378864Z # skipped 0
+2026-10-31T07:03:28.1379273Z # todo 0
+2026-10-31T07:03:28.1379690Z # duration_ms 422.742668
+2026-10-31T07:03:28.8583419Z PASS initial DOM render: backend=dom, Count=0, messages=0, DOM matches
+2026-10-31T07:03:28.9446393Z PASS first Add: backend=dom, Count=1, messages=1, DOM matches
+2026-10-31T07:03:29.0203952Z PASS second Add: backend=dom, Count=2, messages=2, DOM matches
+2026-10-31T07:03:29.0749482Z PASS swap to React: backend=react, Count=2, messages=2, DOM matches
+2026-10-31T07:03:29.1361289Z PASS Add on React: backend=react, Count=3, messages=3, DOM matches
+2026-10-31T07:03:29.1778554Z PASS swap back to DOM: backend=dom, Count=3, messages=3, DOM matches
+2026-10-31T07:03:29.2525922Z PASS Reset after swap: backend=dom, Count=0, messages=4, DOM matches
+2026-10-31T07:03:29.2527091Z Demo smoke passed (7 states across DOM and React renderers).
+2026-10-31T07:04:02.1859467Z backend replacement parity matched 103 scripts over 5249 initial/action ticks (seed 20261030)
+2026-10-31T07:04:02.1861513Z native Gobi trace comparison: matched
+2026-10-31T07:04:02.1863164Z full traces: /home/runner/work/gondola/gondola/backend-replacement/build/report-seed-20261030.json
+2026-10-31T07:04:02.3868830Z ##[group]Run actions/upload-artifact@v4
+2026-10-31T07:04:02.3869161Z with:
+2026-10-31T07:04:02.3869400Z   name: gobi-backend-replacement-artifacts
+2026-10-31T07:04:02.3869831Z   path: interaction/build/
+interaction/artifacts/
+backend-replacement/build/
+
+2026-10-31T07:04:02.3870247Z   if-no-files-found: ignore
+2026-10-31T07:04:02.3870506Z   compression-level: 6
+2026-10-31T07:04:02.3870732Z   overwrite: false
+2026-10-31T07:04:02.3870972Z   include-hidden-files: false
+2026-10-31T07:04:02.3871222Z ##[endgroup]
+2026-10-31T07:04:02.5626901Z (node:10735) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-31T07:04:02.5628395Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-31T07:04:02.6349997Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-31T07:04:02.6353803Z The least common ancestor is /home/runner/work/gondola/gondola. This will be the root directory of the artifact
+2026-10-31T07:04:02.6355451Z With the provided path, there will be 320 files uploaded
+2026-10-31T07:04:02.6362481Z Artifact name is valid!
+2026-10-31T07:04:02.6363454Z Root directory input is valid!
+2026-10-31T07:04:03.0119219Z Beginning upload of artifact content to blob storage
+2026-10-31T07:04:04.6456121Z (node:10735) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-31T07:04:05.6909008Z Uploaded bytes 5977116
+2026-10-31T07:04:05.7689670Z Finished uploading artifact content to blob storage!
+2026-10-31T07:04:05.7690709Z SHA256 digest of uploaded artifact zip is 535e704438d954fee49ec39bd5f1dc507c73b0fd547e53afb7a000c6b1af4d27
+2026-10-31T07:04:05.7692929Z Finalizing artifact upload
+2026-10-31T07:04:06.2081098Z Artifact gobi-backend-replacement-artifacts.zip successfully finalized. Artifact ID 13034022378
+2026-10-31T07:04:06.2083431Z Artifact gobi-backend-replacement-artifacts has been successfully uploaded! Final size is 5977116 bytes. Artifact ID is 13034022378
+2026-10-31T07:04:06.2088705Z Artifact download URL: https://github.com/samuelpmahan/gondola/actions/runs/41178477181/artifacts/13034022378
+2026-10-31T07:04:06.2430449Z Post job cleanup.
+2026-10-31T07:04:06.3748346Z (node:10749) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-31T07:04:06.3750759Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-31T07:04:06.3753446Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-90b127dcd6765ca2c051251bef17731da37759a93403a4f6db400a1efee489c1, not saving cache.
+2026-10-31T07:04:06.3889631Z Post job cleanup.
+2026-10-31T07:04:06.5222450Z (node:10757) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-31T07:04:06.5223329Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-31T07:04:06.5314260Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOMODCACHE
+2026-10-31T07:04:06.5364385Z [command]/opt/hostedtoolcache/go/1.24.13/x64/bin/go env GOCACHE
+2026-10-31T07:04:06.5402253Z /home/runner/go/pkg/mod
+2026-10-31T07:04:06.5430858Z /home/runner/.cache/go-build
+2026-10-31T07:04:06.5435241Z Primary key was not generated. Please check the log messages above for more errors or information
+2026-10-31T07:04:06.5647685Z Post job cleanup.
+2026-10-31T07:04:06.6665237Z [command]/usr/bin/git version
+2026-10-31T07:04:06.6713850Z git version 2.56.0
+2026-10-31T07:04:06.6758988Z Temporarily overriding HOME='/home/runner/work/_temp/73c5f438-0268-4ea9-9ac2-3f4d9b15355c' before making global git config changes
+2026-10-31T07:04:06.6760579Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-31T07:04:06.6765211Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/gondola/gondola
+2026-10-31T07:04:06.6817301Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-31T07:04:06.6883771Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-31T07:04:06.7164311Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-31T07:04:06.7199107Z http.https://github.com/.extraheader
+2026-10-31T07:04:06.7234564Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-31T07:04:06.7284329Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-31T07:04:06.7588607Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-31T07:04:06.7638634Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-31T07:04:06.8047528Z Cleaning up orphan processes
+2026-10-31T07:04:06.8393175Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

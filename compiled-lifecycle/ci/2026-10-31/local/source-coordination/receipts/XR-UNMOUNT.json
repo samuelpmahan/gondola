@@ -1,0 +1,66 @@
+{
+  "job_id": "XR-UNMOUNT",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "The wrapper now retires lifecycle effects only after core accepts unmount or the deferred microtask observes actual disposal. Replaying the original valid completion Proxy leaves the driver open, accepts the completion, and permits later request/reply delivery. Deferred unmount retains callbacks until disposal, then retires them; direct unmount releases outstanding callbacks.",
+  "evidence": {
+    "report_sha256": "f483379e5f73667ced610134c92777c1a5f59d2cf130dbc1d46711717ea8cc6b",
+    "author_packet": {
+      "report_sha256": "0b41c537f602df408c31faffaf83fc5b18c72d083849d7498789efa5258527e6",
+      "receipt_sha256": "8149c997f964f892c8e80e070098990a9e7afc778fe35cc33e6e73bdf4b569a4"
+    },
+    "independent_tests": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 9,
+        "failed": 0,
+        "exit_code": 0,
+        "source_hash": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+        "test_source_hash": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+        "log": "compiled-lifecycle/coordination/reviews/xr-unmount/review-lifecycle-9.log",
+        "log_sha256": "843a157f1596a7734f9b7e9c13753b14cb9aeebaaf21ebb4ca79b53b0cb7adb2"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "source_hash": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+        "test_source_hash": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+        "log": "compiled-lifecycle/coordination/reviews/xr-unmount/review-shared-runtime-29.log",
+        "log_sha256": "c8b30d73879c7536c5b975e149ffad84a2415eec0cc3be13533fca8f429fe230"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node compiled-lifecycle/coordination/reviews/xr-unmount/reentrant-unmount-probe.mjs",
+        "exit_code": 0,
+        "expected_observations": [
+          "The nested completion-time unmount returns false without retiring the driver.",
+          "The valid completion remains accepted and the runtime remains mounted after the deferred check.",
+          "A subsequent child request and reply delivery are accepted.",
+          "A normal unmount leaves no pending requests and releases a sibling callback."
+        ],
+        "source": "compiled-lifecycle/coordination/reviews/xr-unmount/reentrant-unmount-probe.mjs",
+        "source_sha256": "9c256dd187c01fe9413f996314f8c64c79671ca0d595eb3e93de2f5ba8327b5e",
+        "result": "compiled-lifecycle/coordination/reviews/xr-unmount/reentrant-unmount-probe.json",
+        "result_sha256": "216369990e704affd0f5745becb7633a1186f8c1caf3d1ac121089bb7911001e"
+      }
+    ],
+    "regression_evidence": {
+      "pre_fix_result": "compiled-lifecycle/coordination/reviews/xr-runtime/unmount-reentry-repro.json",
+      "pre_fix_sha256": "7a13946b98a78ef9ec34102fa8141e279f9c541d31c5fa84f2cf8865409301d6",
+      "post_fix_probe_sha256": "216369990e704affd0f5745becb7633a1186f8c1caf3d1ac121089bb7911001e",
+      "deferred_disposal_assertions": "The 9/9 lifecycle suite verifies that pending remains until the actual core disposal is observed, then becomes empty and force delivery reports that its callback was released."
+    },
+    "current_source_hashes": {
+      "compiled-lifecycle/runtime/runtime.mjs": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1"
+    },
+    "limits": [
+      "The cross-profile React/DOM/browser matrix was not part of this wrapper review and remains with the harness lane."
+    ]
+  }
+}

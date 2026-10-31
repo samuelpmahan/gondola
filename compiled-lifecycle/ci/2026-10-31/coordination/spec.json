@@ -1,0 +1,53 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-CI-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "lanes/go/**",
+      "summary": "Audit typed native/direct state, real Go slices and source/module linkage; final accepted artifact required; preflight may inspect local proof but is not final CI acceptance."
+    },
+    {
+      "id": "E-CI-ORDER",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "lanes/order/**",
+      "summary": "Audit lifecycle intents, callbacks, Go old reply guards, cancellation order, teardown; final artifact required; preflight may inspect local proof but is not final CI acceptance."
+    },
+    {
+      "id": "E-CI-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "lanes/demo/**",
+      "summary": "Audit actual managed CI HTTP demo/screenshot/assets/lifecycle state; final artifact required; preflight may inspect local proof but is not final CI acceptance."
+    },
+    {
+      "id": "E-CI-EVIDENCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "lanes/evidence/**",
+      "summary": "Collect28 workflow statuses/logs; verify source/merge tree and full inherited/static results; preflight may inspect local proof but is not final CI acceptance."
+    }
+  ]
+}

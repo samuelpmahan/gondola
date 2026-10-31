@@ -1,0 +1,39 @@
+{
+  "yamlParser": "PyYAML 6.0.3 BaseLoader",
+  "oldWorkflow": {
+    "sha256": "464789e75a245e40147d6200c11808ee2350efc8687b0300727cc2b62bbf2642",
+    "bytes": 2017,
+    "matchesRecoveredCopy": true,
+    "matchesPriorRecordedPin": true,
+    "parseError": "while scanning a simple key\n  in \"<unicode string>\", line 48, column 11:\n              compiled-lifecycle/builds/feasib ... \n              ^\ncould not find expected ':'\n  in \"<unicode string>\", line 60, column 11:\n              if-no-files-found: warn\n              ^"
+  },
+  "currentWorkflow": {
+    "sha256": "8c7382b44c764f8f51c8038150714d7b70c0896b3bf52359c1a848d17f99d1bd",
+    "bytes": 2019,
+    "parse": "passed",
+    "triggers": [
+      "push",
+      "pull_request"
+    ],
+    "runner": "ubuntu-latest",
+    "setupGo": "1.24.x",
+    "setupNode": "22",
+    "command": "bash run-compiled-lifecycle.sh",
+    "artifactUploadIf": "always()",
+    "artifactPaths": [
+      "compiled-lifecycle/builds/attempts/**",
+      "compiled-lifecycle/builds/feasibility/**",
+      "compiled-lifecycle/coordination/reports/E-BUILD.md",
+      "compiled-lifecycle/coordination/receipts/E-BUILD.json",
+      "compiled-lifecycle/conformance/evidence/**",
+      "compiled-lifecycle/demo/evidence/**",
+      "compiled-methods/artifacts/attempts/**",
+      "compiled-methods/coordination/reports/E-DEMO.md",
+      "compiled-methods/coordination/receipts/E-DEMO.json",
+      "compiled-backends/artifacts/**",
+      "compiled-backends/coordination/reports/E-DEMO.md",
+      "compiled-backends/coordination/receipts/E-DEMO.json",
+      "compiled-frontend/artifacts/**"
+    ]
+  }
+}

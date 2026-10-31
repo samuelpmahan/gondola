@@ -1,0 +1,85 @@
+{
+  "job_id": "XR-PORTABLE-TEST",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independently verified the R-PORTABLE-TEST loader change. The current test loader requires GOBI_LIFECYCLE_APP_DIR, validates the generated AppIR package identity, loads both generated modules only from that directory, and has no feasibility-cache fallback. Reproducing the missing-env regression against the retained old loader fails as expected; the repaired regression passes, and the full suite passes 10/10 both against N6's actual generated appDir and from an isolated mirror with no feasibility cache.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/XR-PORTABLE-TEST.md",
+    "report_sha256": "557863bd183d0499a3284cb10a76ed9059ac4d2e22d085c3f3bbd7298a1cfc30",
+    "author_packet": {
+      "job_id": "R-PORTABLE-TEST",
+      "worker": "N2",
+      "report_sha256": "d7958218b2e7b90697ace86201b8bd5a3912f42eb8f3782f4843f581c1225e7e",
+      "receipt_sha256": "d6fc3f5cf819955eddb337b1a5b64dd0ed4d8bf741c689532432e2d0728f8023"
+    },
+    "toolchain": "Node v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+    "before_source_sha256": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+    "current_source_sha256": "a07ec74fe85995e7ac18fd0d03a789e3d722f3507b6a24b5d03f410bef58e59d",
+    "production_runtime_sha256_unchanged": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+    "generated_app": {
+      "build_record_sha256": "94e70c541f3bc0c478dc0a3191b5dbeca02bb864a1a588277594968a4616a93d",
+      "manifest_sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+      "app_dir": "/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707",
+      "package_path": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+      "app_ir_sha256": "341693716b95fe70cb7fe0aab3bbc26db78e920266602062510b90feb87c1f6d",
+      "compiled_module_sha256": "172c04df5a13b6963f27647fdce075a3e4df9f8cf65f3b9c8ca77d029bac975f",
+      "encoder_sha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+      "output_count": 67,
+      "diagnostics": 0
+    },
+    "checks": [
+      {
+        "name": "Old-loader missing-env regression",
+        "command": "env -u GOBI_LIFECYCLE_APP_DIR PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='compiled lifecycle fixture loader requires an explicit app directory' compiled-lifecycle/coordination/reviews/xr-portable-test/legacy-probe/compiled-lifecycle/runtime/runtime.test.mjs",
+        "exit_code": 1,
+        "expected_failure": "Missing expected rejection; the old loader discovered the actual generated app copied under its former relative feasibility-cache path.",
+        "test_source_sha256": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+        "probe_setup_sha256": "abda0158c31dbfb5ed16f0c2a10bade09ddc85eba3eaab835e75ff2974b781c2",
+        "probe_script_sha256": "21fe195abc3c5652f595a105e8dcc0d74c622c52bd4d5674a81288d0368763cf",
+        "log": "compiled-lifecycle/coordination/reviews/xr-portable-test/legacy-probe/red-regression.log",
+        "log_sha256": "0ff6c5920f113a9642b90f25b55a76fb2283ff247e6630a5be056f499e8fb156"
+      },
+      {
+        "name": "Repaired missing-env regression",
+        "command": "env -u GOBI_LIFECYCLE_APP_DIR PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test --test-name-pattern='compiled lifecycle fixture loader requires an explicit app directory' compiled-lifecycle/runtime/runtime.test.mjs",
+        "exit_code": 0,
+        "passed": 1,
+        "failed": 0,
+        "log": "compiled-lifecycle/coordination/reviews/xr-portable-test/green-missing-env.log",
+        "log_sha256": "dfc6c0c2259b2eaa3fc69c0c07407c4d57ac537655d9acdce344a1b95f3b10d2"
+      },
+      {
+        "name": "Full suite against actual generated appDir",
+        "command": "GOBI_LIFECYCLE_APP_DIR=/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707 PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "exit_code": 0,
+        "passed": 10,
+        "failed": 0,
+        "log": "compiled-lifecycle/coordination/reviews/xr-portable-test/fresh-app-full-suite.log",
+        "log_sha256": "403e7372f9c899cf1010d79de27efc0a8722bb0d2123773b3149a1e6e16f4658"
+      },
+      {
+        "name": "Full suite from isolated mirror without feasibility cache",
+        "command": "GOBI_LIFECYCLE_APP_DIR=/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707 PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/coordination/reviews/xr-portable-test/isolated/compiled-lifecycle/runtime/runtime.test.mjs",
+        "exit_code": 0,
+        "passed": 10,
+        "failed": 0,
+        "fallback_path_exists": false,
+        "log": "compiled-lifecycle/coordination/reviews/xr-portable-test/isolated-full-suite.log",
+        "log_sha256": "299c6a41651ab684051ac362c618dea1146a8b649c8f1d9f6f032b513e38d020"
+      },
+      {
+        "name": "Independent source and appDir audit",
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/reviews/xr-portable-test/audit-portability.mjs",
+        "exit_code": 0,
+        "auditor_sha256": "48419d960f9ee9c560241b3eaaec46ce2efac35e3420a3f2ad730ba7ebdb084e",
+        "output": "compiled-lifecycle/coordination/reviews/xr-portable-test/source-audit.json",
+        "output_sha256": "856dbea1ddf5fbeedcd5c454d5a5c7a24e92029c33a80969841f424462dac965"
+      }
+    ],
+    "limits": [
+      "This review accepts the explicit test loader contract and no-cache behavior only; default full-runner wiring is owned by N5/N6 and remains outside this decision.",
+      "The loader is part of the compiled lifecycle runtime test module, not a production runtime loader.",
+      "No product/test/docs/Git/state edits were made by the reviewer; no merge, deployment, or publication was performed."
+    ]
+  }
+}

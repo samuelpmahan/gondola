@@ -1,0 +1,75 @@
+{
+  "schema": "gobi.compiled-lifecycle-independent-review/v1",
+  "job_id": "XR-HARNESS",
+  "worker": "N5",
+  "epoch": "08",
+  "budget": 400,
+  "broken_constraints": [],
+  "decision": "accepted",
+  "acceptance_scope": "E-HARNESS attempt-05 only, for its recorded frozen source/build snapshot",
+  "current_tree_accepted": false,
+  "summary": "Independent review accepted attempt-05 for its frozen source/build snapshot: native/direct/React/DOM/swap outputs and eight mutation controls match the literal oracle; all 178 source and 8 build pins were stable during that run. A later oracle unit-test-only hash change is recorded, so this does not accept the current tree.",
+  "summary_sha256": "b23236324ef37cdde2dfc5f784ce5db7d35a7e048e62baf9f9e9f8d2a2d5a408",
+  "report": "compiled-lifecycle/coordination/reports/XR-HARNESS.md",
+  "report_sha256": "c8566bfc97e96cef8585b9383bc3b30512584bc7c167909116a1c414c85f63a9",
+  "audit": "compiled-lifecycle/coordination/reviews/xr-harness/audit.json",
+  "audit_sha256": "cc2fb46c31ec81449c3d0a133e308f4ac64da7a55d8b9a7515985dd9665da421",
+  "reviewed_evidence": {
+    "attempt": "compiled-lifecycle/conformance/evidence/attempt-05",
+    "run_status": "matched",
+    "check_status": "matched",
+    "run_sha256": "e4ea41b9bb24317e97ed29b406e7797a5c4b1026934d8092ee6b8a053851c106",
+    "manifest_sha256": "5c4748f510fa9a69234d824aa619e80e6d32b94ed93a7c7f6a4d3215d61292f1",
+    "native_sha256": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+    "direct_sha256": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71",
+    "browser_capture_sha256": "78886a28fc0ac6e519a21b4765167aabea6d394bf539e05b725bb2a1aabe4763",
+    "check_sha256": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a",
+    "harness_report_sha256": "5780154ee97181b20ccdc15d64e248e02a9a4fd36b963c8276917ea7279e30f5",
+    "counts": {
+      "fixture_events": 26,
+      "go_ticks": 26,
+      "clicks_per_browser_profile": 16,
+      "requests": 7,
+      "cancellations": 3,
+      "swap_profile_replacements": 17,
+      "callback_eligible_replacements": 16,
+      "callback_fences": 32,
+      "detached_button_clicks_after_remount": 18,
+      "mutation_controls_detected": 8
+    },
+    "cancellation_order": [
+      "grandchild:g1:r3",
+      "child:g1:r2",
+      "parent:g1:r1"
+    ],
+    "source_pins": {
+      "count": 178,
+      "identical_before_and_after_run": true,
+      "current_postrun_mismatches": 1,
+      "only_mismatch": {
+        "path": "compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+        "attempt_sha256": "18c88acd3e9028af30b1f737599ae537fc1354ea65f37037e5c9f89281ebae6d",
+        "current_sha256": "6a48d1d46addfa07d4792c3bf71d842c7ea6159eb69c5010b00e540df970daf1",
+        "original_bytes_preserved_at": "compiled-lifecycle/coordination/reviews/r-oracle/before/browser/lifecycle-oracle.test.mjs",
+        "change_scope": "test-only expectedEffects assertion update"
+      }
+    },
+    "build_output_pins": {
+      "count": 8,
+      "identical_before_and_after_check": true,
+      "current_mismatches": 0
+    },
+    "toolchain": {
+      "node": "v22.23.4",
+      "go": "go version go1.24.0 linux/amd64",
+      "chromium": "153.0.8010.0",
+      "playwright": "1.64.1"
+    },
+    "retained_rejected_attempts": ["attempt-00", "attempt-01", "attempt-02", "attempt-03", "attempt-04"]
+  },
+  "limits": [
+    "Attempt-05 acceptance applies only to its recorded source/build snapshot; no current-tree full acceptance is claimed after the oracle test-only edit.",
+    "Attempts 00–04 remain rejected and are not acceptance evidence.",
+    "This review inspects the recorded evidence and source; it does not rerun the full matrix."
+  ]
+}

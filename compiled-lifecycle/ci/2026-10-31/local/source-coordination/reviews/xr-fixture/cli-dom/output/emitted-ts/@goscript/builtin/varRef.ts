@@ -1,0 +1,245 @@
+import { runtimePanic } from './panic.js'
+
+export interface OwnedPointerHandle<T = unknown> {
+  readonly __goOwnedPointer: true
+  __goAddress: () => number
+  __goRef: () => VarRef<T>
+  __goSlice?: (length: number) => unknown
+}
+
+/**
+ * VarRef represents a Go variable which can be referred to by other variables.
+ *
+ * For example:
+ *   var myVariable int // variable referenced
+ *   myOtherVar := &myVariable.
+ */
+export type VarRef<T> = {
+  value: T
+  __isVarRef?: true
+  __goType?: string
+  __goAddress?: () => number
+  __goCollection?: unknown
+  __goIndex?: number
+  __goPointer?: OwnedPointerHandle<T>
+}
+
+// pointerAddressStride separates synthetic addresses so that an address plus
+// a struct field offset can be traced back to its object (see objectAtAddress).
+export const pointerAddressStride = 0x100000000
+const pointerAddresses = new WeakMap<object, number>()
+const addressObjects = new globalThis.Map<number, WeakRef<object>>()
+const addressCleanup = new FinalizationRegistry<number>((address) => {
+  addressObjects.delete(address)
+})
+const fieldReferences = new WeakMap<
+  object,
+  globalThis.Map<PropertyKey, VarRef<unknown>>
+>()
+let nextPointerAddress = 1
+
+// pointerAddress returns the stable synthetic address of an object, which
+// all runtime and reflect pointer addresses share.
+export function pointerAddress(value: object): number {
+  let address = pointerAddresses.get(value)
+  if (address === undefined) {
+    address = nextPointerAddress * pointerAddressStride
+    nextPointerAddress++
+    pointerAddresses.set(value, address)
+    addressObjects.set(address, new WeakRef(value))
+    addressCleanup.register(value, address)
+  }
+  return address
+}
+
+// objectAtAddress returns the live object a synthetic address was assigned
+// to by pointerAddress, if any.
+export function objectAtAddress(address: number): object | undefined {
+  return addressObjects.get(address)?.deref()
+}
+
+function refPointer<T>(
+  ref: VarRef<T>,
+  address: () => number,
+): OwnedPointerHandle<T> {
+  return {
+    __goOwnedPointer: true,
+    __goAddress: address,
+    __goRef: () => ref,
+  }
+}
+
+/** VariableRef allocates pointer machinery only when its pointer or address is requested. */
+class VariableRef<T> implements VarRef<T> {
+  readonly __isVarRef = true
+  private pointer?: OwnedPointerHandle<T>
+
+  constructor(public value: T) {}
+
+  get __goPointer(): OwnedPointerHandle<T> {
+    return (this.pointer ??= refPointer(this, () => pointerAddress(this)))
+  }
+
+  get __goAddress(): () => number {
+    return this.__goPointer.__goAddress
+  }
+}
+
+/** FieldReference keeps field access separate from lazily requested pointers. */
+class FieldReference<T extends object, K extends keyof T> implements VarRef<
+  T[K]
+> {
+  readonly __isVarRef = true
+  private pointer?: OwnedPointerHandle<T[K]>
+
+  constructor(
+    private readonly target: T,
+    private readonly key: K,
+  ) {}
+
+  get value(): T[K] {
+    return this.target[this.key]
+  }
+
+  set value(value: T[K]) {
+    this.target[this.key] = value
+  }
+
+  get __goPointer(): OwnedPointerHandle<T[K]> {
+    return (this.pointer ??= refPointer(this, () => pointerAddress(this)))
+  }
+
+  get __goAddress(): () => number {
+    return this.__goPointer.__goAddress
+  }
+}
+
+/** varRef wraps a variable with distinct pointer identity. */
+export function varRef<T>(v: T): VarRef<T> {
+  return new VariableRef(v)
+}
+
+/** fieldRef returns the stable reference to a mutable object field. */
+export function fieldRef<T extends object, K extends keyof T>(
+  target: T,
+  key: K,
+): VarRef<T[K]> {
+  // A loop usually takes the address of the same field again and again, as
+  // a method returning &s.field does, so the last reference is remembered,
+  // which avoids the two map lookups. References are never replaced, so it
+  // is always the one that the maps hold.
+  if (target === lastFieldTarget && key === lastFieldKey) {
+    return lastFieldRef as VarRef<T[K]>
+  }
+  const ref = fieldRefLookup(target, key)
+  lastFieldTarget = target
+  lastFieldKey = key
+  lastFieldRef = ref
+  return ref
+}
+
+// lastFieldTarget, lastFieldKey and lastFieldRef are the arguments and result
+// of the last fieldRef call. Only this one target is kept alive by them.
+let lastFieldTarget: object | undefined
+let lastFieldKey: PropertyKey | undefined
+let lastFieldRef: VarRef<unknown> | undefined
+
+// fieldRefLookup finds or makes the reference of fieldRef in fieldReferences.
+function fieldRefLookup<T extends object, K extends keyof T>(
+  target: T,
+  key: K,
+): VarRef<T[K]> {
+  let references = fieldReferences.get(target)
+  if (references === undefined) {
+    references = new globalThis.Map<PropertyKey, VarRef<unknown>>()
+    fieldReferences.set(target, references)
+  }
+  const existing = references.get(key)
+  if (existing !== undefined) return existing as VarRef<T[K]>
+  const ref = new FieldReference(target, key)
+  references.set(key, ref)
+  return ref
+}
+
+/**
+ * transientFieldRef returns a new reference to a mutable object field, for a
+ * call whose pointer parameter only reads and writes through it, so that it
+ * need not find the stable reference of fieldRef. It must never be compared,
+ * kept or given an address.
+ */
+export function transientFieldRef<T extends object, K extends keyof T>(
+  target: T,
+  key: K,
+): VarRef<T[K]> {
+  return new FieldReference(target, key)
+}
+
+/**
+ * callPointerMethod calls the pointer method member of the struct that ref
+ * refers to, with ref as its receiver: a method that may keep or compare its
+ * receiver gets the same reference to a variable, field or element that
+ * taking its address gives.
+ */
+export function callPointerMethod(
+  ref: VarRef<unknown>,
+  member: PropertyKey,
+  ...args: unknown[]
+): any {
+  const target = ref.value as Record<PropertyKey, (...args: unknown[]) => any>
+  return target[member].apply(ref, args)
+}
+
+/** isVarRef reports whether a value carries the variable-reference marker. */
+export function isVarRef(v: unknown): v is VarRef<unknown> {
+  return v !== null && typeof v === 'object' && (v as any).__isVarRef === true
+}
+
+export function isOwnedPointerHandle(
+  value: unknown,
+): value is OwnedPointerHandle {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    (value as { __goOwnedPointer?: unknown }).__goOwnedPointer === true
+  )
+}
+
+export function ownedPointerFromRef<T>(
+  ref: VarRef<T>,
+): OwnedPointerHandle<T> | undefined {
+  return ref.__goPointer
+}
+
+export function ownedPointerAddress(pointer: OwnedPointerHandle): number {
+  return pointer.__goAddress()
+}
+
+export function ownedPointerRef<T>(pointer: OwnedPointerHandle<T>): VarRef<T> {
+  return pointer.__goRef()
+}
+
+/** unref Dereference a variable reference; a null ref raises a Go runtime panic. */
+export function unref<T>(b: VarRef<T>): T {
+  if (b === null) {
+    runtimePanic(
+      'runtime error: invalid memory address or nil pointer dereference',
+    )
+  }
+  return b.value
+}
+
+export function unsupportedPointerRef<T>(_value: unknown): VarRef<T> {
+  return {
+    get value(): T {
+      throw new Error(
+        'unsafe pointer dereference is not supported in JavaScript/TypeScript',
+      )
+    },
+    set value(_value: T) {
+      throw new Error(
+        'unsafe pointer dereference is not supported in JavaScript/TypeScript',
+      )
+    },
+    __isVarRef: true,
+  }
+}

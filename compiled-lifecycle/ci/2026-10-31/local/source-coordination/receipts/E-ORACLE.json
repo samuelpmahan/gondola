@@ -1,0 +1,66 @@
+{
+  "job_id": "E-ORACLE",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Added an independent literal oracle for all 26 fixed lifecycle events and 26 state checkpoints, including Go tree, messages/effects, outerHTML-v1, live button properties, child-first cancellation, stale generation no-ops, and duplicate completion no-ops. Node v22.23.4 syntax checks and five focused oracle tests passed. N3 owns the actual mounted browser comparison; no physical-browser result is claimed in this receipt.",
+  "source_scope": [
+    "compiled-lifecycle/browser/lifecycle-oracle.mjs",
+    "compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+    "compiled-lifecycle/browser/lifecycle-oracle.node22.test.log",
+    "compiled-lifecycle/coordination/reports/E-ORACLE.md",
+    "compiled-lifecycle/coordination/receipts/E-ORACLE.json"
+  ],
+  "evidence": {
+    "report_sha256": "88d80bb25bc6143b2f5f9bc1e1ca26257a64be71dd4fc257792905cc2e4f42ee",
+    "source_files": {
+      "compiled-lifecycle/browser/lifecycle-oracle.mjs": {
+        "sha256": "795ba7fef0ff680019f4988aba5cfcecb25b205516a2c7058bfc720fc217cb82",
+        "bytes": 24962
+      },
+      "compiled-lifecycle/browser/lifecycle-oracle.test.mjs": {
+        "sha256": "18c88acd3e9028af30b1f737599ae537fc1354ea65f37037e5c9f89281ebae6d",
+        "bytes": 10481
+      },
+      "compiled-lifecycle/browser/lifecycle-oracle.node22.test.log": {
+        "sha256": "2db2aff769448ad04caf3d76e5f0c91a41679b5de9ecadfdf7cb58ae2051e2e1",
+        "bytes": 1760
+      }
+    },
+    "frozen_inputs": {
+      "fixtures/compiled/lifecycle/scenario.json": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+      "compiled-lifecycle/CONTRACT.md": "ed9eedea8f9582583d1f89e44be20e55f692f037f2b8decc93025433e478e083"
+    },
+    "local_checks": {
+      "node": "v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+      "commands": [
+        {
+          "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/browser/lifecycle-oracle.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+          "exit_code": 0,
+          "result": "both modules passed syntax checks",
+          "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+        },
+        {
+          "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+          "exit_code": 0,
+          "passed": 5,
+          "failed": 0,
+          "evidence_path": "compiled-lifecycle/browser/lifecycle-oracle.node22.test.log",
+          "evidence_sha256": "2db2aff769448ad04caf3d76e5f0c91a41679b5de9ecadfdf7cb58ae2051e2e1"
+        }
+      ]
+    },
+    "coverage": [
+      "26 manually enumerated Go state checkpoints cover Init and every Go-message event; the renderer swap is explicitly state-neutral and does not create a Go tick.",
+      "The event oracle matches the frozen scenario while retaining independent expected state, view-tree, message, request-effect, cancellation-effect, and reply expectations.",
+      "Request effect kind is fixture.request; cancellation kind is lifecycle.cancel and the removal effect order is Grandchild, Child, Parent. The independent Sibling remains pending through subtree removal.",
+      "Exact outerHTML-v1 and control path/key/type/value/checked/disabled expectations are available at each checkpoint. The browser harness can compare actual raw outerHTML and live HTMLButtonElement.disabled properties to these values.",
+      "Mutation tests reject cancellation reordering and a changed old-generation state after a stale completion message."
+    ],
+    "limits": [
+      "No physical browser profile had been retained at the time of this receipt; N4 claims the oracle expectations and focused unit checks only. N3 owns React/DOM/swap mounted observations and their independent comparison.",
+      "No Go native adapter or compiled candidate was executed in this oracle lane.",
+      "This fixed finite value-owned fixture does not establish arbitrary pointer manager compilation, dynamic topology, randomized lifecycle coverage, production transport behavior, or pixel equivalence."
+    ]
+  },
+  "reported_stage": "independent_finite_lifecycle_state_tree_dom_effect_and_cancellation_oracle_authored_node22_unit_checks_passed_integrated_browser_evidence_owned_by_n3"
+}

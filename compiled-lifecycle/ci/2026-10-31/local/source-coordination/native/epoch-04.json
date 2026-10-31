@@ -1,0 +1,102 @@
+{
+  "epoch": 4,
+  "at": "2026-10-31T06:30:02.240630+00:00",
+  "ready_jobs": [
+    "XR-ORACLE",
+    "XR-EFFECT-SLICE",
+    "R-UNMOUNT",
+    "R-ORACLE"
+  ],
+  "pinned_workers": [
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "assignments": {
+    "N5": "E-DEMO",
+    "N6": "E-BUILD",
+    "N1": "XR-EFFECT-SLICE",
+    "N3": "E-HARNESS",
+    "N4": "XR-FIXTURE",
+    "N2": "R-UNMOUNT"
+  },
+  "dispatch": {
+    "N1": "XR-EFFECT-SLICE",
+    "N2": "R-UNMOUNT"
+  },
+  "native_seconds": 0.00440858599904459,
+  "native_constraints": {
+    "solved": true,
+    "brokenVal": 0,
+    "brokenCount": 0,
+    "constraints": [
+      {
+        "name": "independent_review",
+        "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+        "value": 0
+      },
+      {
+        "name": "pin_in_flight",
+        "desc": "avoidMovingSpec: Avoid moving 4 objects",
+        "value": 0
+      },
+      {
+        "name": "ready_packet_capacity",
+        "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+        "value": 0
+      }
+    ]
+  },
+  "independent_capacity_check": true,
+  "independent_eligibility_check": true,
+  "exact_score": 500,
+  "native_score": 500,
+  "caps": {
+    "E-FIXTURE": 0,
+    "E-RUNTIME": 0,
+    "E-HARNESS": 1,
+    "E-ORACLE": 0,
+    "E-DEMO": 1,
+    "E-BUILD": 1,
+    "XR-FIXTURE": 1,
+    "XR-RUNTIME": 0,
+    "XR-HARNESS": 0,
+    "XR-ORACLE": 1,
+    "XR-DEMO": 0,
+    "XR-BUILD": 0,
+    "R-EFFECT-SLICE": 0,
+    "XR-EFFECT-SLICE": 1,
+    "R-UNMOUNT": 1,
+    "XR-UNMOUNT": 0,
+    "R-ORACLE": 1,
+    "XR-ORACLE-REPAIR": 0,
+    "BENCH": 6
+  },
+  "eligible": {
+    "XR-ORACLE": [
+      "N2"
+    ],
+    "XR-EFFECT-SLICE": [
+      "N1"
+    ],
+    "R-UNMOUNT": [
+      "N2"
+    ],
+    "R-ORACLE": []
+  },
+  "weights": {
+    "XR-ORACLE": 200,
+    "XR-EFFECT-SLICE": 200,
+    "R-UNMOUNT": 300,
+    "R-ORACLE": 300
+  },
+  "agent_by_worker": {
+    "N1": null,
+    "N2": null,
+    "N3": "/root/lifecycle_harness",
+    "N4": "/root/lifecycle_oracle",
+    "N5": "/root/lifecycle_demo",
+    "N6": "/root/lifecycle_build"
+  }
+}

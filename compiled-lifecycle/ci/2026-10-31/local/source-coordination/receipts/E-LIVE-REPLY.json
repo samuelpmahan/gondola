@@ -1,0 +1,91 @@
+{
+  "job_id": "E-LIVE-REPLY",
+  "worker": "N2",
+  "outcome": "confirmed_reuse",
+  "summary": "A supplementary sequence requests Parent/Child/Grandchild/Sibling at generation 1, removes and remounts the parent subtree, creates fresh generation-2 Parent/Child/Grandchild requests, then tests old direct Go completion messages and force-delivered retired callbacks before completing all fresh requests. Native Go and the actual compiled GoScript host agree: all nodes are Pending before stale replies; direct old messages preserve full state, view, effects, and pending work; retired callbacks are rejected without ticks; generation-2 and sibling replies still succeed.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/E-LIVE-REPLY.md",
+    "report_sha256": "37b89d47871ee674963ebe986d5ad89e6541ff75db01918312a54dd3a66c77b4",
+    "toolchains": {
+      "node": "v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+      "root_go": "go1.24.0 linux/amd64 at /tmp/gondola-go/bin/go",
+      "compiled_cli_go": "go1.27.3 linux/amd64, recorded by the frozen E-BUILD attempt"
+    },
+    "frozen_source": {
+      "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z",
+      "e_build_execution_sha256": "b0b181c5044b829e4e6d305f8507c447a5e6d2addb29d05c6a1b528ed496976b",
+      "e_build_status": "passed",
+      "e_build_source_pins_match": true,
+      "fixed_matrix_run_sha256": "7dc4d7c31ecd83225be87b55a2f5e26548563a445db282c9e0eec00379b6ceb9",
+      "react_app_dir": "/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z/react/output/apps/lifecycle-7e6575d90707",
+      "source_hashes": {
+        "fixtures/compiled/lifecycle/app.go": "6b61e55c3046f58873d2774e38a7bca44769f18f6870c39e1885b78be340fe41",
+        "fixtures/compiled/lifecycle/view.go": "afc4b1611c5dbd8e5264d3c124b808770bdd8579fdc1426c350f4df6689bb948",
+        "fixtures/compiled/lifecycle/scenario.json": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+        "compiled-lifecycle/runtime/runtime.mjs": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+        "compiled-lifecycle/runtime/runtime.test.mjs": "a07ec74fe85995e7ac18fd0d03a789e3d722f3507b6a24b5d03f410bef58e59d",
+        "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0"
+      },
+      "generated_outputs": {
+        "build_record_sha256": "36c962c08bece3b14d0d4ed2742bda23f6b758675254f90b7ef2041f3ddbbbb7",
+        "manifest_sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+        "app_ir_sha256": "341693716b95fe70cb7fe0aab3bbc26db78e920266602062510b90feb87c1f6d",
+        "encoder_sha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+        "compiled_module_sha256": "dabbfaea0c8a27ec389008f0820f0b14578337acca6cb60bd491ed2394dc5c6c"
+      }
+    },
+    "native_probe": {
+      "source": "compiled-lifecycle/coordination/live-reply/native-live-reply-probe.go.txt",
+      "source_sha256": "0bb17bc85655ab904fba3f0fba0676e927fd3157a92a7bf9a2b86ceb14c51aa7",
+      "executed_copy": "/tmp/compiled_lifecycle_live_reply_probe.go",
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/live-reply/capture-command.mjs native /tmp/gondola-go/bin/go run /tmp/compiled_lifecycle_live_reply_probe.go",
+      "child_command": "/tmp/gondola-go/bin/go run /tmp/compiled_lifecycle_live_reply_probe.go",
+      "captured_command_sha256": "5294ab836fcea5c2722923d99dd8218a4f8de8e1788488043caf691694087941",
+      "exit_code": 0,
+      "stdout_sha256": "c5a8e19d7cf88517d416c7b0f01771585d4260393e5aed8979c764a7489f83ff",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "All three old direct completion messages preserve exact Go state and View and emit no effects. Generation-2 Grandchild/Child/Parent and the generation-1 Sibling all complete with their exact tokens."
+    },
+    "compiled_goscript_host_probe": {
+      "source": "compiled-lifecycle/coordination/live-reply/compiled-live-reply-probe.mjs",
+      "source_sha256": "8924ca8a36c7d525e4571a93cb0a8774595a8bd217a7a9bdc360b425ed35b42e",
+      "command": "GOBI_LIFECYCLE_APP_DIR=/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z/react/output/apps/lifecycle-7e6575d90707 /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/live-reply/capture-command.mjs compiled /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/live-reply/compiled-live-reply-probe.mjs",
+      "child_command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/live-reply/compiled-live-reply-probe.mjs",
+      "captured_command_sha256": "4608f2e0d69f246b7c8aa7ff116fbb342fdd476d4997d097cc1d8c5b91e103fa",
+      "exit_code": 0,
+      "stdout_sha256": "544e8e4067ab1f7115a8dac7d970a586a3572a4cc3dc0cd231b4a5a57a7af483",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666",
+      "direct_old_message_order": ["parent:g1:r1", "child:g1:r2", "grandchild:g1:r3"],
+      "direct_old_messages": {
+        "accepted_as_no_op_ticks": 3,
+        "full_state_unchanged": true,
+        "compiled_go_view_unchanged": true,
+        "driver_and_core_correlations_unchanged": true
+      },
+      "force_retired_callbacks": {
+        "tokens": ["parent:g1:r1", "child:g1:r2", "grandchild:g1:r3"],
+        "outcome": "rejected: unknown or extra effect completion",
+        "go_ticks_added": 0,
+        "state_view_and_current_correlations_unchanged": true
+      },
+      "fresh_pending_before_stale": ["parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4"],
+      "fresh_replies_accepted_in_order": ["grandchild:g2:r7", "child:g2:r6", "parent:g2:r5", "sibling:g1:r4"],
+      "final_pending": []
+    },
+    "cross_audit": {
+      "source": "compiled-lifecycle/coordination/live-reply/audit-live-reply-results.mjs",
+      "source_sha256": "1c733ee555dd94a7cab7eeffc9fd18889ede8da1fa6e626fd12313e1b3bcafbd",
+      "result": "compiled-lifecycle/coordination/live-reply/cross-audit.json",
+      "result_sha256": "4941a6596a737dffe5bcd39aad9a7b142b491f0a03b7f3fdccf4aa42d9c6a101",
+      "result_stdout_sha256": "4941a6596a737dffe5bcd39aad9a7b142b491f0a03b7f3fdccf4aa42d9c6a101",
+      "result_stderr_sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8",
+      "native_and_compiled_full_state_equal_at_fresh_and_final": true,
+      "native_and_compiled_normalized_view_equal_at_fresh_and_final": true
+    },
+    "limits": [
+      "This is a supplementary headless probe, not a React/DOM/browser run or a replacement for the fixed CI matrix.",
+      "The probe is bounded to the fixed finite lifecycle fixture and the frozen E-BUILD generated app.",
+      "No product source, runtime, build output, Git state, or native source was edited; the only native helper is retained as .go.txt and executed from /tmp."
+    ]
+  }
+}

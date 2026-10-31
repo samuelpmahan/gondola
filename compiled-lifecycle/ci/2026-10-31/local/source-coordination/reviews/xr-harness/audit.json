@@ -1,0 +1,80 @@
+{
+  "schema": "gobi.compiled-lifecycle-harness-review-evidence/v1",
+  "job_id": "XR-HARNESS",
+  "worker": "N5",
+  "decision": "accepted",
+  "accepted_scope": "attempt-05 recorded frozen source/build snapshot only",
+  "current_tree_acceptance": false,
+  "attempt": "compiled-lifecycle/conformance/evidence/attempt-05",
+  "attempt_status": "matched",
+  "counts": {
+    "fixtureEvents": 26,
+    "goTicks": 26,
+    "physicalClicksPerBrowserProfile": 16,
+    "requests": 7,
+    "cancellations": 3,
+    "swapProfileRendererSwaps": 17,
+    "callbackEligibleSwaps": 16,
+    "callbackIneligibleSwaps": 1,
+    "callbackFences": 32,
+    "retainedDetachedButtonClicksPerProfile": 6,
+    "retainedDetachedButtonClicksAcrossProfiles": 18,
+    "mutationControlsDetected": 8,
+    "nativeEffects": 10,
+    "directEffectRecords": 14,
+    "browserEffectRecordsPerProfile": 17
+  },
+  "cancellationOrder": [
+    "grandchild:g1:r3",
+    "child:g1:r2",
+    "parent:g1:r1"
+  ],
+  "rendererSwapException": {
+    "reason": "fixture-renderer-swap-8",
+    "from": "dom",
+    "to": "react",
+    "callbackEligible": false,
+    "why": "retired renderer had no user action callback to retain",
+    "preserved": ["state", "trace ticks", "pending effects", "effect records", "physical root retirement"]
+  },
+  "pins": {
+    "sourceSnapshotCount": 178,
+    "sourceSnapshotsIdenticalAtRun": true,
+    "buildOutputSnapshotCount": 8,
+    "buildOutputSnapshotsIdenticalAtRun": true,
+    "currentBuildOutputMismatches": 0,
+    "postRunSourceDrift": [
+      {
+        "path": "compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+        "attempt05Sha256": "18c88acd3e9028af30b1f737599ae537fc1354ea65f37037e5c9f89281ebae6d",
+        "attempt05Bytes": 10481,
+        "currentSha256": "6a48d1d46addfa07d4792c3bf71d842c7ea6159eb69c5010b00e540df970daf1",
+        "currentBytes": 11347,
+        "preservedAttemptBytes": "compiled-lifecycle/coordination/reviews/r-oracle/before/browser/lifecycle-oracle.test.mjs",
+        "scope": "test-only expectedEffects assertion update; lifecycle-oracle.mjs and harness source remain pinned"
+      }
+    ]
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "go": "go version go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "playwright": "1.64.1"
+  },
+  "evidenceSha256": {
+    "harnessReport": "5780154ee97181b20ccdc15d64e248e02a9a4fd36b963c8276917ea7279e30f5",
+    "attemptManifest": "5c4748f510fa9a69234d824aa619e80e6d32b94ed93a7c7f6a4d3215d61292f1",
+    "run": "e4ea41b9bb24317e97ed29b406e7797a5c4b1026934d8092ee6b8a053851c106",
+    "native": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+    "direct": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71",
+    "browserCapture": "78886a28fc0ac6e519a21b4765167aabea6d394bf539e05b725bb2a1aabe4763",
+    "check": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a"
+  },
+  "rejectedAttempts": [
+    {"attempt": "attempt-00", "status": "rejected", "retained": true, "cause": "direct helper omission and frozen probe Action validation mismatch"},
+    {"attempt": "attempt-01", "status": "rejected", "retained": true, "cause": "DOM snapshot queried after renderer unmount"},
+    {"attempt": "attempt-02", "status": "rejected", "retained": true, "cause": "fixed swap had no retained callback; claim narrowed"},
+    {"attempt": "attempt-03", "status": "rejected", "retained": true, "cause": "pending expectation omitted sequence and typed effect fields"},
+    {"attempt": "attempt-04", "status": "rejected", "retained": true, "cause": "source pins changed during capture"}
+  ]
+}
