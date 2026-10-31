@@ -72,6 +72,45 @@ func TestStrictCertificateJSONRejectsDuplicateKeys(t *testing.T) {
 	}
 }
 
+func TestExecutionSnapshotDecoderRejectsDuplicateUnknownAndAliasedFields(t *testing.T) {
+	tests := []struct {
+		name string
+		body string
+	}{
+		{"duplicate-attempt", `{"attempt":"attempt-one","attempt":"attempt-two"}`},
+		{"unknown-snapshot-field", `{"reviewerUnknownField":true}`},
+		{"case-insensitive-field-alias", `{"Schema":"gobi.backend-qualification-pre-archive-snapshot/v1"}`},
+		{"unknown-nested-typed-field", `{"build":{"nativeTrace":{"reviewerUnknownField":true}}}`},
+		{"nested-case-insensitive-field-alias", `{"build":{"nativeTrace":{"Events":50}}}`},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			path := filepath.Join(root, "execution-before-archive.json")
+			if err := os.WriteFile(path, []byte(tc.body), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			var snapshot executionSnapshot
+			if err := readJSONMember(root, "execution-before-archive.json", &snapshot); err == nil {
+				t.Fatal("execution snapshot decoder accepted duplicate, unknown, or aliased Go field")
+			}
+		})
+	}
+}
+
+func TestExecutionSnapshotDecoderLeavesRawJSONOpaque(t *testing.T) {
+	root := t.TempDir()
+	path := filepath.Join(root, "execution-before-archive.json")
+	body := []byte(`{"sourceBefore":{"State":{"Key":"opaque"}},"sourceAfter":{"arbitrary":{"Schema":1}}}`)
+	if err := os.WriteFile(path, body, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var snapshot executionSnapshot
+	if err := readJSONMember(root, "execution-before-archive.json", &snapshot); err != nil {
+		t.Fatalf("snapshot decoder interpreted keys inside raw JSON fields as Go struct fields: %v", err)
+	}
+}
+
 func TestVerifyReferencesBindBytesAndAttemptPath(t *testing.T) {
 	root := t.TempDir()
 	attempt := "attempt-20261031T181327827Z-18"

@@ -121,17 +121,22 @@ type executionSnapshot struct {
 	Schema          *string         `json:"schema"`
 	Attempt         *string         `json:"attempt"`
 	SourceCommit    *string         `json:"sourceCommit"`
+	SourceTree      *string         `json:"sourceTree"`
 	SourceBefore    json.RawMessage `json:"sourceBefore"`
 	SourceAfter     json.RawMessage `json:"sourceAfter"`
 	SourcePinsMatch *bool           `json:"sourcePinsMatch"`
 	Build           struct {
-		Provenance  *fileReference `json:"provenance"`
-		NativeTrace *fileReference `json:"nativeTrace"`
-		SourceBase  *string        `json:"sourceBase"`
+		DOM         json.RawMessage          `json:"dom"`
+		NativeTrace *executionTraceReference `json:"nativeTrace"`
+		Provenance  *fileReference           `json:"provenance"`
+		React       json.RawMessage          `json:"react"`
+		SourceBase  *string                  `json:"sourceBase"`
 	} `json:"build"`
 	Qualification struct {
-		Summary   *fileReference `json:"summary"`
-		RawReport *fileReference `json:"rawReport"`
+		Baseline  json.RawMessage `json:"baseline"`
+		Matrix    json.RawMessage `json:"matrix"`
+		Summary   *fileReference  `json:"summary"`
+		RawReport *fileReference  `json:"rawReport"`
 	} `json:"qualification"`
 	Certificate struct {
 		Path      *string `json:"path"`
@@ -143,20 +148,54 @@ type executionSnapshot struct {
 	} `json:"certificate"`
 	Demo struct {
 		Build struct {
-			SourceCommit          *string `json:"sourceCommit"`
-			Qualified             *bool   `json:"qualified"`
-			CaseCount             *int    `json:"caseCount"`
-			HealthyCases          *int    `json:"healthyCases"`
-			FaultCases            *int    `json:"faultCases"`
-			EvidenceFilesVerified *int    `json:"evidenceFilesVerified"`
+			Schema                *string         `json:"schema"`
+			Status                *string         `json:"status"`
+			Output                *string         `json:"output"`
+			SourceCommit          *string         `json:"sourceCommit"`
+			Qualified             *bool           `json:"qualified"`
+			CaseCount             *int            `json:"caseCount"`
+			HealthyCases          *int            `json:"healthyCases"`
+			FaultCases            *int            `json:"faultCases"`
+			EvidenceFilesVerified *int            `json:"evidenceFilesVerified"`
+			ViewerData            json.RawMessage `json:"viewerData"`
 		} `json:"build"`
-		Smoke *fileReference `json:"smoke"`
+		Smoke *executionSmokeReference `json:"smoke"`
 	} `json:"demo"`
 	ArchivePending  *bool `json:"archivePending"`
 	FinalAcceptance *bool `json:"finalAcceptance"`
 }
 
+type executionTraceReference struct {
+	Path      *string `json:"path"`
+	Bytes     *int64  `json:"bytes"`
+	SHA256    *string `json:"sha256"`
+	Events    *int    `json:"events"`
+	GoUpdates *int    `json:"goUpdates"`
+}
+
+func (ref *executionTraceReference) fileReference() *fileReference {
+	if ref == nil {
+		return nil
+	}
+	return &fileReference{Path: ref.Path, Bytes: ref.Bytes, SHA256: ref.SHA256}
+}
+
+type executionSmokeReference struct {
+	Path   *string         `json:"path"`
+	Bytes  *int64          `json:"bytes"`
+	SHA256 *string         `json:"sha256"`
+	Checks json.RawMessage `json:"checks"`
+}
+
+func (ref *executionSmokeReference) fileReference() *fileReference {
+	if ref == nil {
+		return nil
+	}
+	return &fileReference{Path: ref.Path, Bytes: ref.Bytes, SHA256: ref.SHA256}
+}
+
 type qualificationInputReferences struct {
+	Plan      *fileReference `json:"plan"`
 	RawReport *fileReference `json:"rawReport"`
 	Summary   *fileReference `json:"summary"`
 }
@@ -174,14 +213,49 @@ type buildInputSummary struct {
 }
 
 type buildProvenance struct {
-	Schema                    *string            `json:"schema"`
-	ContractBaseCommitRef     *string            `json:"contractBaseCommitRef"`
-	Fixture                   *fileReference     `json:"fixture"`
-	Plan                      *fileReference     `json:"plan"`
-	Expectations              *fileReference     `json:"expectations"`
-	NativeTrace               *fileReference     `json:"nativeTrace"`
-	SourcePins                map[string]filePin `json:"sourcePins"`
-	SourcePinsMatchAfterBuild *bool              `json:"sourcePinsMatchAfterBuild"`
+	Schema                    *string                    `json:"schema"`
+	DOM                       json.RawMessage            `json:"dom"`
+	ContractBaseCommitRef     *string                    `json:"contractBaseCommitRef"`
+	Fixture                   *fileReference             `json:"fixture"`
+	Locks                     json.RawMessage            `json:"locks"`
+	PackagePath               *string                    `json:"packagePath"`
+	Plan                      *buildInputSourceReference `json:"plan"`
+	Expectations              *buildInputSourceReference `json:"expectations"`
+	NativeTrace               *buildInputTraceReference  `json:"nativeTrace"`
+	React                     json.RawMessage            `json:"react"`
+	SourcePins                map[string]filePin         `json:"sourcePins"`
+	SourcePinsMatchAfterBuild *bool                      `json:"sourcePinsMatchAfterBuild"`
+	Versions                  json.RawMessage            `json:"versions"`
+}
+
+type buildInputSourceReference struct {
+	Path      *string `json:"path"`
+	Bytes     *int64  `json:"bytes"`
+	SHA256    *string `json:"sha256"`
+	Schema    *string `json:"schema"`
+	CaseCount *int    `json:"caseCount"`
+}
+
+func (ref *buildInputSourceReference) fileReference() *fileReference {
+	if ref == nil {
+		return nil
+	}
+	return &fileReference{Path: ref.Path, Bytes: ref.Bytes, SHA256: ref.SHA256}
+}
+
+type buildInputTraceReference struct {
+	Path   *string `json:"path"`
+	Bytes  *int64  `json:"bytes"`
+	SHA256 *string `json:"sha256"`
+	Events *int    `json:"events"`
+	Steps  *int    `json:"steps"`
+}
+
+func (ref *buildInputTraceReference) fileReference() *fileReference {
+	if ref == nil {
+		return nil
+	}
+	return &fileReference{Path: ref.Path, Bytes: ref.Bytes, SHA256: ref.SHA256}
 }
 
 type filePin struct {
@@ -252,10 +326,10 @@ func verifyArchiveBindings(root, expectedCommit, manifestAttempt string, certifi
 	if err := verifyAttemptReferenceFromDisk(root, attempt, execution.Build.Provenance, "inputs/provenance/build-inputs.json"); err != nil {
 		return fmt.Errorf("build provenance reference: %w", err)
 	}
-	if err := verifyAttemptReferenceFromDisk(root, attempt, execution.Build.NativeTrace, "inputs/native/native-trace.json"); err != nil {
+	if err := verifyAttemptReferenceFromDisk(root, attempt, execution.Build.NativeTrace.fileReference(), "inputs/native/native-trace.json"); err != nil {
 		return fmt.Errorf("native trace reference: %w", err)
 	}
-	if err := verifyAttemptReferenceFromDisk(root, attempt, execution.Demo.Smoke, "demo/http-smoke.json"); err != nil {
+	if err := verifyAttemptReferenceFromDisk(root, attempt, execution.Demo.Smoke.fileReference(), "demo/http-smoke.json"); err != nil {
 		return fmt.Errorf("demo smoke reference: %w", err)
 	}
 
@@ -371,24 +445,24 @@ func verifyBuildProvenance(root, attempt string, execution executionSnapshot) er
 			}
 		}
 	}
-	if !sameReference(summary.ProvenancePath, execution.Build.Provenance) || !sameReference(summary.NativePath, execution.Build.NativeTrace) {
+	if !sameReference(summary.ProvenancePath, execution.Build.Provenance) || !sameReference(summary.NativePath, execution.Build.NativeTrace.fileReference()) {
 		return errors.New("build summary references differ from execution snapshot")
 	}
-	if !sameReference(summary.FixturePath, provenance.Fixture) || !sameReference(summary.ExpectationsPath, provenance.Expectations) ||
-		!sameReferenceContents(summary.NativePath, provenance.NativeTrace) {
+	if !sameReference(summary.FixturePath, provenance.Fixture) || !sameReference(summary.ExpectationsPath, provenance.Expectations.fileReference()) ||
+		!sameReferenceContents(summary.NativePath, provenance.NativeTrace.fileReference()) {
 		return errors.New("build summary input references differ from build provenance")
 	}
 
 	if err := verifySourceReference(root, provenance.Fixture); err != nil {
 		return fmt.Errorf("fixture input provenance: %w", err)
 	}
-	if err := verifySourceReference(root, provenance.Plan); err != nil {
+	if err := verifySourceReference(root, provenance.Plan.fileReference()); err != nil {
 		return fmt.Errorf("oracle plan provenance: %w", err)
 	}
-	if err := verifySourceReference(root, provenance.Expectations); err != nil {
+	if err := verifySourceReference(root, provenance.Expectations.fileReference()); err != nil {
 		return fmt.Errorf("oracle expectations provenance: %w", err)
 	}
-	if err := verifyInputReference(root, provenance.NativeTrace, "inputs/"); err != nil {
+	if err := verifyInputReference(root, provenance.NativeTrace.fileReference(), "inputs/"); err != nil {
 		return fmt.Errorf("native input provenance: %w", err)
 	}
 
@@ -512,7 +586,7 @@ func readJSONMember(root, rel string, target any) error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal(data, target); err != nil {
+	if err := decodeStrictJSON(data, target); err != nil {
 		return err
 	}
 	return nil
@@ -520,6 +594,9 @@ func readJSONMember(root, rel string, target any) error {
 
 func decodeStrictJSON(data []byte, target any) error {
 	if err := rejectDuplicateJSONKeys(data); err != nil {
+		return err
+	}
+	if err := rejectNoncanonicalStructFieldNames(data, target); err != nil {
 		return err
 	}
 	decoder := json.NewDecoder(bytes.NewReader(data))
@@ -533,6 +610,82 @@ func decodeStrictJSON(data []byte, target any) error {
 			return errors.New("multiple JSON values are not allowed")
 		}
 		return err
+	}
+	return nil
+}
+
+func rejectNoncanonicalStructFieldNames(data []byte, target any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	var value any
+	if err := decoder.Decode(&value); err != nil {
+		return err
+	}
+	return checkCanonicalStructFieldNames(value, reflect.TypeOf(target))
+}
+
+func checkCanonicalStructFieldNames(value any, typ reflect.Type) error {
+	for typ != nil && typ.Kind() == reflect.Pointer {
+		typ = typ.Elem()
+	}
+	if typ == nil || typ == reflect.TypeOf(json.RawMessage{}) || value == nil {
+		return nil
+	}
+	switch typ.Kind() {
+	case reflect.Struct:
+		object, ok := value.(map[string]any)
+		if !ok {
+			return nil
+		}
+		fields := make(map[string]reflect.Type)
+		for i := 0; i < typ.NumField(); i++ {
+			field := typ.Field(i)
+			if field.PkgPath != "" {
+				continue
+			}
+			tag := field.Tag.Get("json")
+			name := strings.Split(tag, ",")[0]
+			if name == "-" {
+				continue
+			}
+			if name == "" {
+				name = field.Name
+			}
+			fields[name] = field.Type
+		}
+		for key, child := range object {
+			fieldType, found := fields[key]
+			if !found {
+				for canonical := range fields {
+					if strings.EqualFold(key, canonical) {
+						return fmt.Errorf("noncanonical JSON field spelling %q; use %q", key, canonical)
+					}
+				}
+				continue
+			}
+			if err := checkCanonicalStructFieldNames(child, fieldType); err != nil {
+				return err
+			}
+		}
+	case reflect.Slice, reflect.Array:
+		if typ.Elem() == reflect.TypeOf(byte(0)) {
+			return nil
+		}
+		if values, ok := value.([]any); ok {
+			for _, child := range values {
+				if err := checkCanonicalStructFieldNames(child, typ.Elem()); err != nil {
+					return err
+				}
+			}
+		}
+	case reflect.Map:
+		if object, ok := value.(map[string]any); ok {
+			for _, child := range object {
+				if err := checkCanonicalStructFieldNames(child, typ.Elem()); err != nil {
+					return err
+				}
+			}
+		}
 	}
 	return nil
 }
