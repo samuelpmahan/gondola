@@ -221,10 +221,11 @@ async function pinFiles(directory, outputRows) {
 }
 
 async function buildProfile(backend) {
-  const outputDir = join(buildRoot, backend);
+  const backendRoot = join(buildRoot, backend);
+  const outputDir = join(backendRoot, "output");
   await mkdir(outputDir, { recursive: true });
-  const requestPath = join(attemptRoot, `${backend}-request.json`);
-  const resultPath = join(attemptRoot, `${backend}-build-result.json`);
+  const requestPath = join(backendRoot, "request.json");
+  const resultPath = join(backendRoot, "result.json");
   const request = {
     schema: "gobi.build-request/v1",
     sourceRoot: root,
@@ -596,11 +597,17 @@ try {
     process.exitCode = 1;
   }
   try {
-    if (receipt.methodBuilds?.react) receipt.outputPinsAfter = {
-      ...(receipt.outputPinsAfter ?? {}),
-      react: await hashDirectory(join(buildRoot, "react")),
-      dom: await hashDirectory(join(buildRoot, "dom")),
-    };
+    if (receipt.methodBuilds?.react) {
+      const after = { ...(receipt.outputPinsAfter ?? {}) };
+      for (const backend of ["react", "dom"]) {
+        const build = receipt.methodBuilds[backend];
+        if (!build) continue;
+        after[backend] = await hashDirectory(join(root, build.outputDir));
+        const before = receipt.outputPinsBefore?.[backend];
+        if (before) stablePins(before, after[backend], `${backend} method build final receipt`);
+      }
+      receipt.outputPinsAfter = after;
+    }
   } catch (error) {
     receipt.failures.push({ name: "output-pins-after", error: error instanceof Error ? error.message : String(error) });
     receipt.status = "failed";

@@ -18,6 +18,8 @@ bash run-compiled-methods.sh
 
 The default command runs the complete inherited `run-compiled-backends.sh` chain before method-specific tests, both real CLI builds, native/direct/browser comparisons, and an HTTP demo smoke. `bash run-compiled-methods.sh --methods-only` is explicitly partial. Each invocation keeps its own directory under `compiled-methods/artifacts/attempts/`; its `execution.json` records commands, versions, source/output hashes, failures, and final status. A `running` receipt is not acceptance.
 
+Each backend build uses `builds/{react,dom}/request.json`, `result.json`, and `output/**` within the attempt. The comparison harness pins the request/result pair beside that backend's output subtree as provenance. Before/after output inventories cover the same `output/` directory and exclude those two provenance files.
+
 After a successful run, serve that attempt's `http-demo/site` directory with a local static HTTP server and open `/`. The directory contains the bundled executable demo. Its buttons add/reset both counters, lock/unlock the child, capture a child value, publish the saved value, and switch renderer while retaining the Go state. The page exposes state, tree, messages, and renderer lifetime records.
 
 ## Contract and evidence

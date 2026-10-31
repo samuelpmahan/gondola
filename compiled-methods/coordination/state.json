@@ -19,8 +19,8 @@
       "agent": null
     },
     "N5": {
-      "job": "E-DEMO",
-      "agent": "/root/backend_demo"
+      "job": null,
+      "agent": null
     }
   },
   "jobs": {
@@ -88,10 +88,11 @@
       ],
       "owner": "compiled-methods/demo/**,run-compiled-methods.sh,compiled-methods/run.mjs,.github/workflows/compiled-methods.yml only",
       "summary": "End-to-end statically resolved value receiver method compilation milestone: DEMO",
-      "status": "running",
+      "status": "done",
       "worker": "N5",
       "started_at": "2026-10-31T03:13:29.335804+00:00",
-      "finished_at": null
+      "finished_at": "2026-10-31T04:30:12.824113+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/E-DEMO.json"
     },
     "E-CONTRACT": {
       "id": "E-CONTRACT",
@@ -164,10 +165,14 @@
       "id": "XR--DEMO",
       "kind": "review",
       "depends_on": "E-DEMO",
-      "status": "pending",
-      "worker": null,
-      "started_at": null,
-      "finished_at": null
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T04:30:31.573640+00:00",
+      "finished_at": "2026-10-31T04:35:17.494902+00:00",
+      "allow_workers": [
+        "N2"
+      ],
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR--DEMO.json"
     },
     "XR--CONTRACT": {
       "id": "XR--CONTRACT",
@@ -268,6 +273,35 @@
       "started_at": "2026-10-31T03:48:08.136254+00:00",
       "finished_at": "2026-10-31T03:52:33.653331+00:00",
       "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR-R-COMPILER.json"
+    },
+    "R-DEMO-METADATA": {
+      "id": "R-DEMO-METADATA",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "repair_of": "XR--DEMO",
+      "depends_on": "XR--DEMO",
+      "owner": "canonical E-DEMO receipt report hash only; evidence/repairs/r-demo-metadata/**; own R-DEMO-METADATA report/receipt",
+      "summary": "Preserve pre-amend canonical receipt/report and original XR review; correct canonical report SHA to actual canonical bytes, keeping raw runner hash separately. No production changes/retests.",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-10-31T04:35:30.126688+00:00",
+      "finished_at": "2026-10-31T04:36:40.120011+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/R-DEMO-METADATA.json"
+    },
+    "XR-R-DEMO-METADATA": {
+      "id": "XR-R-DEMO-METADATA",
+      "kind": "review",
+      "depends_on": "R-DEMO-METADATA",
+      "allow_workers": [
+        "N2"
+      ],
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-10-31T04:36:52.497849+00:00",
+      "finished_at": "2026-10-31T04:38:46.954588+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/gondola-methods/compiled-methods/coordination/receipts/XR-R-DEMO-METADATA.json"
     }
   },
   "events": [
@@ -1337,9 +1371,304 @@
       "at": "2026-10-31T03:52:33.653331+00:00",
       "worker": "N1",
       "job": "XR-R-COMPILER"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T04:30:12.824113+00:00",
+      "worker": "N5",
+      "job": "E-DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 9,
+      "at": "2026-10-31T04:30:13.562606+00:00",
+      "ready_jobs": [
+        "XR--DEMO"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N2": "XR--DEMO",
+        "N1": "BENCH",
+        "N4": "BENCH",
+        "N3": "BENCH",
+        "N5": "BENCH"
+      },
+      "dispatch": {
+        "N2": "XR--DEMO"
+      },
+      "native_seconds": 0.004294159996788949,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 0,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 1,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 0,
+        "XR-R-HARNESS": 0,
+        "R-CONTRACT": 0,
+        "XR-R-CONTRACT": 0,
+        "R-COMPILER": 0,
+        "XR-R-COMPILER": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR--DEMO": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR--DEMO": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T04:30:31.573640+00:00",
+      "worker": "N2",
+      "job": "XR--DEMO",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T04:35:17.494902+00:00",
+      "worker": "N2",
+      "job": "XR--DEMO"
+    },
+    {
+      "type": "solve",
+      "epoch": 10,
+      "at": "2026-10-31T04:35:18.217233+00:00",
+      "ready_jobs": [
+        "R-DEMO-METADATA"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N5": "R-DEMO-METADATA",
+        "N2": "BENCH",
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N4": "BENCH"
+      },
+      "dispatch": {
+        "N5": "R-DEMO-METADATA"
+      },
+      "native_seconds": 0.0046096010046312585,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 0,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 0,
+        "XR-R-HARNESS": 0,
+        "R-CONTRACT": 0,
+        "XR-R-CONTRACT": 0,
+        "R-COMPILER": 0,
+        "XR-R-COMPILER": 0,
+        "R-DEMO-METADATA": 1,
+        "XR-R-DEMO-METADATA": 0,
+        "BENCH": 5
+      },
+      "eligible": {
+        "R-DEMO-METADATA": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "R-DEMO-METADATA": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T04:35:30.126688+00:00",
+      "worker": "N5",
+      "job": "R-DEMO-METADATA",
+      "agent": "/root/backend_demo"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T04:36:40.120011+00:00",
+      "worker": "N5",
+      "job": "R-DEMO-METADATA"
+    },
+    {
+      "type": "solve",
+      "epoch": 11,
+      "at": "2026-10-31T04:36:40.519896+00:00",
+      "ready_jobs": [
+        "XR-R-DEMO-METADATA"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N5": "BENCH",
+        "N1": "BENCH",
+        "N3": "BENCH",
+        "N4": "BENCH",
+        "N2": "XR-R-DEMO-METADATA"
+      },
+      "dispatch": {
+        "N2": "XR-R-DEMO-METADATA"
+      },
+      "native_seconds": 0.0036343200044939294,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 5 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-FIXTURE": 0,
+        "E-BROWSER": 0,
+        "E-HARNESS": 0,
+        "E-COMPILER": 0,
+        "E-DEMO": 0,
+        "E-CONTRACT": 0,
+        "XR--FIXTURE": 0,
+        "XR--BROWSER": 0,
+        "XR--HARNESS": 0,
+        "XR--COMPILER": 0,
+        "XR--DEMO": 0,
+        "XR--CONTRACT": 0,
+        "R-HARNESS": 0,
+        "XR-R-HARNESS": 0,
+        "R-CONTRACT": 0,
+        "XR-R-CONTRACT": 0,
+        "R-COMPILER": 0,
+        "XR-R-COMPILER": 0,
+        "R-DEMO-METADATA": 0,
+        "XR-R-DEMO-METADATA": 1,
+        "BENCH": 5
+      },
+      "eligible": {
+        "XR-R-DEMO-METADATA": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-R-DEMO-METADATA": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-10-31T04:36:52.497849+00:00",
+      "worker": "N2",
+      "job": "XR-R-DEMO-METADATA",
+      "agent": "/root/backend_dom"
+    },
+    {
+      "type": "complete",
+      "at": "2026-10-31T04:38:46.954588+00:00",
+      "worker": "N2",
+      "job": "XR-R-DEMO-METADATA"
     }
   ],
-  "epoch": 9,
+  "epoch": 12,
   "policy": {
     "extract_priority": 100,
     "review_priority": 200,
