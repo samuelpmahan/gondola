@@ -336,7 +336,36 @@ function getComponent(compiled, componentId) {
       || component.capabilities.some((capability) => typeof capability !== "string" || !SUPPORTED_CAPABILITIES.has(capability))) {
     throw new TypeError("component.capabilities must be a supported capability array");
   }
-  return { component, symbols };
+  let effectResultTypeId = null;
+  if (Array.isArray(appIR.symbols)) {
+    const updateMetadata = appIR.symbols.find((candidate) => candidate?.id === component.update);
+    const results = updateMetadata?.signature?.results;
+    if (Array.isArray(results) && results.length === 2 && typeof results[1] === "string") {
+      effectResultTypeId = results[1];
+    }
+  }
+  return { component, symbols, appIR, effectResultTypeId };
+}
+
+function effectSliceMetadata(appIR, effectResultTypeId) {
+  if (typeof effectResultTypeId !== "string" || effectResultTypeId.length === 0) {
+    throw new TypeError("GoScript effect slices require the compiled Update signature's second result type");
+  }
+  if (!Array.isArray(appIR.types)) throw new TypeError("compiled.appIR.types is required to encode GoScript effect slices");
+  const sliceType = appIR.types.find((type) => type?.id === effectResultTypeId);
+  if (!isRecord(sliceType) || sliceType.kind !== "slice" || typeof sliceType.elemType !== "string") {
+    throw new TypeError(`Update result ${JSON.stringify(effectResultTypeId)} is not a declared slice type`);
+  }
+  const elementType = appIR.types.find((type) => type?.id === sliceType.elemType);
+  if (!isRecord(elementType) || elementType.kind !== "struct" || !Array.isArray(elementType.fields)) {
+    throw new TypeError(`Update effect element ${JSON.stringify(sliceType.elemType)} is not a declared struct type`);
+  }
+  const fieldNames = ["Kind", "Name", "Arg", "Reply"];
+  if (elementType.fields.length !== fieldNames.length || elementType.fields.some((field, index) =>
+    !isRecord(field) || field.name !== fieldNames[index] || field.type !== "string")) {
+    throw new TypeError("compiled Update effect element must declare exactly string Kind, Name, Arg, and Reply fields");
+  }
+  return { typeId: effectResultTypeId, elementTypeId: sliceType.elemType, fieldNames };
 }
 
 function requireEncoder(encoder) {
@@ -468,45 +497,145 @@ function noThenable(value, label) {
   }
 }
 
-function normalizeEffects(effects, dispatchId, capabilities) {
-  if (effects === null || effects === undefined) return [];
-  if (!Array.isArray(effects)) throw new TypeError("Update effects must be an array or null");
-  if (effects.length > 0 && !capabilities.includes("effect.request-reply")) {
-    throw new TypeError("component emitted effects without effect.request-reply capability");
-  }
-  const lengthDescriptor = Object.getOwnPropertyDescriptor(effects, "length");
+function denseDataArray(value, label) {
+  if (!Array.isArray(value)) throw new TypeError(`${label} must be an array`);
+  const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
   if (!lengthDescriptor || !Object.prototype.hasOwnProperty.call(lengthDescriptor, "value") ||
       !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0) {
-    throw new TypeError("Update effects has an invalid length");
+    throw new TypeError(`${label} has an invalid length`);
   }
-  const effectCount = lengthDescriptor.value;
-  const effectKeys = Reflect.ownKeys(effects);
-  if (effectKeys.length !== effectCount + 1 || effectKeys.some((key, index) => key !== (index === effectCount ? "length" : String(index)))) {
-    throw new TypeError("Update effects must be a dense array without extra properties");
+  const length = lengthDescriptor.value;
+  const keys = Reflect.ownKeys(value);
+  if (keys.length !== length + 1 ||
+      keys.some((key, index) => key !== (index === length ? "length" : String(index)))) {
+    throw new TypeError(`${label} must be dense and contain no extra properties`);
   }
-  const result = [];
-  for (let effectIndex = 0; effectIndex < effectCount; effectIndex += 1) {
-    const element = Object.getOwnPropertyDescriptor(effects, String(effectIndex));
-    if (!element || !Object.prototype.hasOwnProperty.call(element, "value") || !element.enumerable ||
-        !element.writable || !element.configurable) {
-      throw new TypeError(`Update effects[${effectIndex}] must be an own data property`);
+  const values = [];
+  for (let index = 0; index < length; index += 1) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+    if (!descriptor || !Object.prototype.hasOwnProperty.call(descriptor, "value") ||
+        !descriptor.enumerable || !descriptor.writable || !descriptor.configurable ||
+        Object.prototype.hasOwnProperty.call(descriptor, "get") ||
+        Object.prototype.hasOwnProperty.call(descriptor, "set")) {
+      throw new TypeError(`${label}[${index}] must be an own data property`);
     }
-    const rawEffect = element.value;
-    const fields = goStructDataRecord(rawEffect, ["Kind", "Name", "Arg", "Reply"], "gobi.Effect");
-    const effect = {
-      kind: requireString(fields.Kind, "gobi.Effect.Kind"),
-      name: requireString(fields.Name, "gobi.Effect.Name"),
-      arg: requireString(fields.Arg, "gobi.Effect.Arg"),
-      reply: requireString(fields.Reply, "gobi.Effect.Reply"),
-    };
-    validateSupportedEffect(effect, "gobi.Effect");
-    result.push({ dispatchId, effectIndex, effect });
+    values.push(descriptor.value);
   }
-  return result;
+  return values;
+}
+
+function readEncodedStringValue(value, label) {
+  const fields = ownDataRecord(value, ["typeId", "kind", "string"], label);
+  if (fields.typeId !== "string" || fields.kind !== "string" || typeof fields.string !== "string") {
+    throw new TypeError(`${label} must be an encoded string Value`);
+  }
+  return fields.string;
+}
+
+function readEncodedEffectSlice(value, metadata) {
+  const fields = ownDataRecord(value, ["typeId", "kind", "isNil", "items"], "gobiEncodeState(Update effects)");
+  if (fields.typeId !== metadata.typeId || fields.kind !== "slice" || typeof fields.isNil !== "boolean") {
+    throw new TypeError("gobiEncodeState returned a Value with the wrong Update effect slice type");
+  }
+  const items = denseDataArray(fields.items, "encoded Update effect items");
+  if (fields.isNil && items.length !== 0) {
+    throw new TypeError("encoded nil Update effect slice must have no items");
+  }
+  return items.map((item, index) => {
+    const itemFields = ownDataRecord(item, ["typeId", "kind", "fields"], `encoded Update effect[${index}]`);
+    if (itemFields.typeId !== metadata.elementTypeId || itemFields.kind !== "struct") {
+      throw new TypeError(`encoded Update effect[${index}] has the wrong struct type`);
+    }
+    const encodedFields = denseDataArray(itemFields.fields, `encoded Update effect[${index}].fields`);
+    if (encodedFields.length !== metadata.fieldNames.length) {
+      throw new TypeError(`encoded Update effect[${index}] has the wrong field count`);
+    }
+    const extracted = {};
+    for (let fieldIndex = 0; fieldIndex < metadata.fieldNames.length; fieldIndex += 1) {
+      const expectedName = metadata.fieldNames[fieldIndex];
+      const encodedField = ownDataRecord(
+        encodedFields[fieldIndex],
+        ["name", "value"],
+        `encoded Update effect[${index}].fields[${fieldIndex}]`,
+      );
+      if (encodedField.name !== expectedName) {
+        throw new TypeError(`encoded Update effect[${index}] field ${fieldIndex} must be ${expectedName}`);
+      }
+      extracted[expectedName] = readEncodedStringValue(
+        encodedField.value,
+        `encoded Update effect[${index}].${expectedName}`,
+      );
+    }
+    return {
+      kind: extracted.Kind,
+      name: extracted.Name,
+      arg: extracted.Arg,
+      reply: extracted.Reply,
+    };
+  });
+}
+
+function validateEffectByPolicy(effect, effectPolicy) {
+  if (effectPolicy === null) {
+    validateSupportedEffect(effect, "gobi.Effect");
+    return;
+  }
+  // The caller owns a closed, synchronous policy for an additional effect ABI.
+  // It receives a copy so it cannot rewrite the request that is traced/queued.
+  const policyInput = Object.freeze({ ...effect });
+  const policyResult = effectPolicy(policyInput, "gobi.Effect");
+  noThenable(policyResult, "effectPolicy(effect)");
+  if (policyResult !== undefined) {
+    throw new TypeError("effectPolicy must validate by returning undefined");
+  }
+}
+
+function normalizeEffects(effects, dispatchId, capabilities, effectPolicy, encoder, appIR, effectResultTypeId) {
+  if (effects === null || effects === undefined) return [];
+  let effectValues;
+  const hasDeclaredEffectSlice = typeof effectResultTypeId === "string"
+    && Array.isArray(appIR?.types)
+    && appIR.types.some((type) => type?.id === effectResultTypeId);
+  if (Array.isArray(effects) && !hasDeclaredEffectSlice) {
+    const rawItems = denseDataArray(effects, "Update effects");
+    if (rawItems.length > 0 && !capabilities.includes("effect.request-reply")) {
+      throw new TypeError("component emitted effects without effect.request-reply capability");
+    }
+    effectValues = rawItems.map((rawEffect) => {
+      const fields = goStructDataRecord(rawEffect, ["Kind", "Name", "Arg", "Reply"], "gobi.Effect");
+      return {
+        kind: requireString(fields.Kind, "gobi.Effect.Kind"),
+        name: requireString(fields.Name, "gobi.Effect.Name"),
+        arg: requireString(fields.Arg, "gobi.Effect.Arg"),
+        reply: requireString(fields.Reply, "gobi.Effect.Reply"),
+      };
+    });
+  } else {
+    const metadata = effectSliceMetadata(appIR, effectResultTypeId);
+    const encoded = encoder.gobiEncodeState(effects, metadata.typeId);
+    noThenable(encoded, "gobiEncodeState(Update effects)");
+    effectValues = readEncodedEffectSlice(encoded, metadata);
+    if (effectValues.length > 0 && !capabilities.includes("effect.request-reply")) {
+      throw new TypeError("component emitted effects without effect.request-reply capability");
+    }
+  }
+  return effectValues.map((effect, effectIndex) => {
+    validateEffectByPolicy(effect, effectPolicy);
+    return { dispatchId, effectIndex, effect };
+  });
 }
 
 function keyFor(request) {
   return `${request.dispatchId}/${request.effectIndex}`;
+}
+
+function validateEffectCorrelation(correlation) {
+  const fields = ownDataRecord(correlation, ["dispatchId", "effectIndex"], "EffectCorrelation");
+  requireString(fields.dispatchId, "EffectCorrelation.dispatchId");
+  if (!Number.isSafeInteger(fields.effectIndex) || fields.effectIndex < 0) {
+    throw new TypeError("EffectCorrelation.effectIndex must be a nonnegative safe integer");
+  }
+  return { dispatchId: fields.dispatchId, effectIndex: fields.effectIndex };
 }
 
 function validateCompletion(completion) {
@@ -547,6 +676,7 @@ export function mountCompiledApp({
   encoder,
   renderer,
   effectHost = null,
+  effectPolicy = null,
   onTick = null,
   onFailure = null,
 }) {
@@ -554,8 +684,11 @@ export function mountCompiledApp({
   requireString(appId, "appId");
   if (onTick !== null && typeof onTick !== "function") throw new TypeError("onTick must be a function or null");
   if (onFailure !== null && typeof onFailure !== "function") throw new TypeError("onFailure must be a function or null");
+  if (effectPolicy !== null && typeof effectPolicy !== "function") {
+    throw new TypeError("effectPolicy must be a synchronous validator function or null");
+  }
 
-  const { component, symbols } = getComponent(compiled, componentId);
+  const { component, symbols, appIR, effectResultTypeId } = getComponent(compiled, componentId);
   const stateEncoder = requireEncoder(encoder);
   let viewRenderer = requireRenderer(renderer);
   if (effectHost !== null && typeof effectHost.request !== "function") {
@@ -576,6 +709,7 @@ export function mountCompiledApp({
   let updateSequence = 0n;
   const ticks = [];
   const pendingEffects = new Map();
+  const effectCancellations = [];
   const deferred = [];
   let rendererGeneration = 1;
   let nextRendererGeneration = 2;
@@ -650,6 +784,47 @@ export function mountCompiledApp({
       replacements: rendererReplacements,
       fencedCallbacks: fencedRendererCallbacks,
     });
+  }
+
+  function effectDiagnostics() {
+    const pending = [];
+    for (const record of pendingEffects.values()) {
+      if (record.completed) continue;
+      pending.push({
+        dispatchId: record.request.dispatchId,
+        effectIndex: record.request.effectIndex,
+        queued: record.queued,
+      });
+    }
+    return cloneJson({ pending, cancellations: effectCancellations });
+  }
+
+  function cancelEffect(correlationInput) {
+    let correlation;
+    try {
+      correlation = validateEffectCorrelation(correlationInput);
+    } catch (error) {
+      return { accepted: false, cancelled: false, error: error.message };
+    }
+    const key = keyFor(correlation);
+    const pending = pendingEffects.get(key);
+    if (!pending || pending.completed) {
+      const result = { ...correlation, outcome: "rejected", reason: "unknown or completed effect" };
+      effectCancellations.push(result);
+      return { accepted: false, cancelled: false, error: result.reason };
+    }
+
+    pendingEffects.delete(key);
+    for (let index = deferred.length - 1; index >= 0; index -= 1) {
+      const item = deferred[index];
+      if (item.kind !== "completion" || keyFor(item.completion) !== key) continue;
+      deferred.splice(index, 1);
+    }
+    pending.queued = false;
+    replacementCompletionQueued = deferred.some((item) =>
+      item.kind === "completion" && item.heldByReplacement === true);
+    effectCancellations.push({ ...correlation, outcome: "cancelled" });
+    return { accepted: true, cancelled: true, dispatchId: correlation.dispatchId, effectIndex: correlation.effectIndex };
   }
 
   function recordTick({ action, message, dispatchId, requestedEffects = [], completedEffects = [] }) {
@@ -770,7 +945,15 @@ export function mountCompiledApp({
         throw new TypeError("compiled Update must return [nextState,effects]");
       }
       [candidateState, rawEffects] = result;
-      const requests = normalizeEffects(rawEffects, dispatchId, capabilities);
+      const requests = normalizeEffects(
+        rawEffects,
+        dispatchId,
+        capabilities,
+        effectPolicy,
+        stateEncoder,
+        appIR,
+        effectResultTypeId,
+      );
       const candidateView = symbols.view(candidateState);
       state = candidateState;
       renderView(candidateView);
@@ -1207,6 +1390,8 @@ export function mountCompiledApp({
     snapshot: runtimeSnapshot,
     replaceRenderer,
     rendererDiagnostics,
+    effectDiagnostics,
+    cancelEffect,
     unmount,
     failure() {
       return lastFailure === null ? null : cloneJson(lastFailure);

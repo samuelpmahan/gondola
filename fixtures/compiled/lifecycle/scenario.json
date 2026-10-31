@@ -1,0 +1,82 @@
+{
+  "schema": "gobi.compiled-lifecycle-fixture/v1",
+  "name": "compiled-lifecycle-parent-child-grandchild-remount-fence",
+  "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+  "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+  "initialState": {
+    "nextRequestID": 0,
+    "nodes": [
+      { "id": "parent", "parentID": "", "generation": 1, "requestID": 0, "alive": true, "requested": false, "pending": false, "token": "", "reply": "", "count": 0 },
+      { "id": "child", "parentID": "parent", "generation": 1, "requestID": 0, "alive": true, "requested": false, "pending": false, "token": "", "reply": "", "count": 0 },
+      { "id": "grandchild", "parentID": "child", "generation": 1, "requestID": 0, "alive": true, "requested": false, "pending": false, "token": "", "reply": "", "count": 0 },
+      { "id": "sibling", "parentID": "", "generation": 1, "requestID": 0, "alive": true, "requested": false, "pending": false, "token": "", "reply": "", "count": 0 }
+    ]
+  },
+  "events": [
+    { "kind": "click", "path": "0/1", "event": "click", "value": "", "message": { "name": "addParent", "arg": "" } },
+    { "kind": "click", "path": "0/3/1", "event": "click", "value": "", "message": { "name": "addChild", "arg": "" } },
+    { "kind": "click", "path": "0/3/3/1", "event": "click", "value": "", "message": { "name": "addGrandchild", "arg": "" } },
+    { "kind": "click", "path": "1/1", "event": "click", "value": "", "message": { "name": "addSibling", "arg": "" } },
+    { "kind": "click", "path": "0/2", "event": "click", "value": "", "message": { "name": "requestParent", "arg": "" } },
+    { "kind": "click", "path": "0/3/2", "event": "click", "value": "", "message": { "name": "requestChild", "arg": "" } },
+    { "kind": "click", "path": "0/3/3/2", "event": "click", "value": "", "message": { "name": "requestGrandchild", "arg": "" } },
+    { "kind": "click", "path": "1/2", "event": "click", "value": "", "message": { "name": "requestSibling", "arg": "" } },
+    { "kind": "renderer-swap", "from": "dom", "to": "react", "target": "root" },
+    { "kind": "click", "path": "2/0", "event": "click", "value": "", "message": { "name": "removeParent", "arg": "" } },
+    { "kind": "click", "path": "2/1", "event": "click", "value": "", "message": { "name": "remountParent", "arg": "" } },
+    { "kind": "go-message", "message": { "name": "complete", "arg": "grandchild:g1:r3" }, "expect": "stale-no-op" },
+    { "kind": "go-message", "message": { "name": "complete", "arg": "child:g1:r2" }, "expect": "stale-no-op" },
+    { "kind": "go-message", "message": { "name": "complete", "arg": "parent:g1:r1" }, "expect": "stale-no-op" },
+    { "kind": "effect-reply", "token": "sibling:g1:r4", "message": { "name": "complete", "arg": "sibling:g1:r4" }, "expect": "accepted" },
+    { "kind": "go-message", "message": { "name": "complete", "arg": "sibling:g1:r4" }, "expect": "duplicate-no-op" },
+    { "kind": "click", "path": "0/1", "event": "click", "value": "", "message": { "name": "addParent", "arg": "" } },
+    { "kind": "click", "path": "0/3/1", "event": "click", "value": "", "message": { "name": "addChild", "arg": "" } },
+    { "kind": "click", "path": "0/3/3/1", "event": "click", "value": "", "message": { "name": "addGrandchild", "arg": "" } },
+    { "kind": "click", "path": "0/2", "event": "click", "value": "", "message": { "name": "requestParent", "arg": "" } },
+    { "kind": "click", "path": "0/3/2", "event": "click", "value": "", "message": { "name": "requestChild", "arg": "" } },
+    { "kind": "click", "path": "0/3/3/2", "event": "click", "value": "", "message": { "name": "requestGrandchild", "arg": "" } },
+    { "kind": "effect-reply", "token": "grandchild:g2:r7", "message": { "name": "complete", "arg": "grandchild:g2:r7" }, "expect": "accepted" },
+    { "kind": "effect-reply", "token": "child:g2:r6", "message": { "name": "complete", "arg": "child:g2:r6" }, "expect": "accepted" },
+    { "kind": "effect-reply", "token": "parent:g2:r5", "message": { "name": "complete", "arg": "parent:g2:r5" }, "expect": "accepted" },
+    { "kind": "go-message", "message": { "name": "complete", "arg": "child:g2:r6" }, "expect": "duplicate-no-op" }
+  ],
+  "expectedStates": [
+    { "afterEvent": -1, "nextRequestID": 0, "generations": [1, 1, 1, 1], "requestIDs": [0, 0, 0, 0], "alive": [true, true, true, true], "requested": [false, false, false, false], "pending": [false, false, false, false], "tokens": ["", "", "", ""], "replies": ["", "", "", ""], "counts": [0, 0, 0, 0] },
+    { "afterEvent": 3, "nextRequestID": 0, "generations": [1, 1, 1, 1], "requestIDs": [0, 0, 0, 0], "alive": [true, true, true, true], "requested": [false, false, false, false], "pending": [false, false, false, false], "tokens": ["", "", "", ""], "replies": ["", "", "", ""], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 7, "nextRequestID": 4, "generations": [1, 1, 1, 1], "requestIDs": [1, 2, 3, 4], "alive": [true, true, true, true], "requested": [true, true, true, true], "pending": [true, true, true, true], "tokens": ["parent:g1:r1", "child:g1:r2", "grandchild:g1:r3", "sibling:g1:r4"], "replies": ["", "", "", ""], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 8, "nextRequestID": 4, "generations": [1, 1, 1, 1], "requestIDs": [1, 2, 3, 4], "alive": [true, true, true, true], "requested": [true, true, true, true], "pending": [true, true, true, true], "tokens": ["parent:g1:r1", "child:g1:r2", "grandchild:g1:r3", "sibling:g1:r4"], "replies": ["", "", "", ""], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 9, "nextRequestID": 4, "generations": [1, 1, 1, 1], "requestIDs": [1, 2, 3, 4], "alive": [false, false, false, true], "requested": [true, true, true, true], "pending": [false, false, false, true], "tokens": ["", "", "", "sibling:g1:r4"], "replies": ["", "", "", ""], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 10, "nextRequestID": 4, "generations": [2, 2, 2, 1], "requestIDs": [0, 0, 0, 4], "alive": [true, true, true, true], "requested": [false, false, false, true], "pending": [false, false, false, true], "tokens": ["", "", "", "sibling:g1:r4"], "replies": ["", "", "", ""], "counts": [0, 0, 0, 1] },
+    { "afterEvent": 13, "nextRequestID": 4, "generations": [2, 2, 2, 1], "requestIDs": [0, 0, 0, 4], "alive": [true, true, true, true], "requested": [false, false, false, true], "pending": [false, false, false, true], "tokens": ["", "", "", "sibling:g1:r4"], "replies": ["", "", "", ""], "counts": [0, 0, 0, 1] },
+    { "afterEvent": 14, "nextRequestID": 4, "generations": [2, 2, 2, 1], "requestIDs": [0, 0, 0, 4], "alive": [true, true, true, true], "requested": [false, false, false, true], "pending": [false, false, false, false], "tokens": ["", "", "", "sibling:g1:r4"], "replies": ["", "", "", "sibling:g1:r4"], "counts": [0, 0, 0, 1] },
+    { "afterEvent": 15, "nextRequestID": 4, "generations": [2, 2, 2, 1], "requestIDs": [0, 0, 0, 4], "alive": [true, true, true, true], "requested": [false, false, false, true], "pending": [false, false, false, false], "tokens": ["", "", "", "sibling:g1:r4"], "replies": ["", "", "", "sibling:g1:r4"], "counts": [0, 0, 0, 1] },
+    { "afterEvent": 18, "nextRequestID": 4, "generations": [2, 2, 2, 1], "requestIDs": [0, 0, 0, 4], "alive": [true, true, true, true], "requested": [false, false, false, true], "pending": [false, false, false, false], "tokens": ["", "", "", "sibling:g1:r4"], "replies": ["", "", "", "sibling:g1:r4"], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 21, "nextRequestID": 7, "generations": [2, 2, 2, 1], "requestIDs": [5, 6, 7, 4], "alive": [true, true, true, true], "requested": [true, true, true, true], "pending": [true, true, true, false], "tokens": ["parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4"], "replies": ["", "", "", "sibling:g1:r4"], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 24, "nextRequestID": 7, "generations": [2, 2, 2, 1], "requestIDs": [5, 6, 7, 4], "alive": [true, true, true, true], "requested": [true, true, true, true], "pending": [false, false, false, false], "tokens": ["parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4"], "replies": ["parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4"], "counts": [1, 1, 1, 1] },
+    { "afterEvent": 25, "nextRequestID": 7, "generations": [2, 2, 2, 1], "requestIDs": [5, 6, 7, 4], "alive": [true, true, true, true], "requested": [true, true, true, true], "pending": [false, false, false, false], "tokens": ["parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4"], "replies": ["parent:g2:r5", "child:g2:r6", "grandchild:g2:r7", "sibling:g1:r4"], "counts": [1, 1, 1, 1] }
+  ],
+  "expectedEffects": [
+    { "afterEvent": 4, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "parent:g1:r1", "reply": "complete" }] },
+    { "afterEvent": 5, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "child:g1:r2", "reply": "complete" }] },
+    { "afterEvent": 6, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "grandchild:g1:r3", "reply": "complete" }] },
+    { "afterEvent": 7, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "sibling:g1:r4", "reply": "complete" }] },
+    {
+      "afterEvent": 9,
+      "effects": [
+        { "kind": "lifecycle.cancel", "name": "cancel", "arg": "grandchild:g1:r3", "reply": "" },
+        { "kind": "lifecycle.cancel", "name": "cancel", "arg": "child:g1:r2", "reply": "" },
+        { "kind": "lifecycle.cancel", "name": "cancel", "arg": "parent:g1:r1", "reply": "" }
+      ]
+    },
+    { "afterEvent": 19, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "parent:g2:r5", "reply": "complete" }] },
+    { "afterEvent": 20, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "child:g2:r6", "reply": "complete" }] },
+    { "afterEvent": 21, "effects": [{ "kind": "fixture.request", "name": "lookup", "arg": "grandchild:g2:r7", "reply": "complete" }] }
+  ],
+  "harnessProbes": [
+    { "afterEvent": 9, "token": "grandchild:g1:r3", "expectRuntimeCompletion": "rejected-cancelled" },
+    { "afterEvent": 9, "token": "child:g1:r2", "expectRuntimeCompletion": "rejected-cancelled" },
+    { "afterEvent": 9, "token": "parent:g1:r1", "expectRuntimeCompletion": "rejected-cancelled" },
+    { "afterEvent": 14, "token": "sibling:g1:r4", "expectRuntimeCompletion": "rejected-duplicate" },
+    { "afterEvent": 24, "token": "child:g2:r6", "expectRuntimeCompletion": "rejected-duplicate" }
+  ]
+}

@@ -1,0 +1,565 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+import {
+  createLifecycleEffectDriver,
+  mountLifecycleApp,
+  validateLifecycleEffect,
+} from "./runtime.mjs";
+
+function requestIntent(kind, token) {
+  return kind === "request"
+    ? { kind: "fixture.request", name: "lookup", arg: token, reply: "complete" }
+    : { kind: "lifecycle.cancel", name: "cancel", arg: token, reply: "" };
+}
+
+function requestRecord(dispatchId, effectIndex, effect) {
+  return { dispatchId, effectIndex, effect };
+}
+
+function key(correlation) {
+  return `${correlation.dispatchId}/${correlation.effectIndex}`;
+}
+
+async function loadCompiledLifecycleFixture() {
+  const configuredAppDir = process.env.GOBI_LIFECYCLE_APP_DIR;
+  if (typeof configuredAppDir !== "string" || configuredAppDir.trim() === "") {
+    throw new Error("GOBI_LIFECYCLE_APP_DIR is required; set it to the generated lifecycle app directory containing app-ir.json, gobi-compiled.mjs, and encoder.mjs");
+  }
+
+  const appDir = resolve(configuredAppDir);
+  let appIR;
+  try {
+    appIR = JSON.parse(await readFile(join(appDir, "app-ir.json"), "utf8"));
+  } catch (error) {
+    throw new Error(`GOBI_LIFECYCLE_APP_DIR must point to a generated lifecycle app directory with a readable app-ir.json (${appDir}): ${error.message}`, { cause: error });
+  }
+  if (appIR.packagePath !== "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle") {
+    throw new Error(`GOBI_LIFECYCLE_APP_DIR points to ${appIR.packagePath ?? "an unknown package"}; expected github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle`);
+  }
+
+  try {
+    const [compiledModule, encoder] = await Promise.all([
+      import(pathToFileURL(join(appDir, "gobi-compiled.mjs")).href),
+      import(pathToFileURL(join(appDir, "encoder.mjs")).href),
+    ]);
+    return { module: compiledModule.gobiCompiled, encoder, appDir };
+  } catch (error) {
+    throw new Error(`GOBI_LIFECYCLE_APP_DIR is missing a loadable gobi-compiled.mjs or encoder.mjs (${appDir}): ${error.message}`, { cause: error });
+  }
+}
+
+test("compiled lifecycle fixture loader requires an explicit app directory", async () => {
+  const previous = process.env.GOBI_LIFECYCLE_APP_DIR;
+  delete process.env.GOBI_LIFECYCLE_APP_DIR;
+  try {
+    await assert.rejects(loadCompiledLifecycleFixture(), /GOBI_LIFECYCLE_APP_DIR is required; set it to the generated lifecycle app directory/);
+  } finally {
+    if (previous === undefined) delete process.env.GOBI_LIFECYCLE_APP_DIR;
+    else process.env.GOBI_LIFECYCLE_APP_DIR = previous;
+  }
+});
+
+function updateSignature(component, module) {
+  return module.appIR.symbols.find((symbol) => symbol.id === component.update)?.signature;
+}
+
+function headlessRenderer() {
+  return {
+    update(view, callbacks) {
+      this.view = view;
+      this.callbacks = callbacks;
+    },
+    viewRecord() {
+      return {
+        tree: { kind: "element", tag: "main", key: "lifecycle-test", attrs: [], on: [], kids: [], text: "" },
+        bindings: [],
+      };
+    },
+    domSnapshot() {
+      return { normalization: "outerHTML-v1", html: "<main></main>", controls: [] };
+    },
+    unmount() {
+      this.view = null;
+    },
+  };
+}
+
+function moduleWithUpdate(module, component, update) {
+  const symbols = Object.create(null);
+  for (const key of Reflect.ownKeys(module.symbols)) {
+    const descriptor = Object.getOwnPropertyDescriptor(module.symbols, key);
+    if (descriptor && Object.prototype.hasOwnProperty.call(descriptor, "value")) {
+      Object.defineProperty(symbols, key, { ...descriptor, value: key === component.update ? update : descriptor.value });
+    }
+  }
+  return { ...module, symbols };
+}
+
+function updateMessage(runtime, name, arg = "") {
+  return runtime.dispatch(
+    { path: "integration", event: "click", value: name },
+    { Name: name, Arg: arg },
+  );
+}
+
+function shiftSliceWindow(slice) {
+  const read = (key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(slice, key);
+    if (!descriptor || !Object.prototype.hasOwnProperty.call(descriptor, "value")) {
+      throw new TypeError(`actual GoSlice.${key} must be an own data property`);
+    }
+    return descriptor.value;
+  };
+  const backing = read("backing");
+  const offset = read("offset");
+  const length = read("length");
+  const items = backing.slice(offset, offset + length);
+  return {
+    backing: [null, ...items],
+    offset: 1,
+    length: items.length,
+    capacity: items.length,
+    target: undefined,
+  };
+}
+
+async function mountActualLifecycle({ module, encoder, component, updateOverride = null, renderer = headlessRenderer() }) {
+  const mountedModule = updateOverride === null
+    ? module
+    : moduleWithUpdate(module, component, updateOverride);
+  return mountLifecycleApp({
+    module: mountedModule,
+    componentId: component.id,
+    appId: "lifecycle-effect-slice-test",
+    encoder,
+    renderer,
+  });
+}
+
+test("closed lifecycle policy accepts only fixture lookup and cancel intents with tokens", () => {
+  assert.equal(validateLifecycleEffect(requestIntent("request", "parent:g1:r1")), undefined);
+  assert.equal(validateLifecycleEffect(requestIntent("cancel", "grandchild:g2:r7")), undefined);
+  assert.throws(() => validateLifecycleEffect({
+    ...requestIntent("request", "parent:g1:r1"), kind: "network.fetch",
+  }), /unsupported lifecycle effect kind/i);
+  assert.throws(() => validateLifecycleEffect({
+    ...requestIntent("request", "parent:g1:r1"), reply: "",
+  }), /lookup\/complete/i);
+  assert.throws(() => validateLifecycleEffect({
+    ...requestIntent("cancel", "parent:g1:r1"), reply: "complete",
+  }), /empty reply/i);
+  assert.throws(() => validateLifecycleEffect(requestIntent("request", "parent:g0:r1")), /invalid lifecycle token/i);
+  assert.throws(() => validateLifecycleEffect({
+    ...requestIntent("request", "parent:g1:r1"), extra: "not allowed",
+  }), /exactly/i);
+  assert.equal(typeof mountLifecycleApp, "function");
+});
+
+test("manual effect driver preserves Go request/cancel order and force-delivers a retired callback", () => {
+  const driver = createLifecycleEffectDriver();
+  const cancelled = new Set();
+  const cancelCalls = [];
+  const callbackCalls = [];
+  driver.attachRuntime({
+    cancelEffect(correlation) {
+      const correlationKey = key(correlation);
+      if (!cancelled.has(correlationKey)) {
+        cancelled.add(correlationKey);
+        cancelCalls.push(correlation);
+        return { accepted: true, cancelled: true, ...correlation };
+      }
+      return { accepted: false, cancelled: false, error: "unknown or completed effect" };
+    },
+  });
+
+  const issue = (index, token) => {
+    const correlation = { dispatchId: "dispatch-0001", effectIndex: index };
+    driver.effectHost.request(requestRecord(
+      correlation.dispatchId,
+      correlation.effectIndex,
+      requestIntent("request", token),
+    ), (completion) => {
+      callbackCalls.push({ token, completion });
+      if (cancelled.has(key(correlation))) {
+        return { accepted: false, error: "unknown or extra effect completion" };
+      }
+      return { accepted: true, dispatchId: "dispatch-0002" };
+    });
+  };
+  issue(0, "parent:g1:r1");
+  issue(1, "child:g1:r2");
+  issue(2, "grandchild:g1:r3");
+  issue(3, "sibling:g1:r4");
+
+  const cancel = (dispatchId, effectIndex, token) => driver.effectHost.request(
+    requestRecord(dispatchId, effectIndex, requestIntent("cancel", token)),
+    () => undefined,
+  );
+  cancel("dispatch-0002", 0, "grandchild:g1:r3");
+  cancel("dispatch-0002", 1, "child:g1:r2");
+  cancel("dispatch-0002", 2, "parent:g1:r1");
+
+  assert.deepEqual(cancelCalls, [
+    { dispatchId: "dispatch-0001", effectIndex: 2 },
+    { dispatchId: "dispatch-0001", effectIndex: 1 },
+    { dispatchId: "dispatch-0001", effectIndex: 0 },
+  ]);
+  assert.deepEqual(driver.pending().map(({ token }) => token), ["sibling:g1:r4"]);
+  assert.deepEqual(driver.records().map(({ sequence, kind, token }) => ({ sequence, kind, token })), [
+    { sequence: 1, kind: "request", token: "parent:g1:r1" },
+    { sequence: 2, kind: "request", token: "child:g1:r2" },
+    { sequence: 3, kind: "request", token: "grandchild:g1:r3" },
+    { sequence: 4, kind: "request", token: "sibling:g1:r4" },
+    { sequence: 5, kind: "cancel", token: "grandchild:g1:r3" },
+    { sequence: 6, kind: "cancel", token: "child:g1:r2" },
+    { sequence: 7, kind: "cancel", token: "parent:g1:r1" },
+  ]);
+
+  const siblingDelivery = driver.deliver("sibling:g1:r4");
+  assert.equal(siblingDelivery.accepted, true);
+  assert.equal(siblingDelivery.correlation.dispatchId, "dispatch-0001");
+  assert.deepEqual(callbackCalls[0], {
+    token: "sibling:g1:r4",
+    completion: {
+      dispatchId: "dispatch-0001",
+      effectIndex: 3,
+      message: { name: "complete", arg: "sibling:g1:r4" },
+    },
+  });
+
+  const lateGrandchild = driver.forceDeliverRetired("grandchild:g1:r3");
+  assert.deepEqual(lateGrandchild, {
+    accepted: false,
+    outcome: "rejected",
+    token: "grandchild:g1:r3",
+    correlation: { dispatchId: "dispatch-0001", effectIndex: 2 },
+    runtimeResult: { accepted: false, error: "unknown or extra effect completion" },
+    error: "unknown or extra effect completion",
+  });
+  assert.equal(callbackCalls.length, 2);
+  const last = driver.records().at(-1);
+  assert.deepEqual({
+    sequence: last.sequence,
+    kind: last.kind,
+    dispatchId: last.dispatchId,
+    effectIndex: last.effectIndex,
+    token: last.token,
+    outcome: last.outcome,
+  }, {
+    sequence: 9,
+    kind: "force-deliver-retired",
+    dispatchId: "dispatch-0001",
+    effectIndex: 2,
+    token: "grandchild:g1:r3",
+    outcome: "rejected",
+  });
+});
+
+test("host unmount retires pending sibling requests and releases every callback", () => {
+  const driver = createLifecycleEffectDriver();
+  const cancelled = [];
+  const callbackCalls = [];
+  driver.attachRuntime({
+    cancelEffect(correlation) {
+      cancelled.push(correlation);
+      return { accepted: true, cancelled: true, ...correlation };
+    },
+  });
+  for (const [index, token] of ["grandchild:g1:r3", "sibling:g1:r4"].entries()) {
+    const correlation = { dispatchId: "dispatch-0001", effectIndex: index };
+    driver.effectHost.request(requestRecord(
+      correlation.dispatchId,
+      correlation.effectIndex,
+      requestIntent("request", token),
+    ), (completion) => {
+      callbackCalls.push(completion);
+      return { accepted: true };
+    });
+  }
+
+  assert.equal(driver.retireAll(), true);
+  assert.equal(driver.retireAll(), false);
+  assert.deepEqual(driver.pending(), []);
+  assert.deepEqual(cancelled, [
+    { dispatchId: "dispatch-0001", effectIndex: 0 },
+    { dispatchId: "dispatch-0001", effectIndex: 1 },
+  ]);
+  assert.deepEqual(driver.records().slice(-2).map(({ kind, token, outcome, reason }) => ({ kind, token, outcome, reason })), [
+    { kind: "retire", token: "grandchild:g1:r3", outcome: "retired", reason: "host-unmount" },
+    { kind: "retire", token: "sibling:g1:r4", outcome: "retired", reason: "host-unmount" },
+  ]);
+
+  const forced = driver.forceDeliverRetired("sibling:g1:r4");
+  assert.deepEqual(forced, {
+    accepted: false,
+    outcome: "rejected",
+    token: "sibling:g1:r4",
+    correlation: { dispatchId: "dispatch-0001", effectIndex: 1 },
+    error: "callback was released on host unmount",
+  });
+  const normalAfterUnmount = driver.deliver("sibling:g1:r4");
+  assert.deepEqual(normalAfterUnmount, {
+    accepted: false,
+    outcome: "rejected",
+    token: "sibling:g1:r4",
+    correlation: { dispatchId: "dispatch-0001", effectIndex: 1 },
+    error: "lifecycle request is unmounted",
+  });
+  assert.equal(callbackCalls.length, 0);
+  assert.deepEqual(driver.pending(), []);
+});
+
+test("real compiled append effects pass through the signature-typed encoder and cancel only removed scopes", async () => {
+  const { module, encoder } = await loadCompiledLifecycleFixture();
+  const component = module.appIR.components[0];
+  const session = await mountActualLifecycle({ module, encoder, component });
+  const { runtime, effects } = session;
+
+  for (const name of ["requestParent", "requestChild", "requestGrandchild", "requestSibling"]) {
+    assert.equal(updateMessage(runtime, name).accepted, true);
+  }
+  assert.deepEqual(effects.pending().map(({ token }) => token), [
+    "parent:g1:r1", "child:g1:r2", "grandchild:g1:r3", "sibling:g1:r4",
+  ]);
+
+  const removed = updateMessage(runtime, "removeParent");
+  assert.equal(removed.accepted, true, removed.error);
+  assert.deepEqual(effects.records().filter(({ kind }) => kind === "cancel").map(({ token, target }) => ({ token, target })), [
+    { token: "grandchild:g1:r3", target: { dispatchId: "dispatch-0003", effectIndex: 0 } },
+    { token: "child:g1:r2", target: { dispatchId: "dispatch-0002", effectIndex: 0 } },
+    { token: "parent:g1:r1", target: { dispatchId: "dispatch-0001", effectIndex: 0 } },
+  ]);
+  assert.deepEqual(effects.pending().map(({ token }) => token), ["sibling:g1:r4"]);
+  assert.deepEqual(runtime.trace().ticks.at(-1).requestedEffects.map(({ effect }) => effect), [
+    { kind: "lifecycle.cancel", name: "cancel", arg: "grandchild:g1:r3", reply: "" },
+    { kind: "lifecycle.cancel", name: "cancel", arg: "child:g1:r2", reply: "" },
+    { kind: "lifecycle.cancel", name: "cancel", arg: "parent:g1:r1", reply: "" },
+  ]);
+
+  const lateRuntimeCompletion = effects.forceDeliverRetired("grandchild:g1:r3");
+  assert.equal(lateRuntimeCompletion.accepted, false);
+  assert.match(lateRuntimeCompletion.error, /unknown or extra effect completion/i);
+  assert.equal(effects.deliver("sibling:g1:r4").accepted, true);
+
+  assert.equal(updateMessage(runtime, "remountParent").accepted, true);
+  const afterRemount = runtime.snapshot().state;
+  for (const token of ["grandchild:g1:r3", "child:g1:r2", "parent:g1:r1"]) {
+    assert.equal(updateMessage(runtime, "complete", token).accepted, true);
+    assert.deepEqual(runtime.snapshot().state, afterRemount, `Go stale-token guard changed state for ${token}`);
+  }
+
+  const remountRequest = updateMessage(runtime, "requestParent");
+  assert.equal(remountRequest.accepted, true, JSON.stringify(remountRequest));
+  assert.deepEqual(effects.pending().map(({ token }) => token), ["parent:g2:r5"]);
+  assert.equal(runtime.unmount(), true);
+  assert.deepEqual(effects.pending(), []);
+  assert.equal(effects.forceDeliverRetired("parent:g2:r5").accepted, false);
+  assert.match(effects.records().at(-1).error, /released on host unmount/i);
+});
+
+test("generated encoder accepts a nonzero-offset effect GoSlice from compiled append", async () => {
+  const { module, encoder } = await loadCompiledLifecycleFixture();
+  const component = module.appIR.components[0];
+  const update = module.symbols[component.update];
+  const signature = updateSignature(component, module);
+  const effectTypeId = signature?.results?.[1];
+  const encoderCalls = [];
+  const observedEncoder = {
+    gobiEncodeState(value, typeId) {
+      if (typeId === effectTypeId) {
+        const descriptor = Object.getOwnPropertyDescriptor(value, "offset");
+        if (descriptor && Object.prototype.hasOwnProperty.call(descriptor, "value")) {
+          encoderCalls.push({ typeId, offset: descriptor.value });
+        }
+      }
+      return encoder.gobiEncodeState(value, typeId);
+    },
+  };
+  const updateWithShiftedAppend = (state, message) => {
+    const result = update(state, message);
+    if (message.Name === "removeParent") return [result[0], shiftSliceWindow(result[1])];
+    return result;
+  };
+  const session = await mountActualLifecycle({
+    module,
+    encoder: observedEncoder,
+    component,
+    updateOverride: updateWithShiftedAppend,
+  });
+
+  for (const name of ["requestParent", "requestChild", "requestGrandchild"]) {
+    const result = updateMessage(session.runtime, name);
+    assert.equal(result.accepted, true, JSON.stringify(result));
+  }
+  const result = updateMessage(session.runtime, "removeParent");
+  assert.equal(result.accepted, true, result.error);
+  assert.ok(encoderCalls.some(({ typeId, offset }) => typeId === effectTypeId && offset === 1));
+  assert.deepEqual(session.effects.records().filter(({ kind }) => kind === "cancel").map(({ token }) => token), [
+    "grandchild:g1:r3", "child:g1:r2", "parent:g1:r1",
+  ]);
+  assert.deepEqual(session.effects.pending(), []);
+  session.runtime.unmount();
+});
+
+test("generated encoder rejects malformed GoSlice wrappers and malformed Go Effect fields", async () => {
+  const { module, encoder } = await loadCompiledLifecycleFixture();
+  const component = module.appIR.components[0];
+  const update = module.symbols[component.update];
+  const cases = [
+    {
+      name: "missing GoSlice capacity",
+      wrap(slice) {
+        return {
+          backing: Object.getOwnPropertyDescriptor(slice, "backing").value,
+          offset: Object.getOwnPropertyDescriptor(slice, "offset").value,
+          length: Object.getOwnPropertyDescriptor(slice, "length").value,
+          target: undefined,
+        };
+      },
+      error: /GoSlice has unexpected own fields/i,
+    },
+    {
+      name: "extra Go Effect field",
+      wrap(slice) {
+        const backing = Object.getOwnPropertyDescriptor(slice, "backing").value;
+        const offset = Object.getOwnPropertyDescriptor(slice, "offset").value;
+        backing[offset].Unexpected = "rejected";
+        return slice;
+      },
+      error: /struct .* has missing or extra own fields/i,
+    },
+  ];
+
+  for (const probe of cases) {
+    const updateWithMalformedAppend = (state, message) => {
+      const result = update(state, message);
+      if (message.Name === "removeParent") return [result[0], probe.wrap(result[1])];
+      return result;
+    };
+    const session = await mountActualLifecycle({
+      module,
+      encoder,
+      component,
+      updateOverride: updateWithMalformedAppend,
+    });
+    for (const name of ["requestParent", "requestChild", "requestGrandchild"]) {
+      const result = updateMessage(session.runtime, name);
+      assert.equal(result.accepted, true, `${probe.name}: ${JSON.stringify(result)}`);
+    }
+    const result = updateMessage(session.runtime, "removeParent");
+    assert.equal(result.accepted, false, probe.name);
+    assert.match(result.error, probe.error, probe.name);
+    assert.equal(session.effects.records().some(({ kind }) => kind === "cancel"), false, probe.name);
+    assert.equal(session.effects.pending().length, 3, probe.name);
+    session.runtime.unmount();
+  }
+});
+
+test("runtime rejects unexpected fields in the typed Value returned for effects", async () => {
+  const { module, encoder } = await loadCompiledLifecycleFixture();
+  const component = module.appIR.components[0];
+  const signature = updateSignature(component, module);
+  const effectTypeId = signature?.results?.[1];
+  let injectExtra = false;
+  const malformedEncoder = {
+    gobiEncodeState(value, typeId) {
+      const encoded = encoder.gobiEncodeState(value, typeId);
+      return typeId === effectTypeId && injectExtra ? { ...encoded, unexpected: true } : encoded;
+    },
+  };
+  const session = await mountActualLifecycle({ module, encoder: malformedEncoder, component });
+  for (const name of ["requestParent", "requestChild", "requestGrandchild"]) {
+    const result = updateMessage(session.runtime, name);
+    assert.equal(result.accepted, true, JSON.stringify(result));
+  }
+  injectExtra = true;
+  const result = updateMessage(session.runtime, "removeParent");
+  assert.equal(result.accepted, false);
+  assert.match(result.error, /exactly: isNil, items, kind, typeId/i);
+  assert.equal(session.effects.records().some(({ kind }) => kind === "cancel"), false);
+  session.runtime.unmount();
+});
+
+test("rejected completion-time unmount leaves the lifecycle driver and pending callbacks live", async () => {
+  const { module, encoder } = await loadCompiledLifecycleFixture();
+  const component = module.appIR.components[0];
+  const session = await mountActualLifecycle({ module, encoder, component });
+  const { runtime, effects } = session;
+
+  assert.equal(updateMessage(runtime, "requestParent").accepted, true);
+  const beforeState = runtime.snapshot().state;
+  const beforeTrace = runtime.trace();
+  const beforePending = effects.pending();
+  let nestedUnmount = null;
+  const invalidCompletion = new Proxy({ dispatchId: "wrong", effectIndex: 0 }, {
+    ownKeys(target) {
+      nestedUnmount = runtime.unmount();
+      return Reflect.ownKeys(target);
+    },
+  });
+
+  const rejected = runtime.complete(invalidCompletion);
+
+  assert.equal(nestedUnmount, false);
+  assert.equal(rejected.accepted, false);
+  assert.equal(runtime.isUnmounted(), false);
+  assert.deepEqual(runtime.snapshot().state, beforeState);
+  assert.deepEqual(runtime.trace(), beforeTrace);
+  assert.deepEqual(effects.pending(), beforePending);
+  assert.equal(effects.records().some(({ kind }) => kind === "retire" || kind === "cancel"), false);
+
+  // A queued unmount may be observed after the current completion admission unwinds.
+  await new Promise((resolve) => queueMicrotask(resolve));
+  assert.equal(runtime.isUnmounted(), false);
+  assert.deepEqual(effects.pending(), beforePending);
+
+  assert.equal(updateMessage(runtime, "requestChild").accepted, true);
+  assert.deepEqual(effects.pending().map(({ token }) => token), ["parent:g1:r1", "child:g1:r2"]);
+  assert.equal(effects.deliver("parent:g1:r1").accepted, true);
+  assert.equal(effects.deliver("child:g1:r2").accepted, true);
+  assert.equal(runtime.isUnmounted(), false);
+  assert.deepEqual(effects.pending(), []);
+  assert.equal(runtime.unmount(), true);
+});
+
+test("deferred core unmount retires effect callbacks after the host finishes the current dispatch", async () => {
+  const { module, encoder } = await loadCompiledLifecycleFixture();
+  const component = module.appIR.components[0];
+  const renderer = headlessRenderer();
+  const session = await mountActualLifecycle({ module, encoder, component, renderer });
+  const { runtime, effects } = session;
+  const originalUpdate = renderer.update;
+  let requestUnmount = false;
+  let nestedUnmount = null;
+  renderer.update = function (view, callbacks) {
+    originalUpdate.call(this, view, callbacks);
+    if (requestUnmount) {
+      requestUnmount = false;
+      nestedUnmount = runtime.unmount();
+    }
+  };
+
+  requestUnmount = true;
+  const dispatch = updateMessage(runtime, "requestParent");
+
+  assert.equal(dispatch.accepted, true);
+  assert.equal(nestedUnmount, false);
+  assert.equal(runtime.isUnmounted(), true);
+  assert.deepEqual(effects.pending().map(({ token }) => token), ["parent:g1:r1"]);
+  await new Promise((resolve) => queueMicrotask(resolve));
+  assert.deepEqual(effects.pending(), []);
+  assert.deepEqual(effects.records().at(-1), {
+    sequence: 2,
+    kind: "retire",
+    dispatchId: "dispatch-0001",
+    effectIndex: 0,
+    token: "parent:g1:r1",
+    outcome: "retired",
+    reason: "host-unmount",
+  });
+  assert.equal(effects.forceDeliverRetired("parent:g1:r1").error, "callback was released on host unmount");
+});

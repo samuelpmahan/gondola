@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "E-FIXTURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/lifecycle/**, cmd/compiled-lifecycle-native/**, compiled-lifecycle/CONTRACT.md, FIXTURE.md",
+      "summary": "Compiled Go lifecycle milestone FIXTURE; dependent implementation waits for N1 contract freeze; reconnaissance/preparation authorized now."
+    },
+    {
+      "id": "E-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-lifecycle/runtime/**",
+      "summary": "Compiled Go lifecycle milestone RUNTIME; dependent implementation waits for N1 contract freeze; reconnaissance/preparation authorized now."
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-lifecycle/conformance/**",
+      "summary": "Compiled Go lifecycle milestone HARNESS; dependent implementation waits for N1 contract freeze; reconnaissance/preparation authorized now."
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-lifecycle/browser/**",
+      "summary": "Compiled Go lifecycle milestone ORACLE; dependent implementation waits for N1 contract freeze; reconnaissance/preparation authorized now."
+    },
+    {
+      "id": "E-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-lifecycle/demo/**",
+      "summary": "Compiled Go lifecycle milestone DEMO; dependent implementation waits for N1 contract freeze; reconnaissance/preparation authorized now."
+    },
+    {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-lifecycle/run.mjs, run-compiled-lifecycle.sh, .github/workflows/gobi-compiled-lifecycle.yml, compiled-lifecycle/README.md, RESULTS.md, builds/**",
+      "summary": "Compiled Go lifecycle milestone BUILD; dependent implementation waits for N1 contract freeze; reconnaissance/preparation authorized now."
+    }
+  ]
+}

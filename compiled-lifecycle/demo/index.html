@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <link rel="icon" href="data:,">
+    <title>Compiled Go lifecycle lab</title>
+    <link rel="stylesheet" href="/demo.css">
+    <script type="module" src="/demo.bundle.mjs"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">GOBI · COMPILED GO</p>
+        <h1>Lifecycle lab</h1>
+        <p class="lede">Follow one Go-owned component tree as pending work survives renderer swaps, a subtree is removed and remounted, and old replies are fenced.</p>
+        <div class="status-row">
+          <span id="status" class="status-pill" role="status" data-state="loading">Loading compiled Go module…</span>
+          <span id="active-renderer" class="renderer-label">Renderer: —</span>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Compiled lifecycle demo">
+        <section class="card live-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">LIVE VIEW</p>
+              <h2>Go component tree</h2>
+            </div>
+            <div class="renderer-switch" role="group" aria-label="Renderer">
+              <button type="button" data-renderer="react" aria-pressed="false">React</button>
+              <button type="button" data-renderer="dom" aria-pressed="true">DOM</button>
+            </div>
+          </div>
+          <p class="card-note">Controls in this view come from the compiled Go <code>View</code>. Clicking one dispatches into the same Go <code>Update</code> function.</p>
+          <div id="go-view" class="go-view" aria-label="Rendered Go view"></div>
+          <div class="host-controls">
+            <div>
+              <p class="eyebrow">MANUAL EFFECT HOST</p>
+              <p id="pending-count" class="host-summary">No pending requests</p>
+            </div>
+            <div class="host-buttons">
+              <button id="complete-next" type="button" disabled>Complete oldest</button>
+              <label class="replay-control">
+                <span class="sr-only">Select a completed reply to replay</span>
+                <select id="replay-token" disabled aria-label="Completed reply to replay">
+                  <option value="">Choose completed reply…</option>
+                </select>
+              </label>
+              <button id="replay-selected" type="button" disabled>Replay selected</button>
+              <button id="probe-retired" type="button" disabled>Probe retired reply</button>
+              <button id="probe-go-message" type="button" disabled>Send old Go completion</button>
+            </div>
+          </div>
+          <div id="pending-list" class="pending-list" aria-label="Pending effect requests"></div>
+          <p id="host-action-status" class="host-action-status" role="status" data-state="idle">Effect host is ready.</p>
+        </section>
+
+        <aside class="inspector" aria-label="Go runtime inspector">
+          <section class="card inspector-card">
+            <p class="eyebrow">GO STATE</p>
+            <h2>Current snapshot</h2>
+            <pre id="state-snapshot" class="data-panel" aria-live="polite">Waiting for Init…</pre>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">GO VIEW</p>
+            <h2>Logical tree</h2>
+            <pre id="view-snapshot" class="data-panel" aria-live="polite">Waiting for View…</pre>
+          </section>
+          <section class="card inspector-card">
+            <p class="eyebrow">EFFECT HOST</p>
+            <h2>Pending and ordered events</h2>
+            <pre id="effect-snapshot" class="data-panel" aria-live="polite">Waiting for effects…</pre>
+          </section>
+        </aside>
+      </section>
+
+      <section class="card trace-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">RUNTIME TRACE</p>
+            <h2>Go dispatches and lifecycle events</h2>
+          </div>
+          <span class="trace-hint">Renderer swaps do not create Go ticks</span>
+        </div>
+        <pre id="runtime-trace" class="data-panel trace-panel" aria-live="polite">Waiting for the first Go tick…</pre>
+      </section>
+
+      <footer class="page-footer">
+        <span>Actual compiled GoScript module</span>
+        <span>React 19 + DOM renderer · no WebAssembly</span>
+      </footer>
+    </main>
+  </body>
+</html>
