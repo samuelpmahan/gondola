@@ -1,0 +1,104 @@
+name: Gobi mounted backend qualification
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/gobi-backend-qualification.yml'
+      - 'backend-qualification/**'
+      - 'backendqualification/**'
+      - 'cmd/backend-qualification/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-children/runtime/**'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-children/conformance/browser-version.test.mjs'
+      - 'compiled-frontend/analyze/**'
+      - 'compiled-frontend/build/**'
+      - 'compiled-frontend/cmd/gobi-build/**'
+      - 'compiled-frontend/emit/**'
+      - 'compiled-frontend/conformance/**'
+      - 'compiled-frontend/frontend/dom/**'
+      - 'compiled-frontend/frontend/react/**'
+      - 'compiled-frontend/frontend/runtime/**'
+      - 'compiled-frontend/frontend/shared/**'
+      - 'compiled-frontend/go.mod'
+      - 'compiled-frontend/go.sum'
+      - 'compiled-frontend/package.json'
+      - 'compiled-frontend/package-lock.json'
+      - 'compiled-publications/CONTRACT.md'
+      - 'compiled-publications/conformance/**'
+      - 'compiled-publications/oracle/**'
+      - 'compiled-publications/runtime/**'
+      - 'fixtures/compiled/publications/**'
+      - 'cmd/compiled-publications-native/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'compilercontract/**'
+      - 'reactmap/**'
+      - 'run-backend-qualification.sh'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/package-lock.json'
+      - 'interaction/package.json'
+      - 'compiled-frontend/package-lock.json'
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact candidate commit SHA to qualify
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  backend-qualification:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_COMMIT: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify requested source commit
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run mounted qualification profile
+        env:
+          GONDOLA_SKIP_NPM_CI: "1"
+          GONDOLA_SKIP_BROWSER_INSTALL: "1"
+          GOFLAGS: -buildvcs=false
+        run: bash run-backend-qualification.sh --source-commit "$SOURCE_COMMIT"
+
+      - name: Preserve mounted qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-backend-qualification-${{ inputs.source_commit || github.event.pull_request.head.sha || github.sha }}
+          path: |
+            backend-qualification/output/attempts/**
+            backend-qualification/evidence/attempts/**
+          if-no-files-found: warn
