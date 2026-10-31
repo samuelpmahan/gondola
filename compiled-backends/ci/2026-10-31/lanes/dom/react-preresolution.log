@@ -1,0 +1,106 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: binds the actual callable exports selected by the AppIR role IDs
+ok 1 - binds the actual callable exports selected by the AppIR role IDs
+  ---
+  duration_ms: 1.598645
+  type: 'test'
+  ...
+# Subtest: checks generated role metadata against the module before binding
+ok 2 - checks generated role metadata against the module before binding
+  ---
+  duration_ms: 0.540617
+  type: 'test'
+  ...
+# Subtest: rejects wrong module schema, missing app roles, duplicate IDs, and non-callable exports
+ok 3 - rejects wrong module schema, missing app roles, duplicate IDs, and non-callable exports
+  ---
+  duration_ms: 0.399444
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# ✘ [ERROR] Could not resolve "react"
+#     compiled-frontend/frontend/react/renderer.mjs:1:18:
+#       1 │ import React from "react";
+#         ╵                   ~~~~~~~
+#   You can mark the path "react" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+# ✘ [ERROR] Could not resolve "react-dom/client"
+#     compiled-frontend/frontend/react/renderer.mjs:2:27:
+#       2 │ import { createRoot } from "react-dom/client";
+#         ╵                            ~~~~~~~~~~~~~~~~~~
+#   You can mark the path "react-dom/client" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+# ✘ [ERROR] Could not resolve "react-dom"
+#     compiled-frontend/frontend/react/renderer.mjs:3:54:
+#       3 │ import { flushSync, version as reactDOMVersion } from "react-dom";
+#         ╵                                                       ~~~~~~~~~~~
+#   You can mark the path "react-dom" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+# Subtest: controlled checked stays live but un-serialized across React mount, update, and remount
+not ok 4 - controlled checked stays live but un-serialized across React mount, update, and remount
+  ---
+  duration_ms: 187.646372
+  type: 'test'
+  location: '/workspace/scratch/39a56936f173/gondola-backends-evidence/compiled-frontend/frontend/react/renderer.browser.test.mjs:126:1'
+  failureType: 'hookFailed'
+  error: |-
+    Build failed with 3 errors:
+    compiled-frontend/frontend/react/renderer.mjs:1:18: ERROR: Could not resolve "react"
+    compiled-frontend/frontend/react/renderer.mjs:2:27: ERROR: Could not resolve "react-dom/client"
+    compiled-frontend/frontend/react/renderer.mjs:3:54: ERROR: Could not resolve "react-dom"
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    failureErrorWithLog (/workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:1752:15)
+    /workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:1211:25
+    /workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:1163:52
+    buildResponseToResult (/workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:1209:7)
+    /workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:1236:16
+    responseCallbacks.<computed> (/workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:886:9)
+    handleIncomingPacket (/workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:941:12)
+    Socket.readFromStdout (/workspace/scratch/39a56936f173/gondola-compiled-fix/interaction/node_modules/esbuild/lib/main.js:864:7)
+    Socket.emit (node:events:519:28)
+    addChunk (node:internal/streams/readable:561:12)
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# node:internal/modules/run_main:123
+#     triggerUncaughtException(
+#     ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'react' imported from /workspace/scratch/39a56936f173/gondola-backends-evidence/compiled-frontend/frontend/react/renderer.mjs
+# Did you mean to import "react/index.js"?
+#     at Object.getPackageJSONURL (node:internal/modules/package_json_reader:314:9)
+#     at packageResolve (node:internal/modules/esm/resolve:772:81)
+#     at moduleResolve (node:internal/modules/esm/resolve:859:18)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at \#resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:783:38)
+#     at nextStep (node:internal/modules/customization_hooks:189:26)
+#     at resolve (file:///tmp/evidence-worktree-resolver.mjs:11:12)
+#     at nextStep (node:internal/modules/customization_hooks:189:26)
+#     at resolveWithHooks (node:internal/modules/customization_hooks:417:10) {
+#   code: 'ERR_MODULE_NOT_FOUND'
+# }
+# Node.js v22.23.4
+# Subtest: compiled-frontend/frontend/react/renderer.test.mjs
+not ok 3 - compiled-frontend/frontend/react/renderer.test.mjs
+  ---
+  duration_ms: 97.697637
+  type: 'test'
+  location: '/workspace/scratch/39a56936f173/gondola-backends-evidence/compiled-frontend/frontend/react/renderer.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 3
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 820.650013

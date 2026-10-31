@@ -1,0 +1,98 @@
+{
+  "schema": "gobi.independent-review-evidence/v1",
+  "job_id": "XR-R-CI-BROWSER",
+  "worker": "N4",
+  "decision": "accepted",
+  "acceptance_scope": "two focused browser-test launchers only; fresh managed-browser CI remains pending",
+  "reviewed_source": {
+    "base_head": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+    "worktree": "/workspace/scratch/39a56936f173/gondola-backends",
+    "changed_files": [
+      "compiled-frontend/frontend/dom/renderer.test.mjs",
+      "compiled-frontend/frontend/react/renderer.browser.test.mjs"
+    ],
+    "diff_review": "each file adds the import of ../../conformance/browser.mjs and replaces the hardcoded launch object with chromium.launch(chromiumLaunchOptions(process.env.CHROMIUM_PATH)); assertions, fixtures, renderer code, oracles, and harness are unchanged",
+    "source_sha256": {
+      "compiled-frontend/frontend/dom/renderer.test.mjs": "df7debccbb92954722b953f743e126e757ebe14b3a4e4eefa3014c59a098791e",
+      "compiled-frontend/frontend/react/renderer.browser.test.mjs": "75f9b3447ee804b92bbd47b324e210bc6a90df28525d0edfb2b7bd1d5461190e",
+      "compiled-frontend/conformance/browser.mjs": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea"
+    }
+  },
+  "author_packet": {
+    "report": {
+      "path": "compiled-backends/ci/2026-10-31/coordination/reports/R-CI-BROWSER.md",
+      "sha256": "98d170064376a733ce9d3a94e495343e54a0f7f0e8438c8c62f6156c530b6afd"
+    },
+    "receipt": {
+      "path": "compiled-backends/ci/2026-10-31/coordination/receipts/R-CI-BROWSER.json",
+      "sha256": "49a4b673a75353d67b8e6553097ca416e1e9eb5891fe7b24b2acd8dee3941771"
+    },
+    "receipt_paths_are_canonical_dated_paths": true,
+    "e_ci_dom_historical_location_resolution": {
+      "old_receipt_source_scope_retained": true,
+      "canonical_report": {
+        "path": "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+        "sha256": "a141f71c0b289d7b16c027ae331a1c89de39e8c0a5d8e3a3cd20875794848e59"
+      },
+      "canonical_receipt": {
+        "path": "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-DOM.json",
+        "sha256": "ff9b86058e17a425196d26c21593801d737549029fa954a9477080c066429af8"
+      },
+      "location_correction": {
+        "path": "compiled-backends/ci/2026-10-31/lanes/dom/location-correction.md",
+        "sha256": "aae609e65b17e3cbae1054492c53eff60666a87256de9f83e9da5092709229b9"
+      },
+      "resolution": "repair packet states canonical dated paths and pins, while preserving consumed E-CI-DOM report/receipt bytes"
+    }
+  },
+  "independent_verification": {
+    "toolchain": {
+      "node": "v22.23.4",
+      "playwright": "1.64.1",
+      "chromium_override": "153.0.8010.0 at /tmp/chromium"
+    },
+    "commands": [
+      {
+        "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+        "result": "passed",
+        "passed": 4,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/dom-focused.log",
+        "log_sha256": "c360793f2881d94d85833abce535cb5f15997dbd58f665aa06b5907180ebbfaa"
+      },
+      {
+        "command": "GOBI_CAPTURE_PHYSICAL_OUTERHTML=1 CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+        "result": "passed",
+        "passed": 1,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/react-browser-focused.log",
+        "log_sha256": "27b97e623349054192c3e7009ae218892a359a114bae44505a73e56a3438f40f"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/conformance/browser-options.test.mjs",
+        "result": "passed",
+        "passed": 2,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/browser-options.log",
+        "log_sha256": "288b166339dfe2d561da0b7601fff64453ccf0dd33e7c852b3d262878ba71739"
+      },
+      {
+        "command": "node --check on both changed test files; git diff --check scoped to both files",
+        "result": "passed"
+      }
+    ],
+    "managed_browser_probe": {
+      "path": "/root/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "exists": false,
+      "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/managed-browser-probe.log",
+      "log_sha256": "12909a2c13ccc7e89b40db26e52cabd3108da19037d4e4f91d6b3c9e394c70eb"
+    }
+  },
+  "limits": [
+    "The local browser suites used explicit CHROMIUM_PATH=/tmp/chromium; the Playwright-managed browser is absent and the unset-path browser launch was not exercised.",
+    "No fresh CI outcome or full four-app/five-fixture matrix is claimed."
+  ]
+}

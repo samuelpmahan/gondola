@@ -1,0 +1,100 @@
+{
+  "job_id": "R-CI-BROWSER",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Updated the two focused browser suites to use the existing chromiumLaunchOptions helper instead of hardcoding /tmp/chromium as the fallback. DOM, React browser, and helper suites pass locally. The Playwright-managed Chromium executable is absent here, so unset-path launch remains untested pending fresh CI.",
+  "source_scope": [
+    "compiled-frontend/frontend/dom/renderer.test.mjs",
+    "compiled-frontend/frontend/react/renderer.browser.test.mjs",
+    "compiled-backends/ci/2026-10-31/lanes/dom/repair/**",
+    "compiled-backends/ci/2026-10-31/coordination/reports/R-CI-BROWSER.md",
+    "compiled-backends/ci/2026-10-31/coordination/receipts/R-CI-BROWSER.json"
+  ],
+  "evidence": {
+    "published_head": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+    "branch": "codex/gobi-compiled-backends-repair-20261031",
+    "report_sha256": "98d170064376a733ce9d3a94e495343e54a0f7f0e8438c8c62f6156c530b6afd",
+    "toolchain": {
+      "node": "v22.23.4",
+      "playwright": "1.64.1",
+      "chromium": "153.0.8010.0 at /tmp/chromium"
+    },
+    "tests": [
+      {
+        "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/dom/renderer.test.mjs",
+        "passed": 4,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/ci/2026-10-31/lanes/dom/repair/dom-chromium.log",
+        "log_sha256": "e9c91370756d796bfa4ceb2dffc04a7c61bee7ee9bfadf54d844d1c54ae02d5d"
+      },
+      {
+        "command": "GOBI_CAPTURE_PHYSICAL_OUTERHTML=1 CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/frontend/react/renderer.browser.test.mjs",
+        "passed": 1,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/ci/2026-10-31/lanes/dom/repair/react-browser-chromium.log",
+        "log_sha256": "0ba4d0f1a08097e10555ee2f3415eb450ada1288d727ad0c0cbdfbb79d2ba888"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-frontend/conformance/browser-options.test.mjs",
+        "passed": 2,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-backends/ci/2026-10-31/lanes/dom/repair/browser-options.log",
+        "log_sha256": "8450eaf93a252d54c2dd72f20c41a68948568bc8f7fa1c1e3889e3e81a408a47"
+      }
+    ],
+    "static_checks": {
+      "syntax": "node --check passed for both changed test modules",
+      "diff": "git diff --check -- compiled-frontend/frontend/dom/renderer.test.mjs compiled-frontend/frontend/react/renderer.browser.test.mjs passed"
+    },
+    "managed_browser_probe": {
+      "result": "not available; no unset-CHROMIUM_PATH browser test run",
+      "playwright_executable": "/root/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "exists": false,
+      "log": "compiled-backends/ci/2026-10-31/lanes/dom/repair/managed-browser-probe.log",
+      "log_sha256": "951e18b17ea1e6bf0da2ede58099085431f58f686ef74b407e71dfe5da540d4d"
+    },
+    "source_sha256": {
+      "compiled-frontend/frontend/dom/renderer.test.mjs": {
+        "before": "8857f373a5d39c0f04b328021315867e6ffea34166ff18877f9dee3b44033efd",
+        "after": "df7debccbb92954722b953f743e126e757ebe14b3a4e4eefa3014c59a098791e"
+      },
+      "compiled-frontend/frontend/react/renderer.browser.test.mjs": {
+        "before": "4e8cd936b0ebd0597f9011c5c9a448d07fc76a9b4919cdc74da3a73b420cb78c",
+        "after": "75f9b3447ee804b92bbd47b324e210bc6a90df28525d0edfb2b7bd1d5461190e"
+      },
+      "compiled-frontend/conformance/browser.mjs": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea"
+    },
+    "e_ci_dom_packet": {
+      "historical_source_scope_paths": [
+        "compiled-backends/coordination/reports/E-CI-DOM.md",
+        "compiled-backends/coordination/receipts/E-CI-DOM.json"
+      ],
+      "historical_paths_note": "The E-CI-DOM receipt content was preserved byte-for-byte during relocation; its source_scope strings retain their original base paths.",
+      "canonical_packet": [
+        {
+          "kind": "report",
+          "path": "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+          "sha256": "a141f71c0b289d7b16c027ae331a1c89de39e8c0a5d8e3a3cd20875794848e59"
+        },
+        {
+          "kind": "receipt",
+          "path": "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-DOM.json",
+          "sha256": "ff9b86058e17a425196d26c21593801d737549029fa954a9477080c066429af8"
+        }
+      ],
+      "location_correction_note": {
+        "path": "compiled-backends/ci/2026-10-31/lanes/dom/location-correction.md",
+        "sha256": "aae609e65b17e3cbae1054492c53eff60666a87256de9f83e9da5092709229b9"
+      }
+    },
+    "limits": [
+      "Focused browser suites were run with explicit CHROMIUM_PATH=/tmp/chromium; the managed Playwright browser could not be exercised locally.",
+      "Fresh managed-CI validation remains required for the unset-CHROMIUM_PATH launch path.",
+      "The four-app/five-fixture native/direct-JS/DOM matrix was outside this repair verification."
+    ]
+  },
+  "reported_stage": "shared_browser_launch_helper_adopted_focused_local_suites_pass_managed_browser_pending"
+}

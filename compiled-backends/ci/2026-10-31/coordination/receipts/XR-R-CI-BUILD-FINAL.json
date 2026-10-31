@@ -1,0 +1,112 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-R-CI-BUILD-FINAL",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "N4's successful full-push repaired-head build claims independently verify, including both actual four-app output trees, exact 204 companion files, raw bundle hashes, six Go test/race/vet logs, source pins, GoScript version, and prior-packet preservation. Amend the ZIP limitation to distinguish its availability and rehash in this audit workspace from its Git-ignored, untracked retention status.",
+  "findings": [
+    {
+      "id": "XR-R-CI-BUILD-FINAL-01",
+      "severity": "documentation-amendment",
+      "path": "compiled-backends/ci/2026-10-31/coordination/reports/R-CI-BUILD-FINAL.md; compiled-backends/ci/2026-10-31/lanes/build/final/artifact-audit.json",
+      "summary": "The report/audit describe the provider ZIP as unavailable locally or not separately retained. In this audit workspace, original.zip exists, is Git-ignored, and was independently rehashed against provider metadata. Clarify that the archive is available for this audit but is not a Git-retained artifact.",
+      "actual_zip": {
+        "path": "compiled-backends/ci/2026-10-31/original.zip",
+        "bytes": 14931201,
+        "sha256": "646f06eb972d8ab2680fa34b12bf646e0dda1d8bd31c2ae1a3df443b113c99aa",
+        "matches_provider_size_and_digest": true,
+        "zip_member_count": 817,
+        "all_members_match_retained_index": true,
+        "all_extracted_files_match_retained_index": true,
+        "git_ignored_by": "compiled-backends/ci/2026-10-31/.gitignore"
+      },
+      "recommended_action": "Update the report/audit metadata to describe workspace availability, successful rehash, and Git-ignored retention status without rerunning CI or changing the build result."
+    }
+  ],
+  "reviewed_head": "195c9433179218348d4b9f2477ae1e0725337d15",
+  "reviewed_tree": "c0e4a66eee3fdd8b789e1b565167856fdab62433",
+  "evidence": {
+    "primary_ci": {
+      "workflow_run": 41155530877,
+      "job": 124401386239,
+      "artifact": 13025112465,
+      "source_head": "195c9433179218348d4b9f2477ae1e0725337d15",
+      "source_tree": "c0e4a66eee3fdd8b789e1b565167856fdab62433",
+      "scope": "successful full push run; separate PR and overall PR-ready status not inferred"
+    },
+    "input_packet": {
+      "report": "compiled-backends/ci/2026-10-31/coordination/reports/R-CI-BUILD-FINAL.md",
+      "report_sha256": "3c15391e3ec0c9a32667bbac70d3c81b12743fed4eb0643fec0508bd2982badd",
+      "receipt": "compiled-backends/ci/2026-10-31/coordination/receipts/R-CI-BUILD-FINAL.json",
+      "receipt_sha256": "3441c6015c1699d9957d9d0ad3c36b2d7c3d849260fe8b15b80cf868ce1c6c7c",
+      "artifact_audit": "compiled-backends/ci/2026-10-31/lanes/build/final/artifact-audit.json",
+      "artifact_audit_sha256": "254c2e3e37e1ab84953fb133c405bb803b80770f6a622127f86cf8a9f891179c"
+    },
+    "independent_crosscheck": {
+      "script": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-build-final/audit_build_crosscheck.py",
+      "script_sha256": "c73971d2142801705869e626f44c52cc73ce7253d71a6c1b4a7a9dd9298d0a4b",
+      "command": "python3 compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-build-final/audit_build_crosscheck.py",
+      "python": "3.12.14",
+      "result": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-build-final/artifact-crosscheck.json",
+      "result_sha256": "e17f5befa6212a91010ebf4e43cae03ed77fbe02dd33bc719bd650a3dbaa7956",
+      "status": "passed"
+    },
+    "builds": {
+      "react": {
+        "app_count": 4,
+        "output_count": 209,
+        "all_output_hashes_match_build_result": true,
+        "manifest_sha256": "a2fa18abeab82a9d752ed3ecdf2c2734593eb0a292718a6b7e533e13701dbc5c",
+        "backend_tags": ["react", "react", "react", "react"]
+      },
+      "dom": {
+        "app_count": 4,
+        "output_count": 209,
+        "all_output_hashes_match_build_result": true,
+        "manifest_sha256": "5174d864a318fd7c7356d2158dc725ee2088d76aadc8c4f60c78ecb9447a9f11",
+        "backend_tags": ["dom", "dom", "dom", "dom"]
+      },
+      "companion_outputs": {
+        "count": 204,
+        "byte_identical": true,
+        "app_ir_objects_identical": true,
+        "manifests_equal_after_removing_only_backend_tags": true,
+        "raw_bundles_compared_for_equality": false
+      }
+    },
+    "go_checks": {
+      "command_count": 6,
+      "all_exit_zero": true,
+      "all_stdout_and_stderr_hashes_match_execution_receipt": true,
+      "full_execution_command_count": 33
+    },
+    "source_pins": {
+      "compiled_frontend_before_and_after_count": 122,
+      "compiled_frontend_unchanged_and_matches_exact_head": true,
+      "backend_runner_before_and_after_count": 126,
+      "backend_runner_unchanged_and_matches_exact_head": true,
+      "goscript_module": "github.com/s4wave/goscript",
+      "goscript_version": "v0.6.2",
+      "go_mod_sha256": "272605fe2a8566fd907c3fea23de9ff27bbb9a9ccce30410079ec3ae3420fa24",
+      "go_sum_sha256": "f46a44e4afcf94027085343e3f1c930ee9cf2c6edeb2a7809e65d9f389f3e83b"
+    },
+    "previous_packet_correction": {
+      "correct_emit_backend_go_sha256": "b2486fff69d106a4801e5a5400c961b3b6ab55ff9be440dcbdec5a9631f3d3ed",
+      "consumed_receipt_mistyped_sha256": "b2486fff69d106a4801e5a5400c9611d05fb27792e775bd2cd57ab17c5a79309",
+      "consumed_report_sha256": "7aede8f251b37c74382050c375f1c7921f5bb413137a90e1528a0112555a53b0",
+      "consumed_receipt_sha256": "d5c484d48b123508e39c373553cbad37b56efe0c41965199adb04d47b270d59f",
+      "history_copies_byte_identical": true,
+      "final_packet_paths_canonical": true
+    }
+  },
+  "limits": [
+    "The decision amends a ZIP availability/retention description only; no build/source defect or CI failure was found.",
+    "This review verified archived command logs and source pins; it did not rerun the six Go commands or CI.",
+    "Only the successful primary full push run is reviewed. Separate PR checks and overall PR readiness remain root-owned.",
+    "The raw ZIP was present locally in this audit workspace and matched provider metadata, but it is Git-ignored and is not part of tracked Git retention."
+  ],
+  "report": {
+    "path": "compiled-backends/ci/2026-10-31/coordination/reports/XR-R-CI-BUILD-FINAL.md",
+    "sha256": "6a79bf20e0f9c9f07bff61b7b1cfddb3c2b9fd441dc4e32ddc981bfceefbe927"
+  }
+}

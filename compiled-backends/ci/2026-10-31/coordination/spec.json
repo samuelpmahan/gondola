@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "E-CI-RUNTIME",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "compiled-backends/ci/2026-10-31/lanes/runtime/** plus own named report/receipt only",
+      "summary": "Independent published-source and fresh CI acceptance for RUNTIME; CI artifact dependency gate must be met before final success"
+    },
+    {
+      "id": "E-CI-DOM",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-backends/ci/2026-10-31/lanes/dom/** plus own named report/receipt only",
+      "summary": "Independent published-source and fresh CI acceptance for DOM; CI artifact dependency gate must be met before final success"
+    },
+    {
+      "id": "E-CI-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-backends/ci/2026-10-31/lanes/harness/** plus own named report/receipt only",
+      "summary": "Independent published-source and fresh CI acceptance for HARNESS; CI artifact dependency gate must be met before final success"
+    },
+    {
+      "id": "E-CI-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-backends/ci/2026-10-31/lanes/build/** plus own named report/receipt only",
+      "summary": "Independent published-source and fresh CI acceptance for BUILD; CI artifact dependency gate must be met before final success"
+    },
+    {
+      "id": "E-CI-DEMO",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-backends/ci/2026-10-31/lanes/demo/** plus own named report/receipt only",
+      "summary": "Independent published-source and fresh CI acceptance for DEMO; CI artifact dependency gate must be met before final success"
+    },
+    {
+      "id": "E-CI-EVIDENCE",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-backends/ci/2026-10-31/lanes/evidence/** plus own named report/receipt only",
+      "summary": "Independent published-source and fresh CI acceptance for EVIDENCE; CI artifact dependency gate must be met before final success"
+    }
+  ]
+}

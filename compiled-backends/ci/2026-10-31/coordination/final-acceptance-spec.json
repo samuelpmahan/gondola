@@ -1,0 +1,37 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-CI-DOM-FINAL",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "repair_of": "E-CI-DOM",
+      "owner": "Dated lanes/dom/final/** and own dated report/receipt only",
+      "summary": "Final DOM/React acceptance at repairedhead195c943; gate on immutable freshCI artifact; scope initial832evidencehistorical and canonical metadata corrected"
+    },
+    {
+      "id": "R-CI-BUILD-FINAL",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "repair_of": "E-CI-BUILD",
+      "owner": "Dated lanes/build/final/** and own dated report/receipt only",
+      "summary": "Fresh repairedhead195c943 build acceptance; gate on immutableCI, verify outputfiles and Go tests, correct preservedoldreceiptbadbackendsha explicitly"
+    }
+  ]
+}

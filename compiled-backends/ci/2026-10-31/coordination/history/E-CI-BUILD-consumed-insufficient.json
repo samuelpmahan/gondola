@@ -1,0 +1,33 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-CI-BUILD",
+  "worker": "N4",
+  "outcome": "insufficient_evidence",
+  "summary": "Interim source audit of the Go build request/emitter/CLI contract is complete at published head 832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb. Fresh repaired-head CI artifacts are still required for final output-tree and Go test/race/vet acceptance; this interim packet claims no build defect and does not claim CI/build success.",
+  "evidence": {
+    "source_review": "compiled-backends/ci/2026-10-31/lanes/build/source-review.md",
+    "report": "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-BUILD.md",
+    "reviewed_head": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+    "reviewed_source_sha256": {
+      "compiled-frontend/build/request.go": "7d288b0cd06e480a7dea0098ece974432f5e9e89cc602ba52a5f697ec1c6d6e6",
+      "compiled-frontend/build/request_test.go": "477d1cc4d15693f34381e6c1db88e64c86f770ad04a5be123320367c5db5fd8e",
+      "compiled-frontend/build/pipeline.go": "1c3b98f253f011b00a01460eb7b1611d05fb27792e775bd2cd57ab17c5a79309",
+      "compiled-frontend/build/pipeline_test.go": "b8c8ece15090988a6ce03e6f69015af0b47e31556bfe3a9dc6413ca4cf515b28",
+      "compiled-frontend/build/publish.go": "7e2857aca4cebf749a7c27f51c3cb6c1c9a71109a55b8bb00852e076eb4e0860",
+      "compiled-frontend/emit/backend.go": "b2486fff69d106a4801e5a5400c9611d05fb27792e775bd2cd57ab17a5c79309",
+      "compiled-frontend/emit/backend_test.go": "dc5c6a1ce143a1d79908eba2805879ff14d7f80d8d27e4ce650fccedf7e4c015",
+      "compilercontract/contract.go": "fa3ef8b3c60f3ff1d4a0e80827bfa65dc21ad741b3c421c1f4634f6b3c0b363e",
+      "gobi/build.go": "ddf183ec2eb7769441d0a12494bbf267e67bceeb9ae9022ec9e2d60923ad0b95"
+    }
+  },
+  "execution": {
+    "local_go_tests_or_cli_builds": "not_run_in_interim_source_audit",
+    "fresh_repaired_head_ci_artifacts": "pending_from_root",
+    "available_832_ci_run": "not_used_as_final_acceptance_evidence"
+  },
+  "limits": [
+    "No final fresh-CI build acceptance is made in this interim packet.",
+    "No claim is made that the four-app CLI builds, 209-file inventories, 204 companion-file equality, raw bundle hashes, Go1.24 contract gates, or Go1.27.3 test/race/vet gates passed.",
+    "Pre-Publish rejection result semantics leave PreservedPreviousOutput false; that field alone is not evidence that a prior output tree was inspected or preserved."
+  ]
+}

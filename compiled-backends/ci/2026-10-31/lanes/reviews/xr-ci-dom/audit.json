@@ -1,0 +1,78 @@
+{
+  "schema": "gobi.independent-review-evidence/v1",
+  "job_id": "XR--CI-DOM",
+  "worker": "N4",
+  "reviewed_head": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+  "decision": "amend",
+  "source_review": {
+    "compiled-frontend/frontend/dom/renderer.test.mjs": {
+      "sha256": "8857f373a5d39c0f04b328021315867e6ffea34166ff18877f9dee3b44033efd",
+      "finding_line": 17,
+      "observed_expression": "executablePath: process.env.CHROMIUM_PATH || \"/tmp/chromium\""
+    },
+    "compiled-frontend/frontend/react/renderer.browser.test.mjs": {
+      "sha256": "4e8cd936b0ebd0597f9011c5c9a448d07fc76a9b4919cdc74da3a73b420cb78c",
+      "finding_line": 17,
+      "observed_expression": "executablePath: process.env.CHROMIUM_PATH || \"/tmp/chromium\""
+    },
+    "compiled-frontend/conformance/browser.mjs": {
+      "sha256": "e5226c8156a27bb1da620556e71cc10daa49d5b7ec3b364c00aa806f2ac90bea",
+      "finding_line": 27,
+      "observed_behavior": "chromiumLaunchOptions omits executablePath when no explicit path is given"
+    },
+    ".github/workflows/compiled-backends.yml": {
+      "sha256": "e4cff918010ad364ee7305fa44600702b3ed398d071aea71a3d10aedb7f9822b",
+      "observed_behavior": "workflow installs Playwright-managed Chromium and does not set CHROMIUM_PATH for the compiled frontend command"
+    }
+  },
+  "author_packet_audit": {
+    "report": {
+      "path": "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+      "sha256": "a141f71c0b289d7b16c027ae331a1c89de39e8c0a5d8e3a3cd20875794848e59"
+    },
+    "receipt": {
+      "path": "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-DOM.json",
+      "sha256": "ff9b86058e17a425196d26c21593801d737549029fa954a9477080c066429af8"
+    },
+    "relocation_note": {
+      "path": "compiled-backends/ci/2026-10-31/lanes/dom/location-correction.md",
+      "sha256": "aae609e65b17e3cbae1054492c53eff60666a87256de9f83e9da5092709229b9",
+      "verified": "note hashes for the dated report/receipt match actual files"
+    },
+    "local_test_logs": {
+      "compiled-backends/ci/2026-10-31/lanes/dom/dom-focused.log": "85fbf0227f4d5ea9e2f8784d6f3ca7055975a49823dcd5a8642d73abd947e6d2",
+      "compiled-backends/ci/2026-10-31/lanes/dom/react-focused.log": "b9b1db1fd5d6a7ab806ac906d2cf19bdebd74f45059228f7f2a9212be0faa015"
+    },
+    "receipt_source_pins_and_log_hashes": "all source hashes and local test log hashes declared by E-CI-DOM matched the files"
+  },
+  "findings": [
+    {
+      "id": "XR-CI-DOM-01",
+      "severity": "medium",
+      "decision": "valid",
+      "summary": "Both browser test launchers force an executable path to CHROMIUM_PATH or /tmp/chromium, bypassing the established helper that otherwise uses Playwright-managed Chromium. The workflow installs managed Chromium but does not configure CHROMIUM_PATH; if /tmp/chromium is absent, launch fails before renderer assertions. This is a source/workflow portability finding, not an observed CI failure.",
+      "required_resolution": "Use the shared chromiumLaunchOptions helper in both launchers and validate through the fresh managed-browser CI run."
+    },
+    {
+      "id": "XR-CI-DOM-02",
+      "severity": "low",
+      "decision": "valid",
+      "summary": "The dated E-CI-DOM receipt source_scope still names the undated compiled-backends/coordination/reports and receipts paths. Those paths are absent in this worktree; the relocation note confirms the dated files were moved byte-for-byte, so the finding is stale path metadata rather than changed report content.",
+      "required_resolution": "Record the canonical dated report/receipt paths and preserve the historical source_scope values or explain their correction in the repair packet; do not retcon the consumed E-CI-DOM bytes."
+    }
+  ],
+  "ci_status": "fresh CI outcome pending; none inferred or claimed",
+  "execution": {
+    "review_method": "read-only source, workflow, report/receipt, relocation-note, and local log hash audit",
+    "commands": [
+      "sha256sum compiled-backends/ci/2026-10-31/coordination/reports/E-CI-DOM.md compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-DOM.json compiled-backends/ci/2026-10-31/lanes/dom/location-correction.md compiled-frontend/frontend/dom/renderer.test.mjs compiled-frontend/frontend/react/renderer.browser.test.mjs compiled-frontend/conformance/browser.mjs compiled-frontend/conformance/browser-options.test.mjs .github/workflows/compiled-backends.yml compiled-backends/ci/2026-10-31/lanes/dom/dom-focused.log compiled-backends/ci/2026-10-31/lanes/dom/react-focused.log",
+      "python3 read-only JSON/source-pin/log-hash verification against E-CI-DOM receipt"
+    ],
+    "production_or_test_code_edited": false,
+    "tests_run_by_reviewer": false
+  },
+  "limits": [
+    "The review confirms the source-level launcher portability defect and local-run evidence; it does not claim a CI failure or success.",
+    "Fresh integrated four-app/five-fixture behavior and managed-browser validation remain pending."
+  ]
+}

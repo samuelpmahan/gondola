@@ -1,0 +1,134 @@
+{
+  "schema": "gobi.xr-ci-runtime-review-audit/v1",
+  "job_id": "XR--CI-RUNTIME",
+  "worker": "N3",
+  "outcome": "accepted",
+  "source": {
+    "commit": "195c9433179218348d4b9f2477ae1e0725337d15",
+    "tree": "c0e4a66eee3fdd8b789e1b565167856fdab62433",
+    "runtimeSha256": "dcc4af98eccceda5b2975e1310cf535fad2a14ec3a21b4db61094d267d2067a4",
+    "runtimeTestSha256": "39790809f3392bb47b3f48d17bfdc40b6fe8628961513f0b1ddf3e69a014e907"
+  },
+  "primary": {
+    "provenanceSha256": "120e2b58bb5c6bf2f718b1be948c6db122be9e88e9c3a2c9e3aa982343757f2b",
+    "runSha256": "f40729d52a01c052e75799e1688a7810355b845fdd25433e424a80911f46993e",
+    "jobsSha256": "1a0100c3b88b24aae2a21681c125f97ac099ac39ea7c05a3c490f3257b3592a6",
+    "artifactMetadataSha256": "29e72f66887c1edc981fea426a65dc4a60976549dbfd7310b330c8f52a2930a4",
+    "artifactZipSha256": "646f06eb972d8ab2680fa34b12bf646e0dda1d8bd31c2ae1a3df443b113c99aa",
+    "artifactZipBytes": 14931201,
+    "retainedIndexSha256": "7b621030d9d9576db534905af653c62b7a518b344c0dfd0e16f1a96a64e03826",
+    "retainedIndexEntries": 817
+  },
+  "artifactIntegrity": {
+    "extractedFiles": 817,
+    "allIndexEntriesMatch": true
+  },
+  "sourcePins": {
+    "compiledFrontend": {
+      "before": 122,
+      "after": 122,
+      "currentCheckoutMatchesAll": true
+    },
+    "compiledBackends": {
+      "before": 126,
+      "after": 126,
+      "currentCheckoutMatchesAll": true
+    }
+  },
+  "executions": {
+    "compiledFrontend": {
+      "status": "passed",
+      "childCommands": 33,
+      "mismatches": 0
+    },
+    "compiledBackends": {
+      "mode": "full",
+      "status": "passed",
+      "commands": 18,
+      "failures": 0,
+      "sourcePinsMatch": true
+    }
+  },
+  "nodeTests": {
+    "command": [
+      "/opt/hostedtoolcache/node/22.23.4/x64/bin/node",
+      "--test",
+      "/home/runner/work/gondola/gondola/compiled-frontend/frontend/dom/renderer.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/frontend/react/bindings.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/frontend/react/renderer.browser.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/frontend/react/renderer.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/browser-options.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/check.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/compare.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/direct-js.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/dom-oracle.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/fixture-expectations.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/list-growth.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/no-wasm.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/observed-action.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/provenance-order.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/provenance.test.mjs",
+      "/home/runner/work/gondola/gondola/compiled-frontend/conformance/trace.test.mjs"
+    ],
+    "cwd": "/home/runner/work/gondola/gondola",
+    "exitCode": 0,
+    "stdoutSha256": "60fbc3b138975258c1ba4b3c0c597bdebe05aaa78d6a89364e0741f4d19a8269",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tap": {
+      "total": 97,
+      "passed": 97,
+      "failed": 0,
+      "runtimeFirst": 71,
+      "runtimeLast": 97,
+      "runtimePassed": 27,
+      "runtimeNamesMatchSource": true
+    },
+    "runtimeTestNames": [
+      "mount emits init tick once; no-dispatch attempts remain visible without Update",
+      "effects are requested only after synchronous state and view commit; replies dispatch once",
+      "scripted host rejects missing, extra, reordered, and mismatched effect requests",
+      "scripted host rejects reordered completions by correlation key",
+      "scripted host rejects an undelivered expected reply",
+      "an effect-host failure is explicit and does not duplicate the committed transition tick",
+      "compiled effects require the exact marked GoScript struct ABI",
+      "renderer lowerCamel actions are accepted and dispatch admission precedes input traps",
+      "reentrant dispatch is explicitly rejected and later traced as a no-op",
+      "stale and post-unmount callbacks are fenced and recorded without Update",
+      "renderer replacement commits the cached Go view without an application tick or Update",
+      "retired renderer callbacks are fenced out of the application trace by renderer identity",
+      "replacement focus hooks preserve the keyed focus snapshot without changing the trace",
+      "replacement requires a valid focus record and a truthful boolean restore result",
+      "replacement rejects invalid, async, and reentrant admissions before old renderer teardown",
+      "a thenable renderer commit fails closed without claiming the old view was restored",
+      "a rejected native Promise from renderer update is observed without invoking its then getter",
+      "rejected observation Promises fail a swap closed without leaking rejections",
+      "active runtime unmount rejects a returned Promise without reporting success",
+      "completion during replacement stays pending at return, then commits exactly once",
+      "unmount before the held completion microtask cancels it without resurrection",
+      "trace snapshots preserve nil versus empty slices and negative-zero bits",
+      "completion admission blocks proxy-trap reentry across runtime entrypoints",
+      "completion descriptor and prototype traps run only after admission is reserved",
+      "completion accessors are rejected without invoking their getter",
+      "completion trap failures cannot reenter after validation admission is released",
+      "synchronous effect-host delivery waits until the requesting commit finishes"
+    ]
+  },
+  "versions": {
+    "node": "v22.23.4",
+    "compiledGo": "go version go1.27.3 linux/amd64",
+    "rootGo": "go version go1.24.13 linux/amd64",
+    "react": "19.3.1",
+    "reactDOM": "19.3.1",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4",
+    "backendNode": "v22.23.4"
+  },
+  "limits": [
+    "The primary evidence is a full successful push run at the published commit; separate synthetic PR run status is not inferred.",
+    "The review verifies archived runtime test and integration evidence; it does not rerun the browser matrix.",
+    "The runtime is a synchronous trusted-renderer protocol, not an arbitrary Proxy/getter sandbox. Regular functions returning thenables are detected only after invocation; replacement observation failures after teardown fail closed without rollback.",
+    "Coverage is bounded to the recorded deterministic fixture/apps and Chromium version; this does not establish other browser engines, hydration, concurrent React, arbitrary Go modules, or production effect transport."
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "gobi.compiled-backends-ci-audit/v1",
+  "job_id": "E-CI-DEMO",
+  "worker": "N5",
+  "outcome": "insufficient_evidence",
+  "status": "pending_fresh_ci_artifacts",
+  "reviewedAt": "2026-10-31",
+  "sourceCommit": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+  "sourcePins": [
+    {
+      "path": ".github/workflows/compiled-backends.yml",
+      "sha256": "e4cff918010ad364ee7305fa44600702b3ed398d071aea71a3d10aedb7f9822b",
+      "bytes": 1525
+    },
+    {
+      "path": "run-compiled-backends.sh",
+      "sha256": "ac7a946538f4a169f2351edba1a3cce5f9731cb9c4c18b9a7b3c2c535960f117",
+      "bytes": 467
+    },
+    {
+      "path": "run-compiled-frontend.sh",
+      "sha256": "245c1240462ffe1e44568bbd61d80f224098096be0a6406cd9956ec80e9938ad",
+      "bytes": 851
+    },
+    {
+      "path": "run-typed-composition.sh",
+      "sha256": "2e3a4116f72e5661037bb090cbb94a4ed49096ce7a79e0b6bc1abd0c5b88edf9",
+      "bytes": 3037
+    },
+    {
+      "path": "compiled-backends/run.mjs",
+      "sha256": "847054bd4cc1766b617fe0fdbced66cb9617d0742249d8cdba32260bfa636d38",
+      "bytes": 29927
+    },
+    {
+      "path": "compiled-backends/demo/app.mjs",
+      "sha256": "2b79c7843d77a0d83d8c9e96f74530d95980414b7102b45e04b040ef98bd1c50",
+      "bytes": 6483
+    },
+    {
+      "path": "compiled-backends/demo/build.mjs",
+      "sha256": "43fcda61435b2f5f927eda95794e318e8931ed682de7c8a84a7f3bf167b4d425",
+      "bytes": 3097
+    },
+    {
+      "path": "compiled-backends/demo/index.html",
+      "sha256": "d8e67d41dfa2cf2ef04591cbfd1a67fb231b2c0ec21ae30f50437cfc8087367c",
+      "bytes": 2630
+    },
+    {
+      "path": "compiled-backends/demo/smoke.mjs",
+      "sha256": "4636d6934b2f847f9a594513579625d1ec9ad6657548f4f3fc080460681af9f8",
+      "bytes": 10784
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b",
+      "bytes": 2478
+    },
+    {
+      "path": "interaction/package-lock.json",
+      "sha256": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0",
+      "bytes": 16564
+    },
+    {
+      "path": "compiled-frontend/package-lock.json",
+      "sha256": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079",
+      "bytes": 14526
+    }
+  ],
+  "sourceAudit": {
+    "workflowDefaultCommand": "bash run-compiled-backends.sh",
+    "workflowMode": "full default; no --backends-only argument",
+    "dependencySetup": [
+      "Go 1.24.x",
+      "Node 22",
+      "npm ci root",
+      "npm ci interaction",
+      "npm ci compiled-frontend",
+      "Playwright managed Chromium install"
+    ],
+    "inheritedRunner": "compiled-backends/run.mjs invokes bash run-compiled-frontend.sh before backend-specific builds unless --backends-only is explicit; no-argument wrapper path runs run-typed-composition.sh and then compiled-frontend/run.mjs",
+    "browserPath": "run-compiled-backends.sh uses /tmp/chromium only as fallback when CHROMIUM_PATH is unset and that executable exists. If CHROMIUM_PATH is unset, Playwright launch omits executablePath and uses its managed browser. Actual CI selection remains unverified until immutable CI receipt/logs arrive.",
+    "demo": "demo/build.mjs validates the selected backend tag on each actual four-app build manifest entry, imports its gobiCompiled module and encoder, and bundles startDemo. The HTTP smoke covers Go state, logical focus/selection, retained callback fencing, pending manual effect completion, and no WASM; the effect host is in-memory."
+  },
+  "pendingEvidence": [
+    "fresh CI workflow command transcript/log",
+    "full N5 execution.json and logs",
+    "inherited compiled-frontend execution.json and logs",
+    "actual HTTP demo smoke JSON and screenshot/output hashes",
+    "source pin sets before and after",
+    "React/DOM output pin sets before and after"
+  ]
+}

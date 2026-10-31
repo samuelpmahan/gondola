@@ -1,0 +1,85 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-R-CI-BUILD-RETENTION",
+  "worker": "N6",
+  "decision": "accepted",
+  "summary": "N4's retention clarification is accurate. I independently verified the local provider ZIP hash and all 817 member hashes, the separate 817-member tar against the same index, current ignored/untracked Git states, and unchanged consumed build packets. The report makes no claim that the tar is already committed or that the ZIP and tar containers are byte-identical.",
+  "findings": [],
+  "reviewed_head": "195c9433179218348d4b9f2477ae1e0725337d15",
+  "reviewed_tree": "c0e4a66eee3fdd8b789e1b565167856fdab62433",
+  "evidence": {
+    "input_packet": {
+      "report": "compiled-backends/ci/2026-10-31/coordination/reports/R-CI-BUILD-RETENTION.md",
+      "report_sha256": "f93e03812537daf61e04b447cde09349ac94dd9ae9e802031ec02681b01ff3ef",
+      "receipt": "compiled-backends/ci/2026-10-31/coordination/receipts/R-CI-BUILD-RETENTION.json",
+      "receipt_sha256": "1869ca415068f89c1309955da6ce7206a0b2d6f79bbe0c599c8f2a443bd85fd5",
+      "audit_script": "compiled-backends/ci/2026-10-31/lanes/build/retention/verify_archive_retention.py",
+      "audit_script_sha256": "f0fa1e98cac0ba826ab1465453914b458532e6271b880f2a24a19e28eb58f9f6",
+      "audit_result": "compiled-backends/ci/2026-10-31/lanes/build/retention/archive-retention-audit.json",
+      "audit_result_sha256": "273c4dc62b9e535b1138714dc2174b04fda7be9714368ab5e199fb0fa276f63b",
+      "audit_status": "passed"
+    },
+    "independent_crosscheck": {
+      "script": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-build-retention/verify_retention_review.py",
+      "script_sha256": "566df755d114b003916b0e76239e4185a36864b9c3353bcd86667ab7bf0378bd",
+      "command": "python3 compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-build-retention/verify_retention_review.py",
+      "result": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-build-retention/independent-audit.json",
+      "result_sha256": "a96a7630126ad1eac54fd6a3a9b79d2ad68e8faaa2ae9e9d0c7c75e03469259c",
+      "result_bytes": 3843,
+      "decision": "accepted"
+    },
+    "primary_ci": {
+      "workflow_run": 41155530877,
+      "job": 124401386239,
+      "artifact": 13025112465,
+      "event": "push",
+      "source_head": "195c9433179218348d4b9f2477ae1e0725337d15",
+      "source_tree": "c0e4a66eee3fdd8b789e1b565167856fdab62433"
+    },
+    "provider_zip": {
+      "path": "compiled-backends/ci/2026-10-31/original.zip",
+      "bytes": 14931201,
+      "sha256": "646f06eb972d8ab2680fa34b12bf646e0dda1d8bd31c2ae1a3df443b113c99aa",
+      "matches_provider_metadata": true,
+      "unique_members": 817,
+      "all_member_paths_sizes_and_hashes_match_index": true,
+      "all_extracted_files_match_zip": true,
+      "git_ignored": true,
+      "git_tracked": false
+    },
+    "readable_tar": {
+      "path": "compiled-backends/ci/2026-10-31/ci-artifacts.tar.xz",
+      "bytes": 5217080,
+      "sha256": "91b781500ff5379cf118918f545b6593969cb28d5495014b68c9a3ea6ca9218d",
+      "regular_members": 817,
+      "nonregular_members": 0,
+      "member_bytes": 87153279,
+      "all_member_paths_sizes_and_hashes_match_index": true,
+      "git_status_at_review": "?? compiled-backends/ci/2026-10-31/ci-artifacts.tar.xz",
+      "git_tracked": false
+    },
+    "retained_index": {
+      "path": "compiled-backends/ci/2026-10-31/retained-index.json",
+      "entries": 817,
+      "member_bytes": 87153279,
+      "sha256": "7b621030d9d9576db534905af653c62b7a518b344c0dfd0e16f1a96a64e03826"
+    },
+    "consumed_packets_unchanged": {
+      "R-CI-BUILD-FINAL-report": "3c15391e3ec0c9a32667bbac70d3c81b12743fed4eb0643fec0508bd2982badd",
+      "R-CI-BUILD-FINAL-receipt": "3441c6015c1699d9957d9d0ad3c36b2d7c3d849260fe8b15b80cf868ce1c6c7c",
+      "R-CI-BUILD-FINAL-artifact-audit": "254c2e3e37e1ab84953fb133c405bb803b80770f6a622127f86cf8a9f891179c",
+      "XR-R-CI-BUILD-FINAL-report": "6a79bf20e0f9c9f07bff61b7b1cfddb3c2b9fd441dc4e32ddc981bfceefbe927",
+      "XR-R-CI-BUILD-FINAL-receipt": "ec4ab656f366c830deb91b2322993b40f25487ac7ffb85f1ed8e778e1c8385fb"
+    }
+  },
+  "limits": [
+    "This review concerns archive availability and retention wording only; it makes no new build/CI conclusion.",
+    "The ZIP is Git-ignored and the readable tar is untracked at review time; future root publication was not reviewed or inferred.",
+    "The ZIP and tar contents were checked independently against retained-index.json; container byte identity is not claimed.",
+    "No production source, CI, test/build artifacts, previous packets, Git history, or native state were modified; no CI/build/test run was performed."
+  ],
+  "report": {
+    "path": "compiled-backends/ci/2026-10-31/coordination/reports/XR-R-CI-BUILD-RETENTION.md",
+    "sha256": "cf17b30ef7788d5c4e3ac247f6d127f3f4282b11a586e5870bf7efffa2857b51"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR-"
+  },
+  "jobs": [
+    {
+      "id": "R-CI-BUILD-RETENTION",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "repair_of": "R-CI-BUILD-FINAL",
+      "owner": "Dated lanes/build/retention/** and own dated packet only; no consumed files changed",
+      "summary": "Clarify original primary ZIP available for audit but not Git-retained; independentlycomputeZIPsha/bytes and distinguish lossless817membertarcontent from ZIPcontainerbytes. Metadata-only repair after XR-R-CI-BUILD-FINALamend; no source/CIrerun"
+    }
+  ]
+}

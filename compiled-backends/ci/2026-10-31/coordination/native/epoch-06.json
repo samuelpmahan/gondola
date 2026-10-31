@@ -1,0 +1,94 @@
+{
+  "epoch": 6,
+  "at": "2026-10-31T01:55:35.446883+00:00",
+  "ready_jobs": [
+    "XR--CI-DEMO",
+    "XR-R-CI-BUILD-FINAL"
+  ],
+  "pinned_workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N6"
+  ],
+  "assignments": {
+    "N6": "E-CI-EVIDENCE",
+    "N5": "XR-R-CI-BUILD-FINAL",
+    "N1": "XR--CI-HARNESS",
+    "N2": "R-CI-DOM-FINAL",
+    "N4": "XR--CI-DEMO",
+    "N3": "XR--CI-RUNTIME"
+  },
+  "dispatch": {
+    "N5": "XR-R-CI-BUILD-FINAL",
+    "N4": "XR--CI-DEMO"
+  },
+  "native_seconds": 0.004119343000638764,
+  "native_constraints": {
+    "solved": true,
+    "brokenVal": 0,
+    "brokenCount": 0,
+    "constraints": [
+      {
+        "name": "independent_review",
+        "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+        "value": 0
+      },
+      {
+        "name": "pin_in_flight",
+        "desc": "avoidMovingSpec: Avoid moving 4 objects",
+        "value": 0
+      },
+      {
+        "name": "ready_packet_capacity",
+        "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+        "value": 0
+      }
+    ]
+  },
+  "independent_capacity_check": true,
+  "independent_eligibility_check": true,
+  "exact_score": 400,
+  "native_score": 400,
+  "caps": {
+    "E-CI-RUNTIME": 0,
+    "E-CI-DOM": 0,
+    "E-CI-HARNESS": 0,
+    "E-CI-BUILD": 0,
+    "E-CI-DEMO": 0,
+    "E-CI-EVIDENCE": 1,
+    "XR--CI-RUNTIME": 1,
+    "XR--CI-DOM": 0,
+    "XR--CI-HARNESS": 1,
+    "XR--CI-BUILD": 0,
+    "XR--CI-DEMO": 1,
+    "XR--CI-EVIDENCE": 0,
+    "R-CI-BROWSER": 0,
+    "XR-R-CI-BROWSER": 0,
+    "R-CI-DOM-FINAL": 1,
+    "R-CI-BUILD-FINAL": 0,
+    "XR-R-CI-DOM-FINAL": 0,
+    "XR-R-CI-BUILD-FINAL": 1,
+    "BENCH": 6
+  },
+  "eligible": {
+    "XR--CI-DEMO": [
+      "N4"
+    ],
+    "XR-R-CI-BUILD-FINAL": [
+      "N5"
+    ]
+  },
+  "weights": {
+    "XR--CI-DEMO": 200,
+    "XR-R-CI-BUILD-FINAL": 200
+  },
+  "agent_by_worker": {
+    "N1": "/root/backend_runtime",
+    "N2": "/root/backend_dom",
+    "N3": "/root/backend_harness",
+    "N4": null,
+    "N5": null,
+    "N6": "/root/backend_contract"
+  }
+}

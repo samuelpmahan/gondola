@@ -1,0 +1,87 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR--CI-BUILD",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "N4's source-level build audit is substantively accurate and appropriately interim, but the E-CI-BUILD receipt has one incorrect backend.go source hash and the archived CI inventory covers only the initial 832d212 head. Correct the pin and provide a new fresh-head final build-acceptance packet with immutable CI artifacts.",
+  "findings": [
+    {
+      "id": "XR-CI-BUILD-01",
+      "severity": "medium",
+      "path": "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-BUILD.json",
+      "summary": "The receipt's backend.go source pin differs from both the pinned source-review Markdown and the actual file at reviewed head.",
+      "recorded_sha256": "b2486fff69d106a4801e5a5400c9611d05fb27792e775bd2cd57ab17c5a79309",
+      "actual_sha256": "b2486fff69d106a4801e5a5400c961b3b6ab55ff9be440dcbdec5a9631f3d3ed",
+      "recommended_action": "Correct the packet source pin; no Go source change is indicated."
+    },
+    {
+      "id": "XR-CI-BUILD-02",
+      "severity": "acceptance-blocker",
+      "path": "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-BUILD.md",
+      "summary": "The report is explicitly interim and lacks a fresh repaired-head build acceptance packet; the archived CI inventory contains only initial runs at 832d212.",
+      "recommended_action": "After repair publication, issue a new report and receipt pinned to the exact repaired head and immutable fresh CI evidence covering CLI output trees/manifests and Go test, race, and vet outputs."
+    }
+  ],
+  "reviewed_head": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+  "reviewed_tree": "bc8883df935c7d0c8b7265831cacdf5521fb70d2",
+  "evidence": {
+    "report": "compiled-backends/ci/2026-10-31/coordination/reports/XR--CI-BUILD.md",
+    "report_sha256": "7afe21184a2c2d38a580676e6505cda9662658831bc50ba8b949f84d78ff6d78",
+    "source_audit": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-ci-build/source-audit.md",
+    "source_audit_sha256": "61acda284fca4e6a2c5d6be8f6375570fcfdd6ea2a36b42ec117f5564eeb2188",
+    "input_packet": {
+      "report": "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-BUILD.md",
+      "report_sha256": "7aede8f251b37c74382050c375f1c7921f5bb413137a90e1528a0112555a53b0",
+      "receipt": "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-BUILD.json",
+      "receipt_sha256": "d5c484d48b123508e39c373553cbad37b56efe0c41965199adb04d47b270d59f"
+    },
+    "source_sha256": {
+      "compiled-frontend/build/request.go": "7d288b0cd06e480a7dea0098ece974432f5e9e89cc602ba52a5f697ec1c6d6e6",
+      "compiled-frontend/build/request_test.go": "477d1cc4d15693f34381e6c1db88e64c86f770ad04a5be123320367c5db5fd8e",
+      "compiled-frontend/build/pipeline.go": "1c3b98f253f011b00a01460eb7b1611d05fb27792e775bd2cd57ab17c5a79309",
+      "compiled-frontend/build/pipeline_test.go": "b8c8ece15090988a6ce03e6f69015af0b47e31556bfe3a9dc6413ca4cf515b28",
+      "compiled-frontend/build/publish.go": "7e2857aca4cebf749a7c27f51c3cb6c1c9a71109a55b8bb00852e076eb4e0860",
+      "compiled-frontend/emit/backend.go": "b2486fff69d106a4801e5a5400c961b3b6ab55ff9be440dcbdec5a9631f3d3ed",
+      "compiled-frontend/emit/backend_test.go": "dc5c6a1ce143a1d79908eba2805879ff14d7f80d8d27e4ce650fccedf7e4c015",
+      "compilercontract/contract.go": "fa3ef8b3c60f3ff1d4a0e80827bfa65dc21ad741b3c421c1f4634f6b3c0b363e",
+      "gobi/build.go": "ddf183ec2eb7769441d0a12494bbf267e67bceeb9ae9022ec9e2d60923ad0b95"
+    },
+    "initial_ci_inventory": {
+      "path": "compiled-backends/ci/2026-10-31/runs-initial.json",
+      "sha256": "ca33c079ad5b71311255080809603da73a80eff9c059596b64f7b6d4a99c8f67",
+      "records": 24,
+      "unique_head_sha": ["832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb"],
+      "capture_status_counts": {"in_progress": 20, "queued": 4}
+    },
+    "initial_jobs_inventory": {
+      "path": "compiled-backends/ci/2026-10-31/jobs-initial.json",
+      "sha256": "13fad581acdf23311639b127f47d09753466fa12e20f8c4bd073964ebcb564e4"
+    },
+    "initial_merge_metadata": {
+      "path": "compiled-backends/ci/2026-10-31/merge-commit.json",
+      "sha256": "0d1c71739708f65e881100245f7c63552a9fe91bf92110096335dc810e94eb0b",
+      "merge_commit": "32bdafa0337bfeda55058e9afb36ff06cc6f8496",
+      "tree": "bc8883df935c7d0c8b7265831cacdf5521fb70d2"
+    },
+    "source_review_conclusion": "N4 Markdown source pins and source-level claims match inspection; no implementation defect is claimed.",
+    "execution": {
+      "go_tests": "not_run",
+      "cli_builds": "not_run",
+      "fresh_repaired_head_ci": "not supplied in reviewed packet"
+    }
+  },
+  "required_fresh_acceptance_fields": [
+    "exact repaired HEAD and immutable CI artifact references",
+    "React and DOM CLI output trees and manifests",
+    "four app paths and backend tags per tree",
+    "209 files per tree and 204 exact companion outputs",
+    "raw compiled module bundle hashes recorded separately",
+    "AppIR, module, encoder, source and runtime pins",
+    "Go toolchain versions and actual test, race, and vet command outputs"
+  ],
+  "limits": [
+    "No Go tests, compiler, or CLI builds were run in this read-only review.",
+    "This decision amends the evidence packet; it does not claim a source implementation defect or final build failure.",
+    "The initial CI run at 832d212 does not establish acceptance for a repaired head."
+  ]
+}

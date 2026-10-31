@@ -1,0 +1,50 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR--CI-DOM",
+  "worker": "N4",
+  "decision": "amend",
+  "summary": "E-CI-DOM's test-portability finding is valid and requires the authorized R-CI-BROWSER launcher repair plus fresh managed-browser CI verification. No CI outcome is claimed. The dated E-CI-DOM receipt also retains stale undated paths in source_scope despite its byte-identical relocation note; the repair packet should document canonical dated paths and preserve the consumed original bytes.",
+  "findings": [
+    {
+      "id": "XR-CI-DOM-01",
+      "severity": "medium",
+      "summary": "Both browser tests pass executablePath as CHROMIUM_PATH || /tmp/chromium, bypassing the existing chromiumLaunchOptions helper. The workflow installs Playwright-managed Chromium but does not set CHROMIUM_PATH; a runner without /tmp/chromium will fail before renderer assertions.",
+      "classification": "valid source/workflow portability gap; not an observed CI failure",
+      "required_gate": "Use chromiumLaunchOptions(process.env.CHROMIUM_PATH) in both tests and verify with fresh managed-browser CI."
+    },
+    {
+      "id": "XR-CI-DOM-02",
+      "severity": "low",
+      "summary": "The dated E-CI-DOM receipt source_scope points to absent undated report/receipt paths. The location-correction note verifies byte-identical relocation and the current dated file hashes, so this is stale metadata rather than evidence content drift.",
+      "required_gate": "Document the canonical dated paths and the historical location correction in the repair packet; do not rewrite consumed E-CI-DOM bytes."
+    }
+  ],
+  "evidence": [
+    "compiled-backends/ci/2026-10-31/lanes/reviews/xr-ci-dom/audit.json",
+    "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+    "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-DOM.json",
+    "compiled-backends/ci/2026-10-31/lanes/dom/location-correction.md",
+    "compiled-backends/ci/2026-10-31/lanes/dom/dom-focused.log",
+    "compiled-backends/ci/2026-10-31/lanes/dom/react-focused.log",
+    "compiled-frontend/conformance/browser.mjs",
+    ".github/workflows/compiled-backends.yml"
+  ],
+  "verified": {
+    "reviewed_head": "832d21262ce5dd3bd1d308a19bd8d7a422f6d7cb",
+    "author_report_sha256": "a141f71c0b289d7b16c027ae331a1c89de39e8c0a5d8e3a3cd20875794848e59",
+    "author_receipt_sha256": "ff9b86058e17a425196d26c21593801d737549029fa954a9477080c066429af8",
+    "relocation_note_sha256": "aae609e65b17e3cbae1054492c53eff60666a87256de9f83e9da5092709229b9",
+    "source_pins_match_author_receipt": true,
+    "local_log_hashes_match_author_receipt": true,
+    "fresh_ci": "pending; no outcome claimed"
+  },
+  "execution": {
+    "method": "read-only source, workflow, report/receipt, relocation-note, and local-log audit",
+    "reviewer_tests_run": false,
+    "production_or_test_files_edited": false
+  },
+  "limits": [
+    "The review confirms a source-level managed-browser portability issue but does not claim CI has failed or passed.",
+    "Integrated four-app/five-fixture conformance is outside this review and remains pending fresh CI artifacts."
+  ]
+}

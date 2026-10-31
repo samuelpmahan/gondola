@@ -1,0 +1,62 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-R-CI-BROWSER",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Accepted the scoped repair: both focused browser-test launchers now use the shared chromiumLaunchOptions helper, with no assertion/oracle or production changes. Independent explicit-path DOM, React browser, and helper suites pass. The managed Playwright executable is absent locally, so unset-path launch and fresh CI remain pending.",
+  "findings": [],
+  "evidence": [
+    "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/audit.json",
+    "compiled-backends/ci/2026-10-31/coordination/reports/R-CI-BROWSER.md",
+    "compiled-backends/ci/2026-10-31/coordination/receipts/R-CI-BROWSER.json",
+    "compiled-backends/ci/2026-10-31/lanes/dom/repair/dom-chromium.log",
+    "compiled-backends/ci/2026-10-31/lanes/dom/repair/react-browser-chromium.log",
+    "compiled-backends/ci/2026-10-31/lanes/dom/repair/browser-options.log",
+    "compiled-backends/ci/2026-10-31/lanes/dom/repair/managed-browser-probe.log",
+    "compiled-backends/ci/2026-10-31/lanes/dom/location-correction.md",
+    "compiled-backends/ci/2026-10-31/coordination/reports/E-CI-DOM.md",
+    "compiled-backends/ci/2026-10-31/coordination/receipts/E-CI-DOM.json"
+  ],
+  "execution": {
+    "review_method": "read-only diff and packet audit plus independent focused suites on the repair worktree",
+    "toolchain": {
+      "node": "v22.23.4",
+      "playwright": "1.64.1",
+      "chromium": "153.0.8010.0 at /tmp/chromium"
+    },
+    "dom_focused": {
+      "passed": 4,
+      "failed": 0,
+      "exit_code": 0,
+      "explicit_chromium_path": true,
+      "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/dom-focused.log",
+      "log_sha256": "c360793f2881d94d85833abce535cb5f15997dbd58f665aa06b5907180ebbfaa"
+    },
+    "react_browser_focused": {
+      "passed": 1,
+      "failed": 0,
+      "exit_code": 0,
+      "explicit_chromium_path": true,
+      "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/react-browser-focused.log",
+      "log_sha256": "27b97e623349054192c3e7009ae218892a359a114bae44505a73e56a3438f40f"
+    },
+    "browser_options": {
+      "passed": 2,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/browser-options.log",
+      "log_sha256": "288b166339dfe2d561da0b7601fff64453ccf0dd33e7c852b3d262878ba71739"
+    },
+    "syntax_and_diff_check": "passed",
+    "managed_browser": {
+      "executable": "/root/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+      "exists": false,
+      "log": "compiled-backends/ci/2026-10-31/lanes/reviews/xr-r-ci-browser/managed-browser-probe.log",
+      "log_sha256": "12909a2c13ccc7e89b40db26e52cabd3108da19037d4e4f91d6b3c9e394c70eb"
+    }
+  },
+  "limits": [
+    "Local browser runs explicitly set CHROMIUM_PATH=/tmp/chromium; managed-browser launch is not verified.",
+    "No fresh CI result or integrated four-app/five-fixture conformance claim is made."
+  ]
+}
