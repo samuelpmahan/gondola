@@ -1,0 +1,149 @@
+{
+  "schema": "gobi.compiled-lifecycle-ci-readiness/v1",
+  "job_id": "E-CI-READINESS",
+  "worker": "N5",
+  "outcome": "confirmed_reuse",
+  "status": "confirmed",
+  "decision": "confirmed_reuse",
+  "summary": "Workflow syntax and artifact paths are valid; the runner’s fresh-build-before-test contract is present and source-pinned, and an isolated no-feasibility mirror passed 10/10 lifecycle tests against the actual generated GoScript app. The N6 execution was explicitly lifecycle-only, so this does not claim the inherited full CI chain or a hosted GitHub Actions pass.",
+  "summary_sha256": "08d41ab37e8bedf388277b5527036475489cb03c939f6c5842190f77f27e5508",
+  "report": "compiled-lifecycle/coordination/reports/E-CI-READINESS.md",
+  "report_sha256": "181f6bdf853ee5548b77c5f75de722f9f92b2cbdd906b8d65a8711d6597c2c0b",
+  "review_scope": [
+    "clean-checkout workflow YAML syntax and artifact paths",
+    "default full command and explicitly partial lifecycle-only mode",
+    "fresh React/DOM build before compiled lifecycle tests",
+    "GOBI_LIFECYCLE_APP_DIR generated-app contract",
+    "independent isolated Node lifecycle tests with no feasibility cache"
+  ],
+  "workflow": {
+    "path": ".github/workflows/gobi-compiled-lifecycle.yml",
+    "sha256": "8c7382b44c764f8f51c8038150714d7b70c0896b3bf52359c1a848d17f99d1bd",
+    "bytes": 2019,
+    "yamlParser": "PyYAML 6.0.3 BaseLoader",
+    "parse": "passed",
+    "triggers": ["push", "pull_request"],
+    "runnerCommand": "bash run-compiled-lifecycle.sh",
+    "artifactUploadAlways": true,
+    "oldBytes": {
+      "path": "compiled-lifecycle/coordination/ci-readiness/evidence/workflow-before.yml",
+      "bytes": 2017,
+      "sha256": "464789e75a245e40147d6200c11808ee2350efc8687b0300727cc2b62bbf2642",
+      "parseFailure": "could not find expected ':' at lines 48 and 60"
+    },
+    "auditOutput": {
+      "path": "compiled-lifecycle/coordination/ci-readiness/evidence/workflow-audit.json",
+      "sha256": "3cbcc91924538bf8471e47d1254b12465f4667895834d59b38fc07ba17c720a0"
+    }
+  },
+  "runner": {
+    "path": "compiled-lifecycle/run.mjs",
+    "sha256": "ac79d5038946e9ff0f69a26acc992c132279bcce2dcba0469f1ea77a2e7826b5",
+    "shellEntrypoint": {
+      "path": "run-compiled-lifecycle.sh",
+      "sha256": "81a45e018a53c437af4099199461def46a10f395b20eb0e7372342a5db32ed7b"
+    },
+    "defaultMode": "full",
+    "defaultInheritedRunner": "bash run-compiled-methods.sh",
+    "partialMode": "--lifecycle-only",
+    "compiledRuntimeTestInvocation": "after fresh React and DOM compiler builds",
+    "historicalWip": {
+      "sourceSha256": "2aa23460b844450efb2ffd2907f996ff07cc08c80aaff2933a7575d49db73885",
+      "finding": "compiled runtime test helper had no call site at the first live inspection",
+      "resolution": "N6 added and source-pinned the post-build call in current runner"
+    }
+  },
+  "testContract": {
+    "environmentVariable": "GOBI_LIFECYCLE_APP_DIR",
+    "testSource": "compiled-lifecycle/runtime/runtime.test.mjs",
+    "testSourceSha256": "a07ec74fe85995e7ac18fd0d03a789e3d722f3507b6a24b5d03f410bef58e59d",
+    "runtimeSourceSha256": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+    "requiresExplicitDirectory": true,
+    "checksCanonicalAppIRPackagePath": true,
+    "importsCompiledModuleAndEncoderFromDirectory": true,
+    "feasibilityFallbackPresent": false,
+    "previousTestSourceSha256": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+    "previousFallbackRegression": {
+      "exitCode": 1,
+      "failure": "Missing expected rejection; old loader found the cached app after the environment variable was unset",
+      "commandRecord": "compiled-lifecycle/coordination/ci-readiness/evidence/loader-red/command.json",
+      "commandSha256": "0de2a47d0c1a8ad62f6903e278f83453b5df13fa4be471ecc50c7da793c591da"
+    }
+  },
+  "freshBuild": {
+    "worker": "N6",
+    "path": "compiled-lifecycle/builds/portability/attempt-00/react",
+    "recordSha256": "94e70c541f3bc0c478dc0a3191b5dbeca02bb864a1a588277594968a4616a93d",
+    "manifestSha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603",
+    "appIRSha256": "341693716b95fe70cb7fe0aab3bbc26db78e920266602062510b90feb87c1f6d",
+    "compiledModuleSha256": "172c04df5a13b6963f27647fdce075a3e4df9f8cf65f3b9c8ca77d029bac975f",
+    "encoderSha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+    "backend": "react",
+    "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+    "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+    "goVersion": "go1.27.3",
+    "cliExitCode": 0,
+    "outputCount": 67,
+    "diagnosticCount": 0,
+    "acceptanceClaim": false,
+    "independentAppValidation": {
+      "path": "compiled-lifecycle/coordination/ci-readiness/evidence/fresh-app-validation.json",
+      "sha256": "49673f61470243bb74bc9594a75784c26543ce18bdd8ed11d25c433a5a185fd0"
+    }
+  },
+  "isolatedMirror": {
+    "path": "/tmp/gondola-ci-readiness.wL6yHx/source",
+    "feasibilityDirectoryPresent": false,
+    "sourceManifest": {
+      "path": "compiled-lifecycle/coordination/ci-readiness/evidence/isolated-mirror.json",
+      "sha256": "e5f2ce71bba46ae03677b6f18580874a9288004811ef07e737dee88236df2242"
+    },
+    "commandRecord": {
+      "path": "compiled-lifecycle/coordination/ci-readiness/evidence/isolated-suite.command.json",
+      "sha256": "26595420093e84878ae27c833bb76c003c40fe25b2e01ff4a13844b31288249c"
+    },
+    "appDirectory": "/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/portability/attempt-00/react/output/apps/lifecycle-7e6575d90707",
+    "node": "v22.23.4",
+    "exitCode": 0,
+    "testsPassed": 10,
+    "testsFailed": 0,
+    "stdoutSha256": "a4ced2c4de9aa5277f7f8c40a7f9b84e77d6327d40960bd6ccb4aa56a262d49e",
+    "stderrSha256": "790bfbbaceb894cc92ed5cbf51888ba8386d9e1fbadd14813ce55f01655ff2f1",
+    "missingEnvRegression": {
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "commandRecord": "compiled-lifecycle/coordination/ci-readiness/evidence/missing-env-regression.command.json",
+      "stdoutSha256": "584bb672932cc330d8860198359273a6ab5813806eb85d32170101fe10ec5265"
+    },
+    "excludedWrongCwdProbe": {
+      "record": "compiled-lifecycle/coordination/ci-readiness/evidence/root-cwd-suite.command.json",
+      "acceptanceUse": false,
+      "reason": "the command used the workspace cwd rather than the isolated mirror"
+    }
+  },
+  "n6Execution": {
+    "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z",
+    "mode": "lifecycle-only",
+    "status": "passed",
+    "stageCount": 13,
+    "commandCount": 18,
+    "sourcePinCount": 122,
+    "sourcePinsStableAndCurrent": true,
+    "buildOutputPinCount": 134,
+    "buildOutputPinsStableAndCurrent": true,
+    "freshRuntimeTest": {"exitCode": 0, "passed": 10, "failed": 0},
+    "archiveMembers": 719,
+    "archiveRoundTripVerified": true,
+    "executionSha256": "b0b181c5044b829e4e6d305f8507c447a5e6d2addb29d05c6a1b528ed496976b",
+    "partialAttemptAudit": {
+      "path": "compiled-lifecycle/coordination/ci-readiness/evidence/partial-attempt-audit.json",
+      "sha256": "c8d558599aa0994f8a3be3bcf81f15fc216b968f4fc1125d06e5c9874c920e7f"
+    }
+  },
+  "limits": [
+    "No hosted GitHub Actions run was performed.",
+    "The verified N6 execution explicitly used --lifecycle-only and skipped the inherited compiled-methods chain.",
+    "The YAML parser check validates syntax and expected step structure; it is not an Actions service-side validation."
+  ]
+}

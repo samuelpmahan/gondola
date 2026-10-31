@@ -1,0 +1,15 @@
+Environment and version probes (read-only):
+  /tmp/gondola-node22/node_modules/node/bin/node --version
+  /tmp/chromium --version
+  python3 --version
+
+Restore, verify, and safely extract the retained archive to a fresh /tmp path:
+  python3 compiled-lifecycle/ci/2026-10-31/lanes/restore/restore_archive.py > compiled-lifecycle/ci/2026-10-31/lanes/restore/restore.stdout.json 2> compiled-lifecycle/ci/2026-10-31/lanes/restore/restore.stderr.log
+
+Run the existing smoke from the locked source worktree against the restored site (no build or dependency install):
+  CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/demo/smoke.mjs --demo /tmp/gobi-lifecycle-restore-dlhtki0q/demo/site --output /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/restore/smoke.json --screenshot /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/restore/smoke.png > /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/restore/smoke.stdout.log 2> /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/restore/smoke.stderr.log
+
+Compare restored-site before/after hashes, local smoke output, R-FINAL receipt, and headless scenario expectations:
+  python3 compiled-lifecycle/ci/2026-10-31/lanes/restore/post_smoke_audit.py > compiled-lifecycle/ci/2026-10-31/lanes/restore/post-smoke.stdout.json 2> compiled-lifecycle/ci/2026-10-31/lanes/restore/post-smoke.stderr.log
+
+No Go compilation, npm install/ci, or rebuild command was run. The smoke's only stderr content is Node's nonfatal UNDICI-EHPA experimental EnvHttpProxyAgent warning; the recorded browser, console, request, and WASM error arrays are empty.

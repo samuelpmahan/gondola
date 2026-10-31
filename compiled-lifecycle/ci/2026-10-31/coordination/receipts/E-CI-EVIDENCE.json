@@ -1,0 +1,60 @@
+{
+  "schema": "gobi.compiled-lifecycle-ci-evidence/v1",
+  "job_id": "E-CI-EVIDENCE",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "status": "captured_with_active_workflow",
+  "decision": "mixed_change",
+  "summary": "Hosted evidence for 49cc2b96c8817a47319d5b7bd484184a22fa984b is mixed: at the 2026-10-31 07:26:45Z capture, 27 of 28 workflows were terminal (26 passed, one primary push failed) and the primary lifecycle PR remained active. The primary artifact verifies source pins and passing build, unit, direct, browser-profile, demo, and inherited-child stages, but native replay could not spawn checkout-relative go and the final cross-profile check was withheld; no full hosted lifecycle acceptance is claimed.",
+  "summary_sha256": "64101137c01bdc46f6ceac58d7d85ba9e65da66260ae78fa8339de7a445170a0",
+  "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/E-CI-EVIDENCE.md",
+  "report_sha256": "dfbe352c0b381a818a376c972e3cde0bb7f3c76f4d7bf35bed1c631375cb93a9",
+  "capture": {
+    "captured_at": "2026-10-31T07:26:45Z",
+    "repository": "samuelpmahan/gondola",
+    "source_head": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "source_tree": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "merge_commit": "d6fe98cd11cb8eb5ba673a449099b170e222b3fa",
+    "workflow_total": 28,
+    "push_runs": 14,
+    "pull_request_runs": 14,
+    "terminal_runs": 27,
+    "success": 26,
+    "failure": 1,
+    "in_progress": 1,
+    "in_progress_run_id": 41178477290
+  },
+  "primary_push": {
+    "run_id": 41178420647,
+    "job_id": 124470665705,
+    "conclusion": "failure",
+    "artifact_id": 13034915662,
+    "artifact_name": "gobi-compiled-lifecycle-artifacts",
+    "artifact_sha256": "6fa057edf26af20b3e6ef805458c92033e2e626d625f44a88bffcc04781762c4",
+    "artifact_bytes": 47035803,
+    "artifact_members": 1272,
+    "artifact_uncompressed_bytes": 412381547,
+    "source_pins_match": true
+  },
+  "blocking_failure": {
+    "stage": "native-direct-browser-matrix",
+    "error": "spawnSync /home/runner/work/gondola/gondola/go ENOENT",
+    "cause": "Bare --native-go go was resolved against the checkout rather than PATH.",
+    "effect": "The final cross-profile checker was withheld."
+  },
+  "evidence": {
+    "workflow_snapshot": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/runs-headsha-20261031T072645Z.json",
+    "normalized_run_summary": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/runs-summary-20261031T072645Z.json",
+    "pull_request_job_statuses": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/pr-job-statuses-20261031T072645Z.json",
+    "primary_summary": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/hosted-primary-summary.json",
+    "primary_summary_sha256": "a3917f0dedd261292c75adbfb8627b2e70a60ab60f7283be27e366d2fc9be07d",
+    "job_log_index": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/logs/job-log-index.json",
+    "job_log_index_sha256": "d5c496eb8927f223deb0576af7dae453c8b3350085a1d5958ced8ca9968be7d4",
+    "archived_terminal_pr_logs": 13,
+    "archived_primary_push_logs": 1,
+    "inherited_child_receipt_sha256": "bedc02817c093cd9a25cac3f186330e9cc31eb33b2e8538a4e83b547a8d8a075",
+    "inherited_child_report_sha256": "4713dec1b968be7de975fa5ca1ab4b81df5f287d411c6fb16a0bc14a968c3ec5",
+    "local_outcomes_index": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/local-prior/index.json"
+  },
+  "claim_limit": "The 49cc primary push did not pass overall; at snapshot time one primary PR workflow remained active. No full hosted lifecycle CI or final cross-profile conformance pass is claimed."
+}

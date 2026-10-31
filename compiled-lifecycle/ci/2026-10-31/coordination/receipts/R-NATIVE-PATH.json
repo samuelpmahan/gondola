@@ -1,0 +1,198 @@
+{
+  "schema": "gobi.compiled-lifecycle-native-path-review/v1",
+  "job_id": "R-NATIVE-PATH",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "status": "ready_for_review",
+  "decision": "mixed_change",
+  "summary": "Corrected compiled lifecycle conformance native executable lookup: bare go remains a PATH command, explicit relative executable paths resolve against the invoking CWD, and GOBI_GO_BIN remains configurable. Actual subprocess tests passed 4/4; forced-PATH lifecycle-only run passed all 13 stages and matched the 26-step cross-runtime oracle. The earlier hosted CI failure remains historical and is not claimed as a hosted pass.",
+  "summary_sha256": "8b3d570e698f00eabbbd5eaeeaecb7b32ed4844a08b5ba3bdf09627f368f3689",
+  "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/R-NATIVE-PATH.md",
+  "report_sha256": "734f1b10f5957ddb047e38b2a194d8eda1e55ae207d6415e275bcaea2f2ef3eb",
+  "source": {
+    "head_sha": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "tree_sha": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "paths": [
+      {
+        "path": "compiled-lifecycle/conformance/run.mjs",
+        "bytes": 18510,
+        "sha256": "751d04d6aa73662d63295bc09cc74875011700c096c2749ae5196e3e116d753f"
+      },
+      {
+        "path": "compiled-lifecycle/conformance/native-path.test.mjs",
+        "bytes": 6540,
+        "sha256": "1b1519883e9e9d7dbe7a2b4814af2f674477b413cf01df015dc778c3dd4c5623"
+      }
+    ],
+    "source_pins_match": true
+  },
+  "reproduction": {
+    "result": "failed-as-expected-before-fix",
+    "exit_code": 1,
+    "failing_command": [
+      "/workspace/scratch/39a56936f173/gondola/go",
+      "run",
+      "./cmd/compiled-lifecycle-native",
+      "--script",
+      "/workspace/scratch/39a56936f173/gondola/fixtures/compiled/lifecycle/scenario.json"
+    ],
+    "failure": "native Go lifecycle replay failed (exit spawn-error): spawnSync /workspace/scratch/39a56936f173/gondola/go ENOENT",
+    "evidence": "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/red/reproduction.json"
+  },
+  "verification": {
+    "targeted_test": {
+      "command": "node --test compiled-lifecycle/conformance/native-path.test.mjs",
+      "passed": 4,
+      "failed": 0
+    },
+    "lifecycle_only": {
+      "status": "passed",
+      "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z",
+      "failures": [],
+      "source_pins_match": true,
+      "conformance_status": "matched",
+      "app_id": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+      "ticks": 26,
+      "renderer_swaps": 17,
+      "mutation_controls_detected": 8,
+      "demo_smoke": "passed",
+      "stages": [
+        {
+          "name": "toolchain-inventory",
+          "status": "passed"
+        },
+        {
+          "name": "go-tests",
+          "status": "passed"
+        },
+        {
+          "name": "compiler-go-tests",
+          "status": "passed"
+        },
+        {
+          "name": "node-tests-before-build",
+          "status": "passed"
+        },
+        {
+          "name": "native-cli",
+          "status": "passed"
+        },
+        {
+          "name": "react-goscript-build",
+          "status": "passed"
+        },
+        {
+          "name": "dom-goscript-build",
+          "status": "passed"
+        },
+        {
+          "name": "compiled-lifecycle-runtime-tests",
+          "status": "passed"
+        },
+        {
+          "name": "backend-build-comparison",
+          "status": "passed"
+        },
+        {
+          "name": "compiled-output-before-pins",
+          "status": "passed"
+        },
+        {
+          "name": "native-direct-browser-matrix",
+          "status": "passed"
+        },
+        {
+          "name": "http-demo",
+          "status": "passed"
+        },
+        {
+          "name": "compiled-output-stability",
+          "status": "passed"
+        }
+      ],
+      "archive": {
+        "path": "compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z/lifecycle-artifacts.tar.gz",
+        "bytes": 14757771,
+        "sha256": "f6c5d09ad0f15b9590e02aedf6ab53b2fc85b2d9e9f00647630708f1364dd9bf",
+        "manifest": {
+          "path": "compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z/archive-manifest.json",
+          "bytes": 148617,
+          "sha256": "27e0ade2164813d3fba831cc44f19b9f9bf56ef862ee68d8f6942dd0e7064c46"
+        },
+        "memberCount": 719,
+        "memberBytes": 168200217,
+        "roundTripVerified": true
+      },
+      "versions": {
+        "node": "v22.23.4",
+        "npm": "11.9.0",
+        "rootGo": "go version go1.24.0 linux/amd64",
+        "compiledGo": "go version go1.27.3 linux/amd64",
+        "packageLocks": {
+          "package-lock.json": "e35def24ea8e20847d1ea58a59bc3b233b6c0d1d9fa697e44e735812617ef53b",
+          "interaction/package-lock.json": "b1dc4681b030322933246c2b4622a4cbb9ebcb8ac7f69f0f4021459c9d603ed0",
+          "compiled-frontend/package-lock.json": "245318fce8e9760b07f8c465240d85b1449d4b75110c510aa5f362be3c600079"
+        },
+        "dependencies": {
+          "react": "19.3.1",
+          "reactDOM": "19.3.1",
+          "playwright": "1.64.1",
+          "esbuild": "0.28.2",
+          "frontendEsbuild": "0.28.2"
+        },
+        "chromiumPath": "/tmp/chromium",
+        "chromium": "Chromium 153.0.8010.0"
+      }
+    },
+    "evidence": [
+      "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-native-path.test.stdout.log",
+      "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-lifecycle-only.stdout.log",
+      "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-run-report.md",
+      "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-run-receipt.json",
+      "compiled-lifecycle/conformance/evidence/attempt-09/lifecycle.run.json"
+    ]
+  },
+  "retained_artifacts": [
+    {
+      "path": "compiled-lifecycle/conformance/run.mjs",
+      "bytes": 18510,
+      "sha256": "751d04d6aa73662d63295bc09cc74875011700c096c2749ae5196e3e116d753f"
+    },
+    {
+      "path": "compiled-lifecycle/conformance/native-path.test.mjs",
+      "bytes": 6540,
+      "sha256": "1b1519883e9e9d7dbe7a2b4814af2f674477b413cf01df015dc778c3dd4c5623"
+    },
+    {
+      "path": "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/red/reproduction.json",
+      "bytes": 6817,
+      "sha256": "13ed896862a7d6669491db7dc54b3fbe7824f27b1290eb3c00903a47c9a2f43a"
+    },
+    {
+      "path": "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-native-path.test.stdout.log",
+      "bytes": 1211,
+      "sha256": "b1d2a07a512be8376215d38f819ba86e220c1b562a73e0849b9aaefc12fa4515"
+    },
+    {
+      "path": "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-run-report.md",
+      "bytes": 25229,
+      "sha256": "ea43f915c9d9dec1fff409487bc67d1a839bc1a682d0629bc85c87b887163f2f"
+    },
+    {
+      "path": "compiled-lifecycle/ci/2026-10-31/lanes/repair-native-path/green/final-run-receipt.json",
+      "bytes": 1842788,
+      "sha256": "a6c99407c97e2d6634de14a0a431293309e40d5fcf691a14b6bacaf16791d810"
+    },
+    {
+      "path": "compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z/lifecycle-artifacts.tar.gz",
+      "bytes": 14757771,
+      "sha256": "f6c5d09ad0f15b9590e02aedf6ab53b2fc85b2d9e9f00647630708f1364dd9bf"
+    },
+    {
+      "path": "compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z/archive-manifest.json",
+      "bytes": 148617,
+      "sha256": "27e0ade2164813d3fba831cc44f19b9f9bf56ef862ee68d8f6942dd0e7064c46"
+    }
+  ],
+  "claim_limit": "This is a successful local forced-PATH lifecycle-only run; the earlier primary hosted CI failure is retained as failed and no new hosted CI pass is claimed. The inherited compiled-methods regression chain was skipped."
+}

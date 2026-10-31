@@ -1,0 +1,79 @@
+{
+  "job_id": "E-FIXTURE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Added the finite value-owned Parent/Child/Grandchild plus independent Sibling Go lifecycle fixture, frozen 26-event script, and standalone native adapter. Native Go tests and React/DOM GoScript builds pass. The mounted host's GoScript effect-slice encoding remains assigned to N2/N3/N5; no generic Manager compilation or mounted-runtime pass is claimed.",
+  "source_scope": [
+    "fixtures/compiled/lifecycle/app.go",
+    "fixtures/compiled/lifecycle/view.go",
+    "fixtures/compiled/lifecycle/app_test.go",
+    "fixtures/compiled/lifecycle/scenario.json",
+    "fixtures/compiled/lifecycle/dense-cancellation-experiment.go.txt",
+    "cmd/compiled-lifecycle-native/main.go",
+    "cmd/compiled-lifecycle-native/main_test.go",
+    "compiled-lifecycle/CONTRACT.md",
+    "compiled-lifecycle/FIXTURE.md",
+    "compiled-lifecycle/coordination/reports/E-FIXTURE.md",
+    "compiled-lifecycle/coordination/receipts/E-FIXTURE.json"
+  ],
+  "evidence": {
+    "report_sha256": "c06e2380d2e3e63b8d3cc62da93825bc1dbeccced34d117606586ce274e4c8c9",
+    "toolchains": {
+      "root_go": "go1.24.0 linux/amd64",
+      "goscript_cli_go": "go1.27.3 linux/amd64"
+    },
+    "checks": [
+      {
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go test -count=1 ./fixtures/compiled/lifecycle ./cmd/compiled-lifecycle-native",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed"
+      },
+      {
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false go run ./cmd/compiled-lifecycle-native --script fixtures/compiled/lifecycle/scenario.json",
+        "working_directory": "repository root",
+        "exit_code": 0,
+        "result": "passed: gobi.compiled-lifecycle-native/v1, full package-path component ID, 26 steps, event-9 cancellation order Grandchild/Child/Parent, final NextRequestID 7"
+      },
+      {
+        "command": "printf '%s\\n' '{\"schema\":\"gobi.build-request/v1\",\"sourceRoot\":\"/workspace/scratch/39a56936f173/gondola\",\"entryPackages\":[\"github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle\"],\"backend\":\"react\",\"outputDir\":\"/tmp/compiled-lifecycle-react-append-final\"}' | PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build",
+        "working_directory": "compiled-frontend",
+        "exit_code": 0,
+        "result": "ok:true; component ID is the package path; effect.request-reply is present; 67 outputs; 0 diagnostics"
+      },
+      {
+        "command": "printf '%s\\n' '{\"schema\":\"gobi.build-request/v1\",\"sourceRoot\":\"/workspace/scratch/39a56936f173/gondola\",\"entryPackages\":[\"github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle\"],\"backend\":\"dom\",\"outputDir\":\"/tmp/compiled-lifecycle-dom-append-final\"}' | PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false go run ./cmd/gobi-build",
+        "working_directory": "compiled-frontend",
+        "exit_code": 0,
+        "result": "ok:true; component ID is the package path; effect.request-reply is present; 67 outputs; 0 diagnostics"
+      }
+    ],
+    "failed_attempts": [
+      {
+        "stage": "initial GoScript numeric admission",
+        "result": "Both backend builds failed with four analyze.numeric-profile diagnostics: integer increment/decrement lacks a safe bound guard at app.go byte spans 2726-2747, 3286-3307, 3851-3872, and 4457-4478. Each NextRequestID increment was moved under the admitted true-side NextRequestID < maxSafeID guard; final builds pass."
+      },
+      {
+        "stage": "mounted effect delivery",
+        "result": "N5's preserved smoke at compiled-lifecycle/demo/evidence/attempt-01-slice-abi-failure reports Update effects must be an array or null for emitted $.Slice<gobi.Effect>. A dense-literal experiment produced the same GoScript slice wrapper and is retained separately. Runtime encoding bridge and mounted integration remain separate gates."
+      }
+    ],
+    "source_sha256": {
+      "fixtures/compiled/lifecycle/app.go": "6b61e55c3046f58873d2774e38a7bca44769f18f6870c39e1885b78be340fe41",
+      "fixtures/compiled/lifecycle/view.go": "afc4b1611c5dbd8e5264d3c124b808770bdd8579fdc1426c350f4df6689bb948",
+      "fixtures/compiled/lifecycle/app_test.go": "5b67112d79f258895b2fffa82b209021581f982f6a5529f6856763ba02986442",
+      "fixtures/compiled/lifecycle/scenario.json": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+      "fixtures/compiled/lifecycle/dense-cancellation-experiment.go.txt": "759744b94938fd3499005473bbae93e98daedba9cd52328ec6ff53a36aea8962",
+      "cmd/compiled-lifecycle-native/main.go": "37d7d709599a5b402f792cd5e9e66118f0ec296984ed3fb11ad2626bb6c23bf3",
+      "cmd/compiled-lifecycle-native/main_test.go": "dd6ce451f96390d245768d5a67a6a1844c3609d0c0bdc7dfe5ac9040301f775a",
+      "compiled-lifecycle/CONTRACT.md": "ed9eedea8f9582583d1f89e44be20e55f692f037f2b8decc93025433e478e083",
+      "compiled-lifecycle/FIXTURE.md": "44a0c2d3d2f3e6e85dec3106e6eabdfbe2bd4e4e96c16f45bfdb8635779bb6b7"
+    },
+    "limits": [
+      "The fixture is a finite set of four Go value slots, not a compiled pointer-based or generic Manager.",
+      "Native Go and AppIR/module-generation evidence do not establish mounted runtime effect delivery; that path is owned by N2/N3/N5 and depends on the slice-encoding bridge.",
+      "No merge, deployment, or publication was performed."
+    ]
+  },
+  "reported_stage": "finite_go_lifecycle_fixture_native_replay_and_react_dom_compiler_builds_verified_mounted_runtime_slice_bridge_pending"
+}

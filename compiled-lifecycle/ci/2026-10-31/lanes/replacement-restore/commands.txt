@@ -1,0 +1,17 @@
+Read-only environment/source checks:
+  /tmp/gondola-node22/node_modules/node/bin/node --version
+  /tmp/chromium --version
+  python3 --version
+  git -C /workspace/scratch/39a56936f173/gondola rev-parse HEAD
+  sha256sum /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/demo/smoke.mjs
+
+Independent archive reassembly and member verification (script writes a unique fresh restore root under /tmp and restore.json under this lane):
+  python3 compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/restore_verify.py > compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/restore.stdout.log 2> compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/restore.stderr.log
+
+Existing smoke source, from the exact 00da source worktree, against the independently restored site:
+  CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/demo/smoke.mjs --demo /tmp/gobi-lifecycle-xr-restore-custody-2xb26kel/restored/demo/site --output /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/smoke.json --screenshot /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/smoke.png > /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/smoke.stdout.log 2> /workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/smoke.stderr.log
+
+Independent post-smoke comparison of all five site pins, the complete terminal State/View/effect arrays, smoke checks, and request results:
+  python3 compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/post_smoke_audit.py > compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/post-smoke.stdout.log 2> compiled-lifecycle/ci/2026-10-31/lanes/replacement-restore/post-smoke.stderr.log
+
+No Go compilation, npm installation, product rebuild, or hosted CI/browser run.

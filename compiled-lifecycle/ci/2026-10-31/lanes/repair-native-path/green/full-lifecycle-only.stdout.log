@@ -1,0 +1,7 @@
+version-npm: npm --version
+lifecycle-go-tests: go test ./compilercontract ./gobi ./fixtures/compiled/lifecycle ./cmd/compiled-lifecycle-native
+lifecycle-compiler-go-tests: go test ./analyze ./build ./cmd/... ./emit
+lifecycle-node-tests-before-build: /tmp/gondola-node22/node_modules/node/bin/node --test /workspace/scratch/39a56936f173/gondola/compiled-frontend/frontend/dom/renderer.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-frontend/frontend/react/bindings.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-frontend/frontend/react/renderer.browser.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-frontend/frontend/react/renderer.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-frontend/frontend/runtime/runtime.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/browser/lifecycle-oracle.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/conformance/check.test.mjs /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/conformance/native-path.test.mjs
+build-native: go build -o /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/attempts/attempt-20261031T072932858Z/native/compiled-lifecycle-native ./cmd/compiled-lifecycle-native
+native-cli-probe: /workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/attempts/attempt-20261031T072932858Z/native/compiled-lifecycle-native --script /workspace/scratch/39a56936f173/gondola/fixtures/compiled/lifecycle/scenario.json
+compile-react: go run ./cmd/gobi-build

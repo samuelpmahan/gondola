@@ -1,0 +1,63 @@
+{
+  "schema": "gobi.compiled-lifecycle-ci-order-audit/v1",
+  "job_id": "E-CI-ORDER",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "status": "audited",
+  "summary": "The primary 49cc workflow failed in the conformance runner because --native-go go resolved to a missing checkout/go path, withholding the final matrix check. The artifact nevertheless contains a separate 26-step native CLI replay matching all direct GoScript step states, Views, messages, and effects, plus browser evidence for G/C/P cancellation, stale callback rejection, pending request survival across swap, detached controls, and clean drained unmount. This is bounded mixed evidence, not full CI acceptance.",
+  "summary_sha256": "198d8d04eb96c7a5238b96e53e968c87a615d2f3434114c1965cbe7d98485628",
+  "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/E-CI-ORDER.md",
+  "report_sha256": "01453ee944a32cf3afdc4ee47fd96ed858f39fbe32879cf8969028500b8e326c",
+  "audit": {
+    "script": "compiled-lifecycle/ci/2026-10-31/lanes/order/audit-ci-order.mjs",
+    "script_sha256": "daa5329bd09bdf3bedb7a49b283f9749a29a2ba330176c45c392922989a70327",
+    "result": "compiled-lifecycle/ci/2026-10-31/lanes/order/audit-result.json",
+    "result_sha256": "af35ddd2d08127221462e079bae86cb97895f90ff556a9a5541ecd9d794ebb21",
+    "command": "compiled-lifecycle/ci/2026-10-31/lanes/order/audit-command.json",
+    "command_sha256": "e64997076a1b4b07211994b6cad69f76e07f4259dc06f744e9b097c4a7996282",
+    "node": "v22.23.4",
+    "exit_code": 0
+  },
+  "artifact": {
+    "id": "13034915662",
+    "workflow_run_id": "41178420647",
+    "conclusion": "failure",
+    "head_sha": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "tree_sha": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "bytes": 47035803,
+    "sha256": "6fa057edf26af20b3e6ef805458c92033e2e626d625f44a88bffcc04781762c4"
+  },
+  "attempt": "compiled-lifecycle/ci/2026-10-31/extracted/compiled-lifecycle/builds/attempts/attempt-20261031T065420569Z",
+  "findings": {
+    "conformanceGate": "rejected: bare --native-go go resolved to /home/runner/work/gondola/gondola/go and failed ENOENT; matrix/lifecycle.native.json and matrix/lifecycle.check.json are absent, so the full checker and mutation controls were withheld",
+    "pinStability": "178 source pins and 8 generated-output pins are identical across the conformance attempt stability checks",
+    "standaloneNativeGo": "separate native-cli stage passed; independently decoded comparison matches all 26 direct emitted-module step states, Views, messages, and effects",
+    "cancellationAndGoReplyGuards": "native and direct module emit Grandchild, Child, Parent cancellation order; old generation-1 direct messages preserve state/View; sibling and generation-2 replies succeed; duplicate direct replies are no-ops",
+    "browserEffectHost": "React, DOM, and swap profiles each record 3 canceled callback rejections without ticks, then accept sibling and generation-2 replies; duplicate completion probes are rejected",
+    "rendererSwapFences": "all four initial request tokens survive the fixed swap; the alternating profile records 16 eligible callback-fenced swaps, 1 ineligible swap, and 32 retired-renderer fence records",
+    "detachedPhysicalControls": "all three profiles attempt six clicks on detached old subtree controls with unchanged trace, snapshot, callbacks, pending work, effects, and physical HTML",
+    "unmountAndErrors": "browser profiles unmount with zero pending work and empty physical DOM; pageErrors are empty; separate runtime suite passes 10/10 including pending-work and reentrant unmount cases",
+    "traceActionMetadata": "injected Go-message actions differ between direct and browser traces at ticks 11, 12, 13, 15, and 25; canonical Go projection excludes action and separate assertions validate the 16 physical clicks, so this field remains un-compared"
+  },
+  "limits": [
+    "The workflow and full hosted lifecycle matrix remain failed/rejected; no full CI acceptance is claimed.",
+    "The primary browser script forces retired callbacks after subtree removal but before fresh generation-2 requests exist. The stronger live-generation-2-pending sequence is separate E-LIVE-REPLY evidence, not part of this artifact.",
+    "Browser unmount occurs after all pending work drains; pending request retirement at unmount is shown by the separate compiled-runtime unit cases, not by the browser scenario.",
+    "The full literal native/direct/browser checker and its mutation controls were not reached after the native conformance subprocess spawn failure."
+  ],
+  "raw_evidence": {
+    "workflow_artifact_listing": "compiled-lifecycle/ci/2026-10-31/lanes/evidence/artifacts-push-41178420647.json",
+    "workflow_artifact_listing_sha256": "b6ae57811d5a67cb95511b96db2b94a7d98f83267e36958bcdb8d37c6f981e13",
+    "workflow_run_sha256": "5b41994552a45d38d9e9ad24bc6e3343644751aa0533d088d898d5c6c35f5d57",
+    "workflow_job_sha256": "c9232338713ae9416b073507a3a254b52d757d7ba0b2df2184c8c409ae43c711",
+    "execution_sha256": "8cacd69eb2b432237492fde7c3a66185356f7faa311fee0ced0b3042097432fc",
+    "matrix_run_sha256": "1c4ba7c6882faccb760bfb182bacad709d91bd8efd81bc320cf834b0e40364a8",
+    "failed_matrix_record_sha256": "34e7f6e191b42cb10dd6df53e7af5b2b41f1a549acafb57eaae30a235390afb2",
+    "standalone_native_cli_sha256": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+    "direct_module_sha256": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71",
+    "browser_capture_sha256": "a663d77ba16c43adfb3f4b12666845b82047b3e1b9c7ed68ffea8c98ac304ad6",
+    "runtime_test_log_sha256": "423cb059cc96073a10f6d57271c0c8b6c07af7bbf11631cbe7ce3f2e7c8173ca",
+    "runtime_test_log": "10 passed, 0 failed",
+    "canonical_check_source_sha256": "0a714448607d40f08719925bf3822b35bd41b58fc66a124d8b7f5f491859c8e5"
+  }
+}

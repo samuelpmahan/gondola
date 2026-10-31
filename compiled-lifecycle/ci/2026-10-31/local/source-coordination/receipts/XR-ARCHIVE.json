@@ -1,0 +1,96 @@
+{
+  "schema": "gobi.compiled-lifecycle-independent-review/v1",
+  "job_id": "XR-ARCHIVE",
+  "worker": "N3",
+  "epoch": "13",
+  "broken_constraints": [],
+  "decision": "accepted",
+  "acceptance_scope": "E-ARCHIVE archive bytes, external inventory, and selected closed-root membership only",
+  "current_tree_accepted": false,
+  "summary": "Accepted the E-ARCHIVE tar and external inventory: independently verified 261 files, 92 directories, 353 members, 435916585 file bytes, 20398966 compressed bytes, safe paths, exact hashes/names, current source equality, and the selected closed roots. Attempt statuses remain unchanged: 00-04 rejected, attempt05 matched, demo ABI attempt failed and acceptance=false. The inventory reports before/after equality; its separate pre/post manifests are not both retained, so that scan itself is not replayable.",
+  "summary_sha256": "53b67db51184f1737723ee709d42d780b1eb3981ecb520d8a85de0b234842a44",
+  "report": "compiled-lifecycle/coordination/reports/XR-ARCHIVE.md",
+  "report_sha256": "82877c964ad56b1a416b41b080ce27d0465fe103b2f6f2e602f968990ccf37ab",
+  "audit": "compiled-lifecycle/coordination/reviews/xr-archive/audit.json",
+  "audit_sha256": "2db2113ae4cdf5dfc902e24e2524083383782a928a4d2319a2519496fa733ac2",
+  "member_checks": "compiled-lifecycle/coordination/reviews/xr-archive/member-checks.json",
+  "member_checks_sha256": "64a4b717bd1b7e2ffe6b207502b57cae7b1eea8b45082f958f1b45a91acc100d",
+  "audit_script": "compiled-lifecycle/coordination/reviews/xr-archive/verify_archive.py",
+  "audit_script_sha256": "4fa406abeea0034bf4633bafde2873967d6562238ffb787e1eebbe652fc17661",
+  "reviewed_evidence": {
+    "archive_path": "/tmp/gondola-lifecycle-history.tar.gz",
+    "archive_sha256": "09d8f49c7d039a44ad0ba1e10973aaa1d2a7c561c6972f05d1ceb24dba47f4a6",
+    "archive_bytes": 20398966,
+    "inventory_path": "compiled-lifecycle/coordination/archive/members.json",
+    "inventory_sha256": "716d61ef287c3a4b0cffdb1a79d41710489d8fd0ce580197e19392b3255cd9f5",
+    "E_ARCHIVE_report_sha256": "c8a0094dfaadae26598af8f8a9a81a0116d69ee172ef7cae72dc7ba39eab3a34",
+    "counts": {
+      "files": 261,
+      "directories": 92,
+      "members": 353,
+      "uncompressed_file_bytes": 435916585
+    },
+    "path_safety": {
+      "all_names_relative_normalized_posix": true,
+      "no_parent_or_dot_components": true,
+      "no_duplicate_members": true,
+      "no_symlink_hardlink_or_special_members": true,
+      "all_members_within_selected_roots": true,
+      "gzip_crc_and_size_validated_to_eof": true
+    },
+    "all_file_hashes_and_sizes_match_inventory": true,
+    "all_current_source_files_match_inventory": true,
+    "all_source_directories_match_inventory": true,
+    "selected_roots": [
+      "compiled-lifecycle/conformance/evidence/attempt-00",
+      "compiled-lifecycle/conformance/evidence/attempt-01",
+      "compiled-lifecycle/conformance/evidence/attempt-02",
+      "compiled-lifecycle/conformance/evidence/attempt-03",
+      "compiled-lifecycle/conformance/evidence/attempt-04",
+      "compiled-lifecycle/conformance/evidence/attempt-05",
+      "compiled-lifecycle/demo/evidence/attempt-01-slice-abi-failure",
+      "compiled-lifecycle/coordination/reviews/r-oracle",
+      "compiled-lifecycle/coordination/reviews/xr-demo",
+      "compiled-lifecycle/coordination/reviews/xr-effect-slice",
+      "compiled-lifecycle/coordination/reviews/xr-fixture",
+      "compiled-lifecycle/coordination/reviews/xr-harness",
+      "compiled-lifecycle/coordination/reviews/xr-oracle",
+      "compiled-lifecycle/coordination/reviews/xr-oracle-repair",
+      "compiled-lifecycle/coordination/reviews/xr-runtime",
+      "compiled-lifecycle/coordination/reviews/xr-unmount"
+    ],
+    "attempt_statuses": {
+      "attempt-00": "rejected",
+      "attempt-01": "rejected",
+      "attempt-02": "rejected",
+      "attempt-03": "rejected",
+      "attempt-04": "rejected",
+      "attempt-05": "matched",
+      "attempt-05-check": "matched",
+      "demo-attempt-01-slice-abi-failure": "failed; acceptance=false"
+    },
+    "exclusions_verified": [
+      "no conformance attempt after attempt-05",
+      "no demo attempt except attempt-01-slice-abi-failure",
+      "no r-portable-test review",
+      "no node_modules",
+      "no recursive coordination/archive content"
+    ],
+    "source_stability": {
+      "inventory_reports_before_after_equal": true,
+      "pre_archive_manifest_sha256": "530dadc448ebe90bbb9068c9454f7bd800e3afb93021029bae3ce566c0bd067c",
+      "archive_and_current_tree_match_per_file_inventory": true,
+      "two_full_source_snapshots_retained_for_independent_replay": false
+    },
+    "audit_toolchain": {
+      "python": "3.12.14",
+      "tar_parser": "Python tarfile streaming mode",
+      "extracted_to_disk": false
+    }
+  },
+  "limits": [
+    "This review accepts archive integrity and selected-root membership only; it does not reclassify any historical attempt.",
+    "The inventory records source-before/after equality and a pre-archive manifest digest. The pre/post scan itself cannot be replayed because two separate full snapshots were not retained; archive and current source bytes independently match the per-file inventory.",
+    "The archive preserves available historical evidence and does not claim recovery of missing source snapshots noted in XR-RUNTIME."
+  ]
+}

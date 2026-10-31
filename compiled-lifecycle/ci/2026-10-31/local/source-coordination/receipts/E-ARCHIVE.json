@@ -1,0 +1,58 @@
+{
+  "job_id": "E-ARCHIVE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Created and verified a compressed custody archive for the requested closed lifecycle evidence and review directories. The tar contains 261 regular files (435,916,585 bytes), 92 directories, and 353 total members. Each file member matches its repository-relative SHA-256/byte inventory, and source member inventories before and after packaging are equal. Raw source evidence remains unchanged.",
+  "evidence": {
+    "report_sha256": "c8a0094dfaadae26598af8f8a9a81a0116d69ee172ef7cae72dc7ba39eab3a34",
+    "archive": {
+      "path": "/tmp/gondola-lifecycle-history.tar.gz",
+      "format": "tar.gz",
+      "bytes": 20398966,
+      "sha256": "09d8f49c7d039a44ad0ba1e10973aaa1d2a7c561c6972f05d1ceb24dba47f4a6"
+    },
+    "inventory": {
+      "path": "compiled-lifecycle/coordination/archive/members.json",
+      "sha256": "716d61ef287c3a4b0cffdb1a79d41710489d8fd0ce580197e19392b3255cd9f5",
+      "regular_member_count": 261,
+      "directory_member_count": 92,
+      "total_member_count": 353,
+      "uncompressed_bytes": 435916585,
+      "repository_relative_paths": true
+    },
+    "source_stability": {
+      "pre_archive_manifest_sha256": "530dadc448ebe90bbb9068c9454f7bd800e3afb93021029bae3ce566c0bd067c",
+      "source_before_after_equal": true,
+      "all_archive_file_members_match_source_sha256_and_bytes": true,
+      "all_archive_directories_match_source_tree": true,
+      "special_members": 0
+    },
+    "included_roots": [
+      "compiled-lifecycle/conformance/evidence/attempt-00",
+      "compiled-lifecycle/conformance/evidence/attempt-01",
+      "compiled-lifecycle/conformance/evidence/attempt-02",
+      "compiled-lifecycle/conformance/evidence/attempt-03",
+      "compiled-lifecycle/conformance/evidence/attempt-04",
+      "compiled-lifecycle/conformance/evidence/attempt-05",
+      "compiled-lifecycle/demo/evidence/attempt-01-slice-abi-failure",
+      "compiled-lifecycle/coordination/reviews/r-oracle",
+      "compiled-lifecycle/coordination/reviews/xr-demo",
+      "compiled-lifecycle/coordination/reviews/xr-effect-slice",
+      "compiled-lifecycle/coordination/reviews/xr-fixture",
+      "compiled-lifecycle/coordination/reviews/xr-harness",
+      "compiled-lifecycle/coordination/reviews/xr-oracle",
+      "compiled-lifecycle/coordination/reviews/xr-oracle-repair",
+      "compiled-lifecycle/coordination/reviews/xr-runtime",
+      "compiled-lifecycle/coordination/reviews/xr-unmount"
+    ],
+    "excluded": [
+      "active/full attempts after attempt-05",
+      "compiled-lifecycle/coordination/reviews/r-portable-test",
+      "portable/readiness work outside the requested closed roots",
+      "node_modules/**",
+      "compiled-lifecycle/coordination/archive/**",
+      "/tmp archive outputs"
+    ],
+    "historical_source_limit": "The XR-RUNTIME report records unavailable pre-bridge shared-runtime and lifecycle test source snapshots. The archive preserves the available report, recorded hashes, logs, and reproductions without claiming those missing historical bytes were recovered."
+  }
+}

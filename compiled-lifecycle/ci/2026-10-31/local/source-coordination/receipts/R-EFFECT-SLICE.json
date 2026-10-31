@@ -1,0 +1,50 @@
+{
+  "job_id": "R-EFFECT-SLICE",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Added signature-typed compiled Update effect decoding through the generated GoScript encoder. Declared effect slices are resolved from AppIR Update metadata and encoded for both Array and GoSlice results; untyped legacy Array results retain the existing strict validation path. Real compiled append removal, malformed wrapper/Effect/encoded Value, offset handling, cancellation and stale-reply cases pass.",
+  "evidence": {
+    "report_sha256": "31b25605dd764a05f8f8fbe16e5a628b074e31a709c133c3f50a9d0172dc93dc",
+    "toolchain": "Node v22.23.4",
+    "focused_tests": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola",
+        "passed": 7,
+        "failed": 0,
+        "exit_code": 0,
+        "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+      }
+    ],
+    "sha256": {
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+      "compiled-lifecycle/runtime/runtime.mjs": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "3c6f5c9d8631a9e1e557ffe93465e0b93d66a085a5b22a33f2f4e6fbb1d0c273",
+      "compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/app-ir.json": "1e0389c7b0ee80119622ce99b8d2f9cc9c117d006ad358662eda5326048b3d23",
+      "compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/encoder.mjs": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+      "compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs": "1d1e8a0f5fe4d496780723a9ae4de4ca1047a9563e8d6ebd02151b4bd638bf8a",
+      "compiled-lifecycle/coordination/reports/R-EFFECT-SLICE.lifecycle-7.log": "c995c6f68b67c46476c64b5f47cee3e8eca5a45cc47b2b9bb9c82a88ed324597",
+      "compiled-lifecycle/coordination/reports/R-EFFECT-SLICE.shared-runtime-29.log": "714a47074e8f4127b0deeba8f0aa12b58869e95f926cece2bd027af36961fec6"
+    },
+    "coverage": [
+      "Compiled Update result type is discovered from AppIR symbol metadata; element fields must be exactly string Kind, Name, Arg, and Reply.",
+      "Generated encoder validates actual compiled GoScript Array and GoSlice effect outputs and returns the typed Value representation consumed by the existing effect policy and capability checks.",
+      "Real removeParent append effects are decoded in Go-emitted child-first order; only removed parent, child, and grandchild correlations are canceled, while the sibling remains live.",
+      "Malformed GoSlice metadata, malformed Go Effect own fields, malformed encoder Value fields, and nonzero slice offsets are covered.",
+      "A forced retired runtime completion is rejected, and direct stale Go complete messages leave remounted state unchanged."
+    ]
+  },
+  "limits": [
+    "The Node lifecycle and shared-runtime suites are focused checks; full React/DOM/browser matrix evidence remains with the harness lane.",
+    "A separate reentrant unmount admission issue identified by XR-RUNTIME remains assigned to R-UNMOUNT and is not represented as fixed here."
+  ]
+}

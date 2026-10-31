@@ -1,0 +1,512 @@
+{
+  "schema": "gobi.compiled-lifecycle-demo-execution/v1",
+  "job_id": "E-DEMO",
+  "worker": "N5",
+  "status": "passed",
+  "outcome": "mixed_change",
+  "summary": "Built and HTTP-smoke-verified a static demo that runs the actual compiled Go lifecycle module through the shared React/DOM renderers and manual effect host. The smoke covered pending-effect swaps, descendant-first cancellation, sibling survival, remount/stale reply fences, manual completions, duplicate replies, and final disabled DOM controls.",
+  "summary_sha256": "0a4a63144282475311c5f0bb2a6a3b42b33a180f3eb8654a30dc4eecc83e7efa",
+  "report": {
+    "path": "compiled-lifecycle/coordination/reports/E-DEMO.md",
+    "sha256": "aa830613ba33d715342a8cbace2b82cddbc2ca06f9b7fd0c78fc7b838e7f0e2b",
+    "bytes": 9055
+  },
+  "attempt": "compiled-lifecycle/builds/feasibility/bridge-green-02",
+  "attempt_kind": "preintegration-demo-only",
+  "acceptanceRun": false,
+  "startedAt": "2026-10-31T06:29:25.001Z",
+  "finishedAt": "2026-10-31T06:29:36.210Z",
+  "rebalancer": {
+    "epoch": 0,
+    "exact_score": 600,
+    "native_score": 600,
+    "base": "6b49cc0bd4c9512a041f723c86b632ec506afd9d",
+    "pr": 13
+  },
+  "versions": {
+    "node": "v22.23.4",
+    "goCompiler": "go1.27.3",
+    "goRoot": "go1.24.0",
+    "chromium": "Chromium 153.0.8010.0",
+    "react": "19.3.1",
+    "reactDOM": "19.3.1",
+    "playwright": "1.64.1",
+    "esbuild": "0.28.2"
+  },
+  "commands": [
+    {
+      "name": "compile-react",
+      "command": "GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-lifecycle/builds/feasibility/bridge-green-02/react/request.json > ../compiled-lifecycle/builds/feasibility/bridge-green-02/react/result.json 2> ../compiled-lifecycle/builds/feasibility/bridge-green-02/react/stderr.log",
+      "cwd": "compiled-frontend",
+      "exitCode": 0,
+      "environment": {
+        "GOTOOLCHAIN": "go1.27.3",
+        "GOFLAGS": "-buildvcs=false"
+      },
+      "request": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/react/request.json",
+        "bytes": 338,
+        "sha256": "8eef8b9749e824a99c5b162223f8994206fb8e6b975ecaca884be96c2547ba4f"
+      },
+      "result": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/react/result.json",
+        "bytes": 24090,
+        "sha256": "babdef25187a21e20004bd1d225e7d84ebbda3f02328ff8a34d06a03936b5f90"
+      },
+      "stderr": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/react/stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "manifest": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/react/output/buildmanifest.json",
+        "bytes": 4658,
+        "sha256": "bee3a7810efcc4e9379776961bff22703a740695575c1981a1e8d7475df78603"
+      },
+      "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+      "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+      "capabilities": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply"
+      ],
+      "effectRequestReply": true,
+      "BuildResultOutputs": 67
+    },
+    {
+      "name": "compile-dom",
+      "command": "GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-lifecycle/builds/feasibility/bridge-green-02/dom/request.json > ../compiled-lifecycle/builds/feasibility/bridge-green-02/dom/result.json 2> ../compiled-lifecycle/builds/feasibility/bridge-green-02/dom/stderr.log",
+      "cwd": "compiled-frontend",
+      "exitCode": 0,
+      "environment": {
+        "GOTOOLCHAIN": "go1.27.3",
+        "GOFLAGS": "-buildvcs=false"
+      },
+      "request": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/dom/request.json",
+        "bytes": 334,
+        "sha256": "70f83b84da1d82c743f535422909be857a8f82b3a3e3b06cf7cb41f657f056da"
+      },
+      "result": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/dom/result.json",
+        "bytes": 24090,
+        "sha256": "67717e2f22c6b6c3a3b8961ad8c2cfcbcc199838700d6461abc3cf4bf36dc35e"
+      },
+      "stderr": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/dom/stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "manifest": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/dom/output/buildmanifest.json",
+        "bytes": 4656,
+        "sha256": "220ce759d04093c95185088a91ae8a6556be44a3aeebb6f327dc7281a473e4e4"
+      },
+      "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+      "componentID": "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle",
+      "capabilities": [
+        "view.node",
+        "numeric.safe-integer",
+        "numeric.float64",
+        "effect.request-reply"
+      ],
+      "effectRequestReply": true,
+      "BuildResultOutputs": 67
+    },
+    {
+      "name": "build-http-demo",
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/demo/build.mjs --compiled compiled-lifecycle/builds/feasibility/bridge-green-02/react/output --output compiled-lifecycle/builds/feasibility/bridge-green-02/demo-site --backend react",
+      "exitCode": 0,
+      "stdout": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-build.stdout.log",
+        "bytes": 438,
+        "sha256": "17c5bef9da03f3b84579640f1755f11af069c5b6f4fe7a3fb26c3fcbac5d9bc1"
+      },
+      "stderr": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-build.stderr.log",
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    },
+    {
+      "name": "http-demo-smoke",
+      "command": "CHROMIUM_PATH=/tmp/chromium /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/demo/smoke.mjs --demo compiled-lifecycle/builds/feasibility/bridge-green-02/demo-site --output compiled-lifecycle/builds/feasibility/bridge-green-02/demo-smoke.json --screenshot compiled-lifecycle/builds/feasibility/bridge-green-02/demo.png",
+      "exitCode": 0,
+      "stdout": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-smoke.stdout.log",
+        "bytes": 1709,
+        "sha256": "2b3b0cfaddd8f4decf0a73b81cf47cd986d59259ef534d7ec7248b17083a118b"
+      },
+      "stderr": {
+        "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-smoke.stderr.log",
+        "bytes": 174,
+        "sha256": "db12ad97221988bf346c55d06788e21a01bb6a683d69266bf732ed4d6d9763c8"
+      }
+    }
+  ],
+  "checks": [
+    "HTTP page loaded the actual compiled lifecycle Go module and mounted its Go View with the DOM renderer",
+    "Go Init produced the initial value-owned Parent\u2192Child\u2192Grandchild tree and independent Sibling state",
+    "Parent, Child, Grandchild, and Sibling counts changed through Go Update",
+    "four Go-emitted lifecycle requests are pending in token order and displayed by the manual host",
+    "pending request correlations, Go state, Go view, and trace survived DOM\u2192React\u2192DOM swaps with no extra Go tick",
+    "removing Parent removed Child and Grandchild, cancelled Grandchild\u2192Child\u2192Parent, and retained Sibling's request",
+    "remount restored a fresh generation-2 Go subtree while Sibling remained live and pending",
+    "retired generation-1 reply callbacks were rejected without a Go tick, then explicit stale complete messages ran Go Update and left the remounted tree unchanged",
+    "manual Sibling completion updated its Go state once; replaying the duplicate reply was rejected without a tick",
+    "second-generation pending effects also survived React\u2194DOM replacement without a Go tick",
+    "manual generation-2 replies completed Grandchild\u2192Child\u2192Parent; duplicate Child was rejected without a Go tick",
+    "final DOM controls expose Go-disabled request/remount states while preserving the complete final tree and reply state"
+  ],
+  "sourcePins": [
+    {
+      "path": "cmd/compiled-lifecycle-native/main.go",
+      "bytes": 14665,
+      "sha256": "37d7d709599a5b402f792cd5e9e66118f0ec296984ed3fb11ad2626bb6c23bf3"
+    },
+    {
+      "path": "compiled-frontend/frontend/runtime/runtime.mjs",
+      "bytes": 53901,
+      "sha256": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0"
+    },
+    {
+      "path": "compiled-frontend/frontend/runtime/runtime.test.mjs",
+      "bytes": 53745,
+      "sha256": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1"
+    },
+    {
+      "path": "compiled-lifecycle/demo/app.mjs",
+      "bytes": 9227,
+      "sha256": "78d45245561e03014eddcb80e26857bc40650edf94c1f6f96ba61182763fb871"
+    },
+    {
+      "path": "compiled-lifecycle/demo/build.mjs",
+      "bytes": 4606,
+      "sha256": "e094a014c03121ca379291d3a564549750baced71d6a229b0cd5bb9980d953eb"
+    },
+    {
+      "path": "compiled-lifecycle/demo/demo.css",
+      "bytes": 6573,
+      "sha256": "dacf230c424e95182a62f73253d30894c30b67171e6035c3f13bef4a32994f7a"
+    },
+    {
+      "path": "compiled-lifecycle/demo/index.html",
+      "bytes": 4546,
+      "sha256": "fa1643df35179cb2f80c120c61811499c07ad8df8525aca1943515cc810a9412"
+    },
+    {
+      "path": "compiled-lifecycle/demo/smoke.mjs",
+      "bytes": 24907,
+      "sha256": "c64c868341fd8a2e4de18b30403babc246397a08d1cb6f34c1a4f3db5daf5b21"
+    },
+    {
+      "path": "compiled-lifecycle/runtime/runtime.mjs",
+      "sha256": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "phase": "R-EFFECT-SLICE source used by bridge-green-02 smoke; superseded by later R-UNMOUNT edit"
+    },
+    {
+      "path": "fixtures/compiled/lifecycle/app.go",
+      "bytes": 7658,
+      "sha256": "6b61e55c3046f58873d2774e38a7bca44769f18f6870c39e1885b78be340fe41"
+    },
+    {
+      "path": "fixtures/compiled/lifecycle/scenario.json",
+      "bytes": 10464,
+      "sha256": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650"
+    },
+    {
+      "path": "fixtures/compiled/lifecycle/view.go",
+      "bytes": 2877,
+      "sha256": "afc4b1611c5dbd8e5264d3c124b808770bdd8579fdc1426c350f4df6689bb948"
+    }
+  ],
+  "sourcePinTiming": "N6 post-run snapshot and demo-build source record; lifecycle adapter pinned to R-EFFECT-SLICE version used by smoke; no before/after drift claim",
+  "compiledInputs": [
+    {
+      "path": "apps/lifecycle-7e6575d90707/app-ir.json",
+      "bytes": 14180,
+      "sha256": "341693716b95fe70cb7fe0aab3bbc26db78e920266602062510b90feb87c1f6d"
+    },
+    {
+      "path": "apps/lifecycle-7e6575d90707/encoder.mjs",
+      "bytes": 15625,
+      "sha256": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4"
+    },
+    {
+      "path": "apps/lifecycle-7e6575d90707/gobi-compiled.mjs",
+      "bytes": 521081,
+      "sha256": "1dc412e0c325f7d2ba06c8b2b8460e47e64c494eca655642fc4a7747e2061b46"
+    }
+  ],
+  "buildRecord": {
+    "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-site/demo-build.json",
+    "bytes": 2490,
+    "sha256": "38d7a84842f349b9d35dae3636ca88c4df5dece8d94be07a7b3281131996ef85"
+  },
+  "observations": {
+    "smokeSchema": "gobi.compiled-lifecycle-http-smoke/v1",
+    "smokeStatus": "passed",
+    "httpRequests": [
+      {
+        "path": "/",
+        "status": 200,
+        "bytes": 4546
+      },
+      {
+        "path": "/demo.css",
+        "status": 200,
+        "bytes": 6573
+      },
+      {
+        "path": "/demo.bundle.mjs",
+        "status": 200,
+        "bytes": 1837423
+      }
+    ],
+    "wasmRequests": [],
+    "noWasm": {
+      "wasmRequests": [],
+      "wasmAPIAttempts": []
+    },
+    "browserErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "runtimeFailures": [],
+    "rendererSwaps": 4,
+    "finalBackend": "dom",
+    "finalTicks": 24,
+    "pendingAtEnd": [],
+    "retiredReplyProbeOutcomes": [
+      {
+        "token": "grandchild:g1:r3",
+        "outcome": "rejected",
+        "error": "unknown or extra effect completion"
+      },
+      {
+        "token": "child:g1:r2",
+        "outcome": "rejected",
+        "error": "unknown or extra effect completion"
+      },
+      {
+        "token": "parent:g1:r1",
+        "outcome": "rejected",
+        "error": "unknown or extra effect completion"
+      }
+    ],
+    "goMessageProbeResults": [
+      {
+        "token": "grandchild:g1:r3",
+        "dispatchId": "dispatch-0011",
+        "stateUnchanged": true
+      },
+      {
+        "token": "child:g1:r2",
+        "dispatchId": "dispatch-0012",
+        "stateUnchanged": true
+      },
+      {
+        "token": "parent:g1:r1",
+        "dispatchId": "dispatch-0013",
+        "stateUnchanged": true
+      }
+    ],
+    "finalState": {
+      "parent": {
+        "id": "parent",
+        "parentId": "",
+        "generation": "2",
+        "requestId": "5",
+        "alive": true,
+        "requested": true,
+        "pending": false,
+        "token": "parent:g2:r5",
+        "reply": "parent:g2:r5",
+        "count": 1
+      },
+      "child": {
+        "id": "child",
+        "parentId": "parent",
+        "generation": "2",
+        "requestId": "6",
+        "alive": true,
+        "requested": true,
+        "pending": false,
+        "token": "child:g2:r6",
+        "reply": "child:g2:r6",
+        "count": 1
+      },
+      "grandchild": {
+        "id": "grandchild",
+        "parentId": "child",
+        "generation": "2",
+        "requestId": "7",
+        "alive": true,
+        "requested": true,
+        "pending": false,
+        "token": "grandchild:g2:r7",
+        "reply": "grandchild:g2:r7",
+        "count": 1
+      },
+      "sibling": {
+        "id": "sibling",
+        "parentId": "",
+        "generation": "1",
+        "requestId": "4",
+        "alive": true,
+        "requested": true,
+        "pending": false,
+        "token": "sibling:g1:r4",
+        "reply": "sibling:g1:r4",
+        "count": 1
+      },
+      "nextRequestId": "7"
+    },
+    "finalDOM": {
+      "normalization": "outerHTML-v1",
+      "controls": [
+        {
+          "path": "0/1",
+          "key": "parent-add",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": false
+        },
+        {
+          "path": "0/2",
+          "key": "parent-request",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": true
+        },
+        {
+          "path": "0/3/1",
+          "key": "child-add",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": false
+        },
+        {
+          "path": "0/3/2",
+          "key": "child-request",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": true
+        },
+        {
+          "path": "0/3/3/1",
+          "key": "grandchild-add",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": false
+        },
+        {
+          "path": "0/3/3/2",
+          "key": "grandchild-request",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": true
+        },
+        {
+          "path": "1/1",
+          "key": "sibling-add",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": false
+        },
+        {
+          "path": "1/2",
+          "key": "sibling-request",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": true
+        },
+        {
+          "path": "2/0",
+          "key": "parent-remove",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": false
+        },
+        {
+          "path": "2/1",
+          "key": "parent-remount",
+          "tag": "button",
+          "type": "submit",
+          "value": "",
+          "checked": false,
+          "disabled": true
+        }
+      ],
+      "html_sha256": "45ae57bef7ef1ed3cc1b726183be702a02a9c00319241c1a7e9c54d74385994b"
+    }
+  },
+  "artifacts": {
+    "attempt": "compiled-lifecycle/builds/feasibility/bridge-green-02",
+    "demoSmoke": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-smoke.json",
+      "bytes": 853539,
+      "sha256": "7ff02b0e825e8bb136cf67c111ef0f33acb18c0e02bc6f3e3bd6204a418b2aad",
+      "status": "passed",
+      "schema": "gobi.compiled-lifecycle-http-smoke/v1"
+    },
+    "screenshot": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo.png",
+      "bytes": 333057,
+      "sha256": "6f366f62a04be4223324602333013b5bfc5c69aaf2c9eeb2edd61e44b8bd8053"
+    },
+    "bundle": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-site/demo.bundle.mjs",
+      "bytes": 1837423,
+      "sha256": "bb9c5f05294816087c647ab965077e4ba4c3672c5e8464f52d4881ea56aac175"
+    },
+    "archive": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/artifacts.tar.gz",
+      "bytes": 1419733,
+      "sha256": "1bf62ad5462a8ee71d6ac640228a6e620ee5cd9510d698f09f397d86a1cf18d5",
+      "manifest": "compiled-lifecycle/builds/feasibility/bridge-green-02/archive-manifest.json",
+      "memberCount": 152,
+      "roundTripVerified": true
+    }
+  },
+  "previousAttempt": {
+    "path": "compiled-lifecycle/demo/evidence/attempt-01-slice-abi-failure/attempt.json",
+    "sha256": "b67c8b5ed4d54f4df4f4bb37ab6bbfbf68811b1609227497f963a29f519b7434",
+    "status": "failed",
+    "acceptance": false,
+    "reason": "GoScript returned $.Slice<gobi.Effect> from removeParent append; the existing effect ABI rejected it with Update effects must be an array or null.",
+    "smoke": {
+      "path": "compiled-lifecycle/demo/evidence/attempt-01-slice-abi-failure/smoke.json",
+      "bytes": 405331,
+      "sha256": "5354172ea60f297b3fc7c42f159f3ffcccefaecd2b73d3d579cdac865860ec1d"
+    },
+    "screenshot": {
+      "path": "compiled-lifecycle/demo/evidence/attempt-01-slice-abi-failure/screenshot.png",
+      "bytes": 340852,
+      "sha256": "aebee0d433bbc1811e28a6d8fba3a856997679af3be5de4c5b08565c9aca8b6c"
+    }
+  },
+  "integrationLimits": [
+    "This receipt covers the N5 static demo build and HTTP smoke only; N6 labels the run as preintegration with acceptanceRun=false.",
+    "The final source-pinned lifecycle matrix and R-UNMOUNT/R-ORACLE review gates are separate and were not claimed by this lane.",
+    "No production deployment or main-branch merge was performed."
+  ]
+}

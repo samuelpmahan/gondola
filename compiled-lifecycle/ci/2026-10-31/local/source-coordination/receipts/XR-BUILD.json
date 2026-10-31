@@ -1,0 +1,141 @@
+{
+  "schema": "gobi.compiled-lifecycle-independent-review/v1",
+  "job_id": "XR-BUILD",
+  "worker": "N5",
+  "epoch": "17",
+  "broken_constraints": [],
+  "decision": "accepted",
+  "acceptance_scope": "Recorded lifecycle-only E-BUILD attempt and separate inherited E-DEMO full child; provenance and artifact boundaries for the invalidated full parent",
+  "current_tree_accepted": false,
+  "summary": "Accepted the recorded lifecycle-only E-BUILD attempt after independently verifying all 122 source pins against current files and published source 49cc, fresh React/DOM outputs and post-build runtime 10/10, conformance/demo evidence, and every file in the complete 719-file archive. Separately verified E-DEMO as a full 17-command child run with 137 current matching pins. The earlier full-parent attempt is preserved as failed with source drift; its inherited 53-file archive subset omits 138 nested build files. No single full-parent local pass or hosted CI acceptance is claimed.",
+  "summary_sha256": "80cc75d296a6b353c5ba88d158f771afc727e204f9f8736858295125aadfbec6",
+  "report": "compiled-lifecycle/coordination/reports/XR-BUILD.md",
+  "report_sha256": "eba577df4e7c588b3cf915b02b6155b9e9d9b22a1c82e01bbe829ae63e2d3caa",
+  "audit": "compiled-lifecycle/coordination/reviews/xr-build/audit.json",
+  "audit_sha256": "adf734ed6f60901c4906e4a33e424544a15cc2afe34a405200b5736f60c4def0",
+  "audit_script": "compiled-lifecycle/coordination/reviews/xr-build/audit.py",
+  "audit_script_sha256": "2b8711c35354bd06677a0e2f00fedca339f24ec848a2f808197246c0d90e5a8d",
+  "reviewed_evidence": {
+    "publication_source": {
+      "commit": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+      "tree": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+      "local_head": "1d94f3f287a13eea8c67dda85cf73e94439a6da2",
+      "local_head_tree_matches_source_tree": true,
+      "hosted_full_ci": "pending",
+      "audit_toolchain": {
+        "command": "python3 compiled-lifecycle/coordination/reviews/xr-build/audit.py",
+        "python": "3.12.14"
+      }
+    },
+    "canonical_E_BUILD": {
+      "receipt": "compiled-lifecycle/coordination/receipts/E-BUILD.json",
+      "receipt_sha256": "cc5ab603c6288cca0665869881ce0bcd347207c7821f61d83a03fb16fad9bdd3",
+      "report": "compiled-lifecycle/coordination/reports/E-BUILD.md",
+      "report_sha256": "54b4146e5cde6cd1cb31d5243d432764fdd841569a773996c2064e7339ba36f0",
+      "mode": "lifecycle-only",
+      "status": "passed",
+      "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z",
+      "attempt_execution_sha256": "b0b181c5044b829e4e6d305f8507c447a5e6d2addb29d05c6a1b528ed496976b",
+      "commands": 18,
+      "stages": 13,
+      "failures": 0,
+      "source_pins": 122,
+      "source_pins_current_and_published_commit_match": true,
+      "react_and_dom_builds": {
+        "each_outputs": 67,
+        "each_diagnostics": 0,
+        "appir_and_encoder_byte_identical": true,
+        "all_build_output_hashes_verified": true
+      },
+      "post_build_lifecycle_runtime": {
+        "tests_passed": 10,
+        "tests_failed": 0,
+        "after_react_and_dom_builds": true,
+        "environment_variable": "GOBI_LIFECYCLE_APP_DIR",
+        "stdout_sha256": "d8eb9912b522065e9345da9e0e1578c955da96de41f672644515e9292db2e9bc"
+      },
+      "conformance": {
+        "status": "matched",
+        "events_and_ticks": 26,
+        "clicks": 16,
+        "swaps": 17,
+        "requests": 7,
+        "cancellations": 3,
+        "cancellation_order": [
+          "grandchild:g1:r3",
+          "child:g1:r2",
+          "parent:g1:r1"
+        ],
+        "stale_physical_click_probes": 18,
+        "callback_fences": 32,
+        "eligible_swaps": 16,
+        "ineligible_swaps": 1,
+        "mutation_controls_detected": 8
+      },
+      "http_demo": {
+        "status": "passed",
+        "http_200_responses": 3,
+        "browser_errors": 0,
+        "console_errors": 0,
+        "wasm_requests": 0,
+        "wasm_api_attempts": 0,
+        "screenshot": "compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z/demo/demo.png",
+        "screenshot_sha256": "6f366f62a04be4223324602333013b5bfc5c69aaf2c9eeb2edd61e44b8bd8053"
+      },
+      "archive": {
+        "path": "compiled-lifecycle/builds/attempts/attempt-20261031T065111036Z/lifecycle-artifacts.tar.gz",
+        "sha256": "2e674d3d7f43576a0f9052f6164e83f3312933112eaf72fa3348a29d3db22f47",
+        "manifest_sha256": "4b7db05fbe4dcca91562360664037ca0f1d4876c20d42786d330da1c009a098c",
+        "verified_regular_file_count": 719,
+        "uncompressed_bytes": 168198179
+      }
+    },
+    "separate_inherited_E_DEMO": {
+      "receipt": "compiled-methods/coordination/receipts/E-DEMO.json",
+      "receipt_sha256": "b610d5e3b37e8015815944db3ae0f119baebbafbcbdefd0f513110cb236d95bd",
+      "report": "compiled-methods/coordination/reports/E-DEMO.md",
+      "report_sha256": "7f65d4640733d294229ab6cb0cfa64ae5e54a09ee5f01e6a9023eb36bbd19477",
+      "mode": "full",
+      "status": "passed",
+      "commands": 17,
+      "source_pins": 137,
+      "source_pins_current_and_published_commit_match": true,
+      "compatibility_check": "compiled-lifecycle/coordination/root-checks/inherited-source-compatibility.json",
+      "compatibility_check_sha256": "b80631756b21620dd6229493c1345f59111bfe598067563fc04a4cee8cb3fb17",
+      "compatibility_check_mismatches": 0,
+      "complete_attempt_files": 191,
+      "nested_build_files": 138,
+      "copied_subset_in_failed_parent_archive": {
+        "files": 53,
+        "bytes": 10269094,
+        "nested_build_outputs_included": false,
+        "all_subset_hashes_match_complete_attempt": true
+      }
+    },
+    "invalidated_full_parent": {
+      "mode": "full",
+      "status": "failed",
+      "source_pins_match": false,
+      "preserved_receipt": "compiled-lifecycle/coordination/before/full-invalidated/E-BUILD.json",
+      "preserved_receipt_sha256": "cff5dfa64cf354c1e4a2149cfe2cedefb766cfe7619a7324e6d168fd995c32b0",
+      "receipt_byte_identical_to_original_attempt_execution": true,
+      "preserved_report": "compiled-lifecycle/coordination/before/full-invalidated/E-BUILD.md",
+      "preserved_report_sha256": "b08df025d7fa3bd481e5db13803b56928c574b0716e226faf48ce6d37a1fbb5b",
+      "source_drift_paths": [
+        ".github/workflows/gobi-compiled-lifecycle.yml",
+        "compiled-lifecycle/run.mjs",
+        "compiled-lifecycle/runtime/runtime.test.mjs"
+      ],
+      "archive_sha256": "2e1b29af515246d205bf706c0726c27d5285ba1856bdb5d8d9f5db3ff5fa43cb",
+      "archive_manifest_sha256": "c85e430e16b38b39e2af693bc03ed316d6062a66f287227db8a05ebd86fb0f6a",
+      "verified_regular_file_count": 701,
+      "test_order_issue": "compiled lifecycle Node tests ran before fresh React/DOM builds and lacked GOBI_LIFECYCLE_APP_DIR"
+    }
+  },
+  "limits": [
+    "The decision accepts the recorded lifecycle-only attempt and the separate inherited child receipt; it does not accept one full-parent local run.",
+    "The 53-file inherited subset in the failed parent archive omits all 138 files under the complete child's nested builds directory; use the complete E-DEMO attempt for those outputs.",
+    "Publication metadata says hosted full CI is pending; no hosted Actions acceptance is claimed.",
+    "The review verifies recorded artifacts and pins without re-running the full test matrix."
+  ]
+}

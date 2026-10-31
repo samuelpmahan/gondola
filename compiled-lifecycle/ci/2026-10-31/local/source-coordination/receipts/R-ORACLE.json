@@ -1,0 +1,74 @@
+{
+  "job_id": "R-ORACLE",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Aligned the oracle test's expectedEffects metadata assertion with the frozen scenario's seven literal fixture.request rows and Grandchild/Child/Parent lifecycle.cancel triplet. Preserved the hand-authored oracle implementation, semantic checks, mutation controls, and closed E-ORACLE packet in a byte-pinned before snapshot. Focused oracle tests passed 5/5 and combined lifecycle/frontend conformance tests passed 9/9.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/R-ORACLE.md",
+    "report_sha256": "8853401cc5311312e78a702db73b6f4b44b4d6ac1456f4020a5c6c9821a870b6",
+    "toolchain": "Node v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+    "seed": "none; fixed lifecycle scenario",
+    "before_snapshot": {
+      "directory": "compiled-lifecycle/coordination/reviews/r-oracle/before",
+      "manifest": "compiled-lifecycle/coordination/reviews/r-oracle/before/SHA256SUMS.txt",
+      "manifest_sha256": "c2badc8434415a231818d8c18ef9ab894d9a7b535769456419d1903db38c7c4a",
+      "files": {
+        "browser/lifecycle-oracle.mjs": "795ba7fef0ff680019f4988aba5cfcecb25b205516a2c7058bfc720fc217cb82",
+        "browser/lifecycle-oracle.test.mjs": "18c88acd3e9028af30b1f737599ae537fc1354ea65f37037e5c9f89281ebae6d",
+        "browser/lifecycle-oracle.node22.test.log": "2db2aff769448ad04caf3d76e5f0c91a41679b5de9ecadfdf7cb58ae2051e2e1",
+        "coordination/reports/E-ORACLE.md": "88d80bb25bc6143b2f5f9bc1e1ca26257a64be71dd4fc257792905cc2e4f42ee",
+        "coordination/receipts/E-ORACLE.json": "f7c36952230a9c277ce4d08fd44473e2732fe8110dbf2616540c23182e515fe6"
+      }
+    },
+    "checks": [
+      {
+        "name": "Node syntax checks",
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/browser/lifecycle-oracle.mjs > compiled-lifecycle/coordination/reviews/r-oracle/node-check.log 2>&1 && PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --check compiled-lifecycle/browser/lifecycle-oracle.test.mjs >> compiled-lifecycle/coordination/reviews/r-oracle/node-check.log 2>&1",
+        "exit_code": 0,
+        "result": "both modules passed syntax checks",
+        "log": "compiled-lifecycle/coordination/reviews/r-oracle/node-check.log",
+        "log_sha256": "0c085475c95f3d462b7bda350205fe673aa0ca4a3f7bcb0a13cc1dff0e123081"
+      },
+      {
+        "name": "Focused oracle suite",
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+        "exit_code": 0,
+        "passed": 5,
+        "failed": 0,
+        "log": "compiled-lifecycle/coordination/reviews/r-oracle/oracle-test.log",
+        "log_sha256": "43b9be83a0c71e5eab488824608f1bd6f99de3d9ee921cfa27fe7037b897dfb7"
+      },
+      {
+        "name": "Combined lifecycle/frontend harness suites",
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/conformance/check.test.mjs compiled-frontend/conformance/check.test.mjs",
+        "exit_code": 0,
+        "passed": 9,
+        "failed": 0,
+        "log": "compiled-lifecycle/coordination/reviews/r-oracle/harness-combined-test.log",
+        "log_sha256": "60dd7da5bce727d291a6ee147a918000a542376a1a7754889ac63a5a10cd7d05"
+      }
+    ],
+    "source_hashes_at_freeze": {
+      "compiled-lifecycle/browser/lifecycle-oracle.mjs": "795ba7fef0ff680019f4988aba5cfcecb25b205516a2c7058bfc720fc217cb82",
+      "compiled-lifecycle/browser/lifecycle-oracle.test.mjs": "6a48d1d46addfa07d4792c3bf71d842c7ea6159eb69c5010b00e540df970daf1",
+      "fixtures/compiled/lifecycle/scenario.json": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+      "compiled-lifecycle/CONTRACT.md": "ed9eedea8f9582583d1f89e44be20e55f692f037f2b8decc93025433e478e083",
+      "compiled-lifecycle/conformance/check.mjs": "0a714448607d40f08719925bf3822b35bd41b58fc66a124d8b7f5f491859c8e5",
+      "compiled-lifecycle/conformance/check.test.mjs": "270d7fae54be739c9ec6e98fd9bf54aef7b03352b80896afb3194c8f9a16aa00",
+      "compiled-lifecycle/conformance/direct.mjs": "8e10939fd30687822590ab0b31efac5203bd6b5f3006aa7c37908475fcf9608d",
+      "compiled-lifecycle/conformance/browser.mjs": "ea9698851cf38ffeb1f1d03a50f369db0508debae39aa6a7e5645fbe804d2257",
+      "compiled-lifecycle/conformance/run.mjs": "48767a3b4e6902493ab068331748229aac7095ef82d8744a7c0be376143e7c8e"
+    },
+    "author_packet": {
+      "job_id": "E-ORACLE",
+      "report_sha256_unchanged": "88d80bb25bc6143b2f5f9bc1e1ca26257a64be71dd4fc257792905cc2e4f42ee",
+      "receipt_sha256_unchanged": "f7c36952230a9c277ce4d08fd44473e2732fe8110dbf2616540c23182e515fe6"
+    },
+    "limits": [
+      "Only the test's literal expectedEffects metadata assertion changed; oracle state/effect semantics and candidate implementation are untouched.",
+      "No physical browser run was repeated in this repair; browser observations remain pinned to the separate N3 attempt-05 evidence and final inherited runner.",
+      "No Go, runtime, Git, or shared-state edits were made; no merge, deployment, or publication was performed."
+    ]
+  },
+  "reported_stage": "literal_scenario_expected_effects_alignment_preserving_frozen_oracle_packet_focused_oracle_and_combined_harness_tests_passed"
+}

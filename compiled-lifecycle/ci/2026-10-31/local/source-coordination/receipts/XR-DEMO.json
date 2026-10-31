@@ -1,0 +1,94 @@
+{
+  "schema": "gobi.compiled-lifecycle-independent-review/v1",
+  "job_id": "XR-DEMO",
+  "worker": "N3",
+  "epoch": "08",
+  "budget": 400,
+  "broken_constraints": [],
+  "decision": "accepted",
+  "acceptance_scope": "E-DEMO bridge-green-02 preintegration HTTP demo and its 152-member archive only",
+  "current_tree_accepted": false,
+  "summary": "Accepted E-DEMO bridge-green-02 as a bounded preintegration HTTP demo only. Independent native Go replay matched the 24 browser trace ticks; the 12-check smoke verified four renderer swaps, child-first Grandchild/Child/Parent cancellation with Sibling preserved, stale and duplicate reply rejection, final DOM controls, zero errors or WebAssembly use, and all 152 archived members. The smoke used the receipt-pinned R-EFFECT-SLICE wrapper, not the later R-UNMOUNT wrapper, and did not claim full source-pinned acceptance.",
+  "summary_sha256": "52610efb5cef54fe8df8c2b9be58706efd230e89a9ef17da8dfebd344b75c7e0",
+  "report": "compiled-lifecycle/coordination/reports/XR-DEMO.md",
+  "report_sha256": "8b89b171678f84153fdd586bb31717ee1282513b78a792c3e0a5d59c62e536ce",
+  "audit": "compiled-lifecycle/coordination/reviews/xr-demo/review.json",
+  "audit_sha256": "744fb11caaff3209683efc0e233ebe1d80efba94814a1bde075af29b9b8ff4f5",
+  "audit_script": "compiled-lifecycle/coordination/reviews/xr-demo/review.mjs",
+  "audit_script_sha256": "47cc7c7e127c391b2fe309102ae0873a1b7c608ff1d0064a1158ec849b1f8e96",
+  "reviewed_evidence": {
+    "attempt": "compiled-lifecycle/builds/feasibility/bridge-green-02",
+    "attempt_kind": "preintegration-demo-only",
+    "acceptanceRun": false,
+    "E_DEMO_report_sha256": "aa830613ba33d715342a8cbace2b82cddbc2ca06f9b7fd0c78fc7b838e7f0e2b",
+    "native_go": {
+      "path": "compiled-lifecycle/coordination/reviews/xr-demo/native-go.json",
+      "sha256": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+      "schema": "gobi.compiled-lifecycle-native/v1",
+      "steps": 26,
+      "Go_updates_matching_browser": 23
+    },
+    "smoke": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo-smoke.json",
+      "sha256": "7ff02b0e825e8bb136cf67c111ef0f33acb18c0e02bc6f3e3bd6204a418b2aad",
+      "status": "passed",
+      "scenario_checks": 12,
+      "trace_ticks_including_Init": 24,
+      "renderer_swaps": 4,
+      "effect_records": 19,
+      "pending_at_end": 0,
+      "cancellation_order": [
+        "grandchild:g1:r3",
+        "child:g1:r2",
+        "parent:g1:r1"
+      ],
+      "rejected_retired_callback_probes": 3,
+      "stale_Go_complete_messages_with_unchanged_state": 3,
+      "rejected_duplicate_deliveries": [
+        "sibling:g1:r4",
+        "child:g2:r6"
+      ],
+      "browser_errors": 0,
+      "console_errors": 0,
+      "failed_HTTP_requests": 0,
+      "WebAssembly_requests": 0,
+      "WebAssembly_API_attempts": 0
+    },
+    "screenshot": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/demo.png",
+      "sha256": "6f366f62a04be4223324602333013b5bfc5c69aaf2c9eeb2edd61e44b8bd8053",
+      "visually_inspected": true
+    },
+    "static_bundle_sha256": "bb9c5f05294816087c647ab965077e4ba4c3672c5e8464f52d4881ea56aac175",
+    "archive": {
+      "path": "compiled-lifecycle/builds/feasibility/bridge-green-02/artifacts.tar.gz",
+      "sha256": "1bf62ad5462a8ee71d6ac640228a6e620ee5cd9510d698f09f397d86a1cf18d5",
+      "members": 152,
+      "names_and_hashes_match_manifest": true
+    },
+    "independent_oracle_sha256": "795ba7fef0ff680019f4988aba5cfcecb25b205516a2c7058bfc720fc217cb82",
+    "source_pins": {
+      "receipt_source_pin_count": 12,
+      "postrun_snapshot_matches_current_except_wrapper": true,
+      "recorded_R_EFFECT_SLICE_wrapper_sha256": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "current_R_UNMOUNT_wrapper_sha256": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+      "source_stability_before_after_run_claimed": false
+    },
+    "toolchain": {
+      "node": "v22.23.4",
+      "goCompiler": "go1.27.3",
+      "goRoot": "go1.24.0",
+      "chromium": "Chromium 153.0.8010.0",
+      "react": "19.3.1",
+      "reactDOM": "19.3.1",
+      "playwright": "1.64.1",
+      "esbuild": "0.28.2"
+    }
+  },
+  "limits": [
+    "Acceptance is limited to the recorded E-DEMO preintegration build/smoke snapshot; the current R-UNMOUNT wrapper was not the demo input.",
+    "E-DEMO records a post-run source snapshot only, not a before/after source stability gate.",
+    "The demo does not retain and physically click detached pre-removal buttons after remount; that case must be established by the separate full harness.",
+    "No arbitrary pointer Manager, production transport, or current-tree full cross-profile conformance claim is made."
+  ]
+}

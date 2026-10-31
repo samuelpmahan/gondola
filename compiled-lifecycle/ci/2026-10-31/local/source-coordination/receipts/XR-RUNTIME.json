@@ -1,0 +1,74 @@
+{
+  "job_id": "XR-RUNTIME",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "The original E-RUNTIME cancellation and effect-policy work is supported by focused shared-host and lifecycle tests, but the wrapper closes its effect driver before knowing whether host unmount succeeded. A reentrant unmount during completion validation returns false while leaving the runtime mounted; subsequent Go effects then fail because the driver is closed. The independent review preserved a compiled-fixture reproduction and excludes the separate R-EFFECT-SLICE gate.",
+  "evidence": {
+    "report_sha256": "f22fa381aba2e0d53bb6302fdd88a56e830c48f277576b121cdc130e49e8e891",
+    "finding": {
+      "id": "XR-RUNTIME-UNMOUNT-REENTRY",
+      "severity": "behavioral",
+      "reproduction": "compiled-lifecycle/coordination/reviews/xr-runtime/unmount-reentry-repro.json",
+      "reproduction_sha256": "7a13946b98a78ef9e1e557ffe93465e0b93d66a085a5b22a33f2f4e6fbb1d0c273",
+      "observed": "The first request succeeds. A completion ownKeys trap calls wrapper unmount and receives false. The completion is fenced after cancellation, runtime.isUnmounted remains false, and a later child request fails with lifecycle effect driver is closed."
+    },
+    "verification": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "source_hash_at_run": "b9bad9be557e102fd05a1028d0f91072bc184487689824b5bc40c5ebcaebf684",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reviews/xr-runtime/current-core-29-latest.log",
+        "log_sha256": "2c9b7a3105720d625474358e3eb0171307ce22474e47130c7ac51d9261edfb86"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test --test-name-pattern='closed lifecycle policy|manual effect driver|host unmount retires' compiled-lifecycle/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "shared_runtime_source_hash_at_run": "56aac386b40bcc6372f7ac73f835defa8262f802ce2466e5ff07289d6ed30199",
+        "lifecycle_wrapper_source_hash": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+        "passed": 3,
+        "failed": 0,
+        "skipped": 4,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reviews/xr-runtime/current-lifecycle-original-scope-3.log",
+        "log_sha256": "4e1d4d15a4affc85781e3747c4a3657c3a309618db770cc232c39adf9a2da621"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "status": "interim bridge run, superseded by separate R-EFFECT-SLICE author report",
+        "passed": 3,
+        "failed": 4,
+        "exit_code": 1,
+        "log": "compiled-lifecycle/coordination/reviews/xr-runtime/current-lifecycle-7.log",
+        "log_sha256": "e84ad9497c40b7271b28ae7960fbab108beb1cf22405ce1b51c8491e621ea2a5"
+      }
+    ],
+    "author_packet": {
+      "report": "compiled-lifecycle/coordination/reports/E-RUNTIME.md",
+      "report_sha256": "815da2f7a05b26444e78d5cbcd20aed6742880978886d9620e3e21b22350cd7d",
+      "receipt_sha256": "e048823da7c214350acacc2439fdb2ea470818d5445a3e55b0553cce3ab75e9a",
+      "recorded_tests": "29 shared-host tests and 3 lifecycle tests passed"
+    },
+    "historical_source_hashes_recorded_by_author": {
+      "compiled-frontend/frontend/runtime/runtime.mjs": "4856f0a425c5893928c7708c21c39143e8a86afac115c6a979d1ab068f55a995",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+      "compiled-lifecycle/runtime/runtime.mjs": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "91766c382f4147150804781c3ce9dd554eb2ae0d1c38ac67e5e62773ef47781e"
+    },
+    "historical_source_availability": "The exact historical shared-host runtime and lifecycle test bytes are unavailable in the workspace. The shared-host runtime now includes the separate effect-slice bridge; the lifecycle wrapper hash is unchanged from the author packet.",
+    "source_hashes_at_review_close": {
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+      "compiled-lifecycle/runtime/runtime.mjs": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "3c6f5c9d8631a9e1e557ffe93465e0b93d66a085a5b22a33f2f4e6fbb1d0c273"
+    },
+    "separate_gate": {
+      "name": "R-EFFECT-SLICE",
+      "reviewed_or_accepted_here": false,
+      "runtime_author_report": "The author supplied hash 42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0 and reported 7/7 lifecycle plus 29/29 shared-host tests passing. The author is recording that gate separately."
+    }
+  }
+}

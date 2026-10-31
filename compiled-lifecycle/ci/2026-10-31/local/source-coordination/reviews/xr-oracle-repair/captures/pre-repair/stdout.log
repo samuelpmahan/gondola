@@ -1,0 +1,238 @@
+TAP version 13
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: literal lifecycle timeline covers the initial state and every Go event around one renderer swap
+not ok 1 - literal lifecycle timeline covers the initial state and every Go event around one renderer swap
+  ---
+  duration_ms: 6.274677
+  type: 'test'
+  location: '/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/coordination/reviews/xr-oracle-repair/pre-repair-mirror/compiled-lifecycle/browser/lifecycle-oracle.test.mjs:39:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        {
+    +     afterEvent: 4,
+    +     effects: [
+    +       {
+    +         arg: 'parent:g1:r1',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   },
+    +   {
+    +     afterEvent: 5,
+    +     effects: [
+    +       {
+    +         arg: 'child:g1:r2',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   },
+    +   {
+    +     afterEvent: 6,
+    +     effects: [
+    +       {
+    +         arg: 'grandchild:g1:r3',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   },
+    +   {
+    +     afterEvent: 7,
+    +     effects: [
+    +       {
+    +         arg: 'sibling:g1:r4',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   },
+    +   {
+          afterEvent: 9,
+          effects: [
+            {
+              arg: 'grandchild:g1:r3',
+              kind: 'lifecycle.cancel',
+    ...
+        },
+    +   {
+    +     afterEvent: 19,
+    +     effects: [
+    +       {
+    +         arg: 'parent:g2:r5',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   },
+    +   {
+    +     afterEvent: 20,
+    +     effects: [
+    +       {
+    +         arg: 'child:g2:r6',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   },
+    +   {
+    +     afterEvent: 21,
+    +     effects: [
+    +       {
+    +         arg: 'grandchild:g2:r7',
+    +         kind: 'fixture.request',
+    +         name: 'lookup',
+    +         reply: 'complete'
+    +       }
+    +     ]
+    +   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      afterEvent: 9
+      effects:
+        0:
+          kind: 'lifecycle.cancel'
+          name: 'cancel'
+          arg: 'grandchild:g1:r3'
+          reply: ''
+        1:
+          kind: 'lifecycle.cancel'
+          name: 'cancel'
+          arg: 'child:g1:r2'
+          reply: ''
+        2:
+          kind: 'lifecycle.cancel'
+          name: 'cancel'
+          arg: 'parent:g1:r1'
+          reply: ''
+  actual:
+    0:
+      afterEvent: 4
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'parent:g1:r1'
+          reply: 'complete'
+    1:
+      afterEvent: 5
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'child:g1:r2'
+          reply: 'complete'
+    2:
+      afterEvent: 6
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'grandchild:g1:r3'
+          reply: 'complete'
+    3:
+      afterEvent: 7
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'sibling:g1:r4'
+          reply: 'complete'
+    4:
+      afterEvent: 9
+      effects:
+        0:
+          kind: 'lifecycle.cancel'
+          name: 'cancel'
+          arg: 'grandchild:g1:r3'
+          reply: ''
+        1:
+          kind: 'lifecycle.cancel'
+          name: 'cancel'
+          arg: 'child:g1:r2'
+          reply: ''
+        2:
+          kind: 'lifecycle.cancel'
+          name: 'cancel'
+          arg: 'parent:g1:r1'
+          reply: ''
+    5:
+      afterEvent: 19
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'parent:g2:r5'
+          reply: 'complete'
+    6:
+      afterEvent: 20
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'child:g2:r6'
+          reply: 'complete'
+    7:
+      afterEvent: 21
+      effects:
+        0:
+          kind: 'fixture.request'
+          name: 'lookup'
+          arg: 'grandchild:g2:r7'
+          reply: 'complete'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/39a56936f173/gondola/compiled-lifecycle/coordination/reviews/xr-oracle-repair/pre-repair-mirror/compiled-lifecycle/browser/lifecycle-oracle.test.mjs:60:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: hand-authored state table records removal, remount generation, old replies and sibling survival
+ok 2 - hand-authored state table records removal, remount generation, old replies and sibling survival
+  ---
+  duration_ms: 1.00134
+  type: 'test'
+  ...
+# Subtest: message and effect expectations bind request tokens and child-first cancellation order
+ok 3 - message and effect expectations bind request tokens and child-first cancellation order
+  ---
+  duration_ms: 0.224188
+  type: 'test'
+  ...
+# Subtest: raw outerHTML and live controls match the frozen view at pending, removed, and remounted states
+ok 4 - raw outerHTML and live controls match the frozen view at pending, removed, and remounted states
+  ---
+  duration_ms: 2.825489
+  type: 'test'
+  ...
+# Subtest: mutation controls detect reordered cancellation and an incorrectly accepted old generation reply
+ok 5 - mutation controls detect reordered cancellation and an incorrectly accepted old generation reply
+  ---
+  duration_ms: 2.409853
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 4
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 96.808094

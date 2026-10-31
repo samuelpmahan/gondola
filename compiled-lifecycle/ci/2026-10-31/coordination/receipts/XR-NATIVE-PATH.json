@@ -1,0 +1,91 @@
+{
+  "schema": "gobi.compiled-lifecycle-native-path-review/v1",
+  "job_id": "XR-NATIVE-PATH",
+  "worker": "N5",
+  "decision": "accepted",
+  "outcome": "confirmed_reuse",
+  "status": "accepted",
+  "summary": "Independently verified the frozen native executable resolver repair. The four targeted subprocess tests passed, including bare PATH lookup, absolute and relative paths, cross-CWD resolution, and the GOBI_GO_BIN default. A fresh conformance run against the final React/DOM builds matched 26 ticks, 17 renderer swaps, and all eight mutation controls. Source/build pins and the complete 719-member attempt archive were verified. The earlier hosted run remains failed; this is local lifecycle-only evidence, not hosted full-CI acceptance.",
+  "summary_sha256": "f6f97f881f1cca012cb1a2027862f73d77f0638896c572f9fe3882b56feeb2a4",
+  "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/XR-NATIVE-PATH.md",
+  "report_sha256": "234eee3a2dad7b7070b723c0188b7f72310a9187cfc1da8aa00d4c596a3496cb",
+  "audit": "compiled-lifecycle/ci/2026-10-31/lanes/review-native-path/audit.json",
+  "audit_sha256": "a96d95abbb8b5e3b088ecd6b48ede07a63b788003b26c7a58215aefd39afaefe",
+  "audit_script": "compiled-lifecycle/ci/2026-10-31/lanes/review-native-path/audit_native_path.py",
+  "audit_script_sha256": "11276ce197cd5813061ebce7dca1968993d1325a145b5084429a9291ec5d930f",
+  "source_head": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+  "author_packet": {
+    "report_sha256": "734f1b10f5957ddb047e38b2a194d8eda1e55ae207d6415e275bcaea2f2ef3eb",
+    "receipt_sha256": "93246f5b6cf12d9681bcc26fb0419553ed14069b426646464aa2545d30fc2b3a",
+    "copied_evidence_entries_verified": 34
+  },
+  "red_reproduction": {
+    "test_count": 3,
+    "passed": 1,
+    "failed": 2,
+    "bare_go_resolved_to": "/workspace/scratch/39a56936f173/gondola/go",
+    "native_error": "spawnSync /workspace/scratch/39a56936f173/gondola/go ENOENT",
+    "final_conformance_check": "withheld"
+  },
+  "independent_targeted_tests": {
+    "command": "node --test compiled-lifecycle/conformance/native-path.test.mjs",
+    "node": "v22.23.4",
+    "go": "go1.24.0 linux/amd64",
+    "npm": "11.9.0",
+    "exit_code": 0,
+    "passed": 4,
+    "failed": 0,
+    "stdout_sha256": "5b2c2dcac77a3d4c9239f87f1226b3b88a090170ec872f952f03cfe5e74ba7f7"
+  },
+  "independent_matrix": {
+    "status": "matched",
+    "native_argument": "go",
+    "native_command": [
+      "go",
+      "run",
+      "./cmd/compiled-lifecycle-native",
+      "--script",
+      "/workspace/scratch/39a56936f173/gondola/fixtures/compiled/lifecycle/scenario.json"
+    ],
+    "native_stderr": "",
+    "ticks": 26,
+    "renderer_swaps": 17,
+    "mutation_controls_detected": 8,
+    "source_pin_count": 179,
+    "source_pins_stable": true,
+    "final_build_outputs_checked": 8,
+    "build_outputs_stable": true,
+    "check_sha256": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a",
+    "run_sha256": "ccaf13af2402b0525f980dfb9ab3ad3e70726c368ffe66789f153ac03228280d"
+  },
+  "lifecycle_only_attempt": {
+    "path": "compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z",
+    "status": "passed",
+    "stages_passed": 13,
+    "source_pin_count": 123,
+    "react_outputs": 67,
+    "dom_outputs": 67,
+    "ticks": 26,
+    "renderer_swaps": 17,
+    "mutation_controls_detected": 8,
+    "demo_checks": 12
+  },
+  "attempt_archive": {
+    "path": "/workspace/scratch/39a56936f173/gondola/compiled-lifecycle/builds/attempts/attempt-20261031T073203120Z/lifecycle-artifacts.tar.gz",
+    "bytes": 14757771,
+    "sha256": "f6c5d09ad0f15b9590e02aedf6ab53b2fc85b2d9e9f00647630708f1364dd9bf",
+    "manifest_sha256": "27e0ade2164813d3fba831cc44f19b9f9bf56ef862ee68d8f6942dd0e7064c46",
+    "regular_members": 719,
+    "uncompressed_bytes": 168200217,
+    "all_manifest_hashes_verified": true
+  },
+  "initial_postfix_attempt": {
+    "status": "failed",
+    "error": "spawnSync npm ENOENT",
+    "acceptance": "not counted as a pass"
+  },
+  "hosted_ci": {
+    "prior_primary_conclusion": "failure",
+    "full_ci_acceptance": false
+  }
+}

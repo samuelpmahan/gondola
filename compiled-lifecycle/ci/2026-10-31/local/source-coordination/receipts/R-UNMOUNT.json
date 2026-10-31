@@ -1,0 +1,53 @@
+{
+  "job_id": "R-UNMOUNT",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Fixed lifecycle wrapper unmount ordering so a core-refused completion-time reentrant unmount no longer retires the effect driver or cancels pending callbacks. Immediate core disposal retires effects synchronously; deferred core disposal is detected after the active admission unwinds through a coalesced microtask. Added actual compiled-fixture regressions for rejected and deferred unmount, subsequent request/reply delivery, and callback release.",
+  "evidence": {
+    "report_sha256": "0b41c537f602df408c31faffaf83fc5b18c72d083849d7498789efa5258527e6",
+    "toolchain": "Node v22.23.4",
+    "focused_tests": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola",
+        "passed": 9,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reports/R-UNMOUNT.lifecycle-9.log",
+        "log_sha256": "0f42685dbf5200db376b3bde6b3f51b827840fabd41f9efc36d9f11cb3742777",
+        "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "working_directory": "/workspace/scratch/39a56936f173/gondola",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reports/R-UNMOUNT.shared-runtime-29.log",
+        "log_sha256": "fd1793f023c23f71d82ef3b6ed7c6c38af91b0effbcb1affa9d1255d90869798",
+        "warning": "Node emitted the existing experimental EnvHttpProxyAgent warning."
+      }
+    ],
+    "pre_fix_regression": {
+      "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test --test-name-pattern='rejected completion-time unmount' compiled-lifecycle/runtime/runtime.test.mjs",
+      "exit_code": 1,
+      "failure": "Expected the pending parent request to remain, but the old wrapper had retired it before core refused the nested unmount."
+    },
+    "sha256": {
+      "compiled-lifecycle/runtime/runtime.mjs": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29",
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+      "compiled-lifecycle/coordination/reviews/xr-runtime/unmount-reentry-repro.json": "7a13946b98a78ef9ec34102fa8141e279f9c541d31c5fa84f2cf8865409301d6"
+    },
+    "coverage": [
+      "Completion Proxy ownKeys reentry receives false from runtime.unmount and leaves state, trace, pending correlations, and callbacks unchanged.",
+      "A later Go request and both the pre-existing and new request completions are accepted after the refused unmount.",
+      "A core-deferred unmount retires the request callback after the current dispatch and core deferred queue finish.",
+      "A direct accepted unmount continues to retire outstanding effect correlations."
+    ]
+  },
+  "limits": [
+    "The cross-profile React/DOM browser matrix must be rerun against the final frozen lifecycle wrapper source.",
+    "No shared compiled runtime source was changed; the core file hash is preserved from the accepted R-EFFECT-SLICE packet."
+  ]
+}

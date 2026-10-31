@@ -1,0 +1,46 @@
+{
+  "schema": "gobi.compiled-lifecycle-ci-go-review/v1",
+  "job_id": "E-CI-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "status": "reviewed",
+  "decision": "mixed_change",
+  "summary": "The primary 49cc artifact proves the targeted Go/native adapter, React/DOM build, typed effect and GoSlice bridge, direct-module replay, browser profiles, and HTTP demo checks passed. The overall conformance attempt failed because its native Go subprocess resolved bare 'go' to a nonexistent checkout/go path; the final cross-runtime check was withheld, so complete hosted lifecycle CI acceptance is not established.",
+  "summary_sha256": "a888c03164ce59d39500da934f2397277158cd9f8b56e02968d0e16b689f111b",
+  "report": "compiled-lifecycle/coordination/reports/E-CI-GO.md",
+  "report_sha256": "9fc1129f38c92b4716983b1f593d43ce07eb8d17a22191ced18be00a84ff8eda",
+  "audit": "compiled-lifecycle/ci/2026-10-31/lanes/go/audit.json",
+  "audit_sha256": "aaaa74b18e8df8b0beb2dc2b216f0b875538cee9687166ba8373732f8c52d1fc",
+  "artifact": {
+    "id": "13034915662",
+    "workflow_run_id": "41178420647",
+    "head_sha": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "tree_sha": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "bytes": 47035803,
+    "sha256": "6fa057edf26af20b3e6ef805458c92033e2e626d625f44a88bffcc04781762c4"
+  },
+  "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T065420569Z",
+  "reviewScope": [
+    "source and build pin binding to published 49cc",
+    "typed native/direct Go state and lifecycle effects",
+    "GoScript AppIR package, component, symbol, and type bindings",
+    "uint64 encoding and generation/request guards",
+    "signature-typed GoSlice effect bridge and malformed input checks",
+    "hosted conformance pass/failure boundary"
+  ],
+  "findings": {
+    "sourcePins": "122 before and 122 after; all independently matched current 49cc files",
+    "reactDomBuilds": "both passed with zero diagnostics; 67 output pins per backend before and after matched",
+    "goTests": "lifecycle fixture/native adapter and compiler Go tests passed",
+    "nativeReplay": "standalone native adapter probe passed 26 steps; seven requests and three child-first cancels",
+    "runtimeBridge": "compiled lifecycle runtime tests passed 10/10 including GoSlice acceptance and malformed wrapper/field rejection",
+    "directAndBrowser": "26-step direct module replay and React/DOM/swap profiles completed",
+    "conformance": "rejected at native Go subprocess spawn; final checker withheld"
+  },
+  "blockingFailure": {
+    "stage": "native-go-script-cli-replay",
+    "error": "spawnSync /home/runner/work/gondola/gondola/go ENOENT",
+    "cause": "--native-go go was resolved as a checkout-relative path, not a PATH executable"
+  },
+  "claimLimit": "No complete hosted lifecycle CI or final native/direct/browser conformance pass is claimed."
+}

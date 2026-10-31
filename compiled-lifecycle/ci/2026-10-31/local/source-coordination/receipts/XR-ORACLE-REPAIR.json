@@ -1,0 +1,91 @@
+{
+  "job_id": "XR-ORACLE-REPAIR",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Independently accepted R-ORACLE. A fresh isolated replay of the preserved original oracle test against the exact final scenario reproduces the expectedEffects mismatch (4 passed, 1 failed); the retained repair changes only that literal assertion block. The current focused suite passes 5/5 and combined conformance suites pass 9/9. The independent attempt-05 audit verifies the retained physical DOM comparisons for 27 snapshots in each of React, DOM, and swap profiles, while keeping that prior capture separate from a fresh E-BUILD matrix.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/XR-ORACLE-REPAIR.md",
+    "report_sha256": "0f9bddf406db1ecbf0ee17840db3c9b116a0c007c6731b7a50d6fac6920a12dc",
+    "author_packet": {
+      "job_id": "R-ORACLE",
+      "worker": "N4",
+      "report_sha256": "8853401cc5311312e78a702db73b6f4b44b4d6ac1456f4020a5c6c9821a870b6",
+      "receipt_sha256": "ed4ff120f8afedefee089864a3f3d859d6a0120b141b58fe0ffdee8249d641aa",
+      "outcome": "mixed_change"
+    },
+    "toolchain": "Node v22.23.4 at /tmp/gondola-node22/node_modules/node/bin/node",
+    "seed": "none; fixed deterministic scenario",
+    "source_pins_manifest": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/source-pins.json",
+    "source_pins_manifest_sha256": "4853d4fa5d0d562fbc308e9f160c013fbb2b587668792dda9ce72b346ff8235f",
+    "before_reproduction": {
+      "purpose": "Reproduced the preserved original test using the exact final pinned scenario without modifying the frozen product sources.",
+      "runner": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/run-capture.mjs",
+      "runner_sha256": "f450745bf8ee3e861e0ce7d9fac7960865b03e6678b0877c9501bbacf105b21f",
+      "command_record": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/pre-repair/command.json",
+      "command_record_sha256": "b5710340e057b0df16e5d612b3987c90d318dee0a4dab6dceb49694a1ce7f175",
+      "child_command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-lifecycle/coordination/reviews/xr-oracle-repair/pre-repair-mirror/compiled-lifecycle/browser/lifecycle-oracle.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola",
+      "exit_code": 1,
+      "passed": 4,
+      "failed": 1,
+      "failure": "Original fixture.expectedEffects literal contains only the afterEvent 9 cancellation row, but the exact scenario has eight effect rows.",
+      "retained_stdout": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/pre-repair/stdout.log",
+      "stdout_sha256": "735e21d7df3618ee6d0ad5e7ec1bb1ad416bb20f0a61b61d303e37d3149a453b",
+      "retained_stderr": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/pre-repair/stderr.log",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666",
+      "exit_code_file": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/pre-repair/exit-code.txt",
+      "exit_code_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "mirror_source_hashes": {
+        "oracle_module": "795ba7fef0ff680019f4988aba5cfcecb25b205516a2c7058bfc720fc217cb82",
+        "original_test": "18c88acd3e9028af30b1f737599ae537fc1354ea65f37037e5c9f89281ebae6d",
+        "exact_scenario": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+        "compare_dependency": "29426a90c823c55a07c5302255f7f0567823459eb9a54833134e02f6ff8d12cc"
+      }
+    },
+    "repair_review": {
+      "current_oracle_module_sha256": "795ba7fef0ff680019f4988aba5cfcecb25b205516a2c7058bfc720fc217cb82",
+      "current_test_sha256": "6a48d1d46addfa07d4792c3bf71d842c7ea6159eb69c5010b00e540df970daf1",
+      "scenario_sha256": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+      "review_finding": "Diff from preserved before test changes only the expectedEffects assertion. State, tree, DOM, effect, reply, and mutation expectations remain unchanged. E-ORACLE report/receipt and the oracle module are byte-identical to preserved copies."
+    },
+    "focused_final": {
+      "command_record": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/focused-final/command.json",
+      "command_record_sha256": "7732724d694a6fb0770cb7a8970699244ce36c533df86f3b5f9e962c11293a2c",
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "stdout": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/focused-final/stdout.log",
+      "stdout_sha256": "41237e466ac34096ed52e274b65742929d86cceb5a83283a4abeb628c0f5ea66",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666"
+    },
+    "combined_final": {
+      "command_record": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/combined-final/command.json",
+      "command_record_sha256": "ebfcae38763ed6fde4eae6fc49eed3853ae24a64baa31de24dc0af184f639871",
+      "exit_code": 0,
+      "passed": 9,
+      "failed": 0,
+      "stdout": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/captures/combined-final/stdout.log",
+      "stdout_sha256": "7b829e8ffc7ac07e7fae9864ce54dc2543b997c88432caef4bb6b0e6dbe84c78",
+      "stderr_sha256": "4a8a4aa028bd629215455e068f1f1bc675b0fe00d3ce9ce98b3400b3d9ea6666"
+    },
+    "attempt_05_audit": {
+      "audit_script": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/audit-attempt05.mjs",
+      "audit_script_sha256": "547fe421c1b6005a24d5b0da9233f30caad5d4b3c8a9059ca17434ef9c652edc",
+      "audit_result": "compiled-lifecycle/coordination/reviews/xr-oracle-repair/attempt05-audit.json",
+      "audit_result_sha256": "0fd9fc5572b642d100bf3a870653190271a1b1ade89380172316b0867b532ecc",
+      "run_sha256": "e4ea41b9bb24317e97ed29b406e7797a5c4b1026934d8092ee6b8a053851c106",
+      "manifest_sha256": "5c4748f510fa9a69234d824aa619e80e6d32b94ed93a7c7f6a4d3215d61292f1",
+      "check_sha256": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a",
+      "browser_sha256": "78886a28fc0ac6e519a21b4765167aabea6d394bf539e05b725bb2a1aabe4763",
+      "result": "matched and source-stable through check; physical and renderer DOM matched literal expectedDOM at every one of 27 snapshots in each of React, DOM, and swap profiles; no profile page errors",
+      "run_test_pin": "18c88acd3e9028af30b1f737599ae537fc1354ea65f37037e5c9f89281ebae6d",
+      "oracle_unit_suite_executed": false,
+      "fresh_e_build_matrix_run": false
+    },
+    "limits": [
+      "No fixture, oracle, scenario, runtime, renderer, or conformance source was edited by this reviewer.",
+      "Attempt-05 is retained prior physical integration evidence and does not replace a fresh E-BUILD matrix on the final test pin.",
+      "No Git, native, merge, deploy, or publication action was performed."
+    ]
+  }
+}

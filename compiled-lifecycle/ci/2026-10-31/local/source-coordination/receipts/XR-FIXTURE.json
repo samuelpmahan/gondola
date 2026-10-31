@@ -1,0 +1,110 @@
+{
+  "job_id": "XR-FIXTURE",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independently reviewed and accepted the bounded value-owned Go lifecycle fixture, native replay, and React/DOM compiler output. Active cancellation code uses ordinary append in Grandchild/Child/Parent order; tests cover all eight pending masks, sibling preservation, stale/duplicate replies, reordered requests, three generations, and existing counter reuse. Independent audits verified all four request-ID guards, every subtree generation guard, typed uint64 AppIR fields, and every emitted output file hash. This acceptance does not include mounted browser effect delivery or generic Manager compilation.",
+  "evidence": {
+    "report": "compiled-lifecycle/coordination/reports/XR-FIXTURE.md",
+    "report_sha256": "53dd18eaee54b1c4674e55ca06f59f7220e7bb9b1ed4963e2042c4a124dbdab8",
+    "author_packet": {
+      "job_id": "E-FIXTURE",
+      "worker": "N1",
+      "report_sha256": "c06e2380d2e3e63b8d3cc62da93825bc1dbeccced34d117606586ce274e4c8c9",
+      "receipt_sha256": "47fe1258a3fc84c5206d7e2782bca701d97364afc25d2c7e9b5c6e53e49678ad",
+      "source_hashes_match_author_packet": true
+    },
+    "toolchains": {
+      "root_go": "go1.24.0 linux/amd64",
+      "goscript_cli_go": "go1.27.3 linux/amd64",
+      "node_auditors": "v22.23.4",
+      "seed": "none; fixed deterministic scenario"
+    },
+    "checks": [
+      {
+        "name": "Go fixture and native adapter tests",
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go test -count=1 ./fixtures/compiled/lifecycle ./cmd/compiled-lifecycle-native",
+        "exit_code": 0,
+        "result": "both packages passed",
+        "log": "compiled-lifecycle/coordination/reviews/xr-fixture/go-test.log",
+        "log_sha256": "1f71e88f813e3bc5e6cee75e42afd655613ac2168ca40b4ebf6556a64d1d15aa"
+      },
+      {
+        "name": "Native fixture replay",
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/compiled-lifecycle-native --script fixtures/compiled/lifecycle/scenario.json",
+        "exit_code": 0,
+        "result": "26 steps; full package-path component ID; event 9 cancellation order Grandchild/Child/Parent; final NextRequestID 7",
+        "output": "compiled-lifecycle/coordination/reviews/xr-fixture/native-output.json",
+        "output_sha256": "ae38bab913056033f299d40441503ed7d18dae962e46f8273b36495317022f55"
+      },
+      {
+        "name": "Independent native trace audit",
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/reviews/xr-fixture/audit-native.mjs compiled-lifecycle/coordination/reviews/xr-fixture/native-output.json",
+        "exit_code": 0,
+        "result": "all 26 steps match literal identity, message, effect, full state, Gobi tree, swap-preservation, and reply-outcome expectations",
+        "auditor_sha256": "264139bf68faa4602a5133def7a37077fb65d4cd69d760b31f2f1e1ed9e3db59",
+        "log": "compiled-lifecycle/coordination/reviews/xr-fixture/native-oracle-audit.log",
+        "log_sha256": "cc9df364fa19e35c3993de98da1bb75a44fc3f9797d8aacdb05ccbb5f4f3bb30"
+      },
+      {
+        "name": "Request/generation exhaustion audit",
+        "command": "PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run compiled-lifecycle/coordination/reviews/xr-fixture/guard-audit.go",
+        "exit_code": 0,
+        "result": "all four request roles admit the last safe ID and block at the limit; each Parent/Child/Grandchild generation guard blocks at max and permits only the final safe generation",
+        "auditor_sha256": "59dbf538068bb42d9e20b89a1239171d8d04ec7eb87a76d5584b5ada4ddfce3b",
+        "log": "compiled-lifecycle/coordination/reviews/xr-fixture/guard-audit.log",
+        "log_sha256": "4dc36e2dfa219d0741f75465d9b717d8b112f20e11f34aa11ca0ea8ae5e65701"
+      },
+      {
+        "name": "GoScript React CLI build",
+        "command": "From compiled-frontend/: PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-lifecycle/coordination/reviews/xr-fixture/cli-react/request.json > ../compiled-lifecycle/coordination/reviews/xr-fixture/cli-react/result.json",
+        "exit_code": 0,
+        "result": "ok:true; 67 output files; zero diagnostics; package-path component ID; effect.request-reply capability",
+        "request_sha256": "a9734d4c421bd2f2b7a9d7c264374b09ccfd92562277a1c9d7b97298d1fe37fe",
+        "result_sha256": "7d8f4d5486c89f3331ec7db64cb829310cc297345d57c89da9f2766c1bff7bad"
+      },
+      {
+        "name": "GoScript DOM CLI build",
+        "command": "From compiled-frontend/: PATH=/tmp/gondola-go/bin:$PATH GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/bin/go run ./cmd/gobi-build < ../compiled-lifecycle/coordination/reviews/xr-fixture/cli-dom/request.json > ../compiled-lifecycle/coordination/reviews/xr-fixture/cli-dom/result.json",
+        "exit_code": 0,
+        "result": "ok:true; 67 output files; zero diagnostics; package-path component ID; effect.request-reply capability",
+        "request_sha256": "df5103553ca575bf9188e37b00e4fbc4f93794594d362c258c1ba970fa107ea9",
+        "result_sha256": "b1779af52b7e86c6db1b616c0872b71581ad32935dfa34e51cc5469a7906bcd3"
+      },
+      {
+        "name": "CLI output hash and typed-AppIR audit",
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH /tmp/gondola-node22/node_modules/node/bin/node compiled-lifecycle/coordination/reviews/xr-fixture/audit-builds.mjs",
+        "exit_code": 0,
+        "result": "all 134 emitted files match recorded byte lengths and SHA-256; React/DOM AppIR is identical; uint64 fields compile as bigint",
+        "auditor_sha256": "9ceb6360c4c0105772afa4d4216c74aa70cff91f4ed30bcba2ddfbcf4c583d78",
+        "audit": "compiled-lifecycle/coordination/reviews/xr-fixture/build-audit.json",
+        "audit_sha256": "40c874848852f775d33f7f910d2ebd93bf80a734827eb52329018a3890951614"
+      }
+    ],
+    "source_hashes_at_review_close": {
+      "fixtures/compiled/lifecycle/app.go": "6b61e55c3046f58873d2774e38a7bca44769f18f6870c39e1885b78be340fe41",
+      "fixtures/compiled/lifecycle/view.go": "afc4b1611c5dbd8e5264d3c124b808770bdd8579fdc1426c350f4df6689bb948",
+      "fixtures/compiled/lifecycle/app_test.go": "5b67112d79f258895b2fffa82b209021581f982f6a5529f6856763ba02986442",
+      "fixtures/compiled/lifecycle/scenario.json": "45f3f402681f8f685af043debaa572d09f9c34f7017ae3bb7a31903b46fa0650",
+      "fixtures/compiled/lifecycle/dense-cancellation-experiment.go.txt": "759744b94938fd3499005473bbae93e98daedba9cd52328ec6ff53a36aea8962",
+      "cmd/compiled-lifecycle-native/main.go": "37d7d709599a5b402f792cd5e9e66118f0ec296984ed3fb11ad2626bb6c23bf3",
+      "cmd/compiled-lifecycle-native/main_test.go": "dd6ce451f96390d245768d5a67a6a1844c3609d0c0bdc7dfe5ac9040301f775a",
+      "compiled-lifecycle/CONTRACT.md": "ed9eedea8f9582583d1f89e44be20e55f692f037f2b8decc93025433e478e083",
+      "compiled-lifecycle/FIXTURE.md": "44a0c2d3d2f3e6e85dec3106e6eabdfbe2bd4e4e96c16f45bfdb8635779bb6b7"
+    },
+    "separate_gate": {
+      "name": "mounted browser and GoScript effect-slice delivery",
+      "included_in_this_decision": false,
+      "reason": "Fixture/native/compiler evidence does not establish mounted effect delivery; the runtime's GoScript slice encoding is separately owned by N2/N3/N5."
+    },
+    "separate_oracle_issue": {
+      "job_id": "R-ORACLE",
+      "included_in_this_decision": false,
+      "reason": "The frozen E-ORACLE test still asserts only the cancellation row although the current fixture scenario has seven request rows plus cancellation. I preserved the original oracle packet and report hashes as directed; the native trace auditor itself passed against its literal step table."
+    },
+    "limits": [
+      "The fixture is four fixed value-owned slots and does not prove a generic or pointer-based lifecycle Manager compiler.",
+      "Successful React/DOM GoScript builds and native replay do not establish mounted browser lifecycle or effect-delivery behavior.",
+      "No source, Git, or shared-state changes were made; no merge, deployment, or publication was performed."
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+// Export the main reflect functions organized like Go stdlib
+export {
+  TypeOf,
+  TypeFor,
+  TypeAssert,
+  ValueOf,
+  Value,
+  Kind_String,
+  ArrayOf,
+  SliceOf,
+  PointerTo,
+  PtrTo,
+  MapOf,
+  ChanOf,
+  FuncOf,
+  MakeFunc,
+  StructOf,
+  ChanDir_String,
+  RecvDir,
+  SendDir,
+  BothDir,
+  getInterfaceTypeByName,
+  getInterfaceLiteralTypeByName,
+} from './type.js'
+export type { Type, ChanDir, Kind } from './type.js'
+export { DeepEqual } from './deepequal.js'
+export {
+  Zero,
+  Copy,
+  Indirect,
+  New,
+  NewAt,
+  SliceAt,
+  MakeSlice,
+  MakeMap,
+  MakeMapWithSize,
+  Append,
+  AppendSlice,
+  MakeChan,
+  Select,
+} from './value.js'
+export { Swapper } from './swapper.js'
+export { MapIter } from './map.js'
+export { VisibleFields } from './visiblefields.js'
+
+// Export new types and constants
+export type { StructTag } from './types.js'
+export {
+  StructTag_Get,
+  StructTag_Lookup,
+  StructField,
+  ValueError,
+  Method,
+  SelectSend,
+  SelectRecv,
+  SelectDefault,
+  SelectCase,
+  SliceHeader,
+  StringHeader,
+  bitVector,
+} from './types.js'
+export type { uintptr, SelectDir } from './types.js'
+
+// Export kind constants
+export {
+  Invalid,
+  Bool,
+  Int,
+  Int8,
+  Int16,
+  Int32,
+  Int64,
+  Uint,
+  Uint8,
+  Uint16,
+  Uint32,
+  Uint64,
+  Uintptr,
+  Float32,
+  Float64,
+  Complex64,
+  Complex128,
+  Array,
+  Chan,
+  Func,
+  Interface,
+  Map,
+  Ptr,
+  Pointer,
+  Slice,
+  String,
+  Struct,
+  UnsafePointer,
+} from './type.js'

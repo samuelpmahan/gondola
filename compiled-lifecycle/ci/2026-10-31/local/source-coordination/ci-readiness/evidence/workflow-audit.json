@@ -1,0 +1,56 @@
+{
+  "schema": "gobi.compiled-lifecycle-ci-workflow-audit/v1",
+  "status": "passed",
+  "yamlParser": "PyYAML 6.0.3 BaseLoader",
+  "oldWorkflow": {
+    "path": "compiled-lifecycle/coordination/root-checks/workflow-before.yml.txt",
+    "bytes": 2017,
+    "sha256": "464789e75a245e40147d6200c11808ee2350efc8687b0300727cc2b62bbf2642",
+    "parseError": "while scanning a simple key\n  in \"<unicode string>\", line 48, column 11:\n              compiled-lifecycle/builds/feasib ... \n              ^\ncould not find expected ':'\n  in \"<unicode string>\", line 60, column 11:\n              if-no-files-found: warn\n              ^"
+  },
+  "currentWorkflow": {
+    "path": ".github/workflows/gobi-compiled-lifecycle.yml",
+    "bytes": 2019,
+    "sha256": "8c7382b44c764f8f51c8038150714d7b70c0896b3bf52359c1a848d17f99d1bd",
+    "parse": "passed",
+    "triggers": [
+      "push",
+      "pull_request"
+    ],
+    "runner": "ubuntu-latest",
+    "runCommand": "bash run-compiled-lifecycle.sh",
+    "artifactUploadIf": "always()",
+    "artifactPaths": [
+      "compiled-lifecycle/builds/attempts/**",
+      "compiled-lifecycle/builds/feasibility/**",
+      "compiled-lifecycle/coordination/reports/E-BUILD.md",
+      "compiled-lifecycle/coordination/receipts/E-BUILD.json",
+      "compiled-lifecycle/conformance/evidence/**",
+      "compiled-lifecycle/demo/evidence/**",
+      "compiled-methods/artifacts/attempts/**",
+      "compiled-methods/coordination/reports/E-DEMO.md",
+      "compiled-methods/coordination/receipts/E-DEMO.json",
+      "compiled-backends/artifacts/**",
+      "compiled-backends/coordination/reports/E-DEMO.md",
+      "compiled-backends/coordination/receipts/E-DEMO.json",
+      "compiled-frontend/artifacts/**"
+    ]
+  },
+  "runner": {
+    "path": "compiled-lifecycle/run.mjs",
+    "sha256": "ac79d5038946e9ff0f69a26acc992c132279bcce2dcba0469f1ea77a2e7826b5",
+    "defaultMode": "full",
+    "partialMode": "--lifecycle-only",
+    "postReactBuildCompiledTest": true,
+    "inheritedFullCommand": "bash run-compiled-methods.sh",
+    "sha256RuntimeTest": "a07ec74fe85995e7ac18fd0d03a789e3d722f3507b6a24b5d03f410bef58e59d",
+    "testAppDirectoryEnv": "GOBI_LIFECYCLE_APP_DIR",
+    "testRequiresExplicitAppDir": true,
+    "oldFeasibilityFallbackAbsent": true
+  },
+  "shellEntrypoint": {
+    "path": "run-compiled-lifecycle.sh",
+    "sha256": "81a45e018a53c437af4099199461def46a10f395b20eb0e7372342a5db32ed7b"
+  },
+  "oldYamlProof": "compiled-lifecycle/coordination/root-checks/workflow-portability.json"
+}

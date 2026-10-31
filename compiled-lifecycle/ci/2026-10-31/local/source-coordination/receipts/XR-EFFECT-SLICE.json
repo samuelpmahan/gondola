@@ -1,0 +1,88 @@
+{
+  "job_id": "XR-EFFECT-SLICE",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independent review accepted the signature-typed effect slice bridge. Declared Update effect slices use the AppIR result TypeID and generated encoder for both actual compiled Arrays and GoSlice append results. Exact typed Value checks, generated wrapper/struct validation, capability and policy gates, and the strict legacy Array path are preserved. A direct compiled Array probe and the source-pinned green suites support the decision. The separate lifecycle unmount repair is out of scope.",
+  "evidence": {
+    "report_sha256": "11e62eea310330f2ddb86dd59bd0d4720e44de84f94e8cb7a7f69614d18b4d8f",
+    "author_packet": {
+      "report": "compiled-lifecycle/coordination/reports/R-EFFECT-SLICE.md",
+      "report_sha256": "31b25605dd764a05f8f8fbe16e5a628b074e31a709c133c3f50a9d0172dc93dc",
+      "receipt_sha256": "2388b78136bdb306e5febb24dc043c7e61f5661f8495a5ba19f58e12b283e693"
+    },
+    "author_verification": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 7,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reports/R-EFFECT-SLICE.lifecycle-7.log",
+        "log_sha256": "c995c6f68b67c46476c64b5f47cee3e8eca5a45cc47b2b9bb9c82a88ed324597"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "toolchain": "Node v22.23.4",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reports/R-EFFECT-SLICE.shared-runtime-29.log",
+        "log_sha256": "714a47074e8f4127b0deeba8f0aa12b58869e95f926cece2bd027af36961fec6"
+      }
+    ],
+    "independent_verification": [
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-frontend/frontend/runtime/runtime.test.mjs",
+        "source_hash_at_run": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+        "test_source_hash_at_run": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+        "passed": 29,
+        "failed": 0,
+        "exit_code": 0,
+        "log": "compiled-lifecycle/coordination/reviews/xr-effect-slice/review-shared-runtime-29.log",
+        "log_sha256": "ea2e381ae9cd88ae64083e5d8ea51a451728d1d58e41921c5eb6625f67ea2cc6"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node --test compiled-lifecycle/runtime/runtime.test.mjs",
+        "shared_runtime_source_hash_at_run": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+        "lifecycle_wrapper_source_hash_at_run": "36e263da7447f1e8d658dc3233c30ccea06d6352d038a2c6f11b6417c2b9aa45",
+        "lifecycle_test_source_hash_at_run": "39f7ce792aedd1bc6e4e5ec9a2b0ec4f56e83c2e3e0dd6edb1fd18fdf4495f30",
+        "passed": 8,
+        "failed": 0,
+        "exit_code": 0,
+        "note": "One additional test is from the separate R-UNMOUNT repair that was in progress; this is supplemental and is not included in the R-EFFECT-SLICE acceptance scope.",
+        "log": "compiled-lifecycle/coordination/reviews/xr-effect-slice/review-lifecycle-current-8.log",
+        "log_sha256": "1e51e1b2d302269360b3ab66d7fc2d05640b6f2bf0457485b426610c84cbdeb7"
+      },
+      {
+        "command": "PATH=/tmp/gondola-node22/node_modules/node/bin:$PATH node compiled-lifecycle/coordination/reviews/xr-effect-slice/typed-array-probe.mjs",
+        "shared_runtime_source_hash": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+        "exit_code": 0,
+        "result": "The actual compiled Update request Array is sent to gobiEncodeState with the declared []gobi.Effect TypeID and is accepted.",
+        "script": "compiled-lifecycle/coordination/reviews/xr-effect-slice/typed-array-probe.mjs",
+        "script_sha256": "da9e2d216a3d5e582eff3d704b36be608bbfe43d8e765d023c26cd408d5af37e",
+        "output": "compiled-lifecycle/coordination/reviews/xr-effect-slice/typed-array-probe.json",
+        "output_sha256": "b4759d280945a5c3481b6cb9eb8935a52a9919da07a094bd0b376e2f5cf41f45"
+      }
+    ],
+    "source_hashes_in_r_effect_slice_author_packet": {
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+      "compiled-lifecycle/runtime/runtime.mjs": "c6fad592554dda059c45ecdb1db55ab62283783de1b1d76c0f320f44fbdf7166",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "3c6f5c9d8631a9e1e557ffe93465e0b93d66a085a5b22a33f2f4e6fbb1d0c273",
+      "compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/app-ir.json": "1e0389c7b0ee80119622ce99b8d2f9cc9c117d006ad358662eda5326048b3d23",
+      "compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/encoder.mjs": "521a73b7cdcbec19b764e8dea2936f466c2cd71550b06bae1d5110d3a503c4a4",
+      "compiled-lifecycle/builds/feasibility/final/react/output/apps/lifecycle-7e6575d90707/gobi-compiled.mjs": "1d1e8a0f5fe4d496780723a9ae4de4ca1047a9563e8d6ebd02151b4bd638bf8a"
+    },
+    "review_close_hashes": {
+      "compiled-frontend/frontend/runtime/runtime.mjs": "42da6087f01acf712aa810556b4ca768dd306e595e8aaf95425cd3d24bd643e0",
+      "compiled-frontend/frontend/runtime/runtime.test.mjs": "6ea9236b08d1bf624bc9f8a84d2bebd6cacfbc12c91749cabf97b8fc6a7bf7b1",
+      "compiled-lifecycle/runtime/runtime.mjs": "9c2a06521ec19be0f70415dcdcf6aa71b022b08daaf6f913e503cc197e2261ed",
+      "compiled-lifecycle/runtime/runtime.test.mjs": "71954753de22fdac4a14d28db44917f0d02860f3cedddbc17732b2218d4fff29"
+    },
+    "separate_gate": {
+      "name": "R-UNMOUNT",
+      "reviewed_or_accepted_here": false,
+      "note": "Lifecycle wrapper repair and its tests landed during this review; this receipt does not assess or accept that separate change."
+    }
+  }
+}

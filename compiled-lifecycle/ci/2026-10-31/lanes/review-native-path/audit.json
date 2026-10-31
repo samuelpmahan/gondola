@@ -1,0 +1,174 @@
+{
+  "schema": "gobi.compiled-lifecycle-native-path-review/v1",
+  "job_id": "XR-NATIVE-PATH",
+  "worker": "N5",
+  "decision": "accepted",
+  "outcome": "confirmed_reuse",
+  "source_head": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+  "review_scope": "native executable resolver repair and independent fresh lifecycle matrix against the final React/DOM builds",
+  "author_packet": {
+    "report_sha256": "734f1b10f5957ddb047e38b2a194d8eda1e55ae207d6415e275bcaea2f2ef3eb",
+    "receipt_sha256": "93246f5b6cf12d9681bcc26fb0419553ed14069b426646464aa2545d30fc2b3a",
+    "copy_custody_entries_verified": 34
+  },
+  "red_reproduction": {
+    "test_exit": 1,
+    "tests": 3,
+    "passed": 1,
+    "failed": 2,
+    "native_failure": "native Go lifecycle replay failed (exit spawn-error): spawnSync /workspace/scratch/39a56936f173/gondola/go ENOENT",
+    "full_check_withheld": true
+  },
+  "resolver_source": {
+    "path": "compiled-lifecycle/conformance/run.mjs",
+    "bytes": 6540,
+    "sha256": "1b1519883e9e9d7dbe7a2b4814af2f674477b413cf01df015dc778c3dd4c5623",
+    "default": "GOBI_GO_BIN ?? bare 'go'",
+    "bare_cli_name": "preserved for PATH",
+    "explicit_relative_path": "resolved against invoking CWD before child CWD switches to repository root",
+    "test_path": "compiled-lifecycle/conformance/native-path.test.mjs"
+  },
+  "n1_lifecycle_only": {
+    "status": "passed",
+    "mode": "lifecycle-only",
+    "stages_passed": 13,
+    "source_pin_count": 123,
+    "build_outputs": {
+      "react": {
+        "count": 67,
+        "sha256": "e06cbcb5a271cb2271b5525dcdec0edaf0f7bfb4401a2db8373b964dd3e1ef2e"
+      },
+      "dom": {
+        "count": 67,
+        "sha256": "1f9b7273c7b84d3db9ecce4fd05f77a755693ad5bd9e76ece2f563b1069348e5"
+      }
+    },
+    "conformance_status": "matched",
+    "ticks": 26,
+    "swaps": 17,
+    "mutations_detected": 8,
+    "demo_checks": 12,
+    "archive": {
+      "bytes": 14757771,
+      "sha256": "f6c5d09ad0f15b9590e02aedf6ab53b2fc85b2d9e9f00647630708f1364dd9bf",
+      "manifest_sha256": "27e0ade2164813d3fba831cc44f19b9f9bf56ef862ee68d8f6942dd0e7064c46",
+      "members": 719,
+      "member_bytes": 168200217,
+      "round_trip_verified": true
+    }
+  },
+  "initial_postfix_attempt": {
+    "attempt": "compiled-lifecycle/builds/attempts/attempt-20261031T072932858Z",
+    "status": "failed",
+    "harness_failure": "spawnSync npm ENOENT",
+    "acceptance": "not counted as a pass"
+  },
+  "independent_rerun": {
+    "targeted_tests": {
+      "command": "node --test compiled-lifecycle/conformance/native-path.test.mjs",
+      "cwd": "/workspace/scratch/39a56936f173/gondola",
+      "exit": 0,
+      "passed": 4,
+      "failed": 0,
+      "cases": [
+        "bare --native-go go reaches the PATH CLI and replays the real lifecycle fixture",
+        "explicit relative and absolute native executables resolve to executable paths",
+        "relative executable paths resolve from the invoking cwd before the child runs from ROOT",
+        "GOBI_GO_BIN remains the unflagged default while bare names stay on PATH"
+      ],
+      "stderr_sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c",
+      "evidence": {
+        "stdout.log": {
+          "bytes": 1214,
+          "sha256": "5b2c2dcac77a3d4c9239f87f1226b3b88a090170ec872f952f03cfe5e74ba7f7"
+        },
+        "stderr.log": {
+          "bytes": 174,
+          "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+        },
+        "exit-code.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      }
+    },
+    "matrix": {
+      "command": "/workspace/scratch/39a56936f173/gondola-lifecycle-ci/compiled-lifecycle/ci/2026-10-31/lanes/review-native-path/matrix/command.json",
+      "cwd": "/workspace/scratch/39a56936f173/gondola",
+      "status": "matched",
+      "ticks": 26,
+      "swaps": 17,
+      "mutation_controls_detected": 8,
+      "native_command": [
+        "go",
+        "run",
+        "./cmd/compiled-lifecycle-native",
+        "--script",
+        "/workspace/scratch/39a56936f173/gondola/fixtures/compiled/lifecycle/scenario.json"
+      ],
+      "native_stderr": "",
+      "stage_count": 7,
+      "stages_completed": true,
+      "source_pins_count": 179,
+      "build_outputs_checked": 8,
+      "evidence": {
+        "lifecycle.native.json": {
+          "bytes": 441286,
+          "sha256": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5"
+        },
+        "lifecycle.direct.json": {
+          "bytes": 2395699,
+          "sha256": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71"
+        },
+        "lifecycle.browser.json": {
+          "bytes": 66817157,
+          "sha256": "7659f55f1aa874a01e149ffa58a8e8e61d067faad76ab3d01a34b758364af5ef"
+        },
+        "lifecycle.browser.capture.json": {
+          "bytes": 66817157,
+          "sha256": "7659f55f1aa874a01e149ffa58a8e8e61d067faad76ab3d01a34b758364af5ef"
+        },
+        "lifecycle.check.json": {
+          "bytes": 12259,
+          "sha256": "b1bbd8a41d6eca789aa27fe5bbcdaa582e908249d8d1ff1fabc4e603e374718a"
+        },
+        "lifecycle.manifest.json": {
+          "bytes": 94910,
+          "sha256": "7138458d2be751b438b31d2223c7912681fae408162311209c0a4d72146eff79"
+        },
+        "lifecycle.run.json": {
+          "bytes": 153957,
+          "sha256": "ccaf13af2402b0525f980dfb9ab3ad3e70726c368ffe66789f153ac03228280d"
+        },
+        "stdout.log": {
+          "bytes": 1451,
+          "sha256": "7937102c08e9e3f088238b04a8eae23fb54f5b9c6337b5205f94c6d7c78c5c11"
+        },
+        "stderr.log": {
+          "bytes": 174,
+          "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+        },
+        "command.json": {
+          "bytes": 2488,
+          "sha256": "8e061d2e79d232ba001da30b9980229e15704458c47407b6bdc55a7f380bf88d"
+        },
+        "exit-code.txt": {
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        }
+      }
+    }
+  },
+  "tool_versions": {
+    "node": "v22.23.4",
+    "npm": "11.9.0",
+    "go_on_PATH": "go1.24.0 linux/amd64",
+    "chromium": "153.0.8010.0",
+    "python": "3.12.14"
+  },
+  "limitations": [
+    "The independent rerun used the final existing React and DOM builds; it did not rebuild them.",
+    "The fresh native/direct/browser matrix is a local lifecycle conformance rerun, not a hosted CI result.",
+    "The preceding hosted full workflow remains failed and is not rewritten as a pass by this repair review."
+  ]
+}

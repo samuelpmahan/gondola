@@ -1,0 +1,122 @@
+{
+  "schema": "gobi.compiled-lifecycle-xr-ci-go-review/v1",
+  "job_id": "XR-CI-GO",
+  "worker": "N4",
+  "decision": "accepted",
+  "outcome": "mixed_change",
+  "summary": "Accepted the requested E-CI-GO Go/native, React/DOM build, and typed effect-bridge evidence after verifying it against the retained primary provider artifact and immutable 49cc source objects. The standalone native replay and all bounded tests passed; the hosted lifecycle matrix still failed when bare go resolved to a nonexistent checkout/go path, so the final native/direct/browser checker and full CI acceptance remain absent.",
+  "summary_sha256": "e235b5ea452f2bd9428b754774fe11cae4b1dddb22f487f94b1e37be909d0c8f",
+  "artifact": {
+    "id": "13034915662",
+    "workflow_run_id": "41178420647",
+    "provider_conclusion": "failure",
+    "head_sha": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "tree_sha": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "bytes": 47035803,
+    "sha256": "6fa057edf26af20b3e6ef805458c92033e2e626d625f44a88bffcc04781762c4",
+    "provider_chunks_verified": 12,
+    "provider_members_verified": 1272
+  },
+  "n1_author_packet": {
+    "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/E-CI-GO.md",
+    "report_sha256": "9fc1129f38c92b4716983b1f593d43ce07eb8d17a22191ced18be00a84ff8eda",
+    "receipt": "compiled-lifecycle/ci/2026-10-31/coordination/receipts/E-CI-GO.json",
+    "receipt_sha256": "58d63e4a69c31c3dd02764c09134a5633117adc1bfb9fdf445e9af5e294a3d3d",
+    "audit": "compiled-lifecycle/ci/2026-10-31/lanes/go/audit.json",
+    "audit_sha256": "aaaa74b18e8df8b0beb2dc2b216f0b875538cee9687166ba8373732f8c52d1fc",
+    "dated_copies_byte_identical": true
+  },
+  "source_and_build_pins": {
+    "attempt_source_pins_before": 122,
+    "attempt_source_pins_after": 122,
+    "immutable_49cc_git_object_mismatches": 0,
+    "react_output_pins_each_checkpoint": 67,
+    "dom_output_pins_each_checkpoint": 67,
+    "build_result_outputs_each_backend": 67,
+    "artifact_output_pin_mismatches": 0,
+    "react_dom_appir_and_encoder_identical": true,
+    "react_dom_compiled_modules_identical": false,
+    "internal_archive": {
+      "bytes": 12062689,
+      "sha256": "eb9c9678f224be7cedb2e95be845343320bf8fdf319481c6a6d568a8136a944d",
+      "members_verified": 241,
+      "uncompressed_bytes": 158843470,
+      "mismatches": 0
+    }
+  },
+  "native_standalone_probe": {
+    "binary_sha256": "897f021e17529503724c1535178255546308e98d365fe31ebd5ff57444837655",
+    "trace_path": "compiled-lifecycle/ci/2026-10-31/extracted/compiled-lifecycle/builds/attempts/attempt-20261031T065420569Z/matrix/native-cli.json",
+    "trace_sha256": "2a3ebb21b4da7ff70701c3a476b5d3b1b12d96e4cce8df4e1b648a15064956d5",
+    "steps": 26,
+    "state_checkpoints_verified_against_fixture": 13,
+    "request_effects": 7,
+    "cancellation_effects": 3,
+    "cancellation_order": ["grandchild:g1:r3", "child:g1:r2", "parent:g1:r1"],
+    "stale_and_duplicate_no_ops": 5,
+    "fresh_and_sibling_replies_accepted": 4,
+    "final_next_request_id": 7,
+    "standalone_native_to_direct_equivalence_claimed": false
+  },
+  "hosted_tests": {
+    "go_lifecycle": {
+      "command": "go test ./compilercontract ./gobi ./fixtures/compiled/lifecycle ./cmd/compiled-lifecycle-native",
+      "exit_code": 0,
+      "stdout_sha256": "86a90409767a7d18ddd75378c848193164acbb343779c704ee983ea41a473846"
+    },
+    "go_compiler": {
+      "command": "go test ./analyze ./build ./cmd/... ./emit",
+      "exit_code": 0,
+      "stdout_sha256": "9eacb29a005eef7b8a607fa48f3b3e089da3475e852a05e9f2c6206e695b3f17"
+    },
+    "compiled_runtime": {
+      "command": "node --test compiled-lifecycle/runtime/runtime.test.mjs",
+      "passed": 10,
+      "failed": 0,
+      "stdout_sha256": "423cb059cc96073a10f6d57271c0c8b6c07af7bbf11631cbe7ce3f2e7c8173ca",
+      "covered": [
+        "compiled append effects through signature-typed encoder",
+        "nonzero-offset effect GoSlice accepted",
+        "malformed GoSlice and Gobi Effect fields rejected",
+        "unexpected typed Value fields rejected"
+      ]
+    }
+  },
+  "direct_module": {
+    "path": "compiled-lifecycle/ci/2026-10-31/extracted/compiled-lifecycle/builds/attempts/attempt-20261031T065420569Z/matrix/lifecycle.direct.json",
+    "sha256": "4fbd9bb6b94e14647edfad95bf681949b2a14ead04091d351f2f4f6eb1689d71",
+    "ticks": 26,
+    "pending_at_end": 0
+  },
+  "global_failure": {
+    "matrix_status": "rejected",
+    "failed_stage": "native-go-script-cli-replay",
+    "error": "spawnSync /home/runner/work/gondola/gondola/go ENOENT",
+    "complete_checker_produced": false,
+    "native_direct_browser_final_comparison_claimed": false,
+    "full_ci_pass_claimed": false
+  },
+  "audit": {
+    "path": "compiled-lifecycle/ci/2026-10-31/lanes/review-go/audit.json",
+    "sha256": "994fccbb5d3eb3a3a353a908e4bd5ff80e62fa716480d2bcf6586d77d781b9c1",
+    "script": "compiled-lifecycle/ci/2026-10-31/lanes/review-go/audit_go_review.py",
+    "script_sha256": "61fcc467c380cf3b188c1a64e1289e0b357b0948605ebe53537a19fbaa5363e3"
+  },
+  "report": {
+    "path": "compiled-lifecycle/ci/2026-10-31/coordination/reports/XR-CI-GO.md",
+    "sha256": "a145fd57891df2f2ef1669e6c475d746df6355352229d43b761ad6cd1d92d096"
+  },
+  "tool_versions": {
+    "python_audit": "3.12.14",
+    "node": "v22.23.4",
+    "root_go": "1.24.13",
+    "compiled_frontend_go": "1.27.3",
+    "react": "19.3.1",
+    "react_dom": "19.3.1",
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4",
+    "random_seed": "none; deterministic artifact review"
+  },
+  "source_files_changed": false,
+  "git_or_provider_state_changed": false
+}

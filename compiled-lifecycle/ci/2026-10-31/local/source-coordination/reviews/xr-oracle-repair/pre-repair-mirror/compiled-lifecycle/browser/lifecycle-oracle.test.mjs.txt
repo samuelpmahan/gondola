@@ -1,0 +1,164 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+import {
+  LIFECYCLE_ACTIONS,
+  LIFECYCLE_EVENTS,
+  LIFECYCLE_EXPECTED_CANCEL_ORDER,
+  LIFECYCLE_EXPECTED_PENDING_AFTER_SWAP,
+  LIFECYCLE_COMPONENT_ID,
+  LIFECYCLE_DISPLAY_LABEL,
+  LIFECYCLE_FIXTURE_NAME,
+  LIFECYCLE_PACKAGE_PATH,
+  LIFECYCLE_PROBES,
+  LIFECYCLE_STATES,
+  LIFECYCLE_STEPS,
+  assertLifecycleDOMSnapshot,
+  assertLifecycleState,
+  assertLifecycleSteps,
+  assertLifecycleViewRecord,
+  expectedLifecycleDOM,
+  expectedLifecyclePhysicalControls,
+  expectedLifecycleStateAtTick,
+  expectedLifecycleView,
+  lifecycleEventsForFixture,
+  lifecycleStateIndexForStep,
+} from "./lifecycle-oracle.mjs";
+
+const TOKENS = Object.freeze({
+  parent1: "parent:g1:r1",
+  child1: "child:g1:r2",
+  grandchild1: "grandchild:g1:r3",
+  sibling1: "sibling:g1:r4",
+  parent2: "parent:g2:r5",
+  child2: "child:g2:r6",
+  grandchild2: "grandchild:g2:r7",
+});
+
+test("literal lifecycle timeline covers the initial state and every Go event around one renderer swap", async () => {
+  assert.equal(LIFECYCLE_FIXTURE_NAME, "compiled-lifecycle-parent-child-grandchild-remount-fence");
+  assert.equal(LIFECYCLE_PACKAGE_PATH, "github.com/samuelpmahan/gondola/fixtures/compiled/lifecycle");
+  assert.equal(LIFECYCLE_COMPONENT_ID, LIFECYCLE_PACKAGE_PATH);
+  assert.equal(LIFECYCLE_DISPLAY_LABEL, "compiled-lifecycle");
+  assert.equal(LIFECYCLE_STATES.length, 26);
+  assert.equal(LIFECYCLE_STEPS.length, 26);
+  assert.equal(LIFECYCLE_ACTIONS.length, 16);
+  assert.equal(LIFECYCLE_EVENTS, LIFECYCLE_STEPS);
+  assert.deepEqual(LIFECYCLE_STEPS.filter((step) => step.kind !== "renderer-swap").map((step) => step.stateIndex),
+    Array.from({ length: 25 }, (_, index) => index + 1));
+  assert.equal(lifecycleStateIndexForStep(8), 8);
+  assert.equal(lifecycleStateIndexForStep(9), 9);
+  assert.deepEqual(LIFECYCLE_STATES[8], LIFECYCLE_STATES[LIFECYCLE_STEPS[8].stateIndex]);
+  assert.equal(LIFECYCLE_STEPS[8].kind, "renderer-swap");
+  assert.deepEqual(LIFECYCLE_STEPS[8].pendingTokens, [TOKENS.parent1, TOKENS.child1, TOKENS.grandchild1, TOKENS.sibling1]);
+  assert.deepEqual(LIFECYCLE_STEPS[8].cancelEffects, []);
+
+  const fixture = JSON.parse(await readFile(new URL("../../fixtures/compiled/lifecycle/scenario.json", import.meta.url), "utf8"));
+  assert.equal(fixture.componentID, LIFECYCLE_COMPONENT_ID);
+  assert.deepEqual(lifecycleEventsForFixture(), fixture.events);
+  assert.deepEqual(fixture.expectedEffects, [{
+    afterEvent: 9,
+    effects: [
+      { kind: "lifecycle.cancel", name: "cancel", arg: TOKENS.grandchild1, reply: "" },
+      { kind: "lifecycle.cancel", name: "cancel", arg: TOKENS.child1, reply: "" },
+      { kind: "lifecycle.cancel", name: "cancel", arg: TOKENS.parent1, reply: "" },
+    ],
+  }]);
+  assert.deepEqual(LIFECYCLE_PROBES, fixture.harnessProbes);
+});
+
+test("hand-authored state table records removal, remount generation, old replies and sibling survival", () => {
+  const removed = expectedLifecycleStateAtTick(9);
+  for (const [name, requestID] of [["Parent", 1], ["Child", 2], ["Grandchild", 3]]) {
+    assert.equal(removed[name].Alive, false);
+    assert.equal(removed[name].Pending, false);
+    assert.equal(removed[name].Token, "");
+    assert.equal(removed[name].Requested, true);
+    assert.equal(removed[name].RequestID, requestID);
+  }
+  assert.deepEqual(removed.Sibling, {
+    ID: "sibling", ParentID: "", Generation: 1, RequestID: 4,
+    Alive: true, Requested: true, Pending: true, Token: TOKENS.sibling1, Reply: "", Counter: { Count: 1 },
+  });
+  assert.deepEqual(expectedLifecycleStateAtTick(10), {
+    Parent: { ID: "parent", ParentID: "", Generation: 2, RequestID: 0, Alive: true, Requested: false, Pending: false, Token: "", Reply: "", Counter: { Count: 0 } },
+    Child: { ID: "child", ParentID: "parent", Generation: 2, RequestID: 0, Alive: true, Requested: false, Pending: false, Token: "", Reply: "", Counter: { Count: 0 } },
+    Grandchild: { ID: "grandchild", ParentID: "child", Generation: 2, RequestID: 0, Alive: true, Requested: false, Pending: false, Token: "", Reply: "", Counter: { Count: 0 } },
+    Sibling: removed.Sibling,
+    NextRequestID: 4,
+  });
+  for (const [index, token] of [[11, TOKENS.grandchild1], [12, TOKENS.child1], [13, TOKENS.parent1]]) {
+    assert.deepEqual(expectedLifecycleStateAtTick(index), expectedLifecycleStateAtTick(10), `old token ${token} must not mutate generation 2`);
+  }
+  assert.equal(expectedLifecycleStateAtTick(14).Sibling.Reply, TOKENS.sibling1);
+  assert.deepEqual(expectedLifecycleStateAtTick(15), expectedLifecycleStateAtTick(14), "duplicate sibling completion is a no-op");
+  assert.deepEqual(expectedLifecycleStateAtTick(25), expectedLifecycleStateAtTick(24), "duplicate child completion is a no-op");
+});
+
+test("message and effect expectations bind request tokens and child-first cancellation order", () => {
+  const requests = LIFECYCLE_STEPS.filter((step) => step.effects?.some((effect) => effect.kind === "fixture.request"));
+  assert.deepEqual(requests.map((step) => step.effects[0]), [
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.parent1, reply: "complete" },
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.child1, reply: "complete" },
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.grandchild1, reply: "complete" },
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.sibling1, reply: "complete" },
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.parent2, reply: "complete" },
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.child2, reply: "complete" },
+    { kind: "fixture.request", name: "lookup", arg: TOKENS.grandchild2, reply: "complete" },
+  ]);
+  const removal = LIFECYCLE_STEPS[9];
+  assert.equal(removal.message.name, "removeParent");
+  assert.deepEqual(removal.effects.map((effect) => effect.arg), LIFECYCLE_EXPECTED_CANCEL_ORDER);
+  assert.equal(removal.effects.some((effect) => effect.arg === TOKENS.sibling1), false);
+  assert.equal(LIFECYCLE_STEPS[14].kind, "effect-reply");
+  assert.equal(LIFECYCLE_STEPS[14].expect, "accepted");
+  assert.equal(LIFECYCLE_STEPS[15].kind, "go-message");
+  assert.equal(LIFECYCLE_STEPS[15].expect, "duplicate-no-op");
+});
+
+test("raw outerHTML and live controls match the frozen view at pending, removed, and remounted states", () => {
+  const initial = expectedLifecycleDOM(expectedLifecycleStateAtTick(0));
+  assert.equal(initial.html,
+    '<main class="lifecycle"><section class="lifecycle-node lifecycle-parent"><p>Parent: live; count=0; idle</p><button class="lifecycle-add">Parent +</button><button class="lifecycle-request">Request parent</button><section class="lifecycle-node lifecycle-child"><p>Child: live; count=0; idle</p><button class="lifecycle-add">Child +</button><button class="lifecycle-request">Request child</button><section class="lifecycle-node lifecycle-grandchild"><p>Grandchild: live; count=0; idle</p><button class="lifecycle-add">Grandchild +</button><button class="lifecycle-request">Request grandchild</button></section></section></section><section class="lifecycle-node lifecycle-sibling"><p>Sibling: live; count=0; idle</p><button class="lifecycle-add">Sibling +</button><button class="lifecycle-request">Request sibling</button></section><aside class="lifecycle-controls"><button class="lifecycle-remove">Remove parent</button><button class="lifecycle-remount" disabled="">Remount parent</button></aside></main>');
+  assert.equal(initial.controls.length, 10);
+  assert.deepEqual(expectedLifecyclePhysicalControls(expectedLifecycleStateAtTick(8)).filter((control) => control.disabled).map((control) => control.path),
+    ["0/2", "0/3/2", "0/3/3/2", "1/2", "2/1"]);
+
+  const removed = expectedLifecycleDOM(expectedLifecycleStateAtTick(9));
+  assert.equal(removed.html,
+    '<main class="lifecycle"><p class="lifecycle-removed">Parent: removed</p><section class="lifecycle-node lifecycle-sibling"><p>Sibling: live; count=1; pending sibling:g1:r4</p><button class="lifecycle-add">Sibling +</button><button class="lifecycle-request" disabled="">Request sibling</button></section><aside class="lifecycle-controls"><button class="lifecycle-remove" disabled="">Remove parent</button><button class="lifecycle-remount">Remount parent</button></aside></main>');
+  assert.deepEqual(expectedLifecyclePhysicalControls(expectedLifecycleStateAtTick(9)).map(({ path, disabled }) => [path, disabled]), [
+    ["1/1", false], ["1/2", true], ["2/0", true], ["2/1", false],
+  ]);
+  assert.ok(!removed.html.includes("lifecycle-child"));
+  assert.equal(expectedLifecycleDOM(expectedLifecycleStateAtTick(14)).html.includes("complete sibling:g1:r4"), true);
+  assertLifecycleDOMSnapshot(initial, expectedLifecycleStateAtTick(0));
+  const initialTree = expectedLifecycleView(expectedLifecycleStateAtTick(0)).tree;
+  assert.deepEqual([initialTree.kind, initialTree.tag, initialTree.key], [1, "main", "lifecycle"]);
+  assert.deepEqual(initialTree.kids.map(({ key }) => key), ["parent", "sibling", "lifecycle-controls"]);
+  assert.deepEqual(initialTree.kids[0].kids.map(({ key }) => key), ["parent-status", "parent-add", "parent-request", "child"]);
+  assert.deepEqual(initialTree.kids[0].kids[3].kids.map(({ key }) => key), [
+    "child-status", "child-add", "child-request", "grandchild",
+  ]);
+  assert.deepEqual(initialTree.kids[0].kids[3].kids[3].kids[2].on, [
+    { event: "click", message: "requestGrandchild", arg: "" },
+  ]);
+  const removedTree = expectedLifecycleView(expectedLifecycleStateAtTick(9)).tree;
+  assert.equal(removedTree.kids[0].key, "parent-removed");
+  assert.deepEqual(removedTree.kids[2].kids.map(({ key }) => key), ["parent-remove", "parent-remount"]);
+  assertLifecycleViewRecord(expectedLifecycleView(expectedLifecycleStateAtTick(9)), expectedLifecycleStateAtTick(9));
+});
+
+test("mutation controls detect reordered cancellation and an incorrectly accepted old generation reply", () => {
+  const wrongOrder = structuredClone(LIFECYCLE_STEPS[9].effects);
+  [wrongOrder[0], wrongOrder[2]] = [wrongOrder[2], wrongOrder[0]];
+  assert.throws(() => assertLifecycleSteps(LIFECYCLE_STEPS.map((step, index) =>
+    index === 9 ? { ...step, effects: wrongOrder } : step)), /value differs/);
+
+  const acceptedOldReply = expectedLifecycleStateAtTick(11);
+  acceptedOldReply.Grandchild.Reply = TOKENS.grandchild1;
+  assert.throws(() => assertLifecycleState(acceptedOldReply, 11), /value differs/);
+  assertLifecycleSteps(LIFECYCLE_STEPS);
+});
+

@@ -1,0 +1,66 @@
+{
+  "schema": "gobi.compiled-lifecycle-ci-review/v1",
+  "job_id": "XR-CI-DEMO",
+  "worker": "N5",
+  "decision": "accepted",
+  "outcome": "confirmed_reuse",
+  "acceptance_scope": "faithful bounded HTTP demo extraction only; full hosted CI remains failed",
+  "global_ci_acceptance": false,
+  "summary": "Independently verified the 49cc provider ZIP and extracted managed demo artifacts. The 12-check HTTP demo passed with 24 trace ticks, four renderer swaps, zero browser/network/WASM errors, and native/browser state, View, and effects matching across Init and 23 Go updates. The final screenshot is the actual managed artifact. The provider workflow remains failed because native Go replay resolved to a missing repository-local executable and the final conformance check was withheld.",
+  "summary_sha256": "7175ee6ab38076a9994a4579ac9bf07885d8b882a74ac69aaa673e98c1fe63cb",
+  "report": "compiled-lifecycle/ci/2026-10-31/coordination/reports/XR-CI-DEMO.md",
+  "report_sha256": "ff5c9babfe8af80bffbccb54a373a1bf81b52e7ffef74b825def21f0dea99893",
+  "audit": "compiled-lifecycle/ci/2026-10-31/lanes/review-demo/audit.json",
+  "audit_sha256": "f31ea1b8c0b192478d40e59e0eab9ffdf9ae51c8c8133578f9f39336a7bb8dc3",
+  "audit_script": "compiled-lifecycle/ci/2026-10-31/lanes/review-demo/audit_review.py",
+  "audit_script_sha256": "895f4589c442ba1d6a236f1ed2620f3b53d28f348e357789161ad6b9572edf12",
+  "author_report_sha256": "ff7a8cab3a3a2c47486a25b74f20e1b9f874d8b7a923d10bef6bdd42bc3b17c6",
+  "provider": {
+    "artifact_id": 13034915662,
+    "run_id": 41178420647,
+    "head_sha": "49cc2b96c8817a47319d5b7bd484184a22fa984b",
+    "tree": "d49ca35b7eda23837c392bbe0d2363551e4c7bec",
+    "conclusion": "failure",
+    "zip_bytes": 47035803,
+    "zip_sha256": "6fa057edf26af20b3e6ef805458c92033e2e626d625f44a88bffcc04781762c4",
+    "members": 1272,
+    "uncompressed_bytes": 412381547,
+    "crc_verified": true,
+    "provider_chunk_count": 12
+  },
+  "demo": {
+    "status": "passed",
+    "http_checks": 12,
+    "trace_ticks_including_init": 24,
+    "native_steps": 26,
+    "native_updates_compared": 23,
+    "renderer_swaps": 4,
+    "browser_version": "156.0.8078.4",
+    "browser_errors": 0,
+    "console_errors": 0,
+    "failed_requests": 0,
+    "wasm_requests": 0,
+    "wasm_api_attempts": 0,
+    "pending_at_end": 0,
+    "cancel_order": [
+      "grandchild:g1:r3",
+      "child:g1:r2",
+      "parent:g1:r1"
+    ],
+    "retired_callbacks_rejected": 3,
+    "stale_go_completions_unchanged": 3,
+    "sibling_survives_pending": true,
+    "duplicate_deliveries_rejected": [
+      "sibling:g1:r4",
+      "child:g2:r6"
+    ],
+    "screenshot_sha256": "d1a9d09dc59e88ce02a83e7d8734acf5987e3e4a1a5c3714384a881295b17648",
+    "screenshot_visually_inspected": true
+  },
+  "global_failure": {
+    "stage": "native-direct-browser-matrix",
+    "error": "spawnSync /home/runner/work/gondola/gondola/go ENOENT",
+    "final_conformance_check": "withheld",
+    "full_workflow_accepted": false
+  }
+}
