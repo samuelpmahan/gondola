@@ -1,0 +1,125 @@
+{
+  "schema": "gobi.module-qualification-mutation-controls/v1",
+  "fixture": "independent-module-pair-v1",
+  "baseline": {
+    "root": "GOBI_MODULE_CAPTURE_ROOT",
+    "summaryPath": "conformance/summary.json",
+    "summaryStatus": "matched",
+    "profileCount": 12,
+    "fixedEvents": 24,
+    "fixedGoUpdates": 16,
+    "fixedStateCheckpoints": 17,
+    "seedEvents": 40
+  },
+  "cases": [
+    {
+      "id": "native-typed-state",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.fixed.native.json",
+      "pointer": "/initial/parentState/Step",
+      "mutation": "replace-number",
+      "value": 2,
+      "expectedDiagnostic": "initial Go state/view/bridge checkpoint"
+    },
+    {
+      "id": "native-node-record-tree",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.fixed.native.json",
+      "pointer": "/initial/parentView/kids/1/kids/0/text",
+      "mutation": "replace-string",
+      "value": "Step + forged",
+      "expectedDiagnostic": "initial Go state/view/bridge checkpoint"
+    },
+    {
+      "id": "compiled-direct-typed-state",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.fixed.direct.json",
+      "pointer": "/react/initial/childState/fields/0/value/fields/0/value/float64Bits",
+      "mutation": "replace-string",
+      "value": "3ff0000000000000",
+      "expectedDiagnostic": "initial.childState"
+    },
+    {
+      "id": "browser-physical-dom",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.browser.json",
+      "pointer": "/profiles/react/snapshots/0/snapshot/child/dom/html",
+      "mutation": "append-string",
+      "value": "<!-- forged -->",
+      "expectedDiagnostic": "profiles.react.snapshot.child.dom"
+    },
+    {
+      "id": "browser-disabled-control",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.browser.json",
+      "pointer": "/profiles/react/snapshots/0/snapshot/child/dom/controls/1/disabled",
+      "mutation": "replace-boolean",
+      "value": false,
+      "edits": [
+        {
+          "pointer": "/profiles/react/snapshots/0/snapshot/child/dom/html",
+          "mutation": "replace-substring",
+          "from": "<button disabled=\"\">Reset</button>",
+          "value": "<button>Reset</button>"
+        },
+        {
+          "pointer": "/profiles/react/snapshots/0/physical/child/controls/1/disabled",
+          "mutation": "replace-boolean",
+          "value": false
+        },
+        {
+          "pointer": "/profiles/react/snapshots/0/physical/child/html",
+          "mutation": "replace-substring",
+          "from": "<button disabled=\"\">Reset</button>",
+          "value": "<button>Reset</button>"
+        }
+      ],
+      "expectedDiagnostic": "profiles.react.snapshot.child.dom"
+    },
+    {
+      "id": "direct-bridge-order",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.fixed.direct.json",
+      "pointer": "/react/events/0/bridgeCalls/1",
+      "mutation": "swap-with-index",
+      "index": 2,
+      "expectedDiagnostic": "bridgeCalls"
+    },
+    {
+      "id": "native-schema-with-matched-summary",
+      "checker": "CheckCaptures",
+      "file": "conformance/module-pair.fixed.native.json",
+      "pointer": "/schema",
+      "mutation": "replace-string",
+      "value": "gobi.compiled-modules-native/forged",
+      "expectedDiagnostic": "schema"
+    },
+    {
+      "id": "abi-descriptor-role",
+      "checker": "CheckABIs",
+      "file": "builds/react-parent/output/apps/moduleparent-462c3bad7b95/module-abi.json",
+      "pointer": "/roles/0/name",
+      "mutation": "replace-string",
+      "value": "NotInit",
+      "expectedDiagnostic": "react-parent",
+      "expectedDetail": "invalid role identity"
+    },
+    {
+      "id": "compiled-module-source-bytes",
+      "checker": "CheckABIs",
+      "file": "builds/react-parent/output/apps/moduleparent-462c3bad7b95/gobi-compiled.mjs",
+      "mutation": "append-bytes",
+      "value": "\n// forged module bytes\n",
+      "expectedDiagnostic": "react-parent",
+      "expectedDetail": "artifact bytes mismatch"
+    },
+    {
+      "id": "fixture-source-bytes",
+      "checker": "VerifyDirectory",
+      "file": "source/fixtures/compiled/moduleparent/app.go",
+      "mutation": "append-bytes",
+      "value": "\n// forged source bytes\n",
+      "expectedDiagnostic": "source/fixtures/compiled/moduleparent/app.go"
+    }
+  ]
+}
