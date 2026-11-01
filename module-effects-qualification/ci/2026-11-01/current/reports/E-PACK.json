@@ -1,0 +1,37 @@
+{
+  "job_id": "E-PACK",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Created a deterministic stdlib tar/gzip evidence packer with 900,000-byte split parts, strict integrity verification, guarded restore, and seven passing regression tests. Smoke packaging used a separate frozen fixture, not the moving coordination directory.",
+  "owned_files": [
+    "/tmp/effectsqual-publish/pack_evidence.py",
+    "/tmp/effectsqual-publish/test_pack_evidence.py",
+    "reports/E-PACK.md",
+    "receipts/E-PACK.json",
+    "rawlogs/E-PACK/**"
+  ],
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s /tmp/effectsqual-publish -p 'test_pack_evidence.py' -v",
+    "python3 /tmp/effectsqual-publish/pack_evidence.py --input /tmp/effectsqual-publish/frozen-smoke-stage-v1 --output /tmp/effectsqual-publish/frozen-smoke-pack-c",
+    "python3 /tmp/effectsqual-publish/pack_evidence.py --input /tmp/effectsqual-publish/frozen-smoke-stage-v1 --output /tmp/effectsqual-publish/frozen-smoke-pack-d",
+    "python3 /tmp/effectsqual-publish/pack_evidence.py --verify --input /tmp/effectsqual-publish/frozen-smoke-pack-c --restore /tmp/effectsqual-publish/frozen-smoke-restored-final"
+  ],
+  "evidence": [
+    "rawlogs/E-PACK/commands.txt",
+    "rawlogs/E-PACK/test-red.stdout.log",
+    "rawlogs/E-PACK/test-final.stdout.log",
+    "rawlogs/E-PACK/test-final.stderr.log",
+    "rawlogs/E-PACK/test-final.status",
+    "rawlogs/E-PACK/smoke-final.command",
+    "rawlogs/E-PACK/smoke-final.stdout.log",
+    "rawlogs/E-PACK/smoke-final.stderr.log",
+    "rawlogs/E-PACK/source-freeze.stdout.log",
+    "rawlogs/E-PACK/artifact-validation.stdout.log",
+    "rawlogs/E-PACK/index.json"
+  ],
+  "limitations": [
+    "The implementation reads the selected finite staging tree into memory.",
+    "It archives regular files only and normalizes metadata rather than preserving source modes or empty directories.",
+    "No live coordination snapshot was packaged; root selects and freezes the final staging tree after all lanes close."
+  ]
+}

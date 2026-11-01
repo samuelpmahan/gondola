@@ -1,0 +1,49 @@
+{
+  "job_id": "XR-ADMISSION",
+  "worker": "N5",
+  "decision": "amend",
+  "summary": "Independent review accepted the real PR23 baseline and verified source/build/ABI rejection controls against sealed source snapshots. It found build-index and build-record casing aliases accepted as extra fields; fully rehashed artifact acceptance is bounded by the declared lack of authenticated compiler provenance.",
+  "owned_files": [
+    "reports/XR-ADMISSION.md",
+    "receipts/XR-ADMISSION.json",
+    "rawlogs/XR-ADMISSION/commands.txt",
+    "rawlogs/XR-ADMISSION/go-overlay.json",
+    "rawlogs/XR-ADMISSION/probe.go",
+    "rawlogs/XR-ADMISSION/probe-pinned-overlay.stdout.log",
+    "rawlogs/XR-ADMISSION/probe-pinned-overlay.stderr.log",
+    "rawlogs/XR-ADMISSION/source-omission-pinned-overlay.stdout.log",
+    "rawlogs/XR-ADMISSION/source-omission-pinned-overlay.stderr.log",
+    "rawlogs/XR-ADMISSION/positive-control-pinned-overlay.stdout.log",
+    "rawlogs/XR-ADMISSION/positive-control-pinned-overlay.stderr.log",
+    "rawlogs/XR-ADMISSION/source-seal-check.py",
+    "rawlogs/XR-ADMISSION/source-seal-check.stdout.log",
+    "rawlogs/XR-ADMISSION/source-seal-check.stderr.log",
+    "rawlogs/XR-ADMISSION/probe.stdout.log",
+    "rawlogs/XR-ADMISSION/probe.stderr.log",
+    "rawlogs/XR-ADMISSION/positive-control.stdout.log",
+    "rawlogs/XR-ADMISSION/positive-control.stderr.log"
+  ],
+  "commands": [
+    "python3 /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMISSION/source-seal-check.py",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMISSION/go-overlay.json ./effectqualification -run '^TestPR23DirectoryIsAccepted$' -count=1 -v",
+    "XR_STOP_AFTER_SOURCE_OMISSION=1 GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go run -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMISSION/go-overlay.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMISSION/probe.go",
+    "XR_SKIP_SOURCE_OMISSION=1 GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go run -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMISSION/go-overlay.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMISSION/probe.go"
+  ],
+  "evidence": [
+    "rawlogs/XR-ADMISSION/positive-control-pinned-overlay.stdout.log",
+    "rawlogs/XR-ADMISSION/source-omission-pinned-overlay.stdout.log",
+    "rawlogs/XR-ADMISSION/probe-pinned-overlay.stdout.log",
+    "rawlogs/XR-ADMISSION/source-seal-check.stdout.log",
+    "seals/E-ADMISSION/seal.json",
+    "seals/E-ADMISSION/source-inventory.json",
+    "seals/E-ADMISSION/source/effectqualification/verify.go",
+    "seals/E-ADMISSION/source/effectqualification/admission.go",
+    "seals/E-ADMISSION/source/effectqualification/admission_test.go"
+  ],
+  "limitations": [
+    "E-ADMISSION seal.json directly hashes its report, receipt, and rawlogs-index, but not source-inventory.json; the review records and independently verifies the source-inventory and source-byte hashes.",
+    "The Go overlay uses the sealed E-ORDER source snapshot; current live ordering.go had moved past that snapshot during this review and is excluded from the admission decision.",
+    "A fully rehashed generated artifact and ABI sidecar are accepted when internally consistent; E-ADMISSION explicitly does not execute or authenticate the compiler toolchain.",
+    "No production or owned implementation files were edited."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "job_id": "E-FINALAUDIT",
+  "worker": "N1",
+  "outcome": "insufficient_evidence",
+  "summary": "The sole reported gap is rawlogs/XR-ORDER/review-packet.sha256 (470 bytes, expected SHA-256 d8e41fcbdfe6b2af4582bdefbe08e2ac2bdadf8ac2c257ebf0a7263480c91c8b). Candidate checksum lists from the captured post-seal packet hashes and the restored canonical sealed hashes both fail the original digest, so no candidate was restored. Root reported all other 825 rawlog entries, 115 sealed source copies, and solver checks validate.",
+  "owned_files": [
+    "reports/E-FINALAUDIT.md",
+    "receipts/E-FINALAUDIT.json",
+    "rawlogs/E-FINALAUDIT/"
+  ],
+  "commands": [
+    "python3 effects-qualification-coordination/rawlogs/E-FINALAUDIT/reconstruct-candidates.py",
+    "sha256sum /workspace/scratch/39a56936f173/effects-qualification-coordination/reports/XR-ORDER.md /workspace/scratch/39a56936f173/effects-qualification-coordination/receipts/XR-ORDER.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ORDER/index.json",
+    "jq '.jobs | to_entries | map({job:.key,kind:.value.kind,status:.value.status,worker:.value.worker})' effects-qualification-coordination/state.json",
+    "git -C gondola rev-parse HEAD HEAD^{tree}",
+    "git -C gondola ls-files '*.go' | wc -l",
+    "cmp effects-qualification-coordination/seals/XR-ORDER/XR-ORDER.md effects-qualification-coordination/reports/XR-ORDER.md && cmp effects-qualification-coordination/seals/XR-ORDER/XR-ORDER.json effects-qualification-coordination/receipts/XR-ORDER.json && cmp effects-qualification-coordination/seals/XR-ORDER/rawlogs-index.json effects-qualification-coordination/rawlogs/XR-ORDER/index.json",
+    "test ! -e effects-qualification-coordination/rawlogs/XR-ORDER/review-packet.sha256"
+  ],
+  "evidence": [
+    "rawlogs/E-FINALAUDIT/commands.txt",
+    "rawlogs/E-FINALAUDIT/reconstruct-candidates.py",
+    "rawlogs/E-FINALAUDIT/candidate-verification.stdout",
+    "rawlogs/E-FINALAUDIT/candidate-verification.status",
+    "rawlogs/E-FINALAUDIT/postseal-packet-hashes.txt",
+    "rawlogs/E-FINALAUDIT/packet-canonical-sha256.stdout",
+    "rawlogs/E-FINALAUDIT/review-packet.sha256.candidate",
+    "rawlogs/E-FINALAUDIT/review-packet.sealed-hashes.candidate",
+    "rawlogs/E-FINALAUDIT/review-packet.postseal-candidate",
+    "rawlogs/E-FINALAUDIT/xr-order-canonical-check.stdout",
+    "rawlogs/E-FINALAUDIT/missing-target-status.stdout",
+    "rawlogs/E-FINALAUDIT/native-jobs-snapshot.json",
+    "rawlogs/E-FINALAUDIT/root-source-id.txt",
+    "rawlogs/E-FINALAUDIT/tracked-go-file-count.txt",
+    "rawlogs/E-FINALAUDIT/root-audit-context.txt",
+    "reports/E-FINALAUDIT.md"
+  ],
+  "limitations": [
+    "The expected checksum file was not recovered; current and sealed report/receipt/index values do not reproduce its digest.",
+    "The 825 rawlog entry, 115 source copy, and solver audit counts were relayed by root; this task did not rerun that broader audit.",
+    "No runtime, browser, compiler, or production-directory checks were performed.",
+    "The missing file is derived review-packet checksum metadata; no execution evidence was identified as missing.",
+    "No candidate was written into rawlogs/XR-ORDER; root owns canonical restoration and final publication notes."
+  ]
+}

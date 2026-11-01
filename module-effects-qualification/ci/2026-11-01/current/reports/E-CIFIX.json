@@ -1,0 +1,40 @@
+{
+  "job_id": "E-CIFIX",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Fixed clean-checkout behavior for PR23 integration tests: absent default fixture skips only with no explicit input; explicit invalid or missing input remains a hard failure. Added five resolver tests. Full git-archive clean checkout with the ignored attempt absent and explicit real-fixture go test ./... both pass.",
+  "owned_files": [
+    "gondola/effectqualification/integration_test.go",
+    "gondola/effectqualification/fixture_selection_test.go"
+  ],
+  "commands": [
+    "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestResolveEffectsQualificationInput$' -count=1 -v",
+    "python3 effects-qualification-coordination/rawlogs/E-CIFIX/make-clean-checkout.py",
+    "env -u GOBI_EFFECTS_QUALIFICATION_INPUT -u GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -count=1 ./...",
+    "env -u GOBI_EFFECTS_QUALIFICATION_INPUT -u GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -v -count=1 ./effectqualification",
+    "GOTOOLCHAIN=local GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT=e0933465725e470dc610e3f81b4bbee95538c1d0 /tmp/gondola-go/go/bin/go test -count=1 ./...",
+    "env -u GOBI_EFFECTS_QUALIFICATION_INPUT -u GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -v ./effectqualification -run '^TestPR23DirectoryIsAccepted$' -count=1",
+    "GOTOOLCHAIN=local GOBI_EFFECTS_QUALIFICATION_INPUT=/tmp/xr-cifix-explicit-missing-attempt /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestPR23DirectoryIsAccepted$' -count=1",
+    "git -C gondola diff --check",
+    "/tmp/gondola-go/go/bin/gofmt -l gondola/effectqualification/integration_test.go gondola/effectqualification/fixture_selection_test.go"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/E-CIFIX/index.json",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/make-clean-checkout.py",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/make-clean-checkout-final.stdout.json",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/go-all-clean-full.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/go-effectqualification-clean-full-verbose.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/go-all-explicit.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/default-fixture.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/explicit-invalid.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/explicit-invalid.stderr.log",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/test-status.json",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/hosted-ci-reference.json",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/source-hashes-final.sha256",
+    "effects-qualification-coordination/rawlogs/E-CIFIX/preserved-archive-sha256-final.txt"
+  ],
+  "limitations": [
+    "The fresh workflow reported by the coordinating root must be rerun after the new test source is included in the published source-pin/test-closure snapshot.",
+    "Hosted run and job identifiers were supplied by the coordinating root; this packet does not claim independent retrieval of the hosted logs."
+  ]
+}

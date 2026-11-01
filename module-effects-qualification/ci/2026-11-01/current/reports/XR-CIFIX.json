@@ -1,0 +1,33 @@
+{
+  "job_id": "XR-CIFIX",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Independently reviewed E-CIFIX source selection, sealed evidence, clean-checkout skip behavior, explicit-path failure, and real-fixture positive control. All reviewed source and raw-log pins match; no amendment is needed.",
+  "owned_files": [
+    "reports/XR-CIFIX.md",
+    "receipts/XR-CIFIX.json",
+    "rawlogs/XR-CIFIX/"
+  ],
+  "commands": [
+    "python3 effects-qualification-coordination/rawlogs/XR-CIFIX/check-sealed-packet.py",
+    "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestResolveEffectsQualificationInput$' -count=1 -v",
+    "GOTOOLCHAIN=local GOBI_EFFECTS_QUALIFICATION_INPUT=/tmp/xr-cifix-n5-review-explicit-missing-attempt /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestPR23DirectoryIsAccepted$' -count=1 (expected exit 1)",
+    "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-CIFIX/default-nondirectory-overlay.json ./effectqualification -run '^TestReviewDefaultFixtureExistsButIsNotDirectory$' -count=1 -v",
+    "GOTOOLCHAIN=local GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT=e0933465725e470dc610e3f81b4bbee95538c1d0 /tmp/gondola-go/go/bin/go test -v -count=1 ./effectqualification -run '^TestPR23DirectoryIsAccepted$'",
+    "GOTOOLCHAIN=local GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT=e0933465725e470dc610e3f81b4bbee95538c1d0 /tmp/gondola-go/go/bin/go test -v -count=1 ./effectqualification",
+    "See rawlogs/XR-CIFIX/commands.txt for the exact evidence map."
+  ],
+  "evidence": [
+    "Five seal targets matched seal.json; all 49 author-indexed raw-log files matched recorded byte counts and SHA-256 values.",
+    "Both E-CIFIX source files matched their sealed snapshots and source-inventory hashes: integration_test.go 5011 bytes / 07319c7308c8f9d0391a484fbda2436a1dbbcad69d3cfa26882b18dd09c906ec; fixture_selection_test.go 2950 bytes / 1972a4fa8ff3a63aa6e77f371cc50ce95b42519885666421ef17d580a7b6795a.",
+    "Resolver unit tests exited 0 and exercised default present/absent, explicit valid/missing/non-directory. Independent explicit missing control exited 1 with a GOBI_EFFECTS_QUALIFICATION_INPUT diagnostic. Default-existing regular-file overlay control exited 0 after observing the intended non-directory error.",
+    "Independent explicit PR23 TestPR23DirectoryIsAccepted with expected source e0933465725e470dc610e3f81b4bbee95538c1d0 exited 0.",
+    "Independent verbose full effectqualification package run with the real fixture and expected source explicitly set exited 0 and contained no SKIP lines.",
+    "Sealed author clean-archive go test -count=1 ./... exited 0 with the ignored fixture absent; the verbose package log shows fixture-dependent skips only for that absent default and confirms resolver and fixture-independent tests pass. Sealed full explicit-fixture suite and default-existing positive test also exited 0.",
+    "No implementation, authored test file, or Git state was changed by this reviewer."
+  ],
+  "limitations": [
+    "No OS permission-denied probe was injected; the helper's generic os.Stat error path was inspected and returns an error.",
+    "No fresh hosted workflow rerun is claimed; E-CIFIX correctly requires the published source/test-closure snapshot to include the test changes first."
+  ]
+}

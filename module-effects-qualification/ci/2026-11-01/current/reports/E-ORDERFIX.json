@@ -1,0 +1,25 @@
+{
+  "job_id": "E-ORDERFIX",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Bound async ledger pending counts and render pending token sets to Go replay state; the reviewed 1-to-99 mutation, mismatched/missing/noncanonical count fields, and coherent pending metadata forgeries are rejected. Full qualification package passes, including the 20-profile fixture check.",
+  "owned_files": [
+    "gondola/effectqualification/ordering.go",
+    "gondola/effectqualification/ordering_test.go"
+  ],
+  "commands": [
+    "/tmp/gondola-go/go/bin/go test ./effectqualification -run 'TestCheckOrdering(BindsPendingCountsToGoState|RejectsCoherentPendingForgery|RejectsPendingGoForgeryAgainstGoState|RealLiteralProfiles|RealSeededCapture)$' -count=1",
+    "/tmp/gondola-go/go/bin/go test ./effectqualification -count=1",
+    "git -C gondola diff --check"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/E-ORDERFIX/commands.txt",
+    "effects-qualification-coordination/rawlogs/E-ORDERFIX/focused-tests.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-ORDERFIX/package-tests.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-ORDERFIX/diff-check.stdout.log",
+    "effects-qualification-coordination/reports/E-ORDERFIX.md"
+  ],
+  "limitations": [
+    "Validation is limited to the finite native and capture schemas and the PR23 fixture protocol; it does not establish arbitrary browser equivalence."
+  ]
+}

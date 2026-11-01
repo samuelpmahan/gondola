@@ -1,0 +1,34 @@
+{
+  "job_id": "E-NEGATIVE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added real PR23 directory integration, ordering positive controls, and semantic, strict-JSON, correlation, event-order, disabled-control, and suite-downgrade negatives. Final full package verification passed.",
+  "owned_files": [
+    "gondola/effectqualification/integration_test.go",
+    "gondola/effectqualification/adversarial_test.go"
+  ],
+  "commands": [
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -count=1",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestPR23' -count=1 -v"
+  ],
+  "evidence": [
+    "rawlogs/N5-NEGATIVE/go-test-final.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-final.stderr.log",
+    "rawlogs/N5-NEGATIVE/negative-controls-02.stdout.log",
+    "rawlogs/N5-NEGATIVE/negative-controls-02.stderr.log",
+    "rawlogs/N5-NEGATIVE/go-test.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-02.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-03.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-04.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-05.stdout.log",
+    "rawlogs/N5-NEGATIVE/negative-controls.stdout.log"
+  ],
+  "limitations": [
+    "Integration uses the real unpacked PR23 attempt directory; archive-mode verification is covered by delivery ownership.",
+    "The checks replay and inspect captured data offline; they do not represent a new browser run."
+  ],
+  "receiptCorrection": {
+    "reason": "normalize native packet and worker slot identifiers only",
+    "original": "receipts/N5-NEGATIVE.json"
+  }
+}

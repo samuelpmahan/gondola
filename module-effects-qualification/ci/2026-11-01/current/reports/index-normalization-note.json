@@ -1,0 +1,6 @@
+{
+  "schema": "gobi.coordination-index-normalization/v1",
+  "note": "Before epoch20, the coordinator generated its canonical raw-file inventory at rawlogs/JOB/index.json before the root seal. Some author-written index.json metadata objects were replaced; their original byte serialization was not separately preserved. The underlying command streams, reports, receipts (with explicitly preserved header corrections), source snapshots and per-file digests remain preserved. The root-sealed rawlogs-index.json is the authoritative canonical inventory for those packets. From epoch20 onward, original author index.json is retained and copied into each seal; the canonical inventory is written separately as coordinator-index.json. No Milestone0 or prior-milestone receipt was modified.",
+  "scope": "new unsealed coordination index metadata only, not execution streams or earlier milestone receipts",
+  "originalIndexSerializationGuarantee": "not claimed for packets sealed before epoch20"
+}

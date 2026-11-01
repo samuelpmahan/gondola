@@ -1,0 +1,43 @@
+{
+  "job_id": "XR-REG",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independently verified E-REG's e093 archive/tree identity, one additive nested compiler boundary, unchanged original snapshot blobs, lock inputs/tool versions, M0 receipts, compiler test/vet/race outcomes, preserved pre-boundary failures, and sealed raw-log hashes.",
+  "owned_files": [
+    "effects-qualification-coordination/reports/XR-REG.md",
+    "effects-qualification-coordination/receipts/XR-REG.json",
+    "effects-qualification-coordination/rawlogs/XR-REG/commands.txt",
+    "effects-qualification-coordination/rawlogs/XR-REG/index.json",
+    "effects-qualification-coordination/rawlogs/XR-REG/source-boundary-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/original-snapshot-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/seal-and-rawlog-hash-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/toolchain-lock-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/toolchain-lock-verification-corrected.stdout.log"
+  ],
+  "commands": [
+    "git archive --format=tar e0933465725e470dc610e3f81b4bbee95538c1d0 and compare tree/archive hashes",
+    "sha256sum -c against seals/E-REG/rawlogs-index.json and seals/E-REG/seal.json",
+    "git show e093:path | sha256sum compared with extracted source snapshots",
+    "verify current and isolated boundary plus lockfile hashes and pinned tool versions",
+    "inspect captured M0/compiler statuses and stdout/stderr streams"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/seals/E-REG/E-REG.md",
+    "effects-qualification-coordination/seals/E-REG/E-REG.json",
+    "effects-qualification-coordination/seals/E-REG/seal.json",
+    "effects-qualification-coordination/seals/E-REG/source-inventory.json",
+    "effects-qualification-coordination/seals/E-REG/rawlogs-index.json",
+    "effects-qualification-coordination/rawlogs/E-REG/commands.txt",
+    "effects-qualification-coordination/rawlogs/XR-REG/commands.txt",
+    "effects-qualification-coordination/rawlogs/XR-REG/index.json",
+    "effects-qualification-coordination/rawlogs/XR-REG/source-boundary-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/original-snapshot-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/seal-and-rawlog-hash-verification.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-REG/toolchain-lock-verification-corrected.stdout.log",
+    "effects-qualification-coordination/reports/XR-REG.md"
+  ],
+  "limitations": [
+    "The current sparse checkout omits the two historical snapshot files; their baseline Git blobs were compared against the isolated archive extraction.",
+    "This is a review of sealed E-REG evidence; M0 and compiler test commands were not rerun."
+  ]
+}

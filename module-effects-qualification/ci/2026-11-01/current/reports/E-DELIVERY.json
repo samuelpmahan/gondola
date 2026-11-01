@@ -1,0 +1,94 @@
+{
+  "job_id": "E-DELIVERY",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Implemented and exercised strict Go directory/archive qualification against the real PR23 module-effects attempt; added fresh runner/workflow integration and source-closure coverage. Fresh publication execution remains root-owned.",
+  "owned_files": [
+    "cmd/module-effects-qualify/main.go",
+    "cmd/module-effects-qualify/main_test.go",
+    "run-module-effects-qualification.sh",
+    "module-effects-qualification/.gitignore",
+    "module-effects-qualification/README.md",
+    "module-effects-qualification/reports/E-DELIVERY.md",
+    "module-effects-qualification/receipts/E-DELIVERY.json",
+    "module-effects-qualification/rawlogs/E-DELIVERY/**",
+    ".github/workflows/gobi-module-effects-qualification.yml",
+    "modulequalification/archive.go (additive effects-specific API; legacy VerifyArchive unchanged)",
+    "modulequalification/archive_effects_test.go",
+    "compiled-module-effects/run.mjs (source-directory closure, explicit source pins, effectsreplay Go test root)",
+    "effectqualification/integration_test.go (authorized N5 expected-source override addendum only)",
+    "compiled-frontend/coordination/go.mod (explicit source-pinned nested module boundary from N1)"
+  ],
+  "commands": [
+    {
+      "command": "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go build -o module-effects-qualification/rawlogs/E-DELIVERY/module-effects-qualify ./cmd/module-effects-qualify",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/go-build.*; module-effects-qualify.sha256"
+    },
+    {
+      "command": "TMPDIR=/tmp/qual-delivery-EDELIVERY-dir GOBI_GO_BIN=/tmp/gondola-go/go/bin/go bash run-module-effects-qualification.sh --directory /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/directory.*"
+    },
+    {
+      "command": "TMPDIR=/tmp/qual-delivery-EDELIVERY-archive GOBI_GO_BIN=/tmp/gondola-go/go/bin/go bash run-module-effects-qualification.sh --archive /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a.tar.gz --manifest /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a.manifest.json",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/archive.*"
+    },
+    {
+      "command": "GOBI_EFFECTS_QUALIFICATION_INPUT=$PWD/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT=e0933465725e470dc610e3f81b4bbee95538c1d0 GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -v -count=1 ./cmd/module-effects-qualify ./effectqualification ./effectsreplay ./modulequalification",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/go-full-explicit-input-tests.*"
+    },
+    {
+      "command": "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -v -count=1 -run 'TestVerifyArchive(DoesNotAcceptModuleEffectsSchema|ExtractsExactManifestAndReportsCompressedBytes|RejectsMalformedMembersWithoutPublishingDestination|RejectsExistingDestinationAndLeavesItUntouched)$' ./modulequalification",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/go-archive-schema-tests.*"
+    },
+    {
+      "command": "GOBI_EFFECTS_QUALIFICATION_INPUT=$PWD/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go test -v -count=1 ./effectqualification -run '^TestPR23DirectoryIsAccepted$' with GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT unset",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/go-pr23-default-source-test.*"
+    },
+    {
+      "command": "bash -n run-module-effects-qualification.sh",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/bash-check.*"
+    },
+    {
+      "command": "node --check compiled-module-effects/run.mjs",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/node-check.*"
+    },
+    {
+      "command": "git diff --check",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/git-diff-check.*"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go list -deps -test -f '{{if and .Module (eq .Module.Path \"github.com/samuelpmahan/gondola\")}}{{.Dir}}{{end}}' ./cmd/module-effects-qualify ./effectqualification ./effectsreplay ./modulequalification",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/go-list-verifier-closure.*"
+    },
+    {
+      "command": "git check-ignore -v module-effects-qualification/output/fresh.probe/attempt/logs/example.json module-effects-qualification/rawlogs/E-DELIVERY/directory.stdout.json module-effects-qualification/evidence/attempts/example/receipt.json module-effects-qualification/ci/2026-11-01/current/README.md",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/fresh-output-ignore.*"
+    },
+    {
+      "command": "/tmp/gondola-go/go/bin/gofmt -l cmd/module-effects-qualify modulequalification/archive.go modulequalification/archive_effects_test.go effectqualification/integration_test.go",
+      "evidence": "module-effects-qualification/rawlogs/E-DELIVERY/gofmt-check.*"
+    }
+  ],
+  "evidence": [
+    "module-effects-qualification/rawlogs/E-DELIVERY/output-manifest.json (SHA-256 e3fe4df6737fa1b1910d715f0b33e8e0dc3d4ceaf54250330be1692400a97d42; 76 files)",
+    "module-effects-qualification/rawlogs/E-DELIVERY/directory.stdout.json",
+    "module-effects-qualification/rawlogs/E-DELIVERY/archive.stdout.json",
+    "module-effects-qualification/rawlogs/E-DELIVERY/go-full-explicit-input-tests.log",
+    "module-effects-qualification/rawlogs/E-DELIVERY/go-archive-schema-tests.log",
+    "module-effects-qualification/rawlogs/E-DELIVERY/go-list-verifier-closure.stdout.txt",
+    "module-effects-qualification/rawlogs/E-DELIVERY/fresh-output-ignore.stdout.txt",
+    "module-effects-qualification/rawlogs/E-DELIVERY/path-none-directory.stdout.json",
+    "module-effects-qualification/reports/E-DELIVERY.md"
+  ],
+  "limitations": [
+    "Producer source commit is e0933465725e470dc610e3f81b4bbee95538c1d0. The verifier checkout had the same base HEAD but was dirty, so no separate immutable verifier commit SHA is claimed.",
+    "The fresh producer mode and GitHub Actions workflow were not executed by N6; root will publish the clean verifier source and run the fresh profile.",
+    "Five unrelated legacy modulequalification tests visibly skipped because their separate capture/archive inputs were not configured; no passing claim is made for them.",
+    "This validates fixed saved capture profiles and declared Go/ABI/artifact contracts. It does not establish browser or pixel equivalence, arbitrary application support, network/auth behavior, compiler invocation, or live cross-module runtime fault behavior."
+  ],
+  "receiptCorrection": {
+    "reason": "native worker slot normalized from author label only",
+    "original": "receipts/E-DELIVERY-original.json",
+    "relocation": "relocation-E-DELIVERY.json"
+  }
+}

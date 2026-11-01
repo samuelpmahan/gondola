@@ -1,0 +1,64 @@
+{
+  "job_id": "E-REG",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Ran M0 successfully twice from an isolated e093 git archive and ran the full compiler Go package graph under Go 1.27.3. Added one nested module boundary so tracked partial historical review snippets remain unchanged evidence outside compiler package discovery.",
+  "owned_files": [
+    "gondola/compiled-frontend/coordination/go.mod",
+    "/tmp/effectsqual-reg/src/compiled-frontend/coordination/go.mod"
+  ],
+  "commands": [
+    "git archive --format=tar e0933465725e470dc610e3f81b4bbee95538c1d0",
+    "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH bash run.sh",
+    "GOTOOLCHAIN=local /root/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.3.linux-amd64/bin/go test ./... (initial run, failed before environment repair)",
+    "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH npm ci --prefix compiled-frontend --no-audit --no-fund",
+    "GOTOOLCHAIN=local /root/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.3.linux-amd64/bin/go test ./... (after esbuild install, before nested boundary; partial source snapshot still fails)",
+    "GOTOOLCHAIN=local /root/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.3.linux-amd64/bin/go test -count=1 ./...",
+    "GOTOOLCHAIN=local /root/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.3.linux-amd64/bin/go test -race -count=1 ./...",
+    "GOTOOLCHAIN=local /root/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.3.linux-amd64/bin/go vet ./...",
+    "cd /tmp/effectsqual-reg/src && sha256sum -c --quiet SHA256SUMS"
+  ],
+  "evidence": [
+    "rawlogs/E-REG/commands.txt",
+    "rawlogs/E-REG/source-archive.sha256",
+    "rawlogs/E-REG/source-and-toolchain.txt",
+    "rawlogs/E-REG/compiler-lock-inputs.sha256",
+    "rawlogs/E-REG/m0-run.stdout",
+    "rawlogs/E-REG/m0-run.stderr",
+    "rawlogs/E-REG/m0-run.status",
+    "rawlogs/E-REG/m0-run-with-boundary.stdout",
+    "rawlogs/E-REG/m0-run-with-boundary.stderr",
+    "rawlogs/E-REG/m0-run-with-boundary.status",
+    "rawlogs/E-REG/compiler-go-tests.stdout",
+    "rawlogs/E-REG/compiler-go-tests.stderr",
+    "rawlogs/E-REG/compiler-go-tests.status",
+    "rawlogs/E-REG/compiler-go-tests-after-deps.stdout",
+    "rawlogs/E-REG/compiler-go-tests-after-deps.stderr",
+    "rawlogs/E-REG/compiler-go-tests-after-deps.status",
+    "rawlogs/E-REG/compiler-npm-ci.stdout",
+    "rawlogs/E-REG/compiler-npm-ci.stderr",
+    "rawlogs/E-REG/compiler-npm-ci.status",
+    "rawlogs/E-REG/compiler-go-tests-final.stdout",
+    "rawlogs/E-REG/compiler-go-tests-final.stderr",
+    "rawlogs/E-REG/compiler-go-tests-final.status",
+    "rawlogs/E-REG/compiler-go-race.stdout",
+    "rawlogs/E-REG/compiler-go-race.stderr",
+    "rawlogs/E-REG/compiler-go-race.status",
+    "rawlogs/E-REG/compiler-go-vet.stdout",
+    "rawlogs/E-REG/compiler-go-vet.stderr",
+    "rawlogs/E-REG/compiler-go-vet.status",
+    "rawlogs/E-REG/compiler-packages-with-boundary.txt",
+    "rawlogs/E-REG/coordination-module.sha256",
+    "rawlogs/E-REG/source-snapshot-hashes.txt",
+    "rawlogs/E-REG/post-boundary-integrity.txt"
+  ],
+  "limitations": [
+    "Compiler coordination review/source-snapshot snippets remain uncompiled evidence by design; their original tracked bytes were preserved and hashed.",
+    "These are inherited PR23 regression results and do not test the new effectqualification verifier implementation.",
+    "No browser or Chromium run was requested for this baseline regression."
+  ],
+  "receiptCorrection": {
+    "reason": "native finish requires slot N1 rather than agent path",
+    "original": "seals/E-REG-preflight-rejected/E-REG.json"
+  }
+}

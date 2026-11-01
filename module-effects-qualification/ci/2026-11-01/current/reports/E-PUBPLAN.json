@@ -1,0 +1,39 @@
+{
+  "job_id": "E-PUBPLAN",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Drafted a finite Payload A / Guide B / URL-review C publication and restore guide at /tmp/effectsqual-publish/publication-guide-template.md. It includes exact package/readback/Go CLI/fresh wrapper steps, actual source-433 baseline measurements, explicit pending corrected-source/M0 placeholders, and both known metadata qualifications. No package, Git commit, or publication was created.",
+  "owned_files": [
+    "/tmp/effectsqual-publish/publication-guide-template.md",
+    "reports/E-PUBPLAN.md",
+    "receipts/E-PUBPLAN.json",
+    "rawlogs/E-PUBPLAN/"
+  ],
+  "commands": [
+    "Read /tmp/effectsqual-publish/CONTINUATION.md and accepted E-PACK/XR-PACK, E-FRESH/XR-FRESH, E-SOURCE/XR-SOURCE records for finalized constraints and measured facts.",
+    "Inspect /tmp/effectsqual-publish/pack_evidence.py argument parser, verify, and restore implementation.",
+    "Inspect gondola/module-effects-qualification/README.md, run-module-effects-qualification.sh, and cmd/module-effects-qualify/main.go for command syntax and runtime behavior.",
+    "git -C gondola status --short --branch",
+    "git -C gondola rev-parse HEAD HEAD^{tree}",
+    "wc -c /tmp/effectsqual-publish/publication-guide-template.md",
+    "sha256sum /tmp/effectsqual-publish/publication-guide-template.md",
+    "Extract distinct placeholders matching {{[A-Z0-9_]+}} from the guide template."
+  ],
+  "evidence": [
+    "rawlogs/E-PUBPLAN/commands.txt",
+    "rawlogs/E-PUBPLAN/context-facts.txt",
+    "rawlogs/E-PUBPLAN/source-status.txt",
+    "rawlogs/E-PUBPLAN/guide-bytes.txt",
+    "rawlogs/E-PUBPLAN/guide-sha256.txt",
+    "rawlogs/E-PUBPLAN/placeholders.txt",
+    "rawlogs/E-PUBPLAN/index.json",
+    "rawlogs/E-PUBPLAN/make-index.go",
+    "reports/E-PUBPLAN.md"
+  ],
+  "limitations": [
+    "This is an unfinalized template; all 16 listed placeholders must be replaced from actual corrected-source, fresh/M0, pack, and Git readback results before Guide B is published.",
+    "N2's test-only CI-helper fix and corrected source SHA/reruns were pending; the draft does not claim their success.",
+    "No stage was frozen or packed, no Git mutation or publication was performed, and no tests were run.",
+    "The guide preserves the single unavailable 470-byte derived XR-ORDER checksum and pre-epoch-20 author-index serialization qualification; it makes no exhaustive authoring-metadata claim."
+  ]
+}

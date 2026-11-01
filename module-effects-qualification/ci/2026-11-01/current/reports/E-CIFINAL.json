@@ -1,0 +1,57 @@
+{
+  "job_id": "E-CIFINAL",
+  "worker": "N6",
+  "outcome": "confirmed_reuse",
+  "summary": "Recovered the final CI fixture-selection gate: M0 passed from an isolated corrected-source Git archive with no GOBI_EFFECTS_* environment and no default fixture; the fresh producer, native archive verifier, and explicit fresh Go suite passed on the corrected source.",
+  "owned_files": [
+    "effects-qualification-coordination/reports/E-CIFINAL.md",
+    "effects-qualification-coordination/receipts/E-CIFINAL.json",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/**"
+  ],
+  "commands": [
+    {
+      "command": "git rev-parse HEAD; git rev-parse 'HEAD^{tree}'; git status --porcelain --untracked-files=all; git archive HEAD | sha256sum",
+      "evidence": "effects-qualification-coordination/rawlogs/E-CIFINAL/preflight-source.txt; postflight-source.txt"
+    },
+    {
+      "command": "git archive 8632f139354c0863482eb625c3ba99b4f607ea0c > /tmp/effectsqual-cifinal-m0-8632f139354c0863482eb625c3ba99b4f607ea0c-E35/source.tar; tar -xf source.tar into /tmp/effectsqual-cifinal-m0-8632f139354c0863482eb625c3ba99b4f607ea0c-E35/source",
+      "evidence": "effects-qualification-coordination/rawlogs/E-CIFINAL/m0-source-archive.*; m0-extract.*; m0-no-default-fixture-check.*"
+    },
+    {
+      "command": "env -i HOME=/root PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin GOTOOLCHAIN=local GOFLAGS=-buildvcs=false npm_config_offline=true bash /tmp/effectsqual-cifinal-m0-8632f139354c0863482eb625c3ba99b4f607ea0c-E35/source/run.sh",
+      "evidence": "effects-qualification-coordination/rawlogs/E-CIFINAL/m0-run.command.txt; m0-run.stdout.log; m0-run.stderr.log; m0-run.exit-code; m0-no-fixture-env.names.txt"
+    },
+    {
+      "command": "cd /tmp/effectsqual-cifinal-m0-8632f139354c0863482eb625c3ba99b4f607ea0c-E35/source && env -i HOME=/root PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -v -count=1 ./effectqualification",
+      "evidence": "effects-qualification-coordination/rawlogs/E-CIFINAL/m0-no-fixture-verbose.command.txt; m0-no-fixture-verbose.stdout.log; m0-no-fixture-verbose.stderr.log; m0-no-fixture-verbose.exit-code"
+    },
+    {
+      "command": "env -i HOME=/root PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin GOBI_GO_BIN=/tmp/gondola-go/go/bin/go GOBI_NODE_BIN=/tmp/gondola-node22/node_modules/node/bin/node GOBI_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 GOTOOLCHAIN=local GOFLAGS=-buildvcs=false bash run-module-effects-qualification.sh --fresh --source-commit 8632f139354c0863482eb625c3ba99b4f607ea0c --chromium /tmp/chromium-portable --output-root /tmp/effectsqual-cifinal-fresh-8632f139354c0863482eb625c3ba99b4f607ea0c-E35",
+      "evidence": "effects-qualification-coordination/rawlogs/E-CIFINAL/fresh.command.txt; fresh.stdout.log; fresh.stderr.log; fresh.exit-code; qualification-report.json; qualification-go-tests.log"
+    }
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/index.json (SHA-256 32707d8445a05c4c0443eab1c05e5ea5ab900ba0a8b097d0e41a02bd3445deb3; 133 files)",
+    "effects-qualification-coordination/reports/E-CIFINAL.md (SHA-256 c8016c6dab1783eb0450bf1d6d9182deeea75f014d47eadd89324012cd1bf602)",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/corrected-source-publication.json",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/fresh-summary.json",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/qualification-report.json",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/producer-receipt.json",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/fresh-primary.manifest.json",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/fresh-primary.tar.gz",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/qualification-go-tests.log",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/m0-run.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/m0-no-fixture-verbose.stdout.log",
+    "effects-qualification-coordination/rawlogs/E-CIFINAL/input-integrity-comparisons.txt"
+  ],
+  "limitations": [
+    "Five unrelated legacy modulequalification tests visibly skipped in the explicit fresh Go suite because their separate capture/archive environment inputs were absent; no passing claim is made for them.",
+    "In the no-fixture M0 run, fixture-dependent effectqualification tests visibly skipped as intended; resolver tests passed and the full M0 run exited 0.",
+    "The hosted workflow was not rerun on source 8632f139354c0863482eb625c3ba99b4f607ea0c; E-CIFINAL ran local fresh and isolated M0 workflows.",
+    "The evidence does not establish pixel equivalence, arbitrary applications, network/auth behavior, or live cross-module runtime fault behavior."
+  ],
+  "receiptCorrection": {
+    "reason": "native slot normalized only",
+    "original": "receipts/E-CIFINAL-original.json"
+  }
+}

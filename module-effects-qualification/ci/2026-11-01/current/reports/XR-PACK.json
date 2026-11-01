@@ -1,0 +1,33 @@
+{
+  "job_id": "XR-PACK",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "Frozen packer and tests match their sealed source inventory. Seven tests pass; independent repeat, verify, exact restore, tampered-part, traversal, strict-index, package-closure, output-boundary, and no-overwrite probes all produced the expected results.",
+  "commands": [
+    "cmp -s /tmp/effectsqual-publish/pack_evidence.py effects-qualification-coordination/seals/E-PACK/source/external/pack_evidence.py",
+    "cmp -s /tmp/effectsqual-publish/test_pack_evidence.py effects-qualification-coordination/seals/E-PACK/source/external/test_pack_evidence.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s /tmp/effectsqual-publish -p 'test_pack_evidence.py' -v",
+    "PYTHONDONTWRITEBYTECODE=1 python3 effects-qualification-coordination/rawlogs/XR-PACK/independent-probe.py"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/XR-PACK/commands.txt",
+    "effects-qualification-coordination/rawlogs/XR-PACK/source-hashes.sha256",
+    "effects-qualification-coordination/rawlogs/XR-PACK/source-sizes.txt",
+    "effects-qualification-coordination/rawlogs/XR-PACK/python-version.txt",
+    "effects-qualification-coordination/rawlogs/XR-PACK/source-byte-match.status",
+    "effects-qualification-coordination/rawlogs/XR-PACK/unittest.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-PACK/unittest.stderr.log",
+    "effects-qualification-coordination/rawlogs/XR-PACK/unittest.status",
+    "effects-qualification-coordination/rawlogs/XR-PACK/independent-probe.py",
+    "effects-qualification-coordination/rawlogs/XR-PACK/independent-probe.stdout.json",
+    "effects-qualification-coordination/rawlogs/XR-PACK/independent-probe.stderr.log",
+    "effects-qualification-coordination/rawlogs/XR-PACK/independent-probe.status",
+    "effects-qualification-coordination/rawlogs/XR-PACK/index.json",
+    "effects-qualification-coordination/reports/XR-PACK.md"
+  ],
+  "limitations": [
+    "The package provides self-consistency checks, not signed provenance or authentication; an editor can recompute hashes after rewriting content.",
+    "The format archives regular files, omits empty directories, normalizes metadata, and holds the selected input bytes in memory while building the archive.",
+    "The independent smoke fixture is separate from the live coordination directory; final snapshot selection and packaging remain a root task."
+  ]
+}

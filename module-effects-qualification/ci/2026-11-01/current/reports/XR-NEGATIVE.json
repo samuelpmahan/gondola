@@ -1,0 +1,39 @@
+{
+  "job_id": "XR-NEGATIVE",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "The sealed N5 negative controls are positive-control-backed, reject the intended state/tree/DOM/disabled/order/correlation/duplicate/suite mutations, and refresh relevant producer inventories. The final runs pass without skips. The separate XR-ORDER pendingCount gap remains explicitly out of scope.",
+  "owned_files": [
+    "reports/XR-NEGATIVE.md",
+    "receipts/XR-NEGATIVE.json",
+    "rawlogs/XR-NEGATIVE/**"
+  ],
+  "commands": [
+    "bash effects-qualification-coordination/rawlogs/XR-NEGATIVE/integrity-validation.sh",
+    "bash effects-qualification-coordination/rawlogs/XR-NEGATIVE/source-and-log-review.sh",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -count=1 (sealed N5 run; reviewed, not rerun)",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestPR23' -count=1 -v (sealed N5 run; reviewed, not rerun)"
+  ],
+  "evidence": [
+    "seals/E-NEGATIVE/E-NEGATIVE.md",
+    "seals/E-NEGATIVE/E-NEGATIVE.json",
+    "seals/E-NEGATIVE/source-inventory.json",
+    "seals/E-NEGATIVE/rawlogs-index.json",
+    "rawlogs/N5-NEGATIVE/go-test-final.stdout.log",
+    "rawlogs/N5-NEGATIVE/negative-controls-02.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-03.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-04.stdout.log",
+    "rawlogs/N5-NEGATIVE/go-test-05.stdout.log",
+    "rawlogs/N5-NEGATIVE/negative-controls.stdout.log",
+    "rawlogs/XR-NEGATIVE/index.json",
+    "rawlogs/XR-NEGATIVE/integrity-validation.stdout.log",
+    "rawlogs/XR-NEGATIVE/negative-control-review.stdout.log",
+    "rawlogs/XR-NEGATIVE/source-review.stdout.log",
+    "rawlogs/XR-ORDER/adversarial-control.stdout",
+    "reports/XR-ORDER.md"
+  ],
+  "limitations": [
+    "The review uses the sealed offline PR23 attempt and historical N5 test outputs; no new browser run or package test was performed.",
+    "N5 does not exercise false orderedLedger.pendingCount values; the separate XR-ORDER review found that gap and it remains under repair."
+  ]
+}

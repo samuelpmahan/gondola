@@ -1,0 +1,41 @@
+{
+  "job_id": "XR-ORDERFIX",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "The sealed E-ORDERFIX source rejects both original 1-to-99 pendingCount mutations, missing and noncanonical counts in both ledgers, coherent forged pendingGo/count metadata, and forged lifecycle pendingGo. All 20 real captures pass, and the original five ordering counterexamples remain rejected.",
+  "findings": [],
+  "commands": [
+    "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ORDERFIX/review-harness.go /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a",
+    "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run 'TestCheckOrdering(BindsPendingCountsToGoState|RejectsCoherentPendingForgery|RejectsPendingGoForgeryAgainstGoState|RealLiteralProfiles|RealSeededCapture)$' -count=1 -v",
+    "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -count=1",
+    "cmp effects-qualification-coordination/seals/E-ORDERFIX/E-ORDERFIX.md effects-qualification-coordination/reports/E-ORDERFIX.md",
+    "cmp effects-qualification-coordination/seals/E-ORDERFIX/E-ORDERFIX.json effects-qualification-coordination/receipts/E-ORDERFIX.json",
+    "cmp effects-qualification-coordination/seals/E-ORDERFIX/rawlogs-index.json effects-qualification-coordination/rawlogs/E-ORDERFIX/index.json",
+    "cd effects-qualification-coordination && sha256sum -c <(jq -r '.[] | \"\\(.sha256)  \\(.path)\"' seals/E-ORDERFIX/rawlogs-index.json)",
+    "cd effects-qualification-coordination && jq -r '.[] | \"\\(.sha256)  \\(.path)\"' seals/E-ORDERFIX/source-inventory.json > /tmp/xr-orderfix-source.sha256",
+    "cd gondola && sha256sum -c /tmp/xr-orderfix-source.sha256",
+    "cmp effects-qualification-coordination/seals/E-ORDERFIX/source/effectqualification/ordering.go gondola/effectqualification/ordering.go",
+    "cmp effects-qualification-coordination/seals/E-ORDERFIX/source/effectqualification/ordering_test.go gondola/effectqualification/ordering_test.go",
+    "sha256sum effects-qualification-coordination/seals/E-ORDERFIX/E-ORDERFIX.md effects-qualification-coordination/seals/E-ORDERFIX/E-ORDERFIX.json effects-qualification-coordination/seals/E-ORDERFIX/rawlogs-index.json effects-qualification-coordination/seals/E-ORDERFIX/source/effectqualification/ordering.go effects-qualification-coordination/seals/E-ORDERFIX/source/effectqualification/ordering_test.go"
+  ],
+  "evidence": [
+    "rawlogs/XR-ORDERFIX/index.json",
+    "rawlogs/XR-ORDERFIX/seal-integrity.stdout",
+    "rawlogs/XR-ORDERFIX/seal-hashes.txt",
+    "rawlogs/XR-ORDERFIX/review-harness.go",
+    "rawlogs/XR-ORDERFIX/review-harness.stdout",
+    "rawlogs/XR-ORDERFIX/review-harness.stderr",
+    "rawlogs/XR-ORDERFIX/review-harness.status",
+    "rawlogs/XR-ORDERFIX/focused-tests.stdout",
+    "rawlogs/XR-ORDERFIX/focused-tests.stderr",
+    "rawlogs/XR-ORDERFIX/focused-tests.status",
+    "rawlogs/XR-ORDERFIX/package-tests.stdout",
+    "rawlogs/XR-ORDERFIX/package-tests.stderr",
+    "rawlogs/XR-ORDERFIX/package-tests.status",
+    "reports/XR-ORDERFIX.md"
+  ],
+  "limitations": [
+    "Review is limited to the finite PR23 fixture and native capture schemas; it makes no arbitrary browser equivalence claim.",
+    "No production files were modified by this review."
+  ]
+}

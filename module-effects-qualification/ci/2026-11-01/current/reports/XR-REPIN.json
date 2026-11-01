@@ -1,0 +1,33 @@
+{
+  "job_id": "XR-REPIN",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Independently checked E-REPIN sealed records, final Git source/tree, test-only source delta, fresh producer byte bindings, stable source-pin manifests, and archive/manifest hashes. The source-consistency claim is supported; no implementation change or full-suite rerun was needed.",
+  "owned_files": [
+    "reports/XR-REPIN.md",
+    "receipts/XR-REPIN.json",
+    "rawlogs/XR-REPIN/"
+  ],
+  "commands": [
+    "python3 effects-qualification-coordination/rawlogs/XR-REPIN/check-sealed-source.py",
+    "/tmp/gondola-go/go/bin/go version",
+    "git -C gondola rev-parse HEAD",
+    "git -C gondola rev-parse 'HEAD^{tree}'",
+    "git -C gondola status --porcelain --untracked-files=all",
+    "See rawlogs/XR-REPIN/commands.txt for the existing E-REPIN records inspected."
+  ],
+  "evidence": [
+    "The E-REPIN report, receipt, both indices, and source inventory match seal.json; all 29 indexed raw-log entries match recorded byte counts and SHA-256 values.",
+    "Live checkout is clean at 8632f139354c0863482eb625c3ba99b4f607ea0c, tree 25af3c13551870e10873f74722cabd2e4e38b0fa. Final binding records 142 package entries, 63 Go closure files, and 73 selected paths; all final current/Git comparisons match.",
+    "Fresh binding records valid, stable producer pins for all 63 Go closure files and 44 app/runner inputs across 73 unique paths. Before/after source-pin files are byte-identical, each 35,821 bytes with 237 entries and SHA-256 ab3e2b96b67a20fd81a8c10edfbda72114c6af090bd67f05d133248a1f45bc9d.",
+    "The Go diff against 433 contains exactly the fixture_selection_test.go addition and integration_test.go modification; production-Go diff returns 0. Current test-file bytes match final-integration-test.sha256 and final-fixture-selection-test.sha256.",
+    "Fresh archive hash/size is d1503bec6ac4f280f5576670eac3b6c5c7de143b4d0bc32a0dd79a634125c272 / 8,792,006 bytes. Manifest hash/size is d8f7f6a1f8ab17762e56bfae838772f95cae01ddd815094b48b6dabfaa2ce51e / 174,195 bytes; it declares source 8632, clean verifier HEAD, 237 pins, and 677 members.",
+    "Recorded tool versions match metadata: root Go 1.24.0, compiler Go 1.27.3, and Node 22.23.4.",
+    "Superseded preflight records and the final evidence distinction are documented in rawlogs/XR-REPIN/preflight-artifact-note.txt."
+  ],
+  "limitations": [
+    "No Go suite, fresh producer, or qualification CLI was rerun; runtime results are outside this bounded source review.",
+    "Git blob equality and producer pin matches establish byte consistency only, not Git history, remote-source, compiler, or producer authenticity.",
+    "The sealed source-inventory file is empty; this review checked the final structured source-binding outputs against the live Git checkout and fresh attempt metadata instead of relying on copied source snapshots."
+  ]
+}

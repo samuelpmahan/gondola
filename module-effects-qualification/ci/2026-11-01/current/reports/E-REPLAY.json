@@ -1,0 +1,40 @@
+{
+  "job_id": "E-REPLAY",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Extracted the native module effects replay into effectsreplay.ReplayJSON([]byte) ([]byte, error), preserved the CLI and mount-boundary modes, and verified byte-identical outputs and CLI failure behavior against the pre-change binary.",
+  "owned_files": [
+    "gondola/effectsreplay/replay.go",
+    "gondola/effectsreplay/replay_test.go",
+    "gondola/cmd/module-effects-native/main.go",
+    "gondola/cmd/module-effects-native/main_test.go"
+  ],
+  "commands": [
+    "/tmp/gondola-go/go/bin/go build -o /tmp/gondola-module-effects-native-before ./cmd/module-effects-native",
+    "/tmp/gondola-go/go/bin/go build -o /tmp/gondola-module-effects-native-after ./cmd/module-effects-native",
+    "/tmp/gondola-go/go/bin/go test ./effectsreplay ./cmd/module-effects-native",
+    "Run baseline and extracted CLIs plus a direct ReplayJSON harness on the literal and three real seeded scenario inputs; compare outputs with cmp.",
+    "Compare baseline and extracted CLI default and -mount-boundaries output, and compare stdout/stderr/exit status on unknown-field, trailing-JSON, and missing-file inputs."
+  ],
+  "evidence": [
+    "rawlogs/N1-E-REPLAY/commands.txt",
+    "rawlogs/N1-E-REPLAY/go-test.stdout",
+    "rawlogs/N1-E-REPLAY/go-test.stderr",
+    "rawlogs/N1-E-REPLAY/test-list.stdout",
+    "rawlogs/N1-E-REPLAY/comparisons.txt",
+    "rawlogs/N1-E-REPLAY/replay-output.sha256",
+    "rawlogs/N1-E-REPLAY/before-output.sha256",
+    "rawlogs/N1-E-REPLAY/before/",
+    "rawlogs/N1-E-REPLAY/after-cli/",
+    "rawlogs/N1-E-REPLAY/after-api/",
+    "rawlogs/N1-E-REPLAY/cli-compat/"
+  ],
+  "limitations": [
+    "Only focused replay and CLI package tests were run by this lane; integrated fresh regression belongs to the root worker.",
+    "Independent review has not yet occurred."
+  ],
+  "receiptCorrection": {
+    "reason": "native finish requires worker slot N1, original used agent path",
+    "original": "seals/E-REPLAY-preflight-rejected/E-REPLAY.json"
+  }
+}

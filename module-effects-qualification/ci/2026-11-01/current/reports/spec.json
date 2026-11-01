@@ -1,0 +1,75 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "service": {
+    "repository": "samuelpmahan/gondola",
+    "baseline": "e0933465725e470dc610e3f81b4bbee95538c1d0"
+  },
+  "jobs": [
+    {
+      "id": "E-REPLAY",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "effectsreplay/** cmd/module-effects-native/**",
+      "summary": "Extract existing native replay into reusable Go API ReplayJSON([]byte)([]byte,error); preserve all CLI/schema semantics and byte output."
+    },
+    {
+      "id": "E-CAPTURE",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "effectqualification/capture.go effectqualification/capture_test.go effectqualification/json.go",
+      "summary": "Go capture semantics and strict canonical JSON helpers. CheckCaptures(root string)(CaptureReport,error), JSON maps decoded with UseNumber; recompute effectsreplay.ReplayJSON for every scenario; exact states/events/effects + Go-render DOM/disabled comparisons across 5 profiles."
+    },
+    {
+      "id": "E-ADMISSION",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "effectqualification/verify.go effectqualification/admission.go effectqualification/admission_test.go",
+      "summary": "Native directory source/build/artifact/ABI admission and top-level VerifyDirectory(root string)(Report,error); reuse modulequalification.VerifyArchive through CLI for archive mode. Hash every input before/after; pin archived source bytes, 4 builds, ABI/caps. Must not accept producer boolean claims as proof."
+    },
+    {
+      "id": "E-ORDER",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "effectqualification/ordering.go effectqualification/ordering_test.go",
+      "summary": "Native lifecycle/transport/correlation acceptance CheckOrdering(expected, actual map[string]any) error. Inspect actual capture vs native differences; ordering supports direct/browser/swap finite profiles. Coordinate exact capture API with N2; no semantic JS delegation."
+    },
+    {
+      "id": "E-NEGATIVE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "effectqualification/integration_test.go effectqualification/adversarial_test.go",
+      "summary": "Independent native integration and negative controls against real PR23 bundle; fully rehash mutated inventories where required so tests reach semantics; no edits to implementation files. Read-only analyze interfaces until available, own reproducible controls/report."
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "cmd/module-effects-qualify/** run-module-effects-qualification.sh module-effects-qualification/** .github/workflows/gobi-module-effects-qualification.yml",
+      "summary": "CLI directory/archive modes with modulequalification.VerifyArchive; fresh explicit runner, Go source closure and evidence/report docs; no dependency on Node for semantic consumer. No edits prior receipts/profile. Runner must work against existing PR23 bundle then fresh profile."
+    }
+  ]
+}

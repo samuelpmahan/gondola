@@ -1,0 +1,30 @@
+{
+  "job_id": "XR-FINALAUDIT",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Accepted the narrow insufficient_evidence disposition: the original XR-ORDER review-packet.sha256 remains unrecovered, while all other current sealed log entries and all 115 sealed source copies match. XR-ORDER canonical report/receipt/index match their seals; no runtime evidence is missing from the one identified gap.",
+  "owned_files": [
+    "reports/XR-FINALAUDIT.md",
+    "receipts/XR-FINALAUDIT.json",
+    "rawlogs/XR-FINALAUDIT/"
+  ],
+  "commands": [
+    "python3 effects-qualification-coordination/rawlogs/XR-FINALAUDIT/check-root-audit.py",
+    "cmp sealed XR-ORDER report, receipt, and rawlogs index with canonical copies; test that review-packet.sha256 remains absent",
+    "wc -c and sha256sum the three preserved 470-byte candidates from rawlogs/E-FINALAUDIT/",
+    "See rawlogs/XR-FINALAUDIT/commands.txt for exact commands."
+  ],
+  "evidence": [
+    "31 current seal maps matched. The current all-seal raw-log walk found 899 entry references over 863 unique paths: 898 references match and the only missing file is rawlogs/XR-ORDER/review-packet.sha256; there are 36 repeated references with consistent pins.",
+    "All 115 source-inventory copies match their sealed sizes and hashes.",
+    "All 34 existing solver logs contain a final-objective record and none contains an ERROR, FATAL, panic, or Exception marker; this is a bounded log scan only.",
+    "XR-ORDER canonical report, receipt, and index match their seal copies. The missing 470-byte checksum target digest is d8e41fcbdfe6b2af4582bdefbe08e2ac2bdadf8ac2c257ebf0a7263480c91c8b. Retained candidates hash to 05713c3604cb417595921b194af3c80d8ba058a9645d7b07317eac8a575116e6 and c1002b278144aab37f6c88099d8b15e95c40f3c60aa19ba59022aabe933d3a63; neither candidate was restored.",
+    "The E-FINALAUDIT 825-entry count belongs to an earlier snapshot; the independent current all-seal enumeration has the broader count reported above."
+  ],
+  "limitations": [
+    "The exact derived 470-byte checksum file remains unavailable; no candidate was fabricated or restored.",
+    "No runtime, browser, producer, or capture commands were rerun, and the available solver-log scan does not prove solver correctness.",
+    "The shared gondola worktree showed a concurrent modified integration_test.go and untracked fixture_selection_test.go at the final status check; this reviewer did not edit or attribute those files.",
+    "This disposition does not authenticate Git history, code provenance, or broader runtime behavior."
+  ]
+}

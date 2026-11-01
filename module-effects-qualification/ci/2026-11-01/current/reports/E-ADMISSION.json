@@ -1,0 +1,29 @@
+{
+  "job_id": "E-ADMISSION",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Added native directory source/build/artifact/ABI admission and VerifyDirectory; verified the real PR23 bundle and the full effectqualification suite.",
+  "owned_files": [
+    "effectqualification/admission.go",
+    "effectqualification/admission_test.go",
+    "effectqualification/verify.go"
+  ],
+  "commands": [
+    "/tmp/gondola-go/go/bin/gofmt -w effectqualification/admission.go effectqualification/admission_test.go effectqualification/verify.go",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run 'TestHashInputs|TestReadSourceIdentity|TestRequiredEffectSourcePins' -count=1",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestPR23DirectoryIsAccepted$' -count=1",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -count=1"
+  ],
+  "evidence": [
+    "rawlogs/E-ADMISSION/go-test-admission-unit-final.log",
+    "rawlogs/E-ADMISSION/go-test-pr23-positive-final.log",
+    "rawlogs/E-ADMISSION/go-test-package-final.log",
+    "rawlogs/E-ADMISSION/commands.txt"
+  ],
+  "limitations": [
+    "Source pin bytes and clean Git metadata are internally checked; Git history and verifier-build provenance are not authenticated.",
+    "Build output bytes and ABI consistency are independently checked, but the compiler is not invoked or authenticated.",
+    "The verifier does not launch a browser or count producer mutation-control booleans as Go-executed negative-control proof.",
+    "modulequalification.VerifyArchive is schema-incompatible with the module-effects execution snapshot; N6 is implementing the effects-specific archive verifier."
+  ]
+}

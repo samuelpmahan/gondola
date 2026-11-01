@@ -1,0 +1,53 @@
+{
+  "job_id": "XR-ADMITFIX",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Independently verified E-ADMITFIX source and evidence seals, exact 15/13/12 key sets, rejection of both prior aliases and new unknown/missing fields, coherent source omission at the same gate, and unaffected capability/pair negatives.",
+  "owned_files": [
+    "reports/XR-ADMITFIX.md",
+    "receipts/XR-ADMITFIX.json",
+    "rawlogs/XR-ADMITFIX/commands.txt",
+    "rawlogs/XR-ADMITFIX/go-overlay.json",
+    "rawlogs/XR-ADMITFIX/probe.go",
+    "rawlogs/XR-ADMITFIX/source-seal-check.py",
+    "rawlogs/XR-ADMITFIX/source-seal-check.stdout.log",
+    "rawlogs/XR-ADMITFIX/source-seal-check.stderr.log",
+    "rawlogs/XR-ADMITFIX/source-seal-check.status",
+    "rawlogs/XR-ADMITFIX/focused-controls.stdout.log",
+    "rawlogs/XR-ADMITFIX/focused-controls.stderr.log",
+    "rawlogs/XR-ADMITFIX/focused-controls.status",
+    "rawlogs/XR-ADMITFIX/source-omission.stdout.log",
+    "rawlogs/XR-ADMITFIX/source-omission.stderr.log",
+    "rawlogs/XR-ADMITFIX/source-omission.status",
+    "rawlogs/XR-ADMITFIX/adversarial-controls.stdout.log",
+    "rawlogs/XR-ADMITFIX/adversarial-controls.stderr.log",
+    "rawlogs/XR-ADMITFIX/adversarial-controls.status",
+    "rawlogs/XR-ADMITFIX/child-parent-key-rejection.stdout.log",
+    "rawlogs/XR-ADMITFIX/child-parent-key-rejection.stderr.log",
+    "rawlogs/XR-ADMITFIX/child-parent-key-rejection.status"
+  ],
+  "commands": [
+    "python3 /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/source-seal-check.py",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/go-overlay.json ./effectqualification -run '^TestBuild(IndexEnvelope|RecordEnvelope)' -count=1 -v",
+    "XR_STOP_AFTER_SOURCE_OMISSION=1 GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go run -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/go-overlay.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/probe.go",
+    "XR_SKIP_SOURCE_OMISSION=1 GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go run -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/go-overlay.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/probe.go",
+    "XR_ONLY_CHILD_KEYED_HELPER=1 GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go run -overlay=/workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/go-overlay.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ADMITFIX/probe.go"
+  ],
+  "evidence": [
+    "rawlogs/XR-ADMITFIX/source-seal-check.stdout.log",
+    "rawlogs/XR-ADMITFIX/focused-controls.stdout.log",
+    "rawlogs/XR-ADMITFIX/source-omission.stdout.log",
+    "rawlogs/XR-ADMITFIX/adversarial-controls.stdout.log",
+    "rawlogs/XR-ADMITFIX/child-parent-key-rejection.stdout.log",
+    "seals/E-ADMITFIX/seal.json",
+    "seals/E-ADMITFIX/source-inventory.json",
+    "seals/E-ADMITFIX/source/effectqualification/admission.go",
+    "seals/E-ADMITFIX/source/effectqualification/admission_test.go"
+  ],
+  "limitations": [
+    "The author source-inventory file is not directly listed in seal.json; its pins were independently checked against the sealed snapshots, live files, sealed report, and indexed source-freeze log.",
+    "The accepted key-set repair does not authenticate compiler provenance; prior fully rehashed artifact acceptance remains within the documented scope.",
+    "The author's full-package result was checked against its sealed rawlog hash; this review independently ran the focused envelope suite and mutation matrix, not the full package.",
+    "No production or owned implementation files were edited."
+  ]
+}

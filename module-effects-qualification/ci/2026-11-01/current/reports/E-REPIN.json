@@ -1,0 +1,82 @@
+{
+  "job_id": "E-REPIN",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "The corrected source commit is byte-bound to the fresh E35 producer for all selected current inputs. Relative to source 433, the Go changes are limited to two test files; production Go bytes are identical. Fresh source pins are stable and cover the complete 63-file Go closure and 44 selected app/runner inputs.",
+  "owned_files": [
+    "effects-qualification-coordination/reports/E-REPIN.md",
+    "effects-qualification-coordination/receipts/E-REPIN.json",
+    "effects-qualification-coordination/rawlogs/E-REPIN/"
+  ],
+  "source": {
+    "commit": "8632f139354c0863482eb625c3ba99b4f607ea0c",
+    "tree": "25af3c13551870e10873f74722cabd2e4e38b0fa",
+    "historical_comparator": "4338255bf8800d521b7f932fb530fe2cedebbf72",
+    "head_matches_source": true,
+    "tree_matches_source": true,
+    "checkout_clean": true,
+    "production_go_diff_exit_code": 0,
+    "test_only_deltas": [
+      {
+        "path": "effectqualification/integration_test.go",
+        "current_bytes": 5011,
+        "current_sha256": "07319c7308c8f9d0391a484fbda2436a1dbbcad69d3cfa26882b18dd09c906ec",
+        "change": "Explicit fixture paths remain hard requirements; an absent default fixture is skippable."
+      },
+      {
+        "path": "effectqualification/fixture_selection_test.go",
+        "current_bytes": 2950,
+        "current_sha256": "1972a4fa8ff3a63aa6e77f371cc50ce95b42519885666421ef17d580a7b6795a",
+        "change": "New unit coverage for default and explicit fixture selection."
+      }
+    ]
+  },
+  "fresh_attempt": {
+    "path": "/tmp/effectsqual-cifinal-fresh-8632f139354c0863482eb625c3ba99b4f607ea0c-E35/attempt-20261101T062545178Z-121-4b515620",
+    "producer_source_commit_matches": true,
+    "producer_verifier_head_matches": true,
+    "binding_exit_code": 0,
+    "package_records": 142,
+    "go_closure_files": 63,
+    "go_closure_pins_validated": 63,
+    "app_runner_inputs": 44,
+    "app_runner_pins_validated": 44,
+    "unique_selected_paths": 73,
+    "selected_paths_matching_current_git_and_producer": 73,
+    "current_and_producer_stable_during_scan": true,
+    "source_pin_manifest_entries": 237,
+    "source_pin_manifest_bytes_each": 35821,
+    "source_pin_manifest_sha256": "ab3e2b96b67a20fd81a8c10edfbda72114c6af090bd67f05d133248a1f45bc9d",
+    "source_pin_manifests_byte_identical": true,
+    "archive_bytes": 8792006,
+    "archive_sha256": "d1503bec6ac4f280f5576670eac3b6c5c7de143b4d0bc32a0dd79a634125c272",
+    "manifest_bytes": 174195,
+    "manifest_sha256": "d8f7f6a1f8ab17762e56bfae838772f95cae01ddd815094b48b6dabfaa2ce51e",
+    "archive_members": 677
+  },
+  "runtime_gate": {
+    "source": "N6 final gate report and captured E-CIFINAL exit records",
+    "fresh_wrapper_exit_code": 0,
+    "m0_no_fixture_exit_code": 0,
+    "explicit_fixture_effectqualification_suite": "passed with no skips",
+    "unrelated_modulequalification_legacy_skips": 5,
+    "n3_reran_tests_or_wrapper": false
+  },
+  "limitations": [
+    "Git blob equality and producer pins are consistency evidence; no Git-history or remote-authentication claim is made.",
+    "The 237 count is the number of source-pin manifest entries; this helper validates the 63 Go closure files and 44 selected app/runner inputs.",
+    "Runtime results were reported by N6; N3 performed read-only binding and metadata checks only."
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/E-REPIN/current-43-binding.json",
+    "effects-qualification-coordination/rawlogs/E-REPIN/final-source-binding.json",
+    "effects-qualification-coordination/rawlogs/E-REPIN/fresh-source-binding.json",
+    "effects-qualification-coordination/rawlogs/E-REPIN/fresh-pin-manifest-check.txt",
+    "effects-qualification-coordination/rawlogs/E-REPIN/fresh-archive-fingerprint.txt",
+    "effects-qualification-coordination/rawlogs/E-REPIN/final-integration-test.diff",
+    "effects-qualification-coordination/rawlogs/E-REPIN/final-fixture-selection-test.diff",
+    "effects-qualification-coordination/rawlogs/E-REPIN/production-go-diff.exit-code",
+    "effects-qualification-coordination/rawlogs/E-REPIN/runtime-gate-references.txt",
+    "effects-qualification-coordination/rawlogs/E-REPIN/index.json"
+  ]
+}

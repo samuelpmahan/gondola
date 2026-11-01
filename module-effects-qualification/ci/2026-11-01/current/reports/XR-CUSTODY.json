@@ -1,0 +1,37 @@
+{
+  "job_id": "XR-CUSTODY",
+  "worker": "N3",
+  "decision": "accepted",
+  "scope": "Independent review of E-CUSTODY checksum-list recovery only",
+  "owned_files": [
+    "reports/XR-CUSTODY.md",
+    "receipts/XR-CUSTODY.json",
+    "rawlogs/XR-CUSTODY/"
+  ],
+  "summary": "The recovered 1133-byte checksum list is byte-identical to the original E-OFFLINE checksum list and has the SHA-256 recorded in the original seal index. The historical report pin is corroborated by the earlier recorded digest and is explicitly a historical metadata reference, not a mismatch against the current report.",
+  "evidence": {
+    "recovered_list_bytes": 1133,
+    "recovered_list_sha256": "a201c2d9a38409755c0144a3af1045c17131b9cd500fb10519cab1983928b929",
+    "canonical_list_cmp_exit_code": 0,
+    "current_report_candidate_sha256": "660fc1ddc7be122b78c62128f50a4938060cded68690858766248d8bf745725f",
+    "candidate_diff": "Only the final E-OFFLINE report digest line differs; current report digest is 61966352bf57cca37b797d9ccb70ee075cf48b23c0e77bad3deb87065b334dad and historical recorded digest is 11d72fa4780a80886477febc04e3373c0ffd5f2f845d60d893263890d6619cfe.",
+    "current_candidate_entries_validated": 8,
+    "historical_candidate_nonreport_entries_validated": 7,
+    "sealed_original_rawlog_entries_validated": 39,
+    "all_rawlog_checks_exit_code": 0
+  },
+  "limitations": [
+    "The historical report digest is a historical metadata pin; it does not identify the later current E-OFFLINE report bytes.",
+    "No CLI rerun or source/product modification was performed.",
+    "The review validates recovery bytes and sealed rawlog pins, not execution semantics beyond the already captured evidence."
+  ],
+  "artifacts": [
+    "reports/XR-CUSTODY.md",
+    "rawlogs/XR-CUSTODY/commands.txt",
+    "rawlogs/XR-CUSTODY/candidate-size-digest.stdout.txt",
+    "rawlogs/XR-CUSTODY/candidate-report-pin-diff.txt",
+    "rawlogs/XR-CUSTODY/current-candidate-check.stdout.txt",
+    "rawlogs/XR-CUSTODY/historical-seven-inputs-check.stdout.txt",
+    "rawlogs/XR-CUSTODY/sealed-rawindex-check.stdout.txt"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "job_id": "XR-REPLAY",
+  "worker": "N3",
+  "reviewed_job": "E-REPLAY",
+  "decision": "accepted",
+  "summary": "Sealed replay extraction and evidence passed independent source, API byte, CLI compatibility, test preservation, short-write, and no-Node-delegation checks. Direct ReplayJSON parser limitations are documented separately from strict qualification caller behavior.",
+  "commands": [
+    "/tmp/gondola-go/go/bin/go run /tmp/xr-replay-compare/verify-seal.go",
+    "/tmp/gondola-go/go/bin/go run /tmp/xr-replay-compare/main.go /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a ../effects-qualification-coordination/rawlogs/E-REPLAY/before ../effects-qualification-coordination/rawlogs/XR-REPLAY/after-api",
+    "/tmp/gondola-go/go/bin/go test ./effectsreplay ./cmd/module-effects-native -count=1",
+    "/tmp/gondola-go/go/bin/go test -list . ./effectsreplay ./cmd/module-effects-native",
+    "/tmp/gondola-go/go/bin/go build -o /tmp/xr-replay-compare/module-effects-native ./cmd/module-effects-native",
+    "/tmp/xr-replay-compare/cli-compat.sh",
+    "/tmp/gondola-go/go/bin/go test /tmp/xr-replay-shortwrite/main.go /tmp/xr-replay-shortwrite/main_test.go -count=1",
+    "/tmp/gondola-go/go/bin/go run /tmp/xr-replay-compare/parser-limits.go",
+    "/tmp/gondola-go/go/bin/go list -f '{{.Imports}}' ./effectsreplay"
+  ],
+  "evidence": [
+    "rawlogs/XR-REPLAY/seal-file-hashes.txt",
+    "rawlogs/XR-REPLAY/seal-inventory-verification.log",
+    "rawlogs/XR-REPLAY/source-snapshot-match.log",
+    "rawlogs/XR-REPLAY/replay-function-preservation.log",
+    "rawlogs/XR-REPLAY/test-preservation-check.log",
+    "rawlogs/XR-REPLAY/test-list.log",
+    "rawlogs/XR-REPLAY/focused-tests.log",
+    "rawlogs/XR-REPLAY/api-comparison.log",
+    "rawlogs/XR-REPLAY/after-api/",
+    "rawlogs/XR-REPLAY/cli-compat-comparison.log",
+    "rawlogs/XR-REPLAY/current-cli/",
+    "rawlogs/XR-REPLAY/io-shortwrite-test.log",
+    "rawlogs/XR-REPLAY/parser-limits.log",
+    "rawlogs/XR-REPLAY/effectsreplay-imports.txt",
+    "rawlogs/XR-REPLAY/delegation-scan.log",
+    "rawlogs/XR-REPLAY/index.json"
+  ],
+  "limitations": [
+    "ReplayJSON rejects unknown fields and trailing values but standard encoding/json accepts duplicate object keys and replaces invalid UTF-8; CheckCaptures applies the strict caller decoder before ReplayJSON.",
+    "This review ran focused package tests and independent real-fixture comparisons, not the full repository suite.",
+    "No browser or network equivalence is claimed."
+  ]
+}

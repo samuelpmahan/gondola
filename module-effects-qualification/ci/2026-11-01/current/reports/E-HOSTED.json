@@ -1,0 +1,95 @@
+{
+  "job_id": "E-HOSTED",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Verified the published PR24 native qualification run, fetched and hashed its hosted artifact ZIP, inspected the embedded attempt summaries and stable pins, and preserved the inherited keyed-workflow failure with its exact missing-fixture diagnostic.",
+  "published_runs": [
+    {
+      "workflow": "Gobi native module-effects qualification",
+      "run_id": 41278451068,
+      "job_id": 124765296457,
+      "conclusion": "success",
+      "source_commit": "4338255bf8800d521b7f932fb530fe2cedebbf72",
+      "url": "https://github.com/samuelpmahan/gondola/actions/runs/41278451068"
+    },
+    {
+      "workflow": "Gobi keyed module effects",
+      "run_id": 41278451076,
+      "job_id": 124765296616,
+      "conclusion": "failure",
+      "source_commit": "4338255bf8800d521b7f932fb530fe2cedebbf72",
+      "url": "https://github.com/samuelpmahan/gondola/actions/runs/41278451076"
+    }
+  ],
+  "artifact": {
+    "name": "gobi-module-effects-qualification-41278451068-1",
+    "artifact_id": 13072252035,
+    "bytes": 24858789,
+    "sha256": "2592859c66658aa18cc1d2d64e11dbec50ab6102edb154b8da2d85a325fd218b",
+    "downloaded": true,
+    "zip_integrity": "passed",
+    "native_cli_readback": {
+      "status": "passed",
+      "source_commit": "4338255bf8800d521b7f932fb530fe2cedebbf72",
+      "scenarios": 4,
+      "profiles": 20,
+      "events": 178,
+      "states": 182,
+      "effects": 58,
+      "transport_events": 116,
+      "archived_source_checks": 236,
+      "path": "rawlogs/E-HOSTED/native-cli-verification.stdout.json"
+    }
+  },
+  "findings": [
+    {
+      "severity": "informational",
+      "location": "run 41278451076, job 124765296616, step 8",
+      "issue": "The inherited M0/regression step fails nine effectqualification tests because their expected PR23 attempt directory does not exist. The logged step environment omits GOBI_EFFECTS_QUALIFICATION_INPUT; the tests report the fallback path and exact stat ENOENT. The following keyed profile step is skipped, and the run has no artifact."
+    }
+  ],
+  "evidence": [
+    "rawlogs/E-HOSTED/captured-at.txt",
+    "rawlogs/E-HOSTED/native-run.json",
+    "rawlogs/E-HOSTED/keyed-run.json",
+    "rawlogs/E-HOSTED/native-jobs.json",
+    "rawlogs/E-HOSTED/keyed-jobs.json",
+    "rawlogs/E-HOSTED/native-artifacts.json",
+    "rawlogs/E-HOSTED/keyed-artifacts.json",
+    "rawlogs/E-HOSTED/artifact-download-response.json",
+    "rawlogs/E-HOSTED/native-job.log",
+    "rawlogs/E-HOSTED/keyed-job.log",
+    "rawlogs/E-HOSTED/hosted-native-artifact.zip",
+    "rawlogs/E-HOSTED/hosted-artifact-unzip-test.txt",
+    "rawlogs/E-HOSTED/hosted-artifact-paths.txt",
+    "rawlogs/E-HOSTED/hosted-artifact-check.txt",
+    "rawlogs/E-HOSTED/keyed-failure-excerpt.txt",
+    "rawlogs/E-HOSTED/source-head-states.txt",
+    "rawlogs/E-HOSTED/native-attempt/receipt.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/source-pins-before.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/source-pins-after.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/test-summary.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/git-source-closure.json",
+    "rawlogs/E-HOSTED/native-attempt/logs/module-effects-go-tests.stdout.bin",
+    "rawlogs/E-HOSTED/native-attempt/logs/module-effects-go-tests.command.json",
+    "rawlogs/E-HOSTED/native-cli-check.txt",
+    "rawlogs/E-HOSTED/native-cli-verification.stdout.json",
+    "rawlogs/E-HOSTED/native-cli-verification.stderr.log",
+    "rawlogs/E-HOSTED/native-cli-verification.status",
+    "rawlogs/E-HOSTED/native-cli-go-version.txt",
+    "rawlogs/E-HOSTED/native-cli-source-head.txt",
+    "rawlogs/E-HOSTED/native-cli-source-diff.txt",
+    "rawlogs/E-HOSTED/native-cli-initial-cwd-error.stderr.log",
+    "rawlogs/E-HOSTED/native-cli-initial-cwd-error.status"
+  ],
+  "limitations": [
+    "Hosted native success and inherited keyed failure are separate workflows on the same source commit.",
+    "The outer ZIP and embedded attempt archive fingerprints were verified, and a Go-native archive/profile verification exited 0; this review did not repeat the browser build/runtime matrix.",
+    "The inherited keyed workflow produced no downloadable artifact."
+  ],
+  "outcome": "confirmed_reuse",
+  "receiptCorrection": {
+    "reason": "native extract outcome normalized from author review-label to allowed read-only verification outcome",
+    "original": "seals/E-HOSTED-preflight-rejected/E-HOSTED.json"
+  }
+}

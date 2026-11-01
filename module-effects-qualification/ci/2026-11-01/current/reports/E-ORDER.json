@@ -1,0 +1,22 @@
+{
+  "job_id": "E-ORDER",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Implemented native lifecycle and transport ordering checks; all five literal profile captures, one seeded browser.swap capture, and event/correlation negative controls pass.",
+  "owned_files": [
+    "gondola/effectqualification/ordering.go",
+    "gondola/effectqualification/ordering_test.go"
+  ],
+  "commands": [
+    "/tmp/gondola-go/go/bin/go test ./effectqualification -run TestCheckOrdering -count=1"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/E-ORDER/command.txt",
+    "effects-qualification-coordination/rawlogs/E-ORDER/go-test.stdout.log",
+    "effects-qualification-coordination/reports/E-ORDER.md"
+  ],
+  "limitations": [
+    "Real-capture tests use GOBI_EFFECTS_QUALIFICATION_INPUT when set, otherwise the local PR23 fixture; they explicitly skip if no fixture is available.",
+    "Validation is limited to the five finite capture profile schemas and captured lifecycle semantics; it is not a general Go/browser equivalence claim."
+  ]
+}

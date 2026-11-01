@@ -1,0 +1,36 @@
+{
+  "job_id": "XR-CAPTURE",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Sealed E-CAPTURE source and evidence integrity verified. The real fixture and focused tests pass; four scenario identity replacements, profile identity replacement, and coherent state/tree/DOM/disabled/event/effect/pending mutations were rejected. Extra generic-map metadata is accepted as documented.",
+  "findings": [],
+  "commands": [
+    "Packet integrity checks and sha256sum verification recorded in rawlogs/XR-CAPTURE/seal-integrity.txt.",
+    "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test -overlay=/tmp/effectqual-review-overlay.json ./effectqualification -run '^(TestDecodeMapStrictPreservesNumberAndRejectsAmbiguousJSON|TestDecodeJSONStrictRejectsFieldAliases|TestCheckCapturesRejectsMissingRequiredSuite|TestCheckCapturesAgainstExplicitFixture)$' -count=1 -v",
+    "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -overlay=/tmp/effectqual-review-overlay.json ./modulequalification -run '^TestDecodeStrict' -count=1 -v",
+    "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run -overlay=/tmp/effectqual-review-overlay.json /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-CAPTURE/boundary-probe.go /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a/conformance"
+  ],
+  "evidence": [
+    "rawlogs/XR-CAPTURE/index.json",
+    "rawlogs/XR-CAPTURE/seal-integrity.stdout",
+    "rawlogs/XR-CAPTURE/seal-integrity.txt",
+    "rawlogs/XR-CAPTURE/sealed-tests.stdout",
+    "rawlogs/XR-CAPTURE/sealed-tests.stderr",
+    "rawlogs/XR-CAPTURE/sealed-tests.status",
+    "rawlogs/XR-CAPTURE/decoder-tests.stdout",
+    "rawlogs/XR-CAPTURE/decoder-tests.stderr",
+    "rawlogs/XR-CAPTURE/decoder-tests.status",
+    "rawlogs/XR-CAPTURE/boundary-probe.go",
+    "rawlogs/XR-CAPTURE/boundary-probe.stdout",
+    "rawlogs/XR-CAPTURE/boundary-probe.stderr",
+    "rawlogs/XR-CAPTURE/boundary-probe.status",
+    "rawlogs/XR-CAPTURE/ordering-overlay.json",
+    "reports/XR-CAPTURE.md"
+  ],
+  "limitations": [
+    "This review covers only the four pinned PR23 scenarios and five fixed profiles.",
+    "Focused tests used the sealed E-ORDER overlay because N2 was concurrently repairing live ordering.go; the separate XR-ORDER pendingCount finding remains outside this capture decision.",
+    "Generic capture documents tolerate unknown metadata keys; typed records use strict closed-field decoding.",
+    "No production source was modified by this review."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "job_id": "E-OFFLINE",
+  "worker": "N5",
+  "outcome": "confirmed_reuse",
+  "summary": "The published Go CLI at clean verifier checkpoint 4338255 accepted the actual prior Git-readback directory and reconstructed prior publication archive with PATH=/nonexistent. Both reports identify producer source e093346, match at 4 scenarios/20 profiles and 4 ABI builds/2 pairs, and are canonically equal after excluding archive metadata.",
+  "owned_files": [
+    "reports/E-OFFLINE.md",
+    "receipts/E-OFFLINE.json",
+    "rawlogs/E-OFFLINE/"
+  ],
+  "commands": [
+    "In gondola/: /tmp/gondola-go/go/bin/go build -mod=readonly -trimpath -o /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/module-effects-qualify ./cmd/module-effects-qualify",
+    "PATH=/nonexistent /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/module-effects-qualify --directory /tmp/module-effects-publish/readback-final-primary",
+    "PATH=/nonexistent /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/module-effects-qualify --archive /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/prior-publication.tar.gz --manifest /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/prior-publication.bundle.manifest.json",
+    "python3 effects-qualification-coordination/rawlogs/E-OFFLINE/compare-cli-reports.py (standard-library canonical report comparison only)",
+    "See rawlogs/E-OFFLINE/commands.txt for publication identity, source closure, segment reconstruction, checksums, versions, and exact commands."
+  ],
+  "evidence": [
+    "Verifier HEAD 4338255bf8800d521b7f932fb530fe2cedebbf72 is clean and has tree 146daa2199e0c2ee679c622b6c765a2c0ff5b356; source-publication.json records equal API/staged/fetched trees.",
+    "The Go 1.24.0 linux/amd64 CLI binary SHA-256 is 91ba287c7333c5291bd81ad0cc8f2586639bc19b8570c9562744eaeecf29b1ee; embedded VCS revision is the verifier HEAD and vcs.modified=false.",
+    "Directory and archive CLI runs each exited 0, emitted no stderr, and reported producer source e0933465725e470dc610e3f81b4bbee95538c1d0, 202 matched source pins, 4 scenarios, 20 profiles, 178 events, 182 states, 58 effects, 116 transport events, 4 builds, and 2 ABI pairs.",
+    "The archive report adds 639 members and 8667568 bytes. Reconstructed archive SHA-256 7eb9f28fc6504bf43207436dfc916549bb28e34059cee69bc138376be7940087 and manifest SHA-256 457073a81f1c93ba0edfe51b06667bb39f9baed95fd32ad3a9c630f9f476b1b9 match the prior publication metadata.",
+    "Canonical reports are equal after removing only the archive field. Raw JSON sizes and hashes are recorded in rawlogs/E-OFFLINE/byte-counts.txt and sha256sums.txt."
+  ],
+  "limitations": [
+    "This independently qualifies only the prior PR23 Git-readback directory and prior publication archive; it makes no fresh-profile claim.",
+    "Offline acceptance does not authenticate Git history or verifier binary provenance, prove a compiler invocation, or qualify arbitrary module graphs.",
+    "Python standard library was used only to compare successful Go CLI JSON reports and summarize fields; all semantic acceptance came from the Go CLI.",
+    "No production files or Git state were modified."
+  ]
+}

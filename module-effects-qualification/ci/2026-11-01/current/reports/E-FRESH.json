@@ -1,0 +1,62 @@
+{
+  "job_id": "E-FRESH",
+  "worker": "N6",
+  "outcome": "confirmed_reuse",
+  "summary": "Executed the accepted fresh source through the producer, native archive consumer, and explicit fixture-backed Go suite, then ran M0 from an isolated Git archive with the historical PR23 input and default expected-source behavior.",
+  "owned_files": [
+    "module-effects-qualification/reports/E-FRESH.md",
+    "module-effects-qualification/receipts/E-FRESH.json",
+    "module-effects-qualification/rawlogs/E-FRESH/**"
+  ],
+  "commands": [
+    {
+      "command": "env PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin GOBI_GO_BIN=/tmp/gondola-go/go/bin/go GOBI_NODE_BIN=/tmp/gondola-node22/node_modules/node/bin/node GOBI_PYTHON_BIN=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 GOTOOLCHAIN=local GOFLAGS=-buildvcs=false bash run-module-effects-qualification.sh --fresh --source-commit 4338255bf8800d521b7f932fb530fe2cedebbf72 --chromium /tmp/chromium-portable --output-root /tmp/effectsqual-fresh-4338255bf8800d521b7f932fb530fe2cedebbf72-E17",
+      "evidence": "module-effects-qualification/rawlogs/E-FRESH/fresh.command.txt; fresh.stdout.log; fresh.stderr.log; fresh.exit-code"
+    },
+    {
+      "command": "GOBI_EFFECTS_QUALIFICATION_INPUT=/tmp/effectsqual-fresh-4338255bf8800d521b7f932fb530fe2cedebbf72-E17/attempt-20261101T055628369Z-128-0d7fde3c GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT=4338255bf8800d521b7f932fb530fe2cedebbf72 /tmp/gondola-go/go/bin/go test -v -count=1 ./cmd/module-effects-qualify ./effectqualification ./effectsreplay ./modulequalification",
+      "evidence": "module-effects-qualification/rawlogs/E-FRESH/qualification-go-tests.log"
+    },
+    {
+      "command": "git archive 4338255bf8800d521b7f932fb530fe2cedebbf72 > /tmp/effectsqual-m0-4338255bf8800d521b7f932fb530fe2cedebbf72-E17/source.tar",
+      "evidence": "module-effects-qualification/rawlogs/E-FRESH/m0-source-archive.command.txt; m0-source-archive.sha256"
+    },
+    {
+      "command": "env -u GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin GOTOOLCHAIN=local GOFLAGS=-buildvcs=false npm_config_offline=true GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a bash /tmp/effectsqual-m0-4338255bf8800d521b7f932fb530fe2cedebbf72-E17/source/run.sh",
+      "evidence": "module-effects-qualification/rawlogs/E-FRESH/m0-run.command.txt; m0-run.stdout.log; m0-run.stderr.log; m0-run.exit-code"
+    },
+    {
+      "command": "(cd /tmp/effectsqual-m0-4338255bf8800d521b7f932fb530fe2cedebbf72-E17/source && env -u GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test -v -count=1 ./effectqualification -run '^TestPR23DirectoryIsAccepted$')",
+      "evidence": "module-effects-qualification/rawlogs/E-FRESH/m0-explicit-fixture-test.command.txt; m0-explicit-fixture-test.stdout.log; m0-explicit-fixture-test.stderr.log; m0-explicit-fixture-test.exit-code"
+    }
+  ],
+  "evidence": [
+    "module-effects-qualification/rawlogs/E-FRESH/output-manifest.json (SHA-256 f1d40a40996c63960a5f4c397bd54c681a58121c39fdd057dfc821dd2bc3ae2b; 151 files)",
+    "module-effects-qualification/reports/E-FRESH.md (SHA-256 56a0edb82d4df46e4a9aaf05da5e357fa916cec1e37711bbbdc098f11df06df9)",
+    "module-effects-qualification/rawlogs/E-FRESH/source-publication.json",
+    "module-effects-qualification/rawlogs/E-FRESH/fresh-execution-gate.json",
+    "module-effects-qualification/rawlogs/E-FRESH/fresh-summary.json",
+    "module-effects-qualification/rawlogs/E-FRESH/qualification-report.json",
+    "module-effects-qualification/rawlogs/E-FRESH/producer-manifest.json",
+    "module-effects-qualification/rawlogs/E-FRESH/producer-receipt.json",
+    "module-effects-qualification/rawlogs/E-FRESH/qualification-go-tests.log",
+    "module-effects-qualification/rawlogs/E-FRESH/fresh-primary.tar.gz",
+    "module-effects-qualification/rawlogs/E-FRESH/fresh-primary.manifest.json",
+    "module-effects-qualification/rawlogs/E-FRESH/input-integrity-comparisons.txt",
+    "module-effects-qualification/rawlogs/E-FRESH/producer-command-logs/**",
+    "module-effects-qualification/rawlogs/E-FRESH/producer-archive-logs/**",
+    "module-effects-qualification/rawlogs/E-FRESH/producer-consumer-logs/**",
+    "module-effects-qualification/rawlogs/E-FRESH/preparation-errors.md",
+    "module-effects-qualification/rawlogs/E-FRESH/input-integrity-comparisons.txt"
+  ],
+  "limitations": [
+    "Five unrelated legacy modulequalification tests visibly skipped due to separate compiled-module capture/archive inputs; they are named in the report and no pass is attributed to them.",
+    "The fresh producer and native acceptance use source 4338255bf8800d521b7f932fb530fe2cedebbf72; the M0 replay reads the historical e0933465725e470dc610e3f81b4bbee95538c1d0 PR23 attempt, with the expected-source override unset.",
+    "The GitHub Actions workflow was not run; the local full fresh wrapper and isolated M0 run both passed.",
+    "This evidence does not establish pixel equivalence, arbitrary backends or applications, network/auth behavior, or live cross-module runtime fault behavior."
+  ],
+  "receiptCorrection": {
+    "reason": "native slot normalized only",
+    "original": "receipts/E-FRESH-original.json"
+  }
+}

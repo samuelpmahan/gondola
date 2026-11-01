@@ -1,0 +1,28 @@
+{
+  "job_id": "E-CUSTODY",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Recovery only: reconstructed the exact original 1133-byte E-OFFLINE checksum list using its frozen eight-input order and the historical pre-amendment report hash. Candidate SHA-256 matches the sealed target exactly; root restored the canonical file and verified zero raw-index mismatches.",
+  "owned_files": [
+    "reports/E-CUSTODY.md",
+    "receipts/E-CUSTODY.json",
+    "rawlogs/E-CUSTODY/"
+  ],
+  "commands": [
+    "Read checkpoints/E-OFFLINE-postseal-addendum/addendum.json, seals/E-OFFLINE/seal.json, seals/E-OFFLINE/rawlogs-index.json, and the frozen rawlogs/E-OFFLINE/commands.txt.",
+    "Generate the 8-entry checksum candidate from the original frozen command order, outputting only under rawlogs/E-CUSTODY/candidate-sha256sums.txt.",
+    "Replace only the report-hash line from sealed hash 61966352...334dad to historical tool-result hash 11d72fa4...619cfe, outputting rawlogs/E-CUSTODY/candidate-sha256sums-original-report-pin.txt.",
+    "wc -c and sha256sum both candidates; exact commands and outputs are in rawlogs/E-CUSTODY/commands.txt and candidate-check.stdout.txt."
+  ],
+  "evidence": [
+    "The post-seal addendum target is 1133 bytes with SHA-256 a201c2d9a38409755c0144a3af1045c17131b9cd500fb10519cab1983928b929.",
+    "The candidate using current sealed report hash 61966352bf57cca37b797d9ccb70ee075cf48b23c0e77bad3deb87065b334dad is 1133 bytes but hashes to 660fc1ddc7be122b78c62128f50a4938060cded68690858766248d8bf745725f.",
+    "The earlier tool result recorded report hash 11d72fa4780a80886477febc04e3373c0ffd5f2f845d60d893263890d6619cfe. Replacing only that line yields a 1133-byte candidate hashing exactly to the sealed target.",
+    "Root restored the original canonical checksum list from the verified candidate and reports zero mismatches against the E-OFFLINE raw-log index."
+  ],
+  "limitations": [
+    "This is a derived checksum-list recovery only; no Go CLI rerun was needed and the original E-OFFLINE consumer result was not changed.",
+    "The historical report hash is taken from the earlier tool result; the exact target digest validates the reconstructed checksum-list bytes and order.",
+    "No production source or Git state was changed."
+  ]
+}

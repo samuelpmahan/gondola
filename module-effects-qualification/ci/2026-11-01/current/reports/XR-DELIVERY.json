@@ -1,0 +1,39 @@
+{
+  "job_id": "XR-DELIVERY",
+  "worker": "N2",
+  "decision": "amend",
+  "summary": "Frozen native verifier, CLI, archive API, existing-input wrapper modes, Go suite, and workflow checks are accepted. The only open item is the intentionally forward-referenced evidence branch guide URL; it must be published and read back after fresh execution and final packaging.",
+  "commands": [
+    "python3 effects-qualification-coordination/rawlogs/XR-DELIVERY/source-integrity.py",
+    "python3 effects-qualification-coordination/rawlogs/XR-DELIVERY/make-overlay.py",
+    "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go build -overlay=effects-qualification-coordination/rawlogs/XR-DELIVERY/compile-overlay.json -o /tmp/xr-delivery-epoch16/module-effects-qualify ./cmd/module-effects-qualify",
+    "GOTOOLCHAIN=local GOBI_EFFECTS_QUALIFICATION_INPUT=<real PR23 attempt> GOBI_EFFECTS_EXPECTED_SOURCE_COMMIT=e0933465725e470dc610e3f81b4bbee95538c1d0 /tmp/gondola-go/go/bin/go test -overlay=effects-qualification-coordination/rawlogs/XR-DELIVERY/compile-overlay.json -v -count=1 ./cmd/module-effects-qualify ./effectqualification ./effectsreplay ./modulequalification",
+    "PATH=/nonexistent /tmp/xr-delivery-epoch16/module-effects-qualify --directory <real PR23 attempt>",
+    "PATH=/nonexistent TMPDIR=/tmp/xr-delivery-epoch16/tmp-archive /tmp/xr-delivery-epoch16/module-effects-qualify --archive <real PR23 archive> --manifest <real PR23 manifest>",
+    "GOTOOLCHAIN=local GOBI_GO_BIN=effects-qualification-coordination/rawlogs/XR-DELIVERY/go-overlay-shim.sh TMPDIR=<private temp> bash gondola/run-module-effects-qualification.sh --directory <real PR23 attempt>",
+    "GOTOOLCHAIN=local GOBI_GO_BIN=effects-qualification-coordination/rawlogs/XR-DELIVERY/go-overlay-shim.sh TMPDIR=<private temp> bash gondola/run-module-effects-qualification.sh --archive <real PR23 archive> --manifest <real PR23 manifest>",
+    "/tmp/portable-tools/actionlint gondola/.github/workflows/gobi-module-effects-qualification.yml",
+    "bash -n gondola/run-module-effects-qualification.sh",
+    "git -C gondola check-ignore -v module-effects-qualification/output/fresh.probe/ module-effects-qualification/rawlogs/probe.log module-effects-qualification/evidence/probe.json module-effects-qualification/ci/probe.log"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/index.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/source-integrity.stdout.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/go-suite.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/directory.stdout.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/archive.stdout.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/wrapper-directory.stdout.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/wrapper-archive.stdout.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/wrapper-bad-cli.stderr.log",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/wrapper-bad-member.stderr.log",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/tmp-leftovers.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/integration-delta.diff",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/pinned-url-hashes.json",
+    "effects-qualification-coordination/rawlogs/XR-DELIVERY/branch-guide-fetch.json"
+  ],
+  "limitations": [
+    "The forward-referenced branch guide URL is not published yet; root plans to create it after the fresh run and final package, followed by an independent URL readback.",
+    "This review did not run fresh mode, the GitHub Actions workflow, or browser execution.",
+    "The archive format and Go verifier provide bounded finite evidence validation, not signed source authenticity or arbitrary-runtime qualification."
+  ]
+}

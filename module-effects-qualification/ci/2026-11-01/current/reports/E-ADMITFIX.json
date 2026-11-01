@@ -1,0 +1,35 @@
+{
+  "job_id": "E-ADMITFIX",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Closed the exact PR23 v1 build-index and role-specific build-record key sets. Added alias, unknown-field, missing-field, and real four-build/two-pair positive controls. Focused and full package tests pass.",
+  "owned_files": [
+    "gondola/effectqualification/admission.go",
+    "gondola/effectqualification/admission_test.go",
+    "reports/E-ADMITFIX.md",
+    "receipts/E-ADMITFIX.json",
+    "rawlogs/E-ADMITFIX/**"
+  ],
+  "commands": [
+    "/tmp/gondola-go/go/bin/gofmt -w gondola/effectqualification/admission.go gondola/effectqualification/admission_test.go",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run '^TestBuild(IndexEnvelope|RecordEnvelope)' -count=1 -v",
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -count=1",
+    "bash effects-qualification-coordination/rawlogs/E-ADMITFIX/preservation-check.sh"
+  ],
+  "evidence": [
+    "rawlogs/E-ADMITFIX/schema-inspection.stdout.log",
+    "rawlogs/E-ADMITFIX/admission-controls.stdout.log",
+    "rawlogs/E-ADMITFIX/admission-controls.stderr.log",
+    "rawlogs/E-ADMITFIX/admission-controls.status",
+    "rawlogs/E-ADMITFIX/full-package.stdout.log",
+    "rawlogs/E-ADMITFIX/full-package.stderr.log",
+    "rawlogs/E-ADMITFIX/full-package.status",
+    "rawlogs/E-ADMITFIX/preservation-check.stdout.log",
+    "rawlogs/E-ADMITFIX/source-freeze.stdout.log",
+    "rawlogs/E-ADMITFIX/index.json"
+  ],
+  "limitations": [
+    "This change does not authenticate compiler provenance or alter the documented acceptance of internally consistent, fully rehashed artifacts.",
+    "The independent source-omission mutation remains outside this keyset fix and was not rerun."
+  ]
+}

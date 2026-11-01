@@ -1,0 +1,56 @@
+{
+  "job_id": "XR-HOSTED",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Independently verified the sealed E-HOSTED packet, saved hosted run and artifact metadata, the retained downloaded ZIP digest/integrity, embedded attempt and manifest, hosted test/runtime summaries, and saved PATH=/nonexistent Go CLI readback. Recorded the inherited keyed-workflow missing-fixture failure as a separate run.",
+  "owned_files": [
+    "reports/XR-HOSTED.md",
+    "receipts/XR-HOSTED.json",
+    "rawlogs/XR-HOSTED/"
+  ],
+  "commands": [
+    "python3 rawlogs/XR-HOSTED/verify-seal.py",
+    "python3 rawlogs/XR-HOSTED/verify-evidence.py",
+    "python3 rawlogs/XR-HOSTED/verify-packet-copies.py",
+    "bash rawlogs/XR-HOSTED/embedded-member-check.sh",
+    "rg -F 'Go.Class.Var.Message_Controller' rawlogs/E-HOSTED/hosted-artifact-paths.txt || true",
+    "python3 rawlogs/XR-HOSTED/make-index.py"
+  ],
+  "evidence": [
+    "rawlogs/XR-HOSTED/seal-verification.json",
+    "rawlogs/XR-HOSTED/evidence-verification.json",
+    "rawlogs/XR-HOSTED/packet-copy-verification.json",
+    "rawlogs/XR-HOSTED/embedded-member-check.stdout",
+    "rawlogs/XR-HOSTED/suspicious-path-check.txt",
+    "rawlogs/XR-HOSTED/commands.txt",
+    "rawlogs/XR-HOSTED/index.json",
+    "rawlogs/E-HOSTED/native-run.json",
+    "rawlogs/E-HOSTED/native-jobs.json",
+    "rawlogs/E-HOSTED/native-artifacts.json",
+    "rawlogs/E-HOSTED/hosted-native-artifact.zip",
+    "rawlogs/E-HOSTED/hosted-artifact-check.txt",
+    "rawlogs/E-HOSTED/hosted-artifact-unzip-test.txt",
+    "rawlogs/E-HOSTED/native-attempt/receipt.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/git-source-closure.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/source-pins-before.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/source-pins-after.json",
+    "rawlogs/E-HOSTED/native-attempt/metadata/test-summary.json",
+    "rawlogs/E-HOSTED/native-job.log",
+    "rawlogs/E-HOSTED/native-cli-check.txt",
+    "rawlogs/E-HOSTED/native-cli-verification.stdout.json",
+    "rawlogs/E-HOSTED/native-cli-verification.stderr.log",
+    "rawlogs/E-HOSTED/native-cli-verification.status",
+    "rawlogs/E-HOSTED/native-cli-go-version.txt",
+    "rawlogs/E-HOSTED/native-cli-source-diff.txt",
+    "rawlogs/E-HOSTED/hosted-artifact-paths.txt",
+    "rawlogs/E-HOSTED/keyed-run.json",
+    "rawlogs/E-HOSTED/keyed-jobs.json",
+    "rawlogs/E-HOSTED/keyed-failure-excerpt.txt",
+    "reports/XR-HOSTED.md"
+  ],
+  "limitations": [
+    "The review used saved GitHub API and job-log records. It did not make a new API request, download, or browser-matrix run.",
+    "The Go-native CLI result verifies the retained archive bytes and replayed profile data; it does not authenticate Git history or compiler-build provenance.",
+    "The inherited keyed-workflow failure is distinct from the successful native run; the later CI fix was not reviewed here."
+  ]
+}

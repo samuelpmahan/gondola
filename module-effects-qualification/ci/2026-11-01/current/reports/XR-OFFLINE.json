@@ -1,0 +1,58 @@
+{
+  "job_id": "XR-OFFLINE",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "The published Go CLI accepted the actual PR23 Git-readback directory and reconstructed archive offline. The captured outputs, source closure, build metadata, archive parts and manifest validate. I accept with a disclosed post-seal metadata-recovery qualification: root restored sha256sums.txt to the original seal-pinned digest, the full rawlog index now passes, and its one historical report reference is documented in the root addendum.",
+  "findings": [
+    {
+      "kind": "post-seal metadata recovery",
+      "disposition": "resolved with qualification",
+      "detail": "The late invalid-CLI control changed three derived summary files after seal. Root's checkpoint records recovery of commands.txt and byte-counts.txt and exact-digest recovery of sha256sums.txt. Independent verification finds zero mismatches in the sealed rawlog index. sha256sums.txt's historical report line references SHA-256 11d72fa4780a80886477febc04e3373c0ffd5f2f845d60d893263890d6619cfe, not the final sealed report hash; the checkpoint identifies it as an earlier report revision."
+    },
+    {
+      "kind": "review-time checkout status",
+      "disposition": "qualified",
+      "detail": "At review time two untracked E-FRESH report/receipt files existed outside the verifier Go source closure. The 35-file closure hashes pass, and the published clean status is supported by the original build-time status record rather than a claim that the current checkout is clean."
+    }
+  ],
+  "owned_files": [
+    "reports/XR-OFFLINE.md",
+    "receipts/XR-OFFLINE.json",
+    "rawlogs/XR-OFFLINE/"
+  ],
+  "commands": [
+    "PATH=/nonexistent /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/module-effects-qualify --directory /tmp/module-effects-publish/readback-final-primary",
+    "python3 /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/E-OFFLINE/compare-cli-reports.py",
+    "bash /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-OFFLINE/run-review-checks.sh",
+    "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go run effects-qualification-coordination/rawlogs/XR-OFFLINE/make-index.go /workspace/scratch/39a56936f173/effects-qualification-coordination",
+    "cd /workspace/scratch/39a56936f173/effects-qualification-coordination && sha256sum -c <(jq -r '.[] | \"\\(.sha256)  \\(.path)\"' rawlogs/XR-OFFLINE/index.json)"
+  ],
+  "evidence": [
+    "rawlogs/XR-OFFLINE/index.json",
+    "rawlogs/XR-OFFLINE/commands.txt",
+    "rawlogs/XR-OFFLINE/custody-recovery-note.txt",
+    "rawlogs/XR-OFFLINE/custody-checkpoint.stdout",
+    "rawlogs/XR-OFFLINE/seal-hashes.stdout",
+    "rawlogs/XR-OFFLINE/packet-copies.status",
+    "rawlogs/XR-OFFLINE/seal-raw-index.stdout",
+    "rawlogs/XR-OFFLINE/seal-raw-index.status",
+    "rawlogs/XR-OFFLINE/verifier-identity.stdout",
+    "rawlogs/XR-OFFLINE/binary-metadata.stdout",
+    "rawlogs/XR-OFFLINE/source-closure.stdout",
+    "rawlogs/XR-OFFLINE/readback-rerun.stdout.json",
+    "rawlogs/XR-OFFLINE/directory-summary.stdout",
+    "rawlogs/XR-OFFLINE/archive-summary.stdout",
+    "rawlogs/XR-OFFLINE/publication-parts.stdout",
+    "rawlogs/XR-OFFLINE/reconstructed-archive.stdout",
+    "rawlogs/XR-OFFLINE/report-comparison-recheck.stdout",
+    "rawlogs/XR-OFFLINE/historical-sha-list.stdout",
+    "reports/XR-OFFLINE.md"
+  ],
+  "limitations": [
+    "Review covers the finite prior PR23 readback and archive only; it makes no fresh-profile claim.",
+    "The E-OFFLINE source inventory is empty. Source identity is assessed from publication metadata, build-time status, Go build information and the indexed 35-file source closure; this does not authenticate Git history or the binary.",
+    "Passing CLI results do not prove a compiler invocation or qualify arbitrary module graphs.",
+    "The recovered checksum list has one historical E-OFFLINE report entry that does not match the later canonical report; the root checkpoint documents this. The current sealed report and all rawlog-index entries validate.",
+    "No production files or Gondola Git state were modified by this review."
+  ]
+}

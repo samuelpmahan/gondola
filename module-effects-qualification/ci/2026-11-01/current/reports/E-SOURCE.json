@@ -1,0 +1,47 @@
+{
+  "job_id": "E-SOURCE",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Historical fixture/app-contract bytes are reused; replay extraction, runner/archive handling, and the verifier closure add or change source paths. The published source and E17 attempt bind all selected current bytes and stable pins to the same source commit.",
+  "owned_files": [
+    "effects-qualification-coordination/reports/E-SOURCE.md",
+    "effects-qualification-coordination/receipts/E-SOURCE.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/"
+  ],
+  "commands": [
+    "GO111MODULE=off /tmp/gondola-go/go/bin/go test -v effects-qualification-coordination/rawlogs/E-SOURCE/source_bind.go effects-qualification-coordination/rawlogs/E-SOURCE/source_bind_test.go",
+    "/tmp/gondola-go/go/bin/go run effects-qualification-coordination/rawlogs/E-SOURCE/source_bind.go -repo gondola -commit 4338255bf8800d521b7f932fb530fe2cedebbf72 -historical-commit e0933465725e470dc610e3f81b4bbee95538c1d0 -go-list-output effects-qualification-coordination/rawlogs/E-SOURCE/current-go-list.json -out effects-qualification-coordination/rawlogs/E-SOURCE/current-binding.json",
+    "/tmp/gondola-go/go/bin/go run effects-qualification-coordination/rawlogs/E-SOURCE/source_bind.go -repo gondola -commit 4338255bf8800d521b7f932fb530fe2cedebbf72 -historical-commit e0933465725e470dc610e3f81b4bbee95538c1d0 -attempt /tmp/effectsqual-fresh-4338255bf8800d521b7f932fb530fe2cedebbf72-E17/attempt-20261101T055628369Z-128-0d7fde3c -require-closure-pins -go-list-output effects-qualification-coordination/rawlogs/E-SOURCE/fresh-go-list.json -out effects-qualification-coordination/rawlogs/E-SOURCE/fresh-binding.json",
+    "/tmp/gondola-go/go/bin/go run effects-qualification-coordination/rawlogs/E-SOURCE/source_bind.go -repo gondola -commit e0933465725e470dc610e3f81b4bbee95538c1d0 -historical-commit e0933465725e470dc610e3f81b4bbee95538c1d0 -attempt gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a -go-list-output effects-qualification-coordination/rawlogs/E-SOURCE/pr23-go-list.json -out effects-qualification-coordination/rawlogs/E-SOURCE/pr23-binding.json",
+    "/tmp/gondola-go/go/bin/go run effects-qualification-coordination/rawlogs/E-SOURCE/source_bind.go -repo gondola -commit e0933465725e470dc610e3f81b4bbee95538c1d0 -historical-commit e0933465725e470dc610e3f81b4bbee95538c1d0 -attempt gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a -require-closure-pins -go-list-output effects-qualification-coordination/rawlogs/E-SOURCE/pr23-go-list.json -out effects-qualification-coordination/rawlogs/E-SOURCE/pr23-closure-gate.json"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-binding.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-go-list.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-binding-final.log",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-binding.exit-code",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-closure-gate.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-closure-gate.exit-code",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/pr23-closure-gate.log",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/helper-tests-final.log",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/source_bind.go",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/source_bind_test.go",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/current-binding.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/current-go-list.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/current-binding.exit-code",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/current-head.txt",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/current-status.txt",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/current-tree.txt",
+    "effects-qualification-coordination/source-publication.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/fresh-binding.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/fresh-go-list.json",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/fresh-binding.log",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/fresh-binding.exit-code",
+    "effects-qualification-coordination/rawlogs/E-SOURCE/fresh-archive-fingerprint.txt"
+  ],
+  "limitations": [
+    "The lead reports N6 wrapper and M0 exit 0. This receipt records source binding, not an independent semantic capture or archive acceptance implementation review.",
+    "The historical PR23 producer archive has 34/62 current verifier closure files pinned; 28 closure paths were outside that attempt's archived source snapshot, and three newer runner/package-discovery inputs are also absent.",
+    "Git objects were read locally. No Git history or remote-authentication claim is made. Producer source-commit metadata is a declaration, while acceptance relies on byte and pin consistency."
+  ]
+}

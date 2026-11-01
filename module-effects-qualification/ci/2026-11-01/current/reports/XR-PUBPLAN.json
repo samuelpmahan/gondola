@@ -1,0 +1,34 @@
+{
+  "job_id": "XR-PUBPLAN",
+  "worker": "N2",
+  "decision": "accepted",
+  "summary": "The publication guide's packer CLI, package/schema paths, Git archive prefixes, restore root, Go CLI build path, and Payload A / Guide B / URL-review C separation are coherent. All 16 placeholders match the author inventory and are explicitly publication-time values. Root must update the N2 status sentence and fill all placeholders before publishing Guide B.",
+  "commands": [
+    "python3 /tmp/effectsqual-publish/pack_evidence.py --help",
+    "cmp -s /tmp/effectsqual-publish/pack_evidence.py effects-qualification-coordination/seals/E-PACK/source/external/pack_evidence.py",
+    "sha256sum /tmp/effectsqual-publish/pack_evidence.py effects-qualification-coordination/seals/E-PACK/source/external/pack_evidence.py",
+    "rg -o '\\{\\{[A-Z0-9_]+\\}\\}' /tmp/effectsqual-publish/publication-guide-template.md | sort -u",
+    "diff -u effects-qualification-coordination/rawlogs/E-PUBPLAN/placeholders.txt effects-qualification-coordination/rawlogs/XR-PUBPLAN/placeholders-from-template.txt",
+    "GOTOOLCHAIN=local /tmp/gondola-go/go/bin/go list ./cmd/module-effects-qualify",
+    "sha256sum gondola/EXPECTED.json gondola/SHA256SUMS"
+  ],
+  "evidence": [
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/index.json",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/guide-facts.json",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/placeholders-from-template.txt",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/placeholder-diff.txt",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/packer-help.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/packer-hashes.sha256",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/packer-schema-cli.txt",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/runner-artifact-paths.txt",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/go-cli-paths.txt",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/go-cli-package.stdout.log",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/pr23-input-hashes.sha256",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/gondola-status.txt",
+    "effects-qualification-coordination/rawlogs/XR-PUBPLAN/protocol-review.json"
+  ],
+  "limitations": [
+    "This review inspected a template, not a completed publication. Root must populate all placeholders only from final source, runtime, pack, readback, and URL-review evidence.",
+    "No tests, packer execution, package restoration, Git mutation, or publication was performed."
+  ]
+}

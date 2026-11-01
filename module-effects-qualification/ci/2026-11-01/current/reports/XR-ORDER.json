@@ -1,0 +1,40 @@
+{
+  "job_id": "XR-ORDER",
+  "worker": "N1",
+  "decision": "amend",
+  "summary": "Positive controls accepted all 20 real capture profiles. Five requested adversarial mutations were rejected, but a false orderedLedger pendingCount was accepted and requires an implementation check plus regression test.",
+  "findings": [
+    {
+      "severity": "amend",
+      "location": "sealed effectqualification/ordering.go: CheckOrdering orderedLedger validation",
+      "issue": "pendingCount is never read or validated. Changing the real browser.swap ordered start row for a:g1:r1 from pendingCount 1 to 99 is accepted while pendingGo still contains only a:g1:r1.",
+      "recommended_action": "Derive or cross-check pendingCount against the independently checked pending token set at each ordered lifecycle record; add a rejection test for the captured mutation."
+    }
+  ],
+  "commands": [
+    "GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test -v ./effectqualification -run TestCheckOrdering -count=1",
+    "/tmp/gondola-go/go/bin/go run /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ORDER/review-harness.go /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a",
+    "/tmp/gondola-go/go/bin/go run /workspace/scratch/39a56936f173/effects-qualification-coordination/rawlogs/XR-ORDER/inspect-browser-swap.go /workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a/conformance/effects.literal.browser.swap.json",
+    "Recompute sealed report, rawlogs-index, source inventory and source code hashes; compare sealed source files with the live implementation and test."
+  ],
+  "evidence": [
+    "rawlogs/XR-ORDER/commands.txt",
+    "rawlogs/XR-ORDER/seal-integrity.txt",
+    "rawlogs/XR-ORDER/positive-control.stdout",
+    "rawlogs/XR-ORDER/positive-control.stderr",
+    "rawlogs/XR-ORDER/positive-control.status",
+    "rawlogs/XR-ORDER/review-harness.go",
+    "rawlogs/XR-ORDER/adversarial-control.stdout",
+    "rawlogs/XR-ORDER/adversarial-control.stderr",
+    "rawlogs/XR-ORDER/adversarial-control.status",
+    "rawlogs/XR-ORDER/capture-inputs.sha256",
+    "rawlogs/XR-ORDER/capture-input-count.txt",
+    "rawlogs/XR-ORDER/inspect-browser-swap.go",
+    "rawlogs/XR-ORDER/fixture-shape.txt",
+    "rawlogs/XR-ORDER/fixture-shape.stderr"
+  ],
+  "limitations": [
+    "Review covers the sealed checker against the PR23 attempt's finite capture profiles; it does not establish arbitrary browser equivalence.",
+    "The reviewed code has not been amended by this reviewer."
+  ]
+}

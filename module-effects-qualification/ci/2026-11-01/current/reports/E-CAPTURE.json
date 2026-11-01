@@ -1,0 +1,53 @@
+{
+  "job_id": "E-CAPTURE",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Implemented finite Go-only capture qualification for four pinned PR23 scenarios and five profiles each. CheckCaptures recomputes all native traces with effectsreplay.ReplayJSON, validates full Go state/view snapshots and Go-rendered browser DOM/disabled behavior, compares effect descriptors and pending state, and invokes N4 CheckOrdering for lifecycle and correlation checks.",
+  "owned_files": [
+    "gondola/effectqualification/capture.go",
+    "gondola/effectqualification/capture_test.go",
+    "gondola/effectqualification/json.go"
+  ],
+  "commands": [
+    {
+      "command": "/tmp/gondola-go/go/bin/go version",
+      "exit_code": 0,
+      "stdout": "rawlogs/E-CAPTURE/go-version.stdout.log",
+      "stderr": "rawlogs/E-CAPTURE/go-version.stderr.log"
+    },
+    {
+      "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOBI_EFFECTS_QUALIFICATION_INPUT=/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T042914069Z-2-7d158b7a /tmp/gondola-go/go/bin/go test ./effectqualification -run '^(TestDecodeMapStrictPreservesNumberAndRejectsAmbiguousJSON|TestDecodeJSONStrictRejectsFieldAliases|TestCheckCapturesRejectsMissingRequiredSuite|TestCheckCapturesAgainstExplicitFixture)$' -count=1 -v",
+      "exit_code": 0,
+      "stdout": "rawlogs/E-CAPTURE/go-test.stdout.log",
+      "stderr": "rawlogs/E-CAPTURE/go-test.stderr.log"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "rawlogs/E-CAPTURE/index.json",
+      "summary": "Pins the exact command, exit code, log hashes, and owned source hashes."
+    },
+    {
+      "path": "rawlogs/E-CAPTURE/go-test.stdout.log",
+      "summary": "All four N2 tests passed, including the explicit real PR23 capture integration."
+    },
+    {
+      "path": "reports/E-CAPTURE.md",
+      "summary": "Implementation behavior, evidence, repair history, strictness, and scope limits."
+    },
+    {
+      "path": "rawlogs/N5-NEGATIVE/go-test-final.stdout.log",
+      "summary": "N5 full-package regression result after N2 pending-state implementation."
+    },
+    {
+      "path": "rawlogs/N5-NEGATIVE/negative-controls-02.stdout.log",
+      "summary": "N5 semantic mutation controls, including Go state/tree, rendered DOM, disabled click, ordering/correlation, and required-suite removal."
+    }
+  ],
+  "limitations": [
+    "Acceptance is limited to the four exact scenario byte pins and the five named profiles per scenario.",
+    "No JavaScript or Chromium is executed by CheckCaptures; browser captures are compared against Go replay and Go-rendered views.",
+    "This does not prove arbitrary module, browser, pixel, JavaScript, or event-stream equivalence and does not replace N3 source/build/ABI admission.",
+    "Generic-map capture documents tolerate extra metadata keys; required fields and consumed values are checked explicitly."
+  ]
+}

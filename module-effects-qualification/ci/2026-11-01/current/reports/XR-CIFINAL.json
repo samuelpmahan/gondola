@@ -1,0 +1,59 @@
+{
+  "job_id": "XR-CIFINAL",
+  "worker": "N1",
+  "decision": "accepted",
+  "summary": "Verified the E-CIFINAL sealed author and coordinator indexes, corrected source identity, no-fixture isolated M0 results, fresh corrected-source run, saved Go-suite output, archive/manifest hashes, and unchanged E-FRESH manifest. The five fresh-suite skips are confined to unrelated legacy modulequalification tests.",
+  "owned_files": [
+    "reports/XR-CIFINAL.md",
+    "receipts/XR-CIFINAL.json",
+    "rawlogs/XR-CIFINAL/"
+  ],
+  "commands": [
+    "python3 rawlogs/XR-CIFINAL/verify-cifinal.py",
+    "python3 rawlogs/XR-CIFINAL/make-index.py",
+    "sha256sum /tmp/effectsqual-cifinal-m0-8632f139354c0863482eb625c3ba99b4f607ea0c-E35/source.tar",
+    "sha256sum rawlogs/E-CIFINAL/fresh-primary.tar.gz rawlogs/E-CIFINAL/fresh-primary.manifest.json",
+    "sha256sum /workspace/scratch/39a56936f173/gondola/module-effects-qualification/rawlogs/E-FRESH/output-manifest.json",
+    "rg -n -- '--- SKIP|modulequalification|effectqualification' rawlogs/E-CIFINAL/qualification-go-tests.log",
+    "rg -n -- 'same over 5000 inputs|receipt matches|SHA256SUMS ok' rawlogs/E-CIFINAL/m0-run.stdout.log"
+  ],
+  "evidence": [
+    "rawlogs/XR-CIFINAL/verification.json",
+    "rawlogs/XR-CIFINAL/verify-cifinal.py",
+    "rawlogs/XR-CIFINAL/make-index.py",
+    "rawlogs/XR-CIFINAL/index.json",
+    "rawlogs/XR-CIFINAL/commands.txt",
+    "rawlogs/E-CIFINAL/index.json",
+    "rawlogs/E-CIFINAL/coordinator-index.json",
+    "rawlogs/E-CIFINAL/corrected-source-publication.json",
+    "rawlogs/E-CIFINAL/preflight-source.txt",
+    "rawlogs/E-CIFINAL/postflight-source.txt",
+    "rawlogs/E-CIFINAL/m0-run.command.txt",
+    "rawlogs/E-CIFINAL/m0-run.exit-code",
+    "rawlogs/E-CIFINAL/m0-no-fixture-env.names.txt",
+    "rawlogs/E-CIFINAL/m0-no-default-fixture-check.txt",
+    "rawlogs/E-CIFINAL/m0-no-default-fixture-after.txt",
+    "rawlogs/E-CIFINAL/m0-run.stdout.log",
+    "rawlogs/E-CIFINAL/m0-no-fixture-verbose.stdout.log",
+    "rawlogs/E-CIFINAL/m0-source-archive-before-run.sha256",
+    "rawlogs/E-CIFINAL/m0-source-archive-after-run.sha256",
+    "rawlogs/E-CIFINAL/fresh.command.txt",
+    "rawlogs/E-CIFINAL/fresh.exit-code",
+    "rawlogs/E-CIFINAL/fresh-summary.json",
+    "rawlogs/E-CIFINAL/producer-receipt.json",
+    "rawlogs/E-CIFINAL/source-pins-before.json",
+    "rawlogs/E-CIFINAL/source-pins-after.json",
+    "rawlogs/E-CIFINAL/qualification-go-tests.log",
+    "rawlogs/E-CIFINAL/fresh-primary.tar.gz",
+    "rawlogs/E-CIFINAL/fresh-primary.manifest.json",
+    "rawlogs/E-CIFINAL/e-fresh-manifest-unmodified.sha256",
+    "receipts/E-CIFINAL-original.json",
+    "reports/XR-CIFINAL.md"
+  ],
+  "limitations": [
+    "No M0 or fresh wrapper was rerun during review; saved statuses and logs were checked.",
+    "The separate fresh Go-suite log lacks its own standalone command/status file; the wrapper status is zero and package output is successful.",
+    "Five unrelated modulequalification integration cases skipped due to absent legacy fixture/archive variables.",
+    "The corrected source's hosted workflow was not rerun, and native archive acceptance does not establish browser pixel equivalence or live network/auth behavior."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "job_id": "XR-SOURCE",
+  "worker": "N4",
+  "decision": "accepted",
+  "summary": "Independently verified the sealed E-SOURCE evidence and all 72 selected source paths against current bytes, local Git blobs, E17 archived bytes, and stable before/after pins. A non-blocking author-index path notation error for source-publication.json is documented.",
+  "findings": [
+    {
+      "severity": "note",
+      "location": "seals/E-SOURCE/author-rawlogs-index.json evidence path ../source-publication.json",
+      "issue": "The path does not resolve relative to rawlogs/E-SOURCE. The coordinator-root source-publication.json exists and its SHA-256 matches the index value.",
+      "impact": "Path notation only; source publication record, E-SOURCE report/receipt references, and source byte checks are intact."
+    }
+  ],
+  "commands": [
+    "effects-qualification-coordination/rawlogs/XR-SOURCE/seal-review.sh",
+    "effects-qualification-coordination/rawlogs/XR-SOURCE/selected-pins-check.sh",
+    "/tmp/gondola-go/go/bin/go version"
+  ],
+  "evidence": [
+    "rawlogs/XR-SOURCE/commands.txt",
+    "rawlogs/XR-SOURCE/go-version.txt",
+    "rawlogs/XR-SOURCE/seal-review.sh",
+    "rawlogs/XR-SOURCE/seal-review.stdout.log",
+    "rawlogs/XR-SOURCE/seal-review.stderr.log",
+    "rawlogs/XR-SOURCE/seal-review.status",
+    "rawlogs/XR-SOURCE/selected-pins-check.sh",
+    "rawlogs/XR-SOURCE/selected-pins-check.stdout.log",
+    "rawlogs/XR-SOURCE/selected-pins-check.stderr.log",
+    "rawlogs/XR-SOURCE/selected-pins-check.status",
+    "rawlogs/XR-SOURCE/preservation-check.sh",
+    "rawlogs/XR-SOURCE/preservation-check.stdout.log",
+    "rawlogs/XR-SOURCE/preservation-check.stderr.log",
+    "rawlogs/XR-SOURCE/preservation-check.status",
+    "rawlogs/E-SOURCE/helper-tests-final.log",
+    "rawlogs/E-SOURCE/fresh-binding.json",
+    "rawlogs/E-SOURCE/pr23-binding.json",
+    "rawlogs/E-SOURCE/pr23-closure-gate.json",
+    "rawlogs/E-SOURCE/fresh-archive-fingerprint.txt"
+  ],
+  "limitations": [
+    "Historical PR23 source-pin coverage is an expected snapshot boundary, not an old producer defect.",
+    "Local Git object, archive, and manifest checks establish consistency; they do not authenticate remote publication or producer declarations.",
+    "This review did not run broad Go/Node tests or app matrices."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "job_id": "XR-FRESH",
+  "worker": "N5",
+  "decision": "accepted",
+  "summary": "Independent read-only review confirmed the sealed fresh E17 producer/archive/native report/Go controls and isolated M0 replay. Source and input stability evidence is consistent; the five legacy modulequalification skips and unrun GitHub Actions workflow are clearly disclosed.",
+  "owned_files": [
+    "reports/XR-FRESH.md",
+    "receipts/XR-FRESH.json",
+    "rawlogs/XR-FRESH/"
+  ],
+  "commands": [
+    "python3 effects-qualification-coordination/rawlogs/XR-FRESH/check-sealed-packet.py",
+    "python3 effects-qualification-coordination/rawlogs/XR-FRESH/summarize-sealed-results.py",
+    "sha256sum effects-qualification-coordination/rawlogs/E-FRESH/fresh-primary.tar.gz effects-qualification-coordination/rawlogs/E-FRESH/fresh-primary.manifest.json",
+    "sha256sum effects-qualification-coordination/rawlogs/E-FRESH/fresh.stdout.log effects-qualification-coordination/rawlogs/E-FRESH/fresh.stderr.log effects-qualification-coordination/rawlogs/E-FRESH/fresh.exit-code effects-qualification-coordination/rawlogs/E-FRESH/m0-run.stdout.log effects-qualification-coordination/rawlogs/E-FRESH/m0-run.stderr.log effects-qualification-coordination/rawlogs/E-FRESH/m0-run.exit-code effects-qualification-coordination/rawlogs/E-FRESH/m0-explicit-fixture-test.stdout.log effects-qualification-coordination/rawlogs/E-FRESH/m0-explicit-fixture-test.stderr.log effects-qualification-coordination/rawlogs/E-FRESH/m0-explicit-fixture-test.exit-code",
+    "rg -n '^(ok|FAIL|\\?|--- SKIP:)' effects-qualification-coordination/rawlogs/E-FRESH/qualification-go-tests.log",
+    "See rawlogs/XR-FRESH/commands.txt for exact review command list and saved outputs."
+  ],
+  "evidence": [
+    "Canonical E-FRESH report, receipt, raw-log index, and source inventory match seal.json; 152 raw-log files match indexed byte counts and SHA-256 digests, and coordinator-index.json is byte-identical to the sealed index.",
+    "Fresh producer source/tree are 4338255bf8800d521b7f932fb530fe2cedebbf72 / 146daa2199e0c2ee679c622b6c765a2c0ff5b356; worktree is clean, and 236 source pins totaling 2700650 bytes match before and after.",
+    "Fresh wrapper, archive consumer, and explicit Go suite have recorded exit status 0. Archive is 8789735 bytes with 676 members, SHA-256 aa55ace290027a44ed772d755d10071d15f1067ab3eae1d49cc2bbbf18c59a71; manifest SHA-256 is a8bd7bbe412cc1fca4af1def49356db411a4fa120ce45c66b5d34ee58ab15a7c.",
+    "Native report records 4 scenarios, 20 profiles, 178 events, 182 states, 58 effects, 116 transport events, 4 builds, and 2 ABI pairs. Fresh producer records 890 profile events and 910 snapshots.",
+    "M0 `bash run.sh` and separate `TestPR23DirectoryIsAccepted` both exited 0 with the historical PR23 directory explicitly supplied and expected-source override unset. The old input fingerprint remained 643 files / 135945618 bytes / tree SHA-256 bd561fe191ecfb5f9fbd5e1742790dd0f04ef176f97cf42338ef867b7b9a9edf before and after.",
+    "The explicit Go test log shows five unrelated legacy skips; none is treated as a pass, and the report states GitHub Actions was not run."
+  ],
+  "limitations": [
+    "This review checked sealed execution records and did not rerun the fresh producer, browser, Go suite, or M0 shell.",
+    "The separate N3 source-closure audit cited by E-FRESH was not repeated in this bounded review.",
+    "No all-green CI claim, pixel equivalence, arbitrary backend/application coverage, network/auth behavior, or live cross-module fault-injection claim is made.",
+    "No production source or Git state was changed."
+  ]
+}
