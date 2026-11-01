@@ -1,0 +1,431 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-RESTORE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "status": "valid_for_translated_baseline",
+  "revision": 2,
+  "summary": "Adapted the standalone no-overwrite restore consumer to the module-effects schemas and index-owned bounded counts. The translated real PR22 archive and 15 controls pass; clean E-DELIVERY primary acceptance remains pending.",
+  "supersedes": {
+    "firstDeclaredFreeze": "module-effects-coordination/checkpoints/E-RESTORE-first-declared-freeze-127436db",
+    "firstAdapterSHA256": "127436db71b0dcd51c49e3143155f9f807d6d6e286e59a5e8726d73aa94910f4",
+    "firstTestCount": 14,
+    "firstReportSHA256": "78d849a9e79618f6f35b0bb4a95eccdea703f2b98785ddae4a463939488d3925",
+    "firstReceiptSHA256": "9671d8742d0be8d200fa77805551bcad0f58a33db952880324467466845081e5",
+    "firstRawIndexSHA256": "c0eca9a45e4d82dc3ba3d07fc29ea6e82a7708c1720add3e48f57427905b407b",
+    "correction": "excludedDirectoryNames applies to parent path components only; the file-basename case and nested excluded-directory case are covered by a new test"
+  },
+  "scope": {
+    "ownedPaths": [
+      "/tmp/module-effects-publish/restore.py",
+      "/tmp/module-effects-publish/tests/**",
+      "/tmp/module-effects-publish/rawlogs/E-RESTORE/**",
+      "module-effects-coordination/reports/E-RESTORE.md",
+      "module-effects-coordination/receipts/E-RESTORE.json",
+      "module-effects-coordination/rawlogs/E-RESTORE/**"
+    ],
+    "repositoryProductionFilesModified": false,
+    "gitOrSchedulerChanged": false
+  },
+  "sourcePins": {
+    "acceptedBase": {
+      "path": "/tmp/keyed-module-publish/restore.py",
+      "bytes": 26946,
+      "sha256": "0dac505c5e9949a2b6168dac955e40c7af805847f73ef27652e1962d603d3f68",
+      "expectedSHA256": "0dac505c5e9949a2b6168dac955e40c7af805847f73ef27652e1962d603d3f68",
+      "matches": true
+    },
+    "adaptedRestore": {
+      "bytes": 33703,
+      "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98"
+    },
+    "testSource": {
+      "bytes": 14761,
+      "sha256": "5c035439c4c8a8af22dd488e29f8e559c9228982c08100026085c197b3ca2efe"
+    },
+    "fixtureTranslator": {
+      "bytes": 3660,
+      "sha256": "3fa22b724b7325acb99f5efedace1647f801f369d08be8388e2e732dd68fe829"
+    },
+    "criticalSafetyFunctionsUnchanged": true,
+    "criticalSafetyFunctionPins": [
+      {
+        "function": "_safe_member_path",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "4edf88ba70f34b7447d7d039234ddf08fb78f98ee41caa80e9d97efdb5c15a8a"
+      },
+      {
+        "function": "_commit_no_replace",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "441e415b82786a2d06c755ceaab4bc77ca4331278b7efcb915d5974ee8d136aa"
+      },
+      {
+        "function": "_extract",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "c50f73dc5df9255ab616ed27d31d2b9e4fae09fddf84090b25d8d082014c02e6"
+      },
+      {
+        "function": "_assemble",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "cd8b79d72675c7ac0747a55007dd60de395811c568b56a5e7d7b94f2f0f669e5"
+      },
+      {
+        "function": "_hash_file",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "411a77595cae942e98a975427c16285a9f507405fbae59d9a8e9edc64a26df22"
+      },
+      {
+        "function": "_pairs_no_duplicates",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "7d355fcb71d93918cb17ca495c368f8fd5a4309a7540af59cbaab2043a5195bb"
+      },
+      {
+        "function": "_json_bytes",
+        "unchangedFromAcceptedBase": true,
+        "sha256": "60d66d028d2d5ca264810b8f37303029b551fd5a48564629a81343f9dc1e6ff8"
+      }
+    ]
+  },
+  "schemaValidation": {
+    "segmentSchema": "gobi.module-effects-segments/v1",
+    "auditManifestSchema": "gobi.module-effects-audit-members/v1",
+    "primaryManifestSchema": "gobi.module-effects-archive-manifest/v1",
+    "indexCountFields": [
+      "memberCount",
+      "sourcePinCount"
+    ],
+    "fixedHistoricalCountsRemoved": true,
+    "exactPrimaryManifestKeyCount": 14,
+    "rootGoSumMetadataRequired": true
+  },
+  "baseline": {
+    "kind": "translated-pr22-primary-archive-known-baseline",
+    "sourceRestoreSHA256": "0dac505c5e9949a2b6168dac955e40c7af805847f73ef27652e1962d603d3f68",
+    "archive": {
+      "bytes": 25697770,
+      "sha256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+      "expectedBytes": 25697770,
+      "expectedSHA256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+      "parts": [
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-000",
+          "bytes": 1048576,
+          "sha256": "c16246a003217e4f10255fc9492df202a484bba7e29c4f990a4d77157a4a5a50"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-001",
+          "bytes": 1048576,
+          "sha256": "520700677a51ba8696c3a350256cda5bd34440f56a9c8ebd652b8887ced976c8"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-002",
+          "bytes": 1048576,
+          "sha256": "fba48d04c28b390c06e1da6a4841ac505b9f29fb609e6cefe9b7223c6708e116"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-003",
+          "bytes": 1048576,
+          "sha256": "fadf30c17b4f0ee44575853e12045d936b33f154af24942981bc423527ae37a1"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-004",
+          "bytes": 1048576,
+          "sha256": "18e615d2d55ab2fba67195538207a86b8f3532618ead22b2a279d32d709929a5"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-005",
+          "bytes": 1048576,
+          "sha256": "19d7ba79a366635251415545e43ea8251db108be35ede7eb0b6fbd11ac3c9ccf"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-006",
+          "bytes": 1048576,
+          "sha256": "70397507676659b1065d69d5e1a790c8df97c21ad2c5f1193853ee4b2d44a0e3"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-007",
+          "bytes": 1048576,
+          "sha256": "cda3567b6edb714c9147c28a71f484a0df1d3a38b23261cd160223aa91c514ff"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-008",
+          "bytes": 1048576,
+          "sha256": "c447bd41b2b3e9b76ef27a1e6e0a29d545a9ee6125d503c0f56a830ab66c5b29"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-009",
+          "bytes": 1048576,
+          "sha256": "4ec24a3fdc9ecc918b9a9b1c56731af4f7459def6d604e769a1f98b9380e4cd4"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-010",
+          "bytes": 1048576,
+          "sha256": "5d22d8e226399240a5f9d25438bc7db591094db7045c71ffc435ec9a5372e703"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-011",
+          "bytes": 1048576,
+          "sha256": "13a90df804e231d974d7b3624c740171b5f8b2167bafc8d89c95995ed0b9de26"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-012",
+          "bytes": 1048576,
+          "sha256": "6ccce4908bc9a70012475556b993b1141dc9c5a15b3c4a873e2b27d754091d4e"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-013",
+          "bytes": 1048576,
+          "sha256": "feb9d9fbc29cfadbd317cdcf905a10d761b64eaadceabd51823abf0dfd206835"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-014",
+          "bytes": 1048576,
+          "sha256": "b4fc71c7072767dac294a7fc882722559e9cd36d60fe201830f1ac8ffc9b4432"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-015",
+          "bytes": 1048576,
+          "sha256": "aacd8e28bc3927070de92a02018f73cd4b608f56979108447182a326baa8e230"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-016",
+          "bytes": 1048576,
+          "sha256": "88e7f1e806c1069ade48e99131aba08ad6bcb32962bafb34e82280f4b103cd2e"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-017",
+          "bytes": 1048576,
+          "sha256": "869cea39e054c6355ebcdca4879d47eb760054c4be4b6a15f4aaf83380dea90f"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-018",
+          "bytes": 1048576,
+          "sha256": "e9a579ffd7d46ba15ab86655f14ce2e10418ab816913e84f030ba1065e0c5247"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-019",
+          "bytes": 1048576,
+          "sha256": "110dc9e11f2151818035d566d4f98e5de36155eb9ff505c522516900d548545e"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-020",
+          "bytes": 1048576,
+          "sha256": "e548df854f670973e19899c4748b9b930c1c7b9e56ced1cc01a124b1513f9bf5"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-021",
+          "bytes": 1048576,
+          "sha256": "1273f49a65b2d0d91f1519a13807c4d709ba2527b119a403ac997bb59259f60d"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-022",
+          "bytes": 1048576,
+          "sha256": "cba0fcf2faed7ce26f5519fbf7675117b3d30b5610204b778f686937d0a1310b"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-023",
+          "bytes": 1048576,
+          "sha256": "8f5e1e9802e53122a377c699ac153b54abf8c5305a853e9991420ff8bda7eb16"
+        },
+        {
+          "path": "/tmp/keyed-module-publish/bundle/bundle.part-024",
+          "bytes": 531946,
+          "sha256": "2a4d8a2443538c12d0622df1001a7bc90eb098cd8308464198d9c9f5bf35bda9"
+        }
+      ]
+    },
+    "translatedManifest": {
+      "path": "/tmp/module-effects-publish/bundle.manifest.json",
+      "bytes": 144004,
+      "sha256": "943eda2d099a82c3957085cc37cd6db047074b096f90350bfdb15a4b1d8b1d8e"
+    },
+    "translatedIndex": {
+      "path": "/tmp/module-effects-publish/bundle-parts.json",
+      "bytes": 4247,
+      "sha256": "c1d73223b9698f4b3af85e3bcab01503290f4ac3dc68f586a61662c8dba6362c",
+      "memberCount": 600,
+      "sourcePinCount": 157
+    },
+    "cliResult": {
+      "archiveBytes": 25697770,
+      "archiveSHA256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+      "destination": "/tmp/module-effects-cli-final-6748kilg/restored",
+      "expandedBytes": 372962548,
+      "indexSHA256": "c1d73223b9698f4b3af85e3bcab01503290f4ac3dc68f586a61662c8dba6362c",
+      "integrityScope": "SHA-256 consistency pins; publisher authenticity is not established",
+      "manifestSHA256": "943eda2d099a82c3957085cc37cd6db047074b096f90350bfdb15a4b1d8b1d8e",
+      "memberCount": 600,
+      "mode": "bundle",
+      "remoteDownloads": [],
+      "sourceCommit": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+      "sourcePinsVerified": 157,
+      "status": "passed"
+    }
+  },
+  "tests": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "pythonExecutable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "platform": "linux",
+    "commands": [
+      {
+        "name": "prepare-translated-pr22-fixture",
+        "argv": [
+          "python3",
+          "/tmp/module-effects-publish/tests/prepare_pr22_fixture.py"
+        ],
+        "command": "python3 /tmp/module-effects-publish/tests/prepare_pr22_fixture.py",
+        "cwd": "/tmp/module-effects-publish",
+        "exitCode": 0,
+        "stdoutPath": "prepare-fixture.stdout.log",
+        "stdoutBytes": 313,
+        "stderrPath": "prepare-fixture.stderr.log",
+        "stderrBytes": 0
+      },
+      {
+        "name": "python-compile-final",
+        "argv": [
+          "python3",
+          "-m",
+          "py_compile",
+          "/tmp/module-effects-publish/restore.py",
+          "/tmp/module-effects-publish/tests/prepare_pr22_fixture.py",
+          "/tmp/module-effects-publish/tests/test_restore.py"
+        ],
+        "command": "python3 -m py_compile /tmp/module-effects-publish/restore.py /tmp/module-effects-publish/tests/prepare_pr22_fixture.py /tmp/module-effects-publish/tests/test_restore.py",
+        "cwd": "/tmp/module-effects-publish",
+        "exitCode": 0,
+        "stdoutPath": "compile-final.stdout.log",
+        "stdoutBytes": 0,
+        "stderrPath": "compile-final.stderr.log",
+        "stderrBytes": 0
+      },
+      {
+        "name": "restore-test-suite-final",
+        "argv": [
+          "python3",
+          "/tmp/module-effects-publish/tests/test_restore.py"
+        ],
+        "command": "python3 /tmp/module-effects-publish/tests/test_restore.py",
+        "cwd": "/tmp/module-effects-publish",
+        "exitCode": 0,
+        "stdoutPath": "test-suite-final.stdout.log",
+        "stdoutBytes": 0,
+        "stderrPath": "test-suite-final.stderr.log",
+        "stderrBytes": 2408
+      },
+      {
+        "name": "translated-pr22-cli-baseline-final",
+        "argv": [
+          "python3",
+          "/tmp/module-effects-publish/restore.py",
+          "/tmp/module-effects-cli-final-6748kilg/restored"
+        ],
+        "command": "python3 /tmp/module-effects-publish/restore.py /tmp/module-effects-cli-final-6748kilg/restored",
+        "cwd": "/tmp/module-effects-publish",
+        "exitCode": 0,
+        "stdoutPath": "pr22-cli-final.stdout.log",
+        "stdoutBytes": 632,
+        "stderrPath": "pr22-cli-final.stderr.log",
+        "stderrBytes": 0
+      }
+    ],
+    "testCount": 15,
+    "testFailures": 0,
+    "testSuitePassed": true,
+    "cliExitCode": 0,
+    "controlCases": [
+      "dynamic small counts",
+      "count bounds/mismatch",
+      "closed index/manifest/metadata fields",
+      "source/member byte+SHA consistency",
+      "test-source subset",
+      "root go.sum absence evidence",
+      "excluded log and bundle path scopes",
+      "excluded directory parent-component semantics",
+      "effect audit schema",
+      "existing destination",
+      "missing segment",
+      "duplicate tar path",
+      "symlink member",
+      "path traversal",
+      "truncated gzip trailer",
+      "Linux renameat2 no-replace and unsupported-platform fail-closed"
+    ]
+  },
+  "preservedFailures": {
+    "path": "module-effects-coordination/rawlogs/E-RESTORE/versions/first-declared-14-test/preserved-failures.json",
+    "attempts": [
+      {
+        "name": "stale translated manifest pin",
+        "argv": [
+          "python3",
+          "/tmp/module-effects-publish/restore.py",
+          "/tmp/module-effects-stale-pin-final-2d6d280b/dest"
+        ],
+        "command": "python3 /tmp/module-effects-publish/restore.py /tmp/module-effects-stale-pin-final-2d6d280b/dest",
+        "cwd": "/tmp/module-effects-publish",
+        "exitCode": 2,
+        "executedScript": "/tmp/module-effects-publish/restore.py",
+        "executedScriptSHA256": "127436db71b0dcd51c49e3143155f9f807d6d6e286e59a5e8726d73aa94910f4",
+        "stdout": {
+          "path": "failure-stale-manifest-pin-final.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "failure-stale-manifest-pin-final.stderr.log",
+          "bytes": 82,
+          "sha256": "3ec1608b8179ae29921f2eff97a3598b3e18debc5cd6482b5dc405e84d1e41c0"
+        }
+      },
+      {
+        "name": "historical compiler-log closure rejection",
+        "argv": [
+          "python3",
+          "/tmp/module-effects-publish/rawlogs/E-RESTORE/source/restore-compilerlog-reject-iteration.py",
+          "/tmp/module-effects-log-probe-final-3z15sqna/dest"
+        ],
+        "command": "python3 /tmp/module-effects-publish/rawlogs/E-RESTORE/source/restore-compilerlog-reject-iteration.py /tmp/module-effects-log-probe-final-3z15sqna/dest",
+        "cwd": "/tmp/module-effects-publish",
+        "exitCode": 2,
+        "executedScript": "/tmp/module-effects-publish/rawlogs/E-RESTORE/source/restore-compilerlog-reject-iteration.py",
+        "executedScriptSHA256": "b1791f588ab4281eeb0f0289b933d8147a1c737fb58a8491810b78be78b30720",
+        "stdout": {
+          "path": "failure-compiler-log-closure-final.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "failure-compiler-log-closure-final.stderr.log",
+          "bytes": 110,
+          "sha256": "331c4cf65681fa74238e1d3fb6fe61502ebdf546821e1437ff246491c245b1a6"
+        }
+      }
+    ]
+  },
+  "pendingAcceptance": {
+    "actualEffectsArchiveTested": false,
+    "reason": "No clean E-DELIVERY primary archive is available yet; latest author attempt stopped at generated-comment normalization while a separate E-BUILD repair is pending.",
+    "requiredNextCheck": "Run the frozen adapter against the eventual clean E-DELIVERY archive/manifest and bounded segments index; this receipt does not claim that gate."
+  },
+  "limits": [
+    "Translated PR22 metadata validates schema/count adaptation but is not a clean module-effects archive.",
+    "Historical PR22 fixture has excludedCompilerLogs=false because its source snapshot includes old compiler logs; current E-DELIVERY metadata declares true.",
+    "SHA-256 pins establish byte consistency, not publisher authenticity.",
+    "Atomic no-overwrite restore requires Linux renameat2(RENAME_NOREPLACE)."
+  ],
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-RESTORE/index.json",
+    "indexExcludesItself": true,
+    "bytes": 13116,
+    "sha256": "fdb88c6eb29dd836e6a3b8f539875c4d19c9eb20b139bbbd021d939972a8e056",
+    "indexedFileCount": 73,
+    "externalMirror": "/tmp/module-effects-publish/rawlogs/E-RESTORE/index.json",
+    "firstDeclaredRawIndexPreserved": "module-effects-coordination/rawlogs/E-RESTORE/versions/first-declared-14-test/index.json"
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/E-RESTORE.md",
+    "bytes": 5027,
+    "sha256": "0fb794263ae40204001773ee2df81f1a1a429ed8200923923def6c0ddf1a828a"
+  }
+}

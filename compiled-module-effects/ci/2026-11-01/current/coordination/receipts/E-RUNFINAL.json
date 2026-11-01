@@ -1,0 +1,1418 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-RUNFINAL",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "status": "clean_producer_run_passed",
+  "phase": "clean_git_bound_E_RUNFINAL_passed_external_consumer_pending",
+  "summary": "The clean source-bound aggregate passed build admission, Go/compiler regressions, Node tests, native/direct/browser parity and oracle controls, the real Chromium timer and renderer-swap/remount smoke, archive round-trip, and the runner’s independent Python archive consumer. External consumer review and publication readback remain pending.",
+  "sourceCommit": "f6c9da1b9299a983f8a55c86ddbb0ab7543a1204",
+  "sourceTree": "89a4548e2dcaafb138a5d2b46bbffda082b52d9b",
+  "git": {
+    "gitHead": "f6c9da1b9299a983f8a55c86ddbb0ab7543a1204",
+    "dirty": false,
+    "sourcePinsMatch": true,
+    "sourcePinMismatches": []
+  },
+  "reportPath": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/E-RUNFINAL.md",
+  "rawEvidencePath": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-RUNFINAL/index.json",
+  "rawEvidenceIndex": {
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-RUNFINAL/index.json",
+    "bytes": 23721,
+    "sha256": "fbce8027ddc1d2a7e945f2a266e2733775c34ce29ea909e153f645400270bbdc"
+  },
+  "attempt": {
+    "id": "attempt-20261101T040910811Z-2-e6460df3",
+    "command": {
+      "argv": [
+        "bash",
+        "run-module-effects.sh",
+        "--source-commit",
+        "f6c9da1b9299a983f8a55c86ddbb0ab7543a1204"
+      ],
+      "cwd": "/workspace/scratch/39a56936f173/gondola",
+      "environmentOverrides": {
+        "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+        "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+        "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python",
+        "CHROMIUM_PATH": "/tmp/chromium-portable"
+      },
+      "allowDirty": false
+    },
+    "runnerReceipt": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T040910811Z-2-e6460df3/receipt.json",
+      "bytes": 715897,
+      "sha256": "3aed5f9ab39ebdc44c00a12e49e2f664bc876fd5515a265ae4bc46ffb981ca22"
+    },
+    "exitCode": 0,
+    "failedStage": null
+  },
+  "tools": {
+    "go": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go1.27.3 linux/amd64",
+    "node": "v22.23.4",
+    "python": "Python 3.12.14",
+    "chromium": "Chromium 153.0.8010.0",
+    "playwright": "1.64.1",
+    "tar": "tar (GNU tar) 1.35"
+  },
+  "sourceClosure": {
+    "scope": {
+      "directories": [
+        "cmd/module-effects-native",
+        "cmd/keyed-module-native",
+        "fixtures/compiled/effectmodulechild",
+        "fixtures/compiled/keyedmoduleparent",
+        "fixtures/compiled/keyedmodulewire",
+        "fixtures/compiled/modulechild",
+        "fixtures/compiled/moduleparent",
+        "fixtures/compiled/modulewire",
+        "moduleabi",
+        "counter",
+        "gobi",
+        "compilercontract",
+        "reactmap",
+        "compiled-module-effects",
+        "compiled-keyed-modules",
+        "compiled-modules/abi",
+        "compiled-modules/conformance",
+        "compiled-frontend"
+      ],
+      "explicitFiles": [
+        "go.mod",
+        "package.json",
+        "package-lock.json",
+        "EXPECTED.json",
+        "SHA256SUMS",
+        ".gitignore",
+        ".gitattributes",
+        "interaction/package.json",
+        "interaction/package-lock.json",
+        "compiled-frontend/go.mod",
+        "compiled-frontend/go.sum",
+        "compiled-frontend/package.json",
+        "compiled-frontend/package-lock.json",
+        "compiled-capabilities/archive-helper.mjs",
+        "compiled-capabilities/archive-helper.test.mjs",
+        "compiled-children/browser-version.mjs",
+        "compiled-frontend/conformance/browser.mjs",
+        "run.sh",
+        "run-interaction.sh",
+        "run-keyed-modules.sh",
+        "run-module-effects.sh",
+        ".github/workflows/gobi-keyed-module-effects.yml",
+        ".github/workflows/gobi-keyed-modules.yml"
+      ],
+      "rootGoSum": {
+        "path": "go.sum",
+        "present": false,
+        "evidencePath": "go.mod",
+        "reason": "the root go.mod contains no dependency requirements; the root module has no external Go dependencies"
+      },
+      "excludedDirectoryNames": [
+        ".cache",
+        ".git",
+        "__pycache__",
+        "attempts",
+        "bundles",
+        "ci",
+        "coordination",
+        "evidence",
+        "node_modules",
+        "output",
+        "rawlogs",
+        "receipts",
+        "reports",
+        "results",
+        "results-prior-refresh",
+        "review-evidence",
+        "toolchain"
+      ],
+      "excludedFiles": [
+        "compiled-frontend/DELIVERY.json",
+        "compiled-frontend/RESULTS.md",
+        "compiled-frontend/frontend/runtime/r2-node-tests.log",
+        "compiled-frontend/frontend/runtime/r2-probe.stderr.log",
+        "compiled-frontend/frontend/runtime/r2_completion_probe.json",
+        "compiled-frontend/frontend/runtime/r2_completion_probe.mjs",
+        "compiled-module-effects/RESULTS.md"
+      ],
+      "excludedCompilerLogs": true
+    },
+    "sourcePins": 201,
+    "testSourceFilesPinned": 57,
+    "sourcePinMismatches": []
+  },
+  "counts": {
+    "builds": 4,
+    "goNativeTests": 13,
+    "goNativePackages": 2,
+    "moduleABIRegressionTests": 1,
+    "compilerAnalyzerTests": 4,
+    "compilerAnalyzerCases": 8,
+    "compilerBuildRegressionTests": 1,
+    "nodeTests": 35,
+    "nodeTestFiles": 6,
+    "scenarioEvents": [
+      {
+        "scenario": "literal",
+        "events": 31
+      },
+      {
+        "scenario": "seed-20261104",
+        "events": 49
+      },
+      {
+        "scenario": "seed-20261105",
+        "events": 50
+      },
+      {
+        "scenario": "seed-20261106",
+        "events": 48
+      }
+    ],
+    "nativeEvents": 178,
+    "nativeStates": 182,
+    "nativeEffects": 58,
+    "nativeTransportEvents": 116,
+    "profileCaptures": 20,
+    "profileEvents": 890,
+    "profileSnapshots": 910,
+    "mutationControlsDetected": 16,
+    "mutationControlApplicationsDetected": 64,
+    "mutationControlDistinctIDs": 16,
+    "conformanceCaptureMutationControlsDetected": 16,
+    "buildAdmissionMutationControlsDetected": 7,
+    "demoSteps": 6,
+    "archiveMembers": 638
+  },
+  "conformance": {
+    "schema": "gobi.module-effects-conformance-summary/v1",
+    "status": "matched",
+    "profiles": [
+      "direct.react",
+      "direct.dom",
+      "browser.react",
+      "browser.dom",
+      "browser.swap"
+    ],
+    "scenarioEvents": [
+      {
+        "scenario": "literal",
+        "events": 31
+      },
+      {
+        "scenario": "seed-20261104",
+        "events": 49
+      },
+      {
+        "scenario": "seed-20261105",
+        "events": 50
+      },
+      {
+        "scenario": "seed-20261106",
+        "events": 48
+      }
+    ],
+    "nativeEvents": 178,
+    "nativeEffects": 58,
+    "transportEvents": 116,
+    "profileEvents": 890,
+    "profileCaptures": 20,
+    "profileSnapshots": 910,
+    "mutationControls": {
+      "status": "detected",
+      "total": 16,
+      "rejected": [
+        {
+          "name": "bypass-go-cancellation",
+          "rejected": true,
+          "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+          "id": "bypass-go-cancellation"
+        },
+        {
+          "name": "cancel-sibling-pending-request",
+          "rejected": true,
+          "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+          "id": "cancel-sibling-pending-request"
+        },
+        {
+          "name": "accept-duplicate-reply",
+          "rejected": true,
+          "path": "browser.dom.events[7].result.accepted",
+          "id": "accept-duplicate-reply"
+        },
+        {
+          "name": "accept-wrong-correlation-tuple",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.message",
+          "id": "accept-wrong-correlation-tuple"
+        },
+        {
+          "name": "accept-old-generation-reply",
+          "rejected": true,
+          "path": "browser.swap.events[18].result.accepted",
+          "id": "accept-old-generation-reply"
+        },
+        {
+          "name": "confuse-renderer-epoch-with-reply-correlation",
+          "rejected": true,
+          "path": "direct.dom.orderedLedger[39].correlation.fields",
+          "id": "confuse-renderer-epoch-with-reply-correlation"
+        },
+        {
+          "name": "start-before-commit-render",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "start-before-commit-render"
+        },
+        {
+          "name": "call-transport-cancel-before-retiring-correlation",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "call-transport-cancel-before-retiring-correlation"
+        },
+        {
+          "name": "accept-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation",
+          "id": "accept-reply-without-correlation"
+        },
+        {
+          "name": "accept-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.a",
+          "id": "accept-reply-with-wrong-state-event-index"
+        },
+        {
+          "name": "accept-reply-with-extra-correlation-field",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation.fields",
+          "id": "accept-reply-with-extra-correlation-field"
+        },
+        {
+          "name": "accept-reply-with-wrong-dispatch-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-dispatch-correlation"
+        },
+        {
+          "name": "accept-reply-with-wrong-effect-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-effect-correlation"
+        },
+        {
+          "name": "accept-duplicate-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.b",
+          "id": "accept-duplicate-reply-with-wrong-state-event-index"
+        },
+        {
+          "name": "accept-cancelled-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[33].correlation",
+          "id": "accept-cancelled-reply-without-correlation"
+        },
+        {
+          "name": "accept-cancelled-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.8.stateEventIndex",
+          "id": "accept-cancelled-reply-with-wrong-state-event-index"
+        }
+      ],
+      "requiredControlIds": [
+        "bypass-go-cancellation",
+        "cancel-sibling-pending-request",
+        "accept-duplicate-reply",
+        "accept-wrong-correlation-tuple",
+        "accept-old-generation-reply",
+        "confuse-renderer-epoch-with-reply-correlation",
+        "start-before-commit-render",
+        "call-transport-cancel-before-retiring-correlation",
+        "accept-reply-without-correlation",
+        "accept-reply-with-wrong-state-event-index",
+        "accept-reply-with-extra-correlation-field",
+        "accept-reply-with-wrong-dispatch-correlation",
+        "accept-reply-with-wrong-effect-correlation",
+        "accept-duplicate-reply-with-wrong-state-event-index",
+        "accept-cancelled-reply-without-correlation",
+        "accept-cancelled-reply-with-wrong-state-event-index"
+      ],
+      "allowAdditionalControls": false,
+      "mutationControlsDetected": 16
+    },
+    "mutationControlApplications": {
+      "status": "detected",
+      "total": 64,
+      "rejected": [
+        {
+          "scenario": "literal",
+          "name": "bypass-go-cancellation",
+          "rejected": true,
+          "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+          "id": "bypass-go-cancellation"
+        },
+        {
+          "scenario": "literal",
+          "name": "cancel-sibling-pending-request",
+          "rejected": true,
+          "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+          "id": "cancel-sibling-pending-request"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-duplicate-reply",
+          "rejected": true,
+          "path": "browser.dom.events[7].result.accepted",
+          "id": "accept-duplicate-reply"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-wrong-correlation-tuple",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.message",
+          "id": "accept-wrong-correlation-tuple"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-old-generation-reply",
+          "rejected": true,
+          "path": "browser.swap.events[18].result.accepted",
+          "id": "accept-old-generation-reply"
+        },
+        {
+          "scenario": "literal",
+          "name": "confuse-renderer-epoch-with-reply-correlation",
+          "rejected": true,
+          "path": "direct.dom.orderedLedger[39].correlation.fields",
+          "id": "confuse-renderer-epoch-with-reply-correlation"
+        },
+        {
+          "scenario": "literal",
+          "name": "start-before-commit-render",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "start-before-commit-render"
+        },
+        {
+          "scenario": "literal",
+          "name": "call-transport-cancel-before-retiring-correlation",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "call-transport-cancel-before-retiring-correlation"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation",
+          "id": "accept-reply-without-correlation"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.a",
+          "id": "accept-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-reply-with-extra-correlation-field",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation.fields",
+          "id": "accept-reply-with-extra-correlation-field"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-reply-with-wrong-dispatch-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-dispatch-correlation"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-reply-with-wrong-effect-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-effect-correlation"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-duplicate-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.b",
+          "id": "accept-duplicate-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-cancelled-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[33].correlation",
+          "id": "accept-cancelled-reply-without-correlation"
+        },
+        {
+          "scenario": "literal",
+          "name": "accept-cancelled-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.8.stateEventIndex",
+          "id": "accept-cancelled-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "bypass-go-cancellation",
+          "rejected": true,
+          "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+          "id": "bypass-go-cancellation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "cancel-sibling-pending-request",
+          "rejected": true,
+          "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+          "id": "cancel-sibling-pending-request"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-duplicate-reply",
+          "rejected": true,
+          "path": "browser.dom.events[7].result.accepted",
+          "id": "accept-duplicate-reply"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-wrong-correlation-tuple",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.message",
+          "id": "accept-wrong-correlation-tuple"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-old-generation-reply",
+          "rejected": true,
+          "path": "browser.swap.events[18].result.accepted",
+          "id": "accept-old-generation-reply"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "confuse-renderer-epoch-with-reply-correlation",
+          "rejected": true,
+          "path": "direct.dom.orderedLedger[39].correlation.fields",
+          "id": "confuse-renderer-epoch-with-reply-correlation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "start-before-commit-render",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "start-before-commit-render"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "call-transport-cancel-before-retiring-correlation",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "call-transport-cancel-before-retiring-correlation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation",
+          "id": "accept-reply-without-correlation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.a",
+          "id": "accept-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-reply-with-extra-correlation-field",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation.fields",
+          "id": "accept-reply-with-extra-correlation-field"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-reply-with-wrong-dispatch-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-dispatch-correlation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-reply-with-wrong-effect-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-effect-correlation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-duplicate-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.b",
+          "id": "accept-duplicate-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-cancelled-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[33].correlation",
+          "id": "accept-cancelled-reply-without-correlation"
+        },
+        {
+          "scenario": "seed-20261104",
+          "name": "accept-cancelled-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.8.stateEventIndex",
+          "id": "accept-cancelled-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "bypass-go-cancellation",
+          "rejected": true,
+          "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+          "id": "bypass-go-cancellation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "cancel-sibling-pending-request",
+          "rejected": true,
+          "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+          "id": "cancel-sibling-pending-request"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-duplicate-reply",
+          "rejected": true,
+          "path": "browser.dom.events[7].result.accepted",
+          "id": "accept-duplicate-reply"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-wrong-correlation-tuple",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.message",
+          "id": "accept-wrong-correlation-tuple"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-old-generation-reply",
+          "rejected": true,
+          "path": "browser.swap.events[18].result.accepted",
+          "id": "accept-old-generation-reply"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "confuse-renderer-epoch-with-reply-correlation",
+          "rejected": true,
+          "path": "direct.dom.orderedLedger[39].correlation.fields",
+          "id": "confuse-renderer-epoch-with-reply-correlation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "start-before-commit-render",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "start-before-commit-render"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "call-transport-cancel-before-retiring-correlation",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "call-transport-cancel-before-retiring-correlation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation",
+          "id": "accept-reply-without-correlation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.a",
+          "id": "accept-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-reply-with-extra-correlation-field",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation.fields",
+          "id": "accept-reply-with-extra-correlation-field"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-reply-with-wrong-dispatch-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-dispatch-correlation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-reply-with-wrong-effect-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-effect-correlation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-duplicate-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.b",
+          "id": "accept-duplicate-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-cancelled-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[33].correlation",
+          "id": "accept-cancelled-reply-without-correlation"
+        },
+        {
+          "scenario": "seed-20261105",
+          "name": "accept-cancelled-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.8.stateEventIndex",
+          "id": "accept-cancelled-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "bypass-go-cancellation",
+          "rejected": true,
+          "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+          "id": "bypass-go-cancellation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "cancel-sibling-pending-request",
+          "rejected": true,
+          "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+          "id": "cancel-sibling-pending-request"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-duplicate-reply",
+          "rejected": true,
+          "path": "browser.dom.events[7].result.accepted",
+          "id": "accept-duplicate-reply"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-wrong-correlation-tuple",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.message",
+          "id": "accept-wrong-correlation-tuple"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-old-generation-reply",
+          "rejected": true,
+          "path": "browser.swap.events[18].result.accepted",
+          "id": "accept-old-generation-reply"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "confuse-renderer-epoch-with-reply-correlation",
+          "rejected": true,
+          "path": "direct.dom.orderedLedger[39].correlation.fields",
+          "id": "confuse-renderer-epoch-with-reply-correlation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "start-before-commit-render",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "start-before-commit-render"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "call-transport-cancel-before-retiring-correlation",
+          "rejected": true,
+          "path": "direct.react.orderedLedger.a",
+          "id": "call-transport-cancel-before-retiring-correlation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation",
+          "id": "accept-reply-without-correlation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.a",
+          "id": "accept-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-reply-with-extra-correlation-field",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[47].correlation.fields",
+          "id": "accept-reply-with-extra-correlation-field"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-reply-with-wrong-dispatch-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-dispatch-correlation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-reply-with-wrong-effect-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.12.correlation",
+          "id": "accept-reply-with-wrong-effect-correlation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-duplicate-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.reply.b",
+          "id": "accept-duplicate-reply-with-wrong-state-event-index"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-cancelled-reply-without-correlation",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger[33].correlation",
+          "id": "accept-cancelled-reply-without-correlation"
+        },
+        {
+          "scenario": "seed-20261106",
+          "name": "accept-cancelled-reply-with-wrong-state-event-index",
+          "rejected": true,
+          "path": "browser.swap.orderedLedger.8.stateEventIndex",
+          "id": "accept-cancelled-reply-with-wrong-state-event-index"
+        }
+      ],
+      "scenarios": [
+        {
+          "scenario": "literal",
+          "status": "detected",
+          "total": 16,
+          "rejected": [
+            {
+              "name": "bypass-go-cancellation",
+              "rejected": true,
+              "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+              "id": "bypass-go-cancellation"
+            },
+            {
+              "name": "cancel-sibling-pending-request",
+              "rejected": true,
+              "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+              "id": "cancel-sibling-pending-request"
+            },
+            {
+              "name": "accept-duplicate-reply",
+              "rejected": true,
+              "path": "browser.dom.events[7].result.accepted",
+              "id": "accept-duplicate-reply"
+            },
+            {
+              "name": "accept-wrong-correlation-tuple",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.message",
+              "id": "accept-wrong-correlation-tuple"
+            },
+            {
+              "name": "accept-old-generation-reply",
+              "rejected": true,
+              "path": "browser.swap.events[18].result.accepted",
+              "id": "accept-old-generation-reply"
+            },
+            {
+              "name": "confuse-renderer-epoch-with-reply-correlation",
+              "rejected": true,
+              "path": "direct.dom.orderedLedger[39].correlation.fields",
+              "id": "confuse-renderer-epoch-with-reply-correlation"
+            },
+            {
+              "name": "start-before-commit-render",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "start-before-commit-render"
+            },
+            {
+              "name": "call-transport-cancel-before-retiring-correlation",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "call-transport-cancel-before-retiring-correlation"
+            },
+            {
+              "name": "accept-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation",
+              "id": "accept-reply-without-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.a",
+              "id": "accept-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-reply-with-extra-correlation-field",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation.fields",
+              "id": "accept-reply-with-extra-correlation-field"
+            },
+            {
+              "name": "accept-reply-with-wrong-dispatch-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-dispatch-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-effect-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-effect-correlation"
+            },
+            {
+              "name": "accept-duplicate-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.b",
+              "id": "accept-duplicate-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-cancelled-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[33].correlation",
+              "id": "accept-cancelled-reply-without-correlation"
+            },
+            {
+              "name": "accept-cancelled-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.8.stateEventIndex",
+              "id": "accept-cancelled-reply-with-wrong-state-event-index"
+            }
+          ]
+        },
+        {
+          "scenario": "seed-20261104",
+          "status": "detected",
+          "total": 16,
+          "rejected": [
+            {
+              "name": "bypass-go-cancellation",
+              "rejected": true,
+              "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+              "id": "bypass-go-cancellation"
+            },
+            {
+              "name": "cancel-sibling-pending-request",
+              "rejected": true,
+              "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+              "id": "cancel-sibling-pending-request"
+            },
+            {
+              "name": "accept-duplicate-reply",
+              "rejected": true,
+              "path": "browser.dom.events[7].result.accepted",
+              "id": "accept-duplicate-reply"
+            },
+            {
+              "name": "accept-wrong-correlation-tuple",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.message",
+              "id": "accept-wrong-correlation-tuple"
+            },
+            {
+              "name": "accept-old-generation-reply",
+              "rejected": true,
+              "path": "browser.swap.events[18].result.accepted",
+              "id": "accept-old-generation-reply"
+            },
+            {
+              "name": "confuse-renderer-epoch-with-reply-correlation",
+              "rejected": true,
+              "path": "direct.dom.orderedLedger[39].correlation.fields",
+              "id": "confuse-renderer-epoch-with-reply-correlation"
+            },
+            {
+              "name": "start-before-commit-render",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "start-before-commit-render"
+            },
+            {
+              "name": "call-transport-cancel-before-retiring-correlation",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "call-transport-cancel-before-retiring-correlation"
+            },
+            {
+              "name": "accept-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation",
+              "id": "accept-reply-without-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.a",
+              "id": "accept-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-reply-with-extra-correlation-field",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation.fields",
+              "id": "accept-reply-with-extra-correlation-field"
+            },
+            {
+              "name": "accept-reply-with-wrong-dispatch-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-dispatch-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-effect-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-effect-correlation"
+            },
+            {
+              "name": "accept-duplicate-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.b",
+              "id": "accept-duplicate-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-cancelled-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[33].correlation",
+              "id": "accept-cancelled-reply-without-correlation"
+            },
+            {
+              "name": "accept-cancelled-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.8.stateEventIndex",
+              "id": "accept-cancelled-reply-with-wrong-state-event-index"
+            }
+          ]
+        },
+        {
+          "scenario": "seed-20261105",
+          "status": "detected",
+          "total": 16,
+          "rejected": [
+            {
+              "name": "bypass-go-cancellation",
+              "rejected": true,
+              "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+              "id": "bypass-go-cancellation"
+            },
+            {
+              "name": "cancel-sibling-pending-request",
+              "rejected": true,
+              "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+              "id": "cancel-sibling-pending-request"
+            },
+            {
+              "name": "accept-duplicate-reply",
+              "rejected": true,
+              "path": "browser.dom.events[7].result.accepted",
+              "id": "accept-duplicate-reply"
+            },
+            {
+              "name": "accept-wrong-correlation-tuple",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.message",
+              "id": "accept-wrong-correlation-tuple"
+            },
+            {
+              "name": "accept-old-generation-reply",
+              "rejected": true,
+              "path": "browser.swap.events[18].result.accepted",
+              "id": "accept-old-generation-reply"
+            },
+            {
+              "name": "confuse-renderer-epoch-with-reply-correlation",
+              "rejected": true,
+              "path": "direct.dom.orderedLedger[39].correlation.fields",
+              "id": "confuse-renderer-epoch-with-reply-correlation"
+            },
+            {
+              "name": "start-before-commit-render",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "start-before-commit-render"
+            },
+            {
+              "name": "call-transport-cancel-before-retiring-correlation",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "call-transport-cancel-before-retiring-correlation"
+            },
+            {
+              "name": "accept-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation",
+              "id": "accept-reply-without-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.a",
+              "id": "accept-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-reply-with-extra-correlation-field",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation.fields",
+              "id": "accept-reply-with-extra-correlation-field"
+            },
+            {
+              "name": "accept-reply-with-wrong-dispatch-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-dispatch-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-effect-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-effect-correlation"
+            },
+            {
+              "name": "accept-duplicate-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.b",
+              "id": "accept-duplicate-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-cancelled-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[33].correlation",
+              "id": "accept-cancelled-reply-without-correlation"
+            },
+            {
+              "name": "accept-cancelled-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.8.stateEventIndex",
+              "id": "accept-cancelled-reply-with-wrong-state-event-index"
+            }
+          ]
+        },
+        {
+          "scenario": "seed-20261106",
+          "status": "detected",
+          "total": 16,
+          "rejected": [
+            {
+              "name": "bypass-go-cancellation",
+              "rejected": true,
+              "path": "direct.react.snapshots[5].snapshot.children[0].goState",
+              "id": "bypass-go-cancellation"
+            },
+            {
+              "name": "cancel-sibling-pending-request",
+              "rejected": true,
+              "path": "direct.dom.snapshots[5].snapshot.children[1].goState",
+              "id": "cancel-sibling-pending-request"
+            },
+            {
+              "name": "accept-duplicate-reply",
+              "rejected": true,
+              "path": "browser.dom.events[7].result.accepted",
+              "id": "accept-duplicate-reply"
+            },
+            {
+              "name": "accept-wrong-correlation-tuple",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.message",
+              "id": "accept-wrong-correlation-tuple"
+            },
+            {
+              "name": "accept-old-generation-reply",
+              "rejected": true,
+              "path": "browser.swap.events[18].result.accepted",
+              "id": "accept-old-generation-reply"
+            },
+            {
+              "name": "confuse-renderer-epoch-with-reply-correlation",
+              "rejected": true,
+              "path": "direct.dom.orderedLedger[39].correlation.fields",
+              "id": "confuse-renderer-epoch-with-reply-correlation"
+            },
+            {
+              "name": "start-before-commit-render",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "start-before-commit-render"
+            },
+            {
+              "name": "call-transport-cancel-before-retiring-correlation",
+              "rejected": true,
+              "path": "direct.react.orderedLedger.a",
+              "id": "call-transport-cancel-before-retiring-correlation"
+            },
+            {
+              "name": "accept-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation",
+              "id": "accept-reply-without-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.a",
+              "id": "accept-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-reply-with-extra-correlation-field",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[47].correlation.fields",
+              "id": "accept-reply-with-extra-correlation-field"
+            },
+            {
+              "name": "accept-reply-with-wrong-dispatch-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-dispatch-correlation"
+            },
+            {
+              "name": "accept-reply-with-wrong-effect-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.12.correlation",
+              "id": "accept-reply-with-wrong-effect-correlation"
+            },
+            {
+              "name": "accept-duplicate-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.reply.b",
+              "id": "accept-duplicate-reply-with-wrong-state-event-index"
+            },
+            {
+              "name": "accept-cancelled-reply-without-correlation",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger[33].correlation",
+              "id": "accept-cancelled-reply-without-correlation"
+            },
+            {
+              "name": "accept-cancelled-reply-with-wrong-state-event-index",
+              "rejected": true,
+              "path": "browser.swap.orderedLedger.8.stateEventIndex",
+              "id": "accept-cancelled-reply-with-wrong-state-event-index"
+            }
+          ]
+        }
+      ],
+      "distinctControlIds": [
+        "accept-cancelled-reply-with-wrong-state-event-index",
+        "accept-cancelled-reply-without-correlation",
+        "accept-duplicate-reply",
+        "accept-duplicate-reply-with-wrong-state-event-index",
+        "accept-old-generation-reply",
+        "accept-reply-with-extra-correlation-field",
+        "accept-reply-with-wrong-dispatch-correlation",
+        "accept-reply-with-wrong-effect-correlation",
+        "accept-reply-with-wrong-state-event-index",
+        "accept-reply-without-correlation",
+        "accept-wrong-correlation-tuple",
+        "bypass-go-cancellation",
+        "call-transport-cancel-before-retiring-correlation",
+        "cancel-sibling-pending-request",
+        "confuse-renderer-epoch-with-reply-correlation",
+        "start-before-commit-render"
+      ],
+      "mutationControlsDetected": 64
+    },
+    "buildAdmissionMutationControls": {
+      "status": "detected",
+      "total": 7,
+      "requiredControlIds": [
+        "remove-cancel-descriptor",
+        "remove-cancel-capability",
+        "unadmit-react-child",
+        "wrong-dom-child-package",
+        "remove-react-keyed-helper",
+        "drop-source-pin",
+        "replace-dom-child-uint64-with-number"
+      ],
+      "allowAdditionalControls": false,
+      "rejected": [
+        {
+          "name": "remove-cancel-descriptor",
+          "rejected": true,
+          "path": "builds.closedEffectDescriptors",
+          "id": "remove-cancel-descriptor"
+        },
+        {
+          "name": "remove-cancel-capability",
+          "rejected": true,
+          "path": "builds.admission.dom.effectCapabilityExtension.capabilities",
+          "id": "remove-cancel-capability"
+        },
+        {
+          "name": "unadmit-react-child",
+          "rejected": true,
+          "path": "builds.admission.react.admitted",
+          "id": "unadmit-react-child"
+        },
+        {
+          "name": "wrong-dom-child-package",
+          "rejected": true,
+          "path": "builds.builds.dom.child.packagePath",
+          "id": "wrong-dom-child-package"
+        },
+        {
+          "name": "remove-react-keyed-helper",
+          "rejected": true,
+          "path": "builds.builds.react.parent.keyed.children",
+          "id": "remove-react-keyed-helper"
+        },
+        {
+          "name": "drop-source-pin",
+          "rejected": true,
+          "path": "builds.sourcePins[\"fixtures/compiled/effectmodulechild/app.go\"]",
+          "id": "drop-source-pin"
+        },
+        {
+          "name": "replace-dom-child-uint64-with-number",
+          "rejected": true,
+          "path": "builds.builds.dom.child.descriptor.types.uint64",
+          "id": "replace-dom-child-uint64-with-number"
+        }
+      ]
+    }
+  },
+  "demo": {
+    "status": "passed",
+    "browserInput": "HTMLElement.click()",
+    "steps": [
+      {
+        "name": "initial-two-key-mount",
+        "passed": true
+      },
+      {
+        "name": "request-pending-and-disabled-controls",
+        "passed": true
+      },
+      {
+        "name": "go-declared-cancel",
+        "passed": true
+      },
+      {
+        "name": "react-swap-immediate-real-add-and-idle-save-clicks",
+        "passed": true
+      },
+      {
+        "name": "renderer-swap-preserves-pending-timer",
+        "passed": true
+      },
+      {
+        "name": "swap-remove-remount-real-child-actions",
+        "passed": true
+      }
+    ],
+    "startObservations": [
+      {
+        "token": "a:g1:r1",
+        "kind": "fixture.request",
+        "name": "save",
+        "goPending": true,
+        "goToken": "a:g1:r1",
+        "statusLabel": "Saving",
+        "saveDisabled": true,
+        "cancelDisabled": false,
+        "backend": "dom"
+      },
+      {
+        "token": "a:g1:r2",
+        "kind": "fixture.request",
+        "name": "save",
+        "goPending": true,
+        "goToken": "a:g1:r2",
+        "statusLabel": "Saving",
+        "saveDisabled": true,
+        "cancelDisabled": false,
+        "backend": "react"
+      },
+      {
+        "token": "b:g1:r1",
+        "kind": "fixture.request",
+        "name": "save",
+        "goPending": true,
+        "goToken": "b:g1:r1",
+        "statusLabel": "Saving",
+        "saveDisabled": true,
+        "cancelDisabled": false,
+        "backend": "react"
+      },
+      {
+        "token": "b:g2:r1",
+        "kind": "fixture.request",
+        "name": "save",
+        "goPending": true,
+        "goToken": "b:g2:r1",
+        "statusLabel": "Saving",
+        "saveDisabled": true,
+        "cancelDisabled": false,
+        "backend": "react"
+      }
+    ],
+    "allStartsSawGoPendingAndRenderedPendingUI": true,
+    "removalOrder": {
+      "key": "b",
+      "generation": 1,
+      "token": "b:g1:r1",
+      "stateEventIndex": 10,
+      "sequence": {
+        "go-update-unmount": 33,
+        "go-state-commit": 35,
+        "go-cancel-effect": 36,
+        "transport-cancel-call": 37,
+        "transport-cancel": 38,
+        "renderer-unmount": 40
+      }
+    },
+    "pageErrors": 0,
+    "failedRequests": 0,
+    "completionSemantics": "real setTimeout completion echoes the opaque Go-generated token; no persistence or HTTP request claim"
+  },
+  "archive": {
+    "archive": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T040910811Z-2-e6460df3.tar.gz",
+      "bytes": 8666186,
+      "sha256": "e01b9508747b6e59af97a0cb57ce6c41a44514393cf9b57d6832b9d7bef89f4a"
+    },
+    "manifest": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T040910811Z-2-e6460df3.manifest.json",
+      "bytes": 160505,
+      "sha256": "5c06a221bae5709eca9859d1c273a7b9f4b26463fca086a4a2caa2ecd30fe0fc"
+    },
+    "members": 638,
+    "roundTripVerified": true,
+    "independentConsumer": {
+      "archiveBytes": 8666186,
+      "archiveSHA256": "e01b9508747b6e59af97a0cb57ce6c41a44514393cf9b57d6832b9d7bef89f4a",
+      "members": 638,
+      "status": "passed"
+    },
+    "duplicateLogExclusions": 0,
+    "regenerableBundlesExcluded": 4
+  },
+  "separateEvidence": {
+    "M0Counter": "E-REG independently passed; no duplicate rerun in this packet, final source binding is handled by its owner.",
+    "priorPR22KeyedRegression": "E-KEYEDREG separately accepted; no duplicate rerun in this packet."
+  },
+  "qualification": {
+    "cleanGitBoundProducerRun": "passed",
+    "externalArchiveConsumer": "pending",
+    "publishedReadback": "pending",
+    "finalAcceptance": "pending independent consumer/review and publication gates"
+  },
+  "reviewerDecision": "pending"
+}

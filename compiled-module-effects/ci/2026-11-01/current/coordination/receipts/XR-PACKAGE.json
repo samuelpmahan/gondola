@@ -1,0 +1,201 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-PACKAGE",
+  "worker": "N4",
+  "decision": "amend",
+  "status": "amend_required",
+  "summary": "The sealed E-PACKAGE packet and its six fixture tests validate, but pack_audit resolves the coordination root before the explicit non-symlink-root guard. A temporary API probe showed direct scan rejects a symlink root while pack_audit accepts and packages its target.",
+  "reviewedPacket": {
+    "baseCommit": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "sealedPacketRoot": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-PACKAGE",
+    "sealFiles": {
+      "E-PACKAGE.md": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-PACKAGE/E-PACKAGE.md",
+        "bytes": 4272,
+        "sha256": "001a6ade5953cbf83c74faea21521041e01ed2b860decf37e897c32bce0f80e9"
+      },
+      "E-PACKAGE.json": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-PACKAGE/E-PACKAGE.json",
+        "bytes": 5882,
+        "sha256": "141782640a891b33bf8024538048c5ac14a222df0889d48c87beb98bc686db2d"
+      },
+      "source-inventory.json": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-PACKAGE/source-inventory.json",
+        "bytes": 1142,
+        "sha256": "380a8fdb54d39406a6c64e6095e71d1b80fd0609a593cec2c6795cff8ab40be4"
+      },
+      "seal.json": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-PACKAGE/seal.json",
+        "bytes": 177,
+        "sha256": "f8fc9a9df7e876813cfebd42fd12ccee67e193f2335b61491a169545b87d794a"
+      }
+    },
+    "sealPinsMatch": true,
+    "sourcePinManifest": {
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-PACKAGE/source/source-pins.json",
+      "bytes": 826,
+      "sha256": "4496c0293302a96be4321e7e3b9faf7b31c71df881e05175511678741f130cc6"
+    },
+    "sourceInventoryCount": 5,
+    "sourceInventory": [
+      {
+        "path": "external/common.py",
+        "bytes": 16065,
+        "sha256": "e7c5fc1c67785f9d9fa202840d93eb726f697ffdf909b5257d2ce94d6e1d3c6c"
+      },
+      {
+        "path": "external/prepare_parts.py",
+        "bytes": 9211,
+        "sha256": "e4b4cd35f2f75382ddd9a3ed8a10ad0156ba2ff3400aa2d417c412db30efc465"
+      },
+      {
+        "path": "external/pack_audit.py",
+        "bytes": 19019,
+        "sha256": "8646ae7833fb82726ebfc4f1154d1b4ea2121bf50939d52644470c74d33122c1"
+      },
+      {
+        "path": "external/test_publisher.py",
+        "bytes": 16253,
+        "sha256": "c0a6a3e266c78eea28ef41d8482011951867faaad6c68bfa59a36500ff153936"
+      },
+      {
+        "path": "external/README-PUBLISHER-TEMPLATE.md",
+        "bytes": 5748,
+        "sha256": "bf973cfdd4fe4dc825479d9557223c465d78f72ed401709a622118573e6d93f7"
+      }
+    ],
+    "sourceMismatches": [],
+    "rawlogIndex": {
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-PACKAGE/index.json",
+      "bytes": 2794,
+      "sha256": "78d210f59011f735817dc8df96310c9b26447f55aa3921a3c44efdf18ffe281e"
+    },
+    "rawlogFileCount": 17,
+    "rawlogMismatches": [],
+    "restoreTool": {
+      "path": "/tmp/module-effects-publish/restore.py",
+      "bytes": 33703,
+      "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98"
+    },
+    "consumerPreparationTool": {
+      "path": "/tmp/module-effects-publish/consume-prep-v2.py",
+      "bytes": 85643,
+      "sha256": "c1d7fed5afb75ca2cecbed4df8ddca50890d3cafd60dd5b0bfbc032e2a1e8a82"
+    }
+  },
+  "verified": {
+    "toolingSourceSnapshotMatchesSealedRawAndLive": true,
+    "livePublisherFileSetExact": true,
+    "fixtureTests": {
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "stdout": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/tests/sealed-source-tests.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/tests/sealed-source-tests.stderr.log",
+        "bytes": 1148,
+        "sha256": "089159d6c299882d4c0b4b21db8b84752d2b5bc1e41e2ea7b4626ad7fcde6d3b"
+      }
+    },
+    "fixtureCoverage": [
+      "manifest-derived member and source-pin counts; exact effects schema; one MiB segmentation; per-part SHA-256 and read-only Git blob SHA-1",
+      "clean commit and manifest verifier binding; source pins, source closure, archive path/size/SHA-256 and member-byte checks fail closed",
+      "deterministic regular-file audit, exact extracted-primary and duplicate-primary exclusions, recognized caches with exclusion records",
+      "retains reports, receipts, seals, native/protocol records, failed witnesses and traces",
+      "source/directory before-after snapshot guard and file mutation guard",
+      "rejects symlink members and output inside coordination root"
+    ],
+    "rawlogIntegrity": {
+      "status": "verified",
+      "indexedFileCount": 17,
+      "indexExcludesItself": true,
+      "savedCheck": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/integrity-check.stdout.json",
+        "bytes": 442,
+        "sha256": "c286997c7c2b7684c52d30668dfd96903c5cf675061c14b73c8474f5b51f20b8"
+      }
+    },
+    "sourceSnapshotCheck": {
+      "status": "verified",
+      "fileCount": 5,
+      "mismatches": 0,
+      "savedCheck": {
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/source-snapshot-verify.stdout.json",
+        "bytes": 115,
+        "sha256": "34a5e2f58baf4444df0b112162f326b74ace79d18cbdfd73c47b1429126af67e"
+      }
+    },
+    "frozenRestoreUnchanged": true,
+    "consumerPreparationUnchanged": true,
+    "gitMutations": false,
+    "networkWrites": false,
+    "sourceFilesModified": false,
+    "python": "Python 3.12.14",
+    "git": "git version 2.51.1"
+  },
+  "finding": {
+    "severity": "blocking",
+    "name": "pack-audit-resolves-symlink-root-before-rejecting-it",
+    "sourcePath": "module-effects-coordination/seals/E-PACKAGE/source/external/pack_audit.py",
+    "lines": {
+      "coordinationRootResolve": 299,
+      "scanTreeCall": 327,
+      "scanTreeNonSymlinkRootGuard": "common.py:63-67"
+    },
+    "observation": {
+      "directScanRejectsSymlinkRoot": true,
+      "packerAcceptedSymlinkRoot": true,
+      "includedMembers": [
+        "coordination/marker.txt"
+      ],
+      "auditSHA256": "f30724e9b4a05de9d44b886d694baf4f6be9d4ffc5eb93fd11594336082e3835",
+      "temporaryOutput": "/tmp/xr-package-symlink-root-ksn1_lsl/out"
+    },
+    "witness": {
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/symlink-root-probe.stdout.json",
+      "bytes": 399,
+      "sha256": "c4ce1fe372cc6f18c9cb2bbda93217ac10c16dc2ebe89a359038d635cd519c9f"
+    },
+    "reproductionCommand": {
+      "argv": [
+        "python3",
+        "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/symlink-root-probe.py"
+      ],
+      "cwd": "/tmp/module-effects-publish/publisher",
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "/tmp/module-effects-publish/publisher"
+      }
+    },
+    "requiredRepair": "Check that the caller-provided coordination root is a real non-symlink directory before resolving it, then add a pack_audit-level symlink-root rejection regression test.",
+    "scopeNote": "This finding is the confirmed root-symlink guard bypass only; no broader traversal claim is made."
+  },
+  "versions": {
+    "python": "Python 3.12.14",
+    "git": "git version 2.51.1"
+  },
+  "commandsPath": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/commands.json",
+  "reviewEvidenceIndex": {
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-PACKAGE/index.json",
+    "bytes": 2539,
+    "sha256": "85a100245dd71a5433b11d8947d464c8e5aca99ff50d74ba5704377cc6a320a8",
+    "files": 15,
+    "indexExcludesItself": true
+  },
+  "reportPath": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/XR-PACKAGE.md",
+  "reportPin": {
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/XR-PACKAGE.md",
+    "bytes": 4030,
+    "sha256": "352e516be4af7e514868d2a312d08e8700b1b8db9e03079f5e9239d4711e7e61"
+  },
+  "noSourceEdits": true,
+  "limits": [
+    "No clean E-RUN/E-DELIVERY primary archive or manifest was available; no production primary or final audit archive was created.",
+    "The fixture suite and symlink-root reproduction used disposable temporary trees. The root finding is from a pack_audit API probe with Git checking disabled to isolate the path guard; production CLI always resolves the same coordination root before scanning.",
+    "Final root archive preparation and restore/publication remain downstream gates after the external publisher repair and review."
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-PACKAGEROOT",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "phase": "publisher_coordination_root_guard_repair",
+  "status": "pending_independent_review_before_final_root_pack",
+  "qualification": {
+    "phase": "publisher_fixture_gate",
+    "status": "passed",
+    "finalSharedRootPackaging": "not_run_pending_independent_review"
+  },
+  "summary": "Fixed the pack_audit coordination-root alias bypass by validating the expanded absolute caller path before resolve(). Added a red/green API-level regression covering symlink rejection and regular-root packaging; all seven publisher fixtures pass under Python 3.12.14.",
+  "scope": {
+    "ownedPaths": [
+      "/tmp/module-effects-publish/publisher/pack_audit.py",
+      "/tmp/module-effects-publish/publisher/test_publisher.py"
+    ],
+    "modifiedPaths": [
+      "pack_audit.py",
+      "test_publisher.py"
+    ],
+    "repoSourceModified": false,
+    "restoreToolModified": false,
+    "consumerPreparationModified": false,
+    "gitMutations": false,
+    "schedulerMutations": false,
+    "sharedCoordinationPackagingAttempted": false
+  },
+  "sourcePins": {
+    "manifestPath": "module-effects-coordination/rawlogs/E-PACKAGEROOT/source/source-pins.json",
+    "files": [
+      {
+        "path": "README-PUBLISHER-TEMPLATE.md",
+        "bytes": 5748,
+        "sha256": "bf973cfdd4fe4dc825479d9557223c465d78f72ed401709a622118573e6d93f7",
+        "baselineBytes": 5748,
+        "baselineSHA256": "bf973cfdd4fe4dc825479d9557223c465d78f72ed401709a622118573e6d93f7",
+        "matchesBaseline": true
+      },
+      {
+        "path": "common.py",
+        "bytes": 16065,
+        "sha256": "e7c5fc1c67785f9d9fa202840d93eb726f697ffdf909b5257d2ce94d6e1d3c6c",
+        "baselineBytes": 16065,
+        "baselineSHA256": "e7c5fc1c67785f9d9fa202840d93eb726f697ffdf909b5257d2ce94d6e1d3c6c",
+        "matchesBaseline": true
+      },
+      {
+        "path": "pack_audit.py",
+        "bytes": 19388,
+        "sha256": "50c7a75fbdf6f77c411a40f86324d972ac685def6850a85efabb91f679362471",
+        "baselineBytes": 19019,
+        "baselineSHA256": "8646ae7833fb82726ebfc4f1154d1b4ea2121bf50939d52644470c74d33122c1",
+        "matchesBaseline": false
+      },
+      {
+        "path": "prepare_parts.py",
+        "bytes": 9211,
+        "sha256": "e4b4cd35f2f75382ddd9a3ed8a10ad0156ba2ff3400aa2d417c412db30efc465",
+        "baselineBytes": 9211,
+        "baselineSHA256": "e4b4cd35f2f75382ddd9a3ed8a10ad0156ba2ff3400aa2d417c412db30efc465",
+        "matchesBaseline": true
+      },
+      {
+        "path": "test_publisher.py",
+        "bytes": 17673,
+        "sha256": "1ee0ae56a6b1d7401d87d72394b0f072a6abfcea5495a8033c7e3b862729f9cf",
+        "baselineBytes": 16253,
+        "baselineSHA256": "c0a6a3e266c78eea28ef41d8482011951867faaad6c68bfa59a36500ff153936",
+        "matchesBaseline": false
+      }
+    ],
+    "allOutOfScopePublisherFilesMatchBaseline": true,
+    "repairScopeExactly": [
+      "pack_audit.py",
+      "test_publisher.py"
+    ]
+  },
+  "originalPackets": {
+    "E-PACKAGESealPreserved": true,
+    "E-PACKAGESealPath": "module-effects-coordination/seals/E-PACKAGE/seal.json",
+    "E-PACKAGEIndexedRawlogsVerified": 17,
+    "XR-PACKAGEAMENDPreserved": true,
+    "preservationCheck": {
+      "path": "module-effects-coordination/rawlogs/E-PACKAGEROOT/preservation-check.json",
+      "bytes": 1902,
+      "sha256": "1869214c1559637cf7e88d4a246b74caf23f4661dde2da45c45b80f094ebea41"
+    }
+  },
+  "interfaces": {
+    "restoreTool": {
+      "path": "/tmp/module-effects-publish/restore.py",
+      "bytes": 33703,
+      "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98",
+      "matchesFrozenPin": true
+    },
+    "consumerPreparation": {
+      "path": "/tmp/module-effects-publish/consume-prep-v2.py",
+      "bytes": 85643,
+      "sha256": "c1d7fed5afb75ca2cecbed4df8ddca50890d3cafd60dd5b0bfbc032e2a1e8a82",
+      "matchesFrozenPin": true
+    }
+  },
+  "verification": {
+    "python": "Python 3.12.14",
+    "redRegression": {
+      "command": "python -m unittest -v test_publisher.AuditPackagingTests.test_pack_audit_rejects_symlink_root_and_accepts_regular_root",
+      "exitCode": 1,
+      "observed": "pack_audit accepted symlink alias before the code fix",
+      "output": {
+        "path": "module-effects-coordination/rawlogs/E-PACKAGEROOT/tests/red-alias-root.log",
+        "bytes": 989,
+        "sha256": "0247ecada1b68f7c84861610ddf9a0cd9ea5626b7d15e0cc8ee0a69b5bbe4744"
+      }
+    },
+    "greenRegression": {
+      "command": "python -m unittest -v test_publisher.AuditPackagingTests.test_pack_audit_rejects_symlink_root_and_accepts_regular_root",
+      "exitCode": 0,
+      "passed": 1,
+      "asserts": [
+        "symlink alias rejected before output creation",
+        "regular root produces audit and includes coordination/marker.txt"
+      ],
+      "output": {
+        "path": "module-effects-coordination/rawlogs/E-PACKAGEROOT/tests/green-alias-root.log",
+        "bytes": 265,
+        "sha256": "555e3896397c26fcb47bcc8f553e31b48560db79b90ebc90e05286a3c25b89de"
+      }
+    },
+    "fullFixtureSuite": {
+      "command": "python -m unittest -v test_publisher.py",
+      "exitCode": 0,
+      "passed": 7,
+      "failed": 0,
+      "includesAllSixOriginalFixtures": true,
+      "output": {
+        "path": "module-effects-coordination/rawlogs/E-PACKAGEROOT/tests/passing-tests.log",
+        "bytes": 1316,
+        "sha256": "ce7bdbb5599507df82ab31055eb444f334ae2988b91c51726588c91601bfd541"
+      }
+    },
+    "repairDiff": {
+      "path": "module-effects-coordination/rawlogs/E-PACKAGEROOT/repair.diff",
+      "bytes": 2562,
+      "sha256": "96712b4689901f9255e6c7d3de5ba09f214f0491e3bdf034ae6dc968a8a0a7d9"
+    },
+    "rootValidationBeforeResolve": true
+  },
+  "sourceState": {
+    "unchangedPublisherFiles": [
+      "README-PUBLISHER-TEMPLATE.md",
+      "common.py",
+      "prepare_parts.py"
+    ],
+    "restoreSHA256Unchanged": true,
+    "consumerSHA256Unchanged": true,
+    "repositoryGitOrSchedulerStateChanged": false
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/E-PACKAGEROOT.md",
+    "bytes": 2234,
+    "sha256": "24e8b2c614ad3903c716273fe8d5318d361deb636abd29a4d3da8976fe688d9e"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-PACKAGEROOT/index.json",
+    "bytes": 1864,
+    "sha256": "a9f7365817e07a7a7cd2259880ebedc9b6e24efbee872fa804b23fd8f7acb231",
+    "indexExcludesItself": true,
+    "indexedFileCount": 11
+  },
+  "limits": [
+    "Tests ran on disposable fixture trees; no clean shared coordination root package or final aggregate archive was produced.",
+    "Final packer qualification awaits independent review of this repair packet."
+  ]
+}

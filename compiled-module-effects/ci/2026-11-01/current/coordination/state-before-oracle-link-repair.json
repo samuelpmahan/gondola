@@ -1,0 +1,1878 @@
+{
+  "schema": "chainspot.rebalancer-state/v1",
+  "service": {},
+  "workers": {
+    "N1": {
+      "job": "E-RESTORE",
+      "agent": "/root/effects_go"
+    },
+    "N2": {
+      "job": "E-BUILDPATH",
+      "agent": "/root/effects_build"
+    },
+    "N3": {
+      "job": "E-REG",
+      "agent": "/root/effects_host"
+    },
+    "N4": {
+      "job": "XR-ORACLE",
+      "agent": "/root/effects_harness"
+    },
+    "N5": {
+      "job": "E-CONSUME",
+      "agent": "/root/effects_oracle"
+    },
+    "N6": {
+      "job": "E-DELIVERY",
+      "agent": "/root/effects_delivery"
+    }
+  },
+  "jobs": {
+    "E-GO": {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/effectmodulechild/** cmd/module-effects-native/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-11-01T02:17:13.005797+00:00",
+      "finished_at": "2026-11-01T02:28:26.233770+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-GO.json"
+    },
+    "E-BUILD": {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-module-effects/build/** compiled-frontend/build/pipeline.go and focused new module_effects_stage_test.go only moduleabi/descriptor.go and focused new module_effects_test.go only",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-11-01T02:17:12.732645+00:00",
+      "finished_at": "2026-11-01T02:52:13.964568+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-BUILD.json"
+    },
+    "E-HOST": {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-module-effects/runtime/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-11-01T02:17:12.643580+00:00",
+      "finished_at": "2026-11-01T02:49:08.666146+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-HOST.json"
+    },
+    "E-HARNESS": {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-module-effects/conformance/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-11-01T02:17:12.907047+00:00",
+      "finished_at": "2026-11-01T02:52:14.067920+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-HARNESS.json"
+    },
+    "E-ORACLE": {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-module-effects/oracle/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation",
+      "status": "done",
+      "worker": "N5",
+      "started_at": "2026-11-01T02:17:12.816280+00:00",
+      "finished_at": "2026-11-01T02:54:56.972866+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-ORACLE.json"
+    },
+    "E-DELIVERY": {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-module-effects/demo/** run.mjs README.md RESULTS.md .gitignore run-module-effects.sh .github/workflows/gobi-keyed-module-effects.yml",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation",
+      "status": "running",
+      "worker": "N6",
+      "started_at": "2026-11-01T02:17:13.097915+00:00",
+      "finished_at": null
+    },
+    "XR-GO": {
+      "id": "XR-GO",
+      "kind": "review",
+      "depends_on": "E-GO",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-11-01T02:49:08.851974+00:00",
+      "finished_at": "2026-11-01T02:53:44.650460+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/XR-GO.json"
+    },
+    "XR-BUILD": {
+      "id": "XR-BUILD",
+      "kind": "review",
+      "depends_on": "E-BUILD",
+      "status": "done",
+      "worker": "N4",
+      "started_at": "2026-11-01T02:52:14.363183+00:00",
+      "finished_at": "2026-11-01T02:58:26.849040+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/XR-BUILD.json"
+    },
+    "XR-HOST": {
+      "id": "XR-HOST",
+      "kind": "review",
+      "depends_on": "E-HOST",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-11-01T02:50:22.667433+00:00",
+      "finished_at": "2026-11-01T02:53:36.094296+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/XR-HOST.json"
+    },
+    "XR-HARNESS": {
+      "id": "XR-HARNESS",
+      "kind": "review",
+      "depends_on": "E-HARNESS",
+      "status": "done",
+      "worker": "N2",
+      "started_at": "2026-11-01T02:52:14.264101+00:00",
+      "finished_at": "2026-11-01T02:56:44.798140+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/XR-HARNESS.json"
+    },
+    "XR-ORACLE": {
+      "id": "XR-ORACLE",
+      "kind": "review",
+      "depends_on": "E-ORACLE",
+      "status": "running",
+      "worker": "N4",
+      "started_at": "2026-11-01T02:58:27.039552+00:00",
+      "finished_at": null
+    },
+    "XR-DELIVERY": {
+      "id": "XR-DELIVERY",
+      "kind": "review",
+      "depends_on": "E-DELIVERY",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "E-RESTORE": {
+      "id": "E-RESTORE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "external /tmp/module-effects-publish/restore.py and owned external tests only",
+      "summary": "Adapt accepted PR22 fail-closed restoration consumer to new effects manifest/index schemas and dynamic source pin count; preserve integrity and no-replace publication; verify actual archive after final run; new strict effects index includes bounded memberCount/sourcePinCount verified against manifest, supports documented sourceClosure/exclusion metadata while exact all archived/source byte checks and Linux renameat2 fail-closed stay intact",
+      "status": "running",
+      "worker": "N1",
+      "started_at": "2026-11-01T02:53:36.309821+00:00",
+      "finished_at": null
+    },
+    "XR-RESTORE": {
+      "id": "XR-RESTORE",
+      "kind": "review",
+      "depends_on": "E-RESTORE",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "E-GOCOMPILE": {
+      "id": "E-GOCOMPILE",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "repair_of": "E-GO",
+      "owner": "fixtures/compiled/effectmodulechild/** cmd/module-effects-native/** compiled-frontend/analyze/load.go and focused new transitive/bridge regression test only compiled-frontend/analyze/analyze.go and focused bounded ParseUint53 intrinsic tests",
+      "summary": "Repair 18 concrete actual compiler unsupported-call diagnostics using analyzable equivalent Go implementations while preserving complete keyed/effect semantics and tests; original E-GO packet immutable; approved precise loader fix for dependency body shadowing and declared bridge root reachability, preserving existing source/state/type checks and counter reuse; call-site proof permits only strconv.ParseUint(value,10,53), no general intrinsic-name allowance or arithmetic loosening, actual emitted boundary parity required",
+      "status": "done",
+      "worker": "N1",
+      "started_at": "2026-11-01T02:29:08.847319+00:00",
+      "finished_at": "2026-11-01T02:50:22.484866+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-GOCOMPILE.json"
+    },
+    "XR-GOCOMPILE": {
+      "id": "XR-GOCOMPILE",
+      "kind": "review",
+      "depends_on": "E-GOCOMPILE",
+      "status": "done",
+      "worker": "N3",
+      "started_at": "2026-11-01T02:53:44.831528+00:00",
+      "finished_at": "2026-11-01T03:00:15.852545+00:00",
+      "receipt": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/XR-GOCOMPILE.json"
+    },
+    "E-CONSUME": {
+      "id": "E-CONSUME",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "external /tmp/module-effects-publish/consume.py and consume-browser.mjs + packet evidence; no production/Git branch writes",
+      "summary": "Prepare independent clean artifact/source/executable consumer now; ACTUAL acceptance gated on clean source-bound E-RUN archive and final frozen restore consumer. Verify all member/source hashes, offline Go replay of4scenarios, relocated compiled direct parity and local archived demo browser, then published Git bytes readback after root fetch. No dirty evidence accepted.",
+      "status": "running",
+      "worker": "N5",
+      "started_at": "2026-11-01T02:54:57.396300+00:00",
+      "finished_at": null
+    },
+    "XR-CONSUME": {
+      "id": "XR-CONSUME",
+      "kind": "review",
+      "depends_on": "E-CONSUME",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "E-BUILDPATH": {
+      "id": "E-BUILDPATH",
+      "kind": "extract",
+      "repair_of": "E-BUILD",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-module-effects/build/abi-admission.mjs and focused new path-normalization test; build.mjs only if binding declared output root needed",
+      "summary": "Repair actual default aggregate isolated output path rejection by strict generated source-comment normalization, preserving executable/unknowncomment tamper rejection; reproduce four builds at runner-shaped path and sameABI/effect/boundary checks; original E-BUILD seal immutable",
+      "status": "running",
+      "worker": "N2",
+      "started_at": "2026-11-01T02:56:44.990687+00:00",
+      "finished_at": null
+    },
+    "XR-BUILDPATH": {
+      "id": "XR-BUILDPATH",
+      "kind": "review",
+      "depends_on": "E-BUILDPATH",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "E-REG": {
+      "id": "E-REG",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "external isolated M0+counter execution copy and rawlogs/E-REG, no feature-worktree/source/Git branch mutation",
+      "summary": "Run original M0 static5000/59receipt regression plus original interactivecounter107/4473 in isolated source-identical copy while new JSpathrepair proceeds. Record exactinputsource closure before/after, versions,commands,seeds,stdout,traces,originalreceipt hashes. Bind relevantinputpins to finalsourcecommit later; no duplicateinflight suites.",
+      "status": "running",
+      "worker": "N3",
+      "started_at": "2026-11-01T03:01:00.189345+00:00",
+      "finished_at": null
+    },
+    "XR-REG": {
+      "id": "XR-REG",
+      "kind": "review",
+      "depends_on": "E-REG",
+      "status": "pending",
+      "worker": null,
+      "started_at": null,
+      "finished_at": null
+    }
+  },
+  "events": [
+    {
+      "type": "solve",
+      "epoch": 0,
+      "at": "2026-11-01T02:15:44.442949+00:00",
+      "ready_jobs": [
+        "E-GO",
+        "E-BUILD",
+        "E-HOST",
+        "E-HARNESS",
+        "E-ORACLE",
+        "E-DELIVERY"
+      ],
+      "pinned_workers": [],
+      "assignments": {
+        "N3": "E-HOST",
+        "N2": "E-BUILD",
+        "N5": "E-ORACLE",
+        "N4": "E-HARNESS",
+        "N1": "E-GO",
+        "N6": "E-DELIVERY"
+      },
+      "dispatch": {
+        "N3": "E-HOST",
+        "N2": "E-BUILD",
+        "N5": "E-ORACLE",
+        "N4": "E-HARNESS",
+        "N1": "E-GO",
+        "N6": "E-DELIVERY"
+      },
+      "native_seconds": 0.005736974999308586,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 0 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 600,
+      "native_score": 600,
+      "caps": {
+        "E-GO": 1,
+        "E-BUILD": 1,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-GO": [
+          "N1"
+        ],
+        "E-BUILD": [
+          "N2"
+        ],
+        "E-HOST": [
+          "N3"
+        ],
+        "E-HARNESS": [
+          "N4"
+        ],
+        "E-ORACLE": [
+          "N5"
+        ],
+        "E-DELIVERY": [
+          "N6"
+        ]
+      },
+      "weights": {
+        "E-GO": 100,
+        "E-BUILD": 100,
+        "E-HOST": 100,
+        "E-HARNESS": 100,
+        "E-ORACLE": 100,
+        "E-DELIVERY": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": null,
+        "N3": null,
+        "N4": null,
+        "N5": null,
+        "N6": null
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:17:12.643580+00:00",
+      "worker": "N3",
+      "job": "E-HOST",
+      "agent": "/root/effects_host"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:17:12.732645+00:00",
+      "worker": "N2",
+      "job": "E-BUILD",
+      "agent": "/root/effects_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:17:12.816280+00:00",
+      "worker": "N5",
+      "job": "E-ORACLE",
+      "agent": "/root/effects_oracle"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:17:12.907047+00:00",
+      "worker": "N4",
+      "job": "E-HARNESS",
+      "agent": "/root/effects_harness"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:17:13.005797+00:00",
+      "worker": "N1",
+      "job": "E-GO",
+      "agent": "/root/effects_go"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:17:13.097915+00:00",
+      "worker": "N6",
+      "job": "E-DELIVERY",
+      "agent": "/root/effects_delivery"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:28:26.233770+00:00",
+      "worker": "N1",
+      "job": "E-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 1,
+      "at": "2026-11-01T02:28:26.344341+00:00",
+      "ready_jobs": [
+        "XR-GO"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "E-HOST",
+        "N6": "E-DELIVERY",
+        "N4": "E-HARNESS",
+        "N1": "BENCH",
+        "N2": "E-BUILD",
+        "N5": "E-ORACLE"
+      },
+      "dispatch": {},
+      "native_seconds": 0.0031067550007719547,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 1,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": []
+      },
+      "weights": {
+        "XR-GO": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "solve",
+      "epoch": 2,
+      "at": "2026-11-01T02:28:41.722406+00:00",
+      "ready_jobs": [
+        "XR-GO",
+        "E-RESTORE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N6": "E-DELIVERY",
+        "N5": "E-ORACLE",
+        "N4": "E-HARNESS",
+        "N1": "E-RESTORE",
+        "N2": "E-BUILD",
+        "N3": "E-HOST"
+      },
+      "dispatch": {
+        "N1": "E-RESTORE"
+      },
+      "native_seconds": 0.004368152000097325,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 1,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": [],
+        "E-RESTORE": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-GO": 200,
+        "E-RESTORE": 100
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:28:41.813267+00:00",
+      "worker": "N1",
+      "job": "E-RESTORE",
+      "agent": "/root/effects_go"
+    },
+    {
+      "type": "operator_defer_before_platform_delivery",
+      "at": "2026-11-01T02:29:08.647408+00:00",
+      "job": "E-RESTORE",
+      "worker": "N1",
+      "reason": "Actual child compiler diagnostics arrived after native start acknowledgment but before platform followup delivery. Preserve recommendation; defer external consumer so Go owner can repair concrete compatibility gate. This is an explicit operator transition, not a native pause API."
+    },
+    {
+      "type": "solve",
+      "epoch": 3,
+      "at": "2026-11-01T02:29:08.757577+00:00",
+      "ready_jobs": [
+        "XR-GO",
+        "E-GOCOMPILE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "E-HOST",
+        "N2": "E-BUILD",
+        "N6": "E-DELIVERY",
+        "N5": "E-ORACLE",
+        "N4": "E-HARNESS",
+        "N1": "E-GOCOMPILE"
+      },
+      "dispatch": {
+        "N1": "E-GOCOMPILE"
+      },
+      "native_seconds": 0.0032862030020623934,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 1,
+        "E-HOST": 1,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 0,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 1,
+        "XR-GOCOMPILE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": [],
+        "E-GOCOMPILE": [
+          "N1"
+        ]
+      },
+      "weights": {
+        "XR-GO": 200,
+        "E-GOCOMPILE": 300
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:29:08.847319+00:00",
+      "worker": "N1",
+      "job": "E-GOCOMPILE",
+      "agent": "/root/effects_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:49:08.666146+00:00",
+      "worker": "N3",
+      "job": "E-HOST"
+    },
+    {
+      "type": "solve",
+      "epoch": 4,
+      "at": "2026-11-01T02:49:08.762966+00:00",
+      "ready_jobs": [
+        "XR-GO",
+        "XR-HOST"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N2": "E-BUILD",
+        "N6": "E-DELIVERY",
+        "N5": "E-ORACLE",
+        "N3": "XR-GO",
+        "N4": "E-HARNESS",
+        "N1": "E-GOCOMPILE"
+      },
+      "dispatch": {
+        "N3": "XR-GO"
+      },
+      "native_seconds": 0.003641624000010779,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 1,
+        "E-HOST": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-HOST": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 0,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 1,
+        "XR-GOCOMPILE": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GO": [
+          "N3"
+        ],
+        "XR-HOST": []
+      },
+      "weights": {
+        "XR-GO": 200,
+        "XR-HOST": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": null,
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:49:08.851974+00:00",
+      "worker": "N3",
+      "job": "XR-GO",
+      "agent": "/root/effects_host"
+    },
+    {
+      "type": "operator_resume_deferred_job",
+      "at": "2026-11-01T02:49:41.804807+00:00",
+      "job": "E-RESTORE",
+      "reason": "Four actual builds and emitted numeric-boundary parity now pass. Native may schedule publication consumer after higher-priority independent reviews. Earlier recommendation was deferred before platform delivery, not executed."
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:50:22.484866+00:00",
+      "worker": "N1",
+      "job": "E-GOCOMPILE"
+    },
+    {
+      "type": "solve",
+      "epoch": 5,
+      "at": "2026-11-01T02:50:22.580268+00:00",
+      "ready_jobs": [
+        "XR-HOST",
+        "E-RESTORE",
+        "XR-GOCOMPILE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "XR-HOST",
+        "N2": "E-BUILD",
+        "N6": "E-DELIVERY",
+        "N5": "E-ORACLE",
+        "N3": "XR-GO",
+        "N4": "E-HARNESS"
+      },
+      "dispatch": {
+        "N1": "XR-HOST"
+      },
+      "native_seconds": 0.004233567000483163,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 1,
+        "E-HOST": 0,
+        "E-HARNESS": 1,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 0,
+        "XR-HOST": 1,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-HOST": [
+          "N1"
+        ],
+        "E-RESTORE": [
+          "N1"
+        ],
+        "XR-GOCOMPILE": []
+      },
+      "weights": {
+        "XR-HOST": 200,
+        "E-RESTORE": 100,
+        "XR-GOCOMPILE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:50:22.667433+00:00",
+      "worker": "N1",
+      "job": "XR-HOST",
+      "agent": "/root/effects_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:52:13.964568+00:00",
+      "worker": "N2",
+      "job": "E-BUILD"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:52:14.067920+00:00",
+      "worker": "N4",
+      "job": "E-HARNESS"
+    },
+    {
+      "type": "solve",
+      "epoch": 6,
+      "at": "2026-11-01T02:52:14.173497+00:00",
+      "ready_jobs": [
+        "XR-BUILD",
+        "XR-HARNESS",
+        "E-RESTORE",
+        "XR-GOCOMPILE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N6": "E-DELIVERY",
+        "N1": "XR-HOST",
+        "N5": "E-ORACLE",
+        "N3": "XR-GO",
+        "N2": "XR-HARNESS",
+        "N4": "XR-BUILD"
+      },
+      "dispatch": {
+        "N2": "XR-HARNESS",
+        "N4": "XR-BUILD"
+      },
+      "native_seconds": 0.003874791997077409,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 4 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 400,
+      "native_score": 400,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 1,
+        "XR-HOST": 1,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-BUILD": [
+          "N4"
+        ],
+        "XR-HARNESS": [
+          "N2"
+        ],
+        "E-RESTORE": [],
+        "XR-GOCOMPILE": [
+          "N2",
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-BUILD": 200,
+        "XR-HARNESS": 200,
+        "E-RESTORE": 100,
+        "XR-GOCOMPILE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": null,
+        "N3": "/root/effects_host",
+        "N4": null,
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:52:14.264101+00:00",
+      "worker": "N2",
+      "job": "XR-HARNESS",
+      "agent": "/root/effects_build"
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:52:14.363183+00:00",
+      "worker": "N4",
+      "job": "XR-BUILD",
+      "agent": "/root/effects_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:53:36.094296+00:00",
+      "worker": "N1",
+      "job": "XR-HOST"
+    },
+    {
+      "type": "solve",
+      "epoch": 7,
+      "at": "2026-11-01T02:53:36.210661+00:00",
+      "ready_jobs": [
+        "E-RESTORE",
+        "XR-GOCOMPILE"
+      ],
+      "pinned_workers": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N4": "XR-BUILD",
+        "N6": "E-DELIVERY",
+        "N2": "XR-HARNESS",
+        "N1": "E-RESTORE",
+        "N5": "E-ORACLE",
+        "N3": "XR-GO"
+      },
+      "dispatch": {
+        "N1": "E-RESTORE"
+      },
+      "native_seconds": 0.0051374419999774545,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 1,
+        "XR-BUILD": 1,
+        "XR-HOST": 0,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-RESTORE": [
+          "N1"
+        ],
+        "XR-GOCOMPILE": []
+      },
+      "weights": {
+        "E-RESTORE": 100,
+        "XR-GOCOMPILE": 200
+      },
+      "agent_by_worker": {
+        "N1": null,
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:53:36.309821+00:00",
+      "worker": "N1",
+      "job": "E-RESTORE",
+      "agent": "/root/effects_go"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:53:44.650460+00:00",
+      "worker": "N3",
+      "job": "XR-GO"
+    },
+    {
+      "type": "solve",
+      "epoch": 8,
+      "at": "2026-11-01T02:53:44.741187+00:00",
+      "ready_jobs": [
+        "XR-GOCOMPILE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCOMPILE",
+        "N4": "XR-BUILD",
+        "N6": "E-DELIVERY",
+        "N2": "XR-HARNESS",
+        "N1": "E-RESTORE",
+        "N5": "E-ORACLE"
+      },
+      "dispatch": {
+        "N3": "XR-GOCOMPILE"
+      },
+      "native_seconds": 0.00385202899997239,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 1,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-HOST": 0,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 0,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-GOCOMPILE": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "XR-GOCOMPILE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": null,
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:53:44.831528+00:00",
+      "worker": "N3",
+      "job": "XR-GOCOMPILE",
+      "agent": "/root/effects_host"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:54:56.972866+00:00",
+      "worker": "N5",
+      "job": "E-ORACLE"
+    },
+    {
+      "type": "solve",
+      "epoch": 9,
+      "at": "2026-11-01T02:54:57.125516+00:00",
+      "ready_jobs": [
+        "XR-ORACLE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCOMPILE",
+        "N4": "XR-BUILD",
+        "N6": "E-DELIVERY",
+        "N5": "BENCH",
+        "N2": "XR-HARNESS",
+        "N1": "E-RESTORE"
+      },
+      "dispatch": {},
+      "native_seconds": 0.009505707999778679,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-HOST": 0,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ORACLE": []
+      },
+      "weights": {
+        "XR-ORACLE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": null,
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "solve",
+      "epoch": 10,
+      "at": "2026-11-01T02:54:57.297134+00:00",
+      "ready_jobs": [
+        "XR-ORACLE",
+        "E-CONSUME"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N6"
+      ],
+      "assignments": {
+        "N6": "E-DELIVERY",
+        "N5": "E-CONSUME",
+        "N1": "E-RESTORE",
+        "N4": "XR-BUILD",
+        "N3": "XR-GOCOMPILE",
+        "N2": "XR-HARNESS"
+      },
+      "dispatch": {
+        "N5": "E-CONSUME"
+      },
+      "native_seconds": 0.004893509001703933,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-HOST": 0,
+        "XR-HARNESS": 1,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "E-CONSUME": 1,
+        "XR-CONSUME": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ORACLE": [],
+        "E-CONSUME": [
+          "N5"
+        ]
+      },
+      "weights": {
+        "XR-ORACLE": 200,
+        "E-CONSUME": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": null,
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:54:57.396300+00:00",
+      "worker": "N5",
+      "job": "E-CONSUME",
+      "agent": "/root/effects_oracle"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:56:44.798140+00:00",
+      "worker": "N2",
+      "job": "XR-HARNESS"
+    },
+    {
+      "type": "solve",
+      "epoch": 11,
+      "at": "2026-11-01T02:56:44.898830+00:00",
+      "ready_jobs": [
+        "XR-ORACLE",
+        "E-BUILDPATH"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCOMPILE",
+        "N1": "E-RESTORE",
+        "N2": "E-BUILDPATH",
+        "N6": "E-DELIVERY",
+        "N5": "E-CONSUME",
+        "N4": "XR-BUILD"
+      },
+      "dispatch": {
+        "N2": "E-BUILDPATH"
+      },
+      "native_seconds": 0.003937244000553619,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 300,
+      "native_score": 300,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 1,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "E-CONSUME": 1,
+        "XR-CONSUME": 0,
+        "E-BUILDPATH": 1,
+        "XR-BUILDPATH": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ORACLE": [
+          "N2"
+        ],
+        "E-BUILDPATH": [
+          "N2"
+        ]
+      },
+      "weights": {
+        "XR-ORACLE": 200,
+        "E-BUILDPATH": 300
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": null,
+        "N3": "/root/effects_host",
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:56:44.990687+00:00",
+      "worker": "N2",
+      "job": "E-BUILDPATH",
+      "agent": "/root/effects_build"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T02:58:26.849040+00:00",
+      "worker": "N4",
+      "job": "XR-BUILD"
+    },
+    {
+      "type": "solve",
+      "epoch": 12,
+      "at": "2026-11-01T02:58:26.946873+00:00",
+      "ready_jobs": [
+        "XR-ORACLE"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N3": "XR-GOCOMPILE",
+        "N1": "E-RESTORE",
+        "N2": "E-BUILDPATH",
+        "N4": "XR-ORACLE",
+        "N6": "E-DELIVERY",
+        "N5": "E-CONSUME"
+      },
+      "dispatch": {
+        "N4": "XR-ORACLE"
+      },
+      "native_seconds": 0.003924826000002213,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 200,
+      "native_score": 200,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 1,
+        "E-CONSUME": 1,
+        "XR-CONSUME": 0,
+        "E-BUILDPATH": 1,
+        "XR-BUILDPATH": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "XR-ORACLE": [
+          "N4"
+        ]
+      },
+      "weights": {
+        "XR-ORACLE": 200
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": "/root/effects_host",
+        "N4": null,
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T02:58:27.039552+00:00",
+      "worker": "N4",
+      "job": "XR-ORACLE",
+      "agent": "/root/effects_harness"
+    },
+    {
+      "type": "complete",
+      "at": "2026-11-01T03:00:15.852545+00:00",
+      "worker": "N3",
+      "job": "XR-GOCOMPILE"
+    },
+    {
+      "type": "solve",
+      "epoch": 13,
+      "at": "2026-11-01T03:00:15.948487+00:00",
+      "ready_jobs": [],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-RESTORE",
+        "N2": "E-BUILDPATH",
+        "N4": "XR-ORACLE",
+        "N6": "E-DELIVERY",
+        "N5": "E-CONSUME",
+        "N3": "BENCH"
+      },
+      "dispatch": {},
+      "native_seconds": 0.004012787001556717,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 0,
+      "native_score": 0,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 0,
+        "E-CONSUME": 1,
+        "XR-CONSUME": 0,
+        "E-BUILDPATH": 1,
+        "XR-BUILDPATH": 0,
+        "BENCH": 6
+      },
+      "eligible": {},
+      "weights": {},
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": null,
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "solve",
+      "epoch": 14,
+      "at": "2026-11-01T03:01:00.091191+00:00",
+      "ready_jobs": [
+        "E-REG"
+      ],
+      "pinned_workers": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "assignments": {
+        "N1": "E-RESTORE",
+        "N2": "E-BUILDPATH",
+        "N4": "XR-ORACLE",
+        "N6": "E-DELIVERY",
+        "N3": "E-REG",
+        "N5": "E-CONSUME"
+      },
+      "dispatch": {
+        "N3": "E-REG"
+      },
+      "native_seconds": 0.004938185000355588,
+      "native_constraints": {
+        "solved": true,
+        "brokenVal": 0,
+        "brokenCount": 0,
+        "constraints": [
+          {
+            "name": "independent_review",
+            "desc": "avoidAssignmentsSpec: Avoid 6 assignments on scope packets",
+            "value": 0
+          },
+          {
+            "name": "pin_in_flight",
+            "desc": "avoidMovingSpec: Avoid moving 5 objects",
+            "value": 0
+          },
+          {
+            "name": "ready_packet_capacity",
+            "desc": "capacitySpec: after(headcount) <= 1 for scope packets",
+            "value": 0
+          }
+        ]
+      },
+      "independent_capacity_check": true,
+      "independent_eligibility_check": true,
+      "exact_score": 100,
+      "native_score": 100,
+      "caps": {
+        "E-GO": 0,
+        "E-BUILD": 0,
+        "E-HOST": 0,
+        "E-HARNESS": 0,
+        "E-ORACLE": 0,
+        "E-DELIVERY": 1,
+        "XR-GO": 0,
+        "XR-BUILD": 0,
+        "XR-HOST": 0,
+        "XR-HARNESS": 0,
+        "XR-ORACLE": 1,
+        "XR-DELIVERY": 0,
+        "E-RESTORE": 1,
+        "XR-RESTORE": 0,
+        "E-GOCOMPILE": 0,
+        "XR-GOCOMPILE": 0,
+        "E-CONSUME": 1,
+        "XR-CONSUME": 0,
+        "E-BUILDPATH": 1,
+        "XR-BUILDPATH": 0,
+        "E-REG": 1,
+        "XR-REG": 0,
+        "BENCH": 6
+      },
+      "eligible": {
+        "E-REG": [
+          "N3"
+        ]
+      },
+      "weights": {
+        "E-REG": 100
+      },
+      "agent_by_worker": {
+        "N1": "/root/effects_go",
+        "N2": "/root/effects_build",
+        "N3": null,
+        "N4": "/root/effects_harness",
+        "N5": "/root/effects_oracle",
+        "N6": "/root/effects_delivery"
+      }
+    },
+    {
+      "type": "dispatch",
+      "at": "2026-11-01T03:01:00.189345+00:00",
+      "worker": "N3",
+      "job": "E-REG",
+      "agent": "/root/effects_host"
+    }
+  ],
+  "epoch": 15,
+  "policy": {
+    "extract_priority": 100,
+    "review_priority": 200,
+    "repair_priority": 300
+  }
+}

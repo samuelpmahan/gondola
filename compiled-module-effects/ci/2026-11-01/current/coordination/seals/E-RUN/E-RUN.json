@@ -1,0 +1,146 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-RUN",
+  "worker": "N6",
+  "outcome": "insufficient_evidence",
+  "status": "stopped_on_runner_consumer_schema_mismatch",
+  "phase": "clean_git_bound_qualification_attempt",
+  "summary": "The clean conformance producer reported matched and rejected 16 capture plus 7 build controls; the N6 consumer then failed because it expects native.stdoutPath, which the public producer summary does not expose. No demo or archive stage ran.",
+  "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+  "sourceTree": "fb4a44ad63eea969f1ae655e2d58f531b56a94fe",
+  "git": {
+    "head": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+    "dirty": false,
+    "sourcePinsMatch": true,
+    "sourcePinMismatches": []
+  },
+  "reportPath": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/E-RUN.md",
+  "rawEvidencePath": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-RUN/index.json",
+  "attempt": {
+    "id": "attempt-20261101T033637716Z-2-0d46ba94",
+    "command": [
+      "bash",
+      "run-module-effects.sh",
+      "--source-commit",
+      "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "--chromium",
+      "/tmp/chromium-portable"
+    ],
+    "environmentOverrides": {
+      "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+      "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python"
+    },
+    "allowDirty": false,
+    "exitCode": 1,
+    "failedStage": "native-direct-browser-conformance",
+    "failure": "The \"paths[0]\" argument must be of type string. Received undefined",
+    "failureLocation": "compiled-module-effects/run.mjs:542"
+  },
+  "tools": {
+    "go": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go1.27.3 linux/amd64",
+    "node": "v22.23.4",
+    "python": "Python 3.12.14",
+    "chromium": "Chromium 153.0.8010.0",
+    "playwright": "1.64.1",
+    "tar": "GNU tar 1.35"
+  },
+  "completedChecks": {
+    "buildCalls": 4,
+    "nativeFixtureGo": {
+      "packages": 2,
+      "tests": 13,
+      "status": "passed"
+    },
+    "moduleABI": {
+      "packages": 1,
+      "tests": 1,
+      "status": "passed"
+    },
+    "compilerAnalyze": {
+      "tests": 4,
+      "cases": 8,
+      "status": "passed"
+    },
+    "compilerBuild": {
+      "tests": 1,
+      "status": "passed"
+    },
+    "node": {
+      "files": 4,
+      "tests": 21,
+      "passed": 21,
+      "status": "passed"
+    },
+    "conformanceProducer": {
+      "status": "matched",
+      "checkStatus": "matched",
+      "captureMutationControls": 16,
+      "buildAdmissionMutationControls": 7,
+      "scenarioEvents": {
+        "literal": 31,
+        "seed-20261104": 49,
+        "seed-20261105": 50,
+        "seed-20261106": 48
+      },
+      "scenarios": 4,
+      "sourceEvents": 178,
+      "nativeStates": 182,
+      "nativeEffects": 58,
+      "nativeTransportRows": 116,
+      "profiles": 20,
+      "profileEvents": 890,
+      "profileSnapshots": 910,
+      "summary": {
+        "path": "attempt-01-clean-run/conformance/effects.summary.json",
+        "bytes": 105243,
+        "sha256": "912652f7cae923268181d7fac7590e14141d0a40291f29f5c7058515c59094d9"
+      },
+      "check": {
+        "path": "conformance/effects.check.json",
+        "bytes": 371,
+        "sha256": "da587f9780d349cac06fd94f62453139472d0b8d31872aef82d4edb381b7485a"
+      }
+    }
+  },
+  "stopReason": {
+    "consumerExpectedFields": [
+      "native.stdoutPath",
+      "native.stderrPath"
+    ],
+    "producerExposedFields": [
+      "native.path",
+      "native.bytes",
+      "native.sha256",
+      "native.command",
+      "native.commandCwd",
+      "native.commandEnvironment"
+    ],
+    "nativeRawLogsExist": true,
+    "nativeRawLogPathsIncludedInPublicSummary": false,
+    "policy": "stop on producer/consumer contract mismatch; do not skip validation or synthesize paths"
+  },
+  "notReached": {
+    "realTimerDemoSmoke": true,
+    "rendererSwapAndRemountBrowserActions": true,
+    "primaryArchive": true,
+    "archiveManifest": true,
+    "independentArchiveConsumer": true,
+    "finalSourceStabilityStage": true,
+    "priorPR22KeyedRegression": true
+  },
+  "separateEvidence": {
+    "E-REG": "295-input M0/counter isolated copy passed and independently reviewed; packet remains precommit and final Git binding is pending.",
+    "archiveProduced": false
+  },
+  "crossReferences": {
+    "copiedFrom": "../E-DELIVERY/attempt-03-clean-run/index.json",
+    "originalEDeliveryReport": "../../reports/E-DELIVERY.md",
+    "originalEDeliveryReceipt": "../../receipts/E-DELIVERY.json",
+    "currentEDeliveryRawlogsIndex": "../E-DELIVERY/index.json",
+    "preUpdateEDeliveryIndexPreserved": false,
+    "originalEDeliveryIndexNote": "The pre-clean-run byte-identical index was not preserved before it was appended; root was notified. The E-DELIVERY report/receipt were not modified."
+  },
+  "reviewerDecision": "pending"
+}

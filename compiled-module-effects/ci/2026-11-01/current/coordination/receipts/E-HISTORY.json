@@ -1,0 +1,158 @@
+{
+  "canonicalArchive": {
+    "bytes": 8666075,
+    "independentConsumerStatus": "passed",
+    "manifestBytes": 160662,
+    "manifestPath": "canonical-archive/attempt-20261101T035413961Z-2-55fe7cd9.manifest.json",
+    "manifestSHA256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33",
+    "manifestSourceAfterSHA256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33",
+    "manifestSourceBeforeSHA256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33",
+    "members": 638,
+    "path": "canonical-archive/attempt-20261101T035413961Z-2-55fe7cd9.tar.gz",
+    "sha256": "eaedcc97d2bef10b16755400c9088a5cea7dd4f320d48b19356c3252b2bbce0d",
+    "sourceAfterSHA256": "eaedcc97d2bef10b16755400c9088a5cea7dd4f320d48b19356c3252b2bbce0d",
+    "sourceBeforeSHA256": "eaedcc97d2bef10b16755400c9088a5cea7dd4f320d48b19356c3252b2bbce0d"
+  },
+  "commands": [
+    {
+      "command": "python3 module-effects-coordination/rawlogs/E-HISTORY/materialize.py",
+      "exitCode": 0,
+      "name": "materialize-frozen-inventories",
+      "python": "3.12.14",
+      "scriptSHA256": "853357c3b1ff225738d7894e320d2cb697cd596c3d7bc05fd8335c9fd6ae7b5a",
+      "stderr": "rawlogs/E-HISTORY/materialize.stderr.log",
+      "stdout": "rawlogs/E-HISTORY/materialize.stdout.json"
+    },
+    {
+      "command": "python3 module-effects-coordination/rawlogs/E-HISTORY/materialize.py",
+      "exitCode": 1,
+      "name": "initial-empty-destination-guard",
+      "note": "The initial guard treated its own redirected logs as existing payload; it copied nothing. The successful run allowed only the copier and its logs before copying.",
+      "payloadCopies": 0,
+      "stderr": "rawlogs/E-HISTORY/materialize-preflight-failure.stderr.log"
+    }
+  ],
+  "counts": {
+    "attempts": 3,
+    "destinationHashMismatches": 0,
+    "evidenceBytes": 876153,
+    "evidenceFiles": 24,
+    "materializedInventoryBytes": 406211460,
+    "materializedInventoryFiles": 1740,
+    "missingFiles": 0,
+    "outputBytes": 405335307,
+    "outputFiles": 1716,
+    "regularFilesOnly": true,
+    "sourceHashMismatches": 0
+  },
+  "evidence": {
+    "copyManifest": "rawlogs/E-HISTORY/copy-manifest.json",
+    "copyManifestSHA256": "6f33fb448e2856c099cff4d52184c51d0120c2a069297cfbe5f0b0dbc44cd3ed",
+    "firstCopierGuardFailure": "rawlogs/E-HISTORY/materialize-preflight-failure.stderr.log",
+    "rawlogIndex": "rawlogs/E-HISTORY/index.json",
+    "rawlogIndexSHA256": "77e91146c0f15207f06b853374d99f5cb625db0744dedccab0be910bb28fe7e7",
+    "rawlogRecordCount": 1751,
+    "sourceIndexCopy": "rawlogs/E-HISTORY/source-deliverycontract-index.json",
+    "sourceIndexCopySHA256": "da9064ca142f4037bb57f3cdc629d88a9a8550d2c45382ce56d38912ea88aa7d"
+  },
+  "job_id": "E-HISTORY",
+  "limitations": [
+    "Attempt 01 records exactRunnerSourceSnapshot=false. Its inventoried output/evidence are preserved; the absent runner body was not reconstructed or claimed.",
+    "Attempt 03 is the frozen author diagnostic pass, not a new clean-source qualification. This job only materialized bytes."
+  ],
+  "outcome": "confirmed_reuse",
+  "report": {
+    "path": "reports/E-HISTORY.md",
+    "sha256": "4a6c643a6eb9e8183f2fcf7bf358f891e08bbb0b987f7cfba68947614730ced1"
+  },
+  "source": {
+    "indexBeforeAfterUnchanged": true,
+    "indexBytes": 25972,
+    "indexPath": "rawlogs/E-DELIVERYCONTRACT/index.json",
+    "indexSHA256": "da9064ca142f4037bb57f3cdc629d88a9a8550d2c45382ce56d38912ea88aa7d",
+    "localInventories": [
+      {
+        "destinationPinMismatches": 0,
+        "groups": {
+          "evidence": {
+            "bytes": 60144,
+            "files": 4
+          },
+          "output": {
+            "bytes": 133457259,
+            "files": 432
+          }
+        },
+        "id": "attempt-20261101T035129308Z-2-78bd7201",
+        "missingFiles": 0,
+        "sourceInventory": {
+          "bytes": 137551,
+          "path": "attempt-01-ordering-failure/local-inventory.json",
+          "sha256": "bd0548494bc8610bb5d2869a2d5feefec3dab07a138f8e46eb55ea18fce65a92"
+        },
+        "sourcePinMismatches": 0,
+        "sourceSnapshotExact": false,
+        "stage": "mounted-timer-demo-smoke",
+        "status": "failed_demo_assertion"
+      },
+      {
+        "destinationPinMismatches": 0,
+        "groups": {
+          "evidence": {
+            "bytes": 56450,
+            "files": 4
+          },
+          "output": {
+            "bytes": 135938988,
+            "files": 642
+          }
+        },
+        "id": "attempt-20261101T035317671Z-2-6e206183",
+        "missingFiles": 0,
+        "sourceInventory": {
+          "bytes": 200322,
+          "path": "attempt-02-inventory-failure/local-inventory.json",
+          "sha256": "29eccfe481632ad614a7bce6968f37aef21531e8a027936754b54422b561abc3"
+        },
+        "sourcePinMismatches": 0,
+        "sourceSnapshotExact": true,
+        "stage": "archive-source-snapshot-and-round-trip",
+        "status": "failed_archive_inventory"
+      },
+      {
+        "destinationPinMismatches": 0,
+        "groups": {
+          "evidence": {
+            "bytes": 759559,
+            "files": 16
+          },
+          "output": {
+            "bytes": 135939060,
+            "files": 642
+          }
+        },
+        "id": "attempt-20261101T035413961Z-2-55fe7cd9",
+        "missingFiles": 0,
+        "sourceInventory": {
+          "bytes": 204086,
+          "path": "attempt-03-author-pass/local-inventory.json",
+          "sha256": "20bc988ab29ef4beef35c6d03d44b3dac4528ac594b05130e4fa778c71de3420"
+        },
+        "sourcePinMismatches": 0,
+        "sourceSnapshotExact": true,
+        "stage": "complete",
+        "status": "author_diagnostic_passed"
+      }
+    ],
+    "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33"
+  },
+  "status": "passed",
+  "summary": "Materialized all 1,740 regular files referenced by the three frozen E-DELIVERYCONTRACT local inventories. All source inventories and files matched their frozen hashes; copied destinations and source-after hashes matched as well. Also copied the canonical 638-member archive and manifest from their frozen pins. No suites were rerun and no original files were modified.",
+  "worker": "N4",
+  "writes": {
+    "onlyNewNamespace": "rawlogs/E-HISTORY/ plus reports/E-HISTORY.md and receipts/E-HISTORY.json",
+    "originalInventoriesOrSourceModified": false,
+    "schedulerOrGitMutation": false,
+    "sourceSuiteRerun": false
+  }
+}

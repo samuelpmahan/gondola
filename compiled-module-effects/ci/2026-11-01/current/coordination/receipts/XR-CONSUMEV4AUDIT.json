@@ -1,0 +1,171 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-CONSUMEV4AUDIT",
+  "worker": "N2",
+  "decision": "accepted",
+  "status": "accepted_source_preflight_review_only",
+  "summary": "Accepted the frozen E-CONSUMEV4AUDIT findings and v4 consumer candidate for source-contract preflight only. All 26 indexed raw files and all three candidate pins matched; 49 named audit assertions passed; the 45 snapshot/count/command/control and 9 lifecycle probes reproduced byte-for-byte. The end-to-end archive outcome remains insufficient_evidence pending a fresh source-bound archive run.",
+  "reviewedPacket": {
+    "job_id": "E-CONSUMEV4AUDIT",
+    "worker": "N1",
+    "decision": "accepted",
+    "outcome": "insufficient_evidence",
+    "qualification": {
+      "phase": "consumer_source_preflight_review",
+      "status": "accepted_preflight_candidate_only",
+      "endToEndArchiveAcceptance": false
+    },
+    "pins": {
+      "reportSHA256": "5b243708b0b82d564fc878e885937db7f1d4647785ea9e9394bc764e494264e2",
+      "receiptSHA256": "34fd9a811e60acff3d23e05ca33c982e66028689fdc9ce1a86285d744c0e773b",
+      "rawlogsIndexSHA256": "102862f0aeec754cbc38fbde81f2ad88ebd0a95f86398eaf18ebfa6bc436d10a"
+    },
+    "rawlogs": {
+      "indexedFiles": 26,
+      "hashMismatches": 0,
+      "reportReceiptIndexPinsMatch": true
+    }
+  },
+  "candidate": {
+    "indexPath": "module-effects-coordination/rawlogs/E-CONSUME/source-v4/files.json",
+    "indexSHA256": "14334d2efa7dd550b6b5a293c750f582aaece38df47dc9a34fb393cef55fa0a3",
+    "files": [
+      {
+        "path": "consume-econsume-v4.py",
+        "bytes": 109901,
+        "sha256": "feececf7081e6d67eac4179b4eeb647f1eb7e2169a0684fdf0cbf5b46ee781bc",
+        "pinMatch": true,
+        "externalCopyMatch": true
+      },
+      {
+        "path": "consume-browser-econsume-v4.mjs",
+        "bytes": 28493,
+        "sha256": "947e92caa4a7856e8f0cf434d9401bb8218296859481ae7eebddcfd515e48d1c",
+        "pinMatch": true,
+        "externalCopyMatch": true
+      },
+      {
+        "path": "restore.py",
+        "bytes": 33703,
+        "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98",
+        "pinMatch": true,
+        "externalCopyMatch": true
+      }
+    ],
+    "pythonVersion": "3.12.14",
+    "nodeVersion": "v22.23.4",
+    "syntaxChecks": {
+      "pythonAST": true,
+      "browserNodeCheck": true
+    }
+  },
+  "verification": {
+    "independentAuditReplay": {
+      "assertions": 49,
+      "failed": 0,
+      "uniqueNames": true,
+      "assertionRowsMatchFrozenResult": true
+    },
+    "contractProbes": {
+      "snapshotCountCommandControls": {
+        "reproduced": 45,
+        "passed": 45,
+        "failed": 0,
+        "byteIdenticalToFrozenOutput": true,
+        "fixtureScope": "author_only_schema_fixture"
+      },
+      "browserUnmountLifecycle": {
+        "reproduced": 9,
+        "passed": 9,
+        "failed": 0,
+        "byteIdenticalToFrozenOutput": true,
+        "fixtureScope": "author_only_schema_fixture"
+      }
+    },
+    "sourceReview": {
+      "snapshotCountsAndCommandsAreValidated": true,
+      "commandSnapshotPrefixAndPostarchiveSuffixBound": true,
+      "archiveHelperCommandsRemainSeparate": true,
+      "countsAreTypedAndArrayDerived": true,
+      "applicationMatrixIsFourScenariosBySixteenRequiredIDs": true,
+      "archiveSourceClosureAndRootGoSumEvidenceAreClosed": true,
+      "nativeBuildAndReplaysUseExtractedSourceAndOfflineCaches": true,
+      "loaderImportedFromExtractedSourceAndCheckedAgainstSelfPin": true,
+      "noOriginalCheckoutFallbackOrHardcodedPath": true,
+      "browserExternalOriginsBlockedAndAttemptedRequestsFail": true,
+      "unmountCancellationAndTeardownOrderEnforced": true
+    },
+    "historicalF6Attempt03": {
+      "archiveMembers": 638,
+      "sourcePinsVerified": 201,
+      "nativeScenarios": 4,
+      "nativeResultsByteAndCanonicalJSONEqual": true,
+      "stoppedAtPreRepairArchivedLoaderContextGuard": true,
+      "qualification": "partial_native_leg_only"
+    },
+    "browserDiagnosticOnly": {
+      "steps": 6,
+      "programmaticHTMLElementClicks": 12,
+      "timerReplies": 2,
+      "rendererSwaps": 3,
+      "localRequests": 4,
+      "externalRequests": 0,
+      "runtimeErrors": 0,
+      "screenshotPixelEquivalenceAsserted": false,
+      "fullConsumerAcceptance": false
+    },
+    "relocationRepair": {
+      "reportSHA256": "69dcf6fe314f19a0ad5bc72c41ddfe86f6dd5c2e7001f8ad21dc3ea08b83c4bd",
+      "receiptSHA256": "94b15187132183cbc6778fa7a6943ba30b94ec568fa86363e630cd88352d52df",
+      "rawlogsIndexSHA256": "74859a394907fcaf0e513744e7f9323969d9d72f9c071258984a858aab6ec552",
+      "currentLoaderSHA256": "bd747b532d86a14bcc6bcad76df62820d717a54e52ec6cd97b0f1106c667277a",
+      "copiedSourceFocusedTestsPassed": 5,
+      "usedTemporaryF6IndexWithUpdatedLoaderSelfPin": true,
+      "freshCleanArchiveRun": false
+    }
+  },
+  "limits": [
+    "The 45 and 9 probes are author-only/schema fixtures, not evidence of archive acceptance.",
+    "The F6 historical attempt passed restore and four native replays but failed later at its old archived loader context guard, before relocated direct/browser completion.",
+    "E-RELOCATE is focused copied-source loader evidence using a temporary copied index with one updated self-pin; the sealed F6 archive/index remain unchanged.",
+    "The browser diagnostic is demo-only and uses programmatic HTMLElement.click(); it does not prove trusted pointer/OS input or pixel equivalence.",
+    "A fresh clean source-bound archive and full v4 restore/native/direct-profile/browser consumer run are still required."
+  ],
+  "scope": {
+    "reviewedPaths": [
+      "module-effects-coordination/reports/E-CONSUMEV4AUDIT.md",
+      "module-effects-coordination/receipts/E-CONSUMEV4AUDIT.json",
+      "module-effects-coordination/rawlogs/E-CONSUMEV4AUDIT/**",
+      "module-effects-coordination/rawlogs/E-CONSUME/source-v4/**",
+      "module-effects-coordination/reports/E-RELOCATE.md",
+      "module-effects-coordination/receipts/E-RELOCATE.json"
+    ],
+    "productionOrConsumerFilesChanged": false,
+    "archiveRewritten": false,
+    "gitOrSchedulerChanged": false,
+    "fullConsumerOrProducerRunExecuted": false
+  },
+  "command": {
+    "path": "module-effects-coordination/rawlogs/XR-CONSUMEV4AUDIT/commands.log",
+    "cwd": "/workspace/scratch/39a56936f173/gondola",
+    "auditAssertions": 49,
+    "auditFailures": 0,
+    "snapshotProbeExitCode": 0,
+    "lifecycleProbeExitCode": 0,
+    "syntaxChecksExitCode": 0,
+    "artifactCheckExitCode": 0
+  },
+  "report": {
+    "path": "reports/XR-CONSUMEV4AUDIT.md",
+    "bytes": 5186,
+    "sha256": "390db96e53e3bbdd3e8146609425aa81aadfd4ba8136506a528dcd294e28d1f6"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/XR-CONSUMEV4AUDIT/index.json",
+    "schema": "gobi.worker-rawlogs-index/v1",
+    "indexedFileCount": 28,
+    "bytes": 4728,
+    "sha256": "ac80d0e18b9099771e73adcdbba5191760a2dbaea49f91238edbc3fb7cedf2a2",
+    "indexExcludesItself": true
+  }
+}

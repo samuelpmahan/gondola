@@ -1,0 +1,86 @@
+{
+  "schema": "gobi.independent-review-receipt/v1",
+  "job_id": "XR-GO",
+  "worker": "N3",
+  "decision": "accepted",
+  "score": {"earned": 200, "possible": 200, "brokenItems": 0},
+  "summary": "Accepted the original sealed native E-GO packet. Sealed source/report/receipt hashes verify, the original Go tests pass in an isolated base-plus-sealed-source copy, and the literal plus all three seeded replay outputs are byte-identical to the recorded evidence with counts 31/49/50/48.",
+  "scope": {
+    "reviewedPacket": "module-effects-coordination/seals/E-GO",
+    "reviewedArtifacts": [
+      "original sealed child wrapper and tests",
+      "original sealed native replay and tests",
+      "original E-GO report, receipt, source inventory, and native outputs"
+    ],
+    "laterEGoCompilePacketIncluded": false,
+    "productionFilesModified": false,
+    "temporaryIsolatedCopy": "/tmp/gondola-xr-go-original"
+  },
+  "sealedPacket": {
+    "sealPath": "module-effects-coordination/seals/E-GO/seal.json",
+    "sealSHA256": "1bb63821ed408de134062d02029c5567649cc60f4376387944316dbcbf741e3e",
+    "sourceInventoryPath": "module-effects-coordination/seals/E-GO/source-inventory.json",
+    "sourceInventorySHA256": "7bae9f521364236ab3dfa5401ee8e593f54d1313659e9df157a8796ca270cbd4",
+    "sealedReportSHA256": "0060ca0e81a1e7813931b226ac92270a9e87a9322f767d022fee1b9007ffade7",
+    "sealedReceiptSHA256": "d1bdacd972ad57b38d6ec72fe945aba3fec388e0052eb193a626cf2959617d5e"
+  },
+  "sealVerification": {
+    "sealedOwnedSourceFiles": 6,
+    "sourceInventoryMatches": true,
+    "sealedReportReceiptMatchSealHashes": true,
+    "pinnedDependencyFilesMatch": 10,
+    "baseCommit": "f4c8f70199a8ca896c13e225a85901abe658d0de"
+  },
+  "tests": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "environment": {"GOTOOLCHAIN": "local", "GOFLAGS": "-buildvcs=false"},
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./fixtures/compiled/effectmodulechild ./cmd/module-effects-native ./fixtures/compiled/keyedmoduleparent ./fixtures/compiled/modulechild ./fixtures/compiled/moduleparent ./fixtures/compiled/modulewire ./counter",
+        "cwd": "/tmp/gondola-xr-go-original",
+        "exitCode": 0,
+        "result": "All six tested packages passed; counter has no test files.",
+        "rawOutput": "module-effects-coordination/rawlogs/XR-GO/isolated-original-go-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -script fixtures/compiled/effectmodulechild/scenario.json",
+        "cwd": "/tmp/gondola-xr-go-original",
+        "exitCode": 0,
+        "outputSHA256": "dffa1412facedeb3d5047f0def6f297dfe296c8ca070a3519a606e50a668ebc8",
+        "outputByteIdenticalToSealedLiteral": true,
+        "rawVerification": "module-effects-coordination/rawlogs/XR-GO/native-literal-verification.json"
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -script /tmp/module-effects-<seed>.json",
+        "cwd": "/tmp/gondola-xr-go-original",
+        "exitCodes": [0, 0, 0],
+        "seedOutputHashesMatchRecordedSummary": true,
+        "rawVerification": "module-effects-coordination/rawlogs/XR-GO/native-seeds-verification.json"
+      }
+    ]
+  },
+  "reviewFindings": {
+    "literalEventCount": 31,
+    "seedEventCounts": [49, 50, 48],
+    "literalOutputCounts": {"states": 32, "effects": 10, "transportRows": 20, "retiredChildren": 1, "finalPending": 0},
+    "removalOrder": ["go.update.unmount", "go.state.unmounted", "go.effect.cancel", "transport.cancel", "renderer.teardown"],
+    "businessStateAndCancellationOwnedByGo": true,
+    "noBrokenItems": true
+  },
+  "limits": [
+    "This review accepts only the declared native Go scope; it does not claim compiler, browser, real transport, or full repository verification.",
+    "E-GOCOMPILE is a later separate packet and was not reviewed here."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/XR-GO.md",
+    "bytes": 4157,
+    "sha256": "b630b50bde24a3273e88ee05fe2ef8c48b26bf5cbc9678af44d36454cc15b8d7"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/XR-GO/index.json",
+    "indexExcludesItself": true,
+    "bytes": 1296,
+    "sha256": "341b370aa753fa2e1242003472c801cb88bb884025a49f8b1bb9821247167b45",
+    "indexedFileCount": 7
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-DELIVERYCONTRACT",
+  "worker": "N2",
+  "decision": "accepted",
+  "status": "accepted_author_only_pass_report_only",
+  "summary": "Accepted E-DELIVERYCONTRACT as an accurate full author-only pipeline pass. The actual producer contract validator and scoped lifecycle assertion pass against saved artifacts; final sources match the author, sealed, archived, and prospective-tree pins. Clean Git-bound E-RUN and external archive acceptance remain pending.",
+  "reviewedPacket": {
+    "job_id": "E-DELIVERYCONTRACT",
+    "worker": "N6",
+    "outcome": "mixed_change",
+    "status": "author_diagnostic_passed",
+    "phase": "author_only_full_pipeline_complete_clean_E_RUN_pending",
+    "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+    "verifierDirty": true,
+    "verifierSourcePinsMatch": false,
+    "seal": {
+      "reportSHA256": "1db144d4c8d07dd47e8e2770cd1ab0b35df5fecc624e89d8a68c1f776f2c9ac1",
+      "receiptSHA256": "443781e466fdedb93d8dfdd6529153094d075d13111615e16b03cd8964fa71ec",
+      "rawlogsIndexSHA256": "da9064ca142f4037bb57f3cdc629d88a9a8550d2c45382ce56d38912ea88aa7d"
+    },
+    "attempts": [
+      {
+        "id": "attempt-20261101T035129308Z-2-78bd7201",
+        "status": "failed_demo_assertion",
+        "exactRunnerSourceSnapshot": false
+      },
+      {
+        "id": "attempt-20261101T035317671Z-2-6e206183",
+        "status": "failed_archive_inventory",
+        "exactRunnerSourceSnapshot": true,
+        "note": "Earlier 61,813-byte run.mjs revision."
+      },
+      {
+        "id": "attempt-20261101T035413961Z-2-55fe7cd9",
+        "status": "author_diagnostic_passed",
+        "exactRunnerSourceSnapshot": true
+      }
+    ]
+  },
+  "verification": {
+    "sealedPacket": {
+      "reportReceiptIndexMatchSeal": true,
+      "copiedArtifactsVerified": 33,
+      "attemptInventoryFilesVerified": 3
+    },
+    "finalN6Sources": [
+      {
+        "path": "compiled-module-effects/run.mjs",
+        "bytes": 61841,
+        "sha256": "70c42e7f5331b2d6b40f4095f71e1a6b42b81e0708f6db1c44dae2e624fd6687",
+        "matchesCurrentSealedArchiveProspectiveTree": true
+      },
+      {
+        "path": "compiled-module-effects/delivery-contract.mjs",
+        "bytes": 35304,
+        "sha256": "2d216f497d95f54e9eb62939136c8a20dbbfae869fbeb2509f0f35699b2b3b1e",
+        "matchesCurrentSealedArchiveProspectiveTree": true
+      },
+      {
+        "path": "compiled-module-effects/delivery-contract.test.mjs",
+        "bytes": 18928,
+        "sha256": "8a9fb62e1fd8333cc711b8f6e125d91e70cbfe50b10b9967ae3d7e90ca83cc08",
+        "matchesCurrentSealedArchiveProspectiveTree": true
+      }
+    ],
+    "prospectiveTree": {
+      "tree": "89a4548e2dcaafb138a5d2b46bbffda082b52d9b",
+      "objectType": "tree",
+      "readOnlyContentCompared": true
+    },
+    "sourceClosure": {
+      "pins": 201,
+      "testSourceFilesPinned": 57,
+      "beforeEqualsAfter": true,
+      "allCurrentFilesMatchAuthorPinMap": true,
+      "gitSourcePinMismatches": [
+        "compiled-module-effects/delivery-contract.mjs",
+        "compiled-module-effects/delivery-contract.test.mjs",
+        "compiled-module-effects/run.mjs"
+      ],
+      "cleanGitBoundRun": false
+    },
+    "actualProducerContractReplay": {
+      "status": "passed",
+      "actualProducerArtifactsReadAndPinned": 30,
+      "scenarioEvents": {
+        "literal": 31,
+        "seed-20261104": 49,
+        "seed-20261105": 50,
+        "seed-20261106": 48
+      },
+      "profiles": 20,
+      "nativeEvents": 178,
+      "nativeStates": 182,
+      "nativeEffects": 58,
+      "nativeTransportEvents": 116,
+      "profileEvents": 890,
+      "snapshots": 910,
+      "captureMutationControls": 16,
+      "buildAdmissionMutationControls": 7,
+      "buildCalls": 4,
+      "buildPairs": [
+        "react keyedmoduleparent + effectmodulechild",
+        "dom keyedmoduleparent + effectmodulechild"
+      ]
+    },
+    "oracleMutationControls": {
+      "applications": 64,
+      "distinctIDs": 16,
+      "applicationsPerScenario": 16,
+      "allRejected": true
+    },
+    "scopedLifecycleReplay": {
+      "key": "b",
+      "generation": 1,
+      "stateEventIndex": 10,
+      "sequence": [
+        33,
+        35,
+        36,
+        37,
+        38,
+        40
+      ]
+    },
+    "authorTestsAndSmoke": {
+      "nodeTests": 35,
+      "nodeFiles": 6,
+      "failures": 0,
+      "skipped": 0,
+      "browserSteps": 6,
+      "httpStatus": 200,
+      "pendingTransportStarts": 4,
+      "pageErrors": 0,
+      "failedRequests": 0,
+      "reviewerReranSuite": false,
+      "reviewerReranChromium": false
+    },
+    "archive": {
+      "bytes": 8666075,
+      "sha256": "eaedcc97d2bef10b16755400c9088a5cea7dd4f320d48b19356c3252b2bbce0d",
+      "manifestSHA256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33",
+      "members": 638,
+      "tarNamesUniqueAndManifestMatched": true,
+      "archiveSourceClosurePinsVerified": 201,
+      "authorRoundTrip": "passed",
+      "authorIndependentPythonConsumer": "passed",
+      "externalArchiveAcceptance": false
+    }
+  },
+  "qualificationBoundary": {
+    "acceptedAs": "author-only full pipeline report",
+    "cleanGitBoundERun": "pending",
+    "externalArchiveConsumer": "pending",
+    "archivedSiteChromiumReplay": "pending",
+    "publishedReadback": "pending",
+    "attempt1RunnerBodyReconstructed": false
+  },
+  "command": {
+    "path": "module-effects-coordination/rawlogs/XR-DELIVERYCONTRACT/commands.log",
+    "python": "3.12.14",
+    "node": "v22.23.4",
+    "auditChecks": 61,
+    "auditFailures": 0,
+    "gitMutation": false,
+    "schedulerMutation": false,
+    "productionOrSourceMutation": false
+  },
+  "artifacts": {
+    "auditScript": {
+      "path": "module-effects-coordination/rawlogs/XR-DELIVERYCONTRACT/audit_packet.py",
+      "bytes": 13304,
+      "sha256": "c6ce4fa39f6e718d6517bb5437f7669fbea3138a83b42119781e649302af025e"
+    },
+    "producerReplay": {
+      "path": "module-effects-coordination/rawlogs/XR-DELIVERYCONTRACT/producer-check.stdout.json",
+      "bytes": 1736,
+      "sha256": "3c1dcdf6e97ccc4094612bebbefecacac662242671580cfe923ab7a9153a16dd"
+    },
+    "prospectiveTreeCheck": {
+      "path": "module-effects-coordination/rawlogs/XR-DELIVERYCONTRACT/prepared-tree-check.json",
+      "bytes": 1083,
+      "sha256": "22dec6215970bc4f65cb81af7626c3bb0aabf813e0cb1548abadb35d96f6206e"
+    },
+    "auditResult": {
+      "path": "module-effects-coordination/rawlogs/XR-DELIVERYCONTRACT/audit-result.json",
+      "bytes": 22028,
+      "sha256": "d0ce48258d39784939b61b57f2c2b38ebd9cdbdba82fba77d54003f715165972"
+    }
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/XR-DELIVERYCONTRACT/index.json",
+    "bytes": 2999,
+    "sha256": "510a5c77b80b74789610a390b93adc04e0e48614580d2e577a5000473eca6a1f",
+    "indexedFileCount": 18,
+    "indexExcludesItself": true
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/XR-DELIVERYCONTRACT.md",
+    "bytes": 5303,
+    "sha256": "f85a5e2b1bc7200654818beba987d8142a981386f6f4913e2136f99c68e58559"
+  }
+}

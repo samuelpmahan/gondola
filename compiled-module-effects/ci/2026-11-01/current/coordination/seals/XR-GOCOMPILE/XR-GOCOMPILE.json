@@ -1,0 +1,148 @@
+{
+  "schema": "gobi.independent-review-receipt/v1",
+  "job_id": "XR-GOCOMPILE",
+  "worker": "N3",
+  "decision": "accepted",
+  "score": {
+    "earned": 200,
+    "possible": 200,
+    "brokenItems": 0
+  },
+  "summary": "Accepted the original sealed E-GOCOMPILE N1 packet. All 10 sealed source files and report/receipt pins verify; isolated Go 1.24 native and Go 1.27.3 analyzer tests pass; native replay output is byte-identical; and recorded React/DOM boundary results match all 10 cases and 16 steps each.",
+  "scope": {
+    "reviewedPacket": "module-effects-coordination/seals/E-GOCOMPILE",
+    "reviewedArtifacts": [
+      "sealed N1 child wrapper and tests",
+      "sealed N1 analyzer reachability and ParseUint intrinsic changes",
+      "sealed N1 native CLI replay and boundary tests",
+      "sealed E-GOCOMPILE report, receipt, source inventory, and indexed rawlogs"
+    ],
+    "baseCommit": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "temporaryIsolatedCopy": "/tmp/gondola-xr-gocompile-original",
+    "productionFilesModified": false,
+    "gitOrSchedulerChanged": false,
+    "E_BUILD_owned_moduleabi_or_pipeline_reviewed": false
+  },
+  "sealedPacket": {
+    "sealPath": "module-effects-coordination/seals/E-GOCOMPILE/seal.json",
+    "sealSHA256": "63b27541e893bd1b9aaf809749fcffe8ea6ea2724bdc9a9120f2355259fd4797",
+    "sourceInventoryPath": "module-effects-coordination/seals/E-GOCOMPILE/source-inventory.json",
+    "sourceInventorySHA256": "e6cb4d484149ecdf2f7b69b71d0dd660e480bbadc3add8a59777e35418af2d1c",
+    "sealedReportSHA256": "8731d77779a85637d7a22253ac501c9f59264253672b4a4febf21990fc4106a2",
+    "sealedReceiptSHA256": "f86d2789698db8fbebb2fa85409f65c587631720ec9092052ba4dde2025de009",
+    "reportReceiptMatchSealHashes": true,
+    "publishedReportReceiptMatchSealedCopies": true,
+    "sourceInventoryMatches": true,
+    "sealedSourceFileCount": 10,
+    "baseCommit": "f4c8f70199a8ca896c13e225a85901abe658d0de"
+  },
+  "tests": {
+    "versions": {
+      "rootGo": "go version go1.24.0 linux/amd64",
+      "analyzerGo": "go version go1.27.3 linux/amd64"
+    },
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./fixtures/compiled/effectmodulechild ./cmd/module-effects-native",
+        "cwd": "/tmp/gondola-xr-gocompile-original",
+        "exitCode": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/XR-GOCOMPILE/go24-native-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./analyze",
+        "cwd": "/tmp/gondola-xr-gocompile-original/compiled-frontend",
+        "exitCode": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/XR-GOCOMPILE/go127-analyzer-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -script fixtures/compiled/effectmodulechild/scenario.json",
+        "cwd": "/tmp/gondola-xr-gocompile-original",
+        "exitCode": 0,
+        "outputSHA256": "dffa1412facedeb3d5047f0def6f297dfe296c8ca070a3519a606e50a668ebc8",
+        "byteIdenticalToSealedLiteral": true
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -mount-boundaries",
+        "cwd": "/tmp/gondola-xr-gocompile-original",
+        "exitCode": 0,
+        "outputSHA256": "99495344d001201fde88b538e5b1b34fda7bd2ed212b9d41fab2833de2b6d886",
+        "byteIdenticalToSealedBoundaryOutput": true
+      }
+    ]
+  },
+  "reviewFindings": {
+    "safeParseUint": "only exact direct strconv.ParseUint with constant decimal base 10 and bitSize 53 is admitted; errors, zero, leading zeros, overflow, and noncanonical spellings are rejected by Go parser checks.",
+    "genericCallAllowlistChanged": false,
+    "integerArithmeticOrConversionRulesChanged": false,
+    "typedChildBridgeRoots": "Input/Publication are rooted only as a complete valid typed pair; exact function signatures and modulewire shapes checked.",
+    "transitiveTraversal": "projected dependency body is walked after projection; second-depth unsafe increment remains rejected.",
+    "replyIdentity": "completion requires exact current Go-owned token equality; no callback token parsing chooses identity.",
+    "goOwnsRequestCancelAndState": true,
+    "nativeLiteral": {
+      "events": 31,
+      "states": 32,
+      "goEffects": 10,
+      "transportRows": 20,
+      "retiredChildren": 1,
+      "pendingTransports": 0,
+      "sha256": "dffa1412facedeb3d5047f0def6f297dfe296c8ca070a3519a606e50a668ebc8"
+    },
+    "retirementOrder": [
+      "go.update.unmount",
+      "go.state.unmounted",
+      "go.effect.cancel",
+      "transport.cancel",
+      "renderer.teardown"
+    ],
+    "retiredChildState": {
+      "key": "a",
+      "generation": 1,
+      "mounted": false,
+      "pending": false,
+      "requestID": 4,
+      "token": "a:g1:r4"
+    },
+    "boundaryCases": {
+      "nativeCases": 10,
+      "stepsPerBackend": 16,
+      "accepted": [
+        "max-safe",
+        "max-safe-cancel-retry"
+      ],
+      "rejectedNoop": [
+        "max-safe-plus-one",
+        "zero",
+        "leading-zero",
+        "malformed",
+        "uint64-max",
+        "uint64-overflow",
+        "non-ascii-digit",
+        "other-byte"
+      ],
+      "reactFullParity": true,
+      "domFullParity": true
+    },
+    "frozenBuildInputsCurrent": {
+      "sourceFileCount": 59,
+      "matchingCurrent": 59,
+      "drifted": []
+    }
+  },
+  "limits": [
+    "This review is limited to the sealed N1 Go/analyzer packet; the E-BUILD-owned moduleabi/descriptor.go and compiled-frontend/build/pipeline.go implementations are separately owned and not assessed here.",
+    "React/DOM boundary parity was independently compared against the frozen E-BUILD-final admission artifact; this review does not replace E-BUILD qualification.",
+    "Host/browser conformance and the full repository test suite were not tested in this review."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/XR-GOCOMPILE.md",
+    "bytes": 4837,
+    "sha256": "e0b1dc6d9fe6651490eba8e9d729f3bae053398e454ff7c83554629659e1d15b"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/XR-GOCOMPILE/index.json",
+    "indexExcludesItself": true,
+    "bytes": 1399,
+    "sha256": "0bcc379ccbca461be92923fac0a055e76a41b2641848a78c52e000e995a93842",
+    "indexedFileCount": 8
+  }
+}

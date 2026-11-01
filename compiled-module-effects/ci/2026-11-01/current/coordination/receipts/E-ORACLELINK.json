@@ -1,0 +1,120 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-ORACLELINK",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Closed the missing reply-correlation and causal stateEventIndex checks in the independent oracle. The saved four-scenario, five-profile baseline matched; 16 distinct capture mutations were rejected across all four scenarios; unit tests passed 4/4.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-module-effects/oracle/**",
+      "module-effects-coordination/reports/E-ORACLELINK.md",
+      "module-effects-coordination/receipts/E-ORACLELINK.json",
+      "module-effects-coordination/rawlogs/E-ORACLELINK/**"
+    ],
+    "productionPathsModified": [
+      "compiled-module-effects/oracle/oracle.mjs"
+    ],
+    "testPathsModified": [
+      "compiled-module-effects/oracle/oracle.test.mjs"
+    ],
+    "otherLaneFilesModified": false,
+    "mountedFaultInjectionClaimed": false,
+    "buildAdmissionControlsRerun": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "manifest": "module-effects-coordination/rawlogs/E-ORACLELINK/source-pins.json",
+    "manifestSHA256": "a4b2295ab47c9b71cf0b1edef18e0391d512c420d0234f011142c91af868549a",
+    "repositoryBase": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "ownedFiles": {
+      "compiled-module-effects/oracle/oracle.mjs": {
+        "bytes": 93905,
+        "sha256": "c24b3a7828eb22df65b39bd8090bfc5d96a79dd8cd55fd9db5471d1b74bf0d64"
+      },
+      "compiled-module-effects/oracle/oracle.test.mjs": {
+        "bytes": 7704,
+        "sha256": "962798dfc1c40e85e24e8b3f44ebe8688004b5df29dda860cdb3d29ba1cac745"
+      }
+    },
+    "testDependency": {
+      "path": "compiled-module-effects/conformance/scenarios.mjs",
+      "bytes": 4807,
+      "sha256": "de9784963969a7563450d6cb0883d77c1184b0ad9344188abd724d72d68df4ea"
+    },
+    "sealedPriorOwnedFiles": {
+      "oracleSHA256": "2c9072dbd7dcbe70a009798ef441e1080e553dfe3eab9959b1ab15e0fecdb763",
+      "testSHA256": "b06fcb29908a19dc98d54e1c78f8b35f8e2044f67c18a60bea2a2d0399c84892"
+    }
+  },
+  "inputPins": {
+    "manifest": "module-effects-coordination/rawlogs/E-ORACLELINK/capture-input-pins.json",
+    "manifestSHA256": "c7015e88edf59427151b131a67e651daeb3aee51add9464571b803348a9b2b49",
+    "sourceAttempt": "E-HARNESS/attempt-03",
+    "captureFiles": 28,
+    "captureSummarySHA256": "ef336f8b37a8d19980ec6cd230efcfb186890d41cabb9fb3f65a6656a8bbffb4",
+    "captureCheckStatus": "matched",
+    "buildIndexSHA256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444"
+  },
+  "verification": {
+    "runtime": {
+      "node": "v22.23.4",
+      "nodeExecutable": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "platform": "linux",
+      "architecture": "x64"
+    },
+    "healthyMatrix": {
+      "status": "matched",
+      "scenarios": 4,
+      "profilesPerScenario": 5,
+      "profileChecks": 20,
+      "nativeEvents": 178,
+      "nativeStates": 182,
+      "goEffects": 58,
+      "transportRows": 116,
+      "lifecycleRows": 20,
+      "profileEventRows": 890,
+      "profileSnapshots": 910,
+      "resultPath": "module-effects-coordination/rawlogs/E-ORACLELINK/healthy-matrix.stdout.json",
+      "resultSHA256": "ad62e020d10734cc2d52b60280821f64875a6e611f1bfe9b062711ca0e1d6863"
+    },
+    "unitTests": {
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "path": "module-effects-coordination/rawlogs/E-ORACLELINK/oracle-tests.stdout.log",
+      "sha256": "2a2d973cb96f273a5c91ccbeee8879c733fd82c62d0b517b5c8ff1d818ef06e7"
+    },
+    "mutationControls": {
+      "status": "detected",
+      "distinctCaptureControls": 16,
+      "scenarioApplications": 64,
+      "rejectedApplications": 64,
+      "acceptedApplications": 0,
+      "scenarioResults": [
+        { "scenario": "literal", "controls": 16, "rejected": 16 },
+        { "scenario": "seed-20261104", "controls": 16, "rejected": 16 },
+        { "scenario": "seed-20261105", "controls": 16, "rejected": 16 },
+        { "scenario": "seed-20261106", "controls": 16, "rejected": 16 }
+      ],
+      "resultPath": "module-effects-coordination/rawlogs/E-ORACLELINK/mutation-controls.stdout.json",
+      "resultSHA256": "28a149e69fc59e7fb844c2ca143792712af1b8b7fc9ad250501e5a6a948086f7"
+    },
+    "syntaxCheck": {
+      "status": "passed",
+      "path": "module-effects-coordination/rawlogs/E-ORACLELINK/oracle-syntax.stdout.log"
+    },
+    "orderedCommands": "module-effects-coordination/rawlogs/E-ORACLELINK/pinned-node22-validation.command.txt"
+  },
+  "rawlogs": {
+    "index": "module-effects-coordination/rawlogs/E-ORACLELINK/index.json",
+    "indexSHA256": "bbd846e2f3256993f39fce58922db4d750891fe2d534aa0a96c67eb7b98f3409",
+    "fileCount": 24,
+    "indexExcludesItself": true
+  },
+  "limits": [
+    "Healthy checks revalidated saved attempt-03 captures; N5 did not make a new browser capture.",
+    "Mutation controls alter in-memory clones of saved capture evidence and are not mounted renderer fault injections.",
+    "Build admission, compiler replay, browser rebuild, and mounted fault injection were not rerun for E-ORACLELINK.",
+    "An exploratory Node v24.22.1 pass is preserved separately; final acceptance used pinned Node v22.23.4."
+  ]
+}

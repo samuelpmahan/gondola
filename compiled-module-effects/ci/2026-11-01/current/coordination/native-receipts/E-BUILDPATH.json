@@ -1,0 +1,180 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-BUILDPATH",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Repaired output-root-aware generated source-comment admission; actual React/DOM parent and child builds passed at runner-shaped and external /tmp output roots, and a relocated build index loaded while its original output root was absent.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-module-effects/build/**",
+      "module-effects-coordination/reports/E-BUILDPATH.md",
+      "module-effects-coordination/receipts/E-BUILDPATH.json",
+      "module-effects-coordination/rawlogs/E-BUILDPATH/**"
+    ],
+    "productionPathsModified": [
+      "compiled-module-effects/build/build.mjs",
+      "compiled-module-effects/build/module-loader.mjs",
+      "compiled-module-effects/build/source-comments.mjs"
+    ],
+    "testPathsAdded": [
+      "compiled-module-effects/build/path-normalization.test.mjs"
+    ],
+    "otherLaneFilesModified": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-buildpath-source-hashes/v1",
+    "repositoryBase": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "manifest": "module-effects-coordination/rawlogs/E-BUILDPATH/runner-shaped/metadata/source-pins.json",
+    "manifestBytes": 12410,
+    "manifestSHA256": "42f152d3c767c21667f38f1806f0b792bd41fe797e3e4b07669064f72188f2e2",
+    "inventoryCount": 61,
+    "ownedFiles": {
+      "compiled-module-effects/build/build.mjs": {
+        "path": "compiled-module-effects/build/build.mjs",
+        "bytes": 62324,
+        "sha256": "79f59f6c39e818d2e6f3f7f3c792981264a49cca3e59e30fcc54ef26e233f595"
+      },
+      "compiled-module-effects/build/module-loader.mjs": {
+        "path": "compiled-module-effects/build/module-loader.mjs",
+        "bytes": 50100,
+        "sha256": "db9f6cf8d42a88fa00a311b4a39ca90b79c69f54e369d9e30e96724e3d79a15b"
+      },
+      "compiled-module-effects/build/abi-admission.mjs": {
+        "path": "compiled-module-effects/build/abi-admission.mjs",
+        "bytes": 40526,
+        "sha256": "c47974d937e8fd6cadca06cb1693254047abb63f7309782234ab51a1d4d850c4"
+      },
+      "compiled-module-effects/build/source-comments.mjs": {
+        "path": "compiled-module-effects/build/source-comments.mjs",
+        "bytes": 13807,
+        "sha256": "6f503e2cc59759888b7ad42e1c425f93f6ae85c81e0efebc79df8a9c9779f784"
+      },
+      "compiled-module-effects/build/path-normalization.test.mjs": {
+        "path": "compiled-module-effects/build/path-normalization.test.mjs",
+        "bytes": 6699,
+        "sha256": "da7d3bd7044375e23a4f0038bd045d0fe78bd5b0db419ff4b92ae08fe5aee495"
+      }
+    }
+  },
+  "builds": {
+    "cli": "node compiled-module-effects/build/build.mjs --output <empty-output-directory>",
+    "toolchain": {
+      "node": "v22.23.4",
+      "rootGo": "go version go1.24.0 linux/amd64",
+      "compilerGo": "go1.27.3 linux/amd64",
+      "goscript": "v0.6.2",
+      "esbuild": "0.28.2"
+    },
+    "runnerShaped": {
+      "outputRoot": "compiled-module-effects/output/attempts/attempt-20261101T034200000Z-N2-E-BUILDPATH/builds",
+      "buildIndex": {
+        "path": "compiled-module-effects/output/attempts/attempt-20261101T034200000Z-N2-E-BUILDPATH/builds/build-index.json",
+        "bytes": 271809,
+        "sha256": "cedac419a1e83cebb5f693b4378a477cf33bc60be2cea76fb0daa6b98512290a"
+      },
+      "actualBuildCount": 4
+    },
+    "externalTmp": {
+      "outputRoot": "/tmp/gobi effects external 20261101/builds",
+      "buildIndex": {
+        "path": "/tmp/gobi effects external 20261101/builds/build-index.json",
+        "bytes": 262944,
+        "sha256": "349be7d2aef5dcc1275c0cbb0c56514c93c4587a148aa82ee570e7f61ae46433"
+      },
+      "actualBuildCount": 4
+    },
+    "relocation": {
+      "copiedIndex": "/tmp/gobi effects relocated 20261101/builds/build-index.json",
+      "indexSHA256": "349be7d2aef5dcc1275c0cbb0c56514c93c4587a148aa82ee570e7f61ae46433",
+      "originalOutputAbsentDuringLoad": true,
+      "loader": "loadModuleEffectsBuilds() accepted relocated React/DOM profiles"
+    },
+    "inventory": [
+      {
+        "backend": "react",
+        "role": "parent",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+        "outputCount": 71,
+        "moduleABIFileSHA256": "5b05d79d1168ef2be997962ee4097c084e83c824da7c3baf97cfa6402b0a72fe",
+        "moduleSHA256": "85b8e453b7b2262ecea641482e936a6f57868fe287b8983bb98ef35b2584f7c8"
+      },
+      {
+        "backend": "react",
+        "role": "child",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effectmodulechild",
+        "outputCount": 73,
+        "moduleABIFileSHA256": "52f4eb3ba3fd3541619aee8691bc734b344fa5a92256b80eb1e613080a4644e1",
+        "moduleSHA256": "cfafb8ae5514f265c5daa7fef0f61938d3b7ec55a66105f7b0c1e48f1272cfe9"
+      },
+      {
+        "backend": "dom",
+        "role": "parent",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+        "outputCount": 71,
+        "moduleABIFileSHA256": "c71addd8061f1fd70d21634fbdfd9e0cc416ee6f44fbe8ad14fea26e5ea4886c",
+        "moduleSHA256": "53d09f428a04af8e3275a62e8919b1e11e51f8946250ece50bc7498fb39ded1f"
+      },
+      {
+        "backend": "dom",
+        "role": "child",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effectmodulechild",
+        "outputCount": 73,
+        "moduleABIFileSHA256": "d768504e1df794231689fa9671e33b811787dae693b0b3d39a9fe7ce8ce940bc",
+        "moduleSHA256": "c006ff3d4a3fdb55dcf9d9b06ed3c99e5f82bc03f31a3e68aa4c66a517ac9245"
+      }
+    ],
+    "admission": {
+      "react": {
+        "admitted": true,
+        "effectCount": 4,
+        "uniqueDescriptorCount": 2,
+        "mountBoundaryCases": 10,
+        "nativeParity": true,
+        "parentAppIRSHA256": "70e17604359b90bc78e022f12b7faeeed3a7a80fac7ba63f79697085711c85af",
+        "normalizedParentModuleSHA256": "4f8066ef90393a8b76490a1532bcfc6f59d48bac6d9d7e57f02426e6d28ba1ce",
+        "normalizedParentHelperSHA256": "9bf860060df1e0463ab1074962dbaf87883d9125acb2e067248dfc6bda04ca3d"
+      },
+      "dom": {
+        "admitted": true,
+        "effectCount": 4,
+        "uniqueDescriptorCount": 2,
+        "mountBoundaryCases": 10,
+        "nativeParity": true,
+        "parentAppIRSHA256": "70e17604359b90bc78e022f12b7faeeed3a7a80fac7ba63f79697085711c85af",
+        "normalizedParentModuleSHA256": "4f8066ef90393a8b76490a1532bcfc6f59d48bac6d9d7e57f02426e6d28ba1ce",
+        "normalizedParentHelperSHA256": "9bf860060df1e0463ab1074962dbaf87883d9125acb2e067248dfc6bda04ca3d"
+      }
+    }
+  },
+  "verification": {
+    "focusedTests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-module-effects/build/path-normalization.test.mjs",
+      "passed": 4,
+      "failed": 0
+    },
+    "loaderIndexesAccepted": 3,
+    "browserBundleSmoke": true,
+    "abiAdmissionNodeBuiltins": false,
+    "nodeSyntaxChecks": [
+      "compiled-module-effects/build/build.mjs",
+      "compiled-module-effects/build/module-loader.mjs",
+      "compiled-module-effects/build/source-comments.mjs"
+    ]
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-BUILDPATH/index.json",
+    "schema": "gobi.worker-rawlogs-index/v1",
+    "fileCount": 96,
+    "sha256": "20d4fe9721a066f1e20dcd21f1bee64fbe06a36d44957783f10cddb4afac2e9d"
+  },
+  "nativeProtocolNormalization": {
+    "by": "/root",
+    "at": "2026-11-01T03:08:59.366558+00:00",
+    "originalReceipt": "receipts/E-BUILDPATH.json",
+    "originalSHA256": "695ce7b14579a6d3c49fc66a7ef3b540ba191fe47055e1764b0f8266873821ad",
+    "originalOutcome": "valid",
+    "normalizedOutcome": "mixed_change",
+    "reason": "Nativefinish rejected author outcomevalid outsideenum; root classifies actualscopedproductionrepair as mixed_change. Originalauthorreceiptandseal unchanged; thisisprotocoladaptation only,no evidence/test/source edits."
+  }
+}

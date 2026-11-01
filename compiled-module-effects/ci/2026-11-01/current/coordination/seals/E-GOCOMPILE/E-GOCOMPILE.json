@@ -1,0 +1,320 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-GOCOMPILE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Fixed transitive local dependency traversal and valid child bridge rooting, added a call-site-bounded safe ParseUint53 analyzer intrinsic, and verified native/emitted React and DOM boundary parity with the full Go state and ordered effects.",
+  "scope": {
+    "ownedPaths": [
+      "fixtures/compiled/effectmodulechild/**",
+      "cmd/module-effects-native/**",
+      "compiled-frontend/analyze/load.go",
+      "compiled-frontend/analyze/analyze.go",
+      "compiled-frontend/analyze/load_dependencies_test.go",
+      "compiled-frontend/analyze/parse_uint_test.go",
+      "module-effects-coordination/reports/E-GOCOMPILE.md",
+      "module-effects-coordination/receipts/E-GOCOMPILE.json",
+      "module-effects-coordination/rawlogs/E-GOCOMPILE/**"
+    ],
+    "productionPathsModified": [
+      "fixtures/compiled/effectmodulechild/app.go",
+      "fixtures/compiled/effectmodulechild/app_test.go",
+      "cmd/module-effects-native/main.go",
+      "cmd/module-effects-native/main_test.go",
+      "compiled-frontend/analyze/load.go",
+      "compiled-frontend/analyze/analyze.go",
+      "compiled-frontend/analyze/load_dependencies_test.go",
+      "compiled-frontend/analyze/parse_uint_test.go"
+    ],
+    "otherLaneFilesModified": true,
+    "otherLanePathsModified": [
+      "moduleabi/descriptor.go"
+    ],
+    "otherLaneChangeOwner": "E-BUILD; root-authorized structural child-bridge effect-capability descriptor support",
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-gocompile-source-hashes/v1",
+    "repositoryHead": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "ownedFiles": {
+      "compiled-frontend/analyze/load.go": {
+        "bytes": 16122,
+        "sha256": "72bdc45e9cf193398db691945eba9c2296974e517c726d5c311fa6230f9dd500"
+      },
+      "compiled-frontend/analyze/analyze.go": {
+        "bytes": 47230,
+        "sha256": "daa0289bb39b13e103412f8546076391c8d1f1766e9e7b0540cb015f7c102040"
+      },
+      "compiled-frontend/analyze/load_dependencies_test.go": {
+        "bytes": 3427,
+        "sha256": "84deac053b5aaa205b52bf5c0894af398e345ad5bedfd9e67f07b369d917dbab"
+      },
+      "compiled-frontend/analyze/parse_uint_test.go": {
+        "bytes": 3231,
+        "sha256": "d20037777e53404d7c5564b5f0e841af4add24eadb990f805d99654dca5fb62a"
+      },
+      "fixtures/compiled/effectmodulechild/app.go": {
+        "bytes": 5057,
+        "sha256": "07a1adaa80080a77406047eff32b90f9ee684af87e85ed4d34f810969b5639ad"
+      },
+      "fixtures/compiled/effectmodulechild/app_test.go": {
+        "bytes": 11343,
+        "sha256": "a8345ec7b26468a321bfc9614e2609d9b531888ac2b8b7b88171b4a7a3f620e6"
+      },
+      "cmd/module-effects-native/main.go": {
+        "bytes": 29428,
+        "sha256": "50b578091dd3d7e15d3b15d3a62688d78bcbb3fa8696d6500f8840bd61aa0043"
+      },
+      "cmd/module-effects-native/main_test.go": {
+        "bytes": 9392,
+        "sha256": "9559129a3520f8023e7795d4d9c65c7dc36bfaf974448c86e5f21ae1d3edff13"
+      }
+    },
+    "dependencyFiles": {
+      "fixtures/compiled/effectmodulechild/view.go": {
+        "bytes": 1514,
+        "sha256": "5ecda485e6131395872d542293ca548851a0b7f51c189bf80bddf421767cb1af"
+      },
+      "fixtures/compiled/modulechild/app.go": {
+        "bytes": 2656,
+        "sha256": "68d462ac1ca616f05249392cbac894fbd954687441377e255944c84a74441265"
+      },
+      "fixtures/compiled/modulechild/view.go": {
+        "bytes": 840,
+        "sha256": "0a860eae91c70fc86535deb56754410a89c20186d658c68642a5476e6f1f7407"
+      },
+      "fixtures/compiled/modulewire/modulewire.go": {
+        "bytes": 278,
+        "sha256": "9d29a10bdf9069852d861a38ede52f11b40a650da057dbd85070bb7da5c4561f"
+      },
+      "fixtures/compiled/keyedmoduleparent/app.go": {
+        "bytes": 7040,
+        "sha256": "610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9"
+      },
+      "counter/counter.go": {
+        "bytes": 827,
+        "sha256": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e"
+      },
+      "gobi/node.go": {
+        "bytes": 3071,
+        "sha256": "e51a1970f0a8e72ffd3d5aaf06f8fcce2137fd87113bb7412f692671743bcc93"
+      },
+      "compilercontract/contract.go": {
+        "bytes": 7144,
+        "sha256": "35700b392b396a6ee9bdb822e3004854da75eeccadfd83b2989f754c24bfb188"
+      },
+      "compilercontract/value.go": {
+        "bytes": 13601,
+        "sha256": "e6f26347e56d8bd97f4802dff206489ed3901082525a2b4c7497fe0811c71a1f"
+      },
+      "compiled-frontend/analyze/project.go": {
+        "bytes": 24458,
+        "sha256": "55b2968ff627c6a9cd63032bbc8c01de395cd7638ab78efe2c44e80071f190a3"
+      },
+      "compiled-frontend/analyze/types.go": {
+        "bytes": 6949,
+        "sha256": "50562366a1ec36c2c3b1ce19c1919ce451500f02cf90e80cc1bcbf82a05afbbf"
+      },
+      "compiled-frontend/build/pipeline.go": {
+        "bytes": 41170,
+        "sha256": "c189165c1a3a5a9c11c59317e2b06b1a21aa645e8d0d0b0fc87c9020e7d43d37"
+      }
+    },
+    "externalLaneFiles": {
+      "moduleabi/descriptor.go": {
+        "bytes": 38494,
+        "sha256": "600c81ebf2de87d024493ddb0ac9f1668aa1f5bd1037461a3d9aadb824dd8dbb"
+      }
+    },
+    "manifest": {
+      "path": "rawlogs/E-GOCOMPILE/source-pins.json",
+      "bytes": 3901,
+      "sha256": "93c2dd7fc84dd098e8b0ed9a812e13b364affc518ba9aa547ad2b1d08895038c"
+    },
+    "canonicalBuildIndex": {
+      "path": "module-effects-coordination/rawlogs/E-GOCOMPILE/E-BUILD-final/build-index.json",
+      "bytes": 220837,
+      "sha256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444"
+    }
+  },
+  "tests": {
+    "versions": {
+      "rootGo": "go version go1.24.0 linux/amd64",
+      "analyzerGo": "go version go1.27.3 linux/amd64"
+    },
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./fixtures/compiled/effectmodulechild ./cmd/module-effects-native",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/E-GOCOMPILE/go24-native-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./analyze",
+        "cwd": "/workspace/scratch/39a56936f173/gondola/compiled-frontend",
+        "exitCode": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/E-GOCOMPILE/go127-analyzer-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -script fixtures/compiled/effectmodulechild/scenario.json",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "output": {
+          "path": "rawlogs/E-GOCOMPILE/native-literal.json",
+          "bytes": 1103548,
+          "sha256": "dffa1412facedeb3d5047f0def6f297dfe296c8ca070a3519a606e50a668ebc8"
+        }
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -mount-boundaries",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "output": {
+          "path": "rawlogs/E-GOCOMPILE/mount-boundaries-native.json",
+          "bytes": 10451,
+          "sha256": "99495344d001201fde88b538e5b1b34fda7bd2ed212b9d41fab2833de2b6d886"
+        }
+      }
+    ],
+    "nodeRequiredForGoTests": false
+  },
+  "safeParseUintIntrinsic": {
+    "call": "direct strconv.ParseUint(string, 10, 53)",
+    "proof": "The standard library 53-bit successful result is at most 2^53-1 (9007199254740991); the wrapper also checks error, positivity, and exact FormatUint canonical round-trip.",
+    "analyzerTests": [
+      "TestAnalyzeBoundsParseUintIntrinsicToSafeDecimalWidth",
+      "TestSafeParseUintIntrinsicRequiresExactCallAndArguments"
+    ],
+    "rejected": [
+      "bitSize 64",
+      "dynamic base",
+      "dynamic bitSize"
+    ],
+    "genericCallAllowlistChanged": false,
+    "genericIntegerArithmeticOrConversionRulesChanged": false
+  },
+  "compilerAndBoundaryEvidence": {
+    "canonicalBuildIndex": "module-effects-coordination/rawlogs/E-GOCOMPILE/E-BUILD-final/build-index.json",
+    "canonicalBuildIndexSHA256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444",
+    "actualIndependentBuildCount": 4,
+    "builds": [
+      "react-parent",
+      "react-child",
+      "dom-parent",
+      "dom-child"
+    ],
+    "toolchain": {
+      "node": "v22.23.4",
+      "rootGo": "go1.24.0",
+      "compilerGo": "go1.27.3",
+      "goscript": "v0.6.2",
+      "esbuild": "0.28.2"
+    },
+    "effectProbes": {
+      "react": {
+        "status": "passed",
+        "observedEffects": 4,
+        "uniqueDescriptors": 2
+      },
+      "dom": {
+        "status": "passed",
+        "observedEffects": 4,
+        "uniqueDescriptors": 2
+      }
+    },
+    "mountBoundaryProbe": {
+      "schema": "gobi.module-effects-mount-boundaries/v1",
+      "nativeCases": 10,
+      "caseNames": [
+        "max-safe",
+        "max-safe-cancel-retry",
+        "max-safe-plus-one",
+        "zero",
+        "leading-zero",
+        "malformed",
+        "uint64-max",
+        "uint64-overflow",
+        "non-ascii-digit",
+        "other-byte"
+      ],
+      "stepsPerBackend": 16,
+      "acceptedCases": 2,
+      "rejectedNoopCases": 8,
+      "backends": {
+        "react": {
+          "nativeParity": true
+        },
+        "dom": {
+          "nativeParity": true
+        }
+      },
+      "compared": "full Core/Key/Generation/Mounted/RequestID/Pending/Token/Reply state and ordered effects"
+    },
+    "parentABIUnchanged": true
+  },
+  "nativeReplay": {
+    "schema": "gobi.module-effects-native/v1",
+    "literal": {
+      "events": 31,
+      "states": 32,
+      "effects": 10,
+      "transportRows": 20,
+      "retiredChildren": 1,
+      "finalPending": 0,
+      "sha256": "dffa1412facedeb3d5047f0def6f297dfe296c8ca070a3519a606e50a668ebc8"
+    },
+    "mountBoundaryOutput": {
+      "bytes": 10451,
+      "sha256": "99495344d001201fde88b538e5b1b34fda7bd2ed212b9d41fab2833de2b6d886"
+    }
+  },
+  "preservedFailures": [
+    {
+      "probe": "E-BUILD-probe-02",
+      "summary": "18 unsupported calls; dependency grandchild traversal and parser functions blocked",
+      "rawlogs": "module-effects-coordination/rawlogs/E-GOCOMPILE/probe-02/"
+    },
+    {
+      "probe": "E-BUILD-probe-03",
+      "summary": "seven unsupported parser calls remained after loader traversal repair",
+      "rawlogs": "module-effects-coordination/rawlogs/E-GOCOMPILE/probe-03/"
+    },
+    {
+      "probe": "E-BUILD-probe-04",
+      "summary": "11 safe-integer diagnostics rejected loop/index and decimal arithmetic parser attempt",
+      "rawlogs": "module-effects-coordination/rawlogs/E-GOCOMPILE/probe-04/"
+    },
+    {
+      "probe": "E-BUILD-probe-05",
+      "summary": "module ABI description rejected effect.request-reply after GoScript bundling; the captured BuildResult had no diagnostics",
+      "rawlogs": "module-effects-coordination/rawlogs/E-GOCOMPILE/probe-05/"
+    },
+    {
+      "probe": "E-BUILD-probe-06",
+      "summary": "four builds completed but profile pair admission rejected uint64 bigint metadata",
+      "rawlogs": "module-effects-coordination/rawlogs/E-GOCOMPILE/probe-06/"
+    },
+    {
+      "probe": "E-BUILD-probe-07",
+      "summary": "four builds and boundary parity passed; canonical final run is E-BUILD-final",
+      "rawlogs": "module-effects-coordination/rawlogs/E-GOCOMPILE/probe-07/"
+    }
+  ],
+  "limits": [
+    "Only the listed root Go packages and complete analyzer package were tested; the full repository test suite was not run.",
+    "Host/browser conformance, seeded cross-adapter parity, demo, archive, and publication are owned by downstream lanes/root.",
+    "No generic effect-admission claim is made; only the declared request/cancel descriptor pair was built and observed."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/E-GOCOMPILE.md",
+    "bytes": 4900,
+    "sha256": "8731d77779a85637d7a22253ac501c9f59264253672b4a4febf21990fc4106a2"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-GOCOMPILE/index.json",
+    "indexExcludesItself": true,
+    "bytes": 31834,
+    "sha256": "d5fe200a4055a2fd4afcabf6a84082ac41ac53929fec6272bc15158f18ab2230",
+    "indexedFileCount": 176
+  }
+}

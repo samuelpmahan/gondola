@@ -1,0 +1,179 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-REG",
+  "worker": "N3",
+  "outcome": "verified_inputs_copy_precommit",
+  "score": {
+    "earned": 100,
+    "possible": 100,
+    "brokenItems": 0
+  },
+  "summary": "The isolated current-source copy passed the original M0 run and counter interaction regression. All 295 relevant inputs match the source worktree before and after; M0 receipts are unchanged; counter output matches the prior trace except absolute temporary input paths. Final qualification remains pending root binding to the final Git source commit.",
+  "scope": {
+    "ownedPaths": [
+      "module-effects-coordination/reports/E-REG.md",
+      "module-effects-coordination/receipts/E-REG.json",
+      "module-effects-coordination/rawlogs/E-REG/**"
+    ],
+    "executionCopy": "/tmp/module-effects-regression-source",
+    "currentHeadAtExecution": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "sourceClosureFileCount": 295,
+    "sourceClosureBytes": 7046852,
+    "currentWorktreeGoSourceFiles": 190,
+    "productionFilesModified": false,
+    "featureWorktreeMutated": false,
+    "gitOrSchedulerChanged": false,
+    "finalGitCommitBinding": "pending root final commit; this packet is precommit source-copy evidence"
+  },
+  "sourcePins": {
+    "beforePath": "module-effects-coordination/rawlogs/E-REG/source-pins-before.json",
+    "beforeSHA256": "97ec71c7387a3051332cdf9785638b3dca510eeee5743cabbf0056fea50c038b",
+    "afterPath": "module-effects-coordination/rawlogs/E-REG/source-pins-after.json",
+    "afterSHA256": "400148c031cae292b5a8b498d12913118497657d73d0134013e5ed0175747d57",
+    "verificationPath": "module-effects-coordination/rawlogs/E-REG/source-pin-verification.json",
+    "verificationSHA256": "993dc6b51aca512332d78ff486fff8d2cfd68eeaeb4cc19eebbd2f7c7cd580c7",
+    "sourceAndCopyMatchBefore": true,
+    "sourceAndCopyMatchAfter": true,
+    "inputChangesDuringRuns": [],
+    "currentSparseCheckoutPatterns": [
+      "/*",
+      "!**/ci/**",
+      "!**/coordination/**",
+      "!**/evidence/**"
+    ],
+    "trackedGoPathsNotPresentInWorktreeCount": 31,
+    "M0OriginalHashes": {
+      "EXPECTED.json": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "SHA256SUMS": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0"
+    },
+    "expectedAndSumsMatchPriorE_RUN": true
+  },
+  "runs": [
+    {
+      "name": "M0 original regression",
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local bash run.sh",
+      "cwd": "/tmp/module-effects-regression-source",
+      "exitCode": 0,
+      "stdout": "module-effects-coordination/rawlogs/E-REG/m0.stdout.log",
+      "stderr": "module-effects-coordination/rawlogs/E-REG/m0.stderr.log",
+      "checks": {
+        "goVetAllPassed": true,
+        "goTestAllPassed": true,
+        "seed": 20261030,
+        "randomCases": 5000,
+        "result": "same over 5000 inputs",
+        "expectedReceiptMatched": true,
+        "SHA256SUMSMatched": true,
+        "gobiRuleRows": 59,
+        "gobiRuleReactTestWasUncached": true
+      },
+      "cacheNote": "Successful root go test ./... reused cached results for many packages due to the preserved incomplete-copy attempt; the gobi package was uncached (0.085s).",
+      "outputs": {
+        "casesSHA256": "36be8659504a42e3d50c224323d9117a1cb9fa858e4d02bc2a03b0077ab42260",
+        "reactOutputSHA256": "ea49283ed2f87a7b76c56eff888ad640b3adad2d19cff45fa8db0ed304db8a31",
+        "verdictSHA256": "180297809767b3d65c35b64abeb23ad53775d961128d9a235cb273bbc955ec23",
+        "generatedReactMapSHA256": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54"
+      }
+    },
+    {
+      "name": "counter interaction regression",
+      "setupCommand": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH npm ci --prefix interaction --no-audit --no-fund",
+      "setupExitCode": 0,
+      "setupStdout": "module-effects-coordination/rawlogs/E-REG/interaction-npm.stdout.log",
+      "setupStderr": "module-effects-coordination/rawlogs/E-REG/interaction-npm.stderr.log",
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOTOOLCHAIN=local GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium-portable bash run-interaction.sh",
+      "cwd": "/tmp/module-effects-regression-source",
+      "exitCode": 0,
+      "stdout": "module-effects-coordination/rawlogs/E-REG/counter.stdout.log",
+      "stderr": "module-effects-coordination/rawlogs/E-REG/counter.stderr.log",
+      "seed": 20261030,
+      "scripts": 107,
+      "ticks": 4473,
+      "nodeTests": 8,
+      "nodePassed": 8,
+      "nodeFailed": 0,
+      "nodeSkipped": 0,
+      "mismatches": 0,
+      "nativeComparator": "matched",
+      "nativeComparatorScripts": 107,
+      "nativeComparatorNonmatches": 0,
+      "browser": {
+        "name": "Chromium",
+        "version": "153.0.8010.0",
+        "executable": "/tmp/chromium-portable"
+      },
+      "trace": {
+        "bytes": 49491413,
+        "sha256": "f02dee21c19f1ce6f087df9214279d55e231c21824d49a630d22e7bce386fd60",
+        "compressedPath": "rawlogs/E-REG/counter-interaction-traces-seed-20261030.json.gz",
+        "compressedBytes": 463291,
+        "compressedSHA256": "bf93efd5f22c13211a400476b414c0a12ac0e2470a154cd447b5a846460f698e",
+        "nativeInputArchivePath": "rawlogs/E-REG/counter-native-inputs-seed-20261030.tar.gz",
+        "nativeInputArchiveSHA256": "a15af6925bf456efcf5da03a3e9e3514b4a739892989aae43ad2de713797f015",
+        "nativeInputFileCount": 107
+      },
+      "priorBaseline": {
+        "rawJSONEqual": false,
+        "normalizedJSONEqual": true,
+        "rawDifferences": 107,
+        "allDifferencesOnlyAbsoluteNativeInputPaths": true,
+        "priorUncompressedSHA256": "bc647b4a36311d2d19e32afa9686df74bfed46bc408a4d17c108c7c74a0bd934",
+        "priorGzipSHA256": "4f5c49b7a22f83fce0765120490c0ffa1487718f970b5e96d500c5a5c0a5a2e2"
+      }
+    }
+  ],
+  "preservedInitialAttempt": {
+    "path": "module-effects-coordination/rawlogs/E-REG/attempt-01-copy-gap",
+    "exitCode": 1,
+    "cause": "The initial 284-file copy omitted 11 test fixtures required by compiled-native and qualificationarchive tests. Those exact fixture files were added to the 295-file closure; the successful rerun passed. No production code failure was observed."
+  },
+  "tools": {
+    "schema": "gobi.e-reg-versions/v1",
+    "job_id": "E-REG",
+    "go": "go version go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "npm": "11.9.0",
+    "python": "Python 3.12.14",
+    "chromium": "Chromium 153.0.8010.0",
+    "playwright": "Version 1.64.1",
+    "esbuild": "0.28.2",
+    "platform": "Linux x86_64",
+    "nodeBinary": "/tmp/gondola-node22/node_modules/node/bin/node",
+    "goBinary": "/tmp/gondola-go/go/bin/go",
+    "npmBinary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+    "chromiumPath": "/tmp/chromium-portable",
+    "counterRunnerCommandExitCode": 0,
+    "npmInstallExitCode": 0,
+    "fullM0RunExitCode": 0,
+    "m0Features": {
+      "seed": 20261030,
+      "cases": 5000,
+      "gobiRuleRows": 59
+    },
+    "counterFeatures": {
+      "scripts": 107,
+      "ticks": 4473,
+      "nodeTests": 8,
+      "nodePassed": 8,
+      "nodeSkipped": 0,
+      "nativeComparator": "matched"
+    }
+  },
+  "limits": [
+    "This is a precommit source-copy regression result; root must bind all input pins to the final Git source commit before claiming qualification.",
+    "Generated dependency trees and build outputs are recorded as outputs but excluded from source pins.",
+    "The source copy omits 31 tracked Go paths under sparse-excluded coordination/evidence/CI trees, which are absent from the current worktree and outside the assigned source-only test closure."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/E-REG.md",
+    "bytes": 4474,
+    "sha256": "ef31d73e5a05314f7fa1b9107bcafc71649cf8381f6f3884db3092b9e8301e9d"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-REG/index.json",
+    "indexExcludesItself": true,
+    "bytes": 4779,
+    "sha256": "4ac9258f883f14d20ea68dcc882c1c93098f17c1744622ef490e8096c34773f0",
+    "indexedFileCount": 29
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Added the independently mounted Go effectmodulechild wrapper and native keyed-module effect replay. Go owns safe request IDs, pending/reply state, token validation, cancellation, and unmount transitions; literal and three seeded native schedules replayed successfully.",
+  "scope": {
+    "ownedPaths": [
+      "fixtures/compiled/effectmodulechild/**",
+      "cmd/module-effects-native/**",
+      "module-effects-coordination/reports/E-GO.md",
+      "module-effects-coordination/receipts/E-GO.json",
+      "module-effects-coordination/rawlogs/E-GO/**"
+    ],
+    "productionPathsModified": [
+      "fixtures/compiled/effectmodulechild/app.go",
+      "fixtures/compiled/effectmodulechild/view.go",
+      "fixtures/compiled/effectmodulechild/app_test.go",
+      "fixtures/compiled/effectmodulechild/scenario.json",
+      "cmd/module-effects-native/main.go",
+      "cmd/module-effects-native/main_test.go"
+    ],
+    "otherLaneFilesModified": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-go-source-hashes/v1",
+    "repositoryHead": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "ownedFiles": {
+      "fixtures/compiled/effectmodulechild/app.go": {"bytes": 5514, "sha256": "ed5a640401add2f4e9f70391e7c6dcb548b8d4449f50c88162a5d431d1eaae9b"},
+      "fixtures/compiled/effectmodulechild/view.go": {"bytes": 1514, "sha256": "5ecda485e6131395872d542293ca548851a0b7f51c189bf80bddf421767cb1af"},
+      "fixtures/compiled/effectmodulechild/app_test.go": {"bytes": 10548, "sha256": "625bbe8108460dfe31affd1ad51565aecb3ba82186002d492cb8d9e5c8621619"},
+      "fixtures/compiled/effectmodulechild/scenario.json": {"bytes": 4516, "sha256": "6bb440be0d2356e205fc0ecdb0eb26147fccde50633db0027cc870e8bc0c0291"},
+      "cmd/module-effects-native/main.go": {"bytes": 26950, "sha256": "e5c8df4b1fdac497618e0d08c454eb2e470fa94dc63e2587bb328a1b9fa48aea"},
+      "cmd/module-effects-native/main_test.go": {"bytes": 6976, "sha256": "6a57482f9a09f4eda2348303874f3ddd55e7a512c053ce47e7285ad99d696c95"}
+    },
+    "dependencyFiles": {
+      "fixtures/compiled/modulechild/app.go": "68d462ac1ca616f05249392cbac894fbd954687441377e255944c84a74441265",
+      "fixtures/compiled/modulechild/view.go": "0a860eae91c70fc86535deb56754410a89c20186d658c68642a5476e6f1f7407",
+      "fixtures/compiled/keyedmoduleparent/app.go": "610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9",
+      "fixtures/compiled/keyedmodulewire/keyedmodulewire.go": "7bb39bbdada741b334f59019683f04338c11afb9ebf40b03a466ce08b4fcad9d",
+      "fixtures/compiled/modulewire/modulewire.go": "9d29a10bdf9069852d861a38ede52f11b40a650da057dbd85070bb7da5c4561f",
+      "fixtures/compiled/moduleparent/app.go": "1da626a1e56e34c9b08bb9d56e6d99f4cbf783439c25053cd61d83eca1830c37",
+      "counter/counter.go": "054e4d52258a40dcb3b053ddebe4695ae720b934a0fb0969abb72af55592ae0e",
+      "gobi/node.go": "e51a1970f0a8e72ffd3d5aaf06f8fcce2137fd87113bb7412f692671743bcc93",
+      "compilercontract/trace.go": "de5aa3f70314fe3cc1e5661ce682c953de6ee12328cba3dd609a891657c5e627",
+      "compiled-module-effects/conformance/scenarios.mjs": "de9784963969a7563450d6cb0883d77c1184b0ad9344188abd724d72d68df4ea"
+    },
+    "hashManifest": "module-effects-coordination/rawlogs/E-GO/source-hashes.json"
+  },
+  "tests": {
+    "goVersion": "go version go1.24.0 linux/amd64",
+    "environment": {"GOTOOLCHAIN": "local", "GOFLAGS": "-buildvcs=false", "nodeRequiredForGoTests": false},
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./fixtures/compiled/effectmodulechild ./cmd/module-effects-native ./fixtures/compiled/keyedmoduleparent ./fixtures/compiled/modulechild ./fixtures/compiled/moduleparent ./fixtures/compiled/modulewire ./counter",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "All six Go test packages passed; counter has no test files.",
+        "rawOutput": "module-effects-coordination/rawlogs/E-GO/focused-go-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go run ./cmd/module-effects-native -script fixtures/compiled/effectmodulechild/scenario.json",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "outputBytes": 1103548,
+        "outputSHA256": "dffa1412facedeb3d5047f0def6f297dfe296c8ca070a3519a606e50a668ebc8",
+        "stderrBytes": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/E-GO/native-literal.stdout.json"
+      }
+    ],
+    "tdd": {
+      "redAttempt": "module-effects-coordination/rawlogs/E-GO/attempt-001-tdd-red.output.log",
+      "redReason": "The new package did not yet export Init, Update, and State.",
+      "resolved": true,
+      "formatterPathAttempt": "module-effects-coordination/rawlogs/E-GO/attempt-002-gofmt-path.output.log",
+      "resolution": "Used /tmp/gondola-go/go/bin/gofmt after the shell PATH did not contain gofmt."
+    }
+  },
+  "nativeReplay": {
+    "schema": "gobi.module-effects-native/v1",
+    "literal": {"events": 31, "states": 32, "effects": 10, "transportEvents": 20, "retiredChildren": 1, "finalPending": 0},
+    "seededRuns": [
+      {"seed": 20261104, "events": 49, "states": 50, "effects": 16, "transportEvents": 32, "finalPending": 0},
+      {"seed": 20261105, "events": 50, "states": 51, "effects": 17, "transportEvents": 34, "finalPending": 0},
+      {"seed": 20261106, "events": 48, "states": 49, "effects": 15, "transportEvents": 30, "finalPending": 0}
+    ],
+    "seedSummary": "module-effects-coordination/rawlogs/E-GO/native-seeds-summary.json",
+    "unmountOrder": ["go.update.unmount", "go.state.unmounted", "go.effect.cancel", "transport.cancel", "renderer.teardown"],
+    "replyPayloadBoundary": "Go completion echoes and stores only the request token; no external payload is claimed."
+  },
+  "limits": [
+    "N1 did not run the four React/DOM compiler builds or typed AppIR/helper/effect admission; E-BUILD owns that gate.",
+    "N1 did not run the compiled host, direct/browser comparison, mutation controls, demo, archive, or publication; later lanes/root own those gates.",
+    "Only the listed Go packages were tested; the full repository test suite was not run.",
+    "The native replay uses deterministic explicit reply events and does not establish real asynchronous, network, or browser transport behavior."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/E-GO.md",
+    "bytes": 4812,
+    "sha256": "0060ca0e81a1e7813931b226ac92270a9e87a9322f767d022fee1b9007ffade7"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-GO/index.json",
+    "indexExcludesItself": true,
+    "bytes": 2051,
+    "sha256": "ce9fe04e4f28434882017d24fa303e9f91d5077a07ab6967810a82749e8e303f",
+    "indexedFileCount": 12
+  }
+}

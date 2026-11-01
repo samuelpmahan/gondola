@@ -1,0 +1,140 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "XR-HOST",
+  "worker": "N1",
+  "outcome": "confirmed_reuse",
+  "decision": "accepted",
+  "summary": "Independent review accepted the sealed E-HOST runtime host. Source and artifact pins matched, and all six host tests passed again against E-BUILD-final.",
+  "reviewedPacket": {
+    "job_id": "E-HOST",
+    "sealDirectory": "module-effects-coordination/seals/E-HOST",
+    "sealPins": {
+      "E-HOST.md": "6a7677c4be8437eaae1645a8973341ea1df5ecf295c171486820ae92582aa7d2",
+      "E-HOST.json": "fcf3968b4d946d8038e607f952d54ed37c9e04db5933b49c959b51511cfb87cb"
+    },
+    "sourceInventory": [
+      {
+        "path": "compiled-module-effects/runtime/runtime.mjs",
+        "bytes": 66332,
+        "sha256": "30991aa19a84d5358485fe2cfa0126927ee464e509625755057f923b736c7238"
+      },
+      {
+        "path": "compiled-module-effects/runtime/runtime.test.mjs",
+        "bytes": 13424,
+        "sha256": "26691886fa78949c2c61f8c3e4b145738ee68475de5278ad25fa0299ef2dfb93"
+      }
+    ],
+    "repositoryHead": "f4c8f70199a8ca896c13e225a85901abe658d0de"
+  },
+  "sourceAndArtifactPins": {
+    "runtimeAndDependencies": [
+      {
+        "path": "compiled-module-effects/runtime/runtime.mjs",
+        "bytes": 66332,
+        "sha256": "30991aa19a84d5358485fe2cfa0126927ee464e509625755057f923b736c7238",
+        "role": "sealed E-HOST source"
+      },
+      {
+        "path": "compiled-module-effects/runtime/runtime.test.mjs",
+        "bytes": 13424,
+        "sha256": "26691886fa78949c2c61f8c3e4b145738ee68475de5278ad25fa0299ef2dfb93",
+        "role": "sealed E-HOST source"
+      },
+      {
+        "path": "compiled-module-effects/build/module-loader.mjs",
+        "bytes": 48386,
+        "sha256": "dc53c58dbf6be5e8bf1ed75ba206ce41ea3e8f571d637d0de783d6a1c2e1d915"
+      },
+      {
+        "path": "compiled-module-effects/build/abi-admission.mjs",
+        "bytes": 45069,
+        "sha256": "60370a5ca223d0ae799a4d488baced6dba0543c3900517b9481ae8d0fa429a80"
+      },
+      {
+        "path": "compiled-modules/conformance/module-loader.mjs",
+        "bytes": 3500,
+        "sha256": "fb675c02b4f1df8f96cf510b73ba3816ae2e440e8855b9f3400c7a98a8834728"
+      },
+      {
+        "path": "compiled-frontend/frontend/react/bindings.mjs",
+        "bytes": 8970,
+        "sha256": "29711c7dea81be8e71549984246c7efdb97e8163096f9cf49d6e04ab1917e02b"
+      },
+      {
+        "path": "compiled-frontend/frontend/shared/view.mjs",
+        "bytes": 22050,
+        "sha256": "ef2aaa7daf021b3e46dd5cec159951ec1e84d4ea3d7f3888ec6b8c27d7a959e0"
+      },
+      {
+        "path": "compiled-frontend/frontend/react/react-map.gen.mjs",
+        "bytes": 3320,
+        "sha256": "9cb7fa3ff84042c36b9ac211dfe2b97a69169e4fb880283e8f000495a8216a54"
+      }
+    ],
+    "finalBuildIndex": {
+      "path": "compiled-module-effects/build/output/E-BUILD-final/build-index.json",
+      "bytes": 220837,
+      "sha256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444",
+      "expectedSHA256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444",
+      "matches": true,
+      "schema": "gobi.module-effects-build-index/v1",
+      "actualBuildCount": 4,
+      "backends": [
+        "dom",
+        "react"
+      ],
+      "inventoryEntries": 4
+    },
+    "sealedSourceVerification": true
+  },
+  "review": {
+    "findings": [],
+    "checkedSemantics": [
+      "request correlations are scoped to the mounted key/generation/lifetime and remain valid across renderer epochs",
+      "Go state and rendered pending view commit before transport start",
+      "synchronous transport replies queue until the dispatch/start path unwinds",
+      "Go unmount and cancellation retire the request before cancellation callbacks and renderer teardown",
+      "renderer swap copies live child instance lifetime, fences old UI callbacks, activates candidate callbacks at commit, and remounts through the active backend factory"
+    ],
+    "syntheticRendererOnly": true,
+    "productionFilesChanged": false
+  },
+  "tests": {
+    "nodeVersion": "v22.23.4",
+    "buildIndex": "compiled-module-effects/build/output/E-BUILD-final/build-index.json",
+    "command": "GOBI_MODULE_EFFECTS_BUILD_INDEX=compiled-module-effects/build/output/E-BUILD-final/build-index.json /tmp/gondola-node22/node_modules/node/bin/node --test compiled-module-effects/runtime/runtime.test.mjs",
+    "cwd": "/workspace/scratch/39a56936f173/gondola",
+    "environment": {
+      "GOBI_MODULE_EFFECTS_BUILD_INDEX": "compiled-module-effects/build/output/E-BUILD-final/build-index.json"
+    },
+    "exitCode": 0,
+    "testsPassed": 6,
+    "testsFailed": 0,
+    "stdout": {
+      "path": "node-test.stdout.log",
+      "bytes": 1823,
+      "sha256": "de3cb5ff7ded22435980edf4fba2ebc045f482dcd7c41ed274796f33757e34c7"
+    },
+    "stderr": {
+      "path": "node-test.stderr.log",
+      "bytes": 174,
+      "sha256": "e0cb71fe601c6aa0bc77d1c72b7de24eb689cec9d73775860edf39dc4fa5755c"
+    }
+  },
+  "limits": [
+    "Synthetic memory renderer only; no mounted React or real browser DOM claim.",
+    "Timer transport and full repository suite were not exercised in this independent review."
+  ],
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/XR-HOST/index.json",
+    "indexExcludesItself": true,
+    "bytes": 855,
+    "sha256": "1a48c966b85eae1682b415b81e71a3d8f1e427016bbd384bc2f742fafbf81293",
+    "indexedFileCount": 5
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/XR-HOST.md",
+    "bytes": 3177,
+    "sha256": "3b0d20d84d2ce7a9cc9ec2c0edb17eee747cf25e34ed71ac378dc5467de7f169"
+  }
+}

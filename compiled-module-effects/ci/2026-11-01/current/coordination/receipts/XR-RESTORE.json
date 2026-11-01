@@ -1,0 +1,137 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-RESTORE",
+  "worker": "N4",
+  "decision": "accepted",
+  "status": "accepted_for_translated_pr22_baseline",
+  "summary": "Independent review accepts sealed E-RESTORE v2 for the translated PR22 baseline. The clean E-DELIVERY module-effects archive remains an explicit pending consumer gate.",
+  "reviewedPacket": {
+    "sealedErestore": {
+      "report": {
+        "path": "../module-effects-coordination/seals/E-RESTORE/E-RESTORE.md",
+        "bytes": 5027,
+        "sha256": "0fb794263ae40204001773ee2df81f1a1a429ed8200923923def6c0ddf1a828a"
+      },
+      "receipt": {
+        "path": "../module-effects-coordination/seals/E-RESTORE/E-RESTORE.json",
+        "bytes": 17993,
+        "sha256": "92877a2dba7569684945911b5a9670283dfa34fe812b6bd769043a97f4e21d4b"
+      },
+      "seal": {
+        "path": "../module-effects-coordination/seals/E-RESTORE/seal.json",
+        "bytes": 175,
+        "sha256": "e87d79f21f48db4e650d773c583f3adf674bfed23932d7a84c53128745c8a2b8"
+      },
+      "sourceInventory": {
+        "path": "../module-effects-coordination/seals/E-RESTORE/source-inventory.json",
+        "bytes": 200,
+        "sha256": "fe90e61d4e5d25d55515f35128d7720206e556f2756d05717c63b48794425093"
+      },
+      "adapter": {
+        "path": "/tmp/module-effects-publish/restore.py",
+        "bytes": 33703,
+        "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98",
+        "matchesSeal": true
+      }
+    },
+    "acceptedBase": {
+      "path": "/tmp/keyed-module-publish/restore.py",
+      "bytes": 26946,
+      "sha256": "0dac505c5e9949a2b6168dac955e40c7af805847f73ef27652e1962d603d3f68"
+    },
+    "adaptedTests": {
+      "path": "/tmp/module-effects-publish/tests/test_restore.py",
+      "bytes": 14761,
+      "sha256": "5c035439c4c8a8af22dd488e29f8e559c9228982c08100026085c197b3ca2efe"
+    },
+    "fixtureTranslator": {
+      "path": "/tmp/module-effects-publish/tests/prepare_pr22_fixture.py",
+      "bytes": 3660,
+      "sha256": "3fa22b724b7325acb99f5efedace1647f801f369d08be8388e2e732dd68fe829"
+    },
+    "criticalSafetyFunctionsUnchanged": [
+      "_safe_member_path",
+      "_commit_no_replace",
+      "_extract",
+      "_assemble",
+      "_hash_file",
+      "_pairs_no_duplicates",
+      "_json_bytes"
+    ]
+  },
+  "verification": {
+    "sealedRawlogs": {
+      "indexSHA256": "fdb88c6eb29dd836e6a3b8f539875c4d19c9eb20b139bbbd021d939972a8e056",
+      "indexed": 73,
+      "matched": 73,
+      "externalMirrorFilesMatched": 73
+    },
+    "preservedFirstDeclaredCheckpoint": {
+      "indexSHA256": "c0eca9a45e4d82dc3ba3d07fc29ea6e82a7708c1720add3e48f57427905b407b",
+      "indexed": 36,
+      "matched": 36
+    },
+    "translatedArchive": {
+      "schema": "gobi.module-effects-archive-manifest/v1",
+      "indexSchema": "gobi.module-effects-segments/v1",
+      "auditSchema": "gobi.module-effects-audit-members/v1",
+      "parts": 25,
+      "partPinsMatched": 25,
+      "archiveBytes": 25697770,
+      "archiveSHA256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+      "expandedBytes": 372962548,
+      "memberCount": 600,
+      "sourcePinCount": 157,
+      "memberAndSourcePathSetsUniqueAndEqual": true,
+      "manifestExactKeyset": true,
+      "rootGoSumAbsenceSupportedByPinnedGoMod": true,
+      "historicalExcludedCompilerLogs": false,
+      "manifestSHA256": "943eda2d099a82c3957085cc37cd6db047074b096f90350bfdb15a4b1d8b1d8e",
+      "indexSHA256": "c1d73223b9698f4b3af85e3bcab01503290f4ac3dc68f586a61662c8dba6362c"
+    },
+    "finalSuite": {
+      "python": "3.12.14",
+      "passed": 15,
+      "failed": 0,
+      "translatedArchiveRestoreIncluded": true
+    },
+    "additionalReviewProbes": {
+      "total": 8,
+      "passed": 8,
+      "cases": [
+        "declared compiler log rejected",
+        "declared compiler exit-code file rejected",
+        "duplicate JSON key rejected",
+        "unexpected tar member rejected",
+        "missing tar member rejected",
+        "excluded-directory name accepted as a file basename",
+        "destination appearing at renameat2 commit preserved atomically",
+        "missing renameat2 fails closed without fallback"
+      ]
+    },
+    "firstReviewerProbeInvocationError": "review-only helper definition order; fixed before rerun; no adapter defect"
+  },
+  "acceptanceBoundary": {
+    "translatedPr22BaselineQualified": true,
+    "cleanEffectsArchiveTested": false,
+    "pendingReason": "No clean E-DELIVERY primary archive was available in this review. E-CONSUME and root readback must run the frozen adapter against the eventual clean archive and manifest."
+  },
+  "reviewEvidenceIndex": {
+    "path": "../module-effects-coordination/rawlogs/XR-RESTORE/index.json",
+    "bytes": 2507,
+    "sha256": "2bbea416d7bc22aaff1ee0242c4e6d66dad5537291d0446f6f7aaaa4f67129ca",
+    "files": 15,
+    "indexExcludesItself": true
+  },
+  "report": {
+    "path": "../module-effects-coordination/reports/XR-RESTORE.md",
+    "bytes": 5035,
+    "sha256": "a08bcdf27a7357b48169da68169c97affedd8815958752f1c506586c1c5c3872"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "platform": "Linux x86_64"
+  },
+  "noProductionOrArchiveEdits": true,
+  "gitOrSchedulerChanged": false
+}

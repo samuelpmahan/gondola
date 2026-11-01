@@ -1,0 +1,167 @@
+{
+  "schema": "gobi.independent-review-receipt/v1",
+  "job_id": "XR-REG",
+  "worker": "N2",
+  "decision": "accepted",
+  "score": {
+    "earned": 500,
+    "possible": 500,
+    "brokenItems": 0
+  },
+  "summary": "Accepted E-REG as precommit input-copy regression evidence: all 295 source pins match pre/post, the isolated copy, and the current worktree; M0 and counter artifacts match; the full counter trace differs from its baseline only in 107 absolute input paths.",
+  "reviewedPacket": {
+    "job_id": "E-REG",
+    "worker": "N3",
+    "authorFrozen": true,
+    "sealedReport": {
+      "path": "module-effects-coordination/seals/E-REG/E-REG.md",
+      "bytes": 4474,
+      "sha256": "ef31d73e5a05314f7fa1b9107bcafc71649cf8381f6f3884db3092b9e8301e9d"
+    },
+    "sealedOriginalReceipt": {
+      "path": "module-effects-coordination/seals/E-REG/E-REG.json",
+      "bytes": 8257,
+      "sha256": "85b00c1fa23c66a40a8066bb28f7c72cd41e17a3cfe43f9730dc4d45f5544e20",
+      "originalOutcome": "verified_inputs_copy_precommit"
+    },
+    "seal": {
+      "path": "module-effects-coordination/seals/E-REG/seal.json",
+      "reportAndReceiptHashesMatch": true
+    },
+    "nativeProtocolReceipt": {
+      "path": "module-effects-coordination/native-receipts/E-REG.json",
+      "bytes": 8845,
+      "sha256": "bb2dbccd52259a0f8cca59f7234b1d0543399232da238e70c0bf71ca2b2a376b",
+      "normalizedOutcome": "confirmed_reuse",
+      "normalizationOriginalSHA256": "85b00c1fa23c66a40a8066bb28f7c72cd41e17a3cfe43f9730dc4d45f5544e20",
+      "roundTripToOriginalReceiptVerified": true
+    },
+    "authorRawlogsIndex": {
+      "path": "module-effects-coordination/rawlogs/E-REG/index.json",
+      "bytes": 4779,
+      "sha256": "4ac9258f883f14d20ea68dcc882c1c93098f17c1744622ef490e8096c34773f0",
+      "indexedFiles": 29,
+      "allFilesVerified": true
+    },
+    "preservedCopyGap": {
+      "path": "module-effects-coordination/rawlogs/E-REG/attempt-01-copy-gap/summary.json",
+      "bytes": 600,
+      "sha256": "ca559bf1ab2ad5c6d3c533fa97936734524a4ab0d512eb757e69d0f176a3d650",
+      "exitCode": 1,
+      "missingFixtureGroups": 3,
+      "fixtureFilesAddedForCorrectedCopy": 11,
+      "productFailureObserved": false
+    }
+  },
+  "verification": {
+    "sourceInputs": {
+      "preRunManifest": {
+        "path": "module-effects-coordination/rawlogs/E-REG/source-pins-before.json",
+        "bytes": 73045,
+        "sha256": "97ec71c7387a3051332cdf9785638b3dca510eeee5743cabbf0056fea50c038b"
+      },
+      "postRunManifest": {
+        "path": "module-effects-coordination/rawlogs/E-REG/source-pins-after.json",
+        "bytes": 51800,
+        "sha256": "400148c031cae292b5a8b498d12913118497657d73d0134013e5ed0175747d57"
+      },
+      "verificationRecord": {
+        "path": "module-effects-coordination/rawlogs/E-REG/source-pin-verification.json",
+        "bytes": 3871,
+        "sha256": "993dc6b51aca512332d78ff486fff8d2cfd68eeaeb4cc19eebbd2f7c7cd580c7"
+      },
+      "copyConstruction": {
+        "path": "module-effects-coordination/rawlogs/E-REG/copy-construction.json",
+        "bytes": 5744,
+        "sha256": "6315bba30e037ffbf9a8aecb0130ed8334554258d346c1e2289bc54042a5f58b"
+      },
+      "fileCount": 295,
+      "totalBytes": 7046852,
+      "goSourceCount": 190,
+      "currentWorktreeMatchesPreAndPostPins": true,
+      "isolatedCopyMatchesPreAndPostPins": true,
+      "preAndPostManifestDifferences": 0,
+      "sourceOrCopyMismatches": 0,
+      "finalGitCommitBinding": "pending root binding; review makes no published-source qualification claim"
+    },
+    "m0": {
+      "seed": 20261030,
+      "inputCases": 5000,
+      "reactOutputs": 5000,
+      "result": "same over 5000 inputs",
+      "originalExpectedSHA256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "originalSHA256SUMSSHA256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "originalReceiptsMatchPriorBaseline": true,
+      "ruleRows": 59,
+      "ruleTest": "TestRulesAgainstReact",
+      "recordedFullRunGobiPackageUncached": true,
+      "independentFocusedRun": {
+        "command": "go test -count=1 ./gobi -run '^TestRulesAgainstReact$'",
+        "cwd": "/tmp/module-effects-regression-source",
+        "exitCode": 0,
+        "output": "ok github.com/samuelpmahan/gondola/gobi 0.083s",
+        "logPath": "module-effects-coordination/rawlogs/XR-REG/focused-gobi-test.log"
+      },
+      "allFourGeneratedArtifactsMatchReceipt": true
+    },
+    "counter": {
+      "seed": 20261030,
+      "scripts": 107,
+      "ticks": 4473,
+      "nodeTests": { "total": 8, "passed": 8, "failed": 0, "skipped": 0 },
+      "nativeComparator": { "matchedScripts": 107, "nonmatches": 0 },
+      "trace": {
+        "path": "module-effects-coordination/rawlogs/E-REG/counter-interaction-traces-seed-20261030.json.gz",
+        "uncompressedBytes": 49491413,
+        "uncompressedSHA256": "f02dee21c19f1ce6f087df9214279d55e231c21824d49a630d22e7bce386fd60",
+        "compressedBytes": 463291,
+        "compressedSHA256": "bf93efd5f22c13211a400476b414c0a12ac0e2470a154cd447b5a846460f698e"
+      },
+      "priorBaseline": {
+        "path": "keyed-module-coordination/rawlogs/E-RUN/interaction-traces-seed-20261030.json.gz",
+        "uncompressedBytes": 49491627,
+        "uncompressedSHA256": "bc647b4a36311d2d19e32afa9686df74bfed46bc408a4d17c108c7c74a0bd934",
+        "compressedSHA256": "4f5c49b7a22f83fce0765120490c0ffa1487718f970b5e96d500c5a5c0a5a2e2"
+      },
+      "comparison": {
+        "rawDifferenceCount": 107,
+        "onlyDifferencePath": "nativeComparison.scenarios[].inputPath",
+        "normalization": "replace both inputPath values with basenames only",
+        "normalizedFullJSONEqual": true
+      },
+      "nativeInputArchive": {
+        "path": "module-effects-coordination/rawlogs/E-REG/counter-native-inputs-seed-20261030.tar.gz",
+        "sha256": "a15af6925bf456efcf5da03a3e9e3514b4a739892989aae43ad2de713797f015",
+        "regularFiles": 107,
+        "allMatchIsolatedCopyInputs": true,
+        "duplicatedIntoReviewPacket": false
+      }
+    }
+  },
+  "independentAudit": {
+    "command": [
+      "/tmp/rebalancer-env/bin/python",
+      "../module-effects-coordination/rawlogs/XR-REG/audit.py"
+    ],
+    "cwd": "/workspace/scratch/39a56936f173/gondola",
+    "exitCode": 0,
+    "pythonVersion": "Python 3.12.14",
+    "sourcePinAndArtifactAudit": "all assertions passed",
+    "rawlogs": {
+      "path": "module-effects-coordination/rawlogs/XR-REG/index.json",
+      "bytes": 719,
+      "sha256": "1b92c1a7d5988f85cbbd1a1eec5af7850ad8cef2f03221d5eb749d95b58c7885",
+      "indexedFiles": 4
+    }
+  },
+  "limits": [
+    "E-REG is precommit input-copy evidence; final Git source binding remains pending and published-source qualification is not claimed.",
+    "The checkout is sparse and the 31 tracked Go paths under excluded coordination/evidence/CI trees were not present in the reviewed input set.",
+    "The 49 MB uncompressed counter trace and 107-file native-input archive are referenced by path and hash rather than duplicated in XR-REG rawlogs."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/XR-REG.md",
+    "bytes": 3412,
+    "sha256": "bff75a37e219b346179f770de540e342630934a6b5ed0720a858e8dc85c118b1"
+  }
+}

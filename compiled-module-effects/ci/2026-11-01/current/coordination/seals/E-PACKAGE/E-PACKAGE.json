@@ -1,0 +1,134 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-PACKAGE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "phase": "publisher_tooling_prepared",
+  "status": "pending_clean_primary_and_root_final_pack",
+  "summary": "Prepared effects-schema primary segment and coordination audit packers with bounded derived counts, 1 MiB SHA-256/Git-blob parts, strict source/manifest binding, deterministic regular-file audit tar, and explicit exclusion records. Six isolated fixture tests pass; no clean acceptance archive was available.",
+  "scope": {
+    "ownedPaths": [
+      "/tmp/module-effects-publish/publisher/**",
+      "module-effects-coordination/reports/E-PACKAGE.md",
+      "module-effects-coordination/receipts/E-PACKAGE.json",
+      "module-effects-coordination/rawlogs/E-PACKAGE/**"
+    ],
+    "productionRepositorySourceModified": false,
+    "restoreToolModified": false,
+    "consumerToolModified": false,
+    "gitOrRemoteMutations": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-package-source-pins/v1",
+    "manifestPath": "module-effects-coordination/rawlogs/E-PACKAGE/source/source-pins.json",
+    "files": [
+      {
+        "path": "README-PUBLISHER-TEMPLATE.md",
+        "bytes": 5748,
+        "sha256": "bf973cfdd4fe4dc825479d9557223c465d78f72ed401709a622118573e6d93f7"
+      },
+      {
+        "path": "common.py",
+        "bytes": 16065,
+        "sha256": "e7c5fc1c67785f9d9fa202840d93eb726f697ffdf909b5257d2ce94d6e1d3c6c"
+      },
+      {
+        "path": "pack_audit.py",
+        "bytes": 19019,
+        "sha256": "8646ae7833fb82726ebfc4f1154d1b4ea2121bf50939d52644470c74d33122c1"
+      },
+      {
+        "path": "prepare_parts.py",
+        "bytes": 9211,
+        "sha256": "e4b4cd35f2f75382ddd9a3ed8a10ad0156ba2ff3400aa2d417c412db30efc465"
+      },
+      {
+        "path": "test_publisher.py",
+        "bytes": 16253,
+        "sha256": "c0a6a3e266c78eea28ef41d8482011951867faaad6c68bfa59a36500ff153936"
+      }
+    ],
+    "liveAndSnapshotByteMatch": true,
+    "verificationPath": "module-effects-coordination/rawlogs/E-PACKAGE/source-snapshot-check.json"
+  },
+  "interfaces": {
+    "restoreTool": {
+      "path": "/tmp/module-effects-publish/restore.py",
+      "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98"
+    },
+    "consumerPreparation": {
+      "path": "/tmp/module-effects-publish/consume-prep-v2.py",
+      "sha256": "c1d7fed5afb75ca2cecbed4df8ddca50890d3cafd60dd5b0bfbc032e2a1e8a82"
+    },
+    "partsIndexSchema": "gobi.module-effects-segments/v1",
+    "primaryManifestSchema": "gobi.module-effects-archive-manifest/v1",
+    "auditMembersSchema": "gobi.module-effects-audit-members/v1",
+    "partHashesSchema": "gobi.module-effects-part-hashes/v1",
+    "partBytes": 1048576,
+    "partNames": "bundle.part-NNN or audit.part-NNN; maximum 1000 names under the three-digit restore contract",
+    "counts": "memberCount and sourcePinCount derive from validated manifest rows/maps and are restore-validator bounded"
+  },
+  "verification": {
+    "commandsPath": "module-effects-coordination/rawlogs/E-PACKAGE/commands.json",
+    "python": "Python 3.12.14",
+    "git": "git version 2.51.1",
+    "focusedTests": {
+      "command": "python3 -m unittest -v test_publisher.py",
+      "passed": 6,
+      "failed": 0,
+      "rawOutput": "module-effects-coordination/rawlogs/E-PACKAGE/tests/passing-tests.log",
+      "covered": [
+        "effects schema and derived member/source-pin counts",
+        "1 MiB segment bytes, SHA-256, and read-only Git blob SHA-1",
+        "manifest/source commit and clean-tree gates",
+        "source pin and source-closure tampering",
+        "deterministic audit tar and exact extracted/primary duplicate exclusions",
+        "indexed exclusion records while retaining receipts/seals/native/protocol/failed traces",
+        "regular-file/symlink checks and before/after source snapshot guard"
+      ]
+    },
+    "initialFailure": {
+      "command": "python3 -m unittest -v test_publisher.py",
+      "exitCode": 1,
+      "classification": "test assertion expected a later archive SHA diagnostic while validator correctly rejected changed length first",
+      "rawOutput": "module-effects-coordination/rawlogs/E-PACKAGE/tests/failure-01-assertion-mismatch.log",
+      "resolvedBy": "Adjusted the fixture assertion to match the observed earlier length guard; no implementation change was required."
+    },
+    "syntaxCompilation": {
+      "exitCode": 0,
+      "rawOutput": "module-effects-coordination/rawlogs/E-PACKAGE/tests/py_compile.log"
+    },
+    "cliHelpChecks": {
+      "preparePartsExitCode": 0,
+      "packAuditExitCode": 0
+    },
+    "sourceSnapshot": {
+      "files": 5,
+      "verified": true
+    },
+    "cleanPrimaryPrepared": false,
+    "actualPackagingOrRestoreRun": false,
+    "reason": "The clean E-RUN/E-DELIVERY primary archive and manifest were not available; tests use disposable synthetic fixture trees only."
+  },
+  "sourceState": {
+    "sourceCommitObserved": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "worktreeWasClean": false,
+    "actualCleanPackagingAttempted": false
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/E-PACKAGE.md",
+    "bytes": 4272,
+    "sha256": "001a6ade5953cbf83c74faea21521041e01ed2b860decf37e897c32bce0f80e9"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-PACKAGE/index.json",
+    "bytes": 2794,
+    "sha256": "78d210f59011f735817dc8df96310c9b26447f55aa3921a3c44efdf18ffe281e",
+    "indexedFileCount": 17
+  },
+  "limits": [
+    "No acceptance archive or publication was produced.",
+    "The clean Git/source closure and manifest binding are exercised with injected synthetic fixture Git state; the CLI production path requires an actual clean Git HEAD.",
+    "Restore/no-replace behavior remains owned by the unchanged sealed restore tool and was not rerun against a final effects archive."
+  ]
+}

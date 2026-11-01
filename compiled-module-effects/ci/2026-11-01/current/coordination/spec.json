@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/effectmodulechild/** cmd/module-effects-native/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation"
+    },
+    {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-module-effects/build/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation"
+    },
+    {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-module-effects/runtime/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation"
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-module-effects/conformance/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation"
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-module-effects/oracle/**",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation"
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-module-effects/demo/** run.mjs README.md RESULTS.md .gitignore run-module-effects.sh .github/workflows/gobi-keyed-module-effects.yml",
+      "summary": "Typed cancellable effects through independent keyed Go children; read CONTRACT.md and freeze interfaces before downstream implementation"
+    }
+  ]
+}

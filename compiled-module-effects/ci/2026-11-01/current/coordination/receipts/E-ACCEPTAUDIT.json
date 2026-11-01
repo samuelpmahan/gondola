@@ -1,0 +1,97 @@
+{
+  "acceptanceBoundary": {
+    "archiveAcceptanceClaimed": false,
+    "cleanERunArchiveTested": false,
+    "reason": "No clean E-RUN archive was available; the latest E-RUN attempt stopped on an outer-runner native stdoutPath/stderrPath schema mismatch before timer-demo and archive qualification."
+  },
+  "decision": "amend",
+  "gitOrSchedulerChanged": false,
+  "job_id": "E-ACCEPTAUDIT",
+  "noProductionOrArchiveEdits": true,
+  "outcome": "insufficient_evidence",
+  "report": {
+    "bytes": 4729,
+    "path": "module-effects-coordination/reports/E-ACCEPTAUDIT.md",
+    "sha256": "802024b020ebf0fa0951cbacfbea687ee7a725d45799c6896f435244b4e5f95b"
+  },
+  "reviewEvidenceIndex": {
+    "bytes": 2197,
+    "files": 13,
+    "indexExcludesItself": true,
+    "path": "module-effects-coordination/rawlogs/E-ACCEPTAUDIT/index.json",
+    "sha256": "7e5994e61cbbce4b137b96582027bd169ba788e0c60ff9a8c9fcf6a7da489041"
+  },
+  "reviewedPacket": {
+    "consumerPreparation": [
+      {
+        "bytes": 85643,
+        "copyMatches": true,
+        "copyPath": "module-effects-coordination/rawlogs/E-ACCEPTAUDIT/consume.py",
+        "path": "/tmp/module-effects-publish/consume.py",
+        "sha256": "c1d7fed5afb75ca2cecbed4df8ddca50890d3cafd60dd5b0bfbc032e2a1e8a82"
+      },
+      {
+        "bytes": 24902,
+        "copyMatches": true,
+        "copyPath": "module-effects-coordination/rawlogs/E-ACCEPTAUDIT/consume-browser.mjs",
+        "path": "/tmp/module-effects-publish/consume-browser.mjs",
+        "sha256": "426174dfe05fb2eb91666a713f7bafee06844c002612e59b086ff5e39577129e"
+      },
+      {
+        "bytes": 33703,
+        "copyMatches": true,
+        "copyPath": "module-effects-coordination/rawlogs/E-ACCEPTAUDIT/restore.py",
+        "path": "/tmp/module-effects-publish/restore.py",
+        "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98"
+      }
+    ],
+    "scope": "Read-only audit of frozen external consumer-preparation; no production, consumer, restore, Git, or source-pin edits."
+  },
+  "schema": "gobi.worker-review-receipt/v1",
+  "status": "amend_required",
+  "summary": "The frozen consumer-preparation has a reproducible execution snapshot counts/commands validation gap and leaves top-level receipt commands unvalidated. No clean E-RUN archive was available, so archive acceptance remains untested.",
+  "verification": {
+    "browserSourceReview": {
+      "chromiumPlaywrightWorkflowInspected": true,
+      "domClickMechanism": "HTMLElement.click()",
+      "executed": false,
+      "removeRemountNewGenerationAsserted": true,
+      "timerAcrossRendererSwapAsserted": true,
+      "unmountCancelTeardownOrderAsserted": true
+    },
+    "cleanBrowserDemoExecuted": false,
+    "cleanEffectsArchiveConsumed": false,
+    "contractProbes": {
+      "failed": 0,
+      "passed": 18,
+      "path": "module-effects-coordination/rawlogs/E-ACCEPTAUDIT/contract-probes.stdout.json",
+      "probeCount": 18
+    },
+    "reproducibleGap": {
+      "probe": "execution-snapshot-poisoned-counts-and-commands-currently-accepted",
+      "snapshotCountsAndCommandsIgnored": true,
+      "topLevelReceiptCommandsUnvalidated": true
+    },
+    "restoreIndexDynamicCountProbes": {
+      "baselineMembers": 600,
+      "baselineSourcePins": 157,
+      "booleanCountRejected": true,
+      "fixtureOnly": true,
+      "mismatchedMemberCountRejected": true,
+      "mismatchedSourcePinCountRejected": true
+    },
+    "syntaxChecks": {
+      "duplicatePlanExpectedExitCode": 2,
+      "node": "v22.23.4",
+      "nodeCheckExitCode": 0,
+      "python": "3.12.14",
+      "pythonCompileExitCode": 0
+    }
+  },
+  "versions": {
+    "node": "v22.23.4",
+    "platform": "Linux x86_64",
+    "python": "3.12.14"
+  },
+  "worker": "N1"
+}

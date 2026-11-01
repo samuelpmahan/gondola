@@ -1,0 +1,97 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-HOST",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Added the compiled module-effects runtime host and deterministic/timer transports. Six real-artifact host unit tests passed, covering commit-before-start, cancellation ordering, correlation fencing, and backend swap/remount behavior through a synthetic renderer.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-module-effects/runtime/**",
+      "module-effects-coordination/reports/E-HOST.md",
+      "module-effects-coordination/receipts/E-HOST.json",
+      "module-effects-coordination/rawlogs/E-HOST/**"
+    ],
+    "productionPathsModified": [
+      "compiled-module-effects/runtime/runtime.mjs",
+      "compiled-module-effects/runtime/runtime.test.mjs"
+    ],
+    "otherLaneFilesModified": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-host-source-hashes/v1",
+    "repositoryBase": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "manifest": "module-effects-coordination/rawlogs/E-HOST/source-hashes.json",
+    "manifestSHA256": "1b9a7504adcf69e8e91d5e0560b35ee1f280c0dbd123b8c1d389d119c26acd4c",
+    "ownedFiles": {
+      "compiled-module-effects/runtime/runtime.mjs": {
+        "bytes": 66332,
+        "sha256": "30991aa19a84d5358485fe2cfa0126927ee464e509625755057f923b736c7238"
+      },
+      "compiled-module-effects/runtime/runtime.test.mjs": {
+        "bytes": 13424,
+        "sha256": "26691886fa78949c2c61f8c3e4b145738ee68475de5278ad25fa0299ef2dfb93"
+      }
+    },
+    "buildIndex": {
+      "path": "compiled-module-effects/build/output/E-BUILD-final/build-index.json",
+      "bytes": 220837,
+      "sha256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444"
+    }
+  },
+  "tests": {
+    "nodeVersion": "v22.23.4",
+    "environment": {
+      "GOBI_MODULE_EFFECTS_BUILD_INDEX": "compiled-module-effects/build/output/E-BUILD-final/build-index.json"
+    },
+    "commands": [
+      {
+        "command": "GOBI_MODULE_EFFECTS_BUILD_INDEX=compiled-module-effects/build/output/E-BUILD-final/build-index.json /tmp/gondola-node22/node_modules/node/bin/node --test compiled-module-effects/runtime/runtime.test.mjs",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "All six host unit tests passed against the final loader index and actual separately compiled parent/child modules.",
+        "testsPassed": 6,
+        "testsFailed": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/E-HOST/runtime-node-test.log",
+        "rawOutputSHA256": "87059c50d6c5dcb66209d336f8c4004dae115bd0068ec8c99baa2acdd1bfc8ea"
+      }
+    ],
+    "syntaxChecks": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-module-effects/runtime/runtime.mjs && /tmp/gondola-node22/node_modules/node/bin/node --check compiled-module-effects/runtime/runtime.test.mjs",
+      "exitCode": 0,
+      "result": "Both runtime files passed Node syntax checks."
+    }
+  },
+  "coverage": {
+    "syntheticRenderer": true,
+    "actualEmittedGoModules": true,
+    "mountedReactOrBrowserDOM": false,
+    "browserEvidenceOwner": "N6",
+    "testCases": [
+      "healthy independently built parent/child mount",
+      "synchronous reply queued until Go pending state and rendered view commit",
+      "reply survives swap; stale UI callback fenced; immediate candidate Add/Save callbacks and active-backend remount",
+      "Go unmount and transport cancel before renderer teardown; old generation callbacks rejected",
+      "closed descriptor and wrong-reply tuple rejection",
+      "changed child ABI admission rejected"
+    ]
+  },
+  "limits": [
+    "Runtime tests use a synthetic memory renderer and FakeElement; they do not claim real React rendering or browser HTMLElement.click() evidence.",
+    "The timer transport was not exercised by this host unit suite; N6 owns demo/browser smoke.",
+    "The full repository test suite and N4/N5 cross-run parity were not run by N3.",
+    "No Git mutation or scheduler action was made by N3."
+  ],
+  "report": {
+    "path": "module-effects-coordination/reports/E-HOST.md",
+    "bytes": 3903,
+    "sha256": "6a7677c4be8437eaae1645a8973341ea1df5ecf295c171486820ae92582aa7d2"
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-HOST/index.json",
+    "indexExcludesItself": true,
+    "bytes": 426,
+    "sha256": "027793ff720a3ef58de37f0d39f9d5db2ef972f7d76b5a73dbbdffc2b7809a5d",
+    "indexedFileCount": 2
+  }
+}

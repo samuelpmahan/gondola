@@ -1,0 +1,295 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-BUILD",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "Produced four independently compiled React/DOM keyed parent and effect child builds, admitted the exact typed-child effect profile, and verified compiled GoScript effect and safe-integer boundary parity against native Go.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-module-effects/build/**",
+      "compiled-frontend/build/pipeline.go (root-approved stage-cause diagnostic fallback)",
+      "compiled-frontend/build/module_effects_stage_test.go",
+      "moduleabi/descriptor.go (root-approved typed-child effect capability eligibility)",
+      "moduleabi/module_effects_test.go",
+      "module-effects-coordination/reports/E-BUILD.md",
+      "module-effects-coordination/receipts/E-BUILD.json",
+      "module-effects-coordination/rawlogs/E-BUILD/**"
+    ],
+    "productionPathsModified": [
+      "compiled-module-effects/build/build.mjs",
+      "compiled-module-effects/build/module-loader.mjs",
+      "compiled-module-effects/build/abi-admission.mjs",
+      "compiled-frontend/build/pipeline.go",
+      "moduleabi/descriptor.go"
+    ],
+    "testPathsAdded": [
+      "compiled-frontend/build/module_effects_stage_test.go",
+      "moduleabi/module_effects_test.go"
+    ],
+    "otherLaneFilesModified": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourcePins": {
+    "schema": "gobi.e-build-source-hashes/v1",
+    "repositoryBase": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "manifest": "module-effects-coordination/rawlogs/E-BUILD/source-pins.json",
+    "manifestSHA256": "0217c1d2e85e7cb0f1f8c6918a92168c15ce9aed693b544c043f8798aa8f6436",
+    "ownedFiles": {
+      "compiled-module-effects/build/build.mjs": {
+        "path": "compiled-module-effects/build/build.mjs",
+        "bytes": 60279,
+        "sha256": "805fd12e9263cf85dd22e862b2f2f23ad8117772c79d2623d0d2631f09b11303"
+      },
+      "compiled-module-effects/build/module-loader.mjs": {
+        "path": "compiled-module-effects/build/module-loader.mjs",
+        "bytes": 48386,
+        "sha256": "dc53c58dbf6be5e8bf1ed75ba206ce41ea3e8f571d637d0de783d6a1c2e1d915"
+      },
+      "compiled-module-effects/build/abi-admission.mjs": {
+        "path": "compiled-module-effects/build/abi-admission.mjs",
+        "bytes": 45069,
+        "sha256": "60370a5ca223d0ae799a4d488baced6dba0543c3900517b9481ae8d0fa429a80"
+      },
+      "compiled-frontend/build/pipeline.go": {
+        "path": "compiled-frontend/build/pipeline.go",
+        "bytes": 41170,
+        "sha256": "c189165c1a3a5a9c11c59317e2b06b1a21aa645e8d0d0b0fc87c9020e7d43d37"
+      },
+      "compiled-frontend/build/module_effects_stage_test.go": {
+        "path": "compiled-frontend/build/module_effects_stage_test.go",
+        "bytes": 929,
+        "sha256": "207433d27d49d1d9758b887951eaa4899385375df1cc6038ec4b4e24eb03a8ad"
+      },
+      "moduleabi/descriptor.go": {
+        "path": "moduleabi/descriptor.go",
+        "bytes": 38494,
+        "sha256": "600c81ebf2de87d024493ddb0ac9f1668aa1f5bd1037461a3d9aadb824dd8dbb"
+      },
+      "moduleabi/module_effects_test.go": {
+        "path": "moduleabi/module_effects_test.go",
+        "bytes": 2743,
+        "sha256": "60a6772d0468dbc667f06553a9c493b1a54958040c785190b71c75324bb3dfb2"
+      }
+    },
+    "buildIndex": {
+      "path": "compiled-module-effects/build/output/E-BUILD-final/build-index.json",
+      "bytes": 220837,
+      "sha256": "70046a0e7f1070c3ec2ad2186e060137a77f2d8df02b5c23bb1760baf156c444"
+    }
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "rootGo": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go1.27.3 linux/amd64",
+    "goscript": "v0.6.2",
+    "esbuild": "0.28.2"
+  },
+  "builds": {
+    "cli": "node compiled-module-effects/build/build.mjs --output <empty-output-directory>",
+    "finalOutput": "compiled-module-effects/build/output/E-BUILD-final",
+    "actualBuildCount": 4,
+    "inventory": [
+      {
+        "backend": "react",
+        "role": "parent",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+        "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+        "outputDir": "react-parent",
+        "outputCount": 71,
+        "moduleABI": "7dea72d5b46c78bc274b02cb4a98b411d6663b7ac160236b2184d974ab61bad2",
+        "moduleABIArtifact": "a55b4acd8d5f17a02bac3d9884168e0827d07972c56e97470601d9bde634bf21",
+        "module": "a219bd5f7b4a96ed31a1086788d434bae30908aa6e8477369e2fc4b87e0537e3"
+      },
+      {
+        "backend": "react",
+        "role": "child",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effectmodulechild",
+        "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/effectmodulechild",
+        "outputDir": "react-child",
+        "outputCount": 73,
+        "moduleABI": "2a9c9e13873a1ba3eef2964f2cddcb4948e40a64dc0506921366aa8d412c3b09",
+        "moduleABIArtifact": "67d0fc5e39ecc1a9816e9d8ca06dcea06c32397b7ef9768ca2f8efeaf757620c",
+        "module": "5e6b38e3986020d321a8e51cba5517d53ddc07d9976120c71ac3e00c8c5d9ca4"
+      },
+      {
+        "backend": "dom",
+        "role": "parent",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+        "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+        "outputDir": "dom-parent",
+        "outputCount": 71,
+        "moduleABI": "def5f48128cdaeadf7616a4974ee93067a05533da0f55bb76d75f9b9e031834a",
+        "moduleABIArtifact": "48860ea0a47ad618b4bc119340e4548f2445284a7f949e11da9b3773c1b62ca8",
+        "module": "6d860c9f4a7a7d96af567fac66ebb4df4be749c03c475f45102ac6f109e36aed"
+      },
+      {
+        "backend": "dom",
+        "role": "child",
+        "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/effectmodulechild",
+        "componentId": "github.com/samuelpmahan/gondola/fixtures/compiled/effectmodulechild",
+        "outputDir": "dom-child",
+        "outputCount": 73,
+        "moduleABI": "fb21ee2718302df9dec70168f3b5a30a25836d0eee51f3e6d8260bb83d8dd3bf",
+        "moduleABIArtifact": "7450f1fd6d280b009df701048b68f1d5da32e06f358086bc4535625f88b80947",
+        "module": "27bdeda816af6435f263615c79cd53e587ca061a32af2bc335ce90fd9491984b"
+      }
+    ],
+    "admission": {
+      "react": {
+        "admitted": true,
+        "parentABIUnchanged": true,
+        "parentABISHA256": "7dea72d5b46c78bc274b02cb4a98b411d6663b7ac160236b2184d974ab61bad2",
+        "childABISHA256": "2a9c9e13873a1ba3eef2964f2cddcb4948e40a64dc0506921366aa8d412c3b09",
+        "effectCount": 4,
+        "uniqueDescriptorCount": 2,
+        "stateSnapshots": [
+          "initial",
+          "mount",
+          "input",
+          "request",
+          "cancel",
+          "retry",
+          "unmount",
+          "stale-complete"
+        ],
+        "boundaryCases": 10,
+        "boundarySteps": 16,
+        "boundaryEffects": 4,
+        "nativeParity": true
+      },
+      "dom": {
+        "admitted": true,
+        "parentABIUnchanged": true,
+        "parentABISHA256": "def5f48128cdaeadf7616a4974ee93067a05533da0f55bb76d75f9b9e031834a",
+        "childABISHA256": "fb21ee2718302df9dec70168f3b5a30a25836d0eee51f3e6d8260bb83d8dd3bf",
+        "effectCount": 4,
+        "uniqueDescriptorCount": 2,
+        "stateSnapshots": [
+          "initial",
+          "mount",
+          "input",
+          "request",
+          "cancel",
+          "retry",
+          "unmount",
+          "stale-complete"
+        ],
+        "boundaryCases": 10,
+        "boundarySteps": 16,
+        "boundaryEffects": 4,
+        "nativeParity": true
+      }
+    },
+    "closedEffectDescriptors": [
+      {
+        "kind": "fixture.request",
+        "name": "save",
+        "argument": "opaque active token: key:g<generation>:r<requestID>",
+        "reply": "complete"
+      },
+      {
+        "kind": "lifecycle.cancel",
+        "name": "cancel",
+        "argument": "opaque active token: key:g<generation>:r<requestID>",
+        "reply": ""
+      }
+    ],
+    "parentComparison": true
+  },
+  "tests": {
+    "commands": [
+      {
+        "command": "GOTOOLCHAIN=local GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./moduleabi -run '^(TestDescribeAcceptsDeclaredChildEffectsAndPreservesCanonicalChecks|TestDescriptorRejectsUnsupportedCapabilitiesAndStaleDigest)$'",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "Both focused module ABI tests passed.",
+        "testsPassed": 2,
+        "testsFailed": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/E-BUILD/go-moduleabi-tests.log"
+      },
+      {
+        "command": "GOTOOLCHAIN=go1.27.3 GOFLAGS=-buildvcs=false /tmp/gondola-go/go/bin/go test -count=1 ./build -run '^TestStageFailureDiagnosticsPreserveCauseOnlyWhenNoStageDiagnosticExists$'",
+        "cwd": "/workspace/scratch/39a56936f173/gondola/compiled-frontend",
+        "exitCode": 0,
+        "result": "Focused empty-stage-error diagnostic regression passed.",
+        "testsPassed": 1,
+        "testsFailed": 0,
+        "rawOutput": "module-effects-coordination/rawlogs/E-BUILD/go-build-stage-test.log"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --input-type=module -e 'import { loadModuleEffectsBuilds } from ./compiled-module-effects/build/module-loader.mjs; await loadModuleEffectsBuilds(compiled-module-effects/build/output/E-BUILD-final/build-index.json)'",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "Final artifact loader passed source pins, the actual four-build inventory, ABI/helper admission, effect probes, and all mount-boundary native parity checks.",
+        "rawOutput": "module-effects-coordination/rawlogs/E-BUILD/loader-validation.log"
+      },
+      {
+        "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-module-effects/build/build.mjs; node --check compiled-module-effects/build/module-loader.mjs; node --check compiled-module-effects/build/abi-admission.mjs",
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "exitCode": 0,
+        "result": "All three JavaScript adapter files passed syntax checks."
+      }
+    ],
+    "countSummary": {
+      "buildRequests": 4,
+      "sourcePins": 59,
+      "backendsAdmitted": 2,
+      "effectObservations": 8,
+      "boundaryCases": 20,
+      "boundarySteps": 32,
+      "boundaryEffects": 8,
+      "nativeParity": true
+    }
+  },
+  "preservedAttempts": [
+    {
+      "attempt": "E-BUILD-probe-01",
+      "result": "One React parent build succeeded; helper raw hash differed only due generated source-path comment lines. Later strict anchored comment-only normalization and mutation checks were added."
+    },
+    {
+      "attempt": "E-BUILD-probe-02",
+      "result": "Parent/helper check passed; child bridge imports and transitive counter dependency projection were not yet admitted by analyzer loader."
+    },
+    {
+      "attempt": "E-BUILD-probe-03",
+      "result": "After dependency traversal repair, child still rejected parser calls; raw commands and source pins preserved."
+    },
+    {
+      "attempt": "E-BUILD-probe-04",
+      "result": "Eleven diagnostics mapped to bounded generation/token parser numeric operations; full child result and source snapshot preserved."
+    },
+    {
+      "attempt": "E-BUILD-probe-05",
+      "result": "React child stage returned failed BuildResult with empty diagnostics. Direct produce reproduction isolated unsupported effect.request-reply in module ABI stage."
+    },
+    {
+      "attempt": "E-BUILD-probe-06",
+      "result": "Four actual builds completed; local ABI admission then rejected the child uint64 BigInt state type before the scoped type exception and encoder bounds proof."
+    },
+    {
+      "attempt": "E-BUILD-probe-07",
+      "result": "Four builds, exact effect admission, and all boundary comparisons passed."
+    },
+    {
+      "attempt": "loader-summary-shape-probe-failed.json",
+      "result": "A local summary selector looked for probe fields on profiles instead of builds; the corrected loader inspection passed. No build or admission failure."
+    }
+  ],
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-BUILD/index.json",
+    "indexExcludesItself": true,
+    "bytes": 48213,
+    "sha256": "981d3602a9340db97a1b11fbacfe8ff6586c066c1ee042b87ab052a8fc5b1069",
+    "indexedFileCount": 255
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/E-BUILD.md",
+    "bytes": 6524,
+    "sha256": "a624e4ed0f04f7477770d2cfed5e3fa3980d5169dc84df9e886a513a2bee3334"
+  },
+  "limits": [
+    "The profile admits only the exact two closed child descriptors and narrowly typed child ABI; no generic effect or BigInt capability is asserted.",
+    "This build packet does not prove mounted React/browser DOM, host transport lifecycle, or native/direct/browser conformance; those are other lane deliverables.",
+    "No Git or scheduler mutation was made by N2."
+  ]
+}

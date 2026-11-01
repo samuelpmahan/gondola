@@ -1,0 +1,462 @@
+{
+  "schema": "gobi.module-effects-delivery-contract-rawlogs/v1",
+  "job_id": "E-DELIVERYCONTRACT",
+  "worker": "N6",
+  "status": "author_diagnostic_passed_clean_qualification_pending",
+  "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+  "verifier": {
+    "gitHead": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+    "dirty": true,
+    "sourcePinsMatch": false,
+    "sourcePinMismatches": [
+      "compiled-module-effects/delivery-contract.mjs",
+      "compiled-module-effects/delivery-contract.test.mjs",
+      "compiled-module-effects/run.mjs"
+    ]
+  },
+  "authorCommand": {
+    "argv": [
+      "/tmp/gondola-node22/node_modules/node/bin/node",
+      "compiled-module-effects/run.mjs",
+      "--source-commit",
+      "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "--chromium",
+      "/tmp/chromium-portable",
+      "--allow-dirty"
+    ],
+    "cwd": "/workspace/scratch/39a56936f173/gondola",
+    "environmentOverrides": {
+      "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+      "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python"
+    },
+    "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts"
+  },
+  "attemptInventories": [
+    {
+      "id": "attempt-20261101T035129308Z-2-78bd7201",
+      "status": "failed_demo_assertion",
+      "stage": "mounted-timer-demo-smoke",
+      "summary": "Real browser timer actions progressed through swap and remove/remount, but the order check selected an unrelated earlier state commit. Corrected to the same child generation and stateEventIndex.",
+      "exactRunnerSourceSnapshot": false,
+      "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "verifierHead": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "dirty": true,
+      "command": {
+        "argv": [
+          "/tmp/gondola-node22/node_modules/node/bin/node",
+          "compiled-module-effects/run.mjs",
+          "--source-commit",
+          "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+          "--chromium",
+          "/tmp/chromium-portable",
+          "--allow-dirty"
+        ],
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "environmentOverrides": {
+          "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+          "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+          "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python"
+        },
+        "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts"
+      },
+      "failure": {
+        "name": "Error",
+        "stage": "mounted-timer-demo-smoke",
+        "message": "Go unmount/cancel/transport/renderer ordering changed: [{\"sequence\":26,\"kind\":\"go-state-commit\",\"rendererEpoch\":4,\"stateEventIndex\":9,\"eventKind\":\"renderer-action\",\"target\":\"child\",\"key\":\"b\",\"generation\":1,\"mounted\":true,\"pending\":true,\"token\":\"b:g1:r1\"},{\"sequence\":30,\"kind\":\"transport-start\",\"rendererEpoch\":4,\"stateEventIndex\":9,\"token\":\"b:g1:r1\",\"key\":\"b\",\"generation\":1,\"correlation\":{\"dispatchId\":\"dispatch-000004\",\"effectIndex\":0},\"descriptor\":{\"kind\":\"fixture.request\",\"name\":\"save\",\"arg\":\"b:g1:r1\",\"reply\":\"complete\"},\"goCalls\":0,\"outcome\":\"started\"},{\"sequence\":33,\"kind\":\"go-update-unmount\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"key\":\"b\",\"generation\":1,\"before\":{\"Core\":{\"Counter\":{\"Count\":0},\"Step\":1,\"Locked\":false,\"InputRevision\":1},\"Key\":\"b\",\"Generation\":1,\"Mounted\":true,\"RequestID\":1,\"Pending\":true,\"Token\":\"b:g1:r1\",\"Reply\":\"\"},\"after\":{\"Core\":{\"Counter\":{\"Count\":0},\"Step\":1,\"Locked\":false,\"InputRevision\":1},\"Key\":\"b\",\"Generation\":1,\"Mounted\":false,\"RequestID\":1,\"Pending\":false,\"Token\":\"b:g1:r1\",\"Reply\":\"\"},\"emittedEffects\":[{\"kind\":\"lifecycle.cancel\",\"name\":\"cancel\",\"arg\":\"b:g1:r1\",\"reply\":\"\"}],\"pendingBefore\":[\"b:g1:r1\"],\"pendingAfter\":[\"b:g1:r1\"]},{\"sequence\":34,\"kind\":\"go-unmounted-commit\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"key\":\"b\",\"generation\":1,\"mounted\":false,\"pending\":false,\"token\":\"b:g1:r1\"},{\"sequence\":35,\"kind\":\"go-state-commit\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"eventKind\":\"child-unmount\",\"target\":\"child\",\"key\":\"b\",\"generation\":1,\"mounted\":false,\"pending\":false,\"token\":\"b:g1:r1\"},{\"sequence\":36,\"kind\":\"go-cancel-effect\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"token\":\"b:g1:r1\",\"key\":\"b\",\"generation\":1,\"correlation\":{\"dispatchId\":\"dispatch-000005\",\"effectIndex\":0},\"targetCorrelation\":{\"dispatchId\":\"dispatch-000004\",\"effectIndex\":0},\"descriptor\":{\"kind\":\"lifecycle.cancel\",\"name\":\"cancel\",\"arg\":\"b:g1:r1\",\"reply\":\"\"},\"pendingAfter\":false},{\"sequence\":37,\"kind\":\"transport-cancel-call\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"token\":\"b:g1:r1\",\"key\":\"b\",\"generation\":1,\"correlation\":{\"dispatchId\":\"dispatch-000004\",\"effectIndex\":0},\"cancelCorrelation\":{\"dispatchId\":\"dispatch-000005\",\"effectIndex\":0},\"retiredBeforeCall\":true},{\"sequence\":38,\"kind\":\"transport-cancel\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"token\":\"b:g1:r1\",\"key\":\"b\",\"generation\":1,\"correlation\":{\"dispatchId\":\"dispatch-000004\",\"effectIndex\":0},\"cancelCorrelation\":{\"dispatchId\":\"dispatch-000005\",\"effectIndex\":0},\"outcome\":\"cancelled\"},{\"sequence\":40,\"kind\":\"renderer-unmount\",\"rendererEpoch\":4,\"stateEventIndex\":10,\"key\":\"b\",\"generation\":1}]"
+      },
+      "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035129308Z-2-78bd7201",
+      "outputBytes": 133457259,
+      "evidenceRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T035129308Z-2-78bd7201",
+      "evidenceBytes": 60144,
+      "localInventory": {
+        "path": "attempt-01-ordering-failure/local-inventory.json",
+        "bytes": 137551,
+        "sha256": "bd0548494bc8610bb5d2869a2d5feefec3dab07a138f8e46eb55ea18fce65a92",
+        "outputFiles": 432,
+        "evidenceFiles": 4
+      },
+      "sourcePinsBefore": {
+        "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035129308Z-2-78bd7201/metadata/source-pins-before.json",
+        "bytes": 30467,
+        "sha256": "afb45e75859057aaa25295e3ee277697c4efe3c805f210cefed388b376b9e693"
+      }
+    },
+    {
+      "id": "attempt-20261101T035317671Z-2-6e206183",
+      "status": "failed_archive_inventory",
+      "stage": "archive-source-snapshot-and-round-trip",
+      "summary": "Real timer browser smoke passed; archive inventory then failed because MODULE_EFFECTS_SCENARIOS was not imported. The source snapshot had been copied before failure.",
+      "exactRunnerSourceSnapshot": true,
+      "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "verifierHead": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "dirty": true,
+      "command": {
+        "argv": [
+          "/tmp/gondola-node22/node_modules/node/bin/node",
+          "compiled-module-effects/run.mjs",
+          "--source-commit",
+          "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+          "--chromium",
+          "/tmp/chromium-portable",
+          "--allow-dirty"
+        ],
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "environmentOverrides": {
+          "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+          "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+          "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python"
+        },
+        "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts"
+      },
+      "failure": {
+        "name": "ReferenceError",
+        "stage": "archive-source-snapshot-and-round-trip",
+        "message": "MODULE_EFFECTS_SCENARIOS is not defined"
+      },
+      "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183",
+      "outputBytes": 135938988,
+      "evidenceRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T035317671Z-2-6e206183",
+      "evidenceBytes": 56450,
+      "localInventory": {
+        "path": "attempt-02-inventory-failure/local-inventory.json",
+        "bytes": 200322,
+        "sha256": "29eccfe481632ad614a7bce6968f37aef21531e8a027936754b54422b561abc3",
+        "outputFiles": 642,
+        "evidenceFiles": 4
+      },
+      "sourcePinsBefore": {
+        "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/metadata/source-pins-before.json",
+        "bytes": 30467,
+        "sha256": "8d2af0eaf2f762b4211eaf5068038838ef387d1a7fd78428a3851104cc20da4c"
+      }
+    },
+    {
+      "id": "attempt-20261101T035413961Z-2-55fe7cd9",
+      "status": "author_diagnostic_passed",
+      "stage": "complete",
+      "summary": "Four builds, Go/Node/compiler regressions, native/direct/browser conformance and controls, real timer demo, archive round-trip, and independent Python consumer passed.",
+      "exactRunnerSourceSnapshot": true,
+      "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "verifierHead": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "dirty": true,
+      "command": {
+        "argv": [
+          "/tmp/gondola-node22/node_modules/node/bin/node",
+          "compiled-module-effects/run.mjs",
+          "--source-commit",
+          "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+          "--chromium",
+          "/tmp/chromium-portable",
+          "--allow-dirty"
+        ],
+        "cwd": "/workspace/scratch/39a56936f173/gondola",
+        "environmentOverrides": {
+          "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+          "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+          "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python"
+        },
+        "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts"
+      },
+      "failure": null,
+      "outputRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9",
+      "outputBytes": 135939060,
+      "evidenceRoot": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T035413961Z-2-55fe7cd9",
+      "evidenceBytes": 759559,
+      "localInventory": {
+        "path": "attempt-03-author-pass/local-inventory.json",
+        "bytes": 204086,
+        "sha256": "20bc988ab29ef4beef35c6d03d44b3dac4528ac594b05130e4fa778c71de3420",
+        "outputFiles": 642,
+        "evidenceFiles": 16
+      },
+      "sourcePinsBefore": {
+        "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/source-pins-before.json",
+        "bytes": 30467,
+        "sha256": "ad9a08f662dba258b953f135a578dd6abc0922d1f0d45f524dc06f4f0a8e9757"
+      }
+    }
+  ],
+  "copiedArtifacts": [
+    {
+      "path": "attempt-01-ordering-failure/failure.json",
+      "bytes": 59209,
+      "sha256": "3f33f920f98a6ce262608c6d1ca6c396418573a3f24eb321909c56303b78ad47",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T035129308Z-2-78bd7201/failure.json"
+    },
+    {
+      "path": "attempt-01-ordering-failure/http-smoke.failed.json",
+      "bytes": 6607,
+      "sha256": "64b95f066c0365388448c6b966539db337d3c53674e871a90e05a5b328fe5ce0",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035129308Z-2-78bd7201/demo/http-smoke.failed.json"
+    },
+    {
+      "path": "attempt-01-ordering-failure/conformance-summary.json",
+      "bytes": 111137,
+      "sha256": "d4903ea37136a331c6504b6c0a8ed77b078f18e88d22e69b69c581e591483cd1",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035129308Z-2-78bd7201/conformance/summary.json"
+    },
+    {
+      "path": "attempt-01-ordering-failure/oracle-summary.json",
+      "bytes": 112233,
+      "sha256": "4e7ae6247564ade1314b61c41a63ec45be3c8c8511f0973ff86660b703c8beb9",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035129308Z-2-78bd7201/oracle/summary.json"
+    },
+    {
+      "path": "attempt-01-ordering-failure/source-pins-before.json",
+      "bytes": 30467,
+      "sha256": "afb45e75859057aaa25295e3ee277697c4efe3c805f210cefed388b376b9e693",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035129308Z-2-78bd7201/metadata/source-pins-before.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/failure.json",
+      "bytes": 55515,
+      "sha256": "94165184aacc70e46edc7368fb87fa17d32f57e59d90a4182d1ae5e4fb8bc3f9",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T035317671Z-2-6e206183/failure.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/http-smoke.passed.json",
+      "bytes": 187738,
+      "sha256": "a5cf107ec2424de0c585eab321286b4a695514a9c550106c3eac6244d30961a4",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/demo/http-smoke.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/conformance-summary.json",
+      "bytes": 111134,
+      "sha256": "b777816c49cffd596a008cf566e4eccc73f15f3f769727ca620619a9ed70fc82",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/conformance/summary.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/oracle-summary.json",
+      "bytes": 112230,
+      "sha256": "0befd0cf2f9490f9a782e67d806caa60483a2fa3ea3cefeda0a1f02192b4d36d",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/oracle/summary.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/source-pins-before.json",
+      "bytes": 30467,
+      "sha256": "8d2af0eaf2f762b4211eaf5068038838ef387d1a7fd78428a3851104cc20da4c",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/metadata/source-pins-before.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/source-pins-after.json",
+      "bytes": 30467,
+      "sha256": "8d2af0eaf2f762b4211eaf5068038838ef387d1a7fd78428a3851104cc20da4c",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/metadata/source-pins-after.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/execution-before-archive.json",
+      "bytes": 60722,
+      "sha256": "e763a2171fe8598410e2bbfcd7864a315141c11e8b9abea25d1a1605fdeb0b8f",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/execution-before-archive.json"
+    },
+    {
+      "path": "attempt-02-inventory-failure/source/run.mjs",
+      "bytes": 61813,
+      "sha256": "e9ea0d4d0246b18f04497f436b64eaedcd9b51a2a0d7bda800873f0b333eabf6",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/source/compiled-module-effects/run.mjs"
+    },
+    {
+      "path": "attempt-02-inventory-failure/source/delivery-contract.mjs",
+      "bytes": 35304,
+      "sha256": "2d216f497d95f54e9eb62939136c8a20dbbfae869fbeb2509f0f35699b2b3b1e",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/source/compiled-module-effects/delivery-contract.mjs"
+    },
+    {
+      "path": "attempt-02-inventory-failure/source/delivery-contract.test.mjs",
+      "bytes": 18928,
+      "sha256": "8a9fb62e1fd8333cc711b8f6e125d91e70cbfe50b10b9967ae3d7e90ca83cc08",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035317671Z-2-6e206183/source/compiled-module-effects/delivery-contract.test.mjs"
+    },
+    {
+      "path": "attempt-03-author-pass/test-summary.json",
+      "bytes": 2787,
+      "sha256": "b186b7aac7cc1a233830f516ada1caea30d6bb1be316b30248f16ef156d49f4f",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/test-summary.json"
+    },
+    {
+      "path": "attempt-03-author-pass/build-integrity.json",
+      "bytes": 68193,
+      "sha256": "fe80f0a5d2af282607192e9a0ba659ee9131a373899a028adb8734747b17de11",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/build-integrity.json"
+    },
+    {
+      "path": "attempt-03-author-pass/build-summary.json",
+      "bytes": 179841,
+      "sha256": "7dbaf8bb3cc7d1a4619a6abecc43dd37ba7b9c24ce540321b2c1c61c723ed97f",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/build-summary.json"
+    },
+    {
+      "path": "attempt-03-author-pass/git-source-closure-before.json",
+      "bytes": 437,
+      "sha256": "393caba8bc55ee21f37df17937c563acc544a7db2e4b4b3338f83ce5b010d158",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/git-source-closure.json"
+    },
+    {
+      "path": "attempt-03-author-pass/git-source-closure-after.json",
+      "bytes": 228,
+      "sha256": "2f2b0fef72a1dfe43c3a6771e6e8f310d7361658a86fbf4cb633a149f2eb2ba6",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/git-source-closure-after.json"
+    },
+    {
+      "path": "attempt-03-author-pass/runner-context.json",
+      "bytes": 3471,
+      "sha256": "75885666d396d28e24048f68dad477997f958e0b90ac1698265243489786c259",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/runner-context.json"
+    },
+    {
+      "path": "attempt-03-author-pass/source-pins-before.json",
+      "bytes": 30467,
+      "sha256": "ad9a08f662dba258b953f135a578dd6abc0922d1f0d45f524dc06f4f0a8e9757",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/source-pins-before.json"
+    },
+    {
+      "path": "attempt-03-author-pass/source-pins-after.json",
+      "bytes": 30467,
+      "sha256": "ad9a08f662dba258b953f135a578dd6abc0922d1f0d45f524dc06f4f0a8e9757",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/metadata/source-pins-after.json"
+    },
+    {
+      "path": "attempt-03-author-pass/execution-before-archive.json",
+      "bytes": 60722,
+      "sha256": "db5afeddf561006b48968e6d81748c32f1cb532bfbecf5059f04665cf27d9b10",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/execution-before-archive.json"
+    },
+    {
+      "path": "attempt-03-author-pass/conformance-summary.json",
+      "bytes": 111137,
+      "sha256": "9437da627d3a2c02a4280a416136a58759c214a25ac8ee30f987669246f04b89",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/conformance/summary.json"
+    },
+    {
+      "path": "attempt-03-author-pass/oracle-summary.json",
+      "bytes": 112233,
+      "sha256": "5ce5d8c60129bac304199ac6d85fe13e19424dfcd8d55ca0ac300343c45db5c5",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/oracle/summary.json"
+    },
+    {
+      "path": "attempt-03-author-pass/http-smoke.json",
+      "bytes": 187738,
+      "sha256": "a5cf107ec2424de0c585eab321286b4a695514a9c550106c3eac6244d30961a4",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9/demo/http-smoke.json"
+    },
+    {
+      "path": "attempt-03-author-pass/author-run-receipt.json",
+      "bytes": 716075,
+      "sha256": "9ddbc56ca09b4c921538094a264fc2fedc89536e124cc6a5f47c885000589bf5",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/evidence/attempts/attempt-20261101T035413961Z-2-55fe7cd9/receipt.json"
+    },
+    {
+      "path": "attempt-03-author-pass/archive.manifest.json",
+      "bytes": 160662,
+      "sha256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9.manifest.json"
+    },
+    {
+      "path": "attempt-03-author-pass/source-closure-pins.json",
+      "bytes": 38079,
+      "sha256": "0a553227e8da45d00b066b16c54e0a4382238f806f040fb2fff242662946ab7c"
+    },
+    {
+      "path": "attempt-01-ordering-failure/local-inventory.json",
+      "bytes": 137551,
+      "sha256": "bd0548494bc8610bb5d2869a2d5feefec3dab07a138f8e46eb55ea18fce65a92"
+    },
+    {
+      "path": "attempt-02-inventory-failure/local-inventory.json",
+      "bytes": 200322,
+      "sha256": "29eccfe481632ad614a7bce6968f37aef21531e8a027936754b54422b561abc3"
+    },
+    {
+      "path": "attempt-03-author-pass/local-inventory.json",
+      "bytes": 204086,
+      "sha256": "20bc988ab29ef4beef35c6d03d44b3dac4528ac594b05130e4fa778c71de3420"
+    }
+  ],
+  "sourceClosurePins": {
+    "path": "attempt-03-author-pass/source-closure-pins.json",
+    "bytes": 38079,
+    "sha256": "0a553227e8da45d00b066b16c54e0a4382238f806f040fb2fff242662946ab7c",
+    "sourcePins": 201,
+    "testSourceFilesPinned": 57,
+    "sourceDirectories": 18,
+    "explicitFiles": 23,
+    "currentN6Files": {
+      "compiled-module-effects/run.mjs": {
+        "bytes": 61841,
+        "sha256": "70c42e7f5331b2d6b40f4095f71e1a6b42b81e0708f6db1c44dae2e624fd6687"
+      },
+      "compiled-module-effects/delivery-contract.mjs": {
+        "bytes": 35304,
+        "sha256": "2d216f497d95f54e9eb62939136c8a20dbbfae869fbeb2509f0f35699b2b3b1e"
+      },
+      "compiled-module-effects/delivery-contract.test.mjs": {
+        "bytes": 18928,
+        "sha256": "8a9fb62e1fd8333cc711b8f6e125d91e70cbfe50b10b9967ae3d7e90ca83cc08"
+      }
+    }
+  },
+  "canonicalArchive": {
+    "path": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9.tar.gz",
+    "bytes": 8666075,
+    "sha256": "eaedcc97d2bef10b16755400c9088a5cea7dd4f320d48b19356c3252b2bbce0d",
+    "manifestOriginalPath": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9.manifest.json",
+    "manifestBytes": 160662,
+    "manifestSHA256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33",
+    "copiedManifest": {
+      "path": "attempt-03-author-pass/archive.manifest.json",
+      "source": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T035413961Z-2-55fe7cd9.manifest.json",
+      "bytes": 160662,
+      "sha256": "364a9d86bf8d5e41fe4ea91581e27d077ac8c14090faf753ffad75fb7fef3f33"
+    },
+    "members": 638,
+    "independentConsumer": {
+      "archiveBytes": 8666075,
+      "archiveSHA256": "eaedcc97d2bef10b16755400c9088a5cea7dd4f320d48b19356c3252b2bbce0d",
+      "members": 638,
+      "status": "passed"
+    },
+    "duplicateLogExclusions": [],
+    "regenerableBundleExclusions": [
+      {
+        "path": "conformance/effects.literal.browser.bundle.mjs",
+        "bytes": 9054837,
+        "sha256": "79e728fcef23e464bfecc5d7d78ae07237ab9e40c48e9384c18199af82b12d47"
+      },
+      {
+        "path": "conformance/effects.seed-20261104.browser.bundle.mjs",
+        "bytes": 9054837,
+        "sha256": "16e7a38ef9ea727ac17d1b20e8d1ad2333086ba3c3cf8b3c903eb40fe08f4a96"
+      },
+      {
+        "path": "conformance/effects.seed-20261105.browser.bundle.mjs",
+        "bytes": 9054837,
+        "sha256": "4f89a0bffab0f2369867eddf1557403a9ff2fdfac7b215fcacedf9fbb780e1cc"
+      },
+      {
+        "path": "conformance/effects.seed-20261106.browser.bundle.mjs",
+        "bytes": 9054837,
+        "sha256": "1082545ed6c8beab9f8a03719e5c68629a3db66603d51dd7859810fa4b982576"
+      }
+    ]
+  },
+  "priorPacketsUnmodified": [
+    "E-DELIVERY"
+  ],
+  "sourceSnapshotLimit": "Attempt 1 failed before source snapshot copy; its exact failure and source pin map are preserved, but not its exact runner body. Attempt 2 copied the exact N6 source files before archive inventory failed. The successful attempt archive and receipt preserve the final N6 source snapshot and pins.",
+  "authorPacket": {
+    "report": {
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/E-DELIVERYCONTRACT.md",
+      "bytes": 5806,
+      "sha256": "1db144d4c8d07dd47e8e2770cd1ab0b35df5fecc624e89d8a68c1f776f2c9ac1"
+    },
+    "receipt": {
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-DELIVERYCONTRACT.json",
+      "bytes": 21994,
+      "sha256": "443781e466fdedb93d8dfdd6529153094d075d13111615e16b03cd8964fa71ec"
+    },
+    "outcome": "mixed_change",
+    "status": "author_diagnostic_passed",
+    "phase": "author_only_full_pipeline_complete_clean_E_RUN_pending"
+  }
+}

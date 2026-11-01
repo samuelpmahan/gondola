@@ -1,0 +1,115 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-ACCEPTAUDIT",
+  "worker": "N2",
+  "decision": "accepted",
+  "status": "accepted_amend_report_only",
+  "summary": "Accepted the frozen E-ACCEPTAUDIT report as an accurate AMEND finding. The poisoned execution snapshot's malformed counts and commands reproduce as accepted, and the top-level receipt commands field is not validated. No clean effects archive or browser demo was executed or accepted.",
+  "reviewedPacket": {
+    "job_id": "E-ACCEPTAUDIT",
+    "worker": "N1",
+    "decision": "amend",
+    "outcome": "insufficient_evidence",
+    "seal": {
+      "reportSHA256": "802024b020ebf0fa0951cbacfbea687ee7a725d45799c6896f435244b4e5f95b",
+      "receiptSHA256": "de7d53eaa6cd3f393d8cc7fedbcc9e909ae3baf7d866f5bbc18c5134e44bac7a",
+      "rawlogsIndexSHA256": "7e5994e61cbbce4b137b96582027bd169ba788e0c60ff9a8c9fcf6a7da489041"
+    },
+    "rawlogs": {
+      "files": 13,
+      "allIndexedHashesMatch": true
+    },
+    "copiedPreparationFiles": [
+      {
+        "name": "consume.py",
+        "bytes": 85643,
+        "sha256": "c1d7fed5afb75ca2cecbed4df8ddca50890d3cafd60dd5b0bfbc032e2a1e8a82",
+        "copyMatchesPinnedOriginal": true
+      },
+      {
+        "name": "consume-browser.mjs",
+        "bytes": 24902,
+        "sha256": "426174dfe05fb2eb91666a713f7bafee06844c002612e59b086ff5e39577129e",
+        "copyMatchesPinnedOriginal": true
+      },
+      {
+        "name": "restore.py",
+        "bytes": 33703,
+        "sha256": "9340386d0726e957fc87153c372c67c9331d3e52ef863fdf07ace65c17ba7e98",
+        "copyMatchesPinnedOriginal": true
+      }
+    ]
+  },
+  "verification": {
+    "sealAndIndex": {
+      "sealedReportReceiptAndIndexMatch": true,
+      "indexedRawFiles": 13,
+      "rawFileHashMismatches": 0
+    },
+    "contractProbes": {
+      "reproduced": 18,
+      "expectedOutcomes": 18,
+      "failed": 0,
+      "poisonedCountsAndCommandsAccepted": true,
+      "oldKeyedFixtureRejected": true,
+      "cleanEffectsArchiveAccepted": false
+    },
+    "consumerGaps": {
+      "snapshotRequiresButDoesNotReadCountsAndCommands": true,
+      "topLevelReceiptCommandsRequiredButNotRead": true,
+      "archiveCommandsOnlyCheckedAsNonemptyList": true,
+      "archiveCommandRecordShapesValidated": false
+    },
+    "browserSourceReview": {
+      "sourceInspected": true,
+      "playwrightChromiumWorkflowExecuted": false,
+      "domActivation": "HTMLElement.click()",
+      "trustedOSOrPointerInputDemonstrated": false,
+      "externalOriginsBlockedBySource": true,
+      "runtimeTimerOrScreenshotObserved": false,
+      "pixelEquivalenceAssertedBySource": false
+    },
+    "versions": {
+      "python": "3.12.14",
+      "node": "v22.23.4",
+      "platform": "Linux x86_64"
+    },
+    "changes": {
+      "productionOrConsumerFilesChanged": false,
+      "gitOrSchedulerChanged": false,
+      "archiveAcceptanceAttempted": false
+    }
+  },
+  "command": {
+    "path": "module-effects-coordination/rawlogs/XR-ACCEPTAUDIT/commands.log",
+    "cwd": "/workspace/scratch/39a56936f173/gondola",
+    "probeCwd": "/workspace/scratch/39a56936f173",
+    "probeExitCode": 0,
+    "auditCheckCount": 24,
+    "auditFailures": 0
+  },
+  "artifacts": {
+    "auditScript": {
+      "path": "module-effects-coordination/rawlogs/XR-ACCEPTAUDIT/audit_packet.py",
+      "bytes": 4943,
+      "sha256": "df3663a59824913e09219fb354936e99c4530095edb8f9d603268a5dc2cd21ec"
+    },
+    "auditResult": {
+      "path": "module-effects-coordination/rawlogs/XR-ACCEPTAUDIT/audit-result.json",
+      "bytes": 8813,
+      "sha256": "1c7968a9c9f01d6a330abf555b16e1b3343cb7004c1fdef0be570249d8630204"
+    }
+  },
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/XR-ACCEPTAUDIT/index.json",
+    "bytes": 1223,
+    "sha256": "f5ee0d8083f03942f3681b10aeb99ba25c441750a6eaf8d23f70870e966f2eb2",
+    "indexedFileCount": 7,
+    "indexExcludesItself": true
+  },
+  "report": {
+    "path": "module-effects-coordination/reports/XR-ACCEPTAUDIT.md",
+    "bytes": 3789,
+    "sha256": "cf82cafdceeb61ff1c076fde67f00e58b8c28457f6b250cc2b1b7abf4fa5ba99"
+  }
+}

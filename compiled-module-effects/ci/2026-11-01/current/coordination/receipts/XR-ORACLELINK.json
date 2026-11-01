@@ -1,0 +1,155 @@
+{
+  "schema": "gobi.worker-review-receipt/v1",
+  "job_id": "XR-ORACLELINK",
+  "worker": "N4",
+  "decision": "accepted",
+  "status": "original_xr_oracle_finding_resolved",
+  "summary": "The two original reply-ledger validation witnesses are rejected by sealed E-ORACLELINK. Healthy saved-capture parity and all 64 applications of the 16 capture controls pass under pinned Node 22.",
+  "reviewedPacket": {
+    "sealedEOraclelink": {
+      "report": {
+        "path": "../module-effects-coordination/seals/E-ORACLELINK/E-ORACLELINK.md",
+        "bytes": 4649,
+        "sha256": "25bd9120f53f96cc4b5e7cd74a5f3d4e0e0e80db2555092792beb93d6ab8ebf2"
+      },
+      "receipt": {
+        "path": "../module-effects-coordination/seals/E-ORACLELINK/E-ORACLELINK.json",
+        "bytes": 5203,
+        "sha256": "042365916958cc473d612bd3031cff3065aa6e7a72c9ec850fc72d054f55d63f"
+      },
+      "seal": {
+        "path": "../module-effects-coordination/seals/E-ORACLELINK/seal.json",
+        "bytes": 183,
+        "sha256": "3ce83a27c312848b1c2b0d75175d32a2425402b4e7e2e019f924aa299e9c4601"
+      },
+      "sourceInventory": {
+        "path": "../module-effects-coordination/seals/E-ORACLELINK/source-inventory.json",
+        "bytes": 341,
+        "sha256": "08f8daf51800f3da375aa90baf976bc9698c1855383d6a50584678abd75e08f3"
+      },
+      "ownedFiles": {
+        "compiled-module-effects/oracle/oracle.mjs": {
+          "bytes": 93905,
+          "sha256": "c24b3a7828eb22df65b39bd8090bfc5d96a79dd8cd55fd9db5471d1b74bf0d64",
+          "currentAndSealedMatch": true
+        },
+        "compiled-module-effects/oracle/oracle.test.mjs": {
+          "bytes": 7704,
+          "sha256": "962798dfc1c40e85e24e8b3f44ebe8688004b5df29dda860cdb3d29ba1cac745",
+          "currentAndSealedMatch": true
+        }
+      },
+      "testDependency": {
+        "path": "compiled-module-effects/conformance/scenarios.mjs",
+        "bytes": 4807,
+        "sha256": "de9784963969a7563450d6cb0883d77c1184b0ad9344188abd724d72d68df4ea",
+        "matchesPin": true
+      }
+    },
+    "preservedOriginalFinding": {
+      "reviewJob": "XR-ORACLE",
+      "decision": "amend",
+      "reportSHA256": "97b71f256b746fa64033601f36ec48e711caee70d4c12b849838180804c5bedc",
+      "receiptDecisionStillAmend": true,
+      "oldOracleSHA256": "2c9072dbd7dcbe70a009798ef441e1080e553dfe3eab9959b1ab15e0fecdb763",
+      "newOracleSHA256": "c24b3a7828eb22df65b39bd8090bfc5d96a79dd8cd55fd9db5471d1b74bf0d64"
+    },
+    "sourcePins": {
+      "manifestPath": "../module-effects-coordination/rawlogs/E-ORACLELINK/source-pins.json",
+      "manifestSHA256": "a4b2295ab47c9b71cf0b1edef18e0391d512c420d0234f011142c91af868549a",
+      "captureInputManifestPath": "../module-effects-coordination/rawlogs/E-ORACLELINK/capture-input-pins.json",
+      "captureInputManifestSHA256": "c7015e88edf59427151b131a67e651daeb3aee51add9464571b803348a9b2b49",
+      "captureAndHarnessFilesMatched": 32,
+      "authorRawlogFilesMatched": 24,
+      "authorRawlogIndexSHA256": "bbd846e2f3256993f39fce58922db4d750891fe2d534aa0a96c67eb7b98f3409"
+    }
+  },
+  "independentChecks": {
+    "runtime": {
+      "node": "v22.23.4",
+      "nodeExecutable": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "platform": "linux",
+      "architecture": "x64"
+    },
+    "oldSourceRedWitnesses": {
+      "status": "reproduced",
+      "missingReplyCorrelationAcceptedByOldSource": true,
+      "wrongAcceptedStateEventIndexAcceptedByOldSource": true,
+      "outputPath": "../module-effects-coordination/rawlogs/XR-ORACLELINK/old-red-witness.stdout.json",
+      "outputSHA256": "0641fb1531d62e9d6576153d473d6772148a98660010836ed023e1fa22f6fae5"
+    },
+    "repairedSourceRedWitnesses": {
+      "missingAcceptedReplyCorrelationRejected": true,
+      "wrongAcceptedStateEventIndexRejected": true,
+      "targetedControls": 11,
+      "targetedControlsRejected": 11,
+      "outputPath": "../module-effects-coordination/rawlogs/XR-ORACLELINK/targeted-links-verified.stdout.json",
+      "outputSHA256": "0e2d471ea3b811bfa3e97b232c348eb5c04ea99a5fafaf8373b5381dab9cf53e"
+    },
+    "healthySavedCaptureMatrix": {
+      "status": "matched",
+      "scenarios": 4,
+      "profilesPerScenario": 5,
+      "profileChecks": 20,
+      "nativeEvents": 178,
+      "nativeStates": 182,
+      "goEffects": 58,
+      "transportRows": 116,
+      "lifecycleRows": 20,
+      "profileEventRows": 890,
+      "profileSnapshots": 910,
+      "outputPath": "../module-effects-coordination/rawlogs/XR-ORACLELINK/healthy-matrix.stdout.json",
+      "outputSHA256": "806c505d3ea5ffabfb0fd74246a39379ffa332852187766f86fabc2fe1845bce"
+    },
+    "negativeContexts": {
+      "acceptedReplyCorrelationMatchesRequest": true,
+      "acceptedStateEventMatchesSourceHostResult": true,
+      "duplicateReplyCorrelationMatchesRequestAndStateMapsToRequest": true,
+      "cancelledReplyCorrelationMatchesRequestAndStateMapsToGoCancel": true
+    },
+    "captureMutationControls": {
+      "distinctControlsPerScenario": 16,
+      "scenarioApplications": 64,
+      "rejected": 64,
+      "accepted": 0,
+      "mountedFaultInjectionClaimed": false,
+      "buildAdmissionControlsRerun": false,
+      "outputPath": "../module-effects-coordination/rawlogs/XR-ORACLELINK/mutation-controls.stdout.json",
+      "outputSHA256": "ca113f821ad4bca5652709dfee524a97fcb83ee6787b2a40de31dfd9d4879eb5"
+    },
+    "unitTests": {
+      "passed": 4,
+      "failed": 0,
+      "outputPath": "../module-effects-coordination/rawlogs/XR-ORACLELINK/oracle-tests.stdout.log",
+      "outputSHA256": "be2468c39ef8d65c7b0c499f18c001ea167d4f2173962820906226b32b3e9010"
+    },
+    "syntaxCheck": {
+      "passed": true,
+      "outputPath": "../module-effects-coordination/rawlogs/XR-ORACLELINK/oracle-syntax.stdout.log"
+    }
+  },
+  "scopeAndLimits": {
+    "currentOracleEqualsSealedOracle": true,
+    "noProductionFilesModifiedByReviewer": true,
+    "gitOrSchedulerChanged": false,
+    "browserCaptureRerun": false,
+    "buildAdmissionAndCompilerReplayRerun": false,
+    "limitations": [
+      "Healthy checks revalidated saved E-HARNESS attempt-03 captures rather than making a new browser capture.",
+      "Mutation controls operate on saved capture clones and are not mounted renderer fault injection.",
+      "This follow-up does not rerun build-admission controls or Go compiler replay."
+    ]
+  },
+  "reviewEvidenceIndex": {
+    "path": "../module-effects-coordination/rawlogs/XR-ORACLELINK/index.json",
+    "bytes": 4795,
+    "sha256": "c6fd56cd87a1bdb78379987721195a8bd9b19c6bebd5e723c1cedbdbf60a2131",
+    "indexedFiles": 29,
+    "indexExcludesItself": true
+  },
+  "report": {
+    "path": "../module-effects-coordination/reports/XR-ORACLELINK.md",
+    "bytes": 4976,
+    "sha256": "ef6fb0e24b157f55f2614de0503285b65f1073a68813a6434fae96ac55d0d58e"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "schema": "gobi.worker-receipt/v1",
+  "job_id": "E-RELOCATE",
+  "worker": "N2",
+  "outcome": "mixed_change",
+  "summary": "The relocated-source module loader now accepts internally consistent recorded compiler context while reading all pinned source from the extracted physical root. The repaired loader loaded the existing four F6 React/DOM parent/child builds and passed native boundary/effect admission with original-checkout reads blocked; source, context, and artifact tamper controls rejected.",
+  "scope": {
+    "ownedPaths": [
+      "compiled-module-effects/build/module-loader.mjs",
+      "compiled-module-effects/build/module-loader-relocation.test.mjs",
+      "module-effects-coordination/reports/E-RELOCATE.md",
+      "module-effects-coordination/receipts/E-RELOCATE.json",
+      "module-effects-coordination/rawlogs/E-RELOCATE/**"
+    ],
+    "productionPathsModified": [
+      "compiled-module-effects/build/module-loader.mjs"
+    ],
+    "testPathsAdded": [
+      "compiled-module-effects/build/module-loader-relocation.test.mjs"
+    ],
+    "otherProductionPathsModified": false,
+    "archiveOrPriorPacketChanged": false,
+    "gitOrSchedulerChangedByWorker": false
+  },
+  "sourceIdentity": {
+    "baseCommit": "f6c9da1b9299a983f8a55c86ddbb0ab7543a1204",
+    "baseTree": "89a4548e2dcaafb138a5d2b46bbffda082b52d9b",
+    "changedFiles": [
+      {
+        "path": "compiled-module-effects/build/module-loader.mjs",
+        "bytes": 50607,
+        "sha256": "bd747b532d86a14bcc6bcad76df62820d717a54e52ec6cd97b0f1106c667277a"
+      },
+      {
+        "path": "compiled-module-effects/build/module-loader-relocation.test.mjs",
+        "bytes": 7003,
+        "sha256": "2120940c6696a8a3b77074456a65fbf6fe3403bd3f99e2f332a5ddac664af620"
+      }
+    ],
+    "frozenF6LoaderPin": {
+      "bytes": 50100,
+      "sha256": "db9f6cf8d42a88fa00a311b4a39ca90b79c69f54e369d9e30e96724e3d79a15b"
+    }
+  },
+  "archiveReplay": {
+    "archivePath": "/workspace/scratch/39a56936f173/gondola/compiled-module-effects/output/attempts/attempt-20261101T040910811Z-2-e6460df3.tar.gz",
+    "archiveBytes": 8666186,
+    "archiveSHA256": "e01b9508747b6e59af97a0cb57ce6c41a44514393cf9b57d6832b9d7bef89f4a",
+    "manifestSHA256": "5c06a221bae5709eca9859d1c273a7b9f4b26463fca086a4a2caa2ecd30fe0fc",
+    "extractedSourceRoot": "/tmp/module-effects-publish/consume-work/e6460df3/extracted/source",
+    "extractedBuildRoot": "/tmp/module-effects-publish/consume-work/e6460df3/extracted/builds",
+    "originalIndexSHA256": "d56a4de470298dda8881f20eba7c4743a3081bdbe1db60772b7e4f0cf0e46718",
+    "derivedTestIndexSHA256": "704cfb07cea66ef61b8f2f9624e67255e1f10da9c1b13919caae1a38e656b56a",
+    "derivedTestIndexChange": "Temporary copy only: update the module-loader self source pin to the tested repaired file. No original archive, extracted base index, or build metadata was modified.",
+    "originalCheckoutReadGuard": "blocked node:fs/promises.readFile paths under the source checkout while importing the copied loader and loading builds"
+  },
+  "admission": {
+    "backendProfiles": [
+      "react",
+      "dom"
+    ],
+    "independentBuilds": [
+      "react/parent",
+      "react/child",
+      "dom/parent",
+      "dom/child"
+    ],
+    "directModuleEncoderRoleObjects": 8,
+    "effectObservationsPerBackend": 4,
+    "closedEffectDescriptorCount": 2,
+    "mountBoundaryCasesPerBackend": 10,
+    "nativeStateAndEffectParity": true
+  },
+  "negativeControls": {
+    "tamperedLocalGoSource": "rejected by source pin mismatch",
+    "tamperedBuildContext": "rejected as malformed or internally inconsistent",
+    "tamperedBuildArtifact": "rejected by the earlier BuildResult output byte/hash gate"
+  },
+  "verification": {
+    "command": "GOBI_RELOCATION_FIXTURE_SOURCE=/tmp/module-effects-publish/consume-work/e6460df3/extracted/source GOBI_RELOCATION_FIXTURE_BUILDS=/tmp/module-effects-publish/consume-work/e6460df3/extracted/builds /tmp/gondola-node22/node_modules/node/bin/node --test compiled-module-effects/build/path-normalization.test.mjs compiled-module-effects/build/module-loader-relocation.test.mjs",
+    "node": "v22.23.4",
+    "testsPassed": 5,
+    "testsFailed": 0,
+    "testsSkipped": 0,
+    "syntaxChecks": [
+      "compiled-module-effects/build/module-loader.mjs",
+      "compiled-module-effects/build/module-loader-relocation.test.mjs"
+    ],
+    "compilerBuildRerun": false
+  },
+  "failedAttempts": [
+    {
+      "path": "module-effects-coordination/rawlogs/E-RELOCATE/attempt-01-readonly-copy/console.log",
+      "summary": "Initial test setup could not overwrite read-only mode-preserving copied source; fixture now chmods only its temporary targets."
+    },
+    {
+      "path": "module-effects-coordination/rawlogs/E-RELOCATE/attempt-02-artifact-rejection-order/console.log",
+      "summary": "Artifact mutation was rejected earlier than the initial assertion expected, by the BuildResult output hash gate; the assertion now matches the correct first rejection."
+    }
+  ],
+  "rawlogs": {
+    "path": "module-effects-coordination/rawlogs/E-RELOCATE/index.json",
+    "schema": "gobi.worker-rawlogs-index/v1",
+    "indexExcludesItself": true,
+    "fileCount": 10,
+    "bytes": 1772,
+    "sha256": "74859a394907fcaf0e513744e7f9323969d9d72f9c071258984a858aab6ec552"
+  },
+  "remainingQualification": "The frozen F6 build index pins the pre-repair loader. Root must bind the repaired source and produce the new clean source-bound archive/index before the external consumer's final acceptance."
+}

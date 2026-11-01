@@ -1,0 +1,213 @@
+{
+  "audit": {
+    "bytes": 5968,
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-DELIVERY/audit.json",
+    "sha256": "6213c6c912262f30610e71981015509ac674b13a7fd93b3ed91e3afd01e3b7d9"
+  },
+  "cleanRun": {
+    "archiveReached": false,
+    "attemptId": "attempt-20261101T033637716Z-2-0d46ba94",
+    "buildIndex": {
+      "bytes": 270909,
+      "sha256": "c2bc37cc8b7387972ac898e296cf91147494a1a8400758306b161672a274b0f5"
+    },
+    "buildsCompleted": 4,
+    "command": [
+      "bash",
+      "run-module-effects.sh",
+      "--source-commit",
+      "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+      "--chromium",
+      "/tmp/chromium-portable"
+    ],
+    "environmentOverrides": {
+      "GOBI_GO_BIN": "/tmp/gondola-go/go/bin/go",
+      "GOBI_NODE_BIN": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "GOBI_PYTHON_BIN": "/tmp/rebalancer-env/bin/python"
+    },
+    "gitClean": true,
+    "independentArchiveConsumerReached": false,
+    "nestedRawlogIndex": {
+      "allMembersVerified": true,
+      "bytes": 313914,
+      "memberCount": 77,
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-DELIVERY/attempt-03-clean-run/index.json",
+      "sha256": "d998817e99ec8e7d7396f91c46b7cf8378462921abf465d8fe8dc4a7e6498d36"
+    },
+    "outerFailure": {
+      "expectedMissingFields": [
+        "stdoutPath",
+        "stderrPath"
+      ],
+      "message": "The \"paths[0]\" argument must be of type string. Received undefined",
+      "outerConsumerLine": 542,
+      "outerConsumerSource": "compiled-module-effects/run.mjs",
+      "producerSource": "compiled-module-effects/conformance/run.mjs",
+      "producerSummaryLine": 210,
+      "stage": "native-direct-browser-conformance",
+      "summaryNativeRecordKeys": [
+        "path",
+        "bytes",
+        "sha256",
+        "command",
+        "commandCwd",
+        "commandEnvironment"
+      ],
+      "type": "TypeError"
+    },
+    "producer": {
+      "buildControls": 7,
+      "captureControls": 16,
+      "nativeEffects": 58,
+      "nativeEvents": 178,
+      "profileCountPerScenario": 5,
+      "profileEvents": 890,
+      "scenarioCount": 4,
+      "status": "matched",
+      "summary": {
+        "bytes": 105243,
+        "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-DELIVERY/attempt-03-clean-run/conformance/effects.summary.json",
+        "sha256": "912652f7cae923268181d7fac7590e14141d0a40291f29f5c7058515c59094d9"
+      },
+      "transportEvents": 116
+    },
+    "sourceAfterSnapshotReached": false,
+    "sourceCommit": "88e7937e66fd1c8f36e5b5dd3224209b07c6eb33",
+    "sourcePinCount": 199,
+    "sourcePinIndexMatchesAuthorMap": true,
+    "sourcePinsMatch": true,
+    "tests": {
+      "compilerAnalyze": 4,
+      "compilerBuildStage": 1,
+      "fixtureGo": 13,
+      "moduleABI": 1,
+      "node": 32,
+      "nodeFailed": 0
+    },
+    "timerDemoReached": false,
+    "toolchain": {
+      "architecture": "x64",
+      "chromium": "Chromium 153.0.8010.0",
+      "chromiumPath": "/tmp/chromium-portable",
+      "compilerGo": "go1.27.3 linux/amd64",
+      "go": "go version go1.24.0 linux/amd64",
+      "goExecutable": "/tmp/gondola-go/go/bin/go",
+      "node": "v22.23.4",
+      "nodeExecutable": "/tmp/gondola-node22/node_modules/node/bin/node",
+      "platform": "linux",
+      "playwright": "1.64.1",
+      "python": "Python 3.12.14",
+      "pythonExecutable": "/tmp/rebalancer-env/bin/python",
+      "tar": "tar (GNU tar) 1.35"
+    }
+  },
+  "commands": {
+    "bytes": 6361,
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-DELIVERY/commands.log",
+    "sha256": "d20a8d664cbde1e8eccf37f987d09cfedb7a13607cde33d20d87be561ea002d9"
+  },
+  "decision": "amend",
+  "finding": {
+    "detail": "Outer runner dereferences record.native.stdoutPath and record.native.stderrPath. The producer public summary omits those fields, although they exist on its internal per-scenario result.",
+    "id": "DELIVERY-OUTER-CONSUMER-SCHEMA",
+    "impact": "Clean aggregate exits before the outer capture/oracle loop finishes; runDemo, runDemoBrowser, archiveAttempt, independent consumer, and post-run source-stability checks do not execute.",
+    "requiredAction": "Align producer and consumer schemas and run the full clean-source pipeline again.",
+    "severity": "blocker",
+    "source": "compiled-module-effects/run.mjs:542-543"
+  },
+  "job_id": "XR-DELIVERY",
+  "provenanceLimits": [
+    "The current E-DELIVERY rawlogs index is an extended 211-entry version. It is not represented as the pre-run index hash.",
+    "The pre-run rawlogs index had 134 entries when inspected, but its bytes and hash were not captured separately; they are unavailable and not reconstructed.",
+    "The clean E-RUN has no successful timer demo, archive creation, independent archive consumer, or final source-stability result."
+  ],
+  "rawlogs": {
+    "bytes": 1049,
+    "indexedFiles": 6,
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/XR-DELIVERY/index.json",
+    "sha256": "9ef9ea9996f75bf8e3b8428dc044d1035d0da8e842adb3f831747d4d708a31bc"
+  },
+  "report": {
+    "bytes": 4026,
+    "path": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/XR-DELIVERY.md",
+    "sha256": "589ef02d19567936e496d04e2a833e807841649e802a79c243ab63185bc8939b"
+  },
+  "reviewedPacket": {
+    "authorRawlogsIndexProvenance": {
+      "bytes": 46988,
+      "cleanRunEntryCount": 77,
+      "currentEntriesVerified": true,
+      "currentEntryCount": 211,
+      "nonRunEntryCount": 134,
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-DELIVERY/index.json",
+      "preRunEntryCountObserved": 134,
+      "preRunIndexBytesRetained": false,
+      "preRunIndexHashClaimed": false,
+      "sha256": "e213cbfae088cd133ab0203f86dde9e640d9dae6999772b30a00129982dc27fe"
+    },
+    "authorSourcePinIndex": {
+      "bytes": 37581,
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/rawlogs/E-DELIVERY/source-pins-final.json",
+      "sha256": "64838b786c7948810baaf46498a4f23d036e810c185e001701645edc491b3e71",
+      "sourcePins": 199,
+      "testListDerivedExactly": true,
+      "testSourcePins": 56
+    },
+    "job_id": "E-DELIVERY",
+    "outcome": "mixed_change",
+    "sealDirectory": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-DELIVERY",
+    "sealFile": {
+      "bytes": 179,
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-DELIVERY/seal.json",
+      "sha256": "d1713c45c71c485db490e488593cb2acd5abe9b65062753dcaf80666cc654b82"
+    },
+    "sealPins": {
+      "E-DELIVERY.json": {
+        "current": {
+          "bytes": 7953,
+          "path": "/workspace/scratch/39a56936f173/module-effects-coordination/receipts/E-DELIVERY.json",
+          "sha256": "0c02bb1779809ecfc8b64dbabaa3fad6322f71d0c4955b6ddde509afda93f9a0"
+        },
+        "matchesSeal": true,
+        "sealedSHA256": "0c02bb1779809ecfc8b64dbabaa3fad6322f71d0c4955b6ddde509afda93f9a0"
+      },
+      "E-DELIVERY.md": {
+        "current": {
+          "bytes": 5996,
+          "path": "/workspace/scratch/39a56936f173/module-effects-coordination/reports/E-DELIVERY.md",
+          "sha256": "84602cfc0a9c734af2230a5cd88d88390c1592c56c61e19dc2a77c0d226853d7"
+        },
+        "matchesSeal": true,
+        "sealedSHA256": "84602cfc0a9c734af2230a5cd88d88390c1592c56c61e19dc2a77c0d226853d7"
+      }
+    },
+    "sourceInventory": {
+      "allVerified": true,
+      "bytes": 1281,
+      "path": "/workspace/scratch/39a56936f173/module-effects-coordination/seals/E-DELIVERY/source-inventory.json",
+      "sha256": "50b30f1e6b0780efef7bdc6c9ba75cba35c6487abdd47fdb4f05787562da312b",
+      "verifiedFiles": 8
+    },
+    "status": "pending_clean_qualification",
+    "worker": "N6"
+  },
+  "schema": "gobi.worker-review-receipt/v1",
+  "status": "amend_required",
+  "summary": "Amend required: the clean E-RUN reached a matched 4x5 producer matrix on clean commit 88e7937, then the outer consumer failed at run.mjs:542 because stdoutPath/stderrPath are absent from the public conformance summary. Timer demo and archive stages were not reached.",
+  "verification": {
+    "all199PinsCoveredByWorkflowPaths": true,
+    "currentEdeliveryIndexCleanRunEntries": 77,
+    "currentEdeliveryIndexEntriesVerified": true,
+    "currentEdeliveryIndexEntryCount": 211,
+    "currentEdeliveryIndexFilesystemCoverageExact": true,
+    "noProductionEdits": true,
+    "noTestsRerunByXRDelivery": true,
+    "sealedReportAndReceiptMatch": true,
+    "sealedSourceInventoryFilesVerified": 8,
+    "sourceMapCount": 199,
+    "sourceMapEqualsCleanRunSnapshot": true,
+    "testSourceMapCount": 56,
+    "workflowPushPullFiltersIdentical": true
+  },
+  "worker": "N1"
+}
