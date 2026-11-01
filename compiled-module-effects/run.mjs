@@ -10,6 +10,11 @@ import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } 
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { archiveAndVerify, createExclusiveAttemptDirectory, writeImmutableSnapshot } from "../compiled-capabilities/archive-helper.mjs";
 import { chromiumLaunchOptions } from "../compiled-frontend/conformance/browser.mjs";
+import {
+  aggregateMutationControlReports, assertUnmountLifecycleOrder, CAPTURE_MUTATION_CONTROL_IDS,
+  MODULE_EFFECTS_SCENARIOS, validateMutationControlReport,
+  verifyConformanceProducerSummary,
+} from "./delivery-contract.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -496,109 +501,30 @@ async function runConformance(args) {
     "--chromium", chromiumPath, "--output", output,
   ], { cwd: root, env: { GOBI_GO_BIN: goExecutable, CHROMIUM_PATH: chromiumPath }, maxBuffer: 256 * 1024 * 1024, captureOutput: false });
   conformanceSummary = parseSingleJSON(stdout, "module effects conformance harness");
-  const expectedProfiles = ["browser.dom", "browser.react", "browser.swap", "direct.dom", "direct.react"];
-  const scenarioNames = Object.keys(conformanceSummary.captures ?? {}).sort();
-  const profileKeys = Object.keys(conformanceSummary.captures?.literal?.profiles ?? {}).sort();
-  if (conformanceSummary.schema !== "gobi.module-effects-conformance-summary/v1" ||
-      conformanceSummary.status !== "matched" || scenarioNames.length !== 4 ||
-      (conformanceSummary.scenarioCount !== undefined && conformanceSummary.scenarioCount !== scenarioNames.length) ||
-      JSON.stringify(profileKeys) !== JSON.stringify(expectedProfiles)) {
-    throw new Error("conformance summary failed its scenario or profile matrix gates");
-  }
-  const buildMutations = conformanceSummary.buildIndex?.mutationControls;
-  if (buildMutations?.status !== "detected" || !Array.isArray(buildMutations.rejected) ||
-      buildMutations.rejected.length === 0 || buildMutations.total !== buildMutations.rejected.length ||
-      buildMutations.rejected.some((item) => item.rejected !== true)) {
-    throw new Error("build-admission mutation controls did not reject every configured faulty build record");
-  }
-  conformanceSummary.buildAdmissionMutationControlsDetected = buildMutations.rejected.filter((item) => item.rejected === true).length;
-  const captureMutations = conformanceSummary.captureMutationControls;
-  if (captureMutations?.status !== "detected" || !Array.isArray(captureMutations.rejected) ||
-      captureMutations.rejected.length === 0 || captureMutations.total !== captureMutations.rejected.length ||
-      captureMutations.rejected.some((item) => item.rejected !== true)) {
-    throw new Error("mounted-capture mutation controls did not reject every configured faulty capture");
-  }
-  conformanceSummary.captureMutationControlsDetected = captureMutations.rejected.filter((item) => item.rejected === true).length;
-  if (JSON.stringify(scenarioNames) !== JSON.stringify(["literal", "seed-20261104", "seed-20261105", "seed-20261106"])) {
-    throw new Error("conformance summary omitted the literal or one of the three frozen seed captures");
-  }
-  const profileCaptures = [];
-  const counts = {
-    scenarios: {}, nativeEvents: 0, nativeStates: 0, nativeEffects: 0, nativeTransportEvents: 0,
-    nativeLifecycleEvents: 0, retiredChildren: 0, profileEvents: 0, snapshots: 0,
-    profileTransportEvents: 0, ledgerEvents: 0, orderedLedgerEvents: 0,
-  };
-  const nativeCommandEvidence = [];
-  const browserBundlePins = [];
-  for (const [scenarioName, record] of Object.entries(conformanceSummary.captures)) {
-    const scenario = await readCapture(record.scenario, `${scenarioName} scenario`);
-    const native = await readCapture(record.native, `${scenarioName} native`);
-    const expectedNativeCommand = [goExecutable, "run", "./cmd/module-effects-native", "-script", record.scenario.path];
-    if (JSON.stringify(record.native.command) !== JSON.stringify(expectedNativeCommand) ||
-        record.native.commandCwd !== root ||
-        JSON.stringify(record.native.commandEnvironment) !== JSON.stringify({ GOTOOLCHAIN: "local", GOFLAGS: "-buildvcs=false" })) {
-      throw new Error(`${scenarioName} native command record differs from the frozen Go replay command`);
-    }
-    const stdoutPath = resolve(record.native.stdoutPath);
-    const stderrPath = resolve(record.native.stderrPath);
-    if (!stdoutPath.startsWith(`${attemptRoot}${sep}`) || !stderrPath.startsWith(`${attemptRoot}${sep}`)) {
-      throw new Error(`${scenarioName} native raw logs were written outside the current attempt`);
-    }
-    const [nativeStdout, nativeStderr] = await Promise.all([readFile(stdoutPath), readFile(stderrPath)]);
-    if (sha256(nativeStdout) !== record.native.stdoutSHA256) throw new Error(`${scenarioName} native stdout hash differs from its command record`);
-    if (JSON.stringify(JSON.parse(nativeStdout.toString("utf8"))) !== JSON.stringify(native.capture)) {
-      throw new Error(`${scenarioName} native capture differs from its exact stdout trace`);
-    }
-    nativeCommandEvidence.push({
-      scenario: scenarioName, argv: record.native.command, cwd: record.native.commandCwd,
-      envOverrides: record.native.commandEnvironment,
-      stdout: { path: relative(attemptRoot, stdoutPath).split(sep).join("/"), bytes: nativeStdout.length, sha256: sha256(nativeStdout) },
-      stderr: { path: relative(attemptRoot, stderrPath).split(sep).join("/"), bytes: nativeStderr.length, sha256: sha256(nativeStderr) },
-    });
-    const browserBundlePath = `${output}.${scenarioName}.browser.bundle.mjs`;
-    const browserBundle = await readFile(browserBundlePath);
-    browserBundlePins.push({
-      scenario: scenarioName, path: relative(attemptRoot, browserBundlePath).split(sep).join("/"),
-      bytes: browserBundle.length, sha256: sha256(browserBundle),
-    });
-    if (scenario.capture.schema !== "gobi.module-effects-scenario/v1" || native.capture.schema !== "gobi.module-effects-native/v1") {
-      throw new Error(`${scenarioName} capture has an unexpected scenario/native schema`);
-    }
-    counts.scenarios[scenarioName] = scenario.capture.events.length;
-    counts.nativeEvents += native.capture.events.length;
-    counts.nativeStates += native.capture.states.length;
-    counts.nativeEffects += native.capture.effects.length;
-    counts.nativeTransportEvents += native.capture.transportLedger.length;
-    counts.nativeLifecycleEvents += native.capture.lifecycleLedger.length;
-    counts.retiredChildren += native.capture.retiredChildren.length;
-    for (const profile of expectedProfiles) {
-      const capture = await readCapture(record.profiles?.[profile], `${scenarioName} ${profile}`);
-      if (capture.capture.schema !== "gobi.module-effects-capture/v1" || capture.capture.profile !== profile) {
-        throw new Error(`${scenarioName} ${profile} capture has the wrong profile schema`);
-      }
-      if (capture.capture.events.length !== scenario.capture.events.length) throw new Error(`${scenarioName} ${profile} event count differs from scenario`);
-      counts.profileEvents += capture.capture.events.length;
-      counts.snapshots += capture.capture.snapshots.length;
-      counts.profileTransportEvents += capture.capture.transportLedger.length;
-      counts.ledgerEvents += capture.capture.ledger.length;
-      counts.orderedLedgerEvents += capture.capture.orderedLedger.length;
-      profileCaptures.push({ scenarioName, scenario: scenario.capture, native: native.capture, profile, capture: capture.capture });
-    }
-  }
-  const scenarioCount = Object.keys(counts.scenarios).length;
-  if (scenarioCount !== 4 || counts.nativeEvents !== Object.values(counts.scenarios).reduce((sum, value) => sum + value, 0)) {
-    throw new Error("conformance event counts were inconsistent with actual capture arrays");
-  }
-  const literalNative = await readCapture(conformanceSummary.captures.literal.native, "literal native");
-  if (counts.scenarios.literal !== 31 || literalNative.capture.events.length !== 31 || literalNative.capture.effects.length !== 10) {
-    throw new Error("literal profile must contain the frozen 31 Go events and 10 Go-emitted effects");
-  }
-  conformanceSummary.captureCounts = counts;
-  conformanceSummary.nativeCommandEvidence = nativeCommandEvidence;
-  conformanceSummary.browserBundlePins = browserBundlePins;
-  conformanceSummary.profileCapturesVerified = profileCaptures.map(({ scenarioName, profile }) => ({ scenarioName, profile }));
+  const inheritedNativeGoVersion = await toolVersion("conformance-native-go-version", goExecutable, ["version"], { env: {} });
+  const expectedCommand = [process.execPath, harness, "--native-go", goExecutable, "--build-index", buildIndexPath,
+    "--chromium", chromiumPath, "--output", output];
+  const browserVersion = toolchain.chromium.match(/\b\d+\.\d+\.\d+\.\d+\b/)?.[0];
+  if (!browserVersion) throw new Error(`cannot parse pinned Chromium version ${toolchain.chromium}`);
+  const verified = await verifyConformanceProducerSummary(conformanceSummary, {
+    attemptRoot, root, outputPrefix: output,
+    buildIndexPath, buildIndexBytes, buildIndex, buildSummary,
+    nativeGo: goExecutable, nativeGoVersion: inheritedNativeGoVersion,
+    chromium: chromiumPath, browserVersion,
+    nodeExecutable: process.execPath, nodeVersion: process.version,
+    compilerGo: buildSummary.toolchain.compilerGo, playwright: toolchain.playwright,
+    expectedCommand,
+  });
+  conformanceSummary.captureMutationControlsDetected = verified.captureMutationControls.rejected
+    .filter((item) => item.rejected === true).length;
+  conformanceSummary.buildAdmissionMutationControlsDetected = verified.buildAdmissionMutationControls.rejected
+    .filter((item) => item.rejected === true).length;
+  conformanceSummary.captureCounts = verified.counts;
+  conformanceSummary.nativeCommandEvidence = verified.nativeCommandEvidence;
+  conformanceSummary.producerFiles = { summary: verified.summaryFile, check: verified.checkFile };
+  conformanceSummary.profileCapturesVerified = verified.profileCaptures.map(({ scenarioName, profile }) => ({ scenarioName, profile }));
   await writeJSON(join(attemptRoot, "conformance/summary.json"), conformanceSummary);
-  return profileCaptures;
+  return verified.profileCaptures;
 }
 
 async function runOracle(profileCaptures) {
@@ -621,6 +547,7 @@ async function runOracle(profileCaptures) {
   }
   const nativeChecks = [];
   const parityChecks = [];
+  const mutationReports = [];
   for (const [scenarioName, scenario] of scenarios) {
     const native = nativeByScenario.get(scenarioName);
     const nativeResult = requireOraclePass(await oracle.assertNativeModuleEffectsCapture(native, scenario), `${scenarioName} native oracle`);
@@ -629,19 +556,31 @@ async function runOracle(profileCaptures) {
     const parityResult = requireOraclePass(await oracle.assertModuleEffectsParity({ scenario, native, profiles: profilesByScenario.get(scenarioName) }), `${scenarioName} parity oracle`);
     if (parityResult.status !== "matched") throw new Error(`${scenarioName} parity oracle did not return matched status`);
     parityChecks.push({ scenario: scenarioName, ...parityResult });
+    const mutationReport = await oracle.runModuleEffectsMutationControls({
+      scenario, native, profiles: profilesByScenario.get(scenarioName),
+    });
+    if (mutationReport?.status !== "detected" || !Array.isArray(mutationReport.rejected) ||
+        mutationReport.total !== mutationReport.rejected.length) {
+      throw new Error(`${scenarioName} independent capture mutation controls did not return their full rejected-row array`);
+    }
+    mutationReports.push({
+      ...mutationReport,
+      requiredControlIds: [...CAPTURE_MUTATION_CONTROL_IDS],
+      allowAdditionalControls: false,
+    });
   }
-  const literalName = "literal";
-  const mutations = await oracle.runModuleEffectsMutationControls({
-    scenario: scenarios.get(literalName), native: nativeByScenario.get(literalName), profiles: profilesByScenario.get(literalName),
+  const literalControls = validateMutationControlReport(mutationReports[0], {
+    path: "oracle.mutationControls.literal", requiredIds: CAPTURE_MUTATION_CONTROL_IDS,
+    allowAdditionalControls: false, normalizeIdFromName: true,
   });
-  const controls = mutations?.rejected;
-  if (mutations?.status !== "detected" || !Array.isArray(controls) || controls.length === 0 ||
-      mutations.total !== controls.length || controls.some((control) => control.rejected !== true)) {
-    throw new Error("module-effects mutation controls did not reject every configured faulty capture");
-  }
+  const mutationApplications = aggregateMutationControlReports(mutationReports, [...scenarios.keys()]);
   oracleSummary = {
     schema: "gobi.module-effects-oracle-summary/v1", status: "matched", nativeChecks, parityChecks,
-    mutationControls: { ...mutations, mutationControlsDetected: controls.filter((item) => item.rejected === true).length },
+    mutationControls: {
+      ...literalControls,
+      mutationControlsDetected: literalControls.rejected.filter((item) => item.rejected === true).length,
+    },
+    mutationControlApplications: mutationApplications,
     conformanceCaptureMutationControls: conformanceSummary.captureMutationControls,
     buildAdmission: buildSummary.admission,
     buildAdmissionMutationControls: conformanceSummary.buildIndex.mutationControls,
@@ -785,11 +724,7 @@ async function runDemoBrowser(siteRoot) {
     if (!removalCancellation) throw new Error("removing a pending key did not run its declared Go cancellation");
     const trace = await page.evaluate(() => window.moduleEffectsDemo.trace());
     const removalRows = trace.lifecycle.filter((row) => row.key === "b" && row.generation === 1);
-    const removalOrder = ["go-update-unmount", "go-state-commit", "go-cancel-effect", "transport-cancel", "renderer-unmount"]
-      .map((kind) => removalRows.findIndex((row) => row.kind === kind));
-    if (removalOrder.some((index) => index < 0) || removalOrder.some((index, position) => position > 0 && index <= removalOrder[position - 1])) {
-      throw new Error(`Go unmount/cancel/transport/renderer ordering changed: ${JSON.stringify(removalRows)}`);
-    }
+    const removalOrder = assertUnmountLifecycleOrder(removalRows, { key: "b", generation: 1 });
     const timerCompleted = ["a:g1:r2", "b:g2:r1"].every((token) =>
       transport.some((record) => record.kind === "timer-reply" && record.token === token && record.status === "accepted"));
     if (!timerCompleted) throw new Error("timer transport did not deliver and accept both uncancelled request token echoes");
@@ -806,7 +741,7 @@ async function runDemoBrowser(siteRoot) {
     demoSummary.httpSmoke = {
       schema: "gobi.module-effects-demo-http-smoke/v1", status: "passed", httpStatus: response.status(),
       initial, final, steps, transport, removalRows, trace, pageErrors, failedRequests,
-      startObservations,
+      startObservations, removalOrder,
       browserInput: "HTMLElement.click()",
     };
     await writeJSON(join(attemptRoot, "demo/http-smoke.json"), demoSummary.httpSmoke);
@@ -838,16 +773,20 @@ async function inventoryAttempt() {
   const members = [];
   const excludedDuplicateLogs = [];
   const excludedRegenerableBundles = [];
+  const expectedBundles = new Set(MODULE_EFFECTS_SCENARIOS.map((scenario) => `conformance/effects.${scenario}.browser.bundle.mjs`));
   for (const path of files) {
     const bytes = await readFile(path);
     const pin = { path: relative(attemptRoot, path).split(sep).join("/"), bytes: bytes.length, sha256: sha256(bytes) };
-    if (pin.path.startsWith("conformance/") && basename(path).endsWith(".native.stdout.log")) {
-      excludedDuplicateLogs.push(pin);
-    } else if (pin.path.startsWith("conformance/") && basename(path).endsWith(".browser.bundle.mjs")) {
+    if (pin.path.startsWith("conformance/") && basename(path).endsWith(".browser.bundle.mjs")) {
+      if (!expectedBundles.has(pin.path) || pin.bytes === 0) throw new Error(`unexpected or empty regenerable conformance bundle: ${pin.path}`);
       excludedRegenerableBundles.push(pin);
     } else {
       members.push(pin);
     }
+  }
+  const excludedBundleNames = excludedRegenerableBundles.map((item) => item.path).sort();
+  if (JSON.stringify(excludedBundleNames) !== JSON.stringify([...expectedBundles].sort())) {
+    throw new Error("archive inventory does not contain the exact four pinned regenerable browser bundles");
   }
   return {
     members: members.sort((left, right) => left.path.localeCompare(right.path)),
@@ -909,6 +848,7 @@ async function archiveAttempt(sourcePinsAfter) {
       conformanceCaptureMutationControls: conformanceSummary.captureMutationControlsDetected,
       buildAdmissionMutationControls: conformanceSummary.buildAdmissionMutationControlsDetected,
       independentCaptureMutationControls: oracleSummary.mutationControls.mutationControlsDetected,
+      independentCaptureMutationControlApplications: oracleSummary.mutationControlApplications.mutationControlsDetected,
     },
     commands: commandRecords,
   });
@@ -1091,6 +1031,9 @@ async function run(args) {
       ledgerEvents: conformanceSummary.captureCounts.ledgerEvents,
       orderedLedgerEvents: conformanceSummary.captureCounts.orderedLedgerEvents,
       mutationControlsDetected: oracleSummary.mutationControls.mutationControlsDetected,
+      mutationControlApplicationsDetected: oracleSummary.mutationControlApplications.mutationControlsDetected,
+      mutationControlApplicationCount: oracleSummary.mutationControlApplications.total,
+      mutationControlDistinctIDs: oracleSummary.mutationControlApplications.distinctControlIds.length,
       conformanceCaptureMutationControlsDetected: conformanceSummary.captureMutationControlsDetected,
       buildAdmissionMutationControlsDetected: conformanceSummary.buildAdmissionMutationControlsDetected,
       demoSteps: demoSummary.httpSmoke.steps.length,
