@@ -1,0 +1,129 @@
+name: Gobi keyed compiled modules
+
+on:
+  push:
+    paths:
+      - 'cmd/keyed-module-native/**'
+      - 'fixtures/compiled/keyedmodulewire/**'
+      - 'fixtures/compiled/keyedmoduleparent/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'moduleabi/**'
+      - 'compiled-modules/**'
+      - 'compiled-keyed-modules/**'
+      - 'compiled-frontend/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-children/conformance/browser-version.test.mjs'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/package.json'
+      - 'interaction/package-lock.json'
+      - 'run-keyed-modules.sh'
+      - '.github/workflows/gobi-keyed-modules.yml'
+  pull_request:
+    paths:
+      - 'cmd/keyed-module-native/**'
+      - 'fixtures/compiled/keyedmodulewire/**'
+      - 'fixtures/compiled/keyedmoduleparent/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'moduleabi/**'
+      - 'compiled-modules/**'
+      - 'compiled-keyed-modules/**'
+      - 'compiled-frontend/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-children/conformance/browser-version.test.mjs'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/package.json'
+      - 'interaction/package-lock.json'
+      - 'run-keyed-modules.sh'
+      - '.github/workflows/gobi-keyed-modules.yml'
+
+jobs:
+  keyed-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run keyed module profile
+        env:
+          GONDOLA_SKIP_NPM_CI: '1'
+          GONDOLA_SKIP_BROWSER_INSTALL: '1'
+          GOFLAGS: -buildvcs=false
+        run: bash run-keyed-modules.sh --source-commit "$GITHUB_SHA"
+
+      - name: Preserve keyed module evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-keyed-modules-evidence
+          path: |
+            compiled-keyed-modules/output/attempts/**
+            compiled-keyed-modules/evidence/attempts/**
+          if-no-files-found: warn
+
+  milestone-zero-and-counter-regressions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run existing Milestone 0 check
+        run: bash run.sh
+
+      - name: Install existing interaction dependencies
+        run: |
+          npm ci --prefix interaction --no-audit --no-fund
+          interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run existing counter interaction regression
+        env:
+          GONDOLA_SKIP_NPM_CI: '1'
+          GONDOLA_SKIP_BROWSER_INSTALL: '1'
+        run: bash run-interaction.sh

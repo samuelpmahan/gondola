@@ -1,0 +1,40 @@
+{
+  "schema": "gobi.keyed-modules-semantic-expectations/v1",
+  "scenario": "keyed-modules-literal",
+  "profile": {
+    "keys": ["a", "b"],
+    "initialGenerations": {"a": 1, "b": 1},
+    "parentInput": {"step": 1, "locked": false, "revision": 1},
+    "effectProfile": "synchronous; no async effects"
+  },
+  "events": [
+    {"index": 0, "accepted": true, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 1, "b:g1": 0}, "parent": {"step": 1, "locked": false, "revision": 1}},
+    {"index": 1, "accepted": true, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 1, "b:g1": 1}, "parent": {"step": 1, "locked": false, "revision": 1}},
+    {"index": 2, "accepted": true, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 1, "b:g1": 1}, "parent": {"step": 1, "locked": true, "revision": 2}},
+    {"index": 3, "accepted": false, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 1, "b:g1": 1}, "parent": {"step": 1, "locked": true, "revision": 2}},
+    {"index": 4, "accepted": true, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 1, "b:g1": 1}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 5, "accepted": true, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 0, "b:g1": 1}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 6, "accepted": false, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 0, "b:g1": 1}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 7, "accepted": true, "order": ["a:g1", "b:g1"], "counts": {"a:g1": 0, "b:g1": 2}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 8, "accepted": true, "order": ["b:g1", "a:g1"], "counts": {"b:g1": 2, "a:g1": 0}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 9, "accepted": true, "order": ["b:g1", "a:g1"], "counts": {"b:g1": 2, "a:g1": 1}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 10, "accepted": true, "order": ["b:g1"], "counts": {"b:g1": 2}, "parent": {"step": 1, "locked": false, "revision": 3}, "retiredSlot": {"a": {"generation": 1, "mounted": false, "publishedCount": 1, "publishedRevision": 3}}},
+    {"index": 11, "accepted": false, "order": ["b:g1"], "counts": {"b:g1": 2}, "parent": {"step": 1, "locked": false, "revision": 3}, "probe": "stale callback a:g1"},
+    {"index": 12, "accepted": false, "order": ["b:g1"], "counts": {"b:g1": 2}, "parent": {"step": 1, "locked": false, "revision": 3}, "probe": "stale publication a:g1"},
+    {"index": 13, "accepted": true, "order": ["b:g1", "a:g2"], "counts": {"b:g1": 2, "a:g2": 0}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 14, "accepted": true, "order": ["b:g1", "a:g2"], "counts": {"b:g1": 2, "a:g2": 1}, "parent": {"step": 1, "locked": false, "revision": 3}},
+    {"index": 15, "accepted": false, "order": ["b:g1", "a:g2"], "counts": {"b:g1": 2, "a:g2": 1}, "parent": {"step": 1, "locked": false, "revision": 3}, "probe": "old callback a:g1 after remount"},
+    {"index": 16, "accepted": false, "order": ["b:g1", "a:g2"], "counts": {"b:g1": 2, "a:g2": 1}, "parent": {"step": 1, "locked": false, "revision": 3}, "probe": "old publication a:g1 after remount"},
+    {"index": 17, "accepted": true, "order": ["b:g1", "a:g2"], "counts": {"b:g1": 0, "a:g2": 1}, "parent": {"step": 1, "locked": false, "revision": 3}}
+  ],
+  "seededProfiles": {
+    "seeds": [20261101, 20261102, 20261103],
+    "extraEventsPerSeed": 18,
+    "actions": ["step.down", "step.up", "lock.toggle", "input.reset", "a.add", "a.reset", "b.add", "b.reset"]
+  },
+  "browserIdentity": {
+    "reorder": "same logical key-generation and same child DOM nodes",
+    "compatibleRendererSwap": "same logical key-generation and Go state; renderer-owned DOM nodes replaced",
+    "removeRemount": "b:g1 retained; a:g1 retired; a:g2 receives a new logical and DOM identity"
+  }
+}
