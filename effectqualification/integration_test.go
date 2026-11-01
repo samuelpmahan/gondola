@@ -3,6 +3,7 @@ package effectqualification
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -17,8 +18,9 @@ const (
 )
 
 // TestPR23DirectoryIsAccepted exercises the public directory API against the
-// immutable PR23 producer bundle. The environment variable permits callers to
-// point the same test at an unpacked copy without silently skipping it.
+// immutable PR23 producer bundle. Callers may point the test at an unpacked
+// copy; clean checkouts without the bundled attempt skip only these integration
+// checks, while an explicitly supplied missing path remains an error.
 func TestPR23DirectoryIsAccepted(t *testing.T) {
 	root := effectsQualificationInput(t)
 	report, err := VerifyDirectory(root)
@@ -66,23 +68,58 @@ func TestPR23OrderingAPIHasPositiveControls(t *testing.T) {
 
 func effectsQualificationInput(t *testing.T) string {
 	t.Helper()
-	root := os.Getenv(qualificationInputEnv)
-	if root == "" {
-		_, source, _, ok := runtime.Caller(0)
+	explicitRoot := os.Getenv(qualificationInputEnv)
+	source := ""
+	if explicitRoot == "" {
+		_, callerSource, _, ok := runtime.Caller(0)
 		if !ok {
 			t.Fatal("cannot locate integration fixture relative to test source")
 		}
-		root = filepath.Join(filepath.Dir(source), "..", "compiled-module-effects", "output", "attempts", pr23FixtureAttempt)
+		source = callerSource
 	}
-	root, err := filepath.Abs(root)
+	root, available, err := resolveEffectsQualificationInput(explicitRoot, source)
 	if err != nil {
-		t.Fatalf("resolve %s=%q: %v", qualificationInputEnv, root, err)
+		t.Fatalf("resolve %s=%q: %v", qualificationInputEnv, explicitRoot, err)
 	}
-	info, err := os.Stat(root)
-	if err != nil || !info.IsDir() {
-		t.Fatalf("%s must name an existing PR23 attempt directory: root=%q err=%v", qualificationInputEnv, root, err)
+	if !available {
+		t.Skipf("default PR23 fixture is absent at %q; set %s to an attempt directory to run the integration checks", root, qualificationInputEnv)
 	}
 	return root
+}
+
+func resolveEffectsQualificationInput(explicitRoot, sourceFile string) (string, bool, error) {
+	if explicitRoot != "" {
+		root, err := filepath.Abs(explicitRoot)
+		if err != nil {
+			return "", false, err
+		}
+		info, err := os.Stat(root)
+		if err != nil {
+			return "", false, errors.New(qualificationInputEnv + " must name an existing PR23 attempt directory: " + err.Error())
+		}
+		if !info.IsDir() {
+			return "", false, errors.New(qualificationInputEnv + " must name an existing PR23 attempt directory: path is not a directory")
+		}
+		return root, true, nil
+	}
+	if sourceFile == "" {
+		return "", false, errors.New("cannot locate integration fixture relative to test source")
+	}
+	root, err := filepath.Abs(filepath.Join(filepath.Dir(sourceFile), "..", "compiled-module-effects", "output", "attempts", pr23FixtureAttempt))
+	if err != nil {
+		return "", false, err
+	}
+	info, err := os.Stat(root)
+	if errors.Is(err, os.ErrNotExist) {
+		return root, false, nil
+	}
+	if err != nil {
+		return "", false, errors.New("inspect default PR23 fixture: " + err.Error())
+	}
+	if !info.IsDir() {
+		return "", false, errors.New("default PR23 fixture exists but is not a directory: " + root)
+	}
+	return root, true, nil
 }
 
 func readQualificationJSONMap(t *testing.T, path string) map[string]any {
