@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Compiled keyed Go modules</title>
+    <style>
+      :root { color-scheme: light dark; font: 16px/1.45 system-ui, sans-serif; }
+      body { margin: 0; padding: 2rem; }
+      main { max-width: 72rem; margin: 0 auto; }
+      header, .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+      .toolbar { margin: 1rem 0; }
+      button { font: inherit; padding: .4rem .75rem; }
+      #keyed-modules { display: grid; gap: 1rem; }
+      #keyed-modules > [data-gobi-module-root] { min-width: 0; padding: 1rem; border: 1px solid #8888; border-radius: .5rem; }
+      #keyed-modules > [data-gobi-module-root='parent'] { background: #8881; }
+      #keyed-modules > [data-gobi-module-root^='child-'] { margin-left: 1.5rem; }
+      pre { overflow: auto; max-height: 26rem; padding: 1rem; background: #8882; border-radius: .5rem; }
+      [data-state="failed"] { color: #c33; }
+      @media (max-width: 42rem) { body { padding: 1rem; } #keyed-modules > [data-gobi-module-root^='child-'] { margin-left: .5rem; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Two keyed Go counters</h1>
+          <p>The Go parent owns membership, order, generations, step, and lock state. Each mounted key has an independent compiled counter child.</p>
+        </div>
+        <output id="keyed-status" aria-live="polite" data-state="starting">Starting…</output>
+      </header>
+      <div class="toolbar" aria-label="Renderer and inspection controls">
+        <div>
+          <button type="button" data-keyed-backend="dom">Use DOM renderer</button>
+          <button type="button" data-keyed-backend="react">Use React renderer</button>
+        </div>
+        <div>
+          <button type="button" id="read-keyed-snapshot">Read snapshot</button>
+          <button type="button" id="read-keyed-trace">Read trace</button>
+        </div>
+      </div>
+      <section id="keyed-modules" aria-label="Compiled keyed parent and child counters"></section>
+      <h2>Current keyed snapshot</h2>
+      <pre id="keyed-snapshot" aria-live="polite"></pre>
+      <details>
+        <summary>Runtime trace</summary>
+        <pre id="keyed-trace"></pre>
+      </details>
+    </main>
+    <script type="module" src="./demo.bundle.mjs"></script>
+  </body>
+</html>
