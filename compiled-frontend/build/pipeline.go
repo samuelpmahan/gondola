@@ -105,7 +105,7 @@ func Build(request compilercontract.BuildRequest) compilercontract.BuildResult {
 	if err != nil {
 		var failure *stageFailure
 		if errors.As(err, &failure) {
-			result.Diagnostics = append(result.Diagnostics, failure.diagnostics...)
+			result.Diagnostics = stageFailureDiagnostics(result.Diagnostics, failure)
 		} else {
 			result.Diagnostics = append(result.Diagnostics, buildDiagnostic("build.publish", err.Error()))
 		}
@@ -114,6 +114,14 @@ func Build(request compilercontract.BuildRequest) compilercontract.BuildResult {
 	result.OK = true
 	result.Apps = builtApps
 	result.Outputs = builtOutputs
+	return result
+}
+
+func stageFailureDiagnostics(existing []compilercontract.Diagnostic, failure *stageFailure) []compilercontract.Diagnostic {
+	result := append(existing, failure.diagnostics...)
+	if len(failure.diagnostics) == 0 {
+		result = append(result, buildDiagnostic("build.stage", failure.err.Error()))
+	}
 	return result
 }
 

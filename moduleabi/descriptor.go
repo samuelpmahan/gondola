@@ -231,9 +231,24 @@ func ValidateDescriptor(d Descriptor) error {
 	if !equalCapabilities(canonicalCaps, d.Capabilities) {
 		return errors.New("capabilities must be unique and sorted")
 	}
+	hasEffectRequest, hasEffectCancel := false, false
+	for _, capability := range d.Capabilities {
+		switch capability {
+		case compilercontract.CapabilityEffectRequest:
+			hasEffectRequest = true
+		case compilercontract.CapabilityEffectCancel:
+			hasEffectCancel = true
+		}
+	}
 	roles := roleMap(d.Roles)
 	types := typeMap(d.Types)
 	parent := roles["Output"].Name != ""
+	// Effect capabilities describe declared typed child code. They do not
+	// certify the host effect vocabulary or lifecycle; profile admission owns
+	// those exact descriptors. Parent effect ABIs remain outside this v1 shape.
+	if (hasEffectRequest || hasEffectCancel) && (roles["Input"].Name == "" || roles["Publication"].Name == "") {
+		return errors.New("effect capabilities require the child Input/Publication bridge roles")
+	}
 	if err := validateBridgeSignature(roles, types, parent); err != nil {
 		return err
 	}
@@ -736,6 +751,8 @@ func canonicalCapabilities(values []compilercontract.Capability) ([]compilercont
 		compilercontract.CapabilityBindingChecked: true,
 		compilercontract.CapabilitySafeInteger:    true,
 		compilercontract.CapabilityFloat64:        true,
+		compilercontract.CapabilityEffectRequest:  true,
+		compilercontract.CapabilityEffectCancel:   true,
 	}
 	seen := map[compilercontract.Capability]bool{}
 	for _, capability := range values {

@@ -341,7 +341,11 @@ func ValidateOperations(program compilercontract.TypedProgram, roots []compilerc
 			case compilercontract.OpUnsupported:
 				diagnostics = append(diagnostics, diagnostic("analyze.unsupported-operation", fmt.Sprintf("unsupported reachable Go construct %s", operation.Operator), span))
 			case compilercontract.OpCall:
-				if operation.SymbolID == "" {
+				if operation.SymbolID == "strconv.ParseUint" {
+					if !safeParseUintCall(operation) {
+						diagnostics = append(diagnostics, diagnostic("analyze.numeric-profile", "strconv.ParseUint is supported only with constant base 10 and bitSize 53", span))
+					}
+				} else if operation.SymbolID == "" {
 					diagnostics = append(diagnostics, diagnostic("analyze.dynamic-call", "dynamic or unresolved call is unsupported", span))
 				} else if _, local := functions[operation.SymbolID]; !local && !supportedCall(operation.SymbolID, types) {
 					diagnostics = append(diagnostics, diagnostic("analyze.unsupported-call", fmt.Sprintf("unsupported reachable call %q", operation.SymbolID), span))
@@ -465,6 +469,21 @@ func supportedCall(id compilercontract.SymbolID, types map[compilercontract.Type
 		return function == "Copysign"
 	}
 	return false
+}
+
+// safeParseUintCall admits only strconv.ParseUint's base-10, 53-bit profile.
+// Its successful result is bounded by 2^53-1, the largest integer exactly
+// represented by the JavaScript number domain used by generated programs.
+// The call remains rejected by default; callers cannot select a wider width
+// or a dynamic base/bitSize through this proof.
+func safeParseUintCall(operation compilercontract.Operation) bool {
+	if operation.Kind != compilercontract.OpCall || operation.SymbolID != "strconv.ParseUint" || len(operation.Children) != 4 {
+		return false
+	}
+	base, baseOK := integerConstant(operation.Children[2])
+	bitSize, bitSizeOK := integerConstant(operation.Children[3])
+	return baseOK && base.IsInt64() && base.Int64() == 10 &&
+		bitSizeOK && bitSize.IsInt64() && bitSize.Int64() == 53
 }
 
 func walkOperations(operations []compilercontract.Operation, visit func(compilercontract.Operation)) {

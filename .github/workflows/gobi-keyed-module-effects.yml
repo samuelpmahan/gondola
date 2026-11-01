@@ -1,0 +1,149 @@
+name: Gobi keyed module effects
+
+on:
+  push:
+    paths:
+      - '.github/workflows/gobi-keyed-module-effects.yml'
+      - '.github/workflows/gobi-keyed-modules.yml'
+      - 'compiled-module-effects/**'
+      - 'cmd/module-effects-native/**'
+      - 'cmd/keyed-module-native/**'
+      - 'cmd/gobi/**'
+      - 'cmd/counter-wasm/**'
+      - 'cmd/compare-interaction/**'
+      - 'fixtures/compiled/effectmodulechild/**'
+      - 'fixtures/compiled/keyedmoduleparent/**'
+      - 'fixtures/compiled/keyedmodulewire/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'compiled-keyed-modules/**'
+      - 'compiled-frontend/**'
+      - 'compiled-modules/abi/**'
+      - 'compiled-modules/conformance/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'moduleabi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'go.sum'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'EXPECTED.json'
+      - 'SHA256SUMS'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/**'
+      - 'run.sh'
+      - 'run-interaction.sh'
+      - 'run-keyed-modules.sh'
+      - 'run-module-effects.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/gobi-keyed-module-effects.yml'
+      - '.github/workflows/gobi-keyed-modules.yml'
+      - 'compiled-module-effects/**'
+      - 'cmd/module-effects-native/**'
+      - 'cmd/keyed-module-native/**'
+      - 'cmd/gobi/**'
+      - 'cmd/counter-wasm/**'
+      - 'cmd/compare-interaction/**'
+      - 'fixtures/compiled/effectmodulechild/**'
+      - 'fixtures/compiled/keyedmoduleparent/**'
+      - 'fixtures/compiled/keyedmodulewire/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'compiled-keyed-modules/**'
+      - 'compiled-frontend/**'
+      - 'compiled-modules/abi/**'
+      - 'compiled-modules/conformance/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'moduleabi/**'
+      - 'reactmap/**'
+      - 'go.mod'
+      - 'go.sum'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'EXPECTED.json'
+      - 'SHA256SUMS'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/**'
+      - 'run.sh'
+      - 'run-interaction.sh'
+      - 'run-keyed-modules.sh'
+      - 'run-module-effects.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  module-effects:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      GOFLAGS: -buildvcs=false
+      GONDOLA_SKIP_NPM_CI: '1'
+      GONDOLA_SKIP_BROWSER_INSTALL: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Chromium for Playwright
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Check source commit
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+
+      - name: Run M0, counter, and prior keyed-module regressions
+        run: |
+          bash run.sh
+          bash run-interaction.sh
+          bash run-keyed-modules.sh --source-commit "$SOURCE_COMMIT"
+
+      - name: Run keyed module effects profile
+        run: bash run-module-effects.sh --source-commit "$SOURCE_COMMIT"
+
+      - name: Preserve keyed module effects evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-keyed-module-effects-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            compiled-module-effects/output/attempts/**
+            compiled-module-effects/output/*.tar.gz
+            compiled-module-effects/output/*.manifest.json
+            compiled-module-effects/evidence/attempts/**
+            compiled-keyed-modules/output/attempts/**
+            compiled-keyed-modules/evidence/attempts/**
+          if-no-files-found: warn

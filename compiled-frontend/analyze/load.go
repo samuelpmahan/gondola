@@ -229,16 +229,29 @@ func projectReachableLocalDependencies(root string, entries []string, entryPacka
 	visited := make(map[compilercontract.SymbolID]bool)
 	queue := make([]compilercontract.SymbolID, 0)
 	entryCount := len(entryPackages)
+	entryTypes := sourceTypeIndex(entryPackages)
 	for _, entry := range entries {
 		for _, pkg := range entryPackages[:entryCount] {
 			if pkg.ImportPath != entry {
 				continue
 			}
+			byName := make(map[string][]compilercontract.TypedFunction)
 			for _, name := range []string{"Init", "Update", "View"} {
 				id := compilercontract.SymbolID(pkg.ImportPath + "." + name)
 				if projected[id].ID != "" {
 					queue = append(queue, id)
 				}
+			}
+			for _, function := range pkg.Functions {
+				byName[function.Name] = append(byName[function.Name], function)
+			}
+			var stateType compilercontract.TypeID
+			if initializers := byName["Init"]; len(initializers) == 1 && len(initializers[0].Signature.Results) == 1 {
+				stateType = initializers[0].Signature.Results[0]
+			}
+			bridgeRoles, bridgeDiagnostics := discoverModuleBridgeRoles(pkg, byName, stateType, entryTypes)
+			if len(bridgeDiagnostics) == 0 && bridgeRoles.input != nil && bridgeRoles.publication != nil {
+				queue = append(queue, bridgeRoles.input.ID, bridgeRoles.publication.ID)
 			}
 		}
 	}
@@ -276,12 +289,13 @@ func projectReachableLocalDependencies(root string, entries []string, entryPacka
 				}
 			}
 			collector := newTypeCollector()
-			function, err := projectFunction(root, declaration.packageSource, declaration.declaration, collector)
+			projectedFunction, err := projectFunction(root, declaration.packageSource, declaration.declaration, collector)
 			if err != nil {
 				// A source-local dependency call without a safe typed body remains
 				// unresolved and is rejected by ValidateOperations if reachable.
 				continue
 			}
+			function = projectedFunction
 			projected[id] = function
 			dependency := dependencyPackages[packagePath]
 			if dependency == nil {
