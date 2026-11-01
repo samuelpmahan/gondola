@@ -52,6 +52,21 @@ function parseRecordedJSON(text, label) {
   throw new TypeError(`${label} does not contain a JSON record`);
 }
 
+function validRecordedBuildContext(buildContext) {
+  if (buildContext?.schema !== "gobi.module-effects-build-context/v1") return false;
+  const fields = ["repositoryRoot", "compilerWorkingDirectory", "outputRoot", "goScriptTempRoot", "helperCommentBase"];
+  if (!fields.every((key) => typeof buildContext[key] === "string" && isAbsolute(buildContext[key]) &&
+      resolve(buildContext[key]) === buildContext[key])) return false;
+
+  // These paths describe where the recorded compiler invocation ran. They
+  // remain anchored to that invocation after the source closure is extracted
+  // elsewhere; source pins below are always read from this loader's physical
+  // ROOT, never from the recorded path.
+  const recordedRepositoryRoot = buildContext.repositoryRoot;
+  return buildContext.compilerWorkingDirectory === resolve(recordedRepositoryRoot, "compiled-frontend") &&
+    buildContext.helperCommentBase === resolve(recordedRepositoryRoot, "compiled-module-effects");
+}
+
 export function validateKeyedHelperDescriptor(descriptor, expected) {
   if (descriptor?.schema !== HELPER_DESCRIPTOR_SCHEMA) throw new TypeError("keyed helper descriptor schema is invalid");
   for (const key of ["backend", "packagePath", "componentId", "exportName"]) {
@@ -487,12 +502,8 @@ export async function loadModuleEffectsBuilds(buildIndexPath) {
     throw new TypeError(`build index must use ${INDEX_SCHEMA}`);
   }
   const buildContext = index.buildContext;
-  if (buildContext?.schema !== "gobi.module-effects-build-context/v1" ||
-      !["repositoryRoot", "compilerWorkingDirectory", "outputRoot", "goScriptTempRoot", "helperCommentBase"].every((key) =>
-        typeof buildContext[key] === "string" && isAbsolute(buildContext[key])) ||
-      buildContext.repositoryRoot !== ROOT || resolve(buildContext.compilerWorkingDirectory) !== resolve(ROOT, "compiled-frontend") ||
-      resolve(buildContext.helperCommentBase) !== resolve(ROOT, "compiled-module-effects")) {
-    throw new TypeError("build index generated-source context is malformed or belongs to a different checkout");
+  if (!validRecordedBuildContext(buildContext)) {
+    throw new TypeError("build index generated-source context is malformed or internally inconsistent");
   }
   const indexRoot = dirname(indexFile);
   const result = { schema: index.schema, indexPath: indexFile, indexSHA256: sha256(indexBytes), builds: {}, profiles: {} };
