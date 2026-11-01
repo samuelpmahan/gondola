@@ -1,0 +1,132 @@
+name: Gobi native module-effects qualification
+
+on:
+  push:
+    paths:
+      - '.github/workflows/gobi-module-effects-qualification.yml'
+      - 'cmd/module-effects-qualify/**'
+      - 'effectqualification/**'
+      - 'effectsreplay/**'
+      - 'modulequalification/**'
+      - 'moduleabi/**'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'fixtures/compiled/effectmodulechild/**'
+      - 'fixtures/compiled/keyedmoduleparent/**'
+      - 'fixtures/compiled/keyedmodulewire/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'compiled-module-effects/**'
+      - 'compiled-keyed-modules/**'
+      - 'compiled-modules/abi/**'
+      - 'compiled-modules/conformance/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-frontend/**'
+      - 'module-effects-qualification/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/**'
+      - 'run.sh'
+      - 'run-interaction.sh'
+      - 'run-keyed-modules.sh'
+      - 'run-module-effects.sh'
+      - 'run-module-effects-qualification.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/gobi-module-effects-qualification.yml'
+      - 'cmd/module-effects-qualify/**'
+      - 'effectqualification/**'
+      - 'effectsreplay/**'
+      - 'modulequalification/**'
+      - 'moduleabi/**'
+      - 'compilercontract/**'
+      - 'counter/**'
+      - 'gobi/**'
+      - 'reactmap/**'
+      - 'fixtures/compiled/effectmodulechild/**'
+      - 'fixtures/compiled/keyedmoduleparent/**'
+      - 'fixtures/compiled/keyedmodulewire/**'
+      - 'fixtures/compiled/modulechild/**'
+      - 'fixtures/compiled/moduleparent/**'
+      - 'fixtures/compiled/modulewire/**'
+      - 'compiled-module-effects/**'
+      - 'compiled-keyed-modules/**'
+      - 'compiled-modules/abi/**'
+      - 'compiled-modules/conformance/**'
+      - 'compiled-capabilities/archive-helper.mjs'
+      - 'compiled-capabilities/archive-helper.test.mjs'
+      - 'compiled-children/browser-version.mjs'
+      - 'compiled-frontend/**'
+      - 'module-effects-qualification/**'
+      - 'go.mod'
+      - 'go.sum'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'interaction/**'
+      - 'run.sh'
+      - 'run-interaction.sh'
+      - 'run-keyed-modules.sh'
+      - 'run-module-effects.sh'
+      - 'run-module-effects-qualification.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  native-module-effects-qualification:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+      GOTOOLCHAIN: local
+      GOFLAGS: -buildvcs=false
+      GONDOLA_SKIP_NPM_CI: '1'
+      GONDOLA_SKIP_BROWSER_INSTALL: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            interaction/package-lock.json
+            compiled-frontend/package-lock.json
+
+      - name: Install existing locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix interaction --no-audit --no-fund
+          npm ci --prefix compiled-frontend --no-audit --no-fund
+
+      - name: Install Chromium for Playwright
+        run: interaction/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Check source commit
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+
+      - name: Produce and qualify a fresh module-effects archive
+        run: bash run-module-effects-qualification.sh --fresh --source-commit "$SOURCE_COMMIT"
+
+      - name: Preserve native qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gobi-module-effects-qualification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            module-effects-qualification/output/fresh.*/**
+            compiled-module-effects/evidence/attempts/**
+          if-no-files-found: warn

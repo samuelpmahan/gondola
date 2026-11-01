@@ -25,26 +25,29 @@ const delimiter = process.platform === "win32" ? ";" : ":";
 const commandRecords = [];
 const rootGoEnv = { GOTOOLCHAIN: "local", GOFLAGS: "-buildvcs=false" };
 const compilerGoEnv = { GOTOOLCHAIN: "go1.27.3", GOFLAGS: "-buildvcs=false" };
-const sourceDirectories = [
+const baseSourceDirectories = [
   "cmd/module-effects-native", "cmd/keyed-module-native",
   "fixtures/compiled/effectmodulechild", "fixtures/compiled/keyedmoduleparent",
   "fixtures/compiled/keyedmodulewire", "fixtures/compiled/modulechild",
   "fixtures/compiled/moduleparent", "fixtures/compiled/modulewire",
   "moduleabi", "counter", "gobi", "compilercontract", "reactmap",
-  "compiled-module-effects", "compiled-keyed-modules",
+  "compiled-module-effects", "compiled-keyed-modules", "module-effects-qualification",
   "compiled-modules/abi", "compiled-modules/conformance",
   "compiled-frontend",
 ];
+let sourceDirectories = [];
 const sourceFiles = [
   "go.mod", "package.json", "package-lock.json", "EXPECTED.json", "SHA256SUMS",
   ".gitignore", ".gitattributes",
   "interaction/package.json", "interaction/package-lock.json",
   "compiled-frontend/go.mod", "compiled-frontend/go.sum",
+  "compiled-frontend/coordination/go.mod",
   "compiled-frontend/package.json", "compiled-frontend/package-lock.json",
   "compiled-capabilities/archive-helper.mjs", "compiled-capabilities/archive-helper.test.mjs",
   "compiled-children/browser-version.mjs",
   "compiled-frontend/conformance/browser.mjs",
   "run.sh", "run-interaction.sh", "run-keyed-modules.sh", "run-module-effects.sh",
+  "run-module-effects-qualification.sh", ".github/workflows/gobi-module-effects-qualification.yml",
   ".github/workflows/gobi-keyed-module-effects.yml", ".github/workflows/gobi-keyed-modules.yml",
 ];
 const excludedNames = new Set([
@@ -395,7 +398,7 @@ async function listNodeTestFiles() {
 
 async function runTests() {
   currentStage = "module-effects-go-and-node-tests";
-  const goPackages = ["./cmd/module-effects-native", "./fixtures/compiled/effectmodulechild"];
+  const goPackages = ["./cmd/module-effects-native", "./fixtures/compiled/effectmodulechild", "./effectsreplay"];
   const goOutput = await execute("module-effects-go-tests", goExecutable, ["test", "-json", "-count=1", ...goPackages], {
     cwd: root, env: rootGoEnv, maxBuffer: 256 * 1024 * 1024,
   });
@@ -966,6 +969,24 @@ async function run(args) {
   gitStart = await gitMetadata("before");
   if (args.sourceCommit !== gitStart.head) throw new Error(`source commit ${args.sourceCommit} does not match Git HEAD ${gitStart.head}`);
   if (gitStart.dirty && !args.allowDirty) throw new Error("working tree is dirty; use --allow-dirty for an author-only diagnostic");
+  currentStage = "verifier-go-test-source-closure";
+  const goTestRoots = ["./cmd/module-effects-qualify", "./effectqualification", "./effectsreplay", "./modulequalification"];
+  const goDirectoryTemplate = "{{if and .Module (eq .Module.Path \"github.com/samuelpmahan/gondola\")}}{{.Dir}}{{end}}";
+  const goDirectoriesOutput = await execute("module-effects-go-test-source-closure", goExecutable, [
+    "list", "-deps", "-test", "-f", goDirectoryTemplate, ...goTestRoots,
+  ], { env: rootGoEnv });
+  const discoveredDirectories = new Set();
+  for (const directory of goDirectoriesOutput.split(/\r?\n/).map((value) => value.trim()).filter(Boolean)) {
+    const absolute = resolve(directory);
+    const relativeDirectory = relative(root, absolute).split(sep).join("/");
+    if (!relativeDirectory || relativeDirectory === "." || relativeDirectory === ".." || relativeDirectory.startsWith("../") || isAbsolute(relativeDirectory)) {
+      throw new Error(`Go test source closure contains an out-of-root package directory: ${directory}`);
+    }
+    discoveredDirectories.add(relativeDirectory);
+  }
+  if (discoveredDirectories.size === 0) throw new Error("Go test source closure returned no in-repository package directories");
+  sourceDirectories = [...new Set([...baseSourceDirectories, ...discoveredDirectories])].sort();
+  sourceClosureScope.directories = sourceDirectories;
   sourcePinsBefore = await snapshotSourcePins();
   const sourceClosure = await compareSourcePinsToGit(sourcePinsBefore, gitStart.head);
   gitStart.sourcePinsMatch = sourceClosure.sourcePinsMatch && !gitStart.dirty;
