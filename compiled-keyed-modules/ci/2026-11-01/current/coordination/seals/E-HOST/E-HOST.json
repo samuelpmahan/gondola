@@ -1,0 +1,101 @@
+{
+  "job_id": "E-HOST",
+  "worker": "N3",
+  "outcome": "mixed_change",
+  "summary": "Added a compiled keyed-module host that reconciles Go-owned membership/generations, reuses isolated child states, fences stale callbacks and renderer epochs, preserves keyed instances across reorder, and validates supplemental helper pins before mount.",
+  "report": "../keyed-module-coordination/reports/E-HOST.md",
+  "source_commit": "4395d41ade7e4196878b6885d4c46dd4d8ec85f1",
+  "git_dirty_at_build": true,
+  "owned_source": [
+    {
+      "path": "compiled-keyed-modules/runtime/runtime.mjs",
+      "bytes": 60813,
+      "sha256": "615e2f4f02136d10ff019a4e8baf24868d48dbbd38355f79dd4bce52c0d3693b"
+    },
+    {
+      "path": "compiled-keyed-modules/runtime/runtime.test.mjs",
+      "bytes": 10131,
+      "sha256": "ff8c6d30d7b6e9e45eb1a6a4f0e47ef3202e197e30c865a7ce93dc57b0121ec7"
+    }
+  ],
+  "toolchain": {
+    "node": "v22.23.4",
+    "node_path": "/tmp/gondola-node22/node_modules/node/bin/node",
+    "root_go": "go1.24.0 linux/amd64",
+    "compiler_go": "go1.27.3 linux/amd64",
+    "goscript": "v0.6.2",
+    "esbuild": "0.28.2"
+  },
+  "dependencies": {
+    "build_index": {
+      "path": "compiled-keyed-modules/build/output/E-BUILD-final/build-index.json",
+      "bytes": 84891,
+      "sha256": "75df29c02218fab47294454bb0338a720d806901d64377b4cae024fd4f6a2e66"
+    },
+    "build_index_loader": {
+      "path": "compiled-keyed-modules/conformance/module-loader.mjs",
+      "sha256": "e69315c913728d20b946ddf24f75d4a9946b043c9cce849ae419aa71478ed76d"
+    },
+    "module_pair_validator": {
+      "path": "compiled-modules/abi/validate.mjs",
+      "sha256": "f3673bac84514039c80ee2eb74651a38720a9c21ccaab9007247866b8b49397e"
+    },
+    "renderer_binding": {
+      "path": "compiled-frontend/frontend/react/bindings.mjs",
+      "sha256": "29711c7dea81be8e71549984246c7efdb97e8163096f9cf49d6e04ab1917e02b"
+    }
+  },
+  "helper_source_identity": [
+    {
+      "path": "fixtures/compiled/keyedmoduleparent/app.go",
+      "bytes": 7040,
+      "sha256": "610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9"
+    },
+    {
+      "path": "compiled-keyed-modules/build/output/E-BUILD-final/dom-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts",
+      "bytes": 186,
+      "sha256": "0a426e9c1e26906a6aa9b9484dc45f97d1eb233e10fa549b4c6ba86c985e5c86"
+    },
+    {
+      "path": "compiled-keyed-modules/build/output/E-BUILD-final/dom-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts",
+      "bytes": 12181,
+      "sha256": "0e40bb7496a649e6679e352bb54ba3065f35924b9e7e57c8542506649e957c8b"
+    }
+  ],
+  "build_profiles": {
+    "dom": {
+      "parent_abi_sha256": "afcc8a633dd042f197eae1fc980c51d36c6c606bddcda336e649871183932146",
+      "child_abi_sha256": "ffbba9b1c36182a7623f9b24468814bfab6210d725d5f3e549fd41542337166d",
+      "helper_sha256": "5937778c4b147344247b7886508605d0d2f0581b2f68fac3c4b799e533c29b37",
+      "helper_descriptor_sha256": "03e34f2b9c78e53794e3efaf680031b5bbec1da99c419c81d41616a2268c0e85"
+    },
+    "react": {
+      "parent_abi_sha256": "3e34e9d8b09e7d9e726ec30c2325340e8ae4be1542d4d3c0ded0243b0009bea3",
+      "child_abi_sha256": "ed5fad22b7b94b4d7ffeb52e1ac880cafc582057673c656c875e369b7bd1ac69",
+      "helper_sha256": "7a9e993e97c4aaa47903a6e71449a318c0eb21071f2ed61cd0ac5b1ea5eb9545",
+      "helper_descriptor_sha256": "24e6541fcdb7eba3d0aa9b7dc356200a1f0b08f092d9ad50234f1608de8e8945"
+    }
+  },
+  "verification": {
+    "command": "GOBI_KEYED_BUILD_INDEX=/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/build/output/E-BUILD-final/build-index.json /tmp/gondola-node22/node_modules/node/bin/node --test compiled-keyed-modules/runtime/runtime.test.mjs",
+    "tests_passed": 2,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "helper_identity_negative_controls": 6,
+    "actual_artifact_smoke": {
+      "schema": "gobi.keyed-host-smoke/v1",
+      "backend": "dom",
+      "event_count": 11,
+      "status": "passed",
+      "output": "../keyed-module-coordination/rawlogs/E-HOST/actual-artifact-smoke.stdout.json",
+      "output_sha256": "7f7fac9f422000956aa160d1bad6bac16312c49b7361ff2ff51feaf2a3887f14"
+    },
+    "physical_browser_run": "pending E-RUN; not claimed by E-HOST"
+  },
+  "rawlogs": {
+    "directory": "../keyed-module-coordination/rawlogs/E-HOST",
+    "inventory": "../keyed-module-coordination/rawlogs/E-HOST/SHA256SUMS",
+    "commands": "../keyed-module-coordination/rawlogs/E-HOST/commands.json"
+  },
+  "independent_review": "pending"
+}

@@ -1,0 +1,42 @@
+{
+  "job_id": "E-RESTORE-SAFE",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Removed the unsafe os.rename fallback. Restore now requires Linux renameat2(RENAME_NOREPLACE) and fails closed with staging cleanup if the platform, symbol, or kernel primitive is unavailable. The current 11-case suite, three new unsupported-commit controls, and actual 600-member/157-source-pin restore passed.",
+  "report": "../keyed-module-coordination/reports/E-RESTORE-SAFE.md",
+  "owned_source": {
+    "path": "/tmp/keyed-module-publish/restore.py",
+    "bytes": 26946,
+    "sha256": "0dac505c5e9949a2b6168dac955e40c7af805847f73ef27652e1962d603d3f68"
+  },
+  "preserved_author_source_sha256": "6cd408b3f86ed91a033e6ad01f494c44c6c8e319409f89453c93777b117191ab",
+  "preserved_reviewer_witness_sha256": "20096e21d4768c32c74df2b4adbf8f8c9fc85d34a11ebe88dd8fdd3d4c0ac3f6",
+  "remedy": {
+    "primitive": "Linux renameat2(RENAME_NOREPLACE)",
+    "unsafe_os_rename_fallback_removed": true,
+    "unsupported_platforms_fail_closed": true,
+    "staging_cleaned_on_commit_failure": true
+  },
+  "verification": {
+    "primary_restore_exit_code": 0,
+    "primary_members": 600,
+    "expanded_bytes": 372962548,
+    "source_pins": 157,
+    "audit_synthetic_cases": 11,
+    "audit_synthetic_failures": 0,
+    "unsupported_primitive_controls": 3,
+    "unsupported_controls_failures": 0,
+    "reviewer_race_foreign_destination_preserved": true,
+    "unsafe_os_rename_calls": 0
+  },
+  "platform": {
+    "python": "3.12.14",
+    "os": "Linux 6.18.57 x86_64",
+    "renameat2_symbol_available": true,
+    "macos_tested": false,
+    "windows_tested": false
+  },
+  "rawlogs": "../keyed-module-coordination/rawlogs/E-RESTORE-SAFE/review-evidence.json",
+  "preserved_author_report_sha256": "8489490bb5e764b9673aa38b9f0642010083feac68974814615801c0852cba2d",
+  "preserved_author_receipt_sha256": "8f6028ca5ba2702342f6bfabf53f7c1bc3e6a1c5f19830e73fe42c4867ebc5b1"
+}

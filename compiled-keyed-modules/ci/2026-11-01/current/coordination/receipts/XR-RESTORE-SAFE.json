@@ -1,0 +1,57 @@
+{
+  "author_job_id": "E-RESTORE-SAFE",
+  "author_worker": "N1",
+  "checks": {
+    "archive_members_verified": 600,
+    "expanded_bytes_verified": 372962548,
+    "expected_control_rejections": "All negative controls returned expected failures; no verification command failed.",
+    "frozen_E_RESTORE_SAFE_SHA256SUMS_entries_verified": 22,
+    "native_linux_renameat2_existing_destination_refused": true,
+    "race_foreign_destination_preserved": true,
+    "race_sentinel_preserved": true,
+    "segments_verified": 25,
+    "source_ast_os_rename_calls": 0,
+    "source_commit": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "source_diff_limited_to_commit_path_and_help": true,
+    "source_pins_verified": 157,
+    "staging_removed_after_commit_failure": true,
+    "synthetic_remote_audit_cases_passed": 11,
+    "unsafe_os_rename_calls": 0,
+    "unsupported_primitive_controls_passed": 3
+  },
+  "decision": "accepted",
+  "job_id": "XR-RESTORE-SAFE",
+  "limitations": [
+    "Safety guarantee is limited to Linux systems with working renameat2(RENAME_NOREPLACE); unsupported profiles fail closed.",
+    "macOS and Windows were not tested; no cross-platform claim is made.",
+    "Restore SHA-256 pins establish byte consistency, not publisher authenticity.",
+    "Go, Node, M0, and browser integration suites were outside this focused review and were not rerun."
+  ],
+  "pins": {
+    "archive_sha256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+    "bundle_index_sha256": "a09b6e65d33e9601dff85d7fb4a560c4b682f6e51c76183e961f07c2e8c96dce",
+    "bundle_manifest_sha256": "0f8f5b15c36442d54412ad6480f4dbbb475b4cabec45ef800a01498a312f064b",
+    "commands_sha256": "ade693f1239a1b1ddfb4fd2c14e63c108b59e93de125d0646ca26405f29e7a86",
+    "prior_E_RESTORE_receipt_sha256": "8f6028ca5ba2702342f6bfabf53f7c1bc3e6a1c5f19830e73fe42c4867ebc5b1",
+    "prior_E_RESTORE_report_sha256": "8489490bb5e764b9673aa38b9f0642010083feac68974814615801c0852cba2d",
+    "prior_E_RESTORE_source_sha256": "6cd408b3f86ed91a033e6ad01f494c44c6c8e319409f89453c93777b117191ab",
+    "prior_XR_RESTORE_race_witness_sha256": "20096e21d4768c32c74df2b4adbf8f8c9fc85d34a11ebe88dd8fdd3d4c0ac3f6",
+    "prior_XR_RESTORE_receipt_sha256": "7b194540f64430b666b31a299d3d74684ddb93b78bac94a7138a1edab627dbea",
+    "prior_XR_RESTORE_report_sha256": "16c7e8b5255684e33c7061c01ad309382425222010375a4b9fa6bf3a24d7df91",
+    "source_diff_sha256": "b7cd109f3044a89422b847a05b30930c2af6a99faf3545ae4cab9b488b170382",
+    "utility_bytes": 26946,
+    "utility_sha256": "0dac505c5e9949a2b6168dac955e40c7af805847f73ef27652e1962d603d3f68"
+  },
+  "platform": {
+    "libc": "glibc 2.39",
+    "macos_tested": false,
+    "os": "Linux 6.18.57 x86_64",
+    "python": "3.12.14",
+    "renameat2_symbol_available": true,
+    "windows_tested": false
+  },
+  "rawlogs": "rawlogs/XR-RESTORE-SAFE",
+  "report": "reports/XR-RESTORE-SAFE.md",
+  "summary": "Independent review accepted the sealed narrow repair: restore now requires Linux renameat2(RENAME_NOREPLACE), fails closed when unavailable or unsupported, and preserves a raced foreign destination. Fresh fail-closed controls, synthetic remote audit cases, native no-replace behavior, and exact verification of the pinned 600-member primary restore passed.",
+  "worker": "N2"
+}

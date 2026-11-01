@@ -1,0 +1,40 @@
+{
+  "job_id": "XR-RESTORE",
+  "worker": "N4",
+  "author_job_id": "E-RESTORE",
+  "author_worker": "N1",
+  "decision": "amend",
+  "summary": "The sealed restore utility passed an independent actual local primary restore (25 segments, all 600 members, 157 source pins), the 11-case remote audit suite, and four additional strict-metadata/member-digest controls. Review requires amendment because CLI help promises existing paths are never overwritten, but the no-renameat2 os.rename fallback can replace a directory created after its precheck; a controlled fallback-race witness reproduces this. Requested narrow fix: fail closed if Linux renameat2(RENAME_NOREPLACE) is unavailable; do not add another OS implementation.",
+  "pins": {
+    "utility_sha256": "6cd408b3f86ed91a033e6ad01f494c44c6c8e319409f89453c93777b117191ab",
+    "author_report_sha256": "8489490bb5e764b9673aa38b9f0642010083feac68974814615801c0852cba2d",
+    "author_receipt_sha256": "8f6028ca5ba2702342f6bfabf53f7c1bc3e6a1c5f19830e73fe42c4867ebc5b1",
+    "bundle_index_sha256": "a09b6e65d33e9601dff85d7fb4a560c4b682f6e51c76183e961f07c2e8c96dce",
+    "bundle_manifest_sha256": "0f8f5b15c36442d54412ad6480f4dbbb475b4cabec45ef800a01498a312f064b",
+    "primary_review_sha256": "201c98354c97ca04f23c2dfba7a70a16f6a9b2f4f9f40f0b10cfd93222c7cb43",
+    "audit_synthetic_sha256": "a99604d897523fda30fe1fa7fd716069ceffd884885c003967143894a02ec521",
+    "metadata_synthetic_sha256": "747b83866bb30c3a1257c6d181aa46f13476a6c64c58246a78a911b13fec9c95",
+    "no_replace_witness_sha256": "20096e21d4768c32c74df2b4adbf8f8c9fc85d34a11ebe88dd8fdd3d4c0ac3f6"
+  },
+  "checks": {
+    "python": "3.12.14",
+    "os": "Linux 6.18.57 x86_64",
+    "segments_verified": 25,
+    "archive_members_verified": 600,
+    "expanded_bytes_verified": 372962548,
+    "source_pins_verified": 157,
+    "remote_synthetic_cases_passed": 11,
+    "extra_metadata_digest_cases_passed": 4,
+    "linux_renameat2_existing_destination_refusal": true,
+    "fallback_race_reproduced": true,
+    "author_sha256sums_entries_verified": 25
+  },
+  "requested_remedy": "Fail closed when renameat2(RENAME_NOREPLACE) is unavailable or unsupported; remove the os.rename fallback. Bound the guarantee/test profile to Linux with renameat2.",
+  "rawlogs": "rawlogs/XR-RESTORE",
+  "limitations": [
+    "No actual audit archive was available; audit controls used the specified synthetic remote schema.",
+    "Offline Go and HTTP asset checks remain sealed E-RESTORE author evidence and were not rerun here.",
+    "macOS and Windows were not run; no cross-platform safety claim is accepted.",
+    "No production utility, source bundle, or E-RESTORE metadata/report/receipt was modified."
+  ]
+}

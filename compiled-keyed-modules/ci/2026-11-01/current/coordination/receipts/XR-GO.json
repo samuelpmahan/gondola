@@ -1,0 +1,52 @@
+{
+  "schema": "chainspot.peer-review-receipt/v1",
+  "job_id": "XR-GO",
+  "worker": "N2",
+  "reviewed_job": "E-GO",
+  "decision": "accepted",
+  "summary": "Accepted the sealed Go keyed controller and native replay after independent source/dependency pin checks, fresh targeted tests, exact 18-event replay comparison, and full snapshot/view audit.",
+  "reviewed_seal": {
+    "report_sha256": "348eecaceedbfd00452b060a2b73ece877a2cd1754516ef26548681ae3dbabda",
+    "receipt_sha256": "cbbb8053727e180bc8b95f1f438c46044993d07a509aa0109952ca3b219c5df7",
+    "source_inventory_sha256": "a1444bfa3482535b8ec2a65e7976b3b8cfb9b35a3b6f65be8ee0d96bbc4ad705"
+  },
+  "verification": {
+    "tool": "/tmp/gondola-go/go/bin/go version -> go version go1.24.0 linux/amd64",
+    "source_pins": "7 of 7 pass",
+    "dependency_pins": "6 of 6 pass",
+    "targeted_go_tests": {
+      "command": "/tmp/gondola-go/go/bin/go test -v -count=1 ./cmd/keyed-module-native ./fixtures/compiled/keyedmoduleparent ./fixtures/compiled/keyedmodulewire ./fixtures/compiled/moduleparent ./fixtures/compiled/modulechild",
+      "exit_code": 0,
+      "stdout": "rawlogs/XR-GO/go-test.stdout.log",
+      "stderr": "rawlogs/XR-GO/go-test.stderr.log"
+    },
+    "native_replay": {
+      "command": "/tmp/gondola-go/go/bin/go run ./cmd/keyed-module-native --script fixtures/compiled/keyedmoduleparent/scenario.json",
+      "exit_code": 0,
+      "events": 18,
+      "schema": "gobi.keyed-module-native/v1",
+      "trace_bytes": 539517,
+      "trace_sha256": "40af1b1ce072f7f702e613c4f292174d8d76b95477842ecba747c0f19a3abd9e",
+      "matches_sealed_author_trace": true,
+      "stdout": "rawlogs/XR-GO/native-literal.json",
+      "stderr": "rawlogs/XR-GO/native-literal.stderr.log"
+    },
+    "trace_audit": {
+      "snapshots_checked": 19,
+      "events_checked": 18,
+      "result": "pass",
+      "evidence": "rawlogs/XR-GO/trace-audit.log"
+    },
+    "malformed_cli_probes": {
+      "cases": 5,
+      "rejected": 5,
+      "evidence": "rawlogs/XR-GO/malformed-probes.log"
+    }
+  },
+  "limits": [
+    "Finite a/b controller profile with JavaScript-safe generations.",
+    "No asynchronous effect or browser renderer claim was tested in this Go review.",
+    "No general compiled-helper reachability claim is made."
+  ],
+  "rawlogs": "rawlogs/XR-GO"
+}

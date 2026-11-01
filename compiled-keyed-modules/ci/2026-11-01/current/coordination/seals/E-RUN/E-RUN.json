@@ -1,0 +1,593 @@
+{
+  "job_id": "E-RUN",
+  "worker": "N6",
+  "outcome": "mixed_change",
+  "summary": "Clean-source keyed delivery acceptance passed at f4c8f70199a8ca896c13e225a85901abe658d0de with all 157 source pins matching Git and the before/after pin maps identical. Four builds, focused Go/Node tests, four-scenario native/direct/browser parity, 28 mutation controls, six mounted demo smoke steps, and an independently verified 600-member archive passed. The final Milestone 0 5000-case check and 107-script/4473-tick counter interaction regression also passed; original M0 hashes match the baseline.",
+  "status": "passed",
+  "source": {
+    "commit": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "tree": "9539b600d72927641217b77a20a38955350eec49",
+    "requestedCommit": "f4c8f70199a8ca896c13e225a85901abe658d0de",
+    "cleanBeforeProfile": true,
+    "cleanAfterAllRuns": true,
+    "gitStatusAfter": "",
+    "sourcePinsMatchGitHead": true,
+    "sourcePinMismatchPaths": [],
+    "sourcePinCount": 157,
+    "sourcePinMapsBeforeAfterEqual": true,
+    "sourcePinsJSONSHA256": "0ad1fc4af4bc7fba1fcea09b6e89a081e53775b035b9e874adccf6fa8ee7d912"
+  },
+  "commands": [
+    {
+      "name": "keyed-module-profile",
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GOBI_PYTHON_BIN=/tmp/rebalancer-env/bin/python CHROMIUM_PATH=/tmp/chromium-portable bash run-keyed-modules.sh --source-commit f4c8f70199a8ca896c13e225a85901abe658d0de",
+      "exitCode": 0,
+      "stdout": "delivery.stdout.log",
+      "stderr": "delivery.stderr.log"
+    },
+    {
+      "name": "milestone-zero",
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH bash run.sh",
+      "exitCode": 0,
+      "stdout": "m0.stdout.log",
+      "stderr": "m0.stderr.log",
+      "checks": {
+        "seed": 20261030,
+        "randomCases": 5000,
+        "receiptsMatch": true,
+        "sha256SumsOK": true
+      }
+    },
+    {
+      "name": "counter-interaction",
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium-portable bash run-interaction.sh",
+      "exitCode": 0,
+      "stdout": "counter-interaction.stdout.log",
+      "stderr": "counter-interaction.stderr.log",
+      "checks": {
+        "seed": 20261030,
+        "scripts": 107,
+        "ticks": 4473,
+        "nodeTests": 8,
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "tools": {
+    "goExecutable": "/tmp/gondola-go/go/bin/go",
+    "go": "go version go1.24.0 linux/amd64",
+    "compilerGo": "go version go1.27.3 linux/amd64",
+    "nodeExecutable": "/tmp/gondola-node22/node_modules/node/bin/node",
+    "node": "v22.23.4",
+    "pythonExecutable": "/tmp/rebalancer-env/bin/python",
+    "python": "Python 3.12.14",
+    "chromiumPath": "/tmp/chromium-portable",
+    "chromium": "Chromium 153.0.8010.0",
+    "playwright": "1.64.1",
+    "tar": "tar (GNU tar) 1.35",
+    "platform": "linux",
+    "architecture": "x64",
+    "npm": "11.9.0",
+    "interactionEsbuild": "0.28.2"
+  },
+  "profile": {
+    "status": "passed",
+    "buildCalls": 4,
+    "buildIndex": {
+      "path": "builds/build-index.json",
+      "bytes": 85101,
+      "sha256": "52941cb76f2408c2d9b3614e92ebd6e334235409ead6abd943d6c72b76ef125c",
+      "admission": {
+        "react": {
+          "backend": "react",
+          "parentABISHA256": "b1976e0c0144b47da247db8a75b5a7b0437e1b0b8653a3001eb3c6eaae42b2b4",
+          "childABISHA256": "1ca59cd7600ec0065d5aaf5e717939640b4dfd0c27bb9983e95899e2c8180ed4",
+          "parentArtifactSHA256": "8895178739c196286bd85aa13151cb540a0f4f109904e18986381ec2955665e1",
+          "childArtifactSHA256": "d23f6e1d0645119ba6a82834cd661313a9c3bbc13b80493e0db8a86592da5eca",
+          "admitted": true
+        },
+        "dom": {
+          "backend": "dom",
+          "parentABISHA256": "329f340567aa5d30c3486ac57c6e1c7315e3a34eaafa7b734ef91d15e87b191b",
+          "childABISHA256": "7e55bffcdcb27f34e9d841a035c02fd1afba804a23bd6f4a3de1000939d48d6b",
+          "parentArtifactSHA256": "5235b4115cb403758278d8032ced380073e6a12fdfb166eaa654d9915ae95bd1",
+          "childArtifactSHA256": "2e33dce4f77fd9d71052b6d25affd82a8aab8e43740887b4e95aa90a7c1b6bf8",
+          "admitted": true
+        }
+      },
+      "adapterChecks": {
+        "react": {
+          "backend": "react",
+          "initialChildren": [
+            {
+              "key": "a",
+              "generation": 1
+            },
+            {
+              "key": "b",
+              "generation": 1
+            }
+          ],
+          "childSnapshotDetached": true,
+          "crossAdapterStateAccepted": true,
+          "parentStateNotMutatedByReceiveKeyed": true,
+          "remountGenerationFenced": true,
+          "standardOutput": {
+            "Step": 2,
+            "Locked": false,
+            "Revision": 2
+          }
+        },
+        "dom": {
+          "backend": "dom",
+          "initialChildren": [
+            {
+              "key": "a",
+              "generation": 1
+            },
+            {
+              "key": "b",
+              "generation": 1
+            }
+          ],
+          "childSnapshotDetached": true,
+          "crossAdapterStateAccepted": true,
+          "parentStateNotMutatedByReceiveKeyed": true,
+          "remountGenerationFenced": true,
+          "standardOutput": {
+            "Step": 2,
+            "Locked": false,
+            "Revision": 2
+          }
+        }
+      }
+    },
+    "builds": {
+      "react": {
+        "parent": {
+          "outputCount": 71,
+          "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+          "moduleABISHA256": "b1976e0c0144b47da247db8a75b5a7b0437e1b0b8653a3001eb3c6eaae42b2b4",
+          "artifactSHA256": "8895178739c196286bd85aa13151cb540a0f4f109904e18986381ec2955665e1",
+          "keyedHelperSHA256": "784721c34a2c953aeee860d120a02bf2fafa529837defca735bf62d8b3fdaf28"
+        },
+        "child": {
+          "outputCount": 70,
+          "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+          "moduleABISHA256": "1ca59cd7600ec0065d5aaf5e717939640b4dfd0c27bb9983e95899e2c8180ed4",
+          "artifactSHA256": "d23f6e1d0645119ba6a82834cd661313a9c3bbc13b80493e0db8a86592da5eca",
+          "keyedHelperSHA256": null
+        }
+      },
+      "dom": {
+        "parent": {
+          "outputCount": 71,
+          "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent",
+          "moduleABISHA256": "329f340567aa5d30c3486ac57c6e1c7315e3a34eaafa7b734ef91d15e87b191b",
+          "artifactSHA256": "5235b4115cb403758278d8032ced380073e6a12fdfb166eaa654d9915ae95bd1",
+          "keyedHelperSHA256": "c91afda9fcb5634388c1d16c901fa3143b0d5f0a86168894d95ec0e3d2f14cea"
+        },
+        "child": {
+          "outputCount": 70,
+          "packagePath": "github.com/samuelpmahan/gondola/fixtures/compiled/modulechild",
+          "moduleABISHA256": "7e55bffcdcb27f34e9d841a035c02fd1afba804a23bd6f4a3de1000939d48d6b",
+          "artifactSHA256": "2e33dce4f77fd9d71052b6d25affd82a8aab8e43740887b4e95aa90a7c1b6bf8",
+          "keyedHelperSHA256": null
+        }
+      }
+    },
+    "focusedTests": {
+      "schema": "gobi.keyed-modules-focused-tests/v1",
+      "status": "passed",
+      "go": {
+        "packages": [
+          "./cmd/keyed-module-native",
+          "./fixtures/compiled/keyedmoduleparent",
+          "./fixtures/compiled/keyedmodulewire",
+          "./fixtures/compiled/moduleparent",
+          "./fixtures/compiled/modulechild"
+        ],
+        "outputBytes": 375
+      },
+      "node": {
+        "files": [
+          "compiled-keyed-modules/runtime/runtime.test.mjs",
+          "compiled-keyed-modules/conformance/module-loader.test.mjs",
+          "compiled-keyed-modules/oracle/oracle.test.mjs"
+        ],
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "outputBytes": 1833
+      },
+      "commands": [
+        {
+          "name": "focused-keyed-go-tests",
+          "command": "/tmp/gondola-go/go/bin/go",
+          "args": [
+            "test",
+            "-count=1",
+            "./cmd/keyed-module-native",
+            "./fixtures/compiled/keyedmoduleparent",
+            "./fixtures/compiled/keyedmodulewire",
+            "./fixtures/compiled/moduleparent",
+            "./fixtures/compiled/modulechild"
+          ],
+          "cwd": "/workspace/scratch/39a56936f173/gondola",
+          "environment": {
+            "GOTOOLCHAIN": "local",
+            "GOFLAGS": "-buildvcs=false"
+          },
+          "startedAt": "2026-11-01T00:37:35.774Z",
+          "completedAt": "2026-11-01T00:37:35.774Z",
+          "exitCode": 0,
+          "signal": null,
+          "spawnError": null,
+          "stdout": {
+            "bytes": 375,
+            "sha256": "1ed16cbe864b4f3d7dbed16c1aa61654778d36d83c21495f06524df409135cda"
+          },
+          "stderr": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        },
+        {
+          "name": "focused-keyed-node-tests",
+          "command": "/tmp/gondola-node22/node_modules/node/bin/node",
+          "args": [
+            "--test-reporter=tap",
+            "--test",
+            "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/runtime/runtime.test.mjs",
+            "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/conformance/module-loader.test.mjs",
+            "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/oracle/oracle.test.mjs"
+          ],
+          "cwd": "/workspace/scratch/39a56936f173/gondola",
+          "environment": {
+            "GOBI_KEYED_BUILD_INDEX": "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/output/attempts/attempt-20261101T003733042Z-6-a2f2aa08/builds/build-index.json"
+          },
+          "startedAt": "2026-11-01T00:37:36.208Z",
+          "completedAt": "2026-11-01T00:37:36.208Z",
+          "exitCode": 0,
+          "signal": null,
+          "spawnError": null,
+          "stdout": {
+            "bytes": 1833,
+            "sha256": "035bcb56e72db406e091cf725fcb9ba907a3b2f0db899fce4489d35432c0860c"
+          },
+          "stderr": {
+            "bytes": 177,
+            "sha256": "ae941077a909afb06c4ba6ccfad92e384b14e5fec2d40bab21244c86ac8ae525"
+          }
+        }
+      ]
+    },
+    "scenarioEventCounts": {
+      "literal": 18,
+      "seed-20261101": 36,
+      "seed-20261102": 36,
+      "seed-20261103": 36
+    },
+    "uniqueScenarioEvents": 126,
+    "nativeCheckpointsIncludingInitial": 130,
+    "nativeCaptureRows": [
+      {
+        "scenario": "literal",
+        "events": 18,
+        "checkpointsIncludingInitial": 19,
+        "captureSHA256": "40af1b1ce072f7f702e613c4f292174d8d76b95477842ecba747c0f19a3abd9e"
+      },
+      {
+        "scenario": "seed-20261101",
+        "events": 36,
+        "checkpointsIncludingInitial": 37,
+        "captureSHA256": "cce04d41951a530b6d849dcfcec7fb883ec07404660b97b321c6fd0a2d2a90f3"
+      },
+      {
+        "scenario": "seed-20261102",
+        "events": 36,
+        "checkpointsIncludingInitial": 37,
+        "captureSHA256": "63bc4a3d8e76e804d51485c31347a56324ac046c5c24f04ce5f3ae9a1a6f9c18"
+      },
+      {
+        "scenario": "seed-20261103",
+        "events": 36,
+        "checkpointsIncludingInitial": 37,
+        "captureSHA256": "6f38507ee251cd11998b3fda092d1bb0e5730e3fab3ebe56b99271bed74b868c"
+      }
+    ],
+    "directProfileCount": 8,
+    "browserProfileCount": 12,
+    "conformanceStatus": "matched",
+    "harnessCheck": {
+      "schema": "gobi.keyed-modules-conformance-check/v1",
+      "status": "matched",
+      "summary": {
+        "path": "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/output/attempts/attempt-20261101T003733042Z-6-a2f2aa08/conformance/keyed.summary.json",
+        "bytes": 75563,
+        "sha256": "8ae486209a4ba914499a46489fc609f2feef5126d841be3ce5fd25b85d9e110a"
+      }
+    },
+    "captureMutationControls": {
+      "status": "detected",
+      "mutationControlsDetected": 11,
+      "controls": [
+        {
+          "id": "native-sibling-counter-isolation",
+          "status": "rejected",
+          "message": "native.events[0].snapshot.children[1].childState: expected {\"count\":0,\"step\":1,\"locked\":false,\"inputRevision\":1}, got {\"count\":1,\"step\":1,\"locked\":false,\"inputRevision\":1}"
+        },
+        {
+          "id": "native-reset-only-target",
+          "status": "rejected",
+          "message": "native.events[5].snapshot.children[1].childState: expected {\"count\":1,\"step\":1,\"locked\":false,\"inputRevision\":3}, got {\"count\":0,\"step\":1,\"locked\":false,\"inputRevision\":3}"
+        },
+        {
+          "id": "native-reorder-preserves-keyed-state",
+          "status": "rejected",
+          "message": "native.events[9].snapshot.children[0].childState: expected {\"count\":2,\"step\":1,\"locked\":false,\"inputRevision\":3}, got {\"count\":1,\"step\":1,\"locked\":false,\"inputRevision\":3}"
+        },
+        {
+          "id": "native-removal-tombstone",
+          "status": "rejected",
+          "message": "native.events[10].snapshot.controllerState: expected {\"a\":{\"key\":\"a\",\"generation\":1,\"mounted\":false,\"publishedCount\":1,\"publishedRevision\":3},\"b\":{\"key\":\"b\",\"generation\":1,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"first\":\"b\",\"second\":\"\",\"childCount\":1}, got {\"a\":{\"key\":\"a\",\"generation\":1,\"mounted\":true,\"publishedCount\":1,\"publishedRevision\":3},\"b\":{\"key\":\"b\",\"generation\":1,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"first\":\"b\",\"second\":\"\",\"childCount\":1}"
+        },
+        {
+          "id": "native-remount-new-generation",
+          "status": "rejected",
+          "message": "native.events[13].snapshot.controllerState: expected {\"a\":{\"key\":\"a\",\"generation\":2,\"mounted\":true,\"publishedCount\":0,\"publishedRevision\":3},\"b\":{\"key\":\"b\",\"generation\":1,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"first\":\"b\",\"second\":\"a\",\"childCount\":2}, got {\"a\":{\"key\":\"a\",\"generation\":1,\"mounted\":true,\"publishedCount\":0,\"publishedRevision\":3},\"b\":{\"key\":\"b\",\"generation\":1,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"first\":\"b\",\"second\":\"a\",\"childCount\":2}"
+        },
+        {
+          "id": "native-stale-callback-fence",
+          "status": "rejected",
+          "message": "native.events[15].accepted: expected false, got true"
+        },
+        {
+          "id": "native-stale-publication-fence",
+          "status": "rejected",
+          "message": "native.events[16].snapshot.controllerState: expected {\"a\":{\"key\":\"a\",\"generation\":2,\"mounted\":true,\"publishedCount\":1,\"publishedRevision\":3},\"b\":{\"key\":\"b\",\"generation\":1,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"first\":\"b\",\"second\":\"a\",\"childCount\":2}, got {\"a\":{\"key\":\"a\",\"generation\":2,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"b\":{\"key\":\"b\",\"generation\":1,\"mounted\":true,\"publishedCount\":2,\"publishedRevision\":3},\"first\":\"b\",\"second\":\"a\",\"childCount\":2}"
+        },
+        {
+          "id": "direct-react-tree-mutation",
+          "status": "rejected",
+          "message": "direct.react.snapshots[eventIndex=9].children.view: expected [{\"kind\":1,\"tag\":\"section\",\"key\":\"module-child\",\"attrs\":[{\"name\":\"class\",\"value\":\"compiled-module-child\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-input\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Step: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Unlocked\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; input revision: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"3\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-publication\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Child publication count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"2\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"div\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"counter\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"2\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"add\",\"flag\":false,\"style\":null}],\"on\":[{\"event\":\"click\",\"message\":\"add\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"+\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":null,\"on\":[{\"event\":\"click\",\"message\":\"reset\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Reset\"}],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"section\",\"key\":\"module-child\",\"attrs\":[{\"name\":\"class\",\"value\":\"compiled-module-child\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-input\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Step: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Unlocked\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; input revision: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"3\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-publication\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Child publication count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"div\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"counter\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"add\",\"flag\":false,\"style\":null}],\"on\":[{\"event\":\"click\",\"message\":\"add\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"+\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":null,\"on\":[{\"event\":\"click\",\"message\":\"reset\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Reset\"}],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"}], got [{\"kind\":1,\"tag\":\"section\",\"key\":\"module-child\",\"attrs\":[{\"name\":\"class\",\"value\":\"compiled-module-child\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-input\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Step: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Unlocked\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; input revision: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"3\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-publication\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Child publication count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"2\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"div\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"counter\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"2\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"add\",\"flag\":false,\"style\":null}],\"on\":[{\"event\":\"click\",\"message\":\"add\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"+\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":null,\"on\":[{\"event\":\"click\",\"message\":\"reset\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Reset\"}],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"section\",\"key\":\"wrong-key\",\"attrs\":[{\"name\":\"class\",\"value\":\"compiled-module-child\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-input\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Step: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Unlocked\"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"; input revision: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"3\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"module-child-publication\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Child publication count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"div\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"counter\",\"flag\":false,\"style\":null}],\"on\":null,\"kids\":[{\"kind\":1,\"tag\":\"p\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Count: \"},{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"1\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":[{\"name\":\"class\",\"value\":\"add\",\"flag\":false,\"style\":null}],\"on\":[{\"event\":\"click\",\"message\":\"add\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"+\"}],\"text\":\"\"},{\"kind\":1,\"tag\":\"button\",\"key\":\"\",\"attrs\":null,\"on\":[{\"event\":\"click\",\"message\":\"reset\",\"arg\":\"\"}],\"kids\":[{\"kind\":2,\"tag\":\"\",\"key\":\"\",\"attrs\":null,\"on\":null,\"kids\":null,\"text\":\"Reset\"}],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"}]"
+        },
+        {
+          "id": "browser-dom-capture-omission",
+          "status": "rejected",
+          "message": "browser.dom.snapshots[eventIndex=-1].children[0].dom: browser capture is missing physical DOM evidence"
+        },
+        {
+          "id": "renderer-swap-logical-instance-loss",
+          "status": "rejected",
+          "message": "browser.identity.after-swap-dom-to-react[0].logicalId: expected \"b:1\", got \"wrong-logical-instance\""
+        },
+        {
+          "id": "renderer-swap-physical-node-retained",
+          "status": "rejected",
+          "message": "browser.identity.after-swap-react-to-dom[0]: renderer replacement must replace physical DOM nodes"
+        }
+      ]
+    },
+    "buildMutationControls": {
+      "status": "detected",
+      "mutationControlsDetected": 17,
+      "controls": [
+        {
+          "id": "helper-sidecar-bytes",
+          "status": "rejected",
+          "message": "buildIndex.builds.react.parent.keyedHelper.sha256: expected \"0000000000000000000000000000000000000000000000000000000000000000\", got \"784721c34a2c953aeee860d120a02bf2fafa529837defca735bf62d8b3fdaf28\""
+        },
+        {
+          "id": "helper-descriptor-bytes",
+          "status": "rejected",
+          "message": "buildIndex.builds.dom.parent.keyedHelper.descriptor.sha256: expected \"0000000000000000000000000000000000000000000000000000000000000000\", got \"1a43168e83903f668e5ea5ba9c1ee34a17992faa5e0bb3a91640b0fece3733d7\""
+        },
+        {
+          "id": "build-backend-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.react.parent.backend: expected \"react\", got \"dom\""
+        },
+        {
+          "id": "build-package-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.dom.parent.packagePath: expected \"github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent\", got \"github.com/samuelpmahan/gondola/fixtures/compiled/modulechild\""
+        },
+        {
+          "id": "build-component-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.react.parent.componentId: expected \"github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent\", got \"wrong-component\""
+        },
+        {
+          "id": "module-abi-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.dom.parent.moduleABI.abiSHA256: expected \"329f340567aa5d30c3486ac57c6e1c7315e3a34eaafa7b734ef91d15e87b191b\", got \"0000000000000000000000000000000000000000000000000000000000000000\""
+        },
+        {
+          "id": "app-ir-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.react.parent.artifacts.appIR.sha256: expected \"0000000000000000000000000000000000000000000000000000000000000000\", got \"70e17604359b90bc78e022f12b7faeeed3a7a80fac7ba63f79697085711c85af\""
+        },
+        {
+          "id": "helper-fixture-source-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.react.parent.keyedHelper.sourceIdentity.fixtureSource.sha256: expected \"0000000000000000000000000000000000000000000000000000000000000000\", got \"610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9\""
+        },
+        {
+          "id": "helper-emitted-source-identity",
+          "status": "rejected",
+          "message": "buildIndex.builds.dom.parent.keyedHelper.descriptor.sourceIdentity/index: expected {\"fixtureSource\":{\"path\":\"fixtures/compiled/keyedmoduleparent/app.go\",\"bytes\":7040,\"sha256\":\"610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9\"},\"emittedGoScriptSources\":[{\"path\":\"dom-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts\",\"bytes\":186,\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"},{\"path\":\"dom-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts\",\"bytes\":12181,\"sha256\":\"0e40bb7496a649e6679e352bb54ba3065f35924b9e7e57c8542506649e957c8b\"}]}, got {\"fixtureSource\":{\"path\":\"fixtures/compiled/keyedmoduleparent/app.go\",\"bytes\":7040,\"sha256\":\"610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9\"},\"emittedGoScriptSources\":[{\"path\":\"dom-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts\",\"bytes\":186,\"sha256\":\"0a426e9c1e26906a6aa9b9484dc45f97d1eb233e10fa549b4c6ba86c985e5c86\"},{\"path\":\"dom-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts\",\"bytes\":12181,\"sha256\":\"0e40bb7496a649e6679e352bb54ba3065f35924b9e7e57c8542506649e957c8b\"}]}"
+        },
+        {
+          "id": "descriptor-backend",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-backend.backend: expected \"react\", got \"dom\""
+        },
+        {
+          "id": "descriptor-package",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-package.packagePath: expected \"github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent\", got \"github.com/samuelpmahan/gondola/fixtures/compiled/modulechild\""
+        },
+        {
+          "id": "descriptor-component",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-component.componentId: expected \"github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent\", got \"wrong-component\""
+        },
+        {
+          "id": "descriptor-module-abi",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-module-abi.moduleABI: expected {\"path\":\"react-parent/apps/keyedmoduleparent-a75c21d49b52/module-abi.json\",\"bytes\":10376,\"sha256\":\"050600d992747d50a0df12272cd8463adb61dea432c3241fda0fce401a8a0eb9\",\"abiSHA256\":\"b1976e0c0144b47da247db8a75b5a7b0437e1b0b8653a3001eb3c6eaae42b2b4\"}, got {\"path\":\"react-parent/apps/keyedmoduleparent-a75c21d49b52/module-abi.json\",\"bytes\":10376,\"sha256\":\"050600d992747d50a0df12272cd8463adb61dea432c3241fda0fce401a8a0eb9\",\"abiSHA256\":\"0000000000000000000000000000000000000000000000000000000000000000\"}"
+        },
+        {
+          "id": "descriptor-app-ir",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-app-ir.appIR: expected {\"path\":\"react-parent/apps/keyedmoduleparent-a75c21d49b52/app-ir.json\",\"bytes\":15908,\"sha256\":\"70e17604359b90bc78e022f12b7faeeed3a7a80fac7ba63f79697085711c85af\"}, got {\"path\":\"react-parent/apps/keyedmoduleparent-a75c21d49b52/app-ir.json\",\"bytes\":15908,\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"}"
+        },
+        {
+          "id": "descriptor-fixture-source",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-fixture-source.sourceIdentity/index: expected {\"fixtureSource\":{\"path\":\"fixtures/compiled/keyedmoduleparent/app.go\",\"bytes\":7040,\"sha256\":\"610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9\"},\"emittedGoScriptSources\":[{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts\",\"bytes\":186,\"sha256\":\"0a426e9c1e26906a6aa9b9484dc45f97d1eb233e10fa549b4c6ba86c985e5c86\"},{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts\",\"bytes\":12181,\"sha256\":\"0e40bb7496a649e6679e352bb54ba3065f35924b9e7e57c8542506649e957c8b\"}]}, got {\"fixtureSource\":{\"path\":\"fixtures/compiled/keyedmoduleparent/app.go\",\"bytes\":7040,\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"},\"emittedGoScriptSources\":[{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts\",\"bytes\":186,\"sha256\":\"0a426e9c1e26906a6aa9b9484dc45f97d1eb233e10fa549b4c6ba86c985e5c86\"},{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts\",\"bytes\":12181,\"sha256\":\"0e40bb7496a649e6679e352bb54ba3065f35924b9e7e57c8542506649e957c8b\"}]}"
+        },
+        {
+          "id": "descriptor-emitted-source",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-emitted-source.sourceIdentity/index: expected {\"fixtureSource\":{\"path\":\"fixtures/compiled/keyedmoduleparent/app.go\",\"bytes\":7040,\"sha256\":\"610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9\"},\"emittedGoScriptSources\":[{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts\",\"bytes\":186,\"sha256\":\"0a426e9c1e26906a6aa9b9484dc45f97d1eb233e10fa549b4c6ba86c985e5c86\"},{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts\",\"bytes\":12181,\"sha256\":\"0e40bb7496a649e6679e352bb54ba3065f35924b9e7e57c8542506649e957c8b\"}]}, got {\"fixtureSource\":{\"path\":\"fixtures/compiled/keyedmoduleparent/app.go\",\"bytes\":7040,\"sha256\":\"610064486c28cb8a2abe1dc7094d8cf37312ea852e7ab83335b7239c1bb9c3b9\"},\"emittedGoScriptSources\":[{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/index.ts\",\"bytes\":186,\"sha256\":\"0a426e9c1e26906a6aa9b9484dc45f97d1eb233e10fa549b4c6ba86c985e5c86\"},{\"path\":\"react-parent/emitted-ts/@goscript/github.com/samuelpmahan/gondola/fixtures/compiled/keyedmoduleparent/app.gs.ts\",\"bytes\":12181,\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"}]}"
+        },
+        {
+          "id": "descriptor-helper-reachability",
+          "status": "rejected",
+          "message": "mutatedDescriptor.descriptor-helper-reachability.stateSemantics.analyzerReachability: must retain the limitation that ReceiveKeyed/IsCurrent are not admitted by the shared AppIR reachability analyzer"
+        }
+      ]
+    },
+    "demoHTTP": {
+      "status": "passed",
+      "httpStatus": 200,
+      "steps": [
+        {
+          "name": "initial-two-key-mount",
+          "passed": true,
+          "children": [
+            {
+              "key": "a",
+              "generation": 1
+            },
+            {
+              "key": "b",
+              "generation": 1
+            }
+          ]
+        },
+        {
+          "name": "independent-counter-adds",
+          "passed": true,
+          "counts": {
+            "a": 1,
+            "b": 1
+          }
+        },
+        {
+          "name": "step-input-propagation",
+          "passed": true,
+          "counts": {
+            "a": 3,
+            "b": 1
+          }
+        },
+        {
+          "name": "lock-propagation-and-child-guard",
+          "passed": true,
+          "goMessageAccepted": true
+        },
+        {
+          "name": "reorder-preserves-child-state",
+          "passed": true,
+          "order": [
+            "b",
+            "a"
+          ],
+          "counts": {
+            "a": 3,
+            "b": 1
+          }
+        },
+        {
+          "name": "remove-remount-generation-fence",
+          "passed": true,
+          "generation": 2,
+          "stalePublication": {
+            "accepted": false,
+            "stale": true,
+            "eventIndex": 10
+          }
+        }
+      ],
+      "rendererRoundTripPreserved": true,
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    "archive": {
+      "path": "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/output/attempts/attempt-20261101T003733042Z-6-a2f2aa08.tar.gz",
+      "bytes": 25697770,
+      "sha256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+      "manifestPath": "/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/output/attempts/attempt-20261101T003733042Z-6-a2f2aa08.manifest.json",
+      "manifestSHA256": "0f8f5b15c36442d54412ad6480f4dbbb475b4cabec45ef800a01498a312f064b",
+      "members": 600,
+      "independentConsumer": {
+        "archiveSHA256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+        "manifestSHA256": "0f8f5b15c36442d54412ad6480f4dbbb475b4cabec45ef800a01498a312f064b",
+        "members": 600,
+        "schema": "gobi.keyed-modules-independent-consumer/v1",
+        "status": "passed"
+      },
+      "copiedPath": "../keyed-module-coordination/rawlogs/E-RUN/keyed-modules-attempt-20261101T003733042Z-6-a2f2aa08.tar.gz",
+      "copiedManifestPath": "../keyed-module-coordination/rawlogs/E-RUN/keyed-modules-attempt-20261101T003733042Z-6-a2f2aa08.manifest.json",
+      "copiedReceiptPath": "../keyed-module-coordination/rawlogs/E-RUN/keyed-modules-attempt-20261101T003733042Z-6-a2f2aa08.receipt.json",
+      "copiedArchiveSHA256": "1921ef063cd8f62f56384c72c65a0f87b26a6cabb015d3aff42040c96b6453d7",
+      "copiedManifestSHA256": "0f8f5b15c36442d54412ad6480f4dbbb475b4cabec45ef800a01498a312f064b",
+      "copiedReceiptSHA256": "010d3daa5df0df60f7a7d83a7833da6c0d2df04cb2befa37c3eee2780399ed6d"
+    }
+  },
+  "milestoneZeroPreservation": {
+    "expected": {
+      "bytes": 320,
+      "sha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2",
+      "matchesBaseline": true
+    },
+    "sha256Sums": {
+      "bytes": 1966,
+      "sha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0",
+      "matchesBaseline": true
+    },
+    "interactionTrace": {
+      "path": "interaction-traces-seed-20261030.json.gz",
+      "uncompressedBytes": 49491627,
+      "uncompressedSHA256": "bc647b4a36311d2d19e32afa9686df74bfed46bc408a4d17c108c7c74a0bd934",
+      "compressedSHA256": "4f5c49b7a22f83fce0765120490c0ffa1487718f970b5e96d500c5a5c0a5a2e2",
+      "matchesBaseline": true
+    }
+  },
+  "deliveryAuthorSnapshotCountCorrection": {
+    "path": "../corrections/E-DELIVERY-snapshot-count.json",
+    "sha256": "c982d4b6b46f6646bfc3020dd0e2ae318774e66abb83f9ff15881e7a9af1d3a2",
+    "originalManualClaim": 148,
+    "correctNativeCheckpoints": 130,
+    "explanation": "The old 148 count was a manual reporting error, not an execution mismatch. This E-RUN derives 130 checkpoints from its four fresh native captures."
+  },
+  "evidence": {
+    "report": "reports/E-RUN.md",
+    "runInventory": "rawlogs/E-RUN/run-inventory.json",
+    "primaryArchive": "rawlogs/E-RUN/keyed-modules-attempt-20261101T003733042Z-6-a2f2aa08.tar.gz",
+    "primaryManifest": "rawlogs/E-RUN/keyed-modules-attempt-20261101T003733042Z-6-a2f2aa08.manifest.json",
+    "primaryReceipt": "rawlogs/E-RUN/keyed-modules-attempt-20261101T003733042Z-6-a2f2aa08.receipt.json",
+    "sha256Manifest": "rawlogs/E-RUN/SHA256SUMS"
+  },
+  "limits": [
+    "The profile covers finite synchronous two-key membership and does not test asynchronous effects.",
+    "Browser uses programmatic HTMLElement.click() DOM dispatch, not trusted pointer or OS input.",
+    "No generic third-renderer admission claim is made."
+  ]
+}

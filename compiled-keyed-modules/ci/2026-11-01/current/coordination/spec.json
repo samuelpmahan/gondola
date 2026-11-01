@@ -1,0 +1,71 @@
+{
+  "schema": "chainspot.rebalancer-spec/v1",
+  "workers": [
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
+  ],
+  "review_policy": {
+    "enabled": true,
+    "review_prefix": "XR"
+  },
+  "jobs": [
+    {
+      "id": "E-GO",
+      "kind": "extract",
+      "allow_workers": [
+        "N1"
+      ],
+      "owner": "fixtures/compiled/keyedmoduleparent/** fixtures/compiled/keyedmodulewire/** cmd/keyed-module-native/**",
+      "summary": "Implement independent keyed module experiment; read CONTRACT.md"
+    },
+    {
+      "id": "E-BUILD",
+      "kind": "extract",
+      "allow_workers": [
+        "N2"
+      ],
+      "owner": "compiled-keyed-modules/build/**",
+      "summary": "Implement independent keyed module experiment; read CONTRACT.md"
+    },
+    {
+      "id": "E-HOST",
+      "kind": "extract",
+      "allow_workers": [
+        "N3"
+      ],
+      "owner": "compiled-keyed-modules/runtime/**",
+      "summary": "Implement independent keyed module experiment; read CONTRACT.md"
+    },
+    {
+      "id": "E-HARNESS",
+      "kind": "extract",
+      "allow_workers": [
+        "N4"
+      ],
+      "owner": "compiled-keyed-modules/conformance/**",
+      "summary": "Implement independent keyed module experiment; read CONTRACT.md"
+    },
+    {
+      "id": "E-ORACLE",
+      "kind": "extract",
+      "allow_workers": [
+        "N5"
+      ],
+      "owner": "compiled-keyed-modules/oracle/**",
+      "summary": "Implement independent keyed module experiment; read CONTRACT.md"
+    },
+    {
+      "id": "E-DELIVERY",
+      "kind": "extract",
+      "allow_workers": [
+        "N6"
+      ],
+      "owner": "compiled-keyed-modules/demo/** compiled-keyed-modules/run.mjs README.md RESULTS.md .github/workflows/gobi-keyed-modules.yml run-keyed-modules.sh",
+      "summary": "Implement independent keyed module experiment; read CONTRACT.md"
+    }
+  ]
+}

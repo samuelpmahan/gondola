@@ -1,0 +1,93 @@
+{
+  "schema": "chainspot.peer-review-receipt/v1",
+  "job_id": "XR-HOST",
+  "worker": "N2",
+  "reviewed_job": "E-HOST",
+  "decision": "accepted",
+  "summary": "Accepted the sealed keyed-module host after source/artifact pin checks, fresh actual-artifact runtime tests, both-backend reset/disabled and closed-record probes, and inspection of available Chromium conformance captures.",
+  "reviewed_seal": {
+    "report_sha256": "aaa354f48600c1ccd7feafb5d43e6867a1fdc004ef5477e627f55f3b10da5e4a",
+    "receipt_sha256": "04c995d7c2bcca841c5dc546c239a1c220fef4c982b815dad54e130d1e1221b8"
+  },
+  "build_index": {
+    "path": "compiled-keyed-modules/build/output/E-BUILD-final/build-index.json",
+    "bytes": 84891,
+    "sha256": "75df29c02218fab47294454bb0338a720d806901d64377b4cae024fd4f6a2e66"
+  },
+  "backend_artifacts": {
+    "dom": {
+      "parent_abi_sha256": "afcc8a633dd042f197eae1fc980c51d36c6c606bddcda336e649871183932146",
+      "child_abi_sha256": "ffbba9b1c36182a7623f9b24468814bfab6210d725d5f3e549fd41542337166d",
+      "helper_sha256": "5937778c4b147344247b7886508605d0d2f0581b2f68fac3c4b799e533c29b37",
+      "helper_descriptor_sha256": "03e34f2b9c78e53794e3efaf680031b5bbec1da99c419c81d41616a2268c0e85"
+    },
+    "react": {
+      "parent_abi_sha256": "3e34e9d8b09e7d9e726ec30c2325340e8ae4be1542d4d3c0ded0243b0009bea3",
+      "child_abi_sha256": "ed5fad22b7b94b4d7ffeb52e1ac880cafc582057673c656c875e369b7bd1ac69",
+      "helper_sha256": "7a9e993e97c4aaa47903a6e71449a318c0eb21071f2ed61cd0ac5b1ea5eb9545",
+      "helper_descriptor_sha256": "24e6541fcdb7eba3d0aa9b7dc356200a1f0b08f092d9ad50234f1608de8e8945"
+    }
+  },
+  "tool": "Node v22.23.4; Chromium capture version 153.0.8010.0; Playwright 1.64.1",
+  "verification": {
+    "pin_failures": 0,
+    "runtime_tests": {
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "backends": [
+        "dom",
+        "react"
+      ]
+    },
+    "loader_descriptor_tests": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "reset_disabled_probe": {
+      "backends": [
+        "dom",
+        "react"
+      ],
+      "result": "pass"
+    },
+    "closed_helper_admission_probe": {
+      "cases": 6,
+      "rejected_before_factories_init_or_container_mutation": 6
+    },
+    "available_e_harness_browser_captures": {
+      "scenarios": 4,
+      "browser_profiles": 12,
+      "snapshots": 130,
+      "build_identity_controls_rejected": 17,
+      "saved_capture_audit": "pass",
+      "full_matrix_rerun_in_xr_host": false,
+      "trusted_pointer_or_os_input": false,
+      "lifetime_identity_audit": "pass; root DOM IDs retained through reorder, removed/remount changed only a, renderer swaps changed DOM IDs but retained logical instances",
+      "reset_and_sibling_isolation": "pass; actual literal DOM snapshots show a reset preserves b, remounted a:2 starts empty, and b reset preserves a"
+    },
+    "pin_checks": {
+      "checked": 27,
+      "failures": 0
+    }
+  },
+  "limits": [
+    "Finite synchronous two-key profile only; no asynchronous effects claim.",
+    "ReceiveKeyed and IsCurrent are source/artifact pinned helpers outside the unchanged shared analyzer AppIR reachability admission.",
+    "Browser evidence uses programmatic HTMLElement.click() and saved E-HARNESS captures; this review did not rerun the full browser matrix."
+  ],
+  "rawlogs": "rawlogs/XR-HOST",
+  "commands": {
+    "runtime_tests": "GOBI_KEYED_BUILD_INDEX=/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/build/output/E-BUILD-final/build-index.json /tmp/gondola-node22/node_modules/node/bin/node --test compiled-keyed-modules/runtime/runtime.test.mjs",
+    "loader_descriptor_test": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-keyed-modules/conformance/module-loader.test.mjs",
+    "reset_disabled_probe": "GOBI_KEYED_BUILD_INDEX=/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/build/output/E-BUILD-final/build-index.json /tmp/gondola-node22/node_modules/node/bin/node ../keyed-module-coordination/rawlogs/XR-HOST/reset-disabled-probe.mjs",
+    "closed_helper_admission_probe": "GOBI_KEYED_BUILD_INDEX=/workspace/scratch/39a56936f173/gondola/compiled-keyed-modules/build/output/E-BUILD-final/build-index.json /tmp/gondola-node22/node_modules/node/bin/node ../keyed-module-coordination/rawlogs/XR-HOST/closed-helper-admission-probe.mjs",
+    "pin_verification": "python3 ../keyed-module-coordination/rawlogs/XR-HOST/verify-pins.py",
+    "saved_browser_capture_audit": "python3 ../keyed-module-coordination/rawlogs/XR-HOST/audit-browser-captures.py"
+  },
+  "failures": {
+    "application_test_failures": 0,
+    "reviewer_inspection_errors": "See rawlogs/XR-HOST/reviewer-tooling-notes.log; read-only summary inspection mistakes only."
+  }
+}

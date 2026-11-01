@@ -1,0 +1,24 @@
+{
+  "job_id": "E-HARNESS",
+  "worker": "N4",
+  "outcome": "mixed_change",
+  "summary": "Implemented and ran the native/direct/browser keyed-module conformance harness. All 4 scenarios matched Go native output: literal 18 events and seeds 20261101/20261102/20261103 at 36 events each; 8 direct profiles, 12 browser profiles, 130 native-aligned snapshots. Literal semantic mutation controls detected 11/11; build identity matched and rejected 17/17 build/helper identity mutations. Node loader test passed 1/1. Full report and exact captures are under reports/E-HARNESS.md and rawlogs/E-HARNESS/.",
+  "evidence": {
+    "summary": "rawlogs/E-HARNESS/run-final.summary.json",
+    "summary_sha256": "b8fa47c2f57c4b011312607cdf3cc029c3c583c9af4bdd99ff68eddc1a48dde1",
+    "check": "rawlogs/E-HARNESS/run-final.check.json",
+    "check_sha256": "78f374a187e2b2003b76c66d5a8e89576fa7e4c390ba5d2dd051c972b96850b2",
+    "build_index": "compiled-keyed-modules/build/output/E-BUILD-final/build-index.json",
+    "build_index_sha256": "75df29c02218fab47294454bb0338a720d806901d64377b4cae024fd4f6a2e66"
+  },
+  "tools": {
+    "go": "go1.24.0 linux/amd64",
+    "node": "v22.23.4",
+    "chromium": "153.0.8010.0"
+  },
+  "limitations": [
+    "Browser actions use programmatic HTMLElement.click() DOM dispatch, not trusted pointer or OS input.",
+    "Finite synchronous two-key profile only; asynchronous effects are not tested.",
+    "Children is AppIR-reachable; ReceiveKeyed and IsCurrent are source/artifact pinned but outside shared analyzer AppIR reachability admission."
+  ]
+}

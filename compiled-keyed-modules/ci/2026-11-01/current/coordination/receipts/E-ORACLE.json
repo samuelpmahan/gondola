@@ -1,0 +1,85 @@
+{
+  "job_id": "E-ORACLE",
+  "worker": "N5",
+  "outcome": "mixed_change",
+  "summary": "Added independent native semantic replay and direct/browser parity checks for two keyed compiled child instances, with actual-capture and actual-build mutation controls. All four final N4 scenarios matched; 11/11 capture controls and 17/17 build identity controls were detected.",
+  "report": "../keyed-module-coordination/reports/E-ORACLE.md",
+  "source_commit": "4395d41ade7e4196878b6885d4c46dd4d8ec85f1",
+  "git_dirty_at_execution": true,
+  "frozen_at_utc": "2026-11-01T00:32:16Z",
+  "owned_sources": [
+    {
+      "path": "compiled-keyed-modules/oracle/oracle.mjs",
+      "bytes": 63729,
+      "sha256": "0c5264035ff00099b0da57209fb38b773a7dce7f0a88e84f3fa36b3724912be8"
+    },
+    {
+      "path": "compiled-keyed-modules/oracle/oracle.test.mjs",
+      "bytes": 16972,
+      "sha256": "ccbb62a2dfafcdf8b003d6a7613fc5dcea028e66e5ad8fe3e3e77b8d1cca779f"
+    },
+    {
+      "path": "compiled-keyed-modules/oracle/expectations.json",
+      "bytes": 3794,
+      "sha256": "9dd927de69b9a1be9349545ab2720dc57f3750eddfb201b0235f1a33027b7ba9"
+    }
+  ],
+  "toolchain": {
+    "oracle_node": "v22.23.4",
+    "native_go": "go1.24.0 linux/amd64",
+    "compiler_go": "go1.27.3 linux/amd64",
+    "goscript": "v0.6.2",
+    "chromium": "153.0.8010.0"
+  },
+  "evidence": {
+    "actual_replay": {
+      "path": "rawlogs/E-ORACLE/actual-replay.json",
+      "sha256": "9121c9428e50c8facc6db222a3cfbafd48bfac10346574437c89d65db22a6c10",
+      "status": "matched",
+      "scenarios": [
+        { "name": "keyed-modules-literal", "events": 18, "snapshots": 19 },
+        { "name": "keyed-modules-seed-20261101", "seed": 20261101, "events": 36, "snapshots": 37 },
+        { "name": "keyed-modules-seed-20261102", "seed": 20261102, "events": 36, "snapshots": 37 },
+        { "name": "keyed-modules-seed-20261103", "seed": 20261103, "events": 36, "snapshots": 37 }
+      ],
+      "native_semantic_snapshots": 130,
+      "direct_profiles": 8,
+      "browser_profiles": 12,
+      "capture_mutations_detected": 11,
+      "build_mutations_detected": 17
+    },
+    "unit_tests": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --test compiled-keyed-modules/oracle/oracle.test.mjs",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "stdout": "rawlogs/E-ORACLE/unit-test.stdout.log",
+      "stderr": "rawlogs/E-ORACLE/unit-test.stderr.log"
+    },
+    "syntax_check": {
+      "command": "/tmp/gondola-node22/node_modules/node/bin/node --check compiled-keyed-modules/oracle/oracle.mjs",
+      "exit_code": 0,
+      "stdout": "rawlogs/E-ORACLE/node-check.stdout.log",
+      "stderr": "rawlogs/E-ORACLE/node-check.stderr.log"
+    },
+    "harness_summary": {
+      "path": "rawlogs/E-HARNESS/run-final.summary.json",
+      "sha256": "b8fa47c2f57c4b011312607cdf3cc029c3c583c9af4bdd99ff68eddc1a48dde1"
+    },
+    "build_index": {
+      "path": "compiled-keyed-modules/build/output/E-BUILD-final/build-index.json",
+      "bytes": 84891,
+      "sha256": "75df29c02218fab47294454bb0338a720d806901d64377b4cae024fd4f6a2e66"
+    }
+  },
+  "attempts": "rawlogs/E-ORACLE/attempts.json",
+  "commands": "rawlogs/E-ORACLE/commands.json",
+  "rawlogs": "rawlogs/E-ORACLE",
+  "scope": {
+    "profile": "two keys a/b, bounded synchronous transitions",
+    "browser_input": "programmatic HTMLElement.click() DOM dispatch only; not trusted pointer or OS input",
+    "async_effects": "none tested or claimed",
+    "helper_reachability": "Children is AppIR reachable; ReceiveKeyed and IsCurrent are byte/source-pinned GoScript helpers not admitted by the unchanged shared AppIR reachability analyzer"
+  },
+  "independent_review": "pending"
+}

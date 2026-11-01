@@ -1,0 +1,39 @@
+{
+  "static": "passed 5000 seed20261030 original receipts unchanged",
+  "counter": "passed 107 scripts4473ticks seed20261030 eightNode tests",
+  "commands": [
+    {
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH bash run.sh",
+      "exit": 0,
+      "log": "rawlogs/root-static.log"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_PATH=/tmp/chromium-portable bash run-interaction.sh",
+      "exit": 1,
+      "log": "rawlogs/root-interaction.log",
+      "cause": "legacy runner consumes CHROMIUM_EXECUTABLE_PATH, not CHROMIUM_PATH"
+    },
+    {
+      "command": "PATH=/tmp/gondola-go/go/bin:/tmp/gondola-node22/node_modules/node/bin:$PATH GONDOLA_SKIP_NPM_CI=1 GONDOLA_SKIP_BROWSER_INSTALL=1 CHROMIUM_EXECUTABLE_PATH=/tmp/chromium-portable bash run-interaction.sh",
+      "exit": 0,
+      "log": "rawlogs/root-interaction-retry.log"
+    }
+  ],
+  "files": [
+    {
+      "path": "EXPECTED.json",
+      "bytes": 320,
+      "sha256": "639e4327a927cadf3530d12d3c9a80bdd89ac329ae333261cecb90f66aa333d2"
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 1966,
+      "sha256": "8b6ec10d327152dc1d6b494223144b08dcf5c2f16bc80d53e9b059d1c9ffe1a0"
+    },
+    {
+      "path": "interaction/build/interaction-traces-seed-20261030.json",
+      "bytes": 49491627,
+      "sha256": "bc647b4a36311d2d19e32afa9686df74bfed46bc408a4d17c108c7c74a0bd934"
+    }
+  ]
+}

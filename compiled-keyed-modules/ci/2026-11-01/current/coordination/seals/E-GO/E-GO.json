@@ -1,0 +1,48 @@
+{
+  "schema": "chainspot.worker-receipt/v1",
+  "job_id": "E-GO",
+  "worker": "N1",
+  "outcome": "mixed_change",
+  "summary": "Implemented the bounded Go-owned a/b keyed controller, keyed publication fence, and native Go replay CLI; focused checks pass.",
+  "changed_paths": [
+    "fixtures/compiled/keyedmoduleparent/app.go",
+    "fixtures/compiled/keyedmoduleparent/app_test.go",
+    "fixtures/compiled/keyedmoduleparent/scenario.json",
+    "fixtures/compiled/keyedmodulewire/keyedmodulewire.go",
+    "fixtures/compiled/keyedmodulewire/keyedmodulewire_test.go",
+    "cmd/keyed-module-native/main.go",
+    "cmd/keyed-module-native/main_test.go"
+  ],
+  "source_hashes_file": "rawlogs/E-GO/owned-source.sha256",
+  "dependency_hashes_file": "rawlogs/E-GO/dependency-source.sha256",
+  "checks": [
+    {
+      "command": "/tmp/gondola-go/go/bin/go test ./cmd/keyed-module-native ./fixtures/compiled/keyedmoduleparent ./fixtures/compiled/keyedmodulewire ./fixtures/compiled/moduleparent ./fixtures/compiled/modulechild",
+      "exit_code": 0,
+      "stdout": "rawlogs/E-GO/go-test.stdout.log",
+      "stderr": "rawlogs/E-GO/go-test.stderr.log"
+    },
+    {
+      "command": "/tmp/gondola-go/go/bin/go run ./cmd/keyed-module-native --script fixtures/compiled/keyedmoduleparent/scenario.json",
+      "exit_code": 0,
+      "stdout": "rawlogs/E-GO/native-literal.json",
+      "stderr": "rawlogs/E-GO/native-literal.stderr.log",
+      "events": 18,
+      "schema": "gobi.keyed-module-native/v1"
+    }
+  ],
+  "tool_version_file": "rawlogs/E-GO/go-version.log",
+  "integration": {
+    "build_probe": "compiled-keyed-modules/build/output/E-BUILD-probe-04",
+    "react_and_dom_parent_child_builds": "pass",
+    "keyed_helper_sidecar": "present",
+    "hashes_file": "rawlogs/E-GO/integration-probe.sha256",
+    "browser_acceptance": "pending downstream E-HOST/E-HARNESS"
+  },
+  "rawlogs": "rawlogs/E-GO",
+  "limitations": [
+    "Finite two-key profile a/b with JavaScript-safe generations.",
+    "No asynchronous effect behavior is claimed.",
+    "The keyed parent ABI Receive is intentionally a no-op; per-child publications use ReceiveKeyed."
+  ]
+}

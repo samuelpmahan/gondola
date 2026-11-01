@@ -1,0 +1,39 @@
+{
+  "job_id": "XR-ORACLE",
+  "worker": "N4",
+  "author_job_id": "E-ORACLE",
+  "author_worker": "N5",
+  "decision": "accepted",
+  "summary": "Independent review accepted the byte-pinned N5 oracle after fresh Node syntax/unit checks and a focused replay of all four frozen N4 scenarios. Full parent/controller/child state, both renderer captures, build/source/helper pins, 1,134 actual DOM roots, 550 click traces, 11 capture mutations and 17 build mutations matched. All negative controls reported the targeted mutated field. Earlier N5/N6 failure evidence remains preserved.",
+  "pins": {
+    "oracle_sha256": "0c5264035ff00099b0da57209fb38b773a7dce7f0a88e84f3fa36b3724912be8",
+    "oracle_test_sha256": "ccbb62a2dfafcdf8b003d6a7613fc5dcea028e66e5ad8fe3e3e77b8d1cca779f",
+    "expectations_sha256": "9dd927de69b9a1be9349545ab2720dc57f3750eddfb201b0235f1a33027b7ba9",
+    "e_harness_summary_sha256": "b8fa47c2f57c4b011312607cdf3cc029c3c583c9af4bdd99ff68eddc1a48dde1",
+    "build_index_sha256": "75df29c02218fab47294454bb0338a720d806901d64377b4cae024fd4f6a2e66",
+    "review_replay_sha256": "4d2a7bb9d16a3c028f5cbdb04a0c7eb47608c2c5476faf3eee6bfebb97c1a230"
+  },
+  "checks": {
+    "node_version": "v22.23.4",
+    "node_check_exit": 0,
+    "oracle_unit_tests": { "passed": 2, "failed": 0, "skipped": 0 },
+    "scenarios": 4,
+    "events": { "literal": 18, "seed-20261101": 36, "seed-20261102": 36, "seed-20261103": 36 },
+    "native_snapshots": 130,
+    "direct_profiles": 8,
+    "browser_profiles": 12,
+    "dom_roots_checked": 1134,
+    "accepted_click_messages_checked": 455,
+    "disabled_dom_clicks_checked": 57,
+    "capture_mutations_detected": 11,
+    "build_mutations_detected": 17,
+    "targeted_mutation_diagnostics": 28
+  },
+  "rawlogs": "rawlogs/XR-ORACLE",
+  "limitations": [
+    "The replay used frozen native/browser outputs; it did not relaunch Go or Chromium.",
+    "Browser clicks are programmatic HTMLElement.click() DOM dispatch, not trusted pointer or OS input.",
+    "Finite synchronous two-key profile only; no async effects are claimed.",
+    "The shared analyzer does not admit ReceiveKeyed or IsCurrent by AppIR reachability."
+  ]
+}

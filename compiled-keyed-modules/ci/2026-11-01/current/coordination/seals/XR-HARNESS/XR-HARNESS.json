@@ -1,0 +1,89 @@
+{
+  "job_id": "XR-HARNESS",
+  "worker": "N3",
+  "decision": "accepted",
+  "summary": "Independently verified the sealed four-scenario E-HARNESS matrix against actual native/direct/browser captures, exact Go NodeRecord trees and browser outerHTML, disabled click callback counts, keyed DOM identities, swap behavior, and separate same-generation renderer epoch stale probes.",
+  "report": "../keyed-module-coordination/reports/XR-HARNESS.md",
+  "reviewed_job": "E-HARNESS",
+  "author": "N4",
+  "sealed_inputs": {
+    "report_sha256": "489c75d4f51fa792162cd47b88424062f8fcd82e89ca6c7a43d95a3c2019b6f7",
+    "receipt_sha256": "4e2f91aa2ffed38b8188d3d36df425117fbefefda39a723e3b7d224b2de85940",
+    "source_inventory": "../keyed-module-coordination/seals/E-HARNESS/source-inventory.json",
+    "source_count": 8,
+    "all_owner_source_pins_match": true
+  },
+  "toolchain": {
+    "node": "v22.23.4",
+    "go": "go1.24.0 linux/amd64",
+    "compiler_go": "go1.27.3 linux/amd64",
+    "goscript": "v0.6.2",
+    "esbuild": "0.28.2",
+    "chromium": "153.0.8010.0"
+  },
+  "pins": {
+    "build_index": {
+      "path": "compiled-keyed-modules/build/output/E-BUILD-final/build-index.json",
+      "bytes": 84891,
+      "sha256": "75df29c02218fab47294454bb0338a720d806901d64377b4cae024fd4f6a2e66"
+    },
+    "harness_summary": {
+      "path": "../keyed-module-coordination/rawlogs/E-HARNESS/run-final.summary.json",
+      "bytes": 71328,
+      "sha256": "b8fa47c2f57c4b011312607cdf3cc029c3c583c9af4bdd99ff68eddc1a48dde1"
+    },
+    "harness_check": {
+      "path": "../keyed-module-coordination/rawlogs/E-HARNESS/run-final.check.json",
+      "sha256": "78f374a187e2b2003b76c66d5a8e89576fa7e4c390ba5d2dd051c972b96850b2"
+    },
+    "current_oracle": {
+      "path": "compiled-keyed-modules/oracle/oracle.mjs",
+      "sha256": "0c5264035ff00099b0da57209fb38b773a7dce7f0a88e84f3fa36b3724912be8"
+    },
+    "oracle_replay": {
+      "path": "../keyed-module-coordination/rawlogs/E-ORACLE/actual-replay.json",
+      "sha256": "9121c9428e50c8facc6db222a3cfbafd48bfac10346574437c89d65db22a6c10"
+    },
+    "fresh_browser_capture": {
+      "path": "../keyed-module-coordination/rawlogs/XR-HARNESS/fresh-literal.browser.json",
+      "bytes": 10578716,
+      "sha256": "db1d7529b1e01268d16cc2e18ddaa3f1cb596168b1911fab65db96018fa43d98"
+    },
+    "renderer_epoch_probe": {
+      "path": "../keyed-module-coordination/rawlogs/XR-HARNESS/renderer-epoch-probe.json",
+      "sha256": "aa22de5af9fe177aa672fd7c91e785ad4c0a296a40b3c03f7281859a0c281607"
+    }
+  },
+  "verification": {
+    "scenario_count": 4,
+    "event_count": 126,
+    "native_checkpoints": 130,
+    "direct_profiles": 8,
+    "mounted_profiles": 12,
+    "exact_browser_dom_snapshots": 1134,
+    "physical_clicks": 330,
+    "accepted_clicks": 273,
+    "disabled_clicks": 57,
+    "generation_stale_callbacks": 24,
+    "generation_stale_publications": 24,
+    "identity_checkpoints_per_swap_profile": 8,
+    "semantic_mutation_controls_detected": 11,
+    "build_identity_mutation_controls_detected": 17,
+    "host_epoch_tests_passed": 2,
+    "fresh_epoch_probe_cycles": [
+      {"from": "dom", "to": "react", "key": "a", "generation": 1, "callback_epoch": 1, "current_epoch": 2},
+      {"from": "react", "to": "dom", "key": "a", "generation": 1, "callback_epoch": 2, "current_epoch": 3}
+    ]
+  },
+  "reviewer_rawlogs": {
+    "directory": "../keyed-module-coordination/rawlogs/XR-HARNESS",
+    "sha256_inventory": "../keyed-module-coordination/rawlogs/XR-HARNESS/SHA256SUMS",
+    "inventory_sha256": "af148459e2c92c0dac50c6544ae5ff8a3f7036e669488ce2e42ef80abb426be8"
+  },
+  "limitations": [
+    "Programmatic HTMLElement.click DOM dispatch only; not trusted pointer or OS input.",
+    "Finite synchronous two-key profile; asynchronous effects are not tested.",
+    "ReceiveKeyed and IsCurrent are pinned supplemental helpers, not AppIR reachability admitted."
+  ],
+  "reviewer_tooling_attempts": "../keyed-module-coordination/rawlogs/XR-HARNESS/reviewer-attempts.log"
+}
