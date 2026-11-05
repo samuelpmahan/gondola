@@ -1,0 +1,371 @@
+{
+  "schema": "gondola.interaction-browser-check/v1",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "passed": 13,
+  "total": 13,
+  "results": [
+    {
+      "name": "dom: controlled input + renderer replacement + exact replay",
+      "status": "passed",
+      "evidence": {
+        "events": 4,
+        "swapDifference": null,
+        "state": {
+          "Draft": "a thought <&> 🪁",
+          "Checked": true,
+          "Saved": "a thought <&> 🪁",
+          "Saves": "1",
+          "Literal": ""
+        }
+      }
+    },
+    {
+      "name": "dom: keyed rows keep data through reorder and replacement",
+      "status": "passed",
+      "evidence": {
+        "rows": [
+          {
+            "ID": "2",
+            "Label": "second",
+            "Checked": true
+          },
+          {
+            "ID": "1",
+            "Label": "first",
+            "Checked": false
+          }
+        ],
+        "events": 7
+      }
+    },
+    {
+      "name": "dom: pending request survives renderer replacement and replays its reply",
+      "status": "passed",
+      "evidence": {
+        "state": {
+          "Input": "opaque reply",
+          "Value": "opaque reply",
+          "Status": "complete",
+          "Pending": false,
+          "Requests": "1",
+          "Completions": "1",
+          "NegativeZero": {
+            "bits": "8000000000000000"
+          }
+        },
+        "diagnostics": {
+          "renderer": {
+            "currentGeneration": 2,
+            "replacements": [
+              {
+                "attempt": 1,
+                "fromGeneration": 1,
+                "toGeneration": 2,
+                "outcome": "committed",
+                "phase": "complete",
+                "oldUnmounted": true,
+                "focusCaptured": false,
+                "focusRestored": false
+              }
+            ],
+            "fencedCallbacks": []
+          },
+          "effects": {
+            "pending": [],
+            "cancellations": []
+          }
+        },
+        "events": 4
+      }
+    },
+    {
+      "name": "react: controlled input + renderer replacement + exact replay",
+      "status": "passed",
+      "evidence": {
+        "events": 4,
+        "swapDifference": null,
+        "state": {
+          "Draft": "a thought <&> 🪁",
+          "Checked": true,
+          "Saved": "a thought <&> 🪁",
+          "Saves": "1",
+          "Literal": ""
+        }
+      }
+    },
+    {
+      "name": "react: keyed rows keep data through reorder and replacement",
+      "status": "passed",
+      "evidence": {
+        "rows": [
+          {
+            "ID": "2",
+            "Label": "second",
+            "Checked": true
+          },
+          {
+            "ID": "1",
+            "Label": "first",
+            "Checked": false
+          }
+        ],
+        "events": 7
+      }
+    },
+    {
+      "name": "react: pending request survives renderer replacement and replays its reply",
+      "status": "passed",
+      "evidence": {
+        "state": {
+          "Input": "opaque reply",
+          "Value": "opaque reply",
+          "Status": "complete",
+          "Pending": false,
+          "Requests": "1",
+          "Completions": "1",
+          "NegativeZero": {
+            "bits": "8000000000000000"
+          }
+        },
+        "diagnostics": {
+          "renderer": {
+            "currentGeneration": 2,
+            "replacements": [
+              {
+                "attempt": 1,
+                "fromGeneration": 1,
+                "toGeneration": 2,
+                "outcome": "committed",
+                "phase": "complete",
+                "oldUnmounted": true,
+                "focusCaptured": false,
+                "focusRestored": false
+              }
+            ],
+            "fencedCallbacks": []
+          },
+          "effects": {
+            "pending": [],
+            "cancellations": []
+          }
+        },
+        "events": 4
+      }
+    },
+    {
+      "name": "real timer completes after Go pending commit",
+      "status": "passed",
+      "evidence": {
+        "state": {
+          "Input": "timer payload",
+          "Value": "timer payload",
+          "Status": "complete",
+          "Pending": false,
+          "Requests": "1",
+          "Completions": "1",
+          "NegativeZero": {
+            "bits": "8000000000000000"
+          }
+        }
+      }
+    },
+    {
+      "name": "reset cancels old timers and prevents late state changes",
+      "status": "passed",
+      "evidence": {
+        "state": {
+          "Input": "",
+          "Value": "",
+          "Status": "idle",
+          "Pending": false,
+          "Requests": "0",
+          "Completions": "0",
+          "NegativeZero": {
+            "bits": "8000000000000000"
+          }
+        },
+        "events": [
+          {
+            "type": "action",
+            "action": {
+              "path": "0",
+              "event": "input",
+              "value": "retired payload"
+            },
+            "message": {
+              "Name": "edit",
+              "Arg": "retired payload"
+            }
+          },
+          {
+            "type": "action",
+            "action": {
+              "path": "1",
+              "event": "click",
+              "value": ""
+            },
+            "message": {
+              "Name": "request",
+              "Arg": ""
+            }
+          },
+          {
+            "type": "reset"
+          }
+        ]
+      }
+    },
+    {
+      "name": "live motion parameters, keyboard input, exact replay and persisted shelf",
+      "status": "passed",
+      "evidence": {
+        "final": {
+          "x": 0.5983902709583493,
+          "v": 0.0009388407138270129,
+          "referenceX": 0.5982830067229826,
+          "referenceV": -0.003915547503611098,
+          "target": 0.6,
+          "time": 0.9999999999999989,
+          "elapsed": 0.9999999999999989,
+          "from": 0.5,
+          "dragging": false
+        },
+        "eventCount": 3
+      }
+    },
+    {
+      "name": "spring pointer cancellation releases the drag",
+      "status": "passed",
+      "evidence": {
+        "scope": "normalized cancellation path; trusted pointer capture checked manually"
+      }
+    },
+    {
+      "name": "a replayed spring resumes when the user nudges it again",
+      "status": "passed",
+      "evidence": {
+        "before": 0.8500773253463333,
+        "after": 0.2610796350082702,
+        "continuousAnimationChecked": true
+      }
+    },
+    {
+      "name": "rejected large input restores the controlled field and retains replayable state",
+      "status": "passed",
+      "evidence": {
+        "errors": [
+          "Input exceeds 4,000 characters"
+        ],
+        "state": {
+          "Draft": "",
+          "Checked": false,
+          "Saved": "",
+          "Saves": "0",
+          "Literal": ""
+        }
+      }
+    },
+    {
+      "name": "390 px and 768 px: all routes fit without horizontal page overflow",
+      "status": "passed",
+      "evidence": [
+        {
+          "width": 390,
+          "route": "gallery",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "spring",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "easing",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "dock",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "form",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "list",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "effect",
+          "clientWidth": 375,
+          "scrollWidth": 375
+        },
+        {
+          "width": 390,
+          "route": "saved",
+          "clientWidth": 390,
+          "scrollWidth": 390
+        },
+        {
+          "width": 768,
+          "route": "gallery",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "spring",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "easing",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "dock",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "form",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "list",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "effect",
+          "clientWidth": 753,
+          "scrollWidth": 753
+        },
+        {
+          "width": 768,
+          "route": "saved",
+          "clientWidth": 768,
+          "scrollWidth": 768
+        }
+      ]
+    }
+  ]
+}
